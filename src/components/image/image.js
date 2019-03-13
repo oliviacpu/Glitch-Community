@@ -6,10 +6,13 @@ import styles from './image.styl';
 const cx = classNames.bind(styles);
 
 const Image = ({ src, className, alt, role }) => {
+  console.log('image', className, src);
   const classes = cx({
-    className,
+    className:,
   });
-  return <img src={src} className={classes} alt={alt} />;
+  console.log('classes', classes);
+  role = !role && alt === '' ? 'presentation' : '';
+  return <img src={src} className={classes} alt={alt} role={role} />;
 };
 
 Image.propTypes = {
@@ -18,6 +21,8 @@ Image.propTypes = {
   src: PropTypes.string.isRequired,
 };
 
-Image.defaultProps = {};
+Image.defaultProps = {
+  role: '',
+};
 
 export default Image;
