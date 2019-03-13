@@ -5,14 +5,12 @@ import styles from './image.styl';
 
 const cx = classNames.bind(styles);
 
-const Image = ({ src, className, alt, role }) => {
+const Image = ({ src, className, alt, role, ...otherProps }) => {
   console.log('image', className, src);
-  const classes = cx({
-    className:,
-  });
+  let classes = [cx, className].join(' ');
   console.log('classes', classes);
   role = !role && alt === '' ? 'presentation' : '';
-  return <img src={src} className={classes} alt={alt} role={role} />;
+  return <img src={src} className={classes} alt={alt} role={role} otherProps />;
 };
 
 Image.propTypes = {
