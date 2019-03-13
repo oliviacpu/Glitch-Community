@@ -5,23 +5,17 @@ import styles from './image.styl';
 
 const cx = classNames.bind(styles);
 
-
-const Image = ({ src, className }) => {
-  return <img src={src} className={classNames([className])} />
-}
-
-
+const Image = ({ src, className, alt }) => {
+  return <img src={src} className={classNames([className])} alt={alt} />;
+};
 
 Image.propTypes = {
   src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isREquired
+  alt: PropTypes.string.isRequired
 };
 
 Image.defaultProps = {
-  align: ['center'],
-  children: null,
-  tooltip: '',
-  persistent: false,
+  
 };
 
 export default Image;
