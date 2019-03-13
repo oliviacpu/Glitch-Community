@@ -4,6 +4,7 @@ import Button from '../src/components/buttons/button';
 import TooltipContainer from '../src/components/tooltips/tooltip-container';
 import TextInput from '../src/components/fields/text-input';
 import TextArea from '../src/components/fields/text-area';
+import Image from '../src/components/image/image';
 
 storiesOf('Button', module)
   .add('regular', () => <Button>Hello Button</Button>)
@@ -69,3 +70,6 @@ storiesOf('Text Input', module)
   .add('text area', () => (
     <TextArea placeholder="[Something here] doesn't seem appropriate for Glitch because..." error="Reason is required"/>
   ));
+
+storiesOf('Image', module)
+  .add('regular', () => (<Image src='https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg' />));
