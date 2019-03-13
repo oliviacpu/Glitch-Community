@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 const Image = ({ src, className, alt, role, ...otherProps }) => {
   console.log('image', className, src);
   let classes = [cx, className].join(' ');
-  console.log('classes', classes);
+  console.log('classes', cx, classes);
   role = !role && alt === '' ? 'presentation' : '';
   return <img src={src} className={classes} alt={alt} role={role} otherProps />;
 };
