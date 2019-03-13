@@ -6,14 +6,15 @@ import styles from './image.styl';
 const cx = classNames.bind(styles);
 
 
-const Image = ({ src }) => {
-  return <img src={src} />
+const Image = ({ src, className }) => {
+  return <img src={src} className={classNames([className])} />
 }
 
 
 
 Image.propTypes = {
-  src: PropTypes.string.isRequired
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isREquired
 };
 
 Image.defaultProps = {

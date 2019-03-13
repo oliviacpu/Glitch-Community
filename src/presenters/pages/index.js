@@ -14,6 +14,7 @@ import OverlayVideo from '../overlays/overlay-video';
 import Questions from '../questions';
 import RecentProjects from '../recent-projects';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import Image from '../../components/image/image';
 
 function loadScript(src) {
   const script = document.createElement('script');
@@ -64,7 +65,7 @@ class WhatIsGlitch extends React.Component {
         <span>
           <figure>
             <h1>
-              <img className="witch large" src={witchLarge} alt={whatsGlitchAlt} />
+              <Image className="witch large" src={witchLarge} alt={whatsGlitchAlt} />
               <img className="witch small" src={witchSmall} alt={whatsGlitchAlt} />
             </h1>
 
