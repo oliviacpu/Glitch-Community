@@ -6,8 +6,8 @@ import styles from './image.styl';
 const cx = classNames.bind(styles);
 
 const Image = ({ src, className, alt, role, width, height }) => {
-  let classes = cx({
-    [className]: className !== undefined
+  const classes = cx({
+    [className]: className !== undefined,
   });
   return <img src={src} width={width} height={height} className={classes} alt={alt} role={role} otherProps />;
 };
@@ -15,7 +15,7 @@ const Image = ({ src, className, alt, role, width, height }) => {
 Image.propTypes = {
   alt: PropTypes.string.isRequired,
   role: PropTypes.string,
-  src: PropTypes.string,
+  src: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
 };
