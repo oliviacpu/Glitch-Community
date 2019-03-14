@@ -18,10 +18,16 @@ Image.propTypes = {
   alt: PropTypes.string.isRequired,
   role: PropTypes.string,
   src: PropTypes.string.isRequired,
+  srcSet: PropTypes.array,
+  width: PropTypes.number,
+  height: PropTypes.number,
 };
 
 Image.defaultProps = {
   role: '',
+  srcSet: [],
+  width: undefined,
+  height: undefined,
 };
 
 export default Image;
