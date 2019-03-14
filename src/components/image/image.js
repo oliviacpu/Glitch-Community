@@ -13,15 +13,54 @@ If we don't, just display the image with width/height props
 ]
 */
 
+const maxImageWidth = (dimensions) => {
+  const { screen } = window;
+  const imgWidth = dimensions.width;
+  const sWidth = screen.width;
+  const sHeight = screen.height;
+
+  const { documentElement } = document;
+  const windowWidth = window.innerWidth || documentElement.clientWidth;
+  const windowHeight = window.innerHeight || documentElement.clientHeight;
+  const devicePixelRatio = window.devicePixelRatio || 1;
+
+  const windowResized = sWidth > windowWidth;
+
+  let result;
+  if (windowResized) {
+    const body = document.getElementsByTagName('body')[0];
+    const scrollWidth = windowWidth - imgWidth;
+    const isScroll = body.clientHeight > windowHeight || body.clientHeight > sHeight;
+    if (isScroll && scrollWidth <= 15) {
+      result = sWidth - scrollWidth;
+    } else {
+      result = (imgWidth / windowWidth) * sWidth;
+    }
+  } else {
+    result = imgWidth;
+  }
+
+  return result * devicePixelRatio;
+};
+
+const ImageSet = ({ images }) => {
+  return <></>;
+};
+
+ImageSet.propTypes = {
+  images: PropTypes.array.isRequired,
+};
 
 const Image = ({ src, className, alt, role, width, height, srcSet }) => {
   let classes = cx({
     [className]: className !== undefined,
-    'width': width,
-    'height': height
+    width: width,
+    height: height,
   });
-  // If no alt, we assume this is just for visuals
   role = !role && alt === '' ? 'presentation' : '';
+  if (srcSet) {
+    const guessMaxImageWidth({ width, height });
+  }
   return <img src={src} srcSet={srcSet} className={classes} alt={alt} role={role} otherProps />;
 };
 
@@ -36,7 +75,7 @@ Image.propTypes = {
 Image.defaultProps = {
   role: '',
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
 export default Image;
