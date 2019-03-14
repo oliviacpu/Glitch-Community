@@ -13,15 +13,8 @@ If we don't, just display the image with width/height props
 ]
 */
 
-const ImageSet = ({ images }) => {
-}
 
-ImageSet.propTypes = {
-  images: PropTypes.array.isRequired
-}
-
-
-const Image = ({ src, className, alt, role, width, height }) => {
+const Image = ({ src, className, alt, role, width, height, srcSet }) => {
   let classes = cx({
     [className]: className !== undefined,
     'width': width,
@@ -29,7 +22,7 @@ const Image = ({ src, className, alt, role, width, height }) => {
   });
   // If no alt, we assume this is just for visuals
   role = !role && alt === '' ? 'presentation' : '';
-  return <img src={src} className={classes} alt={alt} role={role} otherProps />;
+  return <img src={src} srcSet={srcSet} className={classes} alt={alt} role={role} otherProps />;
 };
 
 Image.propTypes = {
