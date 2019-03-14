@@ -25,7 +25,7 @@ function loadScript(src) {
 
 const Callout = ({ classes, imgUrl, title, description }) => (
   <div className={`callout ${classes}`}>
-    <img className="badge" src={imgUrl} alt={title} />
+    <Image className="badge" src={imgUrl} width="114" height="115" alt={title} />
     <div className="window">
       <div className="title">{title}</div>
       <div className="description">{description}</div>
@@ -49,13 +49,10 @@ class WhatIsGlitch extends React.Component {
     loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }
 
-  //<Image className="witch large" src={witchLarge} alt={whatsGlitchAlt} />
-//              <img className="witch small" src={witchSmall} alt={whatsGlitchAlt} />
-
   render() {
     const witchLarge = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446';
     const witchSmall = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039';
-    const srcSet = [{ src: witchSmall, width: 800 }, { src: witchLarge, width: 1000} ];
+    const srcSet = [{ src: witchSmall, width: 800 }, { src: witchLarge, width: 1000 }];
 
     const discover = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fexplore-illustration.svg?1543508598659';
     const remix = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fremix-illustration.svg?1543508529783';
@@ -68,7 +65,11 @@ class WhatIsGlitch extends React.Component {
       <section className="what-is-glitch">
         <span>
           <figure>
-            <h1><Image srcSet={srcSet} width='95%' /></h1>
+            <h1>
+              {' '}
+              <Image className="witch large" src={witchLarge} alt={whatsGlitchAlt} />
+              <Image className="witch small" src={witchSmall} alt={whatsGlitchAlt} />
+            </h1>
 
             <OverlayVideo>
               <div className="button video">
