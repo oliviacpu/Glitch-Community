@@ -13,6 +13,13 @@ If we don't, just display the image with width/height props
 ]
 */
 
+const ImageSet = ({ images }) => {
+}
+
+ImageSet.propTypes = {
+  images: PropTypes.array.isRequired
+}
+
 
 const Image = ({ src, className, alt, role, width, height }) => {
   let classes = cx({
@@ -29,14 +36,12 @@ Image.propTypes = {
   alt: PropTypes.string.isRequired,
   role: PropTypes.string,
   src: PropTypes.string.isRequired,
-  srcSet: PropTypes.array,
   width: PropTypes.number,
   height: PropTypes.number,
 };
 
 Image.defaultProps = {
   role: '',
-  srcSet: [],
   width: '100%',
   height: '100%'
 };
