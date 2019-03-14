@@ -18,6 +18,7 @@ const maxImageWidth = (dimensions) => {
   const imgWidth = dimensions.width;
   const sWidth = screen.width;
   const sHeight = screen.height;
+  console.log(screen, imgWidth);
 
   const { documentElement } = document;
   const windowWidth = window.innerWidth || documentElement.clientWidth;
@@ -39,17 +40,14 @@ const maxImageWidth = (dimensions) => {
   } else {
     result = imgWidth;
   }
+  console.log('result', result);
 
   return result * devicePixelRatio;
 };
 
-const ImageSet = ({ images }) => {
-  return <></>;
-};
-
-ImageSet.propTypes = {
-  images: PropTypes.array.isRequired,
-};
+const nearest = (array, value) => {
+  return Math.max.apply(null, array.filter(function(v){return v.width <= val}));
+}
 
 const Image = ({ src, className, alt, role, width, height, srcSet }) => {
   let classes = cx({
@@ -59,7 +57,9 @@ const Image = ({ src, className, alt, role, width, height, srcSet }) => {
   });
   role = !role && alt === '' ? 'presentation' : '';
   if (srcSet) {
-    const guessMaxImageWidth({ width, height });
+    const getMaxImageWidth = maxImageWidth({ width, height });
+    const image = nearest(srcSet, getMaxImageWidth);
+    console.log("image", image);
   }
   return <img src={src} srcSet={srcSet} className={classes} alt={alt} role={role} otherProps />;
 };

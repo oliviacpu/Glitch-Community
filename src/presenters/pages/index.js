@@ -68,7 +68,7 @@ class WhatIsGlitch extends React.Component {
       <section className="what-is-glitch">
         <span>
           <figure>
-            <h1><Image srcSet={srcSet} src={witchSmall} /></h1>
+            <h1><Image srcSet={srcSet} src={witchSmall} width='800' /></h1>
 
             <OverlayVideo>
               <div className="button video">
