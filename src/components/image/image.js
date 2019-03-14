@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 const Image = ({ src, className, alt, role, ...otherProps }) => {
   let classes = cx({
     [className]: className !== undefined,
+    'image': true
   });
   // If no alt, we assume this is just for visuals
   role = !role && alt === '' ? 'presentation' : '';
