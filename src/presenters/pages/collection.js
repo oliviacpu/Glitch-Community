@@ -24,6 +24,7 @@ import ReportButton from '../pop-overs/report-abuse-pop';
 import CollectionAvatar from '../includes/collection-avatar';
 import { TeamTile } from '../teams-list';
 import { UserTile } from '../users-list';
+import Image from '../../components/image/image';
 
 import { CurrentUserConsumer } from '../current-user';
 
@@ -155,7 +156,7 @@ const CollectionPageContents = ({
                     )
                   ) : isAuthorized ? (
                     <div className="empty-collection-hint">
-                      <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
+                      <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" role="presentation" />
                       <p>You can add any project, created by any user</p>
                     </div>
                   ) : (
