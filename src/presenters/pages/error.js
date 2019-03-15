@@ -8,6 +8,7 @@ import Layout from '../layout';
 import { getShowUrl } from '../../models/project';
 import { useCurrentUser } from '../current-user';
 import NotFound from '../includes/not-found';
+import Image from '../../components/image/image';
 
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
@@ -15,7 +16,7 @@ export const NotFoundPage = ({ api }) => (
   <Layout api={api}>
     <Helmet title="👻 Page not found" />
     <main className="error-page-container">
-      <img className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
+      <Image className="error-image" src={telescopeImageUrl} role="presentation" width="318px" height="297px" />
       <div className="error-msg">
         <h1>Page Not Found</h1>
         <p>Maybe a typo, or perhaps it's moved?</p>
