@@ -28,6 +28,7 @@ const Button = ({ onClick, disabled, type, size, hover, children }) => {
   );
 };
 
+
 Button.propTypes = {
   /** element(s) to display in the button */
   children: PropTypes.node.isRequired,
