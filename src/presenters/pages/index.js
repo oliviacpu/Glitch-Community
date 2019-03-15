@@ -71,7 +71,7 @@ class WhatIsGlitch extends React.Component {
 
             <OverlayVideo>
               <div className="button video">
-                <img className="play-button" src={play} alt="How it works" />
+                <Image className="play-button" src={play} alt="How it works" />
                 <span>How it works</span>
               </div>
             </OverlayVideo>
