@@ -1,7 +1,7 @@
 /* globals API_URL */
 
 import { createSlice } from 'redux-starter-kit';
-import { before } from 'redux-aop';
+import { before, after } from 'redux-aop';
 import axios from 'axios';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
@@ -63,6 +63,15 @@ export const { reducer, actions } = createSlice({
   },
 });
 
+let didInit = false
+const onInit = after((store, action) => {
+  if (!didInit) {
+    didInit = true
+    store.dispatch(actions.requestedLoad())
+  }
+  return action
+})
+
 const onLoad = before([actions.requestedLoad], (store, action) => {
   // prevent multiple 'load's from running
   if (store.getState().currentUser.isLoading) {
@@ -77,10 +86,23 @@ const onLoad = before([actions.requestedLoad], (store, action) => {
 });
 
 const onUserChange = before([actions.loaded], (store, action) => {
-  const { payload } = action;
-  if (!usersMatch(payload, store.getState().currentUser)) {
-    identifyUser(payload);
+  const prev = store.getState().currentUser
+  const { cachedUser, sharedUser } = action.payload
+
+  if (!usersMatch(cachedUser, prev.cachedUser)) {
+    identifyUser(cachedUser);
   }
+
+  if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
+    // delay loading a moment so both items from storage have a chance to update
+    setTimeout(() => {
+      store.dispatch(actions.requestedLoad())
+    }, 1);
+    
+  }
+
+  // hooks for easier debugging
+  window.currentUser = cachedUser;
 
   return action;
 });
