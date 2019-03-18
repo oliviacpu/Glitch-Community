@@ -1,10 +1,13 @@
 /* globals API_URL */
 
 import { createSlice } from 'redux-starter-kit';
-import { before } from 'redux-aop'
+import { before } from 'redux-aop';
 import axios from 'axios';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
+
+// TODO: This manages _both_ the users login information and their profile data.
+// Once we're managing user profiles in redux, these can probably be separated.
 
 export const blankUser = {
   id: 0,
@@ -25,14 +28,15 @@ export const blankUser = {
 
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
-  initialState: { 
-    sharedUser: local
-    cachedUser
+  initialState: {
+    sharedUser: readFromStorage('currentUser') || null,
+    cachedUser: readFromStorage('community-cachedUser') || null,
   },
   reducers: {
     loaded: (_, { payload }) => payload,
-    loggedOut: () => initialState
-  }
+    loggedIn: (_, { payload }) => payload,
+    loggedOut: () => ({ sharedUser: null, cachedUser: null }),
+  },
 });
 
 function getAPI({ currentUser }) {
@@ -48,7 +52,6 @@ function getAPI({ currentUser }) {
     baseURL: API_URL,
   });
 }
-
 
 function identifyUser(user) {
   const analytics = { window };
@@ -110,14 +113,51 @@ function usersMatch(a, b) {
   return false;
 }
 
-const onUserChange = before([actions.loaded], (prevState, { payload }) => {
+async function getAnonUser(state) {
+  const { data } = await getAPI(state).post('users/anon');
+  return data;
+}
+
+async function getSharedUser(state) {
+  try {
+    const {
+      data: { user },
+    } = await getAPI(state).get('boot?latestProjectOnly=true');
+    return user;
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      return undefined;
+    }
+    throw error;
+  }
+}
+
+async function getCachedUser(state) {
+  const { sharedUser } = state.currentUser;
+  if (!sharedUser) return undefined;
+  if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
+  try {
+    const { data } = await getAPI(state).get(`users/${sharedUser.id}`);
+    if (!usersMatch(sharedUser, data)) {
+      return 'error';
+    }
+    return data;
+  } catch (error) {
+    if (error.response && (error.response.status === 401 || error.response.status === 404)) {
+      // 401 means our token is bad, 404 means the user doesn't exist
+      return 'error';
+    }
+    throw error;
+  }
+}
+
+const onUserChange = before([actions.loaded], (prevState, action) => {
+  const { payload } = action;
   if (!usersMatch(payload, prevState.currentUser)) {
     identifyUser(payload);
   }
-  
-  return action
-})
 
-export const middleware = [
-  onUserChange,
-];
+  return action;
+});
+
+export const middleware = [onUserChange];
