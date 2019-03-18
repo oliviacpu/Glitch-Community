@@ -118,19 +118,19 @@ export const middleware = [onInit, onLoad, onUserChange];
 
 // connectors
 // TODO: `api` and actions don't need to be in here, do they?
+// TODO: what is `fetched` actually used for?
 
 export function useCurrentUser () {
   const currentUser = useReduxSelector(selectCurrentUser)
   const store = useReduxStore()
   return {
-    api: this.api(store.getState()),
+    api: getAPI(store.getState()),
     currentUser,
-    // TODO: what is `fetched` actually used for?
-    fetched: !!currentUser.id.
+    fetched: !!currentUser.id,
     reload: () => store.dispatch(actions.loadRequested()),
     login: (user) => store.dispatch(actions.loggedIn(user)),
-    update: (changes) => this.update(changes),
-    clear: () => this.logout(),
+    update: (changes) => store.dispatch(actions.updated(changes)),
+    clear: () => store.dispatch(actions.loggedOut()),
   }
 }
 
