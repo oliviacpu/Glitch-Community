@@ -1,7 +1,12 @@
-import { createSlice } from 'redux-starter-kit';
-import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
+/* globals API_URL */
 
-export const initialState = {
+import { createSlice } from 'redux-starter-kit';
+import { before } from 'redux-aop'
+import axios from 'axios';
+import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
+import { readFromStorage } from './local-storage';
+
+export const blankUser = {
   id: 0,
   login: null,
   name: null,
@@ -20,13 +25,30 @@ export const initialState = {
 
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
-  initialState,
+  initialState: { 
+    sharedUser: local
+    cachedUser
+  },
   reducers: {
     loaded: (_, { payload }) => payload,
-    login: (_, { payload }) => payload,
-    logout: () => initialState
+    loggedOut: () => initialState
   }
 });
+
+function getAPI({ currentUser }) {
+  if (currentUser) {
+    return axios.create({
+      baseURL: API_URL,
+      headers: {
+        Authorization: currentUser.persistentToken,
+      },
+    });
+  }
+  return axios.create({
+    baseURL: API_URL,
+  });
+}
+
 
 function identifyUser(user) {
   const analytics = { window };
@@ -77,4 +99,25 @@ function identifyUser(user) {
   }
 }
 
-export const middleware = [];
+// Test if two user objects reference the same person
+function usersMatch(a, b) {
+  if (a && b && a.id === b.id && a.persistentToken === b.persistentToken) {
+    return true;
+  }
+  if (!a && !b) {
+    return true;
+  }
+  return false;
+}
+
+const onUserChange = before([actions.loaded], (prevState, { payload }) => {
+  if (!usersMatch(payload, prevState.currentUser)) {
+    identifyUser(payload);
+  }
+  
+  return action
+})
+
+export const middleware = [
+  onUserChange,
+];
