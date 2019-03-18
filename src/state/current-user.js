@@ -158,13 +158,73 @@ async function getCachedUser(state) {
   }
 }
 
-const onUserChange = before([actions.loaded], (prevState, action) => {
+async function load(state) {
+  if (this.state.working) return;
+  this.setState({ working: true });
+  let { sharedUser } = this.props;
+  const nextState = {}
+
+  // If we're signed out create a new anon user
+  if (!sharedUser) {
+    sharedUser = await this.getAnonUser();
+    nextState.sharedUser = sharedUser
+  }
+
+  // Check if we have to clear the cached user
+  if (!usersMatch(sharedUser, this.props.cachedUser)) {
+    nextState.cachedUser = cachedUser
+  }
+
+  const newCachedUser = await this.getCachedUser();
+  if (newCachedUser === 'error') {
+    // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
+    // Anon users get their token and id deleted when they're merged into a user on sign in
+    // If it did change then quit out and let componentDidUpdate sort it out
+    if (usersMatch(sharedUser, this.props.sharedUser)) {
+      // The user wasn't changed, so we need to fix it
+      this.setState({ fetched: false });
+      const newSharedUser = await this.getSharedUser();
+      this.props.setSharedUser(newSharedUser);
+      console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
+      addBreadcrumb({
+        level: 'info',
+        message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
+      });
+      addBreadcrumb({
+        level: 'info',
+        message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
+      });
+      captureMessage('Invalid cachedUser');
+    }
+  } else {
+    // The shared user is good, store it
+    this.props.setCachedUser(newCachedUser);
+    this.setState({ fetched: true });
+  }
+
+  this.setState({ working: false });
+}
+
+const asyncFunctionMiddleware = before(
+  (x) => 'then' in x,
+  (store, action) => {
+  
+  }
+)
+
+const loadMiddleware before([actions.requestedLoad], (store, action) => {
+  if (store.getState().currentUser.isLoading) { return }
+  
+})
+
+
+const onUserChange = before([actions.loaded], (store, action) => {
   const { payload } = action;
-  if (!usersMatch(payload, prevState.currentUser)) {
+  if (!usersMatch(payload, store.getState().currentUser)) {
     identifyUser(payload);
   }
 
   return action;
 });
 
-export const middleware = [onUserChange];
+export const middleware = [loadMiddleware, onUserChange, asyncFunctionMiddleware];
