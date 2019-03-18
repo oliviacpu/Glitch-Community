@@ -1,6 +1,6 @@
 /* globals API_URL */
 
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { createSlice } from 'redux-starter-kit';
 import { before, after } from 'redux-aop';
@@ -117,13 +117,21 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
 export const middleware = [onInit, onLoad, onUserChange];
 
 // connectors
+// TODO: `api` and actions don't need to be in here, do they?
 
 export function useCurrentUser () {
-  const store = useContext(ReactReduxContext)
-  const [currentUser, setCurrentUser] = useState(store.getState().currentUser)
-  useEffect(() => {
-    return 
-  }, [store])
+  const currentUser = useReduxSelector(selectCurrentUser)
+  const store = useReduxStore()
+  return {
+    api: this.api(store.getState()),
+    currentUser,
+    // TODO: what is `fetched` actually used for?
+    fetched: !!currentUser.id.
+    reload: () => store.dispatch(actions.loadRequested()),
+    login: (user) => store.dispatch(actions.loggedIn(user)),
+    update: (changes) => this.update(changes),
+    clear: () => this.logout(),
+  }
 }
 
 
@@ -288,3 +296,16 @@ function selectCurrentUser (state) {
 }
 
 
+const useReduxStore = () => useContext(ReactReduxContext)
+
+function useReduxSelector (selector) {
+  const store = useReduxStore()
+  const [state, setState] = useState(() => selector(store.getState()))
+  useEffect(() => {
+    return store.subscribe(() => {
+      const nextState = selector(store.getState())
+      if (nextState !== state) { setState(nextState) }
+    })
+  }, [store])
+  return state
+}
