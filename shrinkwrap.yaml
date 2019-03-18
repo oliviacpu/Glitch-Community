@@ -61,6 +61,7 @@ dependencies:
   react-select: 2.4.2
   react-textarea-autosize: 7.1.0
   redux: 4.0.1
+  redux-aop: 1.0.0
   redux-starter-kit: 0.4.3
   speed-measure-webpack-plugin: 1.3.0
   stats-webpack-plugin: 0.7.0
@@ -9383,6 +9384,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==
+  /redux-aop/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-oZJ4/H/0fO8MIo4fzzXNPOyQrmY=
   /redux-devtools-extension/2.13.8/redux@4.0.1:
     dependencies:
       redux: 4.0.1
@@ -11359,6 +11364,7 @@ specifiers:
   react-select: ^2.4.0
   react-textarea-autosize: ^7.1.0
   redux: ^4.0.1
+  redux-aop: ^1.0.0
   redux-starter-kit: ^0.4.3
   speed-measure-webpack-plugin: ^1.3.0
   stats-webpack-plugin: ^0.7.0

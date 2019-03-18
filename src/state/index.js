@@ -1,36 +1,14 @@
-import { configureStore, createSlice, getDefaultMiddleware } from 'redux-starter-kit';
-import { before }
-
-const currentUser = createSlice({
-  initialState: {
-    id: 0,
-    login: null,
-    name: null,
-    description: '',
-    color: '#aaa',
-    avatarUrl: null,
-    avatarThumbnailUrl: null,
-    hasCoverImage: false,
-    coverColor: null,
-    emails: [],
-    features: [],
-    projects: [],
-    teams: [],
-    collections: [],
-  },
-  reducers: {},
-});
-
-const sentryMiddleware = (store) => (next) => (action) => {
-
-}
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
+import * as currentUser from './current-user'
 
 const store = configureStore({
   reducers: {
-    currentUser,
+    currentUser: currentUser.reducer,
   },
-  middleware: [...getDefaultMiddleware()],
-  devTools: true,
+  middleware: [
+    ...getDefaultMiddleware(), 
+    ...currentUser.middleware
+  ],
 });
 
 export default store;
