@@ -9,7 +9,7 @@ import { readFromStorage } from './local-storage';
 // TODO: This manages _both_ the users login information and their profile data.
 // Once we're managing user profiles in redux, these can probably be separated.
 
-export const blankUser = {
+const defaultUser = {
   id: 0,
   login: null,
   name: null,
@@ -63,16 +63,18 @@ export const { reducer, actions } = createSlice({
   },
 });
 
-let didInit = false
+const matchTypes = (...actions) => actions.map(String);
+
+let didInit = false;
 const onInit = after((store, action) => {
   if (!didInit) {
-    didInit = true
-    store.dispatch(actions.requestedLoad())
+    didInit = true;
+    store.dispatch(actions.requestedLoad());
   }
-  return action
-})
+  return action;
+});
 
-const onLoad = before([actions.requestedLoad], (store, action) => {
+const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
   // prevent multiple 'load's from running
   if (store.getState().currentUser.isLoading) {
     return null;
@@ -85,9 +87,9 @@ const onLoad = before([actions.requestedLoad], (store, action) => {
   return action;
 });
 
-const onUserChange = before([actions.loaded], (store, action) => {
-  const prev = store.getState().currentUser
-  const { cachedUser, sharedUser } = action.payload
+const onUserChange = before(matchTypes(...Object.values(actions)), (store, action) => {
+  const prev = store.getState().currentUser;
+  const { cachedUser, sharedUser } = action.payload;
 
   if (!usersMatch(cachedUser, prev.cachedUser)) {
     identifyUser(cachedUser);
@@ -96,9 +98,8 @@ const onUserChange = before([actions.loaded], (store, action) => {
   if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
     // delay loading a moment so both items from storage have a chance to update
     setTimeout(() => {
-      store.dispatch(actions.requestedLoad())
+      store.dispatch(actions.requestedLoad());
     }, 1);
-    
   }
 
   // hooks for easier debugging
@@ -107,8 +108,7 @@ const onUserChange = before([actions.loaded], (store, action) => {
   return action;
 });
 
-export const middleware = [onLoad, onUserChange];
-
+export const middleware = [onInit, onLoad, onUserChange];
 
 // utilities
 
@@ -264,3 +264,12 @@ async function load(state) {
 
   return nextState;
 }
+
+function selectCurrentUser (state) {
+  const { sharedUser, cachedUser } = state.currentUser
+  return { ...defaultUser, ...sharedUser, ...cachedUser }
+}
+
+export function useCurrentUser () {
+  const store = useContext(
+} 
