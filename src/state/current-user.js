@@ -1,5 +1,7 @@
 /* globals API_URL */
 
+import React, { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 import { createSlice } from 'redux-starter-kit';
 import { before, after } from 'redux-aop';
 import axios from 'axios';
@@ -8,6 +10,8 @@ import { readFromStorage } from './local-storage';
 
 // TODO: This manages _both_ the users login information and their profile data.
 // Once we're managing user profiles in redux, these can probably be separated.
+
+// reducer
 
 const defaultUser = {
   id: 0,
@@ -63,6 +67,8 @@ export const { reducer, actions } = createSlice({
   },
 });
 
+// middleware 
+
 const matchTypes = (...actions) => actions.map(String);
 
 let didInit = false;
@@ -109,6 +115,17 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
 });
 
 export const middleware = [onInit, onLoad, onUserChange];
+
+// connectors
+
+export function useCurrentUser () {
+  const store = useContext(ReactReduxContext)
+  const [currentUser, setCurrentUser] = useState(store.getState().currentUser)
+  useEffect(() => {
+    return 
+  }, [store])
+}
+
 
 // utilities
 
@@ -270,6 +287,4 @@ function selectCurrentUser (state) {
   return { ...defaultUser, ...sharedUser, ...cachedUser }
 }
 
-export function useCurrentUser () {
-  const store = useContext(
-} 
+
