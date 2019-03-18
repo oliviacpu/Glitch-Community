@@ -31,10 +31,23 @@ export const { reducer, actions } = createSlice({
   initialState: {
     sharedUser: readFromStorage('currentUser') || null,
     cachedUser: readFromStorage('community-cachedUser') || null,
+    isLoading: false,
   },
   reducers: {
-    loaded: (_, { payload }) => payload,
-    loggedIn: (_, { payload }) => ({ sharedUser: payload, cachedUser: undefined }),
+    requestedLoad: (state, { payload }) => ({
+      ...state,
+      isLoading: true,
+    }),
+    loaded: (state, { payload }) => ({
+      ...state,
+      isLoading: false,
+      ...payload,
+    }),
+    loggedIn: (state, { payload }) => ({
+      ...state,
+      sharedUser: payload,
+      cachedUser: undefined,
+    }),
     updated: (state, { payload }) => ({
       ...state,
       cachedUser: {
@@ -42,7 +55,11 @@ export const { reducer, actions } = createSlice({
         ...payload,
       },
     }),
-    loggedOut: () => ({ sharedUser: null, cachedUser: null }),
+    loggedOut: (state) => ({
+      ...state,
+      sharedUser: null,
+      cachedUser: null,
+    }),
   },
 });
 
@@ -159,28 +176,25 @@ async function getCachedUser(state) {
 }
 
 async function load(state) {
-  if (this.state.working) return;
-  this.setState({ working: true });
-  let { sharedUser } = this.props;
-  const nextState = {}
+  let { sharedUser, cachedUser } = state.sharedUser;
+  const nextState = {};
 
   // If we're signed out create a new anon user
   if (!sharedUser) {
-    sharedUser = await this.getAnonUser();
-    nextState.sharedUser = sharedUser
+    nextState.sharedUser = await getAnonUser(state);;
   }
 
   // Check if we have to clear the cached user
-  if (!usersMatch(sharedUser, this.props.cachedUser)) {
-    nextState.cachedUser = cachedUser
+  if (!usersMatch(sharedUser, cachedUser)) {
+    nextState.cachedUser = undefined;
   }
 
-  const newCachedUser = await this.getCachedUser();
+  const newCachedUser = await getCachedUser(state);
   if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
     // If it did change then quit out and let componentDidUpdate sort it out
-    if (usersMatch(sharedUser, this.props.sharedUser)) {
+    if (usersMatch(nextState.sharedUser, this.props.sharedUser)) {
       // The user wasn't changed, so we need to fix it
       this.setState({ fetched: false });
       const newSharedUser = await this.getSharedUser();
@@ -205,18 +219,18 @@ async function load(state) {
   this.setState({ working: false });
 }
 
-const asyncFunctionMiddleware = before(
-  (x) => 'then' in x,
-  (store, action) => {
-  
+const onLoad = before([actions.requestedLoad], (store, action) => {
+  // prevent multiple 'load's from running
+  if (store.getState().currentUser.isLoading) {
+    return null;
   }
-)
 
-const loadMiddleware before([actions.requestedLoad], (store, action) => {
-  if (store.getState().currentUser.isLoading) { return }
-  
-})
+  load(store.getState()).then((result) => {
+    store.dispatch(actions.loaded(result));
+  });
 
+  return action;
+});
 
 const onUserChange = before([actions.loaded], (store, action) => {
   const { payload } = action;
@@ -227,4 +241,4 @@ const onUserChange = before([actions.loaded], (store, action) => {
   return action;
 });
 
-export const middleware = [loadMiddleware, onUserChange, asyncFunctionMiddleware];
+export const middleware = [onLoad, onUserChange];
