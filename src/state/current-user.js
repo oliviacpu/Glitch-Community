@@ -34,17 +34,24 @@ export const { reducer, actions } = createSlice({
   },
   reducers: {
     loaded: (_, { payload }) => payload,
-    loggedIn: (_, { payload }) => payload,
+    loggedIn: (_, { payload }) => ({ sharedUser: payload, cachedUser: undefined }),
+    updated: (state, { payload }) => ({
+      ...state,
+      cachedUser: {
+        ...state.cachedUser,
+        ...payload,
+      },
+    }),
     loggedOut: () => ({ sharedUser: null, cachedUser: null }),
   },
 });
 
-function getAPI({ currentUser }) {
-  if (currentUser) {
+function getAPI(state) {
+  if (state.currentUser.sharedUser) {
     return axios.create({
       baseURL: API_URL,
       headers: {
-        Authorization: currentUser.persistentToken,
+        Authorization: state.currentUser.sharedUser.persistentToken,
       },
     });
   }
