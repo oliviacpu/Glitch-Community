@@ -63,6 +63,33 @@ export const { reducer, actions } = createSlice({
   },
 });
 
+const onLoad = before([actions.requestedLoad], (store, action) => {
+  // prevent multiple 'load's from running
+  if (store.getState().currentUser.isLoading) {
+    return null;
+  }
+
+  load(store.getState()).then((result) => {
+    store.dispatch(actions.loaded(result));
+  });
+
+  return action;
+});
+
+const onUserChange = before([actions.loaded], (store, action) => {
+  const { payload } = action;
+  if (!usersMatch(payload, store.getState().currentUser)) {
+    identifyUser(payload);
+  }
+
+  return action;
+});
+
+export const middleware = [onLoad, onUserChange];
+
+
+// utilities
+
 function getAPI(state) {
   if (state.currentUser.sharedUser) {
     return axios.create({
@@ -176,12 +203,12 @@ async function getCachedUser(state) {
 }
 
 async function load(state) {
-  let { sharedUser, cachedUser } = state.sharedUser;
-  const nextState = {};
+  let { sharedUser, cachedUser } = state.currenUser;
+  const nextState = { sharedUser, cachedUser };
 
   // If we're signed out create a new anon user
   if (!sharedUser) {
-    nextState.sharedUser = await getAnonUser(state);;
+    nextState.sharedUser = await getAnonUser(state);
   }
 
   // Check if we have to clear the cached user
@@ -194,51 +221,24 @@ async function load(state) {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
     // If it did change then quit out and let componentDidUpdate sort it out
-    if (usersMatch(nextState.sharedUser, this.props.sharedUser)) {
+    if (usersMatch(nextState.sharedUser, sharedUser)) {
       // The user wasn't changed, so we need to fix it
-      this.setState({ fetched: false });
-      const newSharedUser = await this.getSharedUser();
-      this.props.setSharedUser(newSharedUser);
-      console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
+      nextState.sharedUser = await getSharedUser(state);
+      console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${nextState.sharedUser && nextState.sharedUser.id}`);
       addBreadcrumb({
         level: 'info',
         message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
       });
       addBreadcrumb({
         level: 'info',
-        message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
+        message: `New shared cachedUser: ${JSON.stringify(nextState.sharedUser)}`,
       });
       captureMessage('Invalid cachedUser');
     }
   } else {
     // The shared user is good, store it
-    this.props.setCachedUser(newCachedUser);
-    this.setState({ fetched: true });
+    nextState.cachedUser = newCachedUser;
   }
 
-  this.setState({ working: false });
+  return nextState;
 }
-
-const onLoad = before([actions.requestedLoad], (store, action) => {
-  // prevent multiple 'load's from running
-  if (store.getState().currentUser.isLoading) {
-    return null;
-  }
-
-  load(store.getState()).then((result) => {
-    store.dispatch(actions.loaded(result));
-  });
-
-  return action;
-});
-
-const onUserChange = before([actions.loaded], (store, action) => {
-  const { payload } = action;
-  if (!usersMatch(payload, store.getState().currentUser)) {
-    identifyUser(payload);
-  }
-
-  return action;
-});
-
-export const middleware = [onLoad, onUserChange];
