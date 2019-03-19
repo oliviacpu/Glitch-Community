@@ -19,7 +19,7 @@ const Image = ({ src, srcSet, className, alt, role, width, onClick, onKeyUp, hei
   return (
     <img
       src={src}
-      srcSet={srcSet.length ? srcSet : undefined}
+      srcSet={srcSet ? srcSet : undefined}
       width={width || undefined}
       height={height || undefined}
       className={className || undefined}
@@ -45,7 +45,6 @@ Image.propTypes = {
 Image.defaultProps = {
   src: '',
   srcSet: {},
-  sizes: '',
   alt: '',
   backgroundImage: false,
   backgroundRatio: 50,

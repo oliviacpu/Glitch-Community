@@ -43,10 +43,10 @@ Callout.defaultProps = {
   classes: '',
 };
 
-const witch = {
-  'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446': '800px',
-  'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039': '300px',
-};
+const witch = [
+  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446 800w'],
+  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039 320w'],
+];
 
 class WhatIsGlitch extends React.Component {
   componentDidMount() {
