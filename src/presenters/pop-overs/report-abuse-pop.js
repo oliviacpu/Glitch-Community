@@ -9,7 +9,7 @@ import { captureException } from '../../utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from '../../utils/abuse-reporting';
 import { Loader } from '../includes/loader';
 
-import { CurrentUserConsumer } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
 import TextArea from '../../components/fields/text-area';
 
 class ReportAbusePop extends React.Component {
@@ -235,15 +235,14 @@ ReportAbusePop.propTypes = {
   currentUser: PropTypes.object.isRequired,
 };
 
-const ReportAbusePopContainer = (props) => (
-  <CurrentUserConsumer>{(currentUser) => <ReportAbusePop currentUser={currentUser} {...props} />}</CurrentUserConsumer>
-);
-
-const ReportAbusePopButton = (props) => (
-  <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
-    <ReportAbusePopContainer reportedType={props.reportedType} reportedModel={props.reportedModel} />
-  </PopoverWithButton>
-);
+const ReportAbusePopButton = (props) => {
+  const currentUser = useCurrentUser();
+  return (
+    <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
+      <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />
+    </PopoverWithButton>
+  );
+};
 
 ReportAbusePopButton.propTypes = {
   reportedType: PropTypes.string.isRequired, // 'project', 'collection', 'user', 'team'

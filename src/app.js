@@ -6,7 +6,6 @@ import { AnalyticsContext } from './presenters/analytics';
 import { UserPrefsProvider } from './presenters/includes/user-prefs';
 import { DevTogglesProvider } from './presenters/includes/dev-toggles';
 import { Notifications } from './presenters/notifications';
-import { CurrentUserProvider } from './presenters/current-user';
 import ReduxProvider from './state';
 
 import Router from './presenters/pages/router';
@@ -19,7 +18,7 @@ const App = () => (
           <UserPrefsProvider>
             <DevTogglesProvider>
               <AnalyticsContext context={{ groupId: '0' }}>
-                <CurrentUserProvider>{() => <Router />}</CurrentUserProvider>
+                <Router />
               </AnalyticsContext>
             </DevTogglesProvider>
           </UserPrefsProvider>

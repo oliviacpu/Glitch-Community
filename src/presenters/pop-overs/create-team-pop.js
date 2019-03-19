@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import _ from 'lodash';
+import { kebabCase, debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { TrackClick } from '../analytics';
-import { CurrentUserConsumer } from '../current-user';
+
 import { getPredicates, getTeamPair } from '../../models/words';
 import { getLink } from '../../models/team';
 import { Loader } from '../includes/loader';
 import { NestedPopoverTitle } from './popover-nested';
 import TextInput from '../../components/fields/text-input';
 import { SignInPopBase } from './sign-in-pop';
+import { useCurrentUser } from '../../state/current-user';
 
 // Create Team 🌿
 
@@ -22,7 +23,7 @@ class CreateTeamPopBase extends React.Component {
       isLoading: false,
       error: '',
     };
-    this.debouncedValidate = _.debounce(this.validate.bind(this), 200);
+    this.debouncedValidate = debounce(this.validate.bind(this), 200);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -40,7 +41,7 @@ class CreateTeamPopBase extends React.Component {
   async validate() {
     const name = this.state.teamName;
     if (name) {
-      const url = _.kebabCase(name);
+      const url = kebabCase(name);
       let error = null;
 
       try {
@@ -92,7 +93,7 @@ class CreateTeamPopBase extends React.Component {
       }
       const { data } = await this.props.api.post('teams', {
         name: this.state.teamName,
-        url: _.kebabCase(this.state.teamName),
+        url: kebabCase(this.state.teamName),
         hasAvatarImage: false,
         coverColor: '',
         location: '',
@@ -126,7 +127,7 @@ class CreateTeamPopBase extends React.Component {
         <section className="pop-over-actions">
           <form onSubmit={this.handleSubmit}>
             <TextInput value={this.state.teamName} onChange={this.handleChange} placeholder={placeholder} error={this.state.error} />
-            <p className="action-description team-url-preview">/@{_.kebabCase(this.state.teamName || placeholder)}</p>
+            <p className="action-description team-url-preview">/@{kebabCase(this.state.teamName || placeholder)}</p>
 
             {this.state.isLoading ? (
               <Loader />
@@ -156,21 +157,18 @@ CreateTeamPopBase.defaultProps = {
 
 const CreateTeamPop = withRouter(CreateTeamPopBase);
 
-const CreateTeamPopOrSignIn = ({ api }) => (
-  <CurrentUserConsumer>
-    {(user) =>
-      user && user.login ? (
-        <CreateTeamPop api={api} />
-      ) : (
-        <SignInPopBase
-          api={api}
-          hash="create-team"
-          header={<NestedPopoverTitle>Sign In</NestedPopoverTitle>}
-          prompt={<p className="action-description">You'll need to sign in to create a team</p>}
-        />
-      )
-    }
-  </CurrentUserConsumer>
-);
+const CreateTeamPopOrSignIn = ({ api }) => {
+  const user = useCurrentUser();
+  return user && user.login ? (
+    <CreateTeamPop api={api} />
+  ) : (
+    <SignInPopBase
+      api={api}
+      hash="create-team"
+      header={<NestedPopoverTitle>Sign In</NestedPopoverTitle>}
+      prompt={<p className="action-description">You'll need to sign in to create a team</p>}
+    />
+  );
+};
 
 export default CreateTeamPopOrSignIn;
