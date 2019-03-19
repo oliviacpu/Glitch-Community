@@ -108,9 +108,11 @@ async function getCachedUser(state) {
 
 // TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
 async function load(state) {
-  const { sharedUser, cachedUser } = state.currenUser;
+  const { sharedUser, cachedUser } = state.currentUser;
   const nextState = { sharedUser, cachedUser };
 
+  console.log(1)
+  
   // If we're signed out create a new anon user
   if (!sharedUser) {
     nextState.sharedUser = await getAnonUser(state);
@@ -120,7 +122,9 @@ async function load(state) {
   if (!usersMatch(sharedUser, cachedUser)) {
     nextState.cachedUser = undefined;
   }
-
+  
+  console.log(2)
+  
   const newCachedUser = await getCachedUser(state);
   if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
@@ -232,8 +236,12 @@ const onInit = after((store, action) => {
   return action;
 });
 
+let isLoading = false
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
+  if (isLoading) { return }
+  isLoading = true
   const currentState = store.getState();
+  console.log({ currentState })
   // prevent multiple 'load's from running
   if (selectLoadState(currentState) === 'loading') {
     return null;
