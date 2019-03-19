@@ -119,7 +119,6 @@ async function fixSharedUser(prevState, nextState) {
   captureMessage('Invalid cachedUser');
 }
 
-// TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
 async function load({ currentUser: prevState }) {
   const nextState = {
     sharedUser: prevState.sharedUser,
@@ -178,7 +177,7 @@ export const { reducer, actions } = createSlice({
   slice: 'currentUser',
   initialState: {
     // sharedUser syncs with the editor and is authoritative on id and persistentToken
-    sharedUser: readFromStorage('currentUser') || null,
+    sharedUser: readFromStorage('cachedUser') || null,
     // cachedUser mirrors GET /users/{id} and is what we actually display
     cachedUser: readFromStorage('community-cachedUser') || null,
     // init | loading \ ready
@@ -218,13 +217,7 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) => {
-  if (state.currentUser.sharedUser) {
-    return state.currentUser.sharedUser.persistentToken;
-  } else {
-    return null;
-  }
-};
+export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken'])
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;

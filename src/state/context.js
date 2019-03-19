@@ -13,7 +13,6 @@ export function useSelector(selector) {
     const unsubscribe = store.subscribe(() => {
       const nextState = selector(store.getState());
       if (nextState !== state) {
-        console.log('updating', selector.name, nextState)
         setState(nextState);
       }
     });
