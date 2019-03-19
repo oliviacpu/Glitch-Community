@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import { useCurrentUser } from './current-user';
 import useErrorHandlers from './error-handlers';
+import { useAPI } from '../state/api'
+import { selectCurrentUser } from '../state/current-user'
+import { useSelector } from '../state/context'
 
 class CollectionEditor extends React.Component {
   constructor(props) {
@@ -77,8 +80,9 @@ CollectionEditor.defaultProps = {
   api: null,
 };
 
-const CollectionEditorContainer = ({ api, children, initialCollection }) => {
-  const { currentUser } = useCurrentUser();
+const CollectionEditorContainer = ({ children, initialCollection }) => {
+  const currentUser = useSelector(selectCurrentUser);
+  const { api } = useAPI();
   const errorFuncs = useErrorHandlers();
   return (
     <CollectionEditor {...{ api, currentUser, initialCollection }} {...errorFuncs}>
@@ -87,7 +91,6 @@ const CollectionEditorContainer = ({ api, children, initialCollection }) => {
   );
 };
 CollectionEditorContainer.propTypes = {
-  api: PropTypes.any.isRequired,
   children: PropTypes.func.isRequired,
   initialCollection: PropTypes.object.isRequired,
 };

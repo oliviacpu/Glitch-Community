@@ -125,19 +125,19 @@ async function load({ currentUser: prevState }) {
     sharedUser: prevState.sharedUser,
     cachedUser: prevState.cachedUser,
   };
-  
+
   // If we're signed out create a new anon user
   if (!prevState.sharedUser) {
     nextState.sharedUser = await getAnonUser();
   }
-  
+
   // Check if we have to clear the cached user
   if (!usersMatch(prevState.sharedUser, prevState.cachedUser)) {
     nextState.cachedUser = undefined;
   }
 
   const newCachedUser = await getCachedUser(nextState);
-  if (newCachedUser === 'error') {    
+  if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
     if (usersMatch(nextState.sharedUser, prevState.sharedUser)) {
@@ -218,7 +218,7 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) => 
+export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken']);
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;
