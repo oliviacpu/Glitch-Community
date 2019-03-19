@@ -17,7 +17,7 @@ export const getAPIForToken = memoize((persistentToken) => {
   return axios.create({
     baseURL: API_URL,
   });
-});
+})
 
 export function getAPI(state) {
   return getAPIForToken(selectPersistentToken(state));
@@ -25,5 +25,6 @@ export function getAPI(state) {
 
 export function useAPI() {
   const persistentToken = useSelector(selectPersistentToken);
+  console.log('useAPI', persistentToken)
   return getAPIForToken(persistentToken);
 }

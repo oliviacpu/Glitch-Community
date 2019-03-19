@@ -218,7 +218,7 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken']);
+export const selectPersistentToken = (state) => 
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;
