@@ -125,22 +125,21 @@ async function load({ currentUser: prevState }) {
     sharedUser: prevState.sharedUser,
     cachedUser: prevState.cachedUser,
   };
-
+  
   // If we're signed out create a new anon user
   if (!prevState.sharedUser) {
     nextState.sharedUser = await getAnonUser();
   }
-
+  
   // Check if we have to clear the cached user
   if (!usersMatch(prevState.sharedUser, prevState.cachedUser)) {
     nextState.cachedUser = undefined;
   }
 
   const newCachedUser = await getCachedUser(nextState);
-  if (newCachedUser === 'error') {
+  if (newCachedUser === 'error') {    
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
-    // If it did change then quit out and let onUserChange sort it out
     if (usersMatch(nextState.sharedUser, prevState.sharedUser)) {
       // The user wasn't changed, so we need to fix it
       fixSharedUser(prevState, nextState);
@@ -261,14 +260,6 @@ const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
 
   if (!usersMatch(cachedUser, prev.cachedUser)) {
     identifyUser(cachedUser);
-  }
-
-  if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
-    // delay loading a moment so both items from storage have a chance to update
-    setTimeout(() => {
-      console.log('reload!');
-      // store.dispatch(actions.requestedLoad());
-    }, 1);
   }
 
   // hooks for easier debugging
