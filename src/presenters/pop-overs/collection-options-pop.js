@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PopoverWithButton from './popover-with-button';
 import PopoverButton from './popover-button';
-import { useCurrentUser } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
 
 // Collection Options Pop
 const CollectionOptionsPop = (props) => {
@@ -38,8 +38,6 @@ CollectionOptionsPop.defaultProps = {
 
 // Collection Options Container
 export default function CollectionOptions({ deleteCollection, collection }) {
-  const { currentUser } = useCurrentUser();
-
   if (!deleteCollection) {
     return null;
   }
@@ -50,7 +48,7 @@ export default function CollectionOptions({ deleteCollection, collection }) {
       containerClass="collection-options-pop-btn"
       buttonClass="collection-options button-borderless"
     >
-      <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} currentUser={currentUser} />
+      <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} />
     </PopoverWithButton>
   );
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useCurrentUser } from './current-user';
+import { useAPI } from '../state/api';
+import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
 
 class ProjectEditor extends React.Component {
@@ -53,8 +54,9 @@ ProjectEditor.defaultProps = {
   api: null,
 };
 
-const ProjectEditorContainer = ({ api, children, initialProject }) => {
-  const { currentUser } = useCurrentUser();
+const ProjectEditorContainer = ({ children, initialProject }) => {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
   const errorFuncs = useErrorHandlers();
   return (
     <ProjectEditor api={api} currentUser={currentUser} initialProject={initialProject} {...errorFuncs}>
@@ -64,7 +66,6 @@ const ProjectEditorContainer = ({ api, children, initialProject }) => {
 };
 
 ProjectEditorContainer.propTypes = {
-  api: PropTypes.any.isRequired,
   children: PropTypes.func.isRequired,
   initialProject: PropTypes.object.isRequired,
 };

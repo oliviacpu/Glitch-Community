@@ -210,7 +210,7 @@ const ProjectPageLoader = ({ domain, ...props }) => {
     <DataLoader get={() => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
       {(project) =>
         project ? (
-          <ProjectEditor api={api} initialProject={project}>
+          <ProjectEditor initialProject={project}>
             {(currentProject, funcs, userIsMember) => (
               <>
                 <Helmet>

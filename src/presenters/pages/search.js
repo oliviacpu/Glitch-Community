@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Layout from '../layout';
 
-import {useCurrentUser} from '../../state/current-user';
-import {useAPI} from '../../state/api';
+import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 
 import useErrorHandlers from '../error-handlers';
 import { Loader } from '../includes/loader';
@@ -52,7 +52,7 @@ const UserResults = ({ users }) => (
 );
 
 const ProjectResults = ({ addProjectToCollection, api, projects }) => {
-  const currentUser = useCurrentUser()
+  const currentUser = useCurrentUser();
   if (!projects) {
     return (
       <article>
@@ -125,13 +125,7 @@ class SearchResults extends React.Component {
       <main className="search-results">
         {showResults(teams) && <TeamResults teams={teams} />}
         {showResults(users) && <UserResults users={users} />}
-        {showResults(projects) && (
-          <ProjectResults
-            projects={projects}
-            api={this.props.api}
-            addProjectToCollection={this.addProjectToCollection}
-          />
-        )}
+        {showResults(projects) && <ProjectResults projects={projects} api={this.props.api} addProjectToCollection={this.addProjectToCollection} />}
         {noResults && <NotFound name="any results" />}
       </main>
     );
@@ -146,19 +140,18 @@ SearchResults.defaultProps = {
   api: null,
 };
 
-const SearchPage = ({, query }) => {
-  const api = useAPI()
+const SearchPage = ({ query }) => {
+  const api = useAPI();
   const errorFuncs = useErrorHandlers();
   return (
     <Layout searchQuery={query}>
-      <Helmet>{!!query && <title>Search for {query}</title>}</Helmet>
+      <Helmet title={!!query && `Search for ${query}`} />
       {query ? <SearchResults {...errorFuncs} query={query} api={api} /> : <NotFound name="anything" />}
       <MoreIdeas />
     </Layout>
   );
 };
 SearchPage.propTypes = {
-  api: PropTypes.any.isRequired,
   query: PropTypes.string,
 };
 SearchPage.defaultProps = {
