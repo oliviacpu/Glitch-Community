@@ -141,7 +141,6 @@ const UserPage = ({
       <EntityPageProjects
         projects={pinnedProjects}
         isAuthorized={isAuthorized}
-        api={api}
         removePin={removePin}
         projectOptions={{
           featureProject,
@@ -149,7 +148,6 @@ const UserPage = ({
           deleteProject,
           addProjectToCollection,
         }}
-        currentUser={maybeCurrentUser}
       />
 
       {!!user.login && (
@@ -169,7 +167,6 @@ const UserPage = ({
       <EntityPageProjects
         projects={recentProjects}
         isAuthorized={isAuthorized}
-        api={api}
         addPin={addPin}
         projectOptions={{
           featureProject,
@@ -177,10 +174,9 @@ const UserPage = ({
           deleteProject,
           addProjectToCollection,
         }}
-        currentUser={maybeCurrentUser}
       />
       {isAuthorized && (
-        <DeletedProjects api={api} setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+        <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
       )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>

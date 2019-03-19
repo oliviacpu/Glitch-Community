@@ -136,7 +136,6 @@ const ProjectOptionsPop = ({ ...props }) => (
 );
 
 ProjectOptionsPop.propTypes = {
-  api: PropTypes.any.isRequired,
   project: PropTypes.shape({
     users: PropTypes.array.isRequired,
   }).isRequired,
@@ -171,9 +170,11 @@ function currentUserIsOnProject(user, project) {
   return false;
 }
 
+const ForwardProps = ({ children, ...props }) => children(props);
+
 // Project Options Container
 // create as stateful react component
-export default function ProjectOptions({ projectOptions, project, api }, { ...props }) {
+export default function ProjectOptions({ projectOptions, project }, { ...props }) {
   const currentUser = useCurrentUser();
 
   if (Object.keys(projectOptions).length === 0) {
@@ -187,13 +188,18 @@ export default function ProjectOptions({ projectOptions, project, api }, { ...pr
       containerClass="project-options-pop-btn"
       passToggleToPop
     >
-      <ProjectOptionsPop
-        {...props}
-        {...projectOptions}
-        project={project}
-        currentUser={currentUser}
-        currentUserIsOnProject={currentUserIsOnProject(currentUser, project)}
-      />
+      <ForwardProps>
+        {(consumerProps) => (
+          <ProjectOptionsPop
+            {...props}
+            {...projectOptions}
+            {...consumerProps}
+            project={project}
+            currentUser={currentUser}
+            currentUserIsOnProject={currentUserIsOnProject(currentUser, project)}
+          />
+        )}
+      </ForwardProps>
     </PopoverWithButton>
   );
 }

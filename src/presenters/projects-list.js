@@ -24,7 +24,7 @@ ProjectsList.propTypes = {
 
 ProjectsList.defaultProps = {
   placeholder: null,
-extraClasses: '',
+  extraClasses: '',
 };
 
 class ExpandyProjects extends React.Component {

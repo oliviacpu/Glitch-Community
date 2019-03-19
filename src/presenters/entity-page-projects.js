@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useCurrentUser } from '../state/current-user';
 
 import ProjectsList from './projects-list';
 
 const EntityPageProjects = ({ projects, isAuthorized, addPin, removePin, projectOptions }) => {
-  const currentUser = useCurrentUser()
+  const currentUser = useCurrentUser();
   const pinnedTitle = (
     <>
       Pinned Projects

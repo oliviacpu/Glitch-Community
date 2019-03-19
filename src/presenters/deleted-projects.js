@@ -8,6 +8,7 @@ import { getAvatarUrl } from '../models/project';
 import { TrackClick } from './analytics';
 import { Loader } from './includes/loader';
 
+import { useAPI } from '../state/api';
 import Heading from '../components/text/heading';
 
 function clickUndelete(event, callback) {
@@ -47,7 +48,7 @@ DeletedProjectsList.propTypes = {
   undelete: PropTypes.func.isRequired,
 };
 
-export default class DeletedProjects extends React.Component {
+class DeletedProjects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -120,3 +121,8 @@ DeletedProjects.propTypes = {
 DeletedProjects.defaultProps = {
   deletedProjects: [],
 };
+
+export default function DeletedProjectsWrapper(props) {
+  const api = useAPI();
+  return <DeletedProjects {...props} api={api} />;
+}
