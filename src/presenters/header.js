@@ -12,6 +12,7 @@ import UserOptionsPop from './pop-overs/user-options-pop';
 import SignInPop from './pop-overs/sign-in-pop';
 import NewProjectPop from './pop-overs/new-project-pop';
 import NewStuffContainer from './overlays/new-stuff';
+import { useAPI } from '../state/api';
 import { useCurrentUser, useCurrentUserActions } from '../state/current-user';
 
 const ResumeCoding = () => (
@@ -92,6 +93,7 @@ Header.defaultProps = {
 };
 
 const HeaderContainer = ({ ...props }) => {
+  const api = useAPI
   const user = useCurrentUser();
   const { loggedOut } = useCurrentUserActions();
 

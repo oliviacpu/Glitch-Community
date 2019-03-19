@@ -91,7 +91,8 @@ async function loadCategory(api, id) {
   return data;
 }
 
-const CategoryPage = ({ api, category, ...props }) => (
+const CategoryPage = ({  category, ...props }) => {
+ return (
   <Layout api={api}>
     <AnalyticsContext properties={{ origin: 'category' }}>
       <DataLoader get={() => loadCategory(api, category.id)}>
@@ -110,9 +111,8 @@ const CategoryPage = ({ api, category, ...props }) => (
     </AnalyticsContext>
   </Layout>
 );
-
+}
 CategoryPage.propTypes = {
-  api: PropTypes.any.isRequired,
   category: PropTypes.object.isRequired,
 };
 

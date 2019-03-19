@@ -7,7 +7,7 @@ export const useReduxStore = () => useContext(ReduxContext);
 
 export function useSelector(selector) {
   const store = useReduxStore();
-  const initState = selector(store.getState())
+  const initState = selector(store.getState());
   const [state, setState] = useState(initState);
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {

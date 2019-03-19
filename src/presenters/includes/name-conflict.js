@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CurrentUserConsumer } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
 import { Link } from './link';
 import { NotificationConsumer } from '../notifications';
 
@@ -36,10 +36,9 @@ NameConflict.propTypes = {
   userId: PropTypes.number.isRequired,
 };
 
-const NameConflictContainer = () => (
-  <CurrentUserConsumer>
-    {({ id }) => <NotificationConsumer>{(notifyFuncs) => <NameConflict userId={id} {...notifyFuncs} />}</NotificationConsumer>}
-  </CurrentUserConsumer>
-);
+const NameConflictContainer = () => {
+  const { id } = useCurrentUser();
+  return <NotificationConsumer>{(notifyFuncs) => <NameConflict userId={id} {...notifyFuncs} />}</NotificationConsumer>;
+};
 
 export default NameConflictContainer;
