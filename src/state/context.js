@@ -5,7 +5,7 @@ export const ReduxContext = createContext();
 
 export const useReduxStore = () => useContext(ReduxContext);
 
-export function useReduxSelector(selector, ...args) {
+export function useSelector(selector, ...args) {
   const store = useReduxStore();
   const [state, setState] = useState(() => selector(store.getState()));
   useEffect(() => {

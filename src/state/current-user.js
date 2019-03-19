@@ -1,8 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { ReactReduxContext } from 'react-redux';
 import { createSlice } from 'redux-starter-kit';
 import { before, after } from 'redux-aop';
-import axios from 'axios';
 import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
@@ -39,7 +36,7 @@ export const { reducer, actions } = createSlice({
     loadState: 'init', // init | loading \ ready
   },
   reducers: {
-    requestedLoad: (state, { payload }) => ({
+    requestedLoad: (state) => ({
       ...state,
       loadState: 'loading',
     }),
@@ -72,18 +69,16 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) =>
-  get(state, ['currentUser', 'sharedUser', 'persistentToken'])
+export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken']);
 
-export function selectCurrentUser (state) {
-  const { sharedUser, cachedUser } = state.currentUser
-  return { ...defaultUser, ...sharedUser, ...cachedUser }
+export function selectCurrentUser(state) {
+  const { sharedUser, cachedUser } = state.currentUser;
+  return { ...defaultUser, ...sharedUser, ...cachedUser };
 }
 
+// middleware
 
-// middleware 
-
-const matchTypes = (...actions) => actions.map(String);
+const matchTypes = (...actionCreators) => actionCreators.map(String);
 
 // TODO: should this be kicked off by the UI mounting?
 let didInit = false;
@@ -96,7 +91,7 @@ const onInit = after((store, action) => {
 });
 
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
-  const currentState = store.getState()
+  const currentState = store.getState();
   // prevent multiple 'load's from running
   if (selectLoadState(currentState) === 'loading') {
     return null;
@@ -125,7 +120,7 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
   }
 
   // hooks for easier debugging
-  // TODO: is this necessary with the redux dev tools?  
+  // TODO: is this necessary with the redux dev tools?
   window.currentUser = cachedUser;
 
   return action;
@@ -137,12 +132,12 @@ export const middleware = [onInit, onLoad, onUserChange];
 // TODO: `api` and actions don't need to be in here, do they?
 // TODO: what is `fetched` actually used for?
 
-export function useLegacyCurrentUser () {
-  const currentUser = useSelector(selectCurrentUser)
-  const loadState = useSelector(selectLoadState)
-  const api = useAPI()
-  const boundActions = useActions(actions)
-  
+export function useLegacyCurrentUser() {
+  const currentUser = useSelector(selectCurrentUser);
+  const loadState = useSelector(selectLoadState);
+  const api = useAPI();
+  const boundActions = useActions(actions);
+
   return {
     api,
     currentUser,
@@ -151,9 +146,8 @@ export function useLegacyCurrentUser () {
     login: boundActions.loggedIn,
     update: boundActions.updated,
     clear: boundActions.loggedOut,
-  }
+  };
 }
-
 
 // utilities
 
@@ -257,7 +251,7 @@ async function getCachedUser(state) {
 
 // TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
 async function load(state) {
-  let { sharedUser, cachedUser } = state.currenUser;
+  const { sharedUser, cachedUser } = state.currenUser;
   const nextState = { sharedUser, cachedUser };
 
   // If we're signed out create a new anon user
