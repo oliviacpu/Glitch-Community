@@ -6,8 +6,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
 
-import { CurrentUserConsumer } from '../current-user';
-
 import { useActions } from '../../state/context';
 import { useAPI } from '../../state/api';
 import { actions as currentUserActions } from '../../state/current-user';
