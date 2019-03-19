@@ -5,13 +5,13 @@ export const ReduxContext = createContext();
 
 export const useReduxStore = () => useContext(ReduxContext);
 
-export function useSelector(selector, ...args) {
+export function useSelector(selector) {
   const store = useReduxStore();
-  const [state, setState] = useState(selector(store.getState(), ...args));
+  const [state, setState] = useState(selector(store.getState()));
   useEffect(
     () =>
       store.subscribe(() => {
-        const nextState = selector(store.getState(), ...args);
+        const nextState = selector(store.getState());
         console.log('nextState', selector.name, nextState)
         if (nextState !== state) {
           setState(nextState);
@@ -19,7 +19,7 @@ export function useSelector(selector, ...args) {
       }),
     [store],
   );
-  console.log('useSelector', selector.name. state)
+  console.log('useSelector', selector.name, state)
   return state;
 }
 
