@@ -241,15 +241,14 @@ const onInit = after((store, action) => {
 });
 
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
-    const currentState = store.getState();
     // prevent multiple 'load's from running
-    if (selectLoadState(currentState) === 'loading') {
-      return null;
+    if (selectLoadState(store.getState()) === 'loading') {
+      return undefined;
     }
-
-//     load(currentState).then((result) => {
-//       store.dispatch(actions.loaded(result));
-//     });
+  
+    Promise.resolve()
+      .then(() => load(store.getState()))
+      .then((result) => { store.dispatch(actions.loaded(result)); })
 
   return action;
 });
