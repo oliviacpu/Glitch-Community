@@ -12,7 +12,6 @@ import UserOptionsPop from './pop-overs/user-options-pop';
 import SignInPop from './pop-overs/sign-in-pop';
 import NewProjectPop from './pop-overs/new-project-pop';
 import NewStuffContainer from './overlays/new-stuff';
-import { useAPI } from '../state/api';
 import { useCurrentUser, useCurrentUserActions } from '../state/current-user';
 
 const ResumeCoding = () => (
@@ -75,7 +74,7 @@ const Header = ({ api, maybeUser, clearUser, searchQuery, showNewStuffOverlay })
 
     <nav>
       <SearchForm defaultValue={searchQuery} />
-      <NewProjectPop api={api} />
+      <NewProjectPop />
       {!!maybeUser && !!maybeUser.projects.length && <ResumeCoding />}
       {!(maybeUser && maybeUser.login) && <SignInPop api={api} />}
       {!!maybeUser && <UserOptionsPop user={maybeUser} signOut={clearUser} showNewStuffOverlay={showNewStuffOverlay} api={api} />}
@@ -93,7 +92,6 @@ Header.defaultProps = {
 };
 
 const HeaderContainer = ({ ...props }) => {
-  const api = useAPI
   const user = useCurrentUser();
   const { loggedOut } = useCurrentUserActions();
 

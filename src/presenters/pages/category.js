@@ -91,27 +91,27 @@ async function loadCategory(api, id) {
   return data;
 }
 
-const CategoryPage = ({  category, ...props }) => {
- return (
-  <Layout api={api}>
-    <AnalyticsContext properties={{ origin: 'category' }}>
-      <DataLoader get={() => loadCategory(api, category.id)}>
-        {(loadedCategory) => (
-          <CollectionEditor api={api} initialCollection={loadedCategory}>
-            {(categoryFromEditor, funcs) => (
-              <CurrentUserConsumer>
-                {(currentUser) => (
-                  <CategoryPageWrap category={categoryFromEditor} api={api} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
-                )}
-              </CurrentUserConsumer>
-            )}
-          </CollectionEditor>
-        )}
-      </DataLoader>
-    </AnalyticsContext>
-  </Layout>
-);
-}
+const CategoryPage = ({ api, category, ...props }) => {
+  return (
+    <Layout api={api}>
+      <AnalyticsContext properties={{ origin: 'category' }}>
+        <DataLoader get={() => loadCategory(api, category.id)}>
+          {(loadedCategory) => (
+            <CollectionEditor api={api} initialCollection={loadedCategory}>
+              {(categoryFromEditor, funcs) => (
+                <CurrentUserConsumer>
+                  {(currentUser) => (
+                    <CategoryPageWrap category={categoryFromEditor} api={api} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
+                  )}
+                </CurrentUserConsumer>
+              )}
+            </CollectionEditor>
+          )}
+        </DataLoader>
+      </AnalyticsContext>
+    </Layout>
+  );
+};
 CategoryPage.propTypes = {
   category: PropTypes.object.isRequired,
 };

@@ -6,6 +6,7 @@ import { Loader } from '../includes/loader';
 import ProjectAvatar from '../includes/project-avatar';
 import PopoverWithButton from './popover-with-button';
 
+import { useAPI } from '../../state/api';
 import { getRemixUrl } from '../../models/project';
 
 const importGitRepo = () => {
@@ -108,4 +109,7 @@ NewProjectPopButton.propTypes = {
   api: PropTypes.any.isRequired,
 };
 
-export default NewProjectPopButton;
+export default (props) => {
+  const api = useAPI()
+  return <NewProjectPopButton {...props} api={api} />
+};
