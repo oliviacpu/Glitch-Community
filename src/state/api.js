@@ -24,7 +24,7 @@ export function getAPI(state) {
 }
 
 export function useAPI() {
-  const persistentToken = useSelector(selectPersistentToken);
+  const persistentToken = useSelector((state) => console.log('useSelector', state) || selectPersistentToken(state));
   console.log('useAPI', persistentToken)
   return getAPIForToken(persistentToken);
 }

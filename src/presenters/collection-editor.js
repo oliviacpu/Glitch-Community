@@ -9,7 +9,7 @@ import { useSelector } from '../state/context'
 
 class CollectionEditor extends React.Component {
   constructor(props) {
-    super(props);
+  super(props);
 
     this.state = {
       ...props.initialCollection,
@@ -82,7 +82,7 @@ CollectionEditor.defaultProps = {
 
 const CollectionEditorContainer = ({ children, initialCollection }) => {
   const currentUser = useSelector(selectCurrentUser);
-  const { api } = useAPI();
+  const api = useAPI();
   const errorFuncs = useErrorHandlers();
   return (
     <CollectionEditor {...{ api, currentUser, initialCollection }} {...errorFuncs}>
