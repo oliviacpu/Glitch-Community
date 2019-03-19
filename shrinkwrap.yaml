@@ -56,7 +56,6 @@ dependencies:
   react-konami: 0.5.0
   react-onclickoutside: 6.8.0
   react-pluralize: 1.5.0
-  react-redux: 6.0.1
   react-router-dom: 4.3.1
   react-select: 2.4.2
   react-textarea-autosize: 7.1.0
@@ -6384,12 +6383,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
-  /hoist-non-react-statics/3.3.0:
-    dependencies:
-      react-is: 16.8.4
-    dev: false
-    resolution:
-      integrity: sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
   /homedir-polyfill/1.0.3:
     dependencies:
       parse-passwd: 1.0.0
@@ -9126,20 +9119,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-dD6Tv05meo+436HZmSzf70gwJkx3HUncpFPggaE02vSzUr8vh+l/2kGfJsxWrFezqVaEq9l0jPeMcWe7dZPatw==
-  /react-redux/6.0.1:
-    dependencies:
-      '@babel/runtime': 7.3.4
-      hoist-non-react-statics: 3.3.0
-      invariant: 2.2.4
-      loose-envify: 1.4.0
-      prop-types: 15.7.2
-      react-is: 16.8.4
-    dev: false
-    peerDependencies:
-      react: ^16.4.0-0
-      redux: ^2.0.0 || ^3.0.0 || ^4.0.0-0
-    resolution:
-      integrity: sha512-T52I52Kxhbqy/6TEfBv85rQSDz6+Y28V/pf52vDWs1YRXG19mcFOGfHnY2HsNFHyhP+ST34Aih98fvt6tqwVcQ==
   /react-router-dom/4.3.1:
     dependencies:
       history: 4.9.0
@@ -11359,7 +11338,6 @@ specifiers:
   react-konami: ^0.5.0
   react-onclickoutside: ^6.8.0
   react-pluralize: ^1.5.0
-  react-redux: ^6.0.1
   react-router-dom: ^4.3.1
   react-select: ^2.4.0
   react-textarea-autosize: ^7.1.0
