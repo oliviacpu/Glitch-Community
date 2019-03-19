@@ -71,11 +71,7 @@ const getTeam = async (api, name) => {
 
 const TeamPageLoader = ({ id, name, ...props }) => {
   const api = useAPI();
-  return (
-    <DataLoader get={() => getTeam(api, name)}>
-      {(team) => (team ? <TeamPage api={api} team={team} {...props} /> : <NotFound name={name} />)}
-    </DataLoader>
-  );
+  return <DataLoader get={() => getTeam(api, name)}>{(team) => (team ? <TeamPage team={team} {...props} /> : <NotFound name={name} />)}</DataLoader>;
 };
 TeamPageLoader.propTypes = {
   id: PropTypes.number.isRequired,
@@ -85,9 +81,7 @@ TeamPageLoader.propTypes = {
 const UserPageLoader = ({ id, name, ...props }) => {
   const api = useAPI();
   return (
-    <DataLoader get={() => getUserById(api, id)}>
-      {(user) => (user ? <UserPage api={api} user={user} {...props} /> : <NotFound name={name} />)}
-    </DataLoader>
+    <DataLoader get={() => getUserById(api, id)}>{(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}</DataLoader>
   );
 };
 UserPageLoader.propTypes = {
@@ -101,10 +95,10 @@ const TeamOrUserPageLoader = ({ name, ...props }) => {
     <DataLoader get={() => getTeam(api, name)}>
       {(team) =>
         team ? (
-          <TeamPage team={team} api={api} {...props} />
+          <TeamPage team={team} {...props} />
         ) : (
           <DataLoader get={() => getUserByLogin(api, name)}>
-            {(user) => (user ? <UserPage user={user} api={api} {...props} /> : <NotFound name={name} />)}
+            {(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}
           </DataLoader>
         )
       }

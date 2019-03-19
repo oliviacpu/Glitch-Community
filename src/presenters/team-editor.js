@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import * as assets from '../utils/assets';
 
-import { useCurrentUser } from './current-user';
+import { useAPI } from '../state/api';
+import { useCurrentUser, useCurrentUserActions } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
 import { useNotifications } from './notifications';
 import useUploader from './includes/uploader';
@@ -250,19 +251,20 @@ TeamEditor.defaultProps = {
   api: null,
 };
 
-const TeamEditorContainer = ({ api, children, initialTeam }) => {
-  const { currentUser, update } = useCurrentUser();
+const TeamEditorContainer = ({ children, initialTeam }) => {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
+  const { updated } = useCurrentUserActions();
   const uploadFuncs = useUploader();
   const notificationFuncs = useNotifications();
   const errorFuncs = useErrorHandlers();
   return (
-    <TeamEditor {...{ api, currentUser, initialTeam }} updateCurrentUser={update} {...uploadFuncs} {...notificationFuncs} {...errorFuncs}>
+    <TeamEditor {...{ api, currentUser, initialTeam }} updateCurrentUser={updated} {...uploadFuncs} {...notificationFuncs} {...errorFuncs}>
       {children}
     </TeamEditor>
   );
 };
 TeamEditorContainer.propTypes = {
-  api: PropTypes.any.isRequired,
   children: PropTypes.func.isRequired,
   initialTeam: PropTypes.object.isRequired,
 };

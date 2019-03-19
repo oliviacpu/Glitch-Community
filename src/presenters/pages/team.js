@@ -329,8 +329,8 @@ const teamConflictsWithUser = (team, currentUser) => {
   return false;
 };
 
-const TeamNameConflict = ({ team }) => (
-  <CurrentUserConsumer>{(currentUser) => teamConflictsWithUser(team, currentUser) && <NameConflictWarning />}</CurrentUserConsumer>
+const TeamNameConflict = ({ team, currentUser }) => (
+  teamConflictsWithUser(team, currentUser) && <NameConflictWarning />
 );
 
 const TeamPageEditor = ({ api, initialTeam, children }) => (
@@ -373,6 +373,7 @@ const TeamPageEditor = ({ api, initialTeam, children }) => (
 );
 const TeamPageContainer = ({ team, ...props }) => {
   const currentUser = useCurrentUser();
+  const api = useAPI();
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
       <TeamPageEditor initialTeam={team}>
@@ -381,19 +382,16 @@ const TeamPageContainer = ({ team, ...props }) => {
             <Helmet>
               <title>{teamFromEditor.name}</title>
             </Helmet>
-            <CurrentUserConsumer>
-              {(currentUser) => (
-                <TeamPage
-                  team={teamFromEditor}
-                  {...funcs}
-                  currentUser={currentUser}
-                  currentUserIsOnTeam={currentUserIsOnTeam}
-                  currentUserIsTeamAdmin={currentUserIsTeamAdmin}
-                  {...props}
-                />
-              )}
-            </CurrentUserConsumer>
-            <TeamNameConflict team={teamFromEditor} />
+            <TeamPage
+              team={teamFromEditor}
+              {...funcs}
+              api={api}
+              currentUser={currentUser}
+              currentUserIsOnTeam={currentUserIsOnTeam}
+              currentUserIsTeamAdmin={currentUserIsTeamAdmin}
+              {...props}
+            />
+            <TeamNameConflict team={teamFromEditor} currentUser={currentUser} />
           </>
         )}
       </TeamPageEditor>
