@@ -111,21 +111,15 @@ async function load(state) {
   const { sharedUser, cachedUser } = state.currentUser;
   const nextState = { sharedUser, cachedUser };
 
-  console.log(1);
-
   // If we're signed out create a new anon user
   if (!sharedUser) {
     nextState.sharedUser = await getAnonUser(state);
   }
 
-  console.log(1.5);
-
   // Check if we have to clear the cached user
   if (!usersMatch(sharedUser, cachedUser)) {
     nextState.cachedUser = undefined;
   }
-
-  console.log(2);
 
   const newCachedUser = await getCachedUser(state);
   if (newCachedUser === 'error') {
@@ -150,8 +144,6 @@ async function load(state) {
     // The shared user is good, store it
     nextState.cachedUser = newCachedUser;
   }
-
-  console.log(3);
 
   return nextState;
 }
@@ -181,8 +173,11 @@ const defaultUser = {
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
   initialState: {
+    
+    // sharedUser syncs with the editor and is authoritative on id and persistentToken
     sharedUser: readFromStorage('currentUser') || null,
-    cachedUser: readFromStorage('community-cachedUser') || null,
+  // cachedUser mirrors GET /users/{id} and is what we actually display
+  cachedUser: readFromStorage('community-cachedUser') || null,
     loadState: 'init', // init | loading \ ready
   },
   reducers: {
@@ -255,7 +250,6 @@ const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
 
 const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   const prev = store.getState().currentUser;
-  console.log(prev)
   const { cachedUser, sharedUser } = action.payload;
 
   if (!usersMatch(cachedUser, prev.cachedUser)) {
@@ -265,7 +259,8 @@ const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
     // delay loading a moment so both items from storage have a chance to update
     setTimeout(() => {
-      store.dispatch(actions.requestedLoad());
+      console.log('reload!')
+      // store.dispatch(actions.requestedLoad());
     }, 1);
   }
 
@@ -282,7 +277,7 @@ export const middleware = [
   onUserChange
 ];
 
-// connectors
+// hooks
 // TODO: `api` and actions don't need to be in here, do they?
 // TODO: what is `fetched` actually used for?
 
