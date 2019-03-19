@@ -7,19 +7,18 @@ export const useReduxStore = () => useContext(ReduxContext);
 
 export function useSelector(selector) {
   const store = useReduxStore();
-  const [state, setState] = useState(selector(store.getState()));
-  useEffect(
-    () =>
-      store.subscribe(() => {
-        const nextState = selector(store.getState());
-        console.log('nextState', selector.name, nextState)
-        if (nextState !== state) {
-          setState(nextState);
-        }
-      }),
-    [store],
-  );
-  console.log('useSelector', selector.name, state)
+  const initState = selector(store.getState())
+  const [state, setState] = useState(initState);
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => {
+      const nextState = selector(store.getState());
+      if (nextState !== state) {
+        console.log('updating', selector.name, nextState)
+        setState(nextState);
+      }
+    });
+    return unsubscribe;
+  }, [store]);
   return state;
 }
 

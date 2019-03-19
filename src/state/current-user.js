@@ -220,11 +220,11 @@ export const selectLoadState = (state) => state.currentUser.loadState;
 
 export const selectPersistentToken = (state) => {
   if (state.currentUser.sharedUser) {
-    return state.currentUser.sharedUser.persistentToken
+    return state.currentUser.sharedUser.persistentToken;
   } else {
-    return null
+    return null;
   }
-}
+};
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;

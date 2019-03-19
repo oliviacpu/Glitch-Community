@@ -5,7 +5,7 @@ import { useCurrentUser } from './current-user';
 import useErrorHandlers from './error-handlers';
 import { useAPI } from '../state/api'
 import { selectCurrentUser } from '../state/current-user'
-import { useSelector } from '../state/context'
+import { useSelector, useReduxStore } from '../state/context'
 
 class CollectionEditor extends React.Component {
   constructor(props) {
@@ -83,6 +83,8 @@ CollectionEditor.defaultProps = {
 const CollectionEditorContainer = ({ children, initialCollection }) => {
   const currentUser = useSelector(selectCurrentUser);
   const api = useAPI();
+  const store = useReduxStore()
+  console.log(currentUser, store.getState().currentUser)
   const errorFuncs = useErrorHandlers();
   return (
     <CollectionEditor {...{ api, currentUser, initialCollection }} {...errorFuncs}>
