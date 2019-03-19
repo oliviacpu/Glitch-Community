@@ -3,6 +3,7 @@ import { ReactReduxContext } from 'react-redux';
 import { createSlice } from 'redux-starter-kit';
 import { before, after } from 'redux-aop';
 import axios from 'axios';
+import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
 
@@ -114,15 +115,19 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
 
 export const middleware = [onInit, onLoad, onUserChange];
 
+// selectors
+
+export const selectPersistentToken = (state) =>
+  get(state, ['currentUser', 'sharedUser', 'persistentToken'])
+
+export function selectCurrentUser (state) {
+  const { sharedUser, cachedUser } = state.currentUser
+  return { ...defaultUser, ...sharedUser, ...cachedUser }
+}
+
 // connectors
 // TODO: `api` and actions don't need to be in here, do they?
 // TODO: what is `fetched` actually used for?
-
-export function useCurrentUser () {
-  return {
-    
-  }
-}
 
 export function useCurrentUser () {
   const currentUser = useReduxSelector(selectCurrentUser)
@@ -292,24 +297,4 @@ async function load(state) {
   }
 
   return nextState;
-}
-
-function selectCurrentUser (state) {
-  const { sharedUser, cachedUser } = state.currentUser
-  return { ...defaultUser, ...sharedUser, ...cachedUser }
-}
-
-
-const useReduxStore = () => useContext(ReactReduxContext)
-
-function useReduxSelector (selector) {
-  const store = useReduxStore()
-  const [state, setState] = useState(() => selector(store.getState()))
-  useEffect(() => {
-    return store.subscribe(() => {
-      const nextState = selector(store.getState())
-      if (nextState !== state) { setState(nextState) }
-    })
-  }, [store])
-  return state
 }
