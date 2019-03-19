@@ -8,6 +8,8 @@ import rootTeams from '../../curated/teams';
 
 import { CurrentUserConsumer } from '../current-user';
 
+import { useAPI } from '../../state/api';
+
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, EmailTokenLoginPage } from './login';
 import JoinTeamPage from './join-team';
@@ -20,6 +22,7 @@ import CollectionPage from './collection';
 import { NotFoundPage, ProjectNotFoundPage } from './error';
 import OauthSignIn from './sign-in';
 import SecretPage from './secret';
+
 
 /* global EXTERNAL_ROUTES */
 
@@ -38,6 +41,9 @@ class ExternalPageReloader extends React.Component {
   }
 }
 
+function PageChangeHandler_
+
+
 class PageChangeHandlerBase extends React.Component {
   componentDidMount() {
     this.track();
@@ -51,7 +57,7 @@ class PageChangeHandlerBase extends React.Component {
     }
   }
 
-  track = () => {
+  track() {
     try {
       const { analytics } = window;
       if (analytics) {
@@ -71,7 +77,9 @@ const PageChangeHandler = withRouter(({ location }) => (
   <CurrentUserConsumer>{(user, fetched, { reload }) => <PageChangeHandlerBase location={location} reloadCurrentUser={reload} />}</CurrentUserConsumer>
 ));
 
-const Router = ({ api }) => (
+const Router = () => {
+  const api = useAPI()
+return (
   <>
     <PageChangeHandler />
     <Switch>
@@ -166,8 +174,7 @@ const Router = ({ api }) => (
   </>
 );
 
-Router.propTypes = {
-  api: PropTypes.any.isRequired,
-};
+} 
 
 export default Router;
+ 
