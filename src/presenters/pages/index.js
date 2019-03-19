@@ -44,7 +44,7 @@ Callout.defaultProps = {
 };
 
 const witch = [
-  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446 800w'],
+  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446 600w'],
   ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039 320w'],
 ];
 
@@ -70,7 +70,7 @@ class WhatIsGlitch extends React.Component {
         <span>
           <figure>
             <h1>
-              <Image src={witchSmall} srcSet={witch} alt={whatsGlitchAlt} />
+              <Image src={witchSmall} backgroundImage={true} srcSet={witch} alt={whatsGlitchAlt} sizes="(max-width: 320px) 280px, 650px" />
             </h1>
 
             <OverlayVideo>
