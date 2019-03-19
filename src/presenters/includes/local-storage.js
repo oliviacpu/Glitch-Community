@@ -1,47 +1,7 @@
 import React from 'react';
 import { captureException } from '../../utils/sentry';
+import { storage, readFromStorage, writeToStorage } from '../../state/local-storage';
 
-const getStorage = () => {
-  try {
-    const storage = window.localStorage;
-    storage.setItem('test', 'test');
-    storage.getItem('test');
-    storage.removeItem('test');
-    return storage;
-  } catch (error) {
-    console.warn('Local storage not available, using memory store');
-  }
-  return null;
-};
-const storage = getStorage();
-
-const readFromStorage = (name) => {
-  if (storage) {
-    try {
-      const raw = storage.getItem(name);
-      if (raw !== null) {
-        return JSON.parse(raw);
-      }
-    } catch (error) {
-      captureException(error);
-    }
-  }
-  return undefined;
-};
-
-const writeToStorage = (name, value) => {
-  if (storage) {
-    try {
-      if (value !== undefined) {
-        storage.setItem(name, JSON.stringify(value));
-      } else {
-        storage.removeItem(name);
-      }
-    } catch (error) {
-      captureException(error);
-    }
-  }
-};
 
 const useLocalStorage = (name, defaultValue) => {
   const [rawValue, setValueInMemory] = React.useState(() => readFromStorage(name));

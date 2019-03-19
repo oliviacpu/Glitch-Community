@@ -1,5 +1,3 @@
-/* globals API_URL */
-
 import React, { useContext, useState, useEffect } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { createSlice } from 'redux-starter-kit';
@@ -119,6 +117,12 @@ export const middleware = [onInit, onLoad, onUserChange];
 // connectors
 // TODO: `api` and actions don't need to be in here, do they?
 // TODO: what is `fetched` actually used for?
+
+export function useCurrentUser () {
+  return {
+    
+  }
+}
 
 export function useCurrentUser () {
   const currentUser = useReduxSelector(selectCurrentUser)

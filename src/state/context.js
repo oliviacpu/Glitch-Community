@@ -7,12 +7,12 @@ export const Provider = ({ store, children }) => <ReduxContext.Provider value={s
 
 export const useReduxStore = () => useContext(ReduxContext);
 
-export function useReduxSelector(selector) {
+export function useReduxSelector(selector, ...args) {
   const store = useReduxStore();
   const [state, setState] = useState(() => selector(store.getState()));
   useEffect(() => {
     return store.subscribe(() => {
-      const nextState = selector(store.getState());
+      const nextState = selector(store.getState(), ...args);
       if (nextState !== state) {
         setState(nextState);
       }
