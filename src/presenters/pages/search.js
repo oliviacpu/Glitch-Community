@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Layout from '../layout';
 
-import { useCurrentUser } from '../current-user';
+import {useCurrentUser} from '../../state/current-user';
+import {useAPI} from '../../state/api';
 
 import useErrorHandlers from '../error-handlers';
 import { Loader } from '../includes/loader';
@@ -50,7 +51,8 @@ const UserResults = ({ users }) => (
   </article>
 );
 
-const ProjectResults = ({ addProjectToCollection, api, projects, currentUser }) => {
+const ProjectResults = ({ addProjectToCollection, api, projects }) => {
+  const currentUser = useCurrentUser()
   if (!projects) {
     return (
       <article>
@@ -126,7 +128,6 @@ class SearchResults extends React.Component {
         {showResults(projects) && (
           <ProjectResults
             projects={projects}
-            currentUser={this.props.currentUser}
             api={this.props.api}
             addProjectToCollection={this.addProjectToCollection}
           />
@@ -139,21 +140,20 @@ class SearchResults extends React.Component {
 SearchResults.propTypes = {
   api: PropTypes.any,
   query: PropTypes.string.isRequired,
-  currentUser: PropTypes.object.isRequired,
 };
 
 SearchResults.defaultProps = {
   api: null,
 };
 
-const SearchPage = ({ api, query }) => {
-  const { currentUser } = useCurrentUser();
+const SearchPage = ({, query }) => {
+  const api = useAPI()
   const errorFuncs = useErrorHandlers();
   return (
-    <Layout api={api} searchQuery={query}>
+    <Layout searchQuery={query}>
       <Helmet>{!!query && <title>Search for {query}</title>}</Helmet>
-      {query ? <SearchResults {...errorFuncs} api={api} query={query} currentUser={currentUser} /> : <NotFound name="anything" />}
-      <MoreIdeas api={api} />
+      {query ? <SearchResults {...errorFuncs} query={query} api={api} /> : <NotFound name="anything" />}
+      <MoreIdeas />
     </Layout>
   );
 };

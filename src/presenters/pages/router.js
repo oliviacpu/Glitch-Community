@@ -113,7 +113,7 @@ const Router = () => {
         <Route
           path="/@:owner/:name"
           exact
-          render={({ location, match }) => <CollectionPage key={location.key} api={api} ownerName={match.params.owner} name={match.params.name} />}
+          render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
         />
 
         <Route
@@ -133,13 +133,13 @@ const Router = () => {
             key={category.url}
             path={`/${category.url}`}
             exact
-            render={({ location }) => <CategoryPage key={location.key} api={api} category={category} />}
+            render={({ location }) => <CategoryPage key={location.key} category={category} />}
           />
         ))}
 
         <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
 
-        <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} api={api} />} />
+        <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
         {EXTERNAL_ROUTES.map((route) => (
           <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />

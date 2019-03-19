@@ -12,7 +12,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { captureException } from '../../utils/sentry';
-import { useCurrentUser } from '../current-user';
+import { useCurrentUser, useCurrentUserActions } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 import { NestedPopover, NestedPopoverTitle } from '../pop-overs/popover-nested';
 
 class SignIn extends React.Component {
@@ -151,9 +152,9 @@ class SignInCodeHandler extends React.Component {
   }
 }
 
-const SignInWithConsumer = (props) => {
-  const { login } = useCurrentUser();
-  return <SignInCodeHandler setUser={login} {...props} />;
+const SignInWithConsumer = ({ api }) => {
+  const { loggedIn } = useCurrentUserActions();
+  return <SignInCodeHandler setUser={loggedIn} api={api} />;
 };
 
 const EmailSignInButton = ({ onClick }) => (
@@ -181,9 +182,9 @@ SignInCodeSection.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const SignInPop = (props) => {
-  const { api } = props;
-  const { currentUser } = useCurrentUser();
+const SignInPop = () => {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
@@ -200,9 +201,9 @@ const SignInPop = (props) => {
   }
 
   return (
-    <NestedPopover alternateContent={() => <SignIn {...props} />} startAlternateVisible={false}>
+    <NestedPopover alternateContent={() => <SignIn api={api} />} startAlternateVisible={false}>
       {(showEmailLogin) => (
-        <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
+        <NestedPopover alternateContent={() => <SignInWithConsumer api={api} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
             <div
               className="pop-over sign-in-pop middle"
@@ -230,10 +231,6 @@ const SignInPop = (props) => {
       )}
     </NestedPopover>
   );
-};
-
-SignInPop.propTypes = {
-  api: PropTypes.func.isRequired,
 };
 
 export default SignInPop;
