@@ -7,10 +7,11 @@ import Embed from './includes/embed';
 import ReportButton from './pop-overs/report-abuse-pop';
 import AddProjectToCollection from './includes/add-project-to-collection';
 import { TrackClick } from './analytics';
-
+import { useCurrentUser } from '../state/current-user';
 import Heading from '../components/text/heading';
 
-const EntityPageFeaturedProject = ({ api, isAuthorized, currentUser, unfeatureProject, addProjectToCollection, featuredProject }) => {
+const EntityPageFeaturedProject = ({ isAuthorized, unfeatureProject, addProjectToCollection, featuredProject }) => {
+  const currentUser = useCurrentUser()
   const reportBtn = (
     <div className="buttons buttons-left">
       <ReportButton className="button-small" reportedType="project" reportedModel={featuredProject} />
@@ -44,8 +45,6 @@ const EntityPageFeaturedProject = ({ api, isAuthorized, currentUser, unfeaturePr
           {currentUser.login && (
             <AddProjectToCollection
               className="button-small"
-              api={api}
-              currentUser={currentUser}
               project={featuredProject}
               fromProject
               addProjectToCollection={addProjectToCollection}
@@ -68,16 +67,10 @@ const EntityPageFeaturedProject = ({ api, isAuthorized, currentUser, unfeaturePr
 };
 
 EntityPageFeaturedProject.propTypes = {
-  api: PropTypes.func.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
-  currentUser: PropTypes.object,
   unfeatureProject: PropTypes.func.isRequired,
   featuredProject: PropTypes.object.isRequired,
   addProjectToCollection: PropTypes.func.isRequired,
-};
-
-EntityPageFeaturedProject.defaultProps = {
-  currentUser: null,
 };
 
 export default EntityPageFeaturedProject;

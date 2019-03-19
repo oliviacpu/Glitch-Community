@@ -11,6 +11,8 @@ import { Loader } from '../includes/loader';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
+import { useAPI } from '../../state/api';
+import { useCurrentUser } from '../../state/current-user';
 
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
 
@@ -210,4 +212,10 @@ AddProjectToCollectionPop.propTypes = {
   currentUser: PropTypes.object.isRequired,
 };
 
-export default AddProjectToCollectionPop;
+const AddProjectToCollectionPopWrap = (props) => {
+  const currentUser = useCurrentUser();
+  const api = useAPI();
+  return <AddProjectToCollectionPop {...props} currentUser={currentUser} api={api} />;
+};
+
+export default AddProjectToCollectionPopWrap;

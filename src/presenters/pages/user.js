@@ -131,11 +131,9 @@ const UserPage = ({
       {featuredProject && (
         <EntityPageFeaturedProject
           featuredProject={featuredProject}
-          api={api}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
           addProjectToCollection={addProjectToCollection}
-          currentUser={maybeCurrentUser}
         />
       )}
 
