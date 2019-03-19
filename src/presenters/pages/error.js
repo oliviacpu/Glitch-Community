@@ -6,7 +6,7 @@ import { captureException } from '../../utils/sentry';
 import Layout from '../layout';
 
 import { getShowUrl } from '../../models/project';
-import { useCurrentUser } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
 import NotFound from '../includes/not-found';
 
 import Heading from '../../components/text/heading';
@@ -91,7 +91,7 @@ OauthErrorPage.defaultProps = {
 };
 
 export const ProjectNotFoundPage = ({ api, name }) => {
-  const { currentUser } = useCurrentUser();
+  const currentUser = useCurrentUser();
 
   const check = async () => {
     try {

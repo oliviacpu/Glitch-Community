@@ -5,7 +5,7 @@ import Layout from '../layout';
 
 import { getEditorUrl } from '../../models/project';
 import { AnalyticsContext } from '../analytics';
-import { CurrentUserConsumer } from '../current-user';
+
 import { Link } from '../includes/link';
 
 import Featured from '../featured';
@@ -16,6 +16,9 @@ import RecentProjects from '../recent-projects';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import Heading from '../../components/text/heading';
+
+import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 
 function loadScript(src) {
   const script = document.createElement('script');
@@ -103,40 +106,29 @@ const MadeInGlitch = () => (
   </section>
 );
 
-const IndexPage = ({ api, user }) => (
-  <main>
-    {!user.login && <WhatIsGlitch />}
+const IndexPage = () => {
+  const user = useCurrentUser();
+  const api = useAPI();
+  return (
+    <main>
+      {!user.login && <WhatIsGlitch />}
 
-    {!!user.projects.length && <RecentProjects api={api} />}
-    {!!user.login && <Questions api={api} />}
-    <Featured isAuthorized={!!user.login} api={api} />
-    <MoreIdeas api={api} />
-    <MadeInGlitch />
-    <ReportButton reportedType="home" />
-  </main>
-);
-IndexPage.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number,
-    login: PropTypes.string,
-  }).isRequired,
-  api: PropTypes.any,
+      {!!user.projects.length && <RecentProjects api={api} />}
+      {!!user.login && <Questions api={api} />}
+      <Featured isAuthorized={!!user.login} api={api} />
+      <MoreIdeas api={api} />
+      <MadeInGlitch />
+      <ReportButton reportedType="home" />
+    </main>
+  );
 };
 
-IndexPage.defaultProps = {
-  api: null,
-};
-
-const IndexPageContainer = ({ api }) => (
-  <Layout api={api}>
+const IndexPageContainer = () => (
+  <Layout>
     <AnalyticsContext properties={{ origin: 'index' }}>
-      <CurrentUserConsumer>{(user) => <IndexPage api={api} user={user} />}</CurrentUserConsumer>
+      <IndexPage />
     </AnalyticsContext>
   </Layout>
 );
 
 export default IndexPageContainer;
-
-IndexPageContainer.defaultProps = {
-  api: PropTypes.any,
-};
