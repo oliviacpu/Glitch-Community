@@ -5,6 +5,22 @@ import styles from './image.styl';
 
 const cx = classNames.bind(styles);
 
+/**
+  * 🖼️ Image Component
+  *
+  * @param {string} src - Image source
+  * @param {object} srcSet - Responsive image source set
+  * @param {alt} alt - Alternative text
+  * @param {number} width - Image width
+  * @param {number} height - Image height
+  * @param {string} role - Image role (typically presentation)
+  * @param {function} onClick - action if the image has one
+  * @param {object} extraClassNames - extra classes to be passed down  to the component
+  * @param {boolean} backgroundImage - If we want the image to be rendered as a background image
+*/
+const imageTag = () => {}
+const backgroundTag = () => {}
+
 const Image = ({ src, className, alt, role, width, height }) => {
   const classes = cx({
     [className]: className !== undefined,
