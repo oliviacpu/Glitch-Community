@@ -11,7 +11,7 @@ import { useCurrentUser } from '../state/current-user';
 import Heading from '../components/text/heading';
 
 const EntityPageFeaturedProject = ({ isAuthorized, unfeatureProject, addProjectToCollection, featuredProject }) => {
-  const currentUser = useCurrentUser()
+  const currentUser = useCurrentUser();
   const reportBtn = (
     <div className="buttons buttons-left">
       <ReportButton className="button-small" reportedType="project" reportedModel={featuredProject} />
@@ -43,12 +43,7 @@ const EntityPageFeaturedProject = ({ isAuthorized, unfeatureProject, addProjectT
 
         <div className="buttons buttons-right">
           {currentUser.login && (
-            <AddProjectToCollection
-              className="button-small"
-              project={featuredProject}
-              fromProject
-              addProjectToCollection={addProjectToCollection}
-            />
+            <AddProjectToCollection className="button-small" project={featuredProject} fromProject addProjectToCollection={addProjectToCollection} />
           )}
 
           <TrackClick

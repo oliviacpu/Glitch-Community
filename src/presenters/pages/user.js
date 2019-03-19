@@ -75,9 +75,7 @@ const UserPage = ({
     featuredProjectId,
     ...user
   },
-  api,
   isAuthorized,
-  maybeCurrentUser,
   updateDescription,
   updateName,
   updateLogin,
@@ -157,9 +155,7 @@ const UserPage = ({
             ...collection,
             user,
           }))}
-          api={api}
           isAuthorized={isAuthorized}
-          maybeCurrentUser={maybeCurrentUser}
         />
       )}
 
@@ -175,9 +171,7 @@ const UserPage = ({
           addProjectToCollection,
         }}
       />
-      {isAuthorized && (
-        <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
-      )}
+      {isAuthorized && <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>
   );
@@ -185,7 +179,6 @@ const UserPage = ({
 
 UserPage.propTypes = {
   clearCover: PropTypes.func.isRequired,
-  maybeCurrentUser: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   leaveProject: PropTypes.func.isRequired,
   uploadAvatar: PropTypes.func.isRequired,
@@ -220,14 +213,9 @@ const UserPageContainer = ({ api, user }) => (
           <Helmet>
             <title>{userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)}</title>
           </Helmet>
-
-          <CurrentUserConsumer>
-            {(maybeCurrentUser) => (
-              <ProjectsLoader api={api} projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-                {(projects) => <UserPage {...{ api, isAuthorized, maybeCurrentUser }} user={{ ...userFromEditor, projects }} {...funcs} />}
-              </ProjectsLoader>
-            )}
-          </CurrentUserConsumer>
+          <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
+            {(projects) => <UserPage isAuthorized={isAuthorized} user={{ ...userFromEditor, projects }} {...funcs} />}
+          </ProjectsLoader>
         </>
       )}
     </UserEditor>

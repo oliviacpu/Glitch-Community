@@ -8,6 +8,8 @@ import { getLink, createCollection } from '../models/collection';
 import { Loader } from './includes/loader';
 import { NotificationConsumer } from './notifications';
 
+import { useAPI } from '../state/api';
+import { useCurrentUser } from '../state/current-user';
 import Heading from '../components/text/heading';
 
 class CollectionsList extends React.Component {
@@ -188,4 +190,8 @@ CollectionsUL.defaultProps = {
   deleteCollection: () => {},
 };
 
-export default CollectionsList;
+export default function CollectionsListWrapper(props) {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
+  return <CollectionsList {...props} api={api} maybeCurrentUser={currentUser} />;
+}
