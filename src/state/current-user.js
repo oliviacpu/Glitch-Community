@@ -150,6 +150,23 @@ async function load({ currentUser: prevState }) {
   return nextState;
 }
 
+export function normalizeUser(user, currentUser) {
+  return user.id === (currentUser && currentUser.id) ? currentUser : user;
+}
+
+export function normalizeUsers(users, currentUser) {
+  return users.map((user) => normalizeUser(user, currentUser));
+}
+
+export function normalizeProject({ users, ...project }, currentUser) {
+  return { users: users ? normalizeUsers(users, currentUser) : [], ...project };
+}
+
+export function normalizeProjects(projects, currentUser) {
+  return projects.map((project) => normalizeProject(project, currentUser));
+}
+
+
 // TODO: This manages _both_ the users login information and their profile data.
 // Once we're managing user profiles in redux, these can probably be separated.
 
@@ -275,6 +292,7 @@ export const middleware = [onInit, onLoad, onUserChange];
 // hooks
 
 export const useCurrentUser = () => useSelector(selectCurrentUser);
+export const useLoadState = () => useSelector(selectLoadState);
 export const useCurrentUserActions = () => useActions(actions);
 
 // TODO: what is `fetched` actually used for?

@@ -113,7 +113,7 @@ const IndexPage = () => {
     <main>
       {!user.login && <WhatIsGlitch />}
 
-      {!!user.projects.length && <RecentProjects api={api} />}
+      {!!user.projects.length && <RecentProjects />}
       {!!user.login && <Questions api={api} />}
       <Featured isAuthorized={!!user.login} api={api} />
       <MoreIdeas api={api} />

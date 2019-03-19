@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getAvatarStyle, getProfileStyle } from '../models/user';
-import { CurrentUserConsumer } from './current-user';
 import { UserLink } from './includes/link';
 
 import { CoverContainer } from './includes/profile';
@@ -12,6 +11,7 @@ import { ProjectsUL } from './projects-list';
 import SignInPop from './pop-overs/sign-in-pop';
 
 import Heading from '../components/text/heading';
+import { useCurrentUser, useLoadState } from '../state/current-user';
 
 const RecentProjectsContainer = ({ children, user }) => (
   <section className="profile recent-projects">
@@ -47,22 +47,17 @@ RecentProjectsContainer.propTypes = {
   }).isRequired,
 };
 
-const RecentProjects = ({ api }) => (
-  <CurrentUserConsumer>
-    {(user, fetched) => (
-      <RecentProjectsContainer user={user} api={api}>
-        {fetched ? (
-          <ProjectsLoader api={api} projects={user.projects.slice(0, 3)}>
-            {(projects) => <ProjectsUL projects={projects} />}
-          </ProjectsLoader>
-        ) : (
-          <Loader />
-        )}
-      </RecentProjectsContainer>
-    )}
-  </CurrentUserConsumer>
-);
-RecentProjects.propTypes = {
-  api: PropTypes.any.isRequired,
+const RecentProjects = () => {
+  const user = useCurrentUser();
+  const fetched = useLoadState() === 'ready';
+  return (
+    <RecentProjectsContainer user={user}>
+      {fetched ? (
+        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsUL projects={projects} />}</ProjectsLoader>
+      ) : (
+        <Loader />
+      )}
+    </RecentProjectsContainer>
+  );
 };
 export default RecentProjects;
