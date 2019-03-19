@@ -6,7 +6,6 @@ import { orderBy, partition } from 'lodash';
 import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
 
 import { AnalyticsContext } from '../analytics';
-import { CurrentUserConsumer } from '../current-user';
 import { AuthDescription } from '../includes/description-field';
 import EditableField from '../includes/editable-field';
 import UserEditor from '../user-editor';
@@ -205,9 +204,9 @@ UserPage.propTypes = {
   unfeatureProject: PropTypes.func.isRequired,
 };
 
-const UserPageContainer = ({ api, user }) => (
+const UserPageContainer = ({ user }) => (
   <AnalyticsContext properties={{ origin: 'user' }}>
-    <UserEditor api={api} initialUser={user}>
+    <UserEditor initialUser={user}>
       {(userFromEditor, funcs, isAuthorized) => (
         <>
           <Helmet>

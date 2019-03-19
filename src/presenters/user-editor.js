@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import * as assets from '../utils/assets';
 
 import { useCurrentUser, useCurrentUserActions } from '../state/current-user';
+import { useAPI } from '../state/api';
 import useErrorHandlers from './error-handlers';
 import useUploader from './includes/uploader';
 
@@ -169,14 +170,14 @@ UserEditor.propTypes = {
   uploadAssetSizes: PropTypes.func.isRequired,
 };
 
-const UserEditorContainer = ({  children, initialUser }) => {
-  const api = useAPI()
+const UserEditorContainer = ({ children, initialUser }) => {
+  const api = useAPI();
   const currentUser = useCurrentUser();
-  const { updatedUser } = useCurrentUserActions()
+  const { updated } = useCurrentUserActions();
   const uploadFuncs = useUploader();
   const errorFuncs = useErrorHandlers();
   return (
-    <UserEditor {...{ api, currentUser, initialUser }} updateCurrentUser={updatedUser} {...uploadFuncs} {...errorFuncs}>
+    <UserEditor {...{ api, currentUser, initialUser }} updateCurrentUser={updated} {...uploadFuncs} {...errorFuncs}>
       {children}
     </UserEditor>
   );

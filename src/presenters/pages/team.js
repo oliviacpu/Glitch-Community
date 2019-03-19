@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
 import { AnalyticsContext } from '../analytics';
-import { CurrentUserConsumer } from '../current-user';
 import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
 import { getLink, getAvatarStyle, getProfileStyle } from '../../models/team';
@@ -29,6 +28,8 @@ import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
+import { useAPI } from '../../state/api';
+import { useCurrentUser } from '../../state/current-user';
 import Heading from '../../components/text/heading';
 
 function syncPageToUrl(team) {
@@ -51,12 +52,10 @@ const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
   </>
 );
 
-const TeamPageCollections = ({ collections, team, api, currentUser, currentUserIsOnTeam }) => (
+const TeamPageCollections = ({ collections, team, currentUserIsOnTeam }) => (
   <CollectionsList
     title="Collections"
     collections={collections.map((collection) => ({ ...collection, team }))}
-    api={api}
-    maybeCurrentUser={currentUser}
     maybeTeam={team}
     isAuthorized={currentUserIsOnTeam}
   />
@@ -204,11 +203,9 @@ class TeamPage extends React.Component {
         {featuredProject && (
           <EntityPageFeaturedProject
             featuredProject={featuredProject}
-            api={this.props.api}
             isAuthorized={this.props.currentUserIsOnTeam}
             unfeatureProject={this.props.unfeatureProject}
             addProjectToCollection={this.props.addProjectToCollection}
-            currentUser={this.props.currentUser}
           />
         )}
 
@@ -218,7 +215,6 @@ class TeamPage extends React.Component {
           isAuthorized={this.props.currentUserIsOnTeam}
           removePin={this.props.removePin}
           projectOptions={this.getProjectOptions()}
-          api={this.props.api}
         />
 
         {/* Recent Projects */}
@@ -227,7 +223,6 @@ class TeamPage extends React.Component {
           isAuthorized={this.props.currentUserIsOnTeam}
           addPin={this.props.addPin}
           projectOptions={this.getProjectOptions()}
-          api={this.props.api}
         />
 
         {team.projects.length === 0 && this.props.currentUserIsOnTeam && (
@@ -341,7 +336,7 @@ const TeamNameConflict = ({ team }) => (
 const TeamPageEditor = ({ api, initialTeam, children }) => (
   <TeamEditor api={api} initialTeam={initialTeam}>
     {(team, funcs, ...args) => (
-      <ProjectsLoader api={api} projects={team.projects}>
+      <ProjectsLoader projects={team.projects}>
         {(projects, reloadProjects) => {
           // Inject page specific changes to the editor
           // Mainly url updating and calls to reloadProjects
@@ -376,31 +371,33 @@ const TeamPageEditor = ({ api, initialTeam, children }) => (
     )}
   </TeamEditor>
 );
-const TeamPageContainer = ({ api, team, ...props }) => (
-  <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-    <TeamPageEditor api={api} initialTeam={team}>
-      {(teamFromEditor, funcs, currentUserIsOnTeam, currentUserIsTeamAdmin) => (
-        <>
-          <Helmet>
-            <title>{teamFromEditor.name}</title>
-          </Helmet>
-          <CurrentUserConsumer>
-            {(currentUser) => (
-              <TeamPage
-                api={api}
-                team={teamFromEditor}
-                {...funcs}
-                currentUser={currentUser}
-                currentUserIsOnTeam={currentUserIsOnTeam}
-                currentUserIsTeamAdmin={currentUserIsTeamAdmin}
-                {...props}
-              />
-            )}
-          </CurrentUserConsumer>
-          <TeamNameConflict team={teamFromEditor} />
-        </>
-      )}
-    </TeamPageEditor>
-  </AnalyticsContext>
-);
+const TeamPageContainer = ({ team, ...props }) => {
+  const currentUser = useCurrentUser();
+  return (
+    <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
+      <TeamPageEditor initialTeam={team}>
+        {(teamFromEditor, funcs, currentUserIsOnTeam, currentUserIsTeamAdmin) => (
+          <>
+            <Helmet>
+              <title>{teamFromEditor.name}</title>
+            </Helmet>
+            <CurrentUserConsumer>
+              {(currentUser) => (
+                <TeamPage
+                  team={teamFromEditor}
+                  {...funcs}
+                  currentUser={currentUser}
+                  currentUserIsOnTeam={currentUserIsOnTeam}
+                  currentUserIsTeamAdmin={currentUserIsTeamAdmin}
+                  {...props}
+                />
+              )}
+            </CurrentUserConsumer>
+            <TeamNameConflict team={teamFromEditor} />
+          </>
+        )}
+      </TeamPageEditor>
+    </AnalyticsContext>
+  );
+};
 export default TeamPageContainer;
