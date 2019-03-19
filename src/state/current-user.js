@@ -111,20 +111,22 @@ async function load(state) {
   const { sharedUser, cachedUser } = state.currentUser;
   const nextState = { sharedUser, cachedUser };
 
-  console.log(1)
-  
+  console.log(1);
+
   // If we're signed out create a new anon user
   if (!sharedUser) {
     nextState.sharedUser = await getAnonUser(state);
   }
 
+  console.log(1.5);
+
   // Check if we have to clear the cached user
   if (!usersMatch(sharedUser, cachedUser)) {
     nextState.cachedUser = undefined;
   }
-  
-  console.log(2)
-  
+
+  console.log(2);
+
   const newCachedUser = await getCachedUser(state);
   if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
@@ -148,6 +150,8 @@ async function load(state) {
     // The shared user is good, store it
     nextState.cachedUser = newCachedUser;
   }
+
+  console.log(3);
 
   return nextState;
 }
@@ -236,26 +240,24 @@ const onInit = after((store, action) => {
   return action;
 });
 
-let isLoading = false
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
-  if (isLoading) { return }
-  isLoading = true
-  const currentState = store.getState();
-  console.log({ currentState })
-  // prevent multiple 'load's from running
-  if (selectLoadState(currentState) === 'loading') {
-    return null;
-  }
+//     const currentState = store.getState();
+//     console.log({ currentState })
+//     // prevent multiple 'load's from running
+//     if (selectLoadState(currentState) === 'loading') {
+//       return null;
+//     }
 
-  load(currentState).then((result) => {
-    store.dispatch(actions.loaded(result));
-  });
+//     load(currentState).then((result) => {
+//       store.dispatch(actions.loaded(result));
+//     });
 
   return action;
 });
 
-const onUserChange = before(matchTypes(...Object.values(actions)), (store, action) => {
+const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   const prev = store.getState().currentUser;
+  console.log(prev)
   const { cachedUser, sharedUser } = action.payload;
 
   if (!usersMatch(cachedUser, prev.cachedUser)) {
@@ -276,7 +278,11 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
   return action;
 });
 
-export const middleware = [onInit, onLoad, onUserChange];
+export const middleware = [
+  onInit,
+  onLoad,
+  onUserChange
+];
 
 // connectors
 // TODO: `api` and actions don't need to be in here, do they?
