@@ -9,6 +9,7 @@ import rootTeams from '../../curated/teams';
 import { CurrentUserConsumer } from '../current-user';
 
 import { useAPI } from '../../state/api';
+import { actions as currentUserAction
 
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, EmailTokenLoginPage } from './login';
@@ -41,8 +42,26 @@ class ExternalPageReloader extends React.Component {
   }
 }
 
-function PageChangeHandler_
+function track () {
+  try {
+      const { analytics } = window;
+      if (analytics) {
+        analytics.page({}, { groupId: '0' });
+      }
+    } catch (ex) {
+      console.error('Error tracking page transition.', ex);
+    }
+}
 
+const PageChangeHandler_ = withRouter(({ location }) => {
+  const { requestedLoad } = useActions(currentUserActions)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+      this.props.reloadCurrentUser();
+      track();
+  }, [key])
+  return null
+}
 
 class PageChangeHandlerBase extends React.Component {
   componentDidMount() {
