@@ -43,6 +43,11 @@ Callout.defaultProps = {
   classes: '',
 };
 
+const witch = {
+  'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446': '800px',
+  'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039': '300px',
+};
+
 class WhatIsGlitch extends React.Component {
   componentDidMount() {
     loadScript('//fast.wistia.com/embed/medias/i0m98yntdb.jsonp');
@@ -50,7 +55,7 @@ class WhatIsGlitch extends React.Component {
   }
 
   render() {
-    const witchLarge = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446';
+    // const witchLarge = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446';
     const witchSmall = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039';
 
     const discover = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fexplore-illustration.svg?1543508598659';
@@ -65,8 +70,7 @@ class WhatIsGlitch extends React.Component {
         <span>
           <figure>
             <h1>
-              <Image className="witch large" src={witchLarge} alt={whatsGlitchAlt} />
-              <Image className="witch small" src={witchSmall} alt={whatsGlitchAlt} />
+              <Image src={witchSmall} srcSet={witch} alt={whatsGlitchAlt} />
             </h1>
 
             <OverlayVideo>

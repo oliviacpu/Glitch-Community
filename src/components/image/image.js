@@ -1,9 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
-import styles from './image.styl';
-
-const cx = classNames.bind(styles);
 
 /**
  * 🖼️ Image Component
@@ -20,35 +16,30 @@ const cx = classNames.bind(styles);
  */
 
 const Image = ({ src, srcSet, className, alt, role, width, onClick, onKeyUp, height }) => {
-  const classes = cx({
-    classNames,
-  });
   return (
     <img
       src={src}
       srcSet={srcSet.length ? srcSet : undefined}
       width={width || undefined}
       height={height || undefined}
-      className={classes}
+      className={className || undefined}
       alt={alt}
       role={role}
-      onClick={onClick || false}
-      onKeyUp={onKeyUp || false}
     />
   );
 };
 
 Image.propTypes = {
-  alt: PropTypes.string.isRequired,
+  alt: PropTypes.string,
   srcSet: PropTypes.instanceOf(Object),
   role: PropTypes.string,
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
-  backgroundImage: PropTypes.boo,
+  backgroundImage: PropTypes.bool,
   backgroundRatio: PropTypes.number,
   onClick: PropTypes.func,
-  extraClassNames: PropTypes.instanceOf(Object)
+  extraClassNames: PropTypes.instanceOf(Object),
 };
 
 Image.defaultProps = {
@@ -61,7 +52,7 @@ Image.defaultProps = {
   role: '',
   width: '',
   height: '',
-  extraClassNames: {}
+  extraClassNames: {},
 };
 
 export default Image;
