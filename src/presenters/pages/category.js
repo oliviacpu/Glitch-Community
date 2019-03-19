@@ -12,6 +12,7 @@ import MoreIdeas from '../more-ideas';
 
 import CollectionEditor from '../collection-editor';
 import { CurrentUserConsumer } from '../current-user';
+import { useAPI } from '../,..,
 
 import Heading from '../../components/text/heading';
 
@@ -91,9 +92,10 @@ async function loadCategory(api, id) {
   return data;
 }
 
-const CategoryPage = ({ api, category, ...props }) => {
+const CategoryPage = ({ category, ...props }) => {
+  const api = useAPI()
   return (
-    <Layout api={api}>
+    <Layout>
       <AnalyticsContext properties={{ origin: 'category' }}>
         <DataLoader get={() => loadCategory(api, category.id)}>
           {(loadedCategory) => (

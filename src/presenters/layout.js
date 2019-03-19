@@ -8,10 +8,10 @@ import Footer from './footer';
 import ErrorBoundary from './includes/error-boundary';
 import Konami from './includes/konami';
 
-const Layout = ({ children, api, searchQuery }) => (
+const Layout = ({ children, searchQuery }) => (
   <div className="content">
     <Helmet title="Glitch" />
-    <Header api={api} searchQuery={searchQuery} />
+    <Header searchQuery={searchQuery} />
     <ErrorBoundary>{children}</ErrorBoundary>
     <Footer />
     <ErrorBoundary fallback={null}>
@@ -22,7 +22,6 @@ const Layout = ({ children, api, searchQuery }) => (
   </div>
 );
 Layout.propTypes = {
-  api: PropTypes.any.isRequired,
   children: PropTypes.node.isRequired,
   searchQuery: PropTypes.string,
 };

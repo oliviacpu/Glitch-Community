@@ -110,6 +110,6 @@ NewProjectPopButton.propTypes = {
 };
 
 export default (props) => {
-  const api = useAPI()
-  return <NewProjectPopButton {...props} api={api} />
+  const api = useAPI();
+  return <NewProjectPopButton {...props} api={api} />;
 };

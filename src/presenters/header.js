@@ -64,7 +64,7 @@ SearchForm.defaultProps = {
   defaultValue: '',
 };
 
-const Header = ({ api, maybeUser, clearUser, searchQuery, showNewStuffOverlay }) => (
+const Header = ({ maybeUser, clearUser, searchQuery, showNewStuffOverlay }) => (
   <header role="banner">
     <div className="header-info">
       <Link to="/">
@@ -76,15 +76,14 @@ const Header = ({ api, maybeUser, clearUser, searchQuery, showNewStuffOverlay })
       <SearchForm defaultValue={searchQuery} />
       <NewProjectPop />
       {!!maybeUser && !!maybeUser.projects.length && <ResumeCoding />}
-      {!(maybeUser && maybeUser.login) && <SignInPop api={api} />}
-      {!!maybeUser && <UserOptionsPop user={maybeUser} signOut={clearUser} showNewStuffOverlay={showNewStuffOverlay} api={api} />}
+      {!(maybeUser && maybeUser.login) && <SignInPop />}
+      {!!maybeUser && <UserOptionsPop user={maybeUser} signOut={clearUser} showNewStuffOverlay={showNewStuffOverlay} />}
     </nav>
   </header>
 );
 
 Header.propTypes = {
   maybeUser: PropTypes.object,
-  api: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
