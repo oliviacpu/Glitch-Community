@@ -1,13 +1,12 @@
 import React from 'react';
+import { combineReducers } from 'redux';
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
-import * as currentUser from './current-user';
+import { reducer as currentUser, middleware as currentUserMiddleware } from './current-user';
 import { ReduxContext } from './context';
 
 export const store = configureStore({
-  reducers: {
-    currentUser: currentUser.reducer,
-  },
-  middleware: [...getDefaultMiddleware(), ...currentUser.middleware],
+  reducers: 
+  middleware: [...getDefaultMiddleware(), ...currentUserMiddleware],
   devTools: true,
 });
 

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
@@ -53,18 +52,17 @@ function track() {
 
 function usePageChangeTracking(location) {
   const { requestedLoad } = useActions(currentUserActions);
-  const key = location.key;
   useEffect(() => {
     window.scrollTo(0, 0);
     requestedLoad();
     track();
-  }, [key]);
+  }, [location.key]);
 }
 
 const PageChangeHandler = withRouter(({ location }) => {
   usePageChangeTracking(location);
-  return null
-})
+  return null;
+});
 
 const Router = () => {
   const api = useAPI();
