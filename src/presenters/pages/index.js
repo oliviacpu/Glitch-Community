@@ -18,7 +18,6 @@ import ReportButton from '../pop-overs/report-abuse-pop';
 import Heading from '../../components/text/heading';
 
 import { useCurrentUser } from '../../state/current-user';
-import { useAPI } from '../../state/api';
 
 function loadScript(src) {
   const script = document.createElement('script');
@@ -108,15 +107,14 @@ const MadeInGlitch = () => (
 
 const IndexPage = () => {
   const user = useCurrentUser();
-  const api = useAPI();
   return (
     <main>
       {!user.login && <WhatIsGlitch />}
 
       {!!user.projects.length && <RecentProjects />}
       {!!user.login && <Questions />}
-      <Featured isAuthorized={!!user.login} api={api} />
-      <MoreIdeas api={api} />
+      <Featured isAuthorized={!!user.login} />
+      <MoreIdeas />
       <MadeInGlitch />
       <ReportButton reportedType="home" />
     </main>
