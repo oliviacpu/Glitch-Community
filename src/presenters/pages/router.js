@@ -106,13 +106,9 @@ const Router = () => {
         <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
         <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={match.params.name} />} />
-        <Route
-          path="/~:name/404"
-          exact
-          render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />}
-        />
+        <Route path="/~:name/404" exact render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />} />
 
-        <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} api={api} name={match.params.name} />} />
+        <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
         <Route
           path="/@:owner/:name"
@@ -123,18 +119,11 @@ const Router = () => {
         <Route
           path="/user/:id(\d+)"
           exact
-          render={({ location, match }) => (
-            <UserPage key={location.key} api={api} id={parseInt(match.params.id, 10)} name={`user ${match.params.id}`} />
-          )}
+          render={({ location, match }) => <UserPage key={location.key} id={parseInt(match.params.id, 10)} name={`user ${match.params.id}`} />}
         />
 
         {Object.keys(rootTeams).map((name) => (
-          <Route
-            key={name}
-            path={`/${name}`}
-            exact
-            render={({ location }) => <TeamPage key={location.key} api={api} id={rootTeams[name]} name={name} />}
-          />
+          <Route key={name} path={`/${name}`} exact render={({ location }) => <TeamPage key={location.key} id={rootTeams[name]} name={name} />} />
         ))}
 
         <Route path="/search" exact render={({ location }) => <SearchPage key={location.key} api={api} query={parse(location.search, 'q')} />} />
