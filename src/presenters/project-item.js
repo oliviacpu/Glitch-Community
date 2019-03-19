@@ -31,8 +31,6 @@ const ProjectItem = ({ api, project, ...props }) => (
 );
 
 ProjectItem.propTypes = {
-  api: PropTypes.func,
-  currentUser: PropTypes.object,
   project: PropTypes.shape({
     description: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
@@ -46,8 +44,6 @@ ProjectItem.propTypes = {
 };
 
 ProjectItem.defaultProps = {
-  api: null,
-  currentUser: null,
   projectOptions: {},
 };
 

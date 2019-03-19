@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { TrackClick } from '../analytics';
 import PopoverWithButton from './popover-with-button';
 import { NestedPopover } from './popover-nested';
-import { CurrentUserConsumer } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
 
 import AddProjectToCollectionPop from './add-project-to-collection-pop';
 
@@ -130,14 +130,13 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
 // Project Options Pop
 const ProjectOptionsPop = ({ ...props }) => (
-  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} api={props.api} togglePopover={props.togglePopover} />}>
+  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} />}>
     {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} />}
   </NestedPopover>
 );
 
 ProjectOptionsPop.propTypes = {
   api: PropTypes.any.isRequired,
-  currentUser: PropTypes.object.isRequired,
   project: PropTypes.shape({
     users: PropTypes.array.isRequired,
   }).isRequired,
@@ -164,19 +163,21 @@ ProjectOptionsPop.defaultProps = {
   featureProject: null,
 };
 
+function currentUserIsOnProject(user, project) {
+  const projectUsers = project.users.map((projectUser) => projectUser.id);
+  if (projectUsers.includes(user.id)) {
+    return true;
+  }
+  return false;
+}
+
 // Project Options Container
 // create as stateful react component
 export default function ProjectOptions({ projectOptions, project, api }, { ...props }) {
+  const currentUser = useCurrentUser();
+
   if (Object.keys(projectOptions).length === 0) {
     return null;
-  }
-
-  function currentUserIsOnProject(user) {
-    const projectUsers = project.users.map((projectUser) => projectUser.id);
-    if (projectUsers.includes(user.id)) {
-      return true;
-    }
-    return false;
   }
 
   return (
@@ -186,30 +187,22 @@ export default function ProjectOptions({ projectOptions, project, api }, { ...pr
       containerClass="project-options-pop-btn"
       passToggleToPop
     >
-      <CurrentUserConsumer>
-        {(user, fetched, funcs, consumerProps) => (
-          <ProjectOptionsPop
-            {...consumerProps}
-            {...props}
-            {...projectOptions}
-            project={project}
-            api={api}
-            currentUser={user}
-            currentUserIsOnProject={currentUserIsOnProject(user)}
-          />
-        )}
-      </CurrentUserConsumer>
+      <ProjectOptionsPop
+        {...props}
+        {...projectOptions}
+        project={project}
+        currentUser={currentUser}
+        currentUserIsOnProject={currentUserIsOnProject(currentUser, project)}
+      />
     </PopoverWithButton>
   );
 }
 
 ProjectOptions.propTypes = {
-  api: PropTypes.func,
   project: PropTypes.object.isRequired,
   projectOptions: PropTypes.object,
 };
 
 ProjectOptions.defaultProps = {
-  api: null,
   projectOptions: {},
 };
