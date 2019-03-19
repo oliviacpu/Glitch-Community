@@ -6,7 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { captureException } from '../../utils/sentry';
 
 import useLocalStorage from '../includes/local-storage';
-import { useCurrentUser } from '../current-user';
+import { useCurrentUserActions } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 import { EmailErrorPage, OauthErrorPage } from './error';
 
 // The Editor may embed /login/* endpoints in an iframe in order to share code.
@@ -118,9 +119,10 @@ LoginPage.defaultProps = {
 };
 
 const LoginPageContainer = (props) => {
-  const { login } = useCurrentUser();
+  const { loggedIn } = useCurrentUserActions();
+  const api = useAPI();
   const [destination, setDestination] = useLocalStorage('destinationAfterAuth', null);
-  return <LoginPage setUser={login} destination={destination} setDestination={setDestination} {...props} />;
+  return <LoginPage setUser={loggedIn} destination={destination} setDestination={setDestination} api={api} {...props} />;
 };
 
 export const FacebookLoginPage = ({ code, ...props }) => {

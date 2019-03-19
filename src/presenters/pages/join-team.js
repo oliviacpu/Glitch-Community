@@ -4,7 +4,8 @@ import { Redirect } from 'react-router-dom';
 import { captureException } from '../../utils/sentry';
 
 import { getLink } from '../../models/team';
-import { useCurrentUser } from '../current-user';
+import { useCurrentUserActions } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 import { useNotifications } from '../notifications';
 
 class JoinTeamPageBase extends React.Component {
@@ -68,9 +69,10 @@ JoinTeamPageBase.propTypes = {
 };
 
 const JoinTeamPage = (props) => {
-  const { login } = useCurrentUser();
+  const { loggedIn } = useCurrentUserActions();
+  const api = useAPI();
   const notify = useNotifications();
-  return <JoinTeamPageBase replaceCurrentUser={login} {...notify} {...props} />;
+  return <JoinTeamPageBase replaceCurrentUser={loggedIn} api={api} {...notify} {...props} />;
 };
 
 export default JoinTeamPage;

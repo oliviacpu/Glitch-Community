@@ -70,28 +70,28 @@ const Router = () => {
     <>
       <PageChangeHandler />
       <Switch>
-        <Route path="/" exact render={({ location }) => <IndexPage key={location.key} api={api} />} />
-        <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} api={api} />} />
+        <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
+        <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
 
         <Route
           path="/login/facebook"
           exact
           render={({ location }) => (
-            <FacebookLoginPage key={location.key} api={api} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
+            <FacebookLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
           )}
         />
         <Route
           path="/login/github"
           exact
           render={({ location }) => (
-            <GitHubLoginPage key={location.key} api={api} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
+            <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
           )}
         />
         <Route
           path="/login/email"
           exact
           render={({ location }) => (
-            <EmailTokenLoginPage key={location.key} api={api} token={parse(location.search, 'token')} hash={parse(location.search, 'hash')} />
+            <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} hash={parse(location.search, 'hash')} />
           )}
         />
 
@@ -99,7 +99,7 @@ const Router = () => {
           path="/join/@:teamUrl/:joinToken"
           exact
           render={({ match }) => (
-            <JoinTeamPage key={location.key} api={api} {...match.params} /> // eslint-disable-line no-restricted-globals
+            <JoinTeamPage key={location.key} {...match.params} /> // eslint-disable-line no-restricted-globals
           )}
         />
 
