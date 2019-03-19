@@ -73,11 +73,11 @@ async function getAnonUser() {
   return data;
 }
 
-async function getSharedUser(token) {
+async function getSharedUser({ sharedUser }) {
   try {
     const {
       data: { user },
-    } = await getAPIForToken(token).get('boot?latestProjectOnly=true');
+    } = await getAPIForToken(sharedUser.persistentToken).get('boot?latestProjectOnly=true');
     return user;
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -105,9 +105,26 @@ async function getCachedUser({ sharedUser }) {
   }
 }
 
+async function fixSharedUser(prevState, nextState) {
+  nextState.sharedUser = await getSharedUser(nextState);
+  console.log(`Fixed shared cachedUser from ${prevState.sharedUser.id} to ${nextState.sharedUser && nextState.sharedUser.id}`);
+  addBreadcrumb({
+    level: 'info',
+    message: `Fixed shared cachedUser. Was ${JSON.stringify(prevState.sharedUser)}`,
+  });
+  addBreadcrumb({
+    level: 'info',
+    message: `New shared cachedUser: ${JSON.stringify(nextState.sharedUser)}`,
+  });
+  captureMessage('Invalid cachedUser');
+}
+
 // TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
 async function load({ currentUser: prevState }) {
-  const nextState = { sharedUser: prevState.sharedUser, cachedUser: prevState.cachedUser };
+  const nextState = {
+    sharedUser: prevState.sharedUser,
+    cachedUser: prevState.cachedUser,
+  };
 
   // If we're signed out create a new anon user
   if (!prevState.sharedUser) {
@@ -126,17 +143,7 @@ async function load({ currentUser: prevState }) {
     // If it did change then quit out and let onUserChange sort it out
     if (usersMatch(nextState.sharedUser, prevState.sharedUser)) {
       // The user wasn't changed, so we need to fix it
-      nextState.sharedUser = await getSharedUser(nextState);
-      console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${nextState.sharedUser && nextState.sharedUser.id}`);
-      addBreadcrumb({
-        level: 'info',
-        message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
-      });
-      addBreadcrumb({
-        level: 'info',
-        message: `New shared cachedUser: ${JSON.stringify(nextState.sharedUser)}`,
-      });
-      captureMessage('Invalid cachedUser');
+      fixSharedUser(prevState, nextState);
     }
   } else {
     // The shared user is good, store it
@@ -171,7 +178,6 @@ const defaultUser = {
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
   initialState: {
-    
     // sharedUser syncs with the editor and is authoritative on id and persistentToken
     sharedUser: readFromStorage('currentUser') || null,
     // cachedUser mirrors GET /users/{id} and is what we actually display
@@ -235,14 +241,16 @@ const onInit = after((store, action) => {
 });
 
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
-    // prevent multiple 'load's from running
-    if (selectLoadState(store.getState()) === 'loading') {
-      return undefined;
-    }
-  
-    Promise.resolve()
-      .then(() => load(store.getState()))
-      .then((result) => { store.dispatch(actions.loaded(result)); })
+  // prevent multiple 'load's from running
+  if (selectLoadState(store.getState()) === 'loading') {
+    return undefined;
+  }
+
+  Promise.resolve()
+    .then(() => load(store.getState()))
+    .then((result) => {
+      store.dispatch(actions.loaded(result));
+    });
 
   return action;
 });
@@ -258,7 +266,7 @@ const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
     // delay loading a moment so both items from storage have a chance to update
     setTimeout(() => {
-      console.log('reload!')
+      console.log('reload!');
       // store.dispatch(actions.requestedLoad());
     }, 1);
   }
@@ -270,11 +278,7 @@ const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   return action;
 });
 
-export const middleware = [
-  onInit,
-  onLoad,
-  onUserChange
-];
+export const middleware = [onInit, onLoad, onUserChange];
 
 // hooks
 // TODO: `api` and actions don't need to be in here, do they?

@@ -5,7 +5,7 @@ import { memoize } from 'lodash';
 import { selectPersistentToken } from './current-user';
 import { useSelector } from './context';
 
-const getAPIForToken = memoize((persistentToken) => {
+export const getAPIForToken = memoize((persistentToken) => {
   if (persistentToken) {
     return axios.create({
       baseURL: API_URL,
