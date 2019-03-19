@@ -103,13 +103,13 @@ const Router = () => {
           )}
         />
 
-        <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} api={api} />} />
+        <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
-        <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} api={api} name={match.params.name} />} />
+        <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={match.params.name} />} />
         <Route
           path="/~:name/404"
           exact
-          render={({ location, match }) => <ProjectNotFoundPage key={location.key} api={api} name={match.params.name} />}
+          render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />}
         />
 
         <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} api={api} name={match.params.name} />} />
@@ -156,7 +156,7 @@ const Router = () => {
           <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
         ))}
 
-        <Route render={({ location }) => <NotFoundPage api={api} key={location.key} />} />
+        <Route render={({ location }) => <NotFoundPage key={location.key} />} />
       </Switch>
     </>
   );

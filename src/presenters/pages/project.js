@@ -28,7 +28,8 @@ import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
 
-import { CurrentUserConsumer } from '../current-user';
+import { useAPI } from '../../state/api';
+import { useCurrentUser } from '../../state/current-user';
 
 import Layout from '../layout';
 
@@ -202,40 +203,38 @@ async function getProject(api, domain) {
   return { ...project, ...rest };
 }
 
-const ProjectPageLoader = ({ domain, api, currentUser, ...props }) => (
-  <DataLoader get={() => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
-    {(project) =>
-      project ? (
-        <ProjectEditor api={api} initialProject={project}>
-          {(currentProject, funcs, userIsMember) => (
-            <>
-              <Helmet>
-                <title>{currentProject.domain}</title>
-              </Helmet>
-              <ProjectPage api={api} project={currentProject} {...funcs} isAuthorized={userIsMember} currentUser={currentUser} {...props} />
-            </>
-          )}
-        </ProjectEditor>
-      ) : (
-        <NotFound name={domain} />
-      )
-    }
-  </DataLoader>
-);
+const ProjectPageLoader = ({ domain, ...props }) => {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
+  return (
+    <DataLoader get={() => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
+      {(project) =>
+        project ? (
+          <ProjectEditor api={api} initialProject={project}>
+            {(currentProject, funcs, userIsMember) => (
+              <>
+                <Helmet>
+                  <title>{currentProject.domain}</title>
+                </Helmet>
+                <ProjectPage api={api} project={currentProject} {...funcs} isAuthorized={userIsMember} currentUser={currentUser} {...props} />
+              </>
+            )}
+          </ProjectEditor>
+        ) : (
+          <NotFound name={domain} />
+        )
+      }
+    </DataLoader>
+  );
+};
 ProjectPageLoader.propTypes = {
-  api: PropTypes.func,
   domain: PropTypes.string.isRequired,
-  currentUser: PropTypes.object.isRequired,
 };
 
-ProjectPageLoader.defaultProps = {
-  api: null,
-};
-
-const ProjectPageContainer = ({ api, name }) => (
-  <Layout api={api}>
+const ProjectPageContainer = ({ name }) => (
+  <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
-      <CurrentUserConsumer>{(currentUser) => <ProjectPageLoader api={api} domain={name} currentUser={currentUser} />}</CurrentUserConsumer>
+      <ProjectPageLoader domain={name} />
     </AnalyticsContext>
   </Layout>
 );

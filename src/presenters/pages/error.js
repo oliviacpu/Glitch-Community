@@ -7,14 +7,15 @@ import Layout from '../layout';
 
 import { getShowUrl } from '../../models/project';
 import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 import NotFound from '../includes/not-found';
 
 import Heading from '../../components/text/heading';
 
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
-export const NotFoundPage = ({ api }) => (
-  <Layout api={api}>
+export const NotFoundPage = () => (
+  <Layout>
     <Helmet title="👻 Page not found" />
     <main className="error-page-container">
       <img className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
@@ -29,17 +30,10 @@ export const NotFoundPage = ({ api }) => (
   </Layout>
 );
 
-NotFoundPage.propTypes = {
-  api: PropTypes.func,
-};
-NotFoundPage.defaultProps = {
-  api: null,
-};
-
 const emailImageUrl = 'https://cdn.glitch.com/26ac422d-705d-42be-b9cb-1fbdfe7e5a63%2Ferror-mailer.svg?1543429767321';
 
-export const EmailErrorPage = ({ api, title, description }) => (
-  <Layout api={api}>
+export const EmailErrorPage = ({ title, description }) => (
+  <Layout>
     <Helmet title={`✉️ ${title}`} />
     <main className="error-page-container">
       <img className="error-image email-error-image" src={emailImageUrl} alt="" width="470px" />
@@ -55,18 +49,14 @@ export const EmailErrorPage = ({ api, title, description }) => (
 );
 
 EmailErrorPage.propTypes = {
-  api: PropTypes.func,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-};
-EmailErrorPage.defaultProps = {
-  api: null,
 };
 
 const oauthImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d15665%2Foauth-key.svg?1544466885907';
 
-export const OauthErrorPage = ({ api, title, description }) => (
-  <Layout api={api}>
+export const OauthErrorPage = ({ title, description }) => (
+  <Layout>
     <Helmet title={`🔑 ${title}`} />
     <main className="error-page-container">
       <img className="error-image" src={oauthImageUrl} alt="" width="370px" />
@@ -82,16 +72,13 @@ export const OauthErrorPage = ({ api, title, description }) => (
 );
 
 OauthErrorPage.propTypes = {
-  api: PropTypes.func,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };
-OauthErrorPage.defaultProps = {
-  api: null,
-};
 
-export const ProjectNotFoundPage = ({ api, name }) => {
+export const ProjectNotFoundPage = ({ name }) => {
   const currentUser = useCurrentUser();
+  const api = useAPI();
 
   const check = async () => {
     try {
@@ -111,7 +98,7 @@ export const ProjectNotFoundPage = ({ api, name }) => {
   }, [name, currentUser.persistentToken]);
 
   return (
-    <Layout api={api}>
+    <Layout>
       <Helmet title="👻 Project not found" />
       <NotFound name={name} />
       <p>Either there's no project here, or you don't have access to it. Are you logged in as the right user?</p>
@@ -120,9 +107,5 @@ export const ProjectNotFoundPage = ({ api, name }) => {
 };
 
 ProjectNotFoundPage.propTypes = {
-  api: PropTypes.func,
   name: PropTypes.string.isRequired,
-};
-ProjectNotFoundPage.defaultProps = {
-  api: null,
 };
