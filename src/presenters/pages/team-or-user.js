@@ -101,10 +101,10 @@ const TeamOrUserPageLoader = ({ name, ...props }) => {
     <DataLoader get={() => getTeam(api, name)}>
       {(team) =>
         team ? (
-          <TeamPage team={team} {...props} />
+          <TeamPage team={team} api={api} {...props} />
         ) : (
           <DataLoader get={() => getUserByLogin(api, name)}>
-            {(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}
+            {(user) => (user ? <UserPage user={user} api={api} {...props} /> : <NotFound name={name} />)}
           </DataLoader>
         )
       }
