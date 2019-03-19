@@ -43,11 +43,6 @@ Callout.defaultProps = {
   classes: '',
 };
 
-const witch = [
-  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446 600w'],
-  ['https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039 320w'],
-];
-
 class WhatIsGlitch extends React.Component {
   componentDidMount() {
     loadScript('//fast.wistia.com/embed/medias/i0m98yntdb.jsonp');
@@ -55,8 +50,7 @@ class WhatIsGlitch extends React.Component {
   }
 
   render() {
-    // const witchLarge = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446';
-    const witchSmall = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-small.svg?1543872119039';
+    const witch = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fglitch-witch-large.svg?1543872118446';
 
     const discover = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fexplore-illustration.svg?1543508598659';
     const remix = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fremix-illustration.svg?1543508529783';
@@ -70,12 +64,12 @@ class WhatIsGlitch extends React.Component {
         <span>
           <figure>
             <h1>
-              <Image src={witchSmall} backgroundImage={true} srcSet={witch} alt={whatsGlitchAlt} sizes="(max-width: 320px) 280px, 650px" />
+              <Image src={witch} alt={whatsGlitchAlt} sizes="(max-width: 320px) 280px, 650px" />
             </h1>
 
             <OverlayVideo>
               <div className="button video">
-                <Image className="play-button" src={play} alt="How it works" />
+                <Image src={play} alt="How it works" />
                 <span>How it works</span>
               </div>
             </OverlayVideo>

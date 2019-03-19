@@ -15,10 +15,10 @@ import PropTypes from 'prop-types';
  * @param {boolean} backgroundImage - If we want the image to be rendered as a background image
  */
 
+
 const Image = ({ src, srcSet, sizes, className, alt, role, width, height, backgroundImage, backgroundRatio }) => {
-  if (backgroundImage === false) {
-    return (
-      <img
+
+      {!backgroundImage && <img
         src={src}
         srcSet={srcSet ? srcSet : undefined}
         sizes={sizes}
@@ -27,16 +27,13 @@ const Image = ({ src, srcSet, sizes, className, alt, role, width, height, backgr
         className={className || undefined}
         alt={alt}
         role={role}
-      />
-    );
-  } else {
-    return (
-      <div
+      />}
+  {backgroundImage === true &&<div
         className={className || undefined}
         style={{
           backgroundImage: `url(${src})`,
           paddingBottom: `${backgroundRatio}%`,
-          backgroundRepeat: 'none',
+          backgroundRepeat: 'no-repeat',
         }}
         role="presentation"
       />
@@ -63,7 +60,7 @@ Image.defaultProps = {
   sizes: '',
   alt: '',
   backgroundImage: false,
-  backgroundRatio: 50,
+  backgroundRatio: 65,
   role: 'presentation',
   width: '',
   height: '',
