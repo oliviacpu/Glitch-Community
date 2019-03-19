@@ -17,6 +17,7 @@ import { ProjectsUL } from './projects-list';
 import { TeamTile } from './teams-list';
 import { UserTile } from './users-list';
 
+import { useAPI } from '../state/api';
 import Heading from '../components/text/heading';
 
 const CollectionWide = ({ collection, api }) => {
@@ -37,9 +38,7 @@ const CollectionWide = ({ collection, api }) => {
         </div>
       </header>
       <div className="collection-contents">
-        <ProjectsLoader api={api} projects={collection.projects}>
-          {(projects) => <ProjectsUL projects={projects} api={api} />}
-        </ProjectsLoader>
+        <ProjectsLoader projects={collection.projects}>{(projects) => <ProjectsUL projects={projects} api={api} />}</ProjectsLoader>
         <CollectionLink collection={collection} className="collection-view-all">
           View all <Pluralize count={collection.projectCount} singular="project" /> <span aria-hidden>→</span>
         </CollectionLink>
@@ -85,14 +84,13 @@ const loadAllCollections = async (api, infos) => {
   return Promise.all(promises);
 };
 
-export const FeaturedCollections = ({ api }) => (
-  <DataLoader get={() => loadAllCollections(api, featuredCollections)}>
-    {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionWide collection={collection} api={api} key={collection.id} />)}
-  </DataLoader>
-);
-
-FeaturedCollections.propTypes = {
-  api: PropTypes.any.isRequired,
+export const FeaturedCollections = () => {
+  const api = useAPI();
+  return (
+    <DataLoader get={() => loadAllCollections(api, featuredCollections)}>
+      {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionWide collection={collection} api={api} key={collection.id} />)}
+    </DataLoader>
+  );
 };
 
 export default FeaturedCollections;

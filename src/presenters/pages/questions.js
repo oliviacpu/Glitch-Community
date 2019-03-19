@@ -8,7 +8,7 @@ import Questions from '../questions';
 import MoreIdeas from '../more-ideas';
 
 const QuestionsPage = ({ api }) => (
-  <Layout api={api}>
+  <Layout>
     <Helmet>
       <title>Questions</title>
     </Helmet>

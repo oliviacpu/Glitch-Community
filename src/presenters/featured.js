@@ -54,7 +54,7 @@ FeaturedPanel.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const Featured = ({ featured, api }) => (
+const Featured = ({ featured }) => (
   <section className="featured">
     <div className="community-pick-embed-container">
       <FeaturedEmbed {...FeaturedEmbedObject} />
@@ -71,19 +71,17 @@ const Featured = ({ featured, api }) => (
     </section>
 
     <ZineItems />
-    <FeaturedCollections api={api} />
+    <FeaturedCollections />
   </section>
 );
 Featured.propTypes = {
   featured: PropTypes.array.isRequired,
-  api: PropTypes.any.isRequired,
 };
 
-const FeaturedContainer = ({ isAuthorized, api }) => <Featured featured={FeaturedItems} isAuthorized={isAuthorized} api={api} />;
+const FeaturedContainer = ({ isAuthorized }) => <Featured featured={FeaturedItems} isAuthorized={isAuthorized} />;
 
 FeaturedContainer.propTypes = {
   isAuthorized: PropTypes.bool.isRequired,
-  api: PropTypes.any.isRequired,
 };
 
 export default FeaturedContainer;

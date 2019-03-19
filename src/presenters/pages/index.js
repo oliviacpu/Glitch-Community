@@ -114,7 +114,7 @@ const IndexPage = () => {
       {!user.login && <WhatIsGlitch />}
 
       {!!user.projects.length && <RecentProjects />}
-      {!!user.login && <Questions api={api} />}
+      {!!user.login && <Questions />}
       <Featured isAuthorized={!!user.login} api={api} />
       <MoreIdeas api={api} />
       <MadeInGlitch />

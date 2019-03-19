@@ -10,6 +10,7 @@ import QuestionItem from './question-item';
 import { captureException } from '../utils/sentry';
 
 import Heading from '../components/text/heading';
+import { useAPI } from '../state/api';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
 
@@ -107,4 +108,9 @@ Questions.defaultProps = {
   max: 3,
 };
 
-export default Questions;
+const QuestionsWrap = (props) => {
+  const api = useAPI();
+  return <Questions {...props} api={api} />;
+};
+
+export default QuestionsWrap;
