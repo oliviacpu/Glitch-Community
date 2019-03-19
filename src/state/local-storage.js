@@ -1,4 +1,4 @@
-import { captureException } from '../../utils/sentry';
+import { captureException } from '../utils/sentry';
 
 const getStorage = () => {
   try {

@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux';
 
 export const ReduxContext = createContext();
 
-export const Provider = ({ store, children }) => <ReduxContext.Provider value={store}>{children}</ReduxContext.Provider>;
-
 export const useReduxStore = () => useContext(ReduxContext);
 
 export function useReduxSelector(selector, ...args) {

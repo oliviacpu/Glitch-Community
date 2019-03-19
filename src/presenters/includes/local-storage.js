@@ -1,5 +1,4 @@
 import React from 'react';
-import { captureException } from '../../utils/sentry';
 import { storage, readFromStorage, writeToStorage } from '../../state/local-storage';
 
 
