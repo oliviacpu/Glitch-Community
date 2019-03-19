@@ -11,8 +11,8 @@ import ProjectsLoader from '../projects-loader';
 import MoreIdeas from '../more-ideas';
 
 import CollectionEditor from '../collection-editor';
-import { CurrentUserConsumer } from '../current-user';
-import { useAPI } from '../,..,
+import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 
 import Heading from '../../components/text/heading';
 
@@ -93,7 +93,8 @@ async function loadCategory(api, id) {
 }
 
 const CategoryPage = ({ category, ...props }) => {
-  const api = useAPI()
+  const api = useAPI();
+  const currentUser = useCurrentUser();
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'category' }}>
@@ -101,11 +102,7 @@ const CategoryPage = ({ category, ...props }) => {
           {(loadedCategory) => (
             <CollectionEditor api={api} initialCollection={loadedCategory}>
               {(categoryFromEditor, funcs) => (
-                <CurrentUserConsumer>
-                  {(currentUser) => (
-                    <CategoryPageWrap category={categoryFromEditor} api={api} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
-                  )}
-                </CurrentUserConsumer>
+                <CategoryPageWrap category={categoryFromEditor} api={api} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
               )}
             </CollectionEditor>
           )}

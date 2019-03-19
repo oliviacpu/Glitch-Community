@@ -1,6 +1,5 @@
 import { createSlice } from 'redux-starter-kit';
 import { before, after } from 'redux-aop';
-import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
 import { getAPIForToken } from './api';
@@ -217,7 +216,13 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken']);
+export const selectPersistentToken = (state) => {
+  if (state.currentUser.sharedUser) {
+    return state.currentUser.sharedUser.persistentToken
+  } else {
+    return null
+  }
+}
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;

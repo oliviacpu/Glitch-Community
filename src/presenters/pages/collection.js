@@ -25,7 +25,8 @@ import CollectionAvatar from '../includes/collection-avatar';
 import { TeamTile } from '../teams-list';
 import { UserTile } from '../users-list';
 
-import { CurrentUserConsumer } from '../current-user';
+import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from '../../state/api';
 
 import Heading from '../../components/text/heading';
 
@@ -209,40 +210,39 @@ async function loadCollection(api, ownerName, collectionName) {
   }
 }
 
-const CollectionPage = ({ api, ownerName, name, ...props }) => (
-  <Layout api={api}>
-    <DataLoader get={() => loadCollection(api, ownerName, name)}>
-      {(collection) =>
-        collection ? (
-          <AnalyticsContext
-            properties={{ origin: 'collection' }}
-            context={{
-              groupId: collection.team ? collection.team.id.toString() : '0',
-            }}
-          >
-            <CurrentUserConsumer>
-              {(currentUser) => (
-                <CollectionEditor api={api} initialCollection={collection}>
-                  {(collectionFromEditor, funcs, userIsAuthor) => (
-                    <CollectionPageContents
-                      collection={collectionFromEditor}
-                      api={api}
-                      currentUser={currentUser}
-                      isAuthorized={userIsAuthor}
-                      {...funcs}
-                      {...props}
-                    />
-                  )}
-                </CollectionEditor>
-              )}
-            </CurrentUserConsumer>
-          </AnalyticsContext>
-        ) : (
-          <NotFound name={name} />
-        )
-      }
-    </DataLoader>
-  </Layout>
-);
-
+const CollectionPage = ({ ownerName, name, ...props }) => {
+  const api = useAPI();
+  const currentUser = useCurrentUser();
+  return (
+    <Layout>
+      <DataLoader get={() => loadCollection(api, ownerName, name)}>
+        {(collection) =>
+          collection ? (
+            <AnalyticsContext
+              properties={{ origin: 'collection' }}
+              context={{
+                groupId: collection.team ? collection.team.id.toString() : '0',
+              }}
+            >
+              <CollectionEditor api={api} initialCollection={collection}>
+                {(collectionFromEditor, funcs, userIsAuthor) => (
+                  <CollectionPageContents
+                    collection={collectionFromEditor}
+                    api={api}
+                    currentUser={currentUser}
+                    isAuthorized={userIsAuthor}
+                    {...funcs}
+                    {...props}
+                  />
+                )}
+              </CollectionEditor>
+            </AnalyticsContext>
+          ) : (
+            <NotFound name={name} />
+          )
+        }
+      </DataLoader>
+    </Layout>
+  );
+};
 export default CollectionPage;
