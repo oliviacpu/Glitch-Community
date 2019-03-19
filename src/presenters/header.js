@@ -12,7 +12,7 @@ import UserOptionsPop from './pop-overs/user-options-pop';
 import SignInPop from './pop-overs/sign-in-pop';
 import NewProjectPop from './pop-overs/new-project-pop';
 import NewStuffContainer from './overlays/new-stuff';
-import { CurrentUserConsumer } from './current-user';
+import { useCurrentUser, useCurrentUserActions } from '../state/current-user';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" className="button button-small button-cta" to={EDITOR_URL}>
@@ -91,14 +91,15 @@ Header.defaultProps = {
   maybeUser: null,
 };
 
-const HeaderContainer = ({ ...props }) => (
-  <CurrentUserConsumer>
-    {(user, userFetched, { clear }) => (
-      <NewStuffContainer isSignedIn={!!user && !!user.login}>
-        {(showNewStuffOverlay) => <Header {...props} maybeUser={user} clearUser={clear} showNewStuffOverlay={showNewStuffOverlay} />}
-      </NewStuffContainer>
-    )}
-  </CurrentUserConsumer>
-);
+const HeaderContainer = ({ ...props }) => {
+  const user = useCurrentUser();
+  const { loggedOut } = useCurrentUserActions();
+
+  return (
+    <NewStuffContainer isSignedIn={!!user && !!user.login}>
+      {(showNewStuffOverlay) => <Header {...props} maybeUser={user} clearUser={loggedOut} showNewStuffOverlay={showNewStuffOverlay} />}
+    </NewStuffContainer>
+  );
+};
 
 export default HeaderContainer;

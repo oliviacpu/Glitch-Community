@@ -3,7 +3,7 @@ import { before, after } from 'redux-aop';
 import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
-import { getAPIForToken, useAPI } from './api';
+import { getAPIForToken } from './api';
 import { useSelector, useActions } from './context';
 
 // utilities
@@ -217,7 +217,7 @@ export const { reducer, actions } = createSlice({
 
 export const selectLoadState = (state) => state.currentUser.loadState;
 
-export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken'])
+export const selectPersistentToken = (state) => get(state, ['currentUser', 'sharedUser', 'persistentToken']);
 
 export function selectCurrentUser(state) {
   const { sharedUser, cachedUser } = state.currentUser;
@@ -255,15 +255,13 @@ const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
 
 const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
   const prev = store.getState().currentUser;
-  const { cachedUser, sharedUser } = action.payload;
+  const { cachedUser } = action.payload;
 
   if (!usersMatch(cachedUser, prev.cachedUser)) {
     identifyUser(cachedUser);
   }
 
-  // hooks for easier debugging
-  // TODO: is this necessary with the redux dev tools?
-  window.currentUser = cachedUser;
+  // TODO: when would we need to trigger a reload?
 
   return action;
 });
@@ -271,22 +269,25 @@ const onUserChange = before(matchTypes(actions.loaded), (store, action) => {
 export const middleware = [onInit, onLoad, onUserChange];
 
 // hooks
-// TODO: `api` and actions don't need to be in here, do they?
+
+export const useCurrentUser = () => useSelector(selectCurrentUser);
+export const useCurrentUserActions = () => useActions(actions);
+
 // TODO: what is `fetched` actually used for?
 
-export function useLegacyCurrentUser() {
-  const currentUser = useSelector(selectCurrentUser);
-  const loadState = useSelector(selectLoadState);
-  const api = useAPI();
-  const boundActions = useActions(actions);
+// export function useLegacyCurrentUser() {
+//   const currentUser = useSelector(selectCurrentUser);
+//   const loadState = useSelector(selectLoadState);
+//   const api = useAPI();
+//   const boundActions = useActions(actions);
 
-  return {
-    api,
-    currentUser,
-    fetched: loadState === 'ready',
-    reload: boundActions.loadRequested,
-    login: boundActions.loggedIn,
-    update: boundActions.updated,
-    clear: boundActions.loggedOut,
-  };
-}
+//   return {
+//     api,
+//     currentUser,
+//     fetched: loadState === 'ready',
+//     reload: boundActions.loadRequested,
+//     login: boundActions.loggedIn,
+//     update: boundActions.updated,
+//     clear: boundActions.loggedOut,
+//   };
+// }

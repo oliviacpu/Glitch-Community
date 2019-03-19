@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useCurrentUser } from './current-user';
 import useErrorHandlers from './error-handlers';
-import { useAPI } from '../state/api'
-import { selectCurrentUser } from '../state/current-user'
-import { useSelector, useReduxStore } from '../state/context'
+import { useAPI } from '../state/api';
+import { useCurrentUser } from '../state/current-user';
 
 class CollectionEditor extends React.Component {
   constructor(props) {
-  super(props);
+    super(props);
 
     this.state = {
       ...props.initialCollection,
@@ -81,10 +79,8 @@ CollectionEditor.defaultProps = {
 };
 
 const CollectionEditorContainer = ({ children, initialCollection }) => {
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUser = useCurrentUser();
   const api = useAPI();
-  const store = useReduxStore()
-  console.log(currentUser, store.getState().currentUser)
   const errorFuncs = useErrorHandlers();
   return (
     <CollectionEditor {...{ api, currentUser, initialCollection }} {...errorFuncs}>
