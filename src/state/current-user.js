@@ -3,7 +3,7 @@ import { before, after } from 'redux-aop';
 import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
-import { getAPI, useAPI } from './api';
+import { getAPIForToken, useAPI } from './api';
 import { useSelector, useActions } from './context';
 
 // utilities
@@ -68,16 +68,16 @@ function usersMatch(a, b) {
   return false;
 }
 
-async function getAnonUser(state) {
-  const { data } = await getAPI(state).post('users/anon');
+async function getAnonUser() {
+  const { data } = await getAPIForToken(undefined).post('users/anon');
   return data;
 }
 
-async function getSharedUser(state) {
+async function getSharedUser(token) {
   try {
     const {
       data: { user },
-    } = await getAPI(state).get('boot?latestProjectOnly=true');
+    } = await getAPIForToken(token).get('boot?latestProjectOnly=true');
     return user;
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -87,12 +87,11 @@ async function getSharedUser(state) {
   }
 }
 
-async function getCachedUser(state) {
-  const { sharedUser } = state.currentUser;
+async function getCachedUser({ sharedUser }) {
   if (!sharedUser) return undefined;
   if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
   try {
-    const { data } = await getAPI(state).get(`users/${sharedUser.id}`);
+    const { data } = await getAPIForToken(sharedUser.persistentToken).get(`users/${sharedUser.id}`);
     if (!usersMatch(sharedUser, data)) {
       return 'error';
     }
@@ -107,28 +106,27 @@ async function getCachedUser(state) {
 }
 
 // TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
-async function load(state) {
-  const { sharedUser, cachedUser } = state.currentUser;
-  const nextState = { sharedUser, cachedUser };
+async function load({ currentUser: prevState }) {
+  const nextState = { sharedUser: prevState.sharedUser, cachedUser: prevState.cachedUser };
 
   // If we're signed out create a new anon user
-  if (!sharedUser) {
-    nextState.sharedUser = await getAnonUser(state);
+  if (!prevState.sharedUser) {
+    nextState.sharedUser = await getAnonUser();
   }
 
   // Check if we have to clear the cached user
-  if (!usersMatch(sharedUser, cachedUser)) {
+  if (!usersMatch(prevState.sharedUser, prevState.cachedUser)) {
     nextState.cachedUser = undefined;
   }
 
-  const newCachedUser = await getCachedUser(state);
+  const newCachedUser = await getCachedUser(nextState);
   if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
     // If it did change then quit out and let onUserChange sort it out
-    if (usersMatch(nextState.sharedUser, sharedUser)) {
+    if (usersMatch(nextState.sharedUser, prevState.sharedUser)) {
       // The user wasn't changed, so we need to fix it
-      nextState.sharedUser = await getSharedUser(state);
+      nextState.sharedUser = await getSharedUser(nextState);
       console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${nextState.sharedUser && nextState.sharedUser.id}`);
       addBreadcrumb({
         level: 'info',
@@ -176,9 +174,10 @@ export const { reducer, actions } = createSlice({
     
     // sharedUser syncs with the editor and is authoritative on id and persistentToken
     sharedUser: readFromStorage('currentUser') || null,
-  // cachedUser mirrors GET /users/{id} and is what we actually display
-  cachedUser: readFromStorage('community-cachedUser') || null,
-    loadState: 'init', // init | loading \ ready
+    // cachedUser mirrors GET /users/{id} and is what we actually display
+    cachedUser: readFromStorage('community-cachedUser') || null,
+    // init | loading \ ready
+    loadState: 'init',
   },
   reducers: {
     requestedLoad: (state) => ({
