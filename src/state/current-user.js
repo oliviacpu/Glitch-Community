@@ -125,6 +125,7 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
   }
 
   // hooks for easier debugging
+  // TODO: is this necessary with the redux dev tools?  
   window.currentUser = cachedUser;
 
   return action;
@@ -138,13 +139,14 @@ export const middleware = [onInit, onLoad, onUserChange];
 
 export function useLegacyCurrentUser () {
   const currentUser = useSelector(selectCurrentUser)
+  const loadState = useSelector(selectLoadState)
   const api = useAPI()
   const boundActions = useActions(actions)
   
   return {
     api,
     currentUser,
-    fetched: !!currentUser.id,
+    fetched: loadState === 'ready',
     reload: boundActions.loadRequested,
     login: boundActions.loggedIn,
     update: boundActions.updated,
@@ -253,6 +255,7 @@ async function getCachedUser(state) {
   }
 }
 
+// TODO: this whole system is kind of gnarly. What is this _supposed_ to do?
 async function load(state) {
   let { sharedUser, cachedUser } = state.currenUser;
   const nextState = { sharedUser, cachedUser };
@@ -271,7 +274,7 @@ async function load(state) {
   if (newCachedUser === 'error') {
     // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
     // Anon users get their token and id deleted when they're merged into a user on sign in
-    // If it did change then quit out and let componentDidUpdate sort it out
+    // If it did change then quit out and let onUserChange sort it out
     if (usersMatch(nextState.sharedUser, sharedUser)) {
       // The user wasn't changed, so we need to fix it
       nextState.sharedUser = await getSharedUser(state);
