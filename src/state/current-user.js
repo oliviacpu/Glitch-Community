@@ -6,6 +6,8 @@ import axios from 'axios';
 import { get } from 'lodash';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import { readFromStorage } from './local-storage';
+import { getAPI, useAPI } from './api';
+import { useSelector, useActions } from './context';
 
 // TODO: This manages _both_ the users login information and their profile data.
 // Once we're managing user profiles in redux, these can probably be separated.
@@ -34,17 +36,17 @@ export const { reducer, actions } = createSlice({
   initialState: {
     sharedUser: readFromStorage('currentUser') || null,
     cachedUser: readFromStorage('community-cachedUser') || null,
-    isLoading: false,
+    loadState: 'init', // init | loading \ ready
   },
   reducers: {
     requestedLoad: (state, { payload }) => ({
       ...state,
-      isLoading: true,
+      loadState: 'loading',
     }),
     loaded: (state, { payload }) => ({
       ...state,
-      isLoading: false,
       ...payload,
+      loadState: 'ready',
     }),
     loggedIn: (state, { payload }) => ({
       ...state,
@@ -66,10 +68,24 @@ export const { reducer, actions } = createSlice({
   },
 });
 
+// selectors
+
+export const selectLoadState = (state) => state.currentUser.loadState;
+
+export const selectPersistentToken = (state) =>
+  get(state, ['currentUser', 'sharedUser', 'persistentToken'])
+
+export function selectCurrentUser (state) {
+  const { sharedUser, cachedUser } = state.currentUser
+  return { ...defaultUser, ...sharedUser, ...cachedUser }
+}
+
+
 // middleware 
 
 const matchTypes = (...actions) => actions.map(String);
 
+// TODO: should this be kicked off by the UI mounting?
 let didInit = false;
 const onInit = after((store, action) => {
   if (!didInit) {
@@ -80,12 +96,13 @@ const onInit = after((store, action) => {
 });
 
 const onLoad = before(matchTypes(actions.requestedLoad), (store, action) => {
+  const currentState = store.getState()
   // prevent multiple 'load's from running
-  if (store.getState().currentUser.isLoading) {
+  if (selectLoadState(currentState) === 'loading') {
     return null;
   }
 
-  load(store.getState()).then((result) => {
+  load(currentState).then((result) => {
     store.dispatch(actions.loaded(result));
   });
 
@@ -115,50 +132,28 @@ const onUserChange = before(matchTypes(...Object.values(actions)), (store, actio
 
 export const middleware = [onInit, onLoad, onUserChange];
 
-// selectors
-
-export const selectPersistentToken = (state) =>
-  get(state, ['currentUser', 'sharedUser', 'persistentToken'])
-
-export function selectCurrentUser (state) {
-  const { sharedUser, cachedUser } = state.currentUser
-  return { ...defaultUser, ...sharedUser, ...cachedUser }
-}
-
 // connectors
 // TODO: `api` and actions don't need to be in here, do they?
 // TODO: what is `fetched` actually used for?
 
-export function useCurrentUser () {
-  const currentUser = useReduxSelector(selectCurrentUser)
-  const store = useReduxStore()
+export function useLegacyCurrentUser () {
+  const currentUser = useSelector(selectCurrentUser)
+  const api = useAPI()
+  const boundActions = useActions(actions)
+  
   return {
-    api: getAPI(store.getState()),
+    api,
     currentUser,
     fetched: !!currentUser.id,
-    reload: () => store.dispatch(actions.loadRequested()),
-    login: (user) => store.dispatch(actions.loggedIn(user)),
-    update: (changes) => store.dispatch(actions.updated(changes)),
-    clear: () => store.dispatch(actions.loggedOut()),
+    reload: boundActions.loadRequested,
+    login: boundActions.loggedIn,
+    update: boundActions.updated,
+    clear: boundActions.loggedOut,
   }
 }
 
 
 // utilities
-
-function getAPI(state) {
-  if (state.currentUser.sharedUser) {
-    return axios.create({
-      baseURL: API_URL,
-      headers: {
-        Authorization: state.currentUser.sharedUser.persistentToken,
-      },
-    });
-  }
-  return axios.create({
-    baseURL: API_URL,
-  });
-}
 
 function identifyUser(user) {
   const analytics = { window };

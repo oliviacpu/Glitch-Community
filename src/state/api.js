@@ -4,8 +4,9 @@ import axios from 'axios';
 import { memoize } from 'lodash';
 import React, { useContext, useState, useEffect } from 'react';
 import { selectPersistentToken } from './current-user';
+import { useSelector } from './context';
 
-const selectAPI = memoize((persistentToken) => {
+const getAPIForToken = memoize((persistentToken) => {
   if (persistentToken) {
     return axios.create({
       baseURL: API_URL,
@@ -20,10 +21,10 @@ const selectAPI = memoize((persistentToken) => {
 })
 
 export function getAPI (state) {
-  return selectAPI(selectPersistentToken(state))
+  return getAPIForToken(selectPersistentToken(state))
 }
 
 export function useAPI () {
   const persistentToken = useSelector(selectPersistentToken)
-  const api = selectAPI(
+  return getAPIForToken(persistentToken)
 }
