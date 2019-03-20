@@ -15,35 +15,38 @@ import PropTypes from 'prop-types';
  * @param {boolean} backgroundImage - If we want the image to be rendered as a background image
  */
 
-
 const Image = ({ src, srcSet, sizes, className, alt, role, width, height, backgroundImage, backgroundRatio }) => {
-
-      {!backgroundImage && <img
-        src={src}
-        srcSet={srcSet ? srcSet : undefined}
-        sizes={sizes}
-        width={width || undefined}
-        height={height || undefined}
-        className={className || undefined}
-        alt={alt}
-        role={role}
-      />}
-  {backgroundImage === true &&<div
-        className={className || undefined}
-        style={{
-          backgroundImage: `url(${src})`,
-          paddingBottom: `${backgroundRatio}%`,
-          backgroundRepeat: 'no-repeat',
-        }}
-        role="presentation"
-      />
-    );
-  }
+  return (
+    <>
+      {!backgroundImage ? (
+        <img
+          src={src}
+          srcSet={srcSet.length > 0 ? srcSet : undefined}
+          sizes={sizes}
+          width={width || undefined}
+          height={height || undefined}
+          className={className || undefined}
+          alt={alt}
+          role={role}
+        />
+      ) : (
+        <div
+          className={className || undefined}
+          style={{
+            backgroundImage: `url(${src})`,
+            paddingBottom: `${backgroundRatio}%`,
+            backgroundRepeat: 'no-repeat',
+          }}
+          role="presentation"
+        />
+      )}
+    </>
+  );
 };
 
 Image.propTypes = {
   alt: PropTypes.string,
-  srcSet: PropTypes.instanceOf(Object),
+  srcSet: PropTypes.array,
   sizes: PropTypes.string,
   role: PropTypes.string,
   src: PropTypes.string,
@@ -56,7 +59,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   src: '',
-  srcSet: {},
+  srcSet: [],
   sizes: '',
   alt: '',
   backgroundImage: false,
