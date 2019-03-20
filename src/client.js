@@ -22,17 +22,6 @@ window.bootstrap = () => {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
-  // Stops IE11 from being visible, and displays a warning
-  if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
-    var fallback = document.getElementById('fallback');
-    var fallbackIE = document.getElementById('fallback-ie');
-    var fallbackImg = document.getElementById('fallback-img');
-    fallback.style.display = 'block';
-    fallbackIE.style.display = 'block';
-    fallbackImg.style.display = 'block';
-    return;
-  } 
-
   // Mark that bootstrapping has occurred,
   // ..and more importantly, use this as an excuse
   // to call into Sentry so that its initialization
