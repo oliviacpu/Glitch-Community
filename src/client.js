@@ -22,6 +22,10 @@ window.bootstrap = () => {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
+  
+  if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+    return;
+  } 
 
   // Mark that bootstrapping has occurred,
   // ..and more importantly, use this as an excuse
