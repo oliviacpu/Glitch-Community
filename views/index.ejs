@@ -87,6 +87,17 @@
       </div>
     </div>
 
+    <script>
+      var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
+      if (isIe) {
+        var fallback = document.getElementById('fallback');
+        var fallbackIE = document.getElementById('fallback-ie');
+        var fallbackImg = document.getElementById('fallback-img');
+        fallback.style.display = 'block';
+        fallbackIE.style.display = 'block';
+        fallbackImg.style.display = 'block';
+      }
+    </script>
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>
     <% } %>

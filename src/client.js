@@ -22,10 +22,8 @@ window.bootstrap = () => {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
-  console.log(navigator.userAgent);
-  var test = true;
   // Stops IE11 from being visible, and displays a warning
-  if (test == true) {
+  if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
     var fallback = document.getElementById('fallback');
     var fallbackIE = document.getElementById('fallback-ie');
     var fallbackImg = document.getElementById('fallback-img');
@@ -39,13 +37,13 @@ window.bootstrap = () => {
   // ..and more importantly, use this as an excuse
   // to call into Sentry so that its initialization
   // happens early in our JS bundle.
-  /*configureScope((scope) => {
+  configureScope((scope) => {
     scope.setTag('bootstrap', 'true');
   });
 
   const dom = document.createElement('div');
   document.body.appendChild(dom);
-  render(<App />, dom);*/
+  render(<App />, dom);
 };
 
 // Make sure react exists because that's an issue that is happening
