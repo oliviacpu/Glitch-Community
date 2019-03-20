@@ -22,7 +22,7 @@ window.bootstrap = () => {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
-  
+  // Stops IE11 from being visible, and displays a warning
   if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
     var fallback = document.getElementById('fallback');
     var fallbackIE = document.getElementById('fallback-ie');
