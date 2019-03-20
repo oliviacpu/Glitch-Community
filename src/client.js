@@ -24,6 +24,12 @@ window.bootstrap = () => {
   }
   
   if (/Trident\/[7]{1}/i.test(navigator.userAgent)) {
+    var fallback = document.getElementById('fallback');
+    var fallbackIE = document.getElementById('fallback-ie');
+    var fallbackImg = document.getElementById('fallback-img');
+    fallback.style.display = 'block';
+    fallbackIE.style.display = 'block';
+    fallbackImg.style.display = 'block';
     return;
   } 
 
