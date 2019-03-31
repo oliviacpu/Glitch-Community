@@ -9,7 +9,7 @@ Philosophically, a little bit `Youtube`, some `Spotify`, with a sprinkle of `app
 Please read [CONTRIBUTING.md](https://glitch.com/edit/#!/community?path=CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests to us.
 
 Glitch employees should check out [DEPLOYING.md](https://glitch.com/edit/#!/community?path=DEPLOYING.md) for details on our deploy process.
-
+  
 ## Getting Started
 
 File structure
@@ -33,12 +33,10 @@ application models -> presenter -> DOM
 
 
 
-```
-  ___     ___      ___
- {o,o}   {o.o}    {o,o}
+``` 
  |)__)   |)_(|    (__(|
 --"-"-----"-"------"-"--
-O RLY?  YA RLY   NO WAI!
+O RLY?  YA RLY   NO WAI!  
 ```
 
 #### Remixing this project
