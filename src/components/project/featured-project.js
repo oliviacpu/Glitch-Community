@@ -42,10 +42,11 @@ const FeaturedProject = ({
   updateNote,
   unfeatureProject,
 }) => {
-  const featuredProjectSectionRef = useRef(null);
+  
 
   return (
-    <ProjectEmbed
+    <div ref={() => }>
+      <ProjectEmbed
       topLeft={<TopLeft
         featuredProject={featuredProject}
         collection={collection}
@@ -65,6 +66,7 @@ const FeaturedProject = ({
       currentUser={currentUser}
       addProjectToCollection={addProjectToCollection}
     />
+    </div>
   );
 };
 
