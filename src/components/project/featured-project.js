@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -42,10 +42,8 @@ const FeaturedProject = ({
   updateNote,
   unfeatureProject,
 }) => {
-  
-
   return (
-    <div ref={() => }>
+    <div >
       <ProjectEmbed
       topLeft={<TopLeft
         featuredProject={featuredProject}
@@ -59,7 +57,6 @@ const FeaturedProject = ({
         unfeatureProject={unfeatureProject}
         displayNewNote={displayNewNote ? () => displayNewNote(featuredProject.id) : null}
         hasNote={!!featuredProject.note}
-        featuredProjectSectionRef={featuredProjectSectionRef}
       />}
       project={featuredProject}
       isAuthorized={isAuthorized}
@@ -67,6 +64,7 @@ const FeaturedProject = ({
       addProjectToCollection={addProjectToCollection}
     />
     </div>
+
   );
 };
 

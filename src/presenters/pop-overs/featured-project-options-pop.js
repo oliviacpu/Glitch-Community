@@ -7,14 +7,13 @@ import PopoverButton from './popover-button';
 // create as stateful react component
 export default function FeaturedProjectOptionsPop({ unfeatureProject, displayNewNote, hasNote, featuredProjectSectionRef }) {
   function animateThenUnfeature(togglePopover) {
-    // const featuredContainer = document.getElementById('project-embed');
-    // featuredContainer.classList.add('slide-down');
-    // featuredProjectSectionRef.classList.add('slide-down');
-    // featuredProjectSectionRef.addEventListener('animationend', () => {
-    //   togglePopover();
-    //   unfeatureProject();
-    // });
-    console.log(featuredProjectSectionRef)
+    const featuredContainer = document.getElementById('project-embed');
+    featuredContainer.classList.add('slide-down');
+    featuredProjectSectionRef.classList.add('slide-down');
+    featuredProjectSectionRef.addEventListener('animationend', () => {
+      togglePopover();
+      unfeatureProject();
+    });
   }
 
   function toggleAndDisplayNewNote(togglePopover) {
