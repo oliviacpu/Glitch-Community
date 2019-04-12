@@ -172,32 +172,27 @@ export class AddTeamUser extends React.Component {
     const alreadyInvitedAndNewInvited = this.props.invitedMembers.concat(this.state.newlyInvited);
     const { inviteEmail, inviteUser, setWhitelistedDomain, ...props } = this.props;
     return (
-      <PopoverContainer>
-        {({ visible, togglePopover }) => {
-          const onClickToggle = useTrackedFunc(togglePopover, 'Add to Team clicked');
-          return (
-            <span className="add-user-container">
-              {alreadyInvitedAndNewInvited.length > 0 && <UsersList users={alreadyInvitedAndNewInvited} />}
-              <button onClick={onClickToggle} className="button button-small button-tertiary add-user">
-                Add
-              </button>
-              {!!this.state.invitee && (
-                <div className="notification notifySuccess inline-notification" onAnimationEnd={this.removeNotifyInvited}>
-                  Invited {this.state.invitee}
-                </div>
-              )}
-              {visible && (
-                <AddTeamUserPop
-                  {...props}
-                  setWhitelistedDomain={setWhitelistedDomain ? (domain) => this.setWhitelistedDomain(togglePopover, domain) : null}
-                  inviteUser={inviteUser ? (user) => this.inviteUser(togglePopover, user) : null}
-                  inviteEmail={inviteEmail ? (email) => this.inviteEmail(togglePopover, email) : null}
-                />
-              )}
-            </span>
-          );
-        }}
-      </PopoverContainer>
+      <span className="add-user-container">
+        {alreadyInvitedAndNewInvited.length > 0 && <UsersList users={alreadyInvitedAndNewInvited} />}
+        <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add">
+          {({ togglePopover }) => {
+            const onClickToggle = useTrackedFunc(togglePopover, 'Add to Team clicked');
+            return (
+              <AddTeamUserPop
+                {...props}
+                setWhitelistedDomain={setWhitelistedDomain ? (domain) => this.setWhitelistedDomain(togglePopover, domain) : null}
+                inviteUser={inviteUser ? (user) => this.inviteUser(togglePopover, user) : null}
+                inviteEmail={inviteEmail ? (email) => this.inviteEmail(togglePopover, email) : null}
+              />
+            );
+          }}
+        </PopoverWithButton>
+        {!!this.state.invitee && (
+          <div className="notification notifySuccess inline-notification" onAnimationEnd={this.removeNotifyInvited}>
+            Invited {this.state.invitee}
+          </div>
+        )}
+      </span>
     );
   }
 }
@@ -206,7 +201,6 @@ AddTeamUser.propTypes = {
   inviteUser: PropTypes.func,
   setWhitelistedDomain: PropTypes.func,
 };
-
 AddTeamUser.defaultProps = {
   setWhitelistedDomain: null,
   inviteUser: null,
