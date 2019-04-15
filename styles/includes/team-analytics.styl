@@ -1,31 +1,34 @@
-analytics-app-views = #2077b4
-analytics-remixes = #ff7f0f
+analytics-app-views-color-color = #9588ea
+analytics-remix-color = #23d5e7
 
 .team-analytics
   position: relative
   section
-    margin-top: 1rem
-
-  .summary-item
-    cursor: pointer
-    &:hover
-      .summary-label
-        text-decoration: underline
+    margin-top: 1rem    
 
   .controls
     margin: 0
+    
+    .options
+      margin-left: 15px
+      .down-arrow
+        display: inline-block
+    
     .button-wrap
       margin-right: 0.5rem
-
+      
+  .summary, .activity, .referrers, .project-details, .explanation, .project-remixes-container
+    margin-left: 15px
+    
   .total
     border-radius: 3px
     padding: 3px 5px
     color: primary-background
     &.app-views    
-      background-color: analytics-app-views
+      background-color: analytics-app-views-color
     &.remixes
-      background-color: analytics-remixes
-
+      background-color: analytics-remix-color
+    
   .activity
     margin-bottom: 0
 
@@ -37,7 +40,7 @@ analytics-remixes = #ff7f0f
     height: 5px
     
   .referrers
-    margin-top: 0
+    margin-top: 1rem
 
   .referrers-content
     display: flex
@@ -51,15 +54,15 @@ analytics-remixes = #ff7f0f
     &.app-views    
       progress
         &::-webkit-progress-value
-          background-color: analytics-app-views
+          background-color: analytics-app-views-color
         &::-moz-progress-bar
-          background-color: analytics-app-views
+          background-color: analytics-app-views-color
     &.remixes
       progress
         &::-webkit-progress-value
-          background-color: analytics-remixes
+          background-color: analytics-remix-color
         &::-moz-progress-bar
-          background-color: analytics-remixes
+          background-color: analytics-remix-color
     // @media (max-width: mediumSmallViewport)
     //   width: calc(50% - 20px)
     @media (max-width: smallViewport)
@@ -113,7 +116,6 @@ analytics-remixes = #ff7f0f
   .project-details
     button
       margin-left: 0
-      margin-right: 5px
   
   .project-remixes a
     display: inline-block

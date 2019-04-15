@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
-import { Link, TeamLink, UserLink, ProjectLink, CollectionLink } from '../../presenters/includes/link';
+import { Link, TeamLink, UserLink, ProjectLink } from '../../presenters/includes/link';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import { useAlgoliaSearch } from '../../state/search';
@@ -53,6 +53,12 @@ const ProjectResult = ({ value: project }) => (
       <div className={styles.infoSecondary}>{project.description}</div>
     </div>
   </ProjectLink>
+);
+
+const CollectionLink = ({ collection, children, ...props }) => (
+  <a href={`/@${collection.fullUrl}`} {...props}>
+    {children}
+  </a>
 );
 
 const CollectionResult = ({ value: collection }) => (

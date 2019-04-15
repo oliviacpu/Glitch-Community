@@ -8,6 +8,7 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
+import Thanks from 'Components/blocks/thanks';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -23,7 +24,6 @@ import { captureException } from '../../utils/sentry';
 // import SampleTeamCollections from '../../curated/sample-team-collections';
 import CollectionsList from '../collections-list';
 
-import { Thanks } from '../includes/thanks';
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
 import DeleteTeam from '../includes/delete-team';

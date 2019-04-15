@@ -45,7 +45,7 @@ const filterReferrers = (referrers) => {
 
 class TeamAnalyticsReferrers extends React.PureComponent {
   render() {
-    const { analytics, totalRemixes, totalAppViews } = this.props;
+    const { activeFilter, analytics, totalRemixes, totalAppViews } = this.props;
 
     const appViewReferrers = filterReferrers(analytics.referrers);
     const remixReferrers = filterReferrers(analytics.remixReferrers);
@@ -53,33 +53,35 @@ class TeamAnalyticsReferrers extends React.PureComponent {
     const totalDirectRemixes = totalRemixes - countTotals(remixReferrers, 'remixes');
     return (
       <div className="referrers-content">
-        <article className="referrers-column app-views">
-          <h4>Total App Views</h4>
-          <ul>
-            <ReferrerPlaceholder count={totalAppViews} />
-            <ReferrerItem count={totalDirectAppViews} total={totalAppViews} description="direct views" />
-            {appViewReferrers.map((referrer) => (
-              <ReferrerItem key={referrer.domain} count={referrer.requests} total={totalAppViews} description={referrer.domain} />
-            ))}
-          </ul>
-        </article>
-
-        <article className="referrers-column remixes">
-          <h4>Remixes</h4>
-          <ul>
-            <ReferrerPlaceholder count={totalRemixes} />
-            <ReferrerItem count={totalDirectRemixes} total={totalRemixes} description="direct remixes" />
-            {remixReferrers.map((referrer) => (
-              <ReferrerItem key={referrer.domain} count={referrer.remixes} total={totalRemixes} description={referrer.domain} />
-            ))}
-          </ul>
-        </article>
+        {activeFilter === 'views' && (
+          <article className="referrers-column app-views">
+            <ul>
+              <ReferrerPlaceholder count={totalAppViews} />
+              <ReferrerItem count={totalDirectAppViews} total={totalAppViews} description="direct views" />
+              {appViewReferrers.map((referrer) => (
+                <ReferrerItem key={referrer.domain} count={referrer.requests} total={totalAppViews} description={referrer.domain} />
+              ))}
+            </ul>
+          </article>
+        )}
+        {activeFilter === 'remixes' && (
+          <article className="referrers-column remixes">
+            <ul>
+              <ReferrerPlaceholder count={totalRemixes} />
+              <ReferrerItem count={totalDirectRemixes} total={totalRemixes} description="direct remixes" />
+              {remixReferrers.map((referrer) => (
+                <ReferrerItem key={referrer.domain} count={referrer.remixes} total={totalRemixes} description={referrer.domain} />
+              ))}
+            </ul>
+          </article>
+        )}
       </div>
     );
   }
 }
 
 TeamAnalyticsReferrers.propTypes = {
+  activeFilter: PropTypes.string.isRequired,
   analytics: PropTypes.object.isRequired,
   totalRemixes: PropTypes.number.isRequired,
   totalAppViews: PropTypes.number.isRequired,
