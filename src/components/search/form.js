@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { mapValues } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import TextInput from '../inputs/text-input';
 import { useAlgoliaSearch } from '../../state/search';
@@ -8,21 +9,13 @@ import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import AutocompleteSearch from './autocomplete';
 import styles from './form.styl';
 
-// when results are loading, show the previous set of results instead.
-function useLastCompleteSearchResult(query) {
-  const results = useAlgoliaSearch(query);
-  const [lastCompleteResults, setLastCompleteResults] = useState(results);
-  useEffect(() => {
-    if (results.status === 'ready') {
-      setLastCompleteResults(results);
-    }
-  }, [results.status]);
-  return lastCompleteResults;
-}
-
-const createReducer = (handlers) => (state, action) => {
-  if (handlers[action.type]) return handlers[action.type](state, action)
-  return state
+const createSlice = (handlers) => {
+  const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }))
+  const reducer = (state, action) => {
+    if (handlers[action.type]) return handlers[action.type](state, action)
+    return state
+  }
+  return { actions, reducer }
 }
 
 const formatResults = (searchResults) => {
@@ -33,7 +26,7 @@ const getResultIdOffset = ({ results, selectedResult }) => {
 
 }
 
-const reducers = createReducer({
+const { actions, reducer } = createSlice({
   queryChanged: (state, { payload }) => ({
     ...state,
     query: payload,
@@ -51,27 +44,36 @@ const reducers = createReducer({
   arrowDown: (state, { payload }) => ({
     ...state,
     selectedResult: getResultIdOffset(state, 1),
+  }),
+  submitted: (state) => ({
+    ...state,
+    submitted: !!state.query && 
   })
 })
 
-const action = (ty)
-
 function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
-  const [query, setQuery] = useState(defaultValue);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const results = useLastCompleteSearchResult(query);
+  const initialState = {
+    selectedResult: null,
+    query: defaultValue,
+    submitted: false,
+  }
+  const [{ query, results, selectedResult }, dispatch] = useReducer(reducer, initialState) 
+  const algoliaResults = useAlgoliaSearch(query);
+  
+  useEffect(() => {
+    dispatch(actions.resultsChanged(algoliaResults))
+  }, [algoliaResults])
+  
+  
   const [submitted, setSubmitted] = useState(false);
-
-  const onChange = (value) => {
-    setQuery(value);
-    setResultIndex(-1);
-  };
 
   const onKeyUp = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
+      dispatch(actions.arrowUp())
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
+      dispatch(actions.arrowDown())
     }
   };
   const onSubmit = (event) => {
@@ -81,21 +83,21 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   };
   return children({
     query,
+    onFocus: () => setVisible(true),
     onSubmit,
     submitted,
     autoComplete: 'off',
-
-    autoCompleteResults: visible && <AutocompleteSearch query={query} results={results} />,
+    autoCompleteResults: visible && <AutocompleteSearch query={query} selectedResult={selectedResult} results={results} />,
   });
 }
 
 function LegacySearchController({ children, defaultValue }) {
   const [query, onChange] = useState(defaultValue);
-  const [submitted, setSubmitted] = useState(false);
+  const [redirect, setRedirect] = useState(null);
   const onSubmit = (event) => {
     event.preventDefault();
     if (!query) return;
-    setSubmitted(true);
+    set(true);
   };
 
   return children({
@@ -126,7 +128,7 @@ function SearchController({ children, defaultValue }) {
 
 const Form = ({ defaultValue }) => (
   <SearchController defaultValue={defaultValue}>
-    {({ query, onChange, onFocus, onSubmit, onKeyUp, submitted, autoComplete, autoCompleteResults }) => (
+    {({ query, onChange, onFocus, onSubmit, onKeyUp, redirect, autoComplete, autoCompleteResults }) => (
       <form
         className={styles.container}
         action="/search"
@@ -139,7 +141,7 @@ const Form = ({ defaultValue }) => (
         autoCapitalize="off"
       >
         <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={query} />
-        {submitted && <Redirect to={`/search?q=${query}`} push />}
+        {redirect && <Redirect to={`/search?q=${query}`} push />}
         {autoCompleteResults}
       </form>
     )}
