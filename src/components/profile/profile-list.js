@@ -8,15 +8,17 @@ import { UserLink, TeamLink } from '../../presenters/includes/link';
 
 import styles from './profile-list.styl';
 
-const UserItem = ({ user }) =>
-    <UserLink user={user}>
-      <UserAvatar user={user} />
-    </UserLink>
+const UserItem = ({ user }) => (
+  <UserLink user={user}>
+    <UserAvatar user={user} />
+  </UserLink>
+);
 
-const TeamItem = ({ team }) =>
-    <TeamLink team={team}>
-      <TeamAvatar team={team} />
-    </TeamLink>
+const TeamItem = ({ team }) => (
+  <TeamLink team={team}>
+    <TeamAvatar team={team} />
+  </TeamLink>
+);
 
 // NOTE: ResizeObserver is not widely supported
 // see https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver

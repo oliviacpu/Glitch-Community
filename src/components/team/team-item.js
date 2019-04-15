@@ -9,7 +9,6 @@ import Image from 'Components/images/image';
 import Thanks from 'Components/blocks/thanks';
 import ProfileList from 'Components/profile/profile-list';
 import { getLink, getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
-import { TeamLink } from '../../presenters/includes/link';
 import { VerifiedBadge } from '../../presenters/includes/team-elements';
 import WrappingLink from '../../presenters/includes/wrapping-link';
 
