@@ -20,74 +20,67 @@ function useLastCompleteSearchResult(query) {
   return lastCompleteResults;
 }
 
-function AlgoliaSearchController ({ }) {
+function AlgoliaSearchController({}) {
   const onKeyUp = (e) => {
-  if (e.key === 'ArrowUp') {
-    e.preventDefault()
-    publish({ type: "up" })
-  } else if (e.key === 'ArrowDown') {
-    e.preventDefault()
-    publish({ type: 'down' })
-  }
-  return children({
-  
-    children: (
-      <>
-        {submitted && <Redirect to={`/search?q=${value}`} push />}
-        {visible && <AutocompleteSearch query={query} results={results} />}
-      </>
-    )
-  })
-}
-
-const noop = () => {}
-
-function SearchController ({ children, defaultValue }) {
-  const [value, onChange] = useState(defaultValue);
-  const algoliaFlag = useDevToggle('Algolia Search');
-  const [submitted, setSubmitted] = useState(false);
-  
-  if (!algoliaFlag) {
-    const onSubmit = (event) => {
-      event.preventDefault();
-      if (!value) return;
-      setSubmitted(true);
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      publish({ type: 'up' });
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      publish({ type: 'down' });
     }
-    
-    return children({
-      onSubmit,
-      onFocus: noop, 
-      onKeyUp: noop,
-      autoComplete: 'on',
-      children: (,
-    })
-  }
-  
+  };
+  return children({
+    query,
+    autoCompleteResults: visible && <AutocompleteSearch query={query} results={results} />,
+  });
 }
 
+function LegacySearchController({ children, defaultValue }) {
+  const [query, onChange] = useState(defaultValue);
+  const [submitted, setSubmitted] = useState(false);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (!query) return;
+    setSubmitted(true);
+  };
+
+  return children({
+    query,
+    onSubmit,
+    submitted,
+    autoComplete: 'on',
+    autoCompleteResults: null,
+  });
+}
+
+function SearchController({ children, defaultValue }) {
+  const algoliaFlag = useDevToggle('Algolia Search');
+
+  if (algoliaFlag) return <AlgoliaSearchController defaultValue={defaultValue}>{children}</AlgoliaSearchController>;
+}
 
 const Form = ({ defaultValue }) => (
-    <SearchController>
-      {({ query, onChange, onFocus, onSubmit, onKeyUp, submitted, autoCompleteResults }) => (
-        <form
-          className={styles.container}
-          action="/search"
-          method="get"
-          role="search"
-          onSubmit={onSubmit}
-          onKeyUp={onKeyUp}
-          onFocus={onFocus}
-          autoComplete={autoComplete}
-          autoCapitalize="off"
-        >
-          <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={value} />
-          {submitted && <Redirect to={`/search?q=${value}`} push />}
-          {autoCompleteResults}
-        </form>
-      )}
-    </PopoverContainer>
-  );
-}
+  <SearchController defaultValue={defaultValue}>
+    {({ query, onChange, onFocus, onSubmit, onKeyUp, submitted, autoComplete, autoCompleteResults }) => (
+      <form
+        className={styles.container}
+        action="/search"
+        method="get"
+        role="search"
+        onSubmit={onSubmit}
+        onKeyUp={onKeyUp}
+        onFocus={onFocus}
+        autoComplete={autoComplete}
+        autoCapitalize="off"
+      >
+        <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={query} />
+        {submitted && <Redirect to={`/search?q=${query}`} push />}
+        {autoCompleteResults}
+      </form>
+    )}
+  </SearchController>
+);
 
 Form.propTypes = {
   defaultValue: PropTypes.string,
