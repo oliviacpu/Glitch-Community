@@ -42,7 +42,7 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
 // so those need to be fetched after the search results have loaded.
 const useUsers = createAPIHook(async (api, userIDs) => {
   if (!userIDs.length) {
-    return [];
+    return undefined;
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
 
@@ -52,7 +52,7 @@ const useUsers = createAPIHook(async (api, userIDs) => {
 
 const useTeams = createAPIHook(async (api, teamIDs) => {
   if (!teamIDs.length) {
-    return [];
+    return undefined;
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
 
