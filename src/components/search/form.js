@@ -1,7 +1,8 @@
-    import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import TextInput from '../inputs/text-input';
+import { useAlgoliaSearch } from '../../state/search';
 import useDevToggle from '../../presenters/includes/dev-toggles';
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import AutocompleteSearch from './autocomplete';
@@ -19,33 +20,46 @@ function useLastCompleteSearchResult(query) {
   return lastCompleteResults;
 }
 
-function AutocompleteController ({ query }) {
-  const 
-  
-  
-  return <AutocompleteSearch query={value} />
+function useSubscription () {
+
 }
+
+function SearchController ({ children }) {
+  const algoliaFlag = useDevToggle('Algolia Search');
+  
+  if (!algoliaFlag) {
+    return({  })
+  
+  }
+  
+}
+
 
 function Form({ defaultValue }) {
   const [value, onChange] = useState(defaultValue);
   const [submitted, setSubmitted] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [publish, subscribe] = useSubscription();
   
-  const algoliaFlag = useDevToggle('Algolia Search');
-
-  const onChange = (query) => {
-    setValue(query)
-    setFocusedIndex(-1)
+  
+  const onKeyUp = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      publish({ type: "up" })
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      publish({ type: 'down' })
+    }
   }
   
   const onSubmit = (event) => {
     event.preventDefault();
     if (!value) return;
-    if (focusedIndex >= 0) {
-      console
+    if (!algoliaFlag) {
+      setSubmitted(true);
+      return;
     }
     
-    setSubmitted(true);
+    
   };
 
   return (
@@ -57,13 +71,14 @@ function Form({ defaultValue }) {
           method="get"
           role="search"
           onSubmit={onSubmit}
+          onKeyUp={onKeyUp}
           autoComplete={algoliaFlag ? 'off' : 'on'}
           autoCapitalize="off"
           onFocus={() => setVisible(true)}
         >
           <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={value} />
           {submitted && <Redirect to={`/search?q=${value}`} push />}
-          {algoliaFlag && visible && <AutocompleteSearch query={value} />}
+          {algoliaFlag && visible && <AutocompleteSearch query={query} results={results} />}
         </form>
       )}
     </PopoverContainer>
