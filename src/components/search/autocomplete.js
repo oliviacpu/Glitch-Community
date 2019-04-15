@@ -93,67 +93,26 @@ const Result = ({ value }) => {
   return <Component value={value} />;
 };
 
-const resultGroups = [
-  { id: 'team', label: 'Teams' },
-  { id: 'user', label: 'Users' },
-  { id: 'project', label: 'Projects' },
-  { id: 'collection', label: 'Collections' },
-];
-
-const MAX_RESULTS_PER_TYPE = 3;
-
-export const AutocompleteResults = ({ query, results }) => {
-  const notTopResult = (result) => !results.topResults.includes(result);
-  const resultGroupsWithItems = resultGroups
-    .map((group) => ({ ...group, items: results[group.id].filter(notTopResult).slice(0, MAX_RESULTS_PER_TYPE) }))
-    .filter((group) => group.items.length > 0);
-  const topResultItems = [...results.starterKit, ...results.topResults];
-  return (
-    <div className={styles.container}>
-      <ul>
-        {topResultItems.length > 0 && (
-          <li>
-            <header className={styles.resultGroupHeader}>Top Results</header>
-            <ul>
-              {topResultItems.map((item) => (
-                <li key={item.id} className={styles.resultItem}>
-                  <Result value={item} />
-                </li>
-              ))}
-            </ul>
-          </li>
-        )}
-        {resultGroupsWithItems.map(({ id, label, items }) => (
-          <li key={id}>
-            <header className={styles.resultGroupHeader}>{label}</header>
-            <ul>
-              {items.map((item) => (
-                <li key={item.id} className={styles.resultItem}>
-                  <Result value={item} />
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-        <li>
-          <SeeAllResults query={query} />
+const Autocomplete = ({ query, results }) => (
+  <div className={styles.container}>
+    <ul>
+      {results.map(({ id, label, items }) => (
+        <li key={id}>
+          <header className={styles.resultGroupHeader}>{label}</header>
+          <ul>
+            {items.map((item) => (
+              <li key={item.id} className={styles.resultItem}>
+                <Result value={item} />
+              </li>
+            ))}
+          </ul>
         </li>
-      </ul>
-    </div>
-  );
-};
-
-
-const Autocomplete = ({ query }) => {
-  const results = useLastCompleteSearchResult(query);
-  if (query && results.totalHits > 0 && results.status === 'ready') {
-    return (
-      <div className={styles.popOver}>
-        <AutocompleteResults query={query} results={results} />
-      </div>
-    );
-  }
-  return null;
-};
+      ))}
+      <li>
+        <SeeAllResults query={query} />
+      </li>
+    </ul>
+  </div>
+);
 
 export default Autocomplete;

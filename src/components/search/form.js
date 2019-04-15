@@ -10,85 +10,89 @@ import AutocompleteSearch from './autocomplete';
 import styles from './form.styl';
 
 const createSlice = (handlers) => {
-  const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }))
+  const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }));
   const reducer = (state, action) => {
-    if (handlers[action.type]) return handlers[action.type](state, action)
-    return state
-  }
-  return { actions, reducer }
-}
+    if (handlers[action.type]) return handlers[action.type](state, action);
+    return state;
+  };
+  return { actions, reducer };
+};
 
 const resultGroups = [
-  { id: 'top', label: 'Top Results', getItems: (resultGroups) => []  },
+  { id: 'top', label: 'Top Results', getItems: (resultGroups) => [...resultGroups.starterKit, ...resultGroups.topResults] },
   { id: 'team', label: 'Teams' },
   { id: 'user', label: 'Users' },
   { id: 'project', label: 'Projects' },
   { id: 'collection', label: 'Collections' },
 ];
 
-const formatResults = (searchResults) => {
-  
-}
+const MAX_RESULTS_PER_TYPE = 3;
 
-const getResultIdOffset = ({ results, selectedResult }, offset) => {
-  const flatResults = flatMap(results.map(group => group.items))
-}
+const formatResults = (results) => {
+  const notTopResult = (result) => !results.topResults.includes(result);
+  const getItemsFor = (group) => {
+    if (group.getItems) return group.getItems(results);
+    return results[group.type].filter(notTopResult).slice(0, MAX_RESULTS_PER_TYPE);
+  };
+  return resultGroups.map((group) => ({ ...group, items: getItemsFor(group) })).filter((group) => group.items.length > 0);
+};
+
+const resultsWithSeelc
 
 const redirectFor = ({ query, results, selectedResult }) => {
-  if (!query) return null
-  if (!selectedResult) return `/search?q=${query}`
+  if (!query) return null;
+  if (!selectedResult) return `/search?q=${query}`;
   return findSelectedResult(results, selectedResult).url;
-}
+};
 
 const { actions, reducer } = createSlice({
   queryChanged: (state, { payload }) => ({
     ...state,
     query: payload,
-    selectedResult: null,
+    selectedResult: -1,
   }),
   resultsChanged: (state, { payload }) => ({
     ...state,
     // use last complete results
-    results: payload.status === 'ready' ? formatResults(payload.value) : state.results
+    results: payload.status === 'ready' ? formatResults(payload.value) : state.results,
   }),
   arrowUp: (state, { payload }) => ({
     ...state,
-    selectedResult: getResultIdOffset(state, -1),
+    selectedResult: state.selectedResult - 1,
   }),
   arrowDown: (state, { payload }) => ({
     ...state,
-    selectedResult: getResultIdOffset(state, 1),
+    selectedResult: state.selectedResult + 1,
   }),
   submitted: (state) => ({
     ...state,
     redirect: redirectFor(state),
-  })
-})
+  }),
+});
 
 function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
   const initialState = {
-    selectedResult: null,
+    selectedResult: -1,
     query: defaultValue,
     redirect: null,
     results: [],
-  }
-  const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState) 
+  };
+  const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState);
   const algoliaResults = useAlgoliaSearch(query);
-  
+
   useEffect(() => {
-    dispatch(actions.resultsChanged(algoliaResults))
-  }, [algoliaResults])
-  
-  
+    dispatch(actions.resultsChanged(algoliaResults));
+  }, [algoliaResults]);
+
   const [submitted, setSubmitted] = useState(false);
 
   const onKeyUp = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      dispatch(actions.arrowUp())
+      dispatch(actions.arrowUp());
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      dispatch(actions.arrowDown())
+      dispatch(actions.arrowDown());
     }
   };
   const onSubmit = (event) => {
@@ -102,7 +106,11 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     onSubmit,
     redirect,
     autoComplete: 'off',
-    autoCompleteResults: visible && <AutocompleteSearch query={query} selectedResult={selectedResult} results={results} />,
+    autoCompleteResults: query && visible && (
+      <div className={styles.popOver}>
+        <AutocompleteSearch query={query} results={resultsWithSelection(results, selectedResult)} />
+      </div>
+    ),
   });
 }
 
