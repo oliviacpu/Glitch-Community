@@ -20,18 +20,35 @@ function useLastCompleteSearchResult(query) {
   return lastCompleteResults;
 }
 
-function AlgoliaSearchController({}) {
+function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
+  const [query, setQuery] = useState(defaultValue);
+  const [resultIndex, setResultIndex] = useState(-1);
+  const results = useLastCompleteSearchResult(query);
+  const [submitted, setSubmitted] = useState(false);
+  
+  const onChange = (value) => {
+    setQuery(value)
+    setResultIndex(-1)
+  }
+  
   const onKeyUp = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      publish({ type: 'up' });
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      publish({ type: 'down' });
     }
+  };
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (!query) return;
+    setSubmitted(true);
   };
   return children({
     query,
+    onSubmit,
+    submitted,
+    autoComplete: 'off',
+
     autoCompleteResults: visible && <AutocompleteSearch query={query} results={results} />,
   });
 }
@@ -57,7 +74,18 @@ function LegacySearchController({ children, defaultValue }) {
 function SearchController({ children, defaultValue }) {
   const algoliaFlag = useDevToggle('Algolia Search');
 
-  if (algoliaFlag) return <AlgoliaSearchController defaultValue={defaultValue}>{children}</AlgoliaSearchController>;
+  if (algoliaFlag)
+    return (
+      <PopoverContainer>
+        {(popoverProps) => (
+          <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue}>
+            {children}
+          </AlgoliaSearchController>
+        )}
+      </PopoverContainer>
+    );
+
+  return <LegacySearchController defaultValue={defaultValue}>{children}</LegacySearchController>;
 }
 
 const Form = ({ defaultValue }) => (
