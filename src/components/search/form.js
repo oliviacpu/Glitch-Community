@@ -41,11 +41,10 @@ const formatResults = (results) => {
 const countResults = (results) => sumBy(results, ({ items }) => items.length);
 
 const resultsWithSelection = (results, selectedResult) => {
-  if (selectedResult === -1) return results;
-  const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
+  if (!selectedResult) return results;
   return results.map((group) => ({
     ...group,
-    items: group.items.map((item) => (item === selectedResultItem ? { ...item, selected: true } : item)),
+    items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
   }));
 };
 
@@ -55,22 +54,21 @@ const getUrlFor = () => '/fart';
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
   if (!selectedResult) return `/search?q=${query}`;
-  const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
-  return getUrlFor(selectedResultItem);
+  return getUrlFor(selectedResult);
 };
 
-function getOffsetSelectedResult ({ results, selectedResult }, offset) {
+function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
   if (!selectedResult) {
     if (offset > 0) {
-      return flatResults[offset]
+      return flatResults[offset];
     }
     if (offset < 0) {
-      return flatResults[flatResults.length + offset]
+      return flatResults[flatResults.length + offset];
     }
   }
-  const nextIndex = flatResults.indexOf(selectedResult) + offset
-  return flatResults[nextIndex]
+  const nextIndex = flatResults.indexOf(selectedResult) + offset;
+  return flatResults[nextIndex];
 }
 
 const { actions, reducer } = createSlice({
@@ -80,7 +78,7 @@ const { actions, reducer } = createSlice({
   }),
   resultsChanged: (state, { payload }) => ({
     ...state,
-    selectedResult: -1,
+    selectedResult: null,
     results: formatResults(payload),
   }),
   arrowUp: (state) => ({
@@ -192,7 +190,16 @@ const Form = ({ defaultValue }) => (
         autoComplete={autoComplete}
         autoCapitalize="off"
       >
-        <TextInput labelText="Search Glitch" name="q" onChange={onChange} onKeyUp={onKeyUp} opaque placeholder="bots, apps, users" type="search" value={query} />
+        <TextInput
+          labelText="Search Glitch"
+          name="q"
+          onChange={onChange}
+          onKeyUp={onKeyUp}
+          opaque
+          placeholder="bots, apps, users"
+          type="search"
+          value={query}
+        />
         {redirect && <Redirect to={redirect} push />}
         {autoCompleteResults}
       </form>
