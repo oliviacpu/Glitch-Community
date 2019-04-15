@@ -3,6 +3,7 @@
 const axios = require('axios');
 const { Cache } = require('memory-cache');
 const dayjs = require('dayjs');
+const { captureException } = require('@sentry/node');
 
 const { API_URL } = require('./constants').current;
 const { getSingleItem } = require('Shared/api');
@@ -10,13 +11,12 @@ const { getSingleItem } = require('Shared/api');
 const CACHE_TIMEOUT = dayjs.convert(15, 'minutes', 'ms');
 const cache = new Cache();
 
-async function getFromCacheOrApi(type, id, api) {
-  const key = `${type}-${id}`;
+async function getFromCacheOrApi(key, api, ...args) {
   let promise = cache.get(key);
   let trackError = false;
   if (!promise) {
     trackError = true;
-    promise = api(id);
+    promise = api(...args);
     cache.put(key, promise, CACHE_TIMEOUT);
   }
   try {
@@ -24,7 +24,8 @@ async function getFromCacheOrApi(type, id, api) {
     return value;
   } catch (error) {
     if (trackError) {
-      console.warn(`Failed to load ${type} ${id}: ${error.toString()}`);
+      console.warn(`Failed to load ${key}: ${error.toString()}`);
+      captureException(error); // it'll probably get filtered out by beforeSend
     }
     return null;
   }
@@ -59,8 +60,8 @@ async function getTeamFromApi(url) {
 
 async function getUserFromApi(login) {
   try {
-    return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
     throw new Error('asdfasdfasdf');
+    return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
   } catch (error) {
     if (error.response && error.response.status === 404) {
       return null;
@@ -93,9 +94,9 @@ async function getCultureZinePosts() {
 }
 
 module.exports = {
-  getProject: (domain) => getFromCacheOrApi('project', domain, getProjectFromApi),
-  getTeam: (url) => getFromCacheOrApi('team', url, getTeamFromApi),
-  getUser: (login) => getFromCacheOrApi('user', login, getUserFromApi),
-  getCollection: (url) => getFromCacheOrApi('collection', url, getCollectionFromApi),
-  getZine: () => getFromCacheOrApi('culture', 'zine', getCultureZinePosts),
+  getProject: (domain) => getFromCacheOrApi(`project ${domain}`, getProjectFromApi, domain),
+  getTeam: (url) => getFromCacheOrApi(`team ${url}`, getTeamFromApi, url),
+  getUser: (login) => getFromCacheOrApi(`user ${login}`, getUserFromApi, login),
+  getCollection: (url) => getFromCacheOrApi(`collection ${url}`, getCollectionFromApi, url),
+  getZine: () => getFromCacheOrApi('culture zine', getCultureZinePosts),
 };
