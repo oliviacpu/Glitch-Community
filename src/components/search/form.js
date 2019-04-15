@@ -117,6 +117,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   };
   return children({
     query,
+    onChange: (value) => dispatch(actions.queryChanged(value)),
     onFocus: () => setVisible(true),
     onSubmit,
     redirect,
@@ -179,7 +180,7 @@ const Form = ({ defaultValue }) => (
         autoCapitalize="off"
       >
         <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={query} />
-        {redirect && <Redirect to={``} push />}
+        {redirect && <Redirect to={redirect} push />}
         {autoCompleteResults}
       </form>
     )}
