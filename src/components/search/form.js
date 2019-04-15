@@ -19,7 +19,7 @@ const createSlice = (handlers) => {
 };
 
 const resultGroups = [
-  { id: 'top', label: 'Top Results', getItems: (resultGroups) => [...resultGroups.starterKit, ...resultGroups.topResults] },
+  { id: 'top', label: 'Top Results', getItems: (results) => [...results.starterKit, ...results.topResults] },
   { id: 'team', label: 'Teams' },
   { id: 'user', label: 'Users' },
   { id: 'project', label: 'Projects' },
@@ -45,19 +45,33 @@ const resultsWithSelection = (results, selectedResult) => {
   const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
   return results.map((group) => ({
     ...group,
-    items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
+    items: group.items.map((item) => (item === selectedResultItem ? { ...item, selected: true } : item)),
   }));
 };
 
 // TODO
-const getUrlFor = () => `/fart`;
+const getUrlFor = () => '/fart';
 
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
-  if (selectedResult === -1) return `/search?q=${query}`;
+  if (!selectedResult) return `/search?q=${query}`;
   const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
   return getUrlFor(selectedResultItem);
 };
+
+function getOffsetSelectedResult ({ results, selectedResult }, offset) {
+  const flatResults = flatMap(results, ({ items }) => items);
+  if (!selectedResult) {
+    if (offset > 0) {
+      return flatResults[offset]
+    }
+    if (offset < 0) {
+      return flatResults[flatResults.length + offset]
+    }
+  }
+  const nextIndex = flatResults.indexOf(selectedResult) + offset
+  return flatResults[nextIndex]
+}
 
 const { actions, reducer } = createSlice({
   queryChanged: (state, { payload }) => ({
@@ -69,13 +83,13 @@ const { actions, reducer } = createSlice({
     selectedResult: -1,
     results: formatResults(payload),
   }),
-  arrowUp: (state, { payload }) => ({
+  arrowUp: (state) => ({
     ...state,
-    selectedResult: state.selectedResult === -1 ? countResults(state.results) - 1 : state.selectedResult - 1,
+    selectedResult: getOffsetSelectedResult(state, -1),
   }),
-  arrowDown: (state, { payload }) => ({
+  arrowDown: (state) => ({
     ...state,
-    selectedResult: state.selectedResult === countResults(state.results) - 1 ? -1 : state.selectedResult + 1,
+    selectedResult: getOffsetSelectedResult(state, 1),
   }),
   submitted: (state) => ({
     ...state,
@@ -85,7 +99,7 @@ const { actions, reducer } = createSlice({
 
 function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
   const initialState = {
-    selectedResult: -1,
+    selectedResult: null,
     query: defaultValue,
     redirect: null,
     results: [],
@@ -100,8 +114,6 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     }
   }, [algoliaResults]);
 
-  const [submitted, setSubmitted] = useState(false);
-
   const onKeyUp = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -113,13 +125,13 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    if (!query) return;
-    setSubmitted(true);
+    dispatch(actions.submitted());
   };
   return children({
     query,
     onChange: (value) => dispatch(actions.queryChanged(value)),
     onFocus: () => setVisible(true),
+    onKeyUp,
     onSubmit,
     redirect,
     autoComplete: 'off',
@@ -142,6 +154,7 @@ function LegacySearchController({ children, defaultValue }) {
 
   return children({
     query,
+    onChange,
     onSubmit,
     redirect,
     autoComplete: 'on',
@@ -175,12 +188,11 @@ const Form = ({ defaultValue }) => (
         method="get"
         role="search"
         onSubmit={onSubmit}
-        onKeyUp={onKeyUp}
         onFocus={onFocus}
         autoComplete={autoComplete}
         autoCapitalize="off"
       >
-        <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={query} />
+        <TextInput labelText="Search Glitch" name="q" onChange={onChange} onKeyUp={onKeyUp} opaque placeholder="bots, apps, users" type="search" value={query} />
         {redirect && <Redirect to={redirect} push />}
         {autoCompleteResults}
       </form>
