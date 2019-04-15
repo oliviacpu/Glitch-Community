@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
 import { getDisplayName } from '../../models/user';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTracker } from '../segment-analytics';
 import { WhitelistedDomainIcon } from './team-elements';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
@@ -171,21 +171,19 @@ export class AddTeamUser extends React.Component {
   render() {
     const alreadyInvitedAndNewInvited = this.props.invitedMembers.concat(this.state.newlyInvited);
     const { inviteEmail, inviteUser, setWhitelistedDomain, ...props } = this.props;
+    const track = useTracker('Add to Team clicked');
     return (
       <span className="add-user-container">
         {alreadyInvitedAndNewInvited.length > 0 && <UsersList users={alreadyInvitedAndNewInvited} />}
         <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add">
-          {({ togglePopover }) => {
-            const onClickToggle = useTrackedFunc(togglePopover, 'Add to Team clicked');
-            return (
-              <AddTeamUserPop
-                {...props}
-                setWhitelistedDomain={setWhitelistedDomain ? (domain) => this.setWhitelistedDomain(togglePopover, domain) : null}
-                inviteUser={inviteUser ? (user) => this.inviteUser(togglePopover, user) : null}
-                inviteEmail={inviteEmail ? (email) => this.inviteEmail(togglePopover, email) : null}
-              />
-            );
-          }}
+          {({ togglePopover }) => (
+            <AddTeamUserPop
+              {...props}
+              setWhitelistedDomain={setWhitelistedDomain ? (domain) => this.setWhitelistedDomain(togglePopover, domain) : null}
+              inviteUser={inviteUser ? (user) => this.inviteUser(togglePopover, user) : null}
+              inviteEmail={inviteEmail ? (email) => this.inviteEmail(togglePopover, email) : null}
+            />
+          )}
         </PopoverWithButton>
         {!!this.state.invitee && (
           <div className="notification notifySuccess inline-notification" onAnimationEnd={this.removeNotifyInvited}>
