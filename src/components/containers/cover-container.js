@@ -22,6 +22,8 @@ const CoverContainer = ({ buttons, children, type, item }) => {
 CoverContainer.propTypes = {
   buttons: PropTypes.node,
   children: PropTypes.node.isRequired,
+  type: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
 };
 
 CoverContainer.defaultProps = {
