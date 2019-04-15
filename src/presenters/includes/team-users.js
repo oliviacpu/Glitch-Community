@@ -135,7 +135,7 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
     try {
       await inviteUser(user);
     } catch (error) {
-      //setInvitee('');
+      setInvitee('');
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
     }
   };
@@ -151,27 +151,29 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
   };
 
   const removeNotifyInvited = () => {
-    //setInvitee('');
+    setInvitee('');
   };
 
   return (
     <span className="add-user-container">
       {alreadyInvitedAndNewInvited.length > 0 && <UsersList users={alreadyInvitedAndNewInvited} />}
-      <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
-        {({ togglePopover }) => (
-          <AddTeamUserPop
-            {...props}
-            setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
-            inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
-            inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
-          />
+      <span className="add-user-wrap">
+        <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
+          {({ togglePopover }) => (
+            <AddTeamUserPop
+              {...props}
+              setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
+              inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
+              inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
+            />
+          )}
+        </PopoverWithButton>
+        {!!invitee && (
+          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+            Invited {invitee}
+          </div>
         )}
-      </PopoverWithButton>
-      {!!invitee && (
-        <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-          Invited {invitee}
-        </div>
-      )}
+      </span>
     </span>
   );
 };
