@@ -37,7 +37,13 @@ const formatResults = (results) => {
   return resultGroups.map((group) => ({ ...group, items: getItemsFor(group) })).filter((group) => group.items.length > 0);
 };
 
-const resultsWithSeelc
+const resultsWithSelection = (results, selectedResult) => {
+  if (selectedResult === -1) return results
+  
+  
+  const resultsCount = sumBy(results, ({ items }) => items.length)
+  
+}
 
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
@@ -58,7 +64,7 @@ const { actions, reducer } = createSlice({
   }),
   arrowUp: (state, { payload }) => ({
     ...state,
-    selectedResult: state.selectedResult - 1,
+    selectedResult: state.selectedResult === -1 ? countResults(state.re,
   }),
   arrowDown: (state, { payload }) => ({
     ...state,
