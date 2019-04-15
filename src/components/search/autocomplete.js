@@ -7,10 +7,8 @@ import ProjectAvatar from '../../presenters/includes/project-avatar';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './autocomplete.styl';
 
-const getContainerClass = ({ selected }) => classnames(styles.resultContainer, selected && styles.selected)
-
 const StarterKitResult = ({ value: starterKit }) => (
-  <a href={starterKit.url} className={getContainerClass(starterKit)}>
+  <a href={starterKit.url} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <MaskImage src={starterKit.imageURL} />
     </div>
@@ -22,7 +20,7 @@ const StarterKitResult = ({ value: starterKit }) => (
 );
 
 const TeamResult = ({ value: team }) => (
-  <TeamLink team={team} className={getContainerClass(team)}>
+  <TeamLink team={team} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <TeamAvatar hideTooltip team={{ ...team, hasAvatarImage: true }} />
     </div>
@@ -34,7 +32,7 @@ const TeamResult = ({ value: team }) => (
 );
 
 const UserResult = ({ value: user }) => (
-  <UserLink user={user} className={getContainerClass(user)}>
+  <UserLink user={user} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <UserAvatar hideTooltip user={user} />
     </div>
@@ -46,7 +44,7 @@ const UserResult = ({ value: user }) => (
 );
 
 const ProjectResult = ({ value: project }) => (
-  <ProjectLink project={project} className={getContainerClass(project)}>
+  <ProjectLink project={project} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <ProjectAvatar {...project} />
     </div>
@@ -64,7 +62,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 );
 
 const CollectionResult = ({ value: collection }) => (
-  <CollectionLink collection={collection} className={getContainerClass(collection)}>
+  <CollectionLink collection={collection} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <CollectionAvatar {...collection} />
     </div>
@@ -103,7 +101,7 @@ const Autocomplete = ({ query, results }) => (
           <header className={styles.resultGroupHeader}>{label}</header>
           <ul>
             {items.map((item) => (
-              <li key={item.id} className={styles.resultItem}>
+              <li key={item.id} className={classnames(styles.resultItem, styles.selected)}>
                 <Result value={item} />
               </li>
             ))}

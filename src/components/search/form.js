@@ -44,7 +44,7 @@ const resultsWithSelection = (results, selectedResult) => {
   return results.map((group) => ({
     ...group,
     // items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
-    items: group.items.map(item => ({ ...item, selected: true }))
+    items: group.items.map((item) => ({ ...item, selected: true })),
   }));
 };
 
