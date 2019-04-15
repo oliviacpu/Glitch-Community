@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -42,27 +42,30 @@ const FeaturedProject = ({
   updateNote,
   unfeatureProject,
 }) => {
+  const featuredProjectRef = useRef();
+
   return (
-    <div >
+    <div ref={featuredProjectRef}>
       <ProjectEmbed
-      topLeft={<TopLeft
-        featuredProject={featuredProject}
-        collection={collection}
-        hideNote={hideNote}
-        updateNote={updateNote}
+        topLeft={<TopLeft
+          featuredProject={featuredProject}
+          collection={collection}
+          hideNote={hideNote}
+          updateNote={updateNote}
+          isAuthorized={isAuthorized}
+        />}
+        topRight={<TopRight
+          isAuthorized={isAuthorized}
+          unfeatureProject={unfeatureProject}
+          displayNewNote={displayNewNote ? () => displayNewNote(featuredProject.id) : null}
+          hasNote={!!featuredProject.note}
+          featuredProjectRef={featuredProjectRef}
+        />}
+        project={featuredProject}
         isAuthorized={isAuthorized}
-      />}
-      topRight={<TopRight
-        isAuthorized={isAuthorized}
-        unfeatureProject={unfeatureProject}
-        displayNewNote={displayNewNote ? () => displayNewNote(featuredProject.id) : null}
-        hasNote={!!featuredProject.note}
-      />}
-      project={featuredProject}
-      isAuthorized={isAuthorized}
-      currentUser={currentUser}
-      addProjectToCollection={addProjectToCollection}
-    />
+        currentUser={currentUser}
+        addProjectToCollection={addProjectToCollection}
+      />
     </div>
 
   );
