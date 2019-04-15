@@ -7,7 +7,7 @@ import Markdown from 'Components/text/markdown';
 import Cover from 'Components/blocks/search-result-cover-bar';
 import Image from 'Components/images/image';
 import Thanks from 'Components/blocks/thanks';
-import { StaticUsersList } from 'Components/user/users-list';
+import UsersList from 'Components/user/users-list';
 import { getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
 import { TeamLink } from '../../presenters/includes/link';
 import { VerifiedBadge } from '../../presenters/includes/team-elements';
@@ -31,7 +31,7 @@ const TeamItem = ({ team }) => (
           {!!team.isVerified && <VerifiedBadge />}
         </div>
         <div className={styles.usersList}>
-          <StaticUsersList users={team.users} layout="block" />
+          <UsersList avatarsOnly users={team.users} layout="block" />
         </div>
         <Markdown length={96}>{team.description || ' '}</Markdown>
         <Thanks count={getTeamThanksCount(team)} />
@@ -45,7 +45,7 @@ TeamItem.propTypes = {
     description: PropTypes.string.isRequired,
     isVerified: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
-    users: PropTypes.array.isRequired,
+    users: PropTypes.array,
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
