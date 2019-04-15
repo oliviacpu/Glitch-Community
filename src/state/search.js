@@ -1,6 +1,6 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
-import { useState, useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { mapValues, sumBy } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';

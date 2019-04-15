@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { mapValues, flatMap } from 'lodash';
-import { Redirect } from 'react-router-dom';
+import { getLink as getProjectLink } from 'Models/project';
+import { getLink as getUserLink } from 'Models/user';
+import { getLink as getTeamLink } from 'Models/team';
 import TextInput from '../inputs/text-input';
 import { useAlgoliaSearch } from '../../state/search';
 import useDevToggle from '../../presenters/includes/dev-toggles';
@@ -48,9 +50,9 @@ const resultsWithSelection = (results, selectedResult) => {
 
 const urlForItem = {
   starterKit: (starterKit) => starterKit.url,
-  team: (team) => `/@${team.name}`,
-  user: (user) => `/@${user.login}`,
-  project: (project) => `/~${project.domain}`,
+  team: getTeamLink,
+  user: getUserLink,
+  project: getProjectLink,
   collection: (collection) => `/@${collection.fullUrl}`,
 };
 
@@ -115,6 +117,12 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     }
   }, [algoliaResults]);
 
+  useEffect(() => {
+    if (redirect) {
+      window.location = redirect;
+    }
+  }, [redirect]);
+
   const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -147,18 +155,16 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
 
 function LegacySearchController({ children, defaultValue }) {
   const [query, onChange] = useState(defaultValue);
-  const [redirect, setRedirect] = useState(null);
   const onSubmit = (event) => {
     event.preventDefault();
     if (!query) return;
-    setRedirect(`/search?q=${query}`);
+    window.location = `/search?q=${query}`;
   };
 
   return children({
     query,
     onChange,
     onSubmit,
-    redirect,
     autoComplete: 'on',
     autoCompleteResults: null,
   });
@@ -183,7 +189,7 @@ function SearchController({ children, defaultValue }) {
 
 const Form = ({ defaultValue }) => (
   <SearchController defaultValue={defaultValue}>
-    {({ query, onChange, onFocus, onSubmit, onKeyDown, redirect, autoComplete, autoCompleteResults }) => (
+    {({ query, onChange, onFocus, onSubmit, onKeyDown, autoComplete, autoCompleteResults }) => (
       <form
         className={styles.container}
         action="/search"
@@ -204,7 +210,6 @@ const Form = ({ defaultValue }) => (
           type="search"
           value={query}
         />
-        {redirect && <Redirect to={redirect} push />}
         {autoCompleteResults}
       </form>
     )}
