@@ -15,10 +15,18 @@ try {
     dsn: 'https://4f1a68242b6944738df12eecc34d377c@sentry.io/1246508',
     environment: process.env.NODE_ENV || 'dev',
     beforeSend(event) {
-      return sentryHelpers.beforeSend(process.env.PROJECT_DOMAIN, constants.currentEnv, event);
+      try {
+        return sentryHelpers.beforeSend(process.env.PROJECT_DOMAIN, constants.currentEnv, event);
+      } catch (error) {
+        console.error(error);
+        return event;
+      }
     },
     beforeBreadcrumb(breadcrumb) {
-      return sentryHelpers.beforeBreadcrumb(breadcrumb);
+      try {
+        return sentryHelpers.beforeBreadcrumb(breadcrumb);
+      } catch (error) {
+        
     },
   });
   Sentry.configureScope((scope) => {

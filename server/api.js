@@ -19,6 +19,7 @@ async function getFromCacheOrApi(key, api, ...args) {
     promise = api(...args);
     cache.put(key, promise, CACHE_TIMEOUT);
   }
+    throw new Error('asdfasdfasdf');
   try {
     const value = await promise;
     return value;
@@ -60,7 +61,6 @@ async function getTeamFromApi(url) {
 
 async function getUserFromApi(login) {
   try {
-    throw new Error('asdfasdfasdf');
     return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
   } catch (error) {
     if (error.response && error.response.status === 404) {
