@@ -12,7 +12,6 @@ import styles from './form.styl';
 const createSlice = (handlers) => {
   const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }));
   const reducer = (state, action) => {
-    console.log(state, action);
     if (handlers[action.type]) return handlers[action.type](state, action);
     return state;
   };
@@ -43,25 +42,29 @@ const resultsWithSelection = (results, selectedResult) => {
   if (!selectedResult) return results;
   return results.map((group) => ({
     ...group,
-    // items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
-    items: group.items.map((item) => ({ ...item, selected: true })),
+    items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
   }));
 };
 
-// TODO
-const getUrlFor = () => '/fart';
+const urlForItem = {
+  starterKit: (starterKit) => starterKit.url,
+  team: (team) => `/@${team.name}`,
+  user: (user) => `/@${user.login}`,
+  project: (project) => `/~${project.domain}`,
+  collection: (collection) => `/@${collection.fullUrl}`,
+};
 
 const redirectFor = ({ query, selectedResult }) => {
   if (!query) return null;
   if (!selectedResult) return `/search?q=${query}`;
-  return getUrlFor(selectedResult);
+  return urlForItem[selectedResult.type](selectedResult);
 };
 
 function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
   if (!selectedResult) {
     if (offset > 0) {
-      return flatResults[offset];
+      return flatResults[offset - 1];
     }
     if (offset < 0) {
       return flatResults[flatResults.length + offset];

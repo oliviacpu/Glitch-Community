@@ -101,7 +101,7 @@ const Autocomplete = ({ query, results }) => (
           <header className={styles.resultGroupHeader}>{label}</header>
           <ul>
             {items.map((item) => (
-              <li key={item.id} className={classnames(styles.resultItem, styles.selected)}>
+              <li key={item.id} className={classnames(styles.resultItem, item.selected && styles.selected)}>
                 <Result value={item} />
               </li>
             ))}
