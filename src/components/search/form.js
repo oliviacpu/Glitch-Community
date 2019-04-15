@@ -32,7 +32,8 @@ const formatResults = (results) => {
   const notTopResult = (result) => !results.topResults.includes(result);
   const getItemsFor = (group) => {
     if (group.getItems) return group.getItems(results);
-    return results[group.type].filter(notTopResult).slice(0, MAX_RESULTS_PER_TYPE);
+    if (!results[group.id]) return [];
+    return results[group.id].filter(notTopResult).slice(0, MAX_RESULTS_PER_TYPE);
   };
   return resultGroups.map((group) => ({ ...group, items: getItemsFor(group) })).filter((group) => group.items.length > 0);
 };
@@ -49,7 +50,7 @@ const resultsWithSelection = (results, selectedResult) => {
 };
 
 // TODO
-const getUrlFor = () => `/fart`
+const getUrlFor = () => `/fart`;
 
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
@@ -95,7 +96,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   useEffect(() => {
     // use last complete results
     if (algoliaResults.status === 'ready') {
-      dispatch(actions.resultsChanged(algoliaResults.value));
+      dispatch(actions.resultsChanged(algoliaResults));
     }
   }, [algoliaResults]);
 
@@ -151,7 +152,7 @@ function LegacySearchController({ children, defaultValue }) {
 function SearchController({ children, defaultValue }) {
   const algoliaFlag = useDevToggle('Algolia Search');
 
-  if (algoliaFlag)
+  if (algoliaFlag) {
     return (
       <PopoverContainer>
         {(popoverProps) => (
@@ -161,7 +162,7 @@ function SearchController({ children, defaultValue }) {
         )}
       </PopoverContainer>
     );
-
+  }
   return <LegacySearchController defaultValue={defaultValue}>{children}</LegacySearchController>;
 }
 
