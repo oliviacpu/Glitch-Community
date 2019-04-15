@@ -135,7 +135,7 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
     try {
       await inviteUser(user);
     } catch (error) {
-      setInvitee('');
+      //setInvitee('');
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
     }
   };
@@ -144,14 +144,14 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
     togglePopover();
     setInvitee(email);
     try {
-      await props.inviteEmail(email);
+      await inviteEmail(email);
     } catch (error) {
       setInvitee('');
     }
   };
 
   const removeNotifyInvited = () => {
-    setInvitee('');
+    //setInvitee('');
   };
 
   return (
