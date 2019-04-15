@@ -20,17 +20,53 @@ function useLastCompleteSearchResult(query) {
   return lastCompleteResults;
 }
 
+const createReducer = (handlers) => (state, action) => {
+  if (handlers[action.type]) return handlers[action.type](state, action)
+  return state
+}
+
+const formatResults = (searchResults) => {
+
+}
+
+const getResultIdOffset = ({ results, selectedResult }) => {
+
+}
+
+const reducers = createReducer({
+  queryChanged: (state, { payload }) => ({
+    ...state,
+    query: payload,
+    selectedResult: null,
+  }),
+  resultsChanged: (state, { payload }) => ({
+    ...state,
+    // use last complete results
+    results: payload.status === 'ready' ? formatResults(payload.value) : state.results
+  }),
+  arrowUp: (state, { payload }) => ({
+    ...state,
+    selectedResult: getResultIdOffset(state, -1),
+  }),
+  arrowDown: (state, { payload }) => ({
+    ...state,
+    selectedResult: getResultIdOffset(state, 1),
+  })
+})
+
+const action = (ty)
+
 function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
   const [query, setQuery] = useState(defaultValue);
-  const [resultIndex, setResultIndex] = useState(-1);
+  const [selectedResult, setSelectedResult] = useState(null);
   const results = useLastCompleteSearchResult(query);
   const [submitted, setSubmitted] = useState(false);
-  
+
   const onChange = (value) => {
-    setQuery(value)
-    setResultIndex(-1)
-  }
-  
+    setQuery(value);
+    setResultIndex(-1);
+  };
+
   const onKeyUp = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
