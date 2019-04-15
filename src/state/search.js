@@ -1,6 +1,6 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { mapValues, sumBy } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';
@@ -42,10 +42,25 @@ const findTop = {
 const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
+
+const reducer = (state, action) => {
+  if (action.type)
+
+}
+
+
 // search provider logic -- shared between algolia & legacy API
 function useSearchProvider(provider, query, params) {
   const { handleError } = useErrorHandlers();
   const emptyResults = mapValues(provider, () => []);
+  const [state, dispatch] = useReducer(reducer, {
+    status: 'init',
+    totalHits: 0,
+    topResults: [],
+    ...emptyResults,
+  })
+  
+  
   const [results, setResults] = useState(emptyResults);
   const [status, setStatus] = useState('init');
   useEffect(() => {
