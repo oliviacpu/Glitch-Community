@@ -8,18 +8,14 @@ const { API_URL } = require('./constants').current;
 const { getSingleItem } = require('Shared/api');
 
 const CACHE_TIMEOUT = dayjs.convert(15, 'minutes', 'ms');
+const cache = new Cache();
 
-const generalCache = new Cache();
-const projectCache = new Cache();
-const teamCache = new Cache();
-const userCache = new Cache();
-const collectionCache = new Cache();
-
-async function getFromCacheOrApi(id, cache, api) {
-  let promise = cache.get(id);
+async function getFromCacheOrApi(type, id, api) {
+  const key = `${type}-${id}`;
+  let promise = cache.get(key);
   if (!promise) {
     promise = api(id);
-    cache.put(id, promise, CACHE_TIMEOUT);
+    cache.put(key, promise, CACHE_TIMEOUT);
   }
   try {
     const value = await promise;
