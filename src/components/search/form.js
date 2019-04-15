@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { mapValues, sumBy, flatMap } from 'lodash';
+import { mapValues, flatMap } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import TextInput from '../inputs/text-input';
 import { useAlgoliaSearch } from '../../state/search';
@@ -12,6 +12,7 @@ import styles from './form.styl';
 const createSlice = (handlers) => {
   const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }));
   const reducer = (state, action) => {
+    console.log(state, action);
     if (handlers[action.type]) return handlers[action.type](state, action);
     return state;
   };
@@ -38,8 +39,6 @@ const formatResults = (results) => {
   return resultGroups.map((group) => ({ ...group, items: getItemsFor(group) })).filter((group) => group.items.length > 0);
 };
 
-const countResults = (results) => sumBy(results, ({ items }) => items.length);
-
 const resultsWithSelection = (results, selectedResult) => {
   if (!selectedResult) return results;
   return results.map((group) => ({
@@ -51,7 +50,7 @@ const resultsWithSelection = (results, selectedResult) => {
 // TODO
 const getUrlFor = () => '/fart';
 
-const redirectFor = ({ query, results, selectedResult }) => {
+const redirectFor = ({ query, selectedResult }) => {
   if (!query) return null;
   if (!selectedResult) return `/search?q=${query}`;
   return getUrlFor(selectedResult);
@@ -112,7 +111,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     }
   }, [algoliaResults]);
 
-  const onKeyUp = (e) => {
+  const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       dispatch(actions.arrowUp());
@@ -125,11 +124,12 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     event.preventDefault();
     dispatch(actions.submitted());
   };
+
   return children({
     query,
     onChange: (value) => dispatch(actions.queryChanged(value)),
     onFocus: () => setVisible(true),
-    onKeyUp,
+    onKeyDown,
     onSubmit,
     redirect,
     autoComplete: 'off',
@@ -179,7 +179,7 @@ function SearchController({ children, defaultValue }) {
 
 const Form = ({ defaultValue }) => (
   <SearchController defaultValue={defaultValue}>
-    {({ query, onChange, onFocus, onSubmit, onKeyUp, redirect, autoComplete, autoCompleteResults }) => (
+    {({ query, onChange, onFocus, onSubmit, onKeyDown, redirect, autoComplete, autoCompleteResults }) => (
       <form
         className={styles.container}
         action="/search"
@@ -194,7 +194,7 @@ const Form = ({ defaultValue }) => (
           labelText="Search Glitch"
           name="q"
           onChange={onChange}
-          onKeyUp={onKeyUp}
+          onKeyDown={onKeyDown}
           opaque
           placeholder="bots, apps, users"
           type="search"

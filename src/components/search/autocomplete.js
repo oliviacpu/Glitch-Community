@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
 import { Link, TeamLink, UserLink, ProjectLink } from '../../presenters/includes/link';
@@ -6,8 +7,10 @@ import ProjectAvatar from '../../presenters/includes/project-avatar';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './autocomplete.styl';
 
+const getContainerClass = ({ selected }) => classnames(styles.resultContainer, selected && styles.selected)
+
 const StarterKitResult = ({ value: starterKit }) => (
-  <a href={starterKit.url} className={styles.resultContainer}>
+  <a href={starterKit.url} className={getContainerClass(starterKit)}>
     <div className={styles.avatarContainer}>
       <MaskImage src={starterKit.imageURL} />
     </div>
@@ -19,7 +22,7 @@ const StarterKitResult = ({ value: starterKit }) => (
 );
 
 const TeamResult = ({ value: team }) => (
-  <TeamLink team={team} className={styles.resultContainer}>
+  <TeamLink team={team} className={getContainerClass(team)}>
     <div className={styles.avatarContainer}>
       <TeamAvatar hideTooltip team={{ ...team, hasAvatarImage: true }} />
     </div>
@@ -31,7 +34,7 @@ const TeamResult = ({ value: team }) => (
 );
 
 const UserResult = ({ value: user }) => (
-  <UserLink user={user} className={styles.resultContainer}>
+  <UserLink user={user} className={getContainerClass(user)}>
     <div className={styles.avatarContainer}>
       <UserAvatar hideTooltip user={user} />
     </div>
@@ -43,7 +46,7 @@ const UserResult = ({ value: user }) => (
 );
 
 const ProjectResult = ({ value: project }) => (
-  <ProjectLink project={project} className={styles.resultContainer}>
+  <ProjectLink project={project} className={getContainerClass(project)}>
     <div className={styles.avatarContainer}>
       <ProjectAvatar {...project} />
     </div>
@@ -61,7 +64,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 );
 
 const CollectionResult = ({ value: collection }) => (
-  <CollectionLink collection={collection} className={styles.resultContainer}>
+  <CollectionLink collection={collection} className={getContainerClass(collection)}>
     <div className={styles.avatarContainer}>
       <CollectionAvatar {...collection} />
     </div>
