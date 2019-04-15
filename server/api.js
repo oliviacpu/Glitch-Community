@@ -19,7 +19,6 @@ async function getFromCacheOrApi(key, api, ...args) {
     promise = api(...args);
     cache.put(key, promise, CACHE_TIMEOUT);
   }
-    throw new Error('asdfasdfasdf');
   try {
     const value = await promise;
     return value;

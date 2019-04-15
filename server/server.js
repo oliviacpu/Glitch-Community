@@ -26,7 +26,9 @@ try {
       try {
         return sentryHelpers.beforeBreadcrumb(breadcrumb);
       } catch (error) {
-        
+        console.error(error);
+        return breadcrumb;
+      }
     },
   });
   Sentry.configureScope((scope) => {
