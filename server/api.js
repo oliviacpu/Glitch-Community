@@ -21,7 +21,7 @@ async function getFromCacheOrApi(type, id, api) {
     const value = await promise;
     return value;
   } catch (error) {
-    console.error(error.toString());
+    console.warn(`Failed to load ${type} ${id}: ${error.toString()}`);
     return null;
   }
 }
@@ -88,9 +88,9 @@ async function getCultureZinePosts() {
 }
 
 module.exports = {
-  getProject: (domain) => getFromCacheOrApi(domain, projectCache, getProjectFromApi),
-  getTeam: (url) => getFromCacheOrApi(url, teamCache, getTeamFromApi),
-  getUser: (login) => getFromCacheOrApi(login, userCache, getUserFromApi),
-  getCollection: (url) => getFromCacheOrApi(url, collectionCache, getCollectionFromApi),
-  getZine: () => getFromCacheOrApi('culture', generalCache, getCultureZinePosts),
+  getProject: (domain) => getFromCacheOrApi('project', domain, getProjectFromApi),
+  getTeam: (url) => getFromCacheOrApi('team', url, getTeamFromApi),
+  getUser: (login) => getFromCacheOrApi('user', login, getUserFromApi),
+  getCollection: (url) => getFromCacheOrApi('collection', url, getCollectionFromApi),
+  getZine: () => getFromCacheOrApi('culture', 'zine', getCultureZinePosts),
 };
