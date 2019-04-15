@@ -44,9 +44,12 @@ const resultsWithSelection = (results, selectedResult) => {
   const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
   return results.map((group) => ({
     ...group,
-    items: group.items.map(item => item === selectedResult ? { ...item, selected: true } : item)
-  }))
+    items: group.items.map((item) => (item === selectedResult ? { ...item, selected: true } : item)),
+  }));
 };
+
+// TODO
+const getUrlFor = () => `/fart`
 
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
@@ -91,7 +94,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
 
   useEffect(() => {
     // use last complete results
-    if (algoliaResults.status === "ready") {
+    if (algoliaResults.status === 'ready') {
       dispatch(actions.resultsChanged(algoliaResults.value));
     }
   }, [algoliaResults]);
