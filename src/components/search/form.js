@@ -18,12 +18,26 @@ const createSlice = (handlers) => {
   return { actions, reducer }
 }
 
-const formatResults = (searchResults) => {
+const resultGroups = [
+  { id: 'top', label: 'Top Results', getItems: (resultGroups) => []  },
+  { id: 'team', label: 'Teams' },
+  { id: 'user', label: 'Users' },
+  { id: 'project', label: 'Projects' },
+  { id: 'collection', label: 'Collections' },
+];
 
+const formatResults = (searchResults) => {
+  
 }
 
-const getResultIdOffset = ({ results, selectedResult }) => {
+const getResultIdOffset = ({ results, selectedResult }, offset) => {
+  const flatResults = flatMap(results.map(group => group.items))
+}
 
+const redirectFor = ({ query, results, selectedResult }) => {
+  if (!query) return null
+  if (!selectedResult) return `/search?q=${query}`
+  return findSelectedResult(results, selectedResult).url;
 }
 
 const { actions, reducer } = createSlice({
@@ -47,7 +61,7 @@ const { actions, reducer } = createSlice({
   }),
   submitted: (state) => ({
     ...state,
-    submitted: !!state.query && 
+    redirect: redirectFor(state),
   })
 })
 
@@ -55,9 +69,10 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   const initialState = {
     selectedResult: null,
     query: defaultValue,
-    submitted: false,
+    redirect: null,
+    results: [],
   }
-  const [{ query, results, selectedResult }, dispatch] = useReducer(reducer, initialState) 
+  const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState) 
   const algoliaResults = useAlgoliaSearch(query);
   
   useEffect(() => {
@@ -85,7 +100,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     query,
     onFocus: () => setVisible(true),
     onSubmit,
-    submitted,
+    redirect,
     autoComplete: 'off',
     autoCompleteResults: visible && <AutocompleteSearch query={query} selectedResult={selectedResult} results={results} />,
   });
@@ -97,13 +112,13 @@ function LegacySearchController({ children, defaultValue }) {
   const onSubmit = (event) => {
     event.preventDefault();
     if (!query) return;
-    set(true);
+    setRedirect(`/search?q=${query}`);
   };
 
   return children({
     query,
     onSubmit,
-    submitted,
+    redirect,
     autoComplete: 'on',
     autoCompleteResults: null,
   });
@@ -141,7 +156,7 @@ const Form = ({ defaultValue }) => (
         autoCapitalize="off"
       >
         <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={query} />
-        {redirect && <Redirect to={`/search?q=${query}`} push />}
+        {redirect && <Redirect to={``} push />}
         {autoCompleteResults}
       </form>
     )}
