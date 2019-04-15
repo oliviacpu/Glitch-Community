@@ -20,51 +20,55 @@ function useLastCompleteSearchResult(query) {
   return lastCompleteResults;
 }
 
-function useSubscription () {
-
+function AlgoliaSearchController ({ }) {
+  const onKeyUp = (e) => {
+  if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    publish({ type: "up" })
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    publish({ type: 'down' })
+  }
+  return children({
+  
+    children: (
+      <>
+        {submitted && <Redirect to={`/search?q=${value}`} push />}
+        {visible && <AutocompleteSearch query={query} results={results} />}
+      </>
+    )
+  })
 }
 
-function SearchController ({ children }) {
+const noop = () => {}
+
+function SearchController ({ children, defaultValue }) {
+  const [value, onChange] = useState(defaultValue);
   const algoliaFlag = useDevToggle('Algolia Search');
+  const [submitted, setSubmitted] = useState(false);
   
   if (!algoliaFlag) {
-    return({  })
-  
+    const onSubmit = (event) => {
+      event.preventDefault();
+      if (!value) return;
+      setSubmitted(true);
+    }
+    
+    return children({
+      onSubmit,
+      onFocus: noop, 
+      onKeyUp: noop,
+      autoComplete: 'on',
+      children: (,
+    })
   }
   
 }
 
 
-function Form({ defaultValue }) {
-  const [value, onChange] = useState(defaultValue);
-  const [submitted, setSubmitted] = useState(false);
-  const [publish, subscribe] = useSubscription();
-  
-  
-  const onKeyUp = (e) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      publish({ type: "up" })
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      publish({ type: 'down' })
-    }
-  }
-  
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if (!value) return;
-    if (!algoliaFlag) {
-      setSubmitted(true);
-      return;
-    }
-    
-    
-  };
-
-  return (
-    <PopoverContainer>
-      {({ visible, setVisible }) => (
+const Form = ({ defaultValue }) => (
+    <SearchController>
+      {({ query, onChange, onFocus, onSubmit, onKeyUp, submitted, autoCompleteResults }) => (
         <form
           className={styles.container}
           action="/search"
@@ -72,13 +76,13 @@ function Form({ defaultValue }) {
           role="search"
           onSubmit={onSubmit}
           onKeyUp={onKeyUp}
-          autoComplete={algoliaFlag ? 'off' : 'on'}
+          onFocus={onFocus}
+          autoComplete={autoComplete}
           autoCapitalize="off"
-          onFocus={() => setVisible(true)}
         >
           <TextInput labelText="Search Glitch" name="q" onChange={onChange} opaque placeholder="bots, apps, users" type="search" value={value} />
           {submitted && <Redirect to={`/search?q=${value}`} push />}
-          {algoliaFlag && visible && <AutocompleteSearch query={query} results={results} />}
+          {autoCompleteResults}
         </form>
       )}
     </PopoverContainer>
