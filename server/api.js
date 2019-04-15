@@ -13,7 +13,9 @@ const cache = new Cache();
 async function getFromCacheOrApi(type, id, api) {
   const key = `${type}-${id}`;
   let promise = cache.get(key);
+  let trackError = false;
   if (!promise) {
+    trackError = true;
     promise = api(id);
     cache.put(key, promise, CACHE_TIMEOUT);
   }
@@ -21,7 +23,9 @@ async function getFromCacheOrApi(type, id, api) {
     const value = await promise;
     return value;
   } catch (error) {
-    console.warn(`Failed to load ${type} ${id}: ${error.toString()}`);
+    if (trackError) {
+      console.warn(`Failed to load ${type} ${id}: ${error.toString()}`);
+    }
     return null;
   }
 }
@@ -55,8 +59,8 @@ async function getTeamFromApi(url) {
 
 async function getUserFromApi(login) {
   try {
-    throw new Error('asdfasdfasdf');
     return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
+    throw new Error('asdfasdfasdf');
   } catch (error) {
     if (error.response && error.response.status === 404) {
       return null;
