@@ -14,6 +14,7 @@ const ignoreErrors = ['Network Error', 'timeout', 'status code 401'];
 
 const beforeSend = function(projectDomain, apiEnv, event) {
   if (!onProductionSite(projectDomain, apiEnv)) {
+    console.error('Not sending error because this is not the production site', event);
     return null;
   }
 
