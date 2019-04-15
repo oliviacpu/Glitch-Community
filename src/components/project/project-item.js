@@ -21,11 +21,11 @@ const getLinkBodyStyles = (project) =>
 
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
-const ProjectItem = ({ project, projectOptions, hasProfileLinks }) => (
+const ProjectItem = ({ project, projectOptions }) => (
   <div className={styles.container}>
     <header className={styles.header}>
       <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
-        <ProfileList layout="row" hasLinks={hasProfileLinks} glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
+        <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
       </div>
       <div className={styles.projectOptionsContainer}>
         <ProjectOptionsPop project={project} projectOptions={projectOptions} />

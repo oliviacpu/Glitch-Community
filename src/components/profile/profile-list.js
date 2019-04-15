@@ -8,23 +8,15 @@ import { UserLink, TeamLink } from '../../presenters/includes/link';
 
 import styles from './profile-list.styl';
 
-const UserItem = ({ user, hasLinks }) =>
-  hasLinks ? (
+const UserItem = ({ user }) =>
     <UserLink user={user}>
       <UserAvatar user={user} />
     </UserLink>
-  ) : (
-    <UserAvatar user={user} />
-  );
 
-const TeamItem = ({ team, hasLinks }) =>
-  hasLinks ? (
+const TeamItem = ({ team }) =>
     <TeamLink team={team}>
       <TeamAvatar team={team} />
     </TeamLink>
-  ) : (
-    <TeamAvatar team={team} />
-  );
 
 // NOTE: ResizeObserver is not widely supported
 // see https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
@@ -56,7 +48,7 @@ const useResizeObserver = () => {
   return { ref, width };
 };
 
-const RowContainer = ({ users, teams, hasLinks }) => {
+const RowContainer = ({ users, teams }) => {
   const { ref, width } = useResizeObserver();
   const avatarWidth = 32;
   const userOffset = -7;
@@ -69,25 +61,25 @@ const RowContainer = ({ users, teams, hasLinks }) => {
     <ul ref={ref} className={classnames(styles.container, styles.row)}>
       {teams.slice(0, maxTeams).map((team) => (
         <li key={`team-${team.id}`} className={styles.teamItem}>
-          <TeamItem team={team} hasLinks={hasLinks} />
+          <TeamItem team={team} />
         </li>
       ))}
       {users.slice(0, maxUsers).map((user) => (
         <li key={`user-${user.id}`} className={styles.userItem}>
-          <UserItem user={user} hasLinks={hasLinks} />
+          <UserItem user={user} />
         </li>
       ))}
     </ul>
   );
 };
 
-const BlockContainer = ({ users, teams, hasLinks }) => (
+const BlockContainer = ({ users, teams }) => (
   <>
     {teams.length > 0 && (
       <ul className={styles.container}>
         {teams.map((team) => (
           <li key={`team-${team.id}`} className={styles.teamItem}>
-            <TeamItem team={team} hasLinks={hasLinks} />
+            <TeamItem team={team} />
           </li>
         ))}
       </ul>
@@ -96,7 +88,7 @@ const BlockContainer = ({ users, teams, hasLinks }) => (
       <ul className={styles.container}>
         {users.map((user) => (
           <li key={`user-${user.id}`} className={styles.userItem}>
-            <UserItem user={user} hasLinks={hasLinks} />
+            <UserItem user={user} />
           </li>
         ))}
       </ul>
@@ -124,11 +116,11 @@ const PlaceholderList = () => (
 
 const maybeList = (item) => (item ? [item] : []);
 
-export const ProfileItem = ({ user, team, hasLinks, glitchTeam }) => (
-  <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} hasLinks={hasLinks} glitchTeam={glitchTeam} />
+export const ProfileItem = ({ user, team, glitchTeam }) => (
+  <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} glitchTeam={glitchTeam} />
 );
 
-const ProfileList = ({ users, teams, layout, hasLinks, glitchTeam }) => {
+const ProfileList = ({ users, teams, layout, glitchTeam }) => {
   if (glitchTeam) {
     return <GlitchTeamList />;
   }
@@ -138,10 +130,10 @@ const ProfileList = ({ users, teams, layout, hasLinks, glitchTeam }) => {
   }
 
   if (layout === 'row') {
-    return <RowContainer users={users} teams={teams} hasLinks={hasLinks} />;
+    return <RowContainer users={users} teams={teams} />;
   }
 
-  return <BlockContainer users={users} teams={teams} hasLinks={hasLinks} />;
+  return <BlockContainer users={users} teams={teams} />;
 };
 
 ProfileList.propTypes = {
@@ -149,14 +141,12 @@ ProfileList.propTypes = {
   users: PropTypes.array,
   teams: PropTypes.array,
   glitchTeam: PropTypes.bool,
-  hasLinks: PropTypes.bool,
 };
 
 ProfileList.defaultProps = {
   users: [],
   teams: [],
   glitchTeam: false,
-  hasLinks: false,
 };
 
 export default ProfileList;

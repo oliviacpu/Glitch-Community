@@ -26,7 +26,7 @@ const WrappingLink = withRouter(({ href, children, className, style, history }) 
 
 WrappingLink.propTypes = {
   href: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
   style: PropTypes.object,
 };
