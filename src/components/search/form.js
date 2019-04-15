@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { mapValues } from 'lodash';
+import { mapValues, sumBy, flatMap } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import TextInput from '../inputs/text-input';
 import { useAlgoliaSearch } from '../../state/search';
@@ -37,38 +37,41 @@ const formatResults = (results) => {
   return resultGroups.map((group) => ({ ...group, items: getItemsFor(group) })).filter((group) => group.items.length > 0);
 };
 
+const countResults = (results) => sumBy(results, ({ items }) => items.length);
+
 const resultsWithSelection = (results, selectedResult) => {
-  if (selectedResult === -1) return results
-  
-  
-  const resultsCount = sumBy(results, ({ items }) => items.length)
-  
-}
+  if (selectedResult === -1) return results;
+  const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
+  return results.map((group) => ({
+    ...group,
+    items: group.items.map(item => item === selectedResult ? { ...item, selected: true } : item)
+  }))
+};
 
 const redirectFor = ({ query, results, selectedResult }) => {
   if (!query) return null;
-  if (!selectedResult) return `/search?q=${query}`;
-  return findSelectedResult(results, selectedResult).url;
+  if (selectedResult === -1) return `/search?q=${query}`;
+  const selectedResultItem = flatMap(results, ({ items }) => items)[selectedResult];
+  return getUrlFor(selectedResultItem);
 };
 
 const { actions, reducer } = createSlice({
   queryChanged: (state, { payload }) => ({
     ...state,
     query: payload,
-    selectedResult: -1,
   }),
   resultsChanged: (state, { payload }) => ({
     ...state,
-    // use last complete results
-    results: payload.status === 'ready' ? formatResults(payload.value) : state.results,
+    selectedResult: -1,
+    results: formatResults(payload),
   }),
   arrowUp: (state, { payload }) => ({
     ...state,
-    selectedResult: state.selectedResult === -1 ? countResults(state.re,
+    selectedResult: state.selectedResult === -1 ? countResults(state.results) - 1 : state.selectedResult - 1,
   }),
   arrowDown: (state, { payload }) => ({
     ...state,
-    selectedResult: state.selectedResult + 1,
+    selectedResult: state.selectedResult === countResults(state.results) - 1 ? -1 : state.selectedResult + 1,
   }),
   submitted: (state) => ({
     ...state,
@@ -87,7 +90,10 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   const algoliaResults = useAlgoliaSearch(query);
 
   useEffect(() => {
-    dispatch(actions.resultsChanged(algoliaResults));
+    // use last complete results
+    if (algoliaResults.status === "ready") {
+      dispatch(actions.resultsChanged(algoliaResults.value));
+    }
   }, [algoliaResults]);
 
   const [submitted, setSubmitted] = useState(false);
