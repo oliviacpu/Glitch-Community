@@ -143,17 +143,6 @@ export const AutocompleteResults = ({ query, results }) => {
   );
 };
 
-// when results are loading, show the previous set of results instead.
-function useLastCompleteSearchResult(query) {
-  const results = useAlgoliaSearch(query);
-  const [lastCompleteResults, setLastCompleteResults] = useState(results);
-  useEffect(() => {
-    if (results.status === 'ready') {
-      setLastCompleteResults(results);
-    }
-  }, [results.status]);
-  return lastCompleteResults;
-}
 
 const Autocomplete = ({ query }) => {
   const results = useLastCompleteSearchResult(query);
