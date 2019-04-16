@@ -39,6 +39,7 @@ try {
   // https://github.com/getsentry/sentry-javascript/issues/1909
   process.on('unhandledRejection', (reason) => {
     console.error('Unhandled Rejection:', reason);
+    process.exit(1);
   });
 } catch (error) {
   console.error('Failed to initialize Sentry!', error);
