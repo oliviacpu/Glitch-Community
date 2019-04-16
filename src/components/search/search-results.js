@@ -81,7 +81,7 @@ function ProjectWithDataLoading({ project, ...props }) {
   const { value: users } = useUsers(project.userIDs);
   const { value: teams } = useTeams(project.teamIDs);
   const projectWithData = { ...project, users, teams };
-  return <ProjectItem usersAreAvatarsOnly project={projectWithData} {...props} />;
+  return <ProjectItem project={projectWithData} {...props} />;
 }
 
 function ProjectResult({ result }) {
