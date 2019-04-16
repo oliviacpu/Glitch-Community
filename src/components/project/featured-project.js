@@ -12,11 +12,13 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
   
   return (
     <>
-      <Heading tagName="h2">
-        Featured Project
-        <Emoji name="clapper" />
-      </Heading>
-      {collection && (
+      <div className={styles.header}>
+        <Heading tagName="h2">
+          Featured Project
+          <Emoji name="clapper" />
+        </Heading>
+      </div>
+      {collection && (featuredProject.note || featuredProject.isAddingANewNote) && (
         <div className={styles.note}>
           <Note
             project={featuredProject}
