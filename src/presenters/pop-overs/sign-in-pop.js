@@ -50,9 +50,79 @@ function slackAuthLink() {
 
 const SignInPopButton = ({ company, emoji, href, onClick }) => (
   <Button href={href} onClick={onClick} size="small">
-    Sign in with {company} <Emoji name={emoji} />
+    {company} <Emoji name={emoji} />
   </Button>
 );
+
+class ForgotPasswordHandler extends React.Component {
+  constructor(props) {
+    super(props);
+    (this.state = {
+      email: '',
+      done: false,
+      error: false,
+      errorMsg: '',
+    }),
+      (this.debouncedValidate = debounce(this.validate.bind(this), 500));
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(email) {
+    this.setState({ email });
+    this.debouncedValidate(email);
+  }
+
+  async onSubmit(e) {
+    this.setState({ done: true });
+    this.setState({ error: false });
+
+    // TODO - actually send link to reset password
+  }
+
+  validate(email) {
+    const isValidEmail = parseOneAddress(email) !== null;
+    this.setState({ errorMsg: isValidEmail ? undefined : 'Enter a valid email address' });
+  }
+
+  render() {
+    const isEnabled = this.state.email.length > 0;
+    return (
+      <dialog className="pop-over sign-in-pop">
+        <NestedPopoverTitle>Forgot Password</NestedPopoverTitle>
+        <section className="pop-over-actions first-section">
+          {!this.state.done && (
+            <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
+              <TextInput
+                type="email"
+                labelText="Email address"
+                value={this.state.email}
+                onChange={this.onChange}
+                placeholder="your@email.com"
+                error={this.state.errorMsg}
+              />
+              <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
+                Send Reset Password Link
+              </button>
+            </form>
+          )}
+          {this.state.done && !this.state.error && (
+            <>
+              <div className="notification notifyPersistent notifySuccess">Almost Done</div>
+              <div>Reset your password by clicking the link sent to {this.state.email}.</div>
+            </>
+          )}
+          {this.state.done && this.state.error && (
+            <>
+              <div className="notification notifyPersistent notifyError">Error</div>
+              <div>{this.state.errorMsg}</div>
+            </>
+          )}
+        </section>
+      </dialog>
+    );
+  }
+}
 
 class EmailHandler extends React.Component {
   constructor(props) {
@@ -240,20 +310,12 @@ const EmailSignInButton = ({ onClick }) => (
       onClick();
     }}
   >
-    Sign in with Email <span className="emoji email" />
+    Email <span className="emoji email" />
   </button>
 );
 EmailSignInButton.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
-
-const NewUserInfoSection = () => (
-  <section className="pop-over-info">
-    <span>
-      <span className="emoji carp_streamer" /> New to Glitch? Create an account by signing in.
-    </span>
-  </section>
-);
 
 const SignInCodeSection = ({ onClick }) => (
   <section className="pop-over-actions pop-over-info">
@@ -268,12 +330,44 @@ SignInCodeSection.propTypes = {
 
 const TermsAndPrivacySection = () => (
   <aside className="pop-over-info last-section">
-    By signing into Glitch, you agree to our {' '}
-    <Link to="/legal/#tos">Terms of Services</Link>
-    {' '} and {' '}
-    <Link to="/legal/#privacy">Privacy Statement</Link>
+    By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
   </aside>
 );
+
+class LoginSection extends React.Component {
+  async handleSubmit(event) {
+    // TODO try logging the user in...
+  }
+
+  render() {
+    return (
+      <section className="pop-over-actions first-section login-section">
+        <form onSubmit={this.handleSubmit}>
+          <TextInput 
+            placeholder="your@email.com" 
+            labelText="email"
+          />
+          <TextInput 
+            placeholder="password" 
+            type="password"
+            labelText="password"
+          />
+          <Button size="small">Sign in</Button>
+        </form>
+
+        <Button
+          size="small"
+          type="tertiary"
+          onClick={() => {
+            this.props.showForgotPassword(this.props.api);
+          }}
+        >
+          Forgot Password
+        </Button>
+      </section>
+    );
+  }
+}
 
 const SignInPopWithoutRouter = (props) => {
   const { header, prompt, api, location, hash } = props;
@@ -295,30 +389,37 @@ const SignInPopWithoutRouter = (props) => {
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
-            <div className="pop-over sign-in-pop">
-              {header}
-              <NewUserInfoSection />
-              <section className="pop-over-actions">
-                {prompt}
-                <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-                <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-                <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} /> }
-                <EmailSignInButton
-                  onClick={() => {
-                    onClick();
-                    showEmailLogin(api);
-                  }}
-                />
-              </section>
-              <SignInCodeSection
-                onClick={() => {
-                  onClick();
-                  showCodeLogin(api);
-                }}
-              />
-              <TermsAndPrivacySection />
-            </div>
+            <NestedPopover alternateContent={() => <ForgotPasswordHandler {...props} />} startAlternateVisible={false}>
+              {(showForgotPassword) => (
+                <div className="pop-over sign-in-pop">
+                  {header}
+                  <section className="pop-over-info">
+                    <div className="pop-title">Sign In or Sign Up</div>
+                  </section>
+                  <LoginSection showForgotPassword={showForgotPassword} {...props} />
+                  <section className="pop-over-actions login-services">
+                    {prompt}
+                    <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+                    <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
+                    <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
+                    {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+                    <EmailSignInButton
+                      onClick={() => {
+                        onClick();
+                        showEmailLogin(api);
+                      }}
+                    />
+                  </section>
+                  <SignInCodeSection
+                    onClick={() => {
+                      onClick();
+                      showCodeLogin(api);
+                    }}
+                  />
+                  <TermsAndPrivacySection />
+                </div>
+              )}
+            </NestedPopover>
           )}
         </NestedPopover>
       )}

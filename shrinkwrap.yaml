@@ -62,6 +62,7 @@ dependencies:
   react-is: 16.8.6
   react-konami: 0.5.0
   react-onclickoutside: 6.8.0
+  react-password-strength: 2.4.0
   react-pluralize: 1.5.0
   react-router-dom: 4.3.1
   react-select: 2.4.2
@@ -9860,6 +9861,18 @@ packages:
       react-dom: ^15.5.x || ^16.x
     resolution:
       integrity: sha512-5Q4Rn7QLEoh7WIe66KFvYIpWJ49GeHoygP1/EtJyZjXKgrWH19Tf0Ty3lWyQzrEEDyLOwUvvmBFSE3dcDdvagA==
+  /react-password-strength/2.4.0:
+    dependencies:
+      prop-types: 15.7.2
+      zxcvbn: 4.4.2
+    dev: false
+    engines:
+      node: '>6.11.1'
+    peerDependencies:
+      react: ^16.0.0
+      react-dom: ^16.0.0
+    resolution:
+      integrity: sha512-8ksh5zfF4uXRxJDGgleABu0dS5hN+mQSvzxLpVWEPVwWMxKikLEVUnB0mrbnBHul7mbjVD9QTjzQ78/wm5bewQ==
   /react-pluralize/1.5.0:
     dependencies:
       react: 15.6.2
@@ -12035,6 +12048,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Lhz8TLaYnxq/2ObqHDql8dX8CJi97oHxrjUcYtzKbbykPtVW9WB+poxI+NM2UIzsMgNCZTIf0AQwsjK5yMAqZw==
+  /zxcvbn/4.4.2:
+    dev: false
+    resolution:
+      integrity: sha1-KOwXzwl0PtyrBW3dixsGJizHPDA=
 registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
@@ -12102,6 +12119,7 @@ specifiers:
   react-is: ^16.8.4
   react-konami: ^0.5.0
   react-onclickoutside: ^6.8.0
+  react-password-strength: ^2.3.1
   react-pluralize: ^1.5.0
   react-router-dom: ^4.3.1
   react-select: ^2.4.0

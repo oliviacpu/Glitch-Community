@@ -105,3 +105,42 @@ dialog.overlay
     width: 100%
   .button
     display: inline
+
+// user settings overlay
+.account-settings-overlay
+  .overlay-title
+    width: 100%
+  .pop-over-main
+    display: grid
+    grid-gap: 10px
+    grid-template-columns: 0.5fr 1fr
+    @media(max-width: smallViewport)
+      display: initial
+      
+    .nav-selection
+      border-right: 1px solid section-line
+      
+    .nav-content
+      margin-bottom: 1.5em
+      h2
+        margin-top: 0
+      label
+        width: 250px
+        margin-bottom: 10px   
+      progress
+        display: block
+        width: 100%
+        height: 5px
+        margin: 0.5rem 0
+        &::-webkit-progress-value
+          background-color: notification
+        &::-moz-progress-bar
+          background-color: notification
+      .info-description
+        margin-bottom: 0.5rem
+        color: tertiary
+          
+          
+  .pop-over-info
+    p
+      margin: 0

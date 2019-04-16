@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { orderBy } from 'lodash';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import Emoji from 'Components/images/emoji';
 import { getAvatarUrl as getTeamAvatarUrl } from '../../models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from '../../models/user';
 import { useTrackedFunc, useTracker } from '../segment-analytics';
@@ -10,6 +11,7 @@ import { Link, TeamLink, UserLink } from '../includes/link';
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';
+import AccountSettingsOverlay from '../overlays/account-settings';
 
 // Create Team button
 
@@ -131,6 +133,13 @@ Are you sure you want to sign out?`)
         <Link to="https://support.glitch.com" className="button button-small has-emoji button-tertiary button-on-secondary-background">
           Support <span className="emoji ambulance" />
         </Link>
+
+        <AccountSettingsOverlay user={user}>
+          <button type="button" className="button-small has-emoji button-tertiary button-on-secondary-background">
+            Account Settings <Emoji name="key" />
+          </button>
+        </AccountSettingsOverlay>
+
         <button type="button" onClick={clickSignout} className="button-small has-emoji button-tertiary button-on-secondary-background">
           Sign Out <span className="emoji balloon" />
         </button>
