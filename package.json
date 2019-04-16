@@ -4,7 +4,9 @@
   "description": "Find cool projects and people using Glitch",
   "scripts": {
     "prestart": "nodemon --watch server --watch shared --exec 'eslint --config server/.eslintrc.server.js server shared webpack.config.js' &",
-    "start": "#forever --minUptime 5000 --spinSleepTime 5000 --watch --watchIgnore '!{{server,shared,views}/**}' ./server/server.js",
+    "start-dev": "nodemon --watch server --watch shared --watch views ./server/server.js",
+    "start-prod": "nodemon --watch server --watch shared --watch views --exec forever ./server/server.js",
+    "start": "npm run start-dev",
     "storybook": "build-storybook -c storybook-config -o build/storybook"
   },
   "dependencies": {
