@@ -12,25 +12,35 @@ import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
+const badPWs = [];
+
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       password: '',
+      passwordConfirm: '',
       errorMsg: '',
       done: false,
     };
-    this.onChange = this.onChange.bind(this);
+    this.onChangePW = this.onChangePW.bind(this);
+    this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
 
-  onChange(password) {
+  onChangePW(password) {
     this.setState({ password });
+    this.validatePasswordMatch();
+  }
+  
+  onChangePWConfirm(passwordConfirm){
+    this.setState({ passwordConfirm});
+    this.validatePasswordMatch();
   }
 
-  validatePasswordMatch(confirmPassword) {
-    const passwordsMatch = this.state.password === confirmPassword;
+  validatePasswordMatch() {
+    const passwordsMatch = this.state.password === this.state.passwordConfirm;
     this.setState({ errorMsg: passwordsMatch ? undefined : 'Passwords do not match' });
   }
   
@@ -67,26 +77,18 @@ class OverlayAccountSettings extends React.Component {
                 <div className="nav-content">
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
-                    <ReactPasswordStrength
-                      minLength={8}
-                      minScore={2}
-                      scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                      changeCallback={this.onChange}
-                      inputProps={{ name: "password_input", autoComplete: "off" }}
-                    />
                     
-                    {/*
                     <TextInput 
                       type="password" 
                       labelText="password" 
                       placeholder="new password" 
-                      onChange={this.onChange} />
-                    */}
+                      onChange={this.onChangePw} />
+                    
                     <TextInput
                       type="password"
                       labelText="confirm password"
                       placeholder="confirm password"
-                      onChange={this.debounceValidatePasswordMatch}
+                      onChange={this.onChangePwConfirm}
                       error={this.state.errorMsg}
                     />
 
