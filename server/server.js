@@ -11,7 +11,6 @@ const sentryHelpers = require('Shared/sentryHelpers');
 const Sentry = require('@sentry/node');
 
 try {
-  throw new Error('block sentry');
   Sentry.init({
     dsn: 'https://4f1a68242b6944738df12eecc34d377c@sentry.io/1246508',
     environment: process.env.NODE_ENV || 'dev',
@@ -35,7 +34,12 @@ try {
   Sentry.configureScope((scope) => {
     scope.setTag('PROJECT_DOMAIN', process.env.PROJECT_DOMAIN);
   });
-  
+  // Node doesn't log unhandled promise errors if something is listening for
+  // them, which Sentry does. Add our own event listener to see them here.
+  // https://github.com/getsentry/sentry-javascript/issues/1909
+  process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection:', reason);
+  });
 } catch (error) {
   console.error('Failed to initialize Sentry!', error);
 }
