@@ -86,7 +86,7 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-middleware": "^3.6.1",
     "winston": "^3.2.1",
-    "zxcvbn": "^4.4.2"
+    "react-password-strength": "^2.3.1"
   },
   "engines": {
     "node": "10.x"

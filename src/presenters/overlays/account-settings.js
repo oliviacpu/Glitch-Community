@@ -2,20 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash/debounce';
-import zxcvbn from 'zxcvbn';
+import ReactPasswordStrength from 'react-password-strength';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
-import Badge from 'Components/badges/badge';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
-
-/* for displaying password strength */
-const scoreWords = ['too weak', 'weak', 'okay', 'good', 'strong'];
-const badPWs = [];
 
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
@@ -24,18 +19,14 @@ class OverlayAccountSettings extends React.Component {
       password: '',
       errorMsg: '',
       done: false,
-      pwScore: 0,
     };
-    this.onPassChange = this.onPassChange.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
 
-  onPassChange(password) {
-    const evaluation = zxcvbn(password);
-    this.setState({ password,
-      score: evaluation.score
-    });
+  onChange(password) {
+    this.setState({ password });
   }
 
   validatePasswordMatch(confirmPassword) {
@@ -54,17 +45,9 @@ class OverlayAccountSettings extends React.Component {
   }
 
   render() {
-    const {score} = this.state;
     const pwMinCharCount = 8;
-    var scoreProgress = Math.max(this.state.score, 1);
-    console.log('scoreProgress ', scoreProgress);
-    const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
+    const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
-    
-    const ReactPasswordInputProps = {
-      placeholder: "password",
-      className: 'another-input-prop-class-name',
-    };
     
     return (
       <PopoverContainer>
@@ -84,19 +67,21 @@ class OverlayAccountSettings extends React.Component {
                 <div className="nav-content">
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
+                    <ReactPasswordStrength
+                      minLength={8}
+                      minScore={2}
+                      scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+                      changeCallback={this.onChange}
+                      inputProps={{ name: "password_input", autoComplete: "off" }}
+                    />
                     
-                    <div>Choose a password that's 8 characters or more</div>
-                    
+                    {/*
                     <TextInput 
                       type="password" 
                       labelText="password" 
-                      placeholder="password" 
-                      onChange={this.onPassChange} />
-                    <div className="pw-strength">
-                      <progress value={scoreProgress} max="4" className={`pw-strength score-${score}`} />
-                      <span class="pw-strength-word">{scoreWords[score]}</span>
-                    </div>
-                    
+                      placeholder="new password" 
+                      onChange={this.onChange} />
+                    */}
                     <TextInput
                       type="password"
                       labelText="confirm password"
@@ -105,6 +90,12 @@ class OverlayAccountSettings extends React.Component {
                       error={this.state.errorMsg}
                     />
 
+                    {this.state.password.length < pwMinCharCount && 
+                      <>
+                        <progress value={progress} max="100" />
+                        <p className="info-description">Your password should contain at least 8 characters</p>
+                      </>
+                    }
 
                     <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
                       Set Password
