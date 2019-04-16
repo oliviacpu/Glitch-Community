@@ -15,6 +15,7 @@ import { FeaturedCollections } from './featured-collections';
 const ZineItems = () => {
   const [posts] = React.useState(window.ZINE_POSTS.slice(0, 4));
   const [masks] = React.useState(sampleSize([1, 2, 3, 4, 5], 4));
+  console.log(posts);
   if (!posts.length) {
     return null;
   }
