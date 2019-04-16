@@ -57,13 +57,13 @@ const SignInPopButton = ({ company, emoji, href, onClick }) => (
 class ForgotPasswordHandler extends React.Component {
   constructor(props) {
     super(props);
-    (this.state = {
+    this.state = {
       email: '',
       done: false,
       error: false,
       errorMsg: '',
-    }),
-      (this.debouncedValidate = debounce(this.validate.bind(this), 500));
+    };
+    this.debouncedValidate = debounce(this.validate.bind(this), 500);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -343,15 +343,8 @@ class LoginSection extends React.Component {
     return (
       <section className="pop-over-actions first-section login-section">
         <form onSubmit={this.handleSubmit}>
-          <TextInput 
-            placeholder="your@email.com" 
-            labelText="email"
-          />
-          <TextInput 
-            placeholder="password" 
-            type="password"
-            labelText="password"
-          />
+          <TextInput placeholder="your@email.com" labelText="email" />
+          <TextInput placeholder="password" type="password" labelText="password" />
           <Button size="small">Sign in</Button>
         </form>
 
