@@ -8,6 +8,7 @@ import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
+import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
@@ -37,41 +38,42 @@ class OverlayAccountSettings extends React.Component {
     this.state = {
       password: '',
       passwordConfirm: '',
-      errorMsg: '',
+      passwordErrorMsg: '',
+      passwordConfirmErrorMsg: '',
       done: false,
     };
     this.onChangePW = this.onChangePW.bind(this);
     this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
-    this.checkWeakPassword = this.checkWeakPassword.bind(this);
+    this.checkWeakPW = this.checkWeakPW.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
 
   onChangePW(password) {
     // check if it's a bad password
-    this.setState({ password });
-    this.checkWeakPassword();
-    if(this.state.passwordConfirm){
-      this.validatePasswordMatch();
-    }
+    this.setState({ password }, () => {
+      this.checkWeakPW();
+        if(this.state.passwordConfirm){
+          this.validatePasswordMatch();
+        }
+    });
   }
 
   onChangePWConfirm(passwordConfirm) {
-    this.setState({ passwordConfirm });
-    this.validatePasswordMatch();
+    this.setState({ passwordConfirm }, () => {
+      this.validatePasswordMatch();
+    });
   }
   
-  checkWeakPassword(password){
-    
-    if(weakPWs.includes(password)){
-      this.setState({ errorMsg: weakPWErrorMsg });
-    }
+  checkWeakPW(){
+    const passwordIsWeak = weakPWs.includes(this.state.password);
+    this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
   }
 
   validatePasswordMatch() {
     const passwordsMatch = this.state.password === this.state.passwordConfirm;
     if(this.state.passwordConfirm){
-      this.setState({ errorMsg: passwordsMatch ? undefined :  matchErrorMsg});
+      this.setState({ passwordConfirmErrorMsg: passwordsMatch ? undefined :  matchErrorMsg});
     }
   }
 
@@ -87,7 +89,7 @@ class OverlayAccountSettings extends React.Component {
   render() {
     const pwMinCharCount = 8;
     const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
-    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;
+    const isEnabled = !this.state.passwordErrorMsg && !this.state.passwordConfirmErrorMsg;
 
     return (
       <PopoverContainer>
@@ -112,15 +114,15 @@ class OverlayAccountSettings extends React.Component {
                       labelText="password" 
                       placeholder="new password" 
                       onChange={this.onChangePW}
-                      error={this.state.errorMsg === weakPWErrorMsg && this.state.errorMsg}
+                      error={this.state.passwordErrorMsg}
                     />
 
                     <TextInput
                       type="password"
                       labelText="confirm password"
                       placeholder="confirm password"
-                      onChange={this.onChangePwConfirm}
-                      error={this.state.errorMsg === matchErrorMsg && this.state.errorMsg}
+                      onChange={this.onChangePWConfirm}
+                      error={this.state.passwordConfirmErrorMsg}
                     />
 
                     {this.state.password.length < pwMinCharCount && (
