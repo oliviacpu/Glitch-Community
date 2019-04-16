@@ -88,9 +88,9 @@ const CollectionPageContents = ({
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
   const userIsLoggedIn = currentUser && currentUser.login;
-  if (collection.featuredProjectId) {
-    const [[featuredProject], otherProjects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
-  }
+  const [[featuredProject], projects] = collection.featuredProjectId 
+    ? partition(collection.projects, (p) => p.id === collection.featuredProjectId) 
+    : [[null], collection.projects];
   return (
     <>
       <Helmet title={collection.name} />
@@ -141,11 +141,11 @@ const CollectionPageContents = ({
                 <div className="collection-project-container-header">
                   {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
                 </div>
-                {collection.featuredProject && (
+                {featuredProject && (
                   <FeaturedProject
                     isAuthorized={currentUserIsAuthor}
                     currentUser={currentUser}
-                    featuredProject={collection.featuredProject}
+                    featuredProject={featuredProject}
                     unfeatureProject={unfeatureProject}
                     addProjectToCollection={addProjectToCollection}
                     collection={collection}
@@ -157,7 +157,7 @@ const CollectionPageContents = ({
                 {currentUserIsAuthor && (
                   <ProjectsUL
                     {...props}
-                    projects={collection.projects}
+                    projects={projects}
                     collection={collection}
                     isAuthorized={currentUserIsAuthor}
                     projectOptions={{

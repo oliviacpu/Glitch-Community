@@ -68,49 +68,15 @@ class CollectionEditor extends React.Component {
   }
 
   updateProject(projectUpdates, projectId) {
-    const stateUpdates = {};
-
-    stateUpdates.projects = this.state.projects.map((project) => {
-      if (project.id === projectId) {
-        return { ...project, ...projectUpdates };
-      }
+    this.setState(({ projects }) => ({
+      projects: projects.map((project) => {
+        if (project.id === projectId) {
+          return { ...project, ...projectUpdates };
+      }  
       return { ...project };
     });
 
-    if (this.state.featuredProject && this.state.featuredProject.id === projectId) {
-      stateUpdates.featuredProject = { ...this.state.featuredProject, ...projectUpdates };
-    }
-
     this.setState(stateUpdates);
-  }
-
-  async featureProject(id) {
-    // make request to server and update featuredProjectId property in state
-    this.updateFields({ featuredProjectId: id });
-
-    // update state:
-    // - if there was an old featured project put the Old Featured Project back in the projects array
-    // - set featuredProject to the new featured project
-    // - remove the new featured project from the projects array
-    const stateUpdates = {};
-    const oldFeaturedProject = this.state.featuredProject;
-    const newFeaturedProjectIdx = this.state.projects.findIndex((p) => p.id === id);
-    stateUpdates.projects = [...this.state.projects];
-    if (oldFeaturedProject) {
-      stateUpdates.featuredProject = stateUpdates.projects.splice(newFeaturedProjectIdx, 1, oldFeaturedProject)[0]; // eslint-disable-line prefer-destructuring
-    } else {
-      stateUpdates.featuredProject = stateUpdates.projects.splice(newFeaturedProjectIdx, 1)[0]; // eslint-disable-line prefer-destructuring
-    }
-
-    this.setState(stateUpdates);
-  }
-
-  async unfeatureProject() {
-    this.updateFields({ featuredProjectId: null });
-    this.setState(({ projects, featuredProject }) => ({
-      projects: [...projects, featuredProject],
-      featuredProject: null,
-    }));
   }
 
   render() {
@@ -125,8 +91,8 @@ class CollectionEditor extends React.Component {
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updateColor: (color) => this.updateFields({ coverColor: color }),
-      featureProject: (id) => this.featureProject(id).catch(handleError),
-      unfeatureProject: () => this.unfeatureProject().catch(handleError),
+      featureProject: (id) => this.updateFields({ featuredProjectId: id }).catch(handleError),
+      unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
     };
     return this.props.children(this.state, funcs, this.currentUserIsAuthor());
   }
