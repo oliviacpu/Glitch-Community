@@ -12,6 +12,9 @@ import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
+/* for displaying password strength */
+const scoreWords = ['weak', 'weak', 'okay', 'good', 'strong'];
+
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +22,9 @@ class OverlayAccountSettings extends React.Component {
       password: '',
       errorMsg: '',
       done: false,
+      pwScore: 0,
     };
-    this.onChange = this.onChange.bind(this);
+    this.onPassChange = this.onPassChange.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
@@ -28,7 +32,9 @@ class OverlayAccountSettings extends React.Component {
   onPassChange(password) {
     const evaluation = zxcvbn(password);
     console.log('evaluation', evaluation);
-    this.setState({ password });
+    this.setState({ password,
+      score: evaluation.score
+    });
   }
 
   validatePasswordMatch(confirmPassword) {
@@ -47,8 +53,10 @@ class OverlayAccountSettings extends React.Component {
   }
 
   render() {
+    const {score} = this.state;
     const pwMinCharCount = 8;
-    const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
+    var scoreProgress = Math.round((this.state.score / 4));
+    const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
     
     const ReactPasswordInputProps = {
@@ -80,6 +88,8 @@ class OverlayAccountSettings extends React.Component {
                       labelText="password" 
                       placeholder="password" 
                       onChange={this.onPassChange} />
+                    <progress value={scoreProgress} max="5" className={scoreWords[score]} />
+                    <span>{scoreWords[score]}</span>
                     
                     <TextInput
                       type="password"
