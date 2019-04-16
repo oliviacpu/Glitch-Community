@@ -68,7 +68,6 @@ const FeaturedProject = ({
         addProjectToCollection={addProjectToCollection}
       />
     </div>
-
   );
 };
 
