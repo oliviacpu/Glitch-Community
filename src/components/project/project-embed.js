@@ -43,7 +43,7 @@ const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCol
   );
 
   return (
-    <section>
+    <section className={styles.projectEmbed}>
       {top}
       <Embed domain={project.domain} />
       <div className={styles.buttonContainer}>

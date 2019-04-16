@@ -8,19 +8,8 @@ import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-proje
 import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
-const TopLeft = () => (
-
-);
-
-const TopRight = (props) => {
-  if (!props.isAuthorized) return null;
-  return (
-    
-  );
-};
-
-
 const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
+  
   return (
     <>
       <Heading tagName="h2">
@@ -60,7 +49,7 @@ const FeaturedProject = ({
   return (
     <div ref={featuredProjectRef}>
       <ProjectEmbed
-        top{<Top
+        top={<Top
           featuredProject={featuredProject}
           collection={collection}
           hideNote={hideNote}
