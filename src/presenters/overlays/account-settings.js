@@ -78,7 +78,7 @@ class PasswordSettings extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    //TODO actually set the password
+    //TODO actually set the password & handle errors if the user has incorrectly entered their current password
   }
 
   setPassword() {
@@ -89,17 +89,26 @@ class PasswordSettings extends React.Component {
     const pwMinCharCount = 8;
     const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
     const isEnabled = !this.state.passwordErrorMsg && !this.state.passwordConfirmErrorMsg;
+    const userHasPassword = false; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
 
     return (
       <>
-        <Heading tagName="h2">Set Password</Heading>
+        <Heading tagName="h2">{ userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
+          { userHasPassword &&
+              <TextInput 
+                type="password"
+                labelText="current password"
+                placeholder="current password"
+                />
+            }
+          
           <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
 
           <TextInput
             type="password"
-            labelText="confirm password"
-            placeholder="confirm password"
+            labelText="confirm new password"
+            placeholder="confirm new password"
             onChange={this.onChangePWConfirm}
             error={this.state.passwordConfirmErrorMsg}
           />
