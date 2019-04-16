@@ -15,6 +15,7 @@ import PopoverContainer from '../pop-overs/popover-container';
 
 /* for displaying password strength */
 const scoreWords = ['too weak', 'weak', 'okay', 'good', 'strong'];
+const badPWs = [];
 
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
