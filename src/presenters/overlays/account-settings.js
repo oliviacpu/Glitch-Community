@@ -84,7 +84,7 @@ class OverlayAccountSettings extends React.Component {
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
                     
-                    <div>Your password should contain at least 8 characters</div>
+                    <div>Choose a password that's 8 characters or more</div>
                     
                     <TextInput 
                       type="password" 
