@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StaticUsersList } from 'Components/user/users-list';
+import ProfileList from 'Components/profile/profile-list';
 import { ProjectLink } from './link';
 import ProjectAvatar from './project-avatar';
 
@@ -20,7 +20,7 @@ const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
             {domain}
           </div>
           {description.length > 0 && <div className="result-description">{description}</div>}
-          {!!users && users.length > 0 && <StaticUsersList users={users} layout="row" />}
+          {!!users && users.length > 0 && <ProfileList users={users} layout="row" />}
         </div>
       </button>
       <ProjectLink project={project} className="view-result-link button button-small button-link" target="_blank" rel="noopener noreferrer">

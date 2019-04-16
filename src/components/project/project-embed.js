@@ -48,7 +48,9 @@ const ProjectEmbed = ({ project, topLeft, topRight, isAuthorized, currentUser, a
         <div className={styles.left}>{topLeft}</div>
         <div className={styles.right}>{topRight}</div>
       </div>
-      <Embed domain={project.domain} />
+      <div className={styles.embedWrap}>
+        <Embed domain={project.domain} />
+      </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
           <BottomLeft />

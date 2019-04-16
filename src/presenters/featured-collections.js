@@ -5,7 +5,7 @@ import { sampleSize, flatMap, uniq } from 'lodash';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
-import { UserTile } from 'Components/user/users-list';
+import { ProfileItem } from 'Components/profile/profile-list';
 import { captureException } from '../utils/sentry';
 
 import { featuredCollections } from '../curated/collections';
@@ -15,7 +15,6 @@ import { getSingleItem, getFromApi, joinIdsToQueryString } from '../../shared/ap
 import CollectionAvatar from './includes/collection-avatar';
 import { CollectionLink } from './includes/link';
 import { DataLoader } from './includes/loader';
-import { TeamTile } from './teams-list';
 
 import { useAPI } from '../state/api';
 
@@ -32,8 +31,9 @@ const CollectionWide = ({ collection }) => {
         <CollectionLink className="collection-name" collection={collection}>
           <Heading tagName="h2">{collection.name}</Heading>
         </CollectionLink>
-        {!!collection.team && <TeamTile team={collection.team} />}
-        {!!collection.user && <UserTile {...collection.user} />}
+        <div className="collection-owner">
+          <ProfileItem hasLinks team={collection.team} user={collection.user} />
+        </div>
         <div className="collection-description">
           <Markdown length={80}>{collection.description}</Markdown>
         </div>
