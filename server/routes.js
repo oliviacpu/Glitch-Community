@@ -71,6 +71,7 @@ module.exports = function(external) {
       );
       built = false;
     }
+    throw new Error('asdfasdf');
 
     res.render('index.ejs', {
       title,
