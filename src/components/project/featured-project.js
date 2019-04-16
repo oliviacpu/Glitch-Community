@@ -16,24 +16,22 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
         Featured Project
         <Emoji name="clapper" />
       </Heading>
-      <div>
-        {collection && (
-          <div className={styles.note}>
-            <Note
-              project={featuredProject}
-              collection={collection}
-              updateNote={updateNote}
-              hideNote={hideNote}
-              isAuthorized={isAuthorized}
-            />
-          </div>
-        )}
-        {isAuthorized && (
-          <div className={styles.unfeatureBtn}>
-            <FeaturedProjectOptionsPop {...props} />
-          </div>
-        )}
-      </div>
+      {collection && (
+        <div className={styles.note}>
+          <Note
+            project={featuredProject}
+            collection={collection}
+            updateNote={updateNote}
+            hideNote={hideNote}
+            isAuthorized={isAuthorized}
+          />
+        </div>
+      )}
+      {isAuthorized && (
+        <div className={styles.unfeatureBtn}>
+          <FeaturedProjectOptionsPop {...props} />
+        </div>
+      )}
     </>
   );
 }
