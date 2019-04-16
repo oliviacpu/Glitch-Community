@@ -72,11 +72,10 @@ class CollectionEditor extends React.Component {
       projects: projects.map((project) => {
         if (project.id === projectId) {
           return { ...project, ...projectUpdates };
-      }  
-      return { ...project };
-    });
-
-    this.setState(stateUpdates);
+        }
+        return { ...project };
+      }),
+    }));
   }
 
   render() {

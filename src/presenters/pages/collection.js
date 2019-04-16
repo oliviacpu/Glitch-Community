@@ -88,9 +88,12 @@ const CollectionPageContents = ({
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
   const userIsLoggedIn = currentUser && currentUser.login;
-  const [[featuredProject], projects] = collection.featuredProjectId 
-    ? partition(collection.projects, (p) => p.id === collection.featuredProjectId) 
-    : [[null], collection.projects];
+  let featuredProject = null;
+  let { projects } = collection;
+  if (collection.featuredProjectId) {
+    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+  }
+
   return (
     <>
       <Helmet title={collection.name} />
