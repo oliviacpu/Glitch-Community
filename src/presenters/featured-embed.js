@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
+import Embed from 'Components/project/embed';
 import { Link } from './includes/link';
-import Embed from './includes/embed';
-
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">
@@ -25,7 +24,9 @@ const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) 
           <button className="button-small">Learn More →</button>
         </Link>
       </div>
-      <Embed domain={appDomain} />
+      <div className="glitch-embed-wrap">
+        <Embed domain={appDomain} />
+      </div>
     </div>
   </div>
 );
