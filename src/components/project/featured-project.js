@@ -58,7 +58,7 @@ const FeaturedProject = ({
           updateNote={updateNote}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
-          displayNewNote={displayNewNote ? () => displayNewNote(featuredProject.id) : null}
+          displayNewNote={() => displayNewNote(featuredProject.id)}
           hasNote={!!featuredProject.note}
           featuredProjectRef={featuredProjectRef}
         />}
@@ -86,9 +86,9 @@ FeaturedProject.propTypes = {
 
 FeaturedProject.defaultProps = {
   collection: null,
-  displayNewNote: null,
-  hideNote: null,
-  updateNote: null,
+  displayNewNote: () => {},
+  hideNote: () => {},
+  updateNote: () => {},
 };
 
 export default FeaturedProject;
