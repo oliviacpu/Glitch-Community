@@ -17,13 +17,15 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
         <Emoji name="clapper" />
       </Heading>
       {collection && (
-        <Note
-          project={featuredProject}
-          collection={collection}
-          updateNote={updateNote}
-          hideNote={hideNote}
-          isAuthorized={isAuthorized}
-        />
+        <div className={styles.note}>
+          <Note
+            project={featuredProject}
+            collection={collection}
+            updateNote={updateNote}
+            hideNote={hideNote}
+            isAuthorized={isAuthorized}
+          />
+        </div>
       )}
       {isAuthorized && (
         <div className={styles.unfeatureBtn}>
