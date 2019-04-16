@@ -126,11 +126,11 @@ PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const OverlayAccountSettings = () => (
+const OverlayAccountSettings = ({children, user, ...props}) => (
   <PopoverContainer>
     {({ visible, setVisible }) => (
       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
-        <summary>{this.props.children}</summary>
+        <summary>{children}</summary>
         <dialog className="overlay account-settings-overlay">
           <section className="pop-over-info overlay-title">
             Account Settings <Emoji name="key" />
@@ -142,12 +142,12 @@ const OverlayAccountSettings = () => (
                   </div>
                 */}
             <div className="nav-content">
-              <PasswordSettings user={this.props.user}/>
+              <PasswordSettings user={user}/>
             </div>
           </section>
           <section className="pop-over-info">
             <Text>
-              Email notifications are sent to <b>{this.props.user.email}</b>
+              Email notifications are sent to <b>{user.email}</b>
             </Text>
           </section>
         </dialog>
