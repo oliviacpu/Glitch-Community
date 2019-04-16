@@ -35,7 +35,7 @@ try {
     scope.setTag('PROJECT_DOMAIN', process.env.PROJECT_DOMAIN);
   });
   // Node doesn't log unhandled promise errors if something is listening for
-  // them, which Sentry does. Add our own event listener to see them here.
+  // them, which Sentry does. Add our own event listener to keep them logged
   // https://github.com/getsentry/sentry-javascript/issues/1909
   process.on('unhandledRejection', (reason) => {
     console.error('Unhandled Rejection:', reason);
