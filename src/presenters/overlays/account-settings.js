@@ -6,6 +6,7 @@ import zxcvbn from 'zxcvbn';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
+import Badge from 'Components/badges/badge';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
@@ -83,6 +84,8 @@ class OverlayAccountSettings extends React.Component {
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
                     
+                    <Badge>Your password should contain at least 8 characters</Badge>
+                    
                     <TextInput 
                       type="password" 
                       labelText="password" 
@@ -92,10 +95,6 @@ class OverlayAccountSettings extends React.Component {
                       <progress value={scoreProgress} max="4" className={`pw-strength score-${score}`} />
                       <span class="pw-strength-word">{scoreWords[score]}</span>
                     </div>
-                    
-                    {this.state.password.length < pwMinCharCount && 
-                      <p className="info-description">Your password should contain at least 8 characters</p>
-                    }
                     
                     <TextInput
                       type="password"
