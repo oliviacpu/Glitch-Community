@@ -12,13 +12,15 @@ import WrappingLink from './includes/wrapping-link';
 
 const ProjectItem = ({ project, collection, hideProjectDescriptions, isAuthorized, ...props }) => (
   <>
-    <Note
-      collection={collection}
-      project={project}
-      isAuthorized={isAuthorized}
-      updateNote={props.projectOptions.updateNote}
-      hideNote={props.projectOptions.hideNote}
-    />
+    <div className="project-item-note">
+      <Note
+        collection={collection}
+        project={project}
+        isAuthorized={isAuthorized}
+        updateNote={props.projectOptions.updateNote}
+        hideNote={props.projectOptions.hideNote}
+      />
+    </div>
     <UsersList glitchTeam={project.showAsGlitchTeam} users={project.users} extraClass="single-line" teams={project.teams} />
     <ProjectOptionsPop project={project} {...props} />
     <WrappingLink href={getLink(project)} className="button-area">
