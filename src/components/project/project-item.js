@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
-import UsersList from 'Components/user/users-list';
+import ProfileList from 'Components/profile/profile-list';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { ProjectLink } from '../../presenters/includes/link';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
@@ -19,11 +19,13 @@ const getLinkBodyStyles = (project) =>
     [styles.private]: project.private,
   });
 
+const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
+
 const ProjectItem = ({ project, projectOptions }) => (
   <div className={styles.container}>
     <header className={styles.header}>
-      <div className={styles.userListContainer}>
-        <UsersList layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
+      <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
+        <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
       </div>
       <div className={styles.projectOptionsContainer}>
         <ProjectOptionsPop project={project} projectOptions={projectOptions} />

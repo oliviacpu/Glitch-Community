@@ -88,9 +88,9 @@ function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
 
-  const props = { project: result };
+  const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
-    props.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
   if (!result.users) {
