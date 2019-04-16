@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash/debounce';
-import ReactPasswordStrength from 'react-password-strength';
+import zxcvbn from 'zxcvbn';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
@@ -25,7 +25,9 @@ class OverlayAccountSettings extends React.Component {
     this.setPassword = this.setPassword.bind(this);
   }
 
-  onChange(password) {
+  onPassChange(password) {
+    const evaluation = zxcvbn(password);
+    console.log('evaluation', evaluation);
     this.setState({ password });
   }
 
@@ -49,6 +51,11 @@ class OverlayAccountSettings extends React.Component {
     const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
     
+    const ReactPasswordInputProps = {
+      placeholder: "password",
+      className: 'another-input-prop-class-name',
+    };
+    
     return (
       <PopoverContainer>
         {({ visible, setVisible }) => (
@@ -67,21 +74,13 @@ class OverlayAccountSettings extends React.Component {
                 <div className="nav-content">
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
-                    <ReactPasswordStrength
-                      minLength={8}
-                      minScore={2}
-                      scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                      changeCallback={this.onChange}
-                      inputProps={{ name: "password_input", autoComplete: "off" }}
-                    />
                     
-                    {/*
                     <TextInput 
                       type="password" 
                       labelText="password" 
-                      placeholder="new password" 
-                      onChange={this.onChange} />
-                    */}
+                      placeholder="password" 
+                      onChange={this.onPassChange} />
+                    
                     <TextInput
                       type="password"
                       labelText="confirm password"
