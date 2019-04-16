@@ -54,7 +54,7 @@ class OverlayAccountSettings extends React.Component {
   render() {
     const {score} = this.state;
     const pwMinCharCount = 8;
-    var scoreProgress = this.state.score;
+    var scoreProgress = Math.max(this.state.score, 1);
     console.log('scoreProgress ', scoreProgress);
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
@@ -93,6 +93,10 @@ class OverlayAccountSettings extends React.Component {
                       <span class="pw-strength-word">{scoreWords[score]}</span>
                     </div>
                     
+                    {this.state.password.length < pwMinCharCount && 
+                      <p className="info-description">Your password should contain at least 8 characters</p>
+                    }
+                    
                     <TextInput
                       type="password"
                       labelText="confirm password"
@@ -101,12 +105,6 @@ class OverlayAccountSettings extends React.Component {
                       error={this.state.errorMsg}
                     />
 
-                    {this.state.password.length < pwMinCharCount && 
-                      <>
-                        <progress value={progress} max="100" />
-                        <p className="info-description">Your password should contain at least 8 characters</p>
-                      </>
-                    }
 
                     <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
                       Set Password
