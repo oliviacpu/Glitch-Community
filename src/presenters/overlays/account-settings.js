@@ -88,8 +88,8 @@ class OverlayAccountSettings extends React.Component {
                       labelText="password" 
                       placeholder="password" 
                       onChange={this.onPassChange} />
-                    <progress value={scoreProgress} max="5" className={`score-${score}`} />
-                    <span>{scoreWords[score]}</span>
+                    <progress value={scoreProgress} max="4" className={`pw-strength score-${score}`} />
+                    <span class="pw-strength-word">{scoreWords[score]}</span>
                     
                     <TextInput
                       type="password"
