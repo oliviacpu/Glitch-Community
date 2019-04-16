@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash/debounce';
-import ReactPasswordStrength from 'react-password-strength';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
@@ -32,7 +31,7 @@ const weakPWs = [
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
-class OverlayAccountSettings extends React.Component {
+class PasswordSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,9 +52,9 @@ class OverlayAccountSettings extends React.Component {
     // check if it's a bad password
     this.setState({ password }, () => {
       this.checkWeakPW();
-        if(this.state.passwordConfirm){
-          this.validatePasswordMatch();
-        }
+      if (this.state.passwordConfirm) {
+        this.validatePasswordMatch();
+      }
     });
   }
 
@@ -64,16 +63,16 @@ class OverlayAccountSettings extends React.Component {
       this.validatePasswordMatch();
     });
   }
-  
-  checkWeakPW(){
+
+  checkWeakPW() {
     const passwordIsWeak = weakPWs.includes(this.state.password);
     this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
   }
 
   validatePasswordMatch() {
     const passwordsMatch = this.state.password === this.state.passwordConfirm;
-    if(this.state.passwordConfirm){
-      this.setState({ passwordConfirmErrorMsg: passwordsMatch ? undefined :  matchErrorMsg});
+    if (this.state.passwordConfirm) {
+      this.setState({ passwordConfirmErrorMsg: passwordsMatch ? undefined : matchErrorMsg });
     }
   }
 
@@ -92,66 +91,70 @@ class OverlayAccountSettings extends React.Component {
     const isEnabled = !this.state.passwordErrorMsg && !this.state.passwordConfirmErrorMsg;
 
     return (
-      <PopoverContainer>
-        {({ visible, setVisible }) => (
-          <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
-            <summary>{this.props.children}</summary>
-            <dialog className="overlay account-settings-overlay">
-              <section className="pop-over-info overlay-title">
-                Account Settings <Emoji name="key" />
-              </section>
-              <section className="pop-over-actions pop-over-main">
-                {/*
+      <>
+        <Heading tagName="h2">Set Password</Heading>
+        <form onSubmit={this.handleSubmit}>
+          <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
+
+          <TextInput
+            type="password"
+            labelText="confirm password"
+            placeholder="confirm password"
+            onChange={this.onChangePWConfirm}
+            error={this.state.passwordConfirmErrorMsg}
+          />
+
+          {this.state.password.length < pwMinCharCount && (
+            <>
+              <progress value={progress} max="100" />
+              <p className="info-description">Your password should contain at least 8 characters</p>
+            </>
+          )}
+
+          <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
+            Set Password
+          </Button>
+
+          {this.state.done && <Badge type="success">Successfully set new password</Badge>}
+        </form>
+      </>
+    );
+  }
+}
+
+PasswordSettings.propTypes = {
+  user: PropTypes.object.isRequired,
+};
+
+const OverlayAccountSettings = () => (
+  <PopoverContainer>
+    {({ visible, setVisible }) => (
+      <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
+        <summary>{this.props.children}</summary>
+        <dialog className="overlay account-settings-overlay">
+          <section className="pop-over-info overlay-title">
+            Account Settings <Emoji name="key" />
+          </section>
+          <section className="pop-over-actions pop-over-main">
+            {/*
                   <div className="nav-selection">
                     <Button active>Set Password</Button>
                   </div>
                 */}
-                <div className="nav-content">
-                  <Heading tagName="h2">Set Password</Heading>
-                  <form onSubmit={this.handleSubmit}>
-                    <TextInput 
-                      type="password" 
-                      labelText="password" 
-                      placeholder="new password" 
-                      onChange={this.onChangePW}
-                      error={this.state.passwordErrorMsg}
-                    />
-
-                    <TextInput
-                      type="password"
-                      labelText="confirm password"
-                      placeholder="confirm password"
-                      onChange={this.onChangePWConfirm}
-                      error={this.state.passwordConfirmErrorMsg}
-                    />
-
-                    {this.state.password.length < pwMinCharCount && (
-                      <>
-                        <progress value={progress} max="100" />
-                        <p className="info-description">Your password should contain at least 8 characters</p>
-                      </>
-                    )}
-
-                    <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
-                      Set Password
-                    </Button>
-
-                    {this.state.done && <Badge type="success">Successfully set new password</Badge>}
-                  </form>
-                </div>
-              </section>
-              <section className="pop-over-info">
-                <Text>
-                  Email notifications are sent to <b>{this.props.user.email}</b>
-                </Text>
-              </section>
-            </dialog>
-          </details>
-        )}
-      </PopoverContainer>
-    );
-  }
-}
+            <div className="nav-content">
+              <PasswordSettings user={this.props.user}/>
+            </div>
+          </section>
+          <section className="pop-over-info">
+            <Text>
+              Email notifications are sent to <b>{this.props.user.email}</b>
+            </Text>
+          </section>
+        </dialog>
+      </details>
+    )}
+  </PopoverContainer>
+);
 
 OverlayAccountSettings.propTypes = {
   children: PropTypes.node.isRequired,
