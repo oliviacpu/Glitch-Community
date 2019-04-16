@@ -73,7 +73,7 @@ class ForgotPasswordHandler extends React.Component {
     this.debouncedValidate(email);
   }
 
-  async onSubmit(e) {
+  async onSubmit() {
     this.setState({ done: true });
     this.setState({ error: false });
 
@@ -336,7 +336,8 @@ const TermsAndPrivacySection = () => (
 
 class LoginSection extends React.Component {
   async handleSubmit(event) {
-    // TODO try logging the user in...
+    event.preventDefault();
+    // TODO actually log the user in...
   }
 
   render() {

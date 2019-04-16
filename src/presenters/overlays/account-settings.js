@@ -64,6 +64,10 @@ class PasswordSettings extends React.Component {
     });
   }
 
+  setPassword() {
+    this.setState({ done: true });
+  }
+
   checkWeakPW() {
     const passwordIsWeak = weakPWs.includes(this.state.password);
     this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
@@ -78,11 +82,7 @@ class PasswordSettings extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    //TODO actually set the password & handle errors if the user has incorrectly entered their current password
-  }
-
-  setPassword() {
-    this.setState({ done: true });
+    // TODO actually set the password & handle errors if the user has incorrectly entered their current password
   }
 
   render() {
@@ -93,16 +93,10 @@ class PasswordSettings extends React.Component {
 
     return (
       <>
-        <Heading tagName="h2">{ userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
-          { userHasPassword &&
-              <TextInput 
-                type="password"
-                labelText="current password"
-                placeholder="current password"
-                />
-            }
-          
+          {userHasPassword && <TextInput type="password" labelText="current password" placeholder="current password" />}
+
           <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
 
           <TextInput
@@ -135,7 +129,7 @@ PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const OverlayAccountSettings = ({children, user, ...props}) => (
+const OverlayAccountSettings = ({ children, user }) => (
   <PopoverContainer>
     {({ visible, setVisible }) => (
       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
@@ -151,7 +145,7 @@ const OverlayAccountSettings = ({children, user, ...props}) => (
                   </div>
                 */}
             <div className="nav-content">
-              <PasswordSettings user={user}/>
+              <PasswordSettings user={user} />
             </div>
           </section>
           <section className="pop-over-info">
