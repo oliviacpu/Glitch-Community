@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
 import Text from 'Components/text/text';
-// import ProjectItem from 'Components/project/project-item';
+import ProjectItem from 'Components/project/project-item';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
@@ -37,15 +37,16 @@ function syncPageToUrl(collection, url) {
   history.replaceState(null, null, getLink({ ...collection, url }));
 }
 
-const ProjectsUL = ({ projects, collection, ...props }) => (
+const ProjectsUL = ({ projects, collection, updateNote, hideNote, isAuthorized, ...props }) => (
   <ul className="projects-container">
     {projects.map((project) => (
       <li key={project.id}>
         <Note
           collection={collection}
           project={project}
-          update={props.projectOptions.updateOrAddNote ? (note) => props.projectOptions.updateOrAddNote({ note, projectId: project.id }) : null}
-          hideNote={props.hideNote}
+          updateNote={updateNote}
+          hideNote={hideNote}
+          isAuthorized={isAuthorized}
         />
         <ProjectItem project={project} {...props} />
       </li>
@@ -179,12 +180,12 @@ const CollectionPageContents = ({
                     projects={projects}
                     collection={collection}
                     isAuthorized={currentUserIsAuthor}
+                    updateNote={updateNote}
+                    hideNote={hideNote}
                     projectOptions={{
                       removeProjectFromCollection,
                       addProjectToCollection,
                       displayNewNote,
-                      updateNote,
-                      hideNote,
                       featureProject,
                     }}
                   />
