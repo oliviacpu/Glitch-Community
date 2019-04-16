@@ -72,7 +72,6 @@ module.exports = function(external) {
       built = false;
     }
 
-    throw new Error('test error');
     res.render('index.ejs', {
       title,
       description,
