@@ -12,7 +12,37 @@ import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
-const badPWs = [];
+// top 25 worst passwords from Splashdata
+const weakPWs = [
+  '123456',
+  'password',
+  '123456789',
+  '12345678',
+  '12345',
+  '111111',
+  '1234567',
+  'sunshine',
+  'qwerty',
+  'iloveyou',
+  'princess',
+  'admin',
+  'welcome',
+  '666666',
+  'abc123',
+  'football',
+  '123123',
+  'monkey',
+  '654321',
+  '!@#$%^&*',
+  'charlie',
+  'aa123456',
+  'donald',
+  'password1',
+  'qwerty123',
+];
+
+const matchErrorMsg = 'Passwords do not match';
+const weakPWErrorMsg = 'Password is too common';
 
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
@@ -30,35 +60,41 @@ class OverlayAccountSettings extends React.Component {
   }
 
   onChangePW(password) {
+    // check if it's a bad password
     this.setState({ password });
     this.validatePasswordMatch();
   }
-  
-  onChangePWConfirm(passwordConfirm){
-    this.setState({ passwordConfirm});
+
+  onChangePWConfirm(passwordConfirm) {
+    this.setState({ passwordConfirm });
     this.validatePasswordMatch();
+  }
+  
+  checkWeakPassword(password){
+    if(weakPWs.includes(password)){
+      this.setState({ errorMsg: weakPWErrorMsg });
+    }
   }
 
   validatePasswordMatch() {
     const passwordsMatch = this.state.password === this.state.passwordConfirm;
-    this.setState({ errorMsg: passwordsMatch ? undefined : 'Passwords do not match' });
+    this.setState({ errorMsg: passwordsMatch ? undefined :  matchErrorMsg});
   }
-  
-  handleSubmit(evt){
+
+  handleSubmit(evt) {
     evt.preventDefault();
     //TODO actually set the password
-  }  
-  
-  setPassword(){
-    console.log('set passowrd');
+  }
+
+  setPassword() {
     this.setState({ done: true });
   }
 
   render() {
     const pwMinCharCount = 8;
     const progress = Math.max(Math.round((this.state.password.length / pwMinCharCount) * 100), 0);
-    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
-    
+    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;
+
     return (
       <PopoverContainer>
         {({ visible, setVisible }) => (
@@ -77,27 +113,28 @@ class OverlayAccountSettings extends React.Component {
                 <div className="nav-content">
                   <Heading tagName="h2">Set Password</Heading>
                   <form onSubmit={this.handleSubmit}>
-                    
                     <TextInput 
                       type="password" 
                       labelText="password" 
                       placeholder="new password" 
-                      onChange={this.onChangePw} />
-                    
+                      onChange={this.onChangePw}
+                      error={this.state.errorMsg === weakPWErrorMsg && this.state.errorMsg}
+                    />
+
                     <TextInput
                       type="password"
                       labelText="confirm password"
                       placeholder="confirm password"
                       onChange={this.onChangePwConfirm}
-                      error={this.state.errorMsg}
+                      error={this.state.errorMsg === matchErrorMsg && this.state.errorMsg}
                     />
 
-                    {this.state.password.length < pwMinCharCount && 
+                    {this.state.password.length < pwMinCharCount && (
                       <>
                         <progress value={progress} max="100" />
                         <p className="info-description">Your password should contain at least 8 characters</p>
                       </>
-                    }
+                    )}
 
                     <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
                       Set Password
