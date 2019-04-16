@@ -13,7 +13,7 @@ import TextInput from 'Components/inputs/text-input';
 import PopoverContainer from '../pop-overs/popover-container';
 
 /* for displaying password strength */
-const scoreWords = ['weak', 'weak', 'okay', 'good', 'strong'];
+const scoreWords = ['too weak', 'weak', 'okay', 'good', 'strong'];
 
 class OverlayAccountSettings extends React.Component {
   constructor(props) {
@@ -31,7 +31,6 @@ class OverlayAccountSettings extends React.Component {
 
   onPassChange(password) {
     const evaluation = zxcvbn(password);
-    console.log('evaluation', evaluation);
     this.setState({ password,
       score: evaluation.score
     });
@@ -55,7 +54,8 @@ class OverlayAccountSettings extends React.Component {
   render() {
     const {score} = this.state;
     const pwMinCharCount = 8;
-    var scoreProgress = Math.round((this.state.score / 4));
+    var scoreProgress = this.state.score;
+    console.log('scoreProgress ', scoreProgress);
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.errorMsg;    
     
@@ -88,7 +88,7 @@ class OverlayAccountSettings extends React.Component {
                       labelText="password" 
                       placeholder="password" 
                       onChange={this.onPassChange} />
-                    <progress value={scoreProgress} max="5" className={scoreWords[score]} />
+                    <progress value={scoreProgress} max="5" className={`score-${score}`} />
                     <span>{scoreWords[score]}</span>
                     
                     <TextInput

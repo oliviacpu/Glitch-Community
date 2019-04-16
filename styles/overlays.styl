@@ -132,7 +132,10 @@ dialog.overlay
         width: 100%
         height: 5px
         margin: 0.5rem 0
-        &.
+        &.score-0::-webkit-progress-value, &.score-1::-webkit-progress-value
+          background-color: #FFAABF
+        &.score-2:-webkit-progress-value, &.score-3:-webkit-progress-value, &.score-4:-webkit-progress-value
+          background-color: #54F8D6
         /**
         &::-webkit-progress-value
           background-color: notification
