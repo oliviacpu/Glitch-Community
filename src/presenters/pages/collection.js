@@ -262,12 +262,6 @@ async function loadCollection(api, ownerName, collectionName) {
       collection.projects = projectsWithUsers;
     }
 
-    // if (collection.featuredProjectId) {
-    //   const [[featuredProject], otherProjects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
-    //   collection.featuredProject = featuredProject;
-    //   collection.projects = otherProjects;
-    // }
-
     return collection;
   } catch (error) {
     if (error && error.response && error.response.status === 404) {
