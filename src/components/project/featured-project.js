@@ -8,29 +8,42 @@ import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-proje
 import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
-const TopLeft = ({ featuredProject, collection, updateNote, hideNote, isAuthorized }) => (
-  <Heading tagName="h2">
-    Featured Project
-    <Emoji name="clapper" />
-    {collection && (<Note
-      project={featuredProject}
-      collection={collection}
-      updateNote={updateNote}
-      hideNote={hideNote}
-      isAuthorized={isAuthorized}
-    />)}
-  </Heading>
+const TopLeft = () => (
+
 );
 
 const TopRight = (props) => {
   if (!props.isAuthorized) return null;
   return (
-    <div className={styles.unfeatureBtn}>
-      <FeaturedProjectOptionsPop {...props} />
-    </div>
+    
   );
 };
 
+
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
+  return (
+    <>
+      <Heading tagName="h2">
+        Featured Project
+        <Emoji name="clapper" />
+      </Heading>
+      {collection && (
+        <Note
+          project={featuredProject}
+          collection={collection}
+          updateNote={updateNote}
+          hideNote={hideNote}
+          isAuthorized={isAuthorized}
+        />
+      )}
+      {isAuthorized && (
+        <div className={styles.unfeatureBtn}>
+          <FeaturedProjectOptionsPop {...props} />
+        </div>
+      )}
+    </>
+  );
+}
 const FeaturedProject = ({
   addProjectToCollection,
   collection,
@@ -47,14 +60,11 @@ const FeaturedProject = ({
   return (
     <div ref={featuredProjectRef}>
       <ProjectEmbed
-        topLeft={<TopLeft
+        top{<Top
           featuredProject={featuredProject}
           collection={collection}
           hideNote={hideNote}
           updateNote={updateNote}
-          isAuthorized={isAuthorized}
-        />}
-        topRight={<TopRight
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
           displayNewNote={displayNewNote ? () => displayNewNote(featuredProject.id) : null}
