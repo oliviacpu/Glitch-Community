@@ -32,9 +32,7 @@ module.exports = function(app) {
       preserveHostHdr: false, // glitch routes based on this, so we have to reset it
       https: true,
       proxyReqPathResolver: (req) => {
-        const path = urlJoin('/', pathOnTarget, req.path);
-        console.log('Proxied:', urlJoin(routeWithLeadingSlash, req.path));
-        return path;
+        return urlJoin('/', pathOnTarget, req.path);
       },
     };
 
