@@ -8,35 +8,33 @@ import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-proje
 import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
-  
-  return (
-    <div className={styles.top}>
-      <div className={styles.header}>
-        <Heading tagName="h2">
-          Featured Project
-          <Emoji name="clapper" />
-        </Heading>
-        {collection && (featuredProject.note || featuredProject.isAddingANewNote) && (
-          <div className={styles.note}>
-            <Note
-              project={featuredProject}
-              collection={collection}
-              updateNote={updateNote}
-              hideNote={hideNote}
-              isAuthorized={isAuthorized}
-            />
-          </div>
-        )}
-      </div>
-      {isAuthorized && (
-        <div className={styles.unfeatureBtn}>
-          <FeaturedProjectOptionsPop {...props} />
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => (
+  <div className={styles.top}>
+    <div className={styles.left}>
+      <Heading tagName="h2">
+        Featured Project
+        <Emoji name="clapper" />
+      </Heading>
+      {collection && (
+        <div className={styles.note}>
+          <Note
+            project={featuredProject}
+            collection={collection}
+            updateNote={updateNote}
+            hideNote={hideNote}
+            isAuthorized={isAuthorized}
+          />
         </div>
       )}
     </div>
-  );
-}
+    {isAuthorized && (
+      <div className={styles.unfeatureBtn}>
+        <FeaturedProjectOptionsPop {...props} />
+      </div>
+    )}
+  </div>
+);
+
 const FeaturedProject = ({
   addProjectToCollection,
   collection,

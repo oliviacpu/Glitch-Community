@@ -68,7 +68,7 @@ ProjectEmbed.propTypes = {
 
 ProjectEmbed.defaultProps = {
   addProjectToCollection: null,
-  top: null
+  top: null,
 };
 
 export default ProjectEmbed;
