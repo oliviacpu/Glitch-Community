@@ -23,7 +23,7 @@ const ProjectItem = ({ project, projectOptions }) => (
   <div className={styles.container}>
     <header className={styles.header}>
       <div className={styles.userListContainer}>
-        <UsersList avatarsOnly layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
+        <UsersList layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
       </div>
       <div className={styles.projectOptionsContainer}>
         <ProjectOptionsPop project={project} projectOptions={projectOptions} />
