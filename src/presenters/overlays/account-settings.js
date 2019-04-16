@@ -12,31 +12,18 @@ import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
-// top 25 worst passwords from Splashdata
+// top worst passwords from Splashdata - edited to only include tyhose with at least 8-character
 const weakPWs = [
-  '123456',
   'password',
   '123456789',
   '12345678',
-  '12345',
-  '111111',
-  '1234567',
+  '11111111',
   'sunshine',
-  'qwerty',
   'iloveyou',
   'princess',
-  'admin',
-  'welcome',
-  '666666',
-  'abc123',
   'football',
-  '123123',
-  'monkey',
-  '654321',
   '!@#$%^&*',
-  'charlie',
   'aa123456',
-  'donald',
   'password1',
   'qwerty123',
 ];
@@ -55,6 +42,7 @@ class OverlayAccountSettings extends React.Component {
     };
     this.onChangePW = this.onChangePW.bind(this);
     this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
+    this.checkWeakPassword = this.checkWeakPassword.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
@@ -62,7 +50,10 @@ class OverlayAccountSettings extends React.Component {
   onChangePW(password) {
     // check if it's a bad password
     this.setState({ password });
-    this.validatePasswordMatch();
+    this.checkWeakPassword();
+    if(this.state.passwordConfirm){
+      this.validatePasswordMatch();
+    }
   }
 
   onChangePWConfirm(passwordConfirm) {
@@ -71,6 +62,7 @@ class OverlayAccountSettings extends React.Component {
   }
   
   checkWeakPassword(password){
+    
     if(weakPWs.includes(password)){
       this.setState({ errorMsg: weakPWErrorMsg });
     }
@@ -78,7 +70,9 @@ class OverlayAccountSettings extends React.Component {
 
   validatePasswordMatch() {
     const passwordsMatch = this.state.password === this.state.passwordConfirm;
-    this.setState({ errorMsg: passwordsMatch ? undefined :  matchErrorMsg});
+    if(this.state.passwordConfirm){
+      this.setState({ errorMsg: passwordsMatch ? undefined :  matchErrorMsg});
+    }
   }
 
   handleSubmit(evt) {
@@ -117,7 +111,7 @@ class OverlayAccountSettings extends React.Component {
                       type="password" 
                       labelText="password" 
                       placeholder="new password" 
-                      onChange={this.onChangePw}
+                      onChange={this.onChangePW}
                       error={this.state.errorMsg === weakPWErrorMsg && this.state.errorMsg}
                     />
 
