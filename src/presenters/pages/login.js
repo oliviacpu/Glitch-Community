@@ -29,20 +29,32 @@ function notifyParent(message = {}) {
   window.parent.postMessage(message, APP_URL);
 }
 
+const RedirectToDestination = () => {
+  const [destination, setDestination] = useLocalStorage('destinationAfterAuth', null);
+
+  React.useEffect(() => {
+    setDestination(undefined);
+  }, []);
+
+  if (destination && destination.expires > new Date().toISOString()) {
+    return <Redirect to={destination.to} />;
+  }
+
+  return <Redirect to="/" />;
+};
+
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       done: false,
-      redirect: { pathname: '/' },
       error: false,
       errorMessage: null,
     };
   }
 
   async componentDidMount() {
-    const { api, provider, url, destination } = this.props;
-    this.props.setDestination(undefined);
+    const { api, provider, url } = this.props;
 
     try {
       const { data } = await api.post(url);
@@ -52,10 +64,6 @@ class LoginPage extends React.Component {
 
       console.log('LOGGED IN', data.id);
       this.props.setUser(data);
-
-      if (destination && destination.expires > new Date().toISOString()) {
-        this.setState({ redirect: destination.to });
-      }
 
       this.setState({ done: true });
       analytics.track('Signed In', { provider });
@@ -79,7 +87,7 @@ class LoginPage extends React.Component {
 
   render() {
     if (this.state.done) {
-      return <Redirect to={this.state.redirect} />;
+      return <RedirectToDestination />;
     }
     if (this.state.error) {
       const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
@@ -96,21 +104,12 @@ LoginPage.propTypes = {
   url: PropTypes.string.isRequired,
   provider: PropTypes.string.isRequired,
   setUser: PropTypes.func.isRequired,
-  destination: PropTypes.shape({
-    expires: PropTypes.string.isRequired,
-    to: PropTypes.object.isRequired,
-  }),
-};
-
-LoginPage.defaultProps = {
-  destination: null,
 };
 
 const LoginPageContainer = (props) => {
   const api = useAPI();
   const { login } = useCurrentUser();
-  const [destination, setDestination] = useLocalStorage('destinationAfterAuth', null);
-  return <LoginPage setUser={login} destination={destination} setDestination={setDestination} api={api} {...props} />;
+  return <LoginPage setUser={login} api={api} {...props} />;
 };
 
 export const FacebookLoginPage = ({ code, ...props }) => {
@@ -128,6 +127,15 @@ export const GoogleLoginPage = ({ code, ...props }) => {
   const callbackUrl = `${APP_URL}/login/google`;
   const url = `/auth/google/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
   return <LoginPageContainer {...props} provider="Google" url={url} />;
+};
+
+export const SlackLoginPage = ({ code, error, ...props }) => {
+  if (error === 'access_denied') {
+    return <RedirectToDestination />;
+  }
+  const callbackUrl = `${APP_URL}/login/slack`;
+  const url = `/auth/slack/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
+  return <LoginPageContainer {...props} provider="Slack" url={url} />;
 };
 
 export const EmailTokenLoginPage = ({ token, ...props }) => {

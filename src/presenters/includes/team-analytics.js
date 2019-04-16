@@ -5,7 +5,9 @@ import _ from 'lodash';
 import sampleAnalytics, { sampleAnalyticsTime } from 'Curated/sample-analytics';
 
 import Text from 'Components/text/text';
+import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Loader from 'Components/loaders/loader';
+
 import TeamAnalyticsTimePop from '../pop-overs/team-analytics-time-pop';
 import TeamAnalyticsProjectPop from '../pop-overs/team-analytics-project-pop';
 
@@ -58,6 +60,7 @@ class TeamAnalytics extends React.Component {
     super(props);
     const currentTimeFrame = 'Last 2 Weeks';
     this.state = {
+      activeFilter: 'views',
       currentTimeFrame,
       fromDate: dateFromTime(currentTimeFrame),
       currentProjectDomain: '', // empty string means all projects
@@ -94,6 +97,10 @@ class TeamAnalytics extends React.Component {
         currentProjectDomain: '',
       });
     }
+  }
+
+  setFilter(filter) {
+    this.setState({ activeFilter: filter });
   }
 
   updateTotals() {
@@ -156,6 +163,10 @@ class TeamAnalytics extends React.Component {
     if (!this.props.currentUserIsOnTeam) {
       return null;
     }
+
+    // segmented button filters
+    const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
+
     return (
       <section className="team-analytics">
         <h2>
@@ -167,12 +178,15 @@ class TeamAnalytics extends React.Component {
 
         {!!this.props.projects.length && (
           <section className="controls">
-            <TeamAnalyticsProjectPop
-              updateProjectDomain={this.updateProjectDomain.bind(this)}
-              currentProjectDomain={this.state.currentProjectDomain}
-              projects={this.props.projects}
-            />
-            <TeamAnalyticsTimePop updateTimeFrame={this.updateTimeFrame.bind(this)} currentTimeFrame={this.state.currentTimeFrame} />
+            <SegmentedButtons value={this.state.activeFilter} buttons={buttons} onChange={this.setFilter.bind(this)} />
+            <div className="options">
+              <TeamAnalyticsProjectPop
+                updateProjectDomain={this.updateProjectDomain.bind(this)}
+                currentProjectDomain={this.state.currentProjectDomain}
+                projects={this.props.projects}
+              />
+              <TeamAnalyticsTimePop updateTimeFrame={this.updateTimeFrame.bind(this)} currentTimeFrame={this.state.currentTimeFrame} />
+            </div>
           </section>
         )}
 
@@ -180,7 +194,13 @@ class TeamAnalytics extends React.Component {
           {this.state.isGettingData ? (
             <Loader />
           ) : (
-            <TeamAnalyticsSummary totalAppViews={this.state.totalAppViews} totalRemixes={this.state.totalRemixes} />
+            <TeamAnalyticsSummary
+              currentProjectDomain={this.state.currentProjectDomain}
+              currentTimeFrame={this.state.currentTimeFrame}
+              activeFilter={this.state.activeFilter}
+              totalAppViews={this.state.totalAppViews}
+              totalRemixes={this.state.totalRemixes}
+            />
           )}
         </section>
 
@@ -189,6 +209,7 @@ class TeamAnalytics extends React.Component {
           {(this.state.isGettingData || this.state.isGettingC3) && <Loader />}
           {!this.state.isGettingC3 && (
             <TeamAnalyticsActivity
+              activeFilter={this.state.activeFilter}
               c3={this.state.c3}
               analytics={this.state.analytics}
               isGettingData={this.state.isGettingData}
@@ -201,6 +222,7 @@ class TeamAnalytics extends React.Component {
           <h3>Referrers</h3>
           {(this.state.isGettingData && <Loader />) || (
             <TeamAnalyticsReferrers
+              activeFilter={this.state.activeFilter}
               analytics={this.state.analytics}
               totalRemixes={this.state.totalRemixes}
               totalAppViews={this.state.totalAppViews}
@@ -211,7 +233,11 @@ class TeamAnalytics extends React.Component {
         {this.state.currentProjectDomain && (
           <section className="project-details">
             <h3>Project Details</h3>
-            <TeamAnalyticsProjectDetails currentProjectDomain={this.state.currentProjectDomain} id={this.props.id} />
+            <TeamAnalyticsProjectDetails
+              currentProjectDomain={this.state.currentProjectDomain}
+              id={this.props.id}
+              activeFilter={this.state.activeFilter}
+            />
           </section>
         )}
 

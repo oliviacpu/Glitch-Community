@@ -77,5 +77,8 @@ module.exports = function(app) {
 
   proxyGlitch('teams', 'teams.glitch.me');
 
+  // proxy projects, users, teams, collections sitemaps
+  proxyGlitch('sitemaps', 'sitemaps.glitch.me');
+
   return routes;
 };

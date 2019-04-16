@@ -8,7 +8,7 @@ import rootTeams from '../../curated/teams';
 import { useCurrentUser } from '../../state/current-user';
 
 import IndexPage from './index';
-import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, EmailTokenLoginPage } from './login';
+import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
 import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
 import ProjectPage from './project';
@@ -82,6 +82,11 @@ const Router = () => (
         path="/login/google"
         exact
         render={({ location }) => <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />}
+      />
+      <Route
+        path="/login/slack"
+        exact
+        render={({ location }) => <SlackLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} hash={parse(location.search, 'hash')} />}
       />
       <Route
         path="/login/email"

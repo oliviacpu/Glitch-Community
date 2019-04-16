@@ -1,13 +1,13 @@
 const body =
-  '<p>Join virtual reality expert Andrés Cuervo for a week of experiments that will both teach and inspire you to create your own WebVR experiences.</p>';
+  '<p>A starter app and tutorial that guides you through making your own web map using Leaflet.</p>';
 
 // make sure image urls use https
 export default {
-  image: 'https://community.glitch.me/culture/content/images/2019/04/Glitch_Illo_TechArt-VR-Headline-v1--1-.png',
+  image: 'https://glitch.com/culture/content/images/2019/03/leaflet.png',
   mask: 'mask-4',
-  title: 'Master WebVR This Week',
-  appDomain: 'aframe-bvh-mocap',
-  blogUrl: '/master-webvr-with-a-week-of-experiments/',
+  title: 'Make Web Maps with Leaflet',
+  appDomain: 'starter-leaflet',
+  blogUrl: '/make-a-web-map-with-leaflet/',
   body,
-  color: '#f5f5f5',
+  color: '#f5f5f5'
 };

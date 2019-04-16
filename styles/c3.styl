@@ -1,3 +1,6 @@
+analytics-app-views-color = #9588ea
+analytics-remix-color = #23d5e7
+
 /*-- Chart --*/
 .c3
   margin: 0
@@ -58,6 +61,7 @@
 .c3-circle._expanded_
   stroke-width: 1px
   stroke: white
+  r: 3.5
 
 .c3-selected-circle
   fill: white
@@ -111,6 +115,8 @@
 /*-- Tooltip --*/
 .c3-tooltip-container
   z-index: 10
+  border: 1px solid secondary
+  border-radius: 3px
 
 .c3-tooltip
   border-collapse: collapse
@@ -120,32 +126,43 @@
   -webkit-box-shadow: 7px 7px 12px -9px #777777
   -moz-box-shadow: 7px 7px 12px -9px #777777
   box-shadow: 7px 7px 12px -9px #777777
-  opacity: 0.9
+  opacity: 0.95
 
 .c3-tooltip tr
-  border: 1px solid #CCC
+  &:first
+    border-top-right-radius: 3px
+    border-top-left-radius: 3px
+  &:last
+    border-bottom-right-radius: 3px
+    border-bottom-left-radius: 3px
+  
 
 .c3-tooltip th
-  background-color: #aaa
+  background: secondary-background-active
+  border-bottom: 1px solid secondary
+  color: primary
   font-size: 14px
-  padding: 2px 5px
+  padding: 5px
+
   text-align: left
-  color: #FFF
 
 .c3-tooltip td
   font-size: 13px
-  padding: 3px 6px
+  padding: 5px
   background-color: #fff
-  border-left: 1px dotted #999
 
 .c3-tooltip td > span
   display: inline-block
   width: 10px
   height: 10px
   margin-right: 6px
+  
+.c3-tooltip td.name
+  display: none
 
 .c3-tooltip td.value
-  text-align: right
+  text-align: left
+  background: none
 
 /*-- Area --*/
 .c3-area
@@ -180,3 +197,22 @@
 
 .c3-chart-arc.c3-target.c3-focused g path
   opacity: 1
+
+/*-- Custom Styling for Glitch Analytics --*/
+.c3-line-Total-App-Views{
+  stroke: analytics-app-views-color !important
+  stroke-width: 2px
+}
+
+.c3-circles-Total-App-Views circle{
+  fill: analytics-app-views-color !important
+}
+
+.c3-line-Remixes{
+  stroke: analytics-remix-color !important
+  stroke-width: 2px
+}
+
+.c3-circles-Remixes circle{
+  fill: analytics-remix-color !important
+}

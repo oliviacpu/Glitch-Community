@@ -8,18 +8,10 @@
   z-index: 1
   
 .userListContainer
-  max-width: calc(100% - 30px)
-  &:after
-    content: ""
-    pointer-events: none
-    position: absolute
-    top: 0
-    right: 28px
-    width: 12rem
-    height: 100%
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))
-    z-index: 1
-  
+  max-width: 100%
+  &.spaceForOptions
+    max-width: calc(100% - 30px)
+
 .projectOptionsContainer
   position: absolute
   top: 0
@@ -38,7 +30,7 @@
   color: inherit
   background-color: #e5e5e5
   border-color: #e5e5e5
-  border-radius: 0.5rem
+  border-radius: 5px
   padding: 1rem 1rem 0.5rem
   min-height: 150px
   text-decoration: none
@@ -70,3 +62,4 @@
   width: 42px
   height: 42px
   border-radius: 5px
+    

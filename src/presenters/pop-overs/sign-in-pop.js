@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
 import debounce from 'lodash/debounce';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import { Link } from '../includes/link';
 import useLocalStorage from '../../state/local-storage';
@@ -12,6 +14,7 @@ import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
+import useDevToggle from '../includes/dev-toggles';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 
@@ -38,10 +41,17 @@ function googleAuthLink() {
   return `${API_URL}/auth/google?${params}`;
 }
 
-const SignInPopButton = (props) => (
-  <Link className="button button-small button-link has-emoji" to={props.href} onClick={props.onClick}>
-    Sign in with {props.company} <span className={`emoji ${props.emoji}`} />
-  </Link>
+function slackAuthLink() {
+  const params = new URLSearchParams();
+  const callbackURL = `${APP_URL}/login/slack`;
+  params.append('callbackURL', callbackURL);
+  return `${API_URL}/auth/slack?${params}`;
+}
+
+const SignInPopButton = ({ company, emoji, href, onClick }) => (
+  <Button href={href} onClick={onClick} size="small">
+    Sign in with {company} <Emoji name={emoji} />
+  </Button>
 );
 
 class EmailHandler extends React.Component {
@@ -267,6 +277,7 @@ const TermsAndPrivacySection = () => (
 
 const SignInPopWithoutRouter = (props) => {
   const { header, prompt, api, location, hash } = props;
+  const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
     setDestination({
@@ -292,6 +303,7 @@ const SignInPopWithoutRouter = (props) => {
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
                 <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
                 <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} /> }
                 <EmailSignInButton
                   onClick={() => {
                     onClick();

@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import randomColor from 'randomcolor';
-import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from '../../models/user';
-import { ThanksShort } from './thanks';
+import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import Thanks from 'Components/blocks/thanks';
+
 import { WhitelistedDomainIcon } from './team-elements';
 
 const UserResultItem = ({ user, action }) => {
@@ -22,7 +23,7 @@ const UserResultItem = ({ user, action }) => {
           {name}
         </div>
         {!!user.name && <div className="result-description">@{login}</div>}
-        {thanksCount > 0 && <ThanksShort count={thanksCount} />}
+        <Thanks short count={thanksCount} />
       </div>
     </button>
   );

@@ -5,11 +5,11 @@ import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
 import Text from 'Components/text/text';
-import { ProjectsUL } from 'Components/containers/projects-list';
+// import ProjectItem from 'Components/project/project-item';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-
+import { ProfileItem } from 'Components/profile/profile-list';
 import Layout from '../layout';
 import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
@@ -24,19 +24,34 @@ import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-import { TeamTile } from '../teams-list';
-import { UserTile } from '../users-list';
 
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import MoreCollectionsContainer from '../more-collections';
+import Note from '../note';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function syncPageToUrl(collection, url) {
   history.replaceState(null, null, getLink({ ...collection, url }));
 }
+
+const ProjectsUL = ({ projects, collection, ...props }) => (
+  <ul className="projects-container">
+    {projects.map((project) => (
+      <li key={project.id}>
+        <Note
+          collection={collection}
+          project={project}
+          update={props.projectOptions.updateOrAddNote ? (note) => props.projectOptions.updateOrAddNote({ note, projectId: project.id }) : null}
+          hideNote={props.hideNote}
+        />
+        <ProjectItem project={project} {...props} />
+      </li>
+    ))}
+  </ul>
+);
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -111,8 +126,9 @@ const CollectionPageContents = ({
               update={(data) => updateNameAndUrl(data).then(() => syncPageToUrl(collection, data.url))}
             />
 
-            {collection.team && <TeamTile team={collection.team} />}
-            {collection.user && <UserTile user={collection.user} />}
+            <div className="collection-owner">
+              <ProfileItem hasLink team={collection.team} user={collection.user} />
+            </div>
 
             <div className="collection-description">
               <AuthDescription

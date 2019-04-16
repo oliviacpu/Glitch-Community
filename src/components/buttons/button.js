@@ -31,7 +31,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
 
   if (href) {
     return (
-      <Link to={href} className={className}>
+      <Link to={href} onClick={onClick} className={className}>
         {children}
       </Link>
     );

@@ -6,6 +6,7 @@ import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
+import Thanks from 'Components/blocks/thanks';
 
 import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
 
@@ -14,7 +15,6 @@ import { useCurrentUser } from '../../state/current-user';
 import { AuthDescription } from '../includes/description-field';
 import EditableField from '../includes/editable-field';
 import UserEditor from '../user-editor';
-import { Thanks } from '../includes/thanks';
 
 import DeletedProjects from '../deleted-projects';
 import EntityPageProjects from '../entity-page-projects';
@@ -119,7 +119,7 @@ const UserPage = ({
             {...{ isAuthorized, updateName }}
             updateLogin={(login) => updateLogin(login).then(() => syncPageToLogin(login))}
           />
-          {!!user.thanksCount && <Thanks count={user.thanksCount} />}
+          <Thanks count={user.thanksCount} />
           <AuthDescription
             authorized={isAuthorized && !!user.login}
             description={user.description}
