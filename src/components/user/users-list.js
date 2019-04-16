@@ -42,7 +42,6 @@ StaticUsersList.propTypes = {
 StaticUsersList.defaultProps = {
   users: [],
   teams: [],
-  users: [],
 };
 
 // UserTile
