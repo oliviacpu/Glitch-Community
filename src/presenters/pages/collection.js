@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { Redirect } from 'react-router-dom';
-
 import Helmet from 'react-helmet';
+import { Redirect } from 'react-router-dom';
+import { partition } from 'lodash';
+
 import Text from 'Components/text/text';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import Image from 'Components/images/image';
@@ -88,7 +88,9 @@ const CollectionPageContents = ({
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
   const userIsLoggedIn = currentUser && currentUser.login;
-
+  if (collection.featuredProjectId) {
+    const [[featuredProject], otherProjects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+  }
   return (
     <>
       <Helmet title={collection.name} />
@@ -240,10 +242,11 @@ async function loadCollection(api, ownerName, collectionName) {
       collection.projects = projectsWithUsers;
     }
 
-    if (collection.featuredProjectId) {
-      collection.featuredProject = collection.projects.find(({ id }) => id === collection.featuredProjectId);
-      collection.projects = collection.projects.filter(({ id }) => id !== collection.featuredProjectId);
-    }
+    // if (collection.featuredProjectId) {
+    //   const [[featuredProject], otherProjects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+    //   collection.featuredProject = featuredProject;
+    //   collection.projects = otherProjects;
+    // }
 
     return collection;
   } catch (error) {
