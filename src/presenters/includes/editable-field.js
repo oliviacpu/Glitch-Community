@@ -106,7 +106,7 @@ PureEditableTextArea.defaultProps = {
   inputType: 'text',
 };
 
-export const PureEditableField = (props) => (
+const PureEditableField = (props) => (
   <PureEditableFieldHolder {...props}>{(inputProps, inputRef) => <input {...inputProps} ref={inputRef} />}</PureEditableFieldHolder>
 );
 
