@@ -28,7 +28,7 @@ const SmallCollectionItem = ({ collection }) => (
     <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
     </div>
-    <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
+    <CollectionLink collection={collection} style={collectionColorStyles(collection)}>
       <div className={styles.smallNameDescriptionArea}>
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
@@ -44,11 +44,10 @@ const SmallCollectionItem = ({ collection }) => (
         <div className={styles.description}>
           <Markdown>{collection.description || ' '}</Markdown>
         </div>
-      </div>
-      <div className={styles.smallProjectCount}>
-        <Pluralize count={collection.projects.length} singular="project" /> →
-      </div>
+      </div>      
     </CollectionLink>
+    <ProjectsPreview collection={collection} />
+    <CollectionLink collection={collection}>{collection.projects.length}<Pluralize count={collection.projects.length} singular="project" /> →</CollectionLink>
   </div>
 );
 

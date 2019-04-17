@@ -265,15 +265,13 @@ storiesOf('ProjectItem', module).add(
 storiesOf('SmallProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
-    <div style={{ margin: '2em', width: '25%' }}>
-      <SmallProjectItem
-        project={{
-          id: 'foo',
-          domain: 'judicious-pruner',
-          private: false,
-        }}
-      />
-    </div>
+    <SmallProjectItem
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: false,
+      }}
+    />
   )),
 );
 
