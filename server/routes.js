@@ -161,7 +161,7 @@ module.exports = function(external) {
 
   app.get('/auth/:domain', async (req, res) => {
     const { domain } = req.params;
-
+    console.log("Olivia", process.env.RUNNING_ON)
     res.render('api-auth.ejs', {
       domain: domain,
       CONSTANTS: constants,
