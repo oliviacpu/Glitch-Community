@@ -160,14 +160,17 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-export const ProjectsUL = ({ showProjectDescriptions, collection, ...props }) => (
+export const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, ...props }) => (
   <ul className="projects-container">
-    {props.projects.map((project) => (
+    {projects.map((project) => (
       <li key={project.id}>
-        <Note
-          collection={collection}
-          project={project}
-        />
+        {collection && (
+          <Note
+            project={project}
+            collection={collection}
+            noteOptions={noteOptions}
+          />
+        )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
       </li>
     ))}
@@ -175,12 +178,13 @@ export const ProjectsUL = ({ showProjectDescriptions, collection, ...props }) =>
 );
 
 ProjectsUL.propTypes = {
-  collection: PropTypes.object.isRequired,
   projects: PropTypes.array.isRequired,
+  collection: PropTypes.object,
   showProjectDescriptions: PropTypes.bool,
 };
 
 ProjectsUL.defaultProps = {
+  collection: null,
   showProjectDescriptions: true,
 };
 
