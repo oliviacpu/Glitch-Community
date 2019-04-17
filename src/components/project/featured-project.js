@@ -69,10 +69,10 @@ const FeaturedProjectWithRef = React.forwardRef((props, featuredProjectRef) => {
   );
 });
 
-class FeaturedProject extends React.component {
+class FeaturedProject extends React.Component {
   render() {
     const featuredProjectRef = React.createRef();
-    return <FeaturedProjectWithRef ref={featuredProjectRef} {...this.props}
+    return <FeaturedProjectWithRef ref={featuredProjectRef} {...this.props} />
   }
 }
 
