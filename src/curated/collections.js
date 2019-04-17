@@ -4,7 +4,7 @@
 export const featuredCollections = [
   { owner: 'glitch', name: 'sketch-with-p-5' },
   { owner: 'glitch', name: 'code-with-comics' },
-  { owner: 'glitch', name: 'draw-with-music' }
+  { owner: 'glitch', name: 'draw-with-music' },
 ];
 
 // More ideas is populated from this team
