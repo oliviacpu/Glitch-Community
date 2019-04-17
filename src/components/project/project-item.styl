@@ -2,6 +2,27 @@
 
 .container
   font-size: 14px
+
+.projectItemSmall
+  .linkBodySmall
+    display: block
+    position: relative
+    background-color: section-line
+    border-radius: 5px
+    padding: 7px 15px
+    display: flex
+    -webkit-box-orient: horizontal
+    -webkit-box-direction: normal
+    flex-direction: row
+    &.private
+      background-color: private
+    &:hover
+      text-decoration: underline
+  .avatarWrap
+    width: 
+  &:hover
+    .linkBodySmall
+      background-color: secondary-hover-on-color
   
 .header
   margin-top: 1rem
@@ -25,17 +46,13 @@
     position: relative
     top: auto
     right: auto
-
-.linkBodySmall
-  display: block
-  position: relative
   
 .linkBody
   display: block
   position: relative
   color: inherit
-  background-color: secondary-background
-  border-color: secondary-background
+  background-color: section-line
+  border-color: section-line
   border-radius: 5px
   padding: 1rem 1rem 0.5rem
   min-height: 150px
@@ -54,8 +71,8 @@
     border-bottom-color: inherit
     border-width: 7px
   &.private
-    background-color: #fcf3b0
-    border-color: #fcf3b0
+    background-color: private
+    border-color: private
 
 .projectHeader
   display: flex

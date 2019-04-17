@@ -16,14 +16,14 @@ const PrivateIcon = () => <span className="project-badge private-project-badge" 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
 const getLinkBodyStyles = (project) =>
-  classnames(styles.linkBody, {
+  classnames(styles.linkBodySmall, {
     [styles.private]: project.private,
   });
 
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const SmallProjectItem = ({ project, projectOptions }) => (
-  <div className={styles.container}>
+  <div className={styles.projectItemSmall}>
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
         <span className={styles.avatarWrap}>
