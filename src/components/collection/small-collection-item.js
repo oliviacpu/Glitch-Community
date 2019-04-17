@@ -44,10 +44,13 @@ const SmallCollectionItem = ({ collection }) => (
         <div className={styles.description}>
           <Markdown>{collection.description || ' '}</Markdown>
         </div>
-      </div>      
+      </div>
     </CollectionLink>
     <ProjectsPreview collection={collection} />
-    <CollectionLink collection={collection}>{collection.projects.length}<Pluralize count={collection.projects.length} singular="project" /> →</CollectionLink>
+    <CollectionLink collection={collection}>
+      {collection.projects.length}
+      <Pluralize count={collection.projects.length} singular="project" /> →
+    </CollectionLink>
   </div>
 );
 
