@@ -31,11 +31,8 @@ const ProjectItem = ({ project, projectOptions }) => (
           <ProfileAvatar project={project} />
         </span>
         <Text>
-          <span className={styles.projectDomain}>{project.domain}</span> {project.private && <PrivateIcon />}
+          <span className={styles.projectName}>{project.domain}</span> {project.private && <PrivateIcon />}
         </Text>
-      </div>
-      <div className={styles.description}>
-        <Markdown length={80}>{project.description || ' '}</Markdown>
       </div>
     </ProjectLink>
   </div>
@@ -43,19 +40,10 @@ const ProjectItem = ({ project, projectOptions }) => (
 
 ProjectItem.propTypes = {
   project: PropTypes.shape({
-    description: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     private: PropTypes.bool,
-    showAsGlitchTeam: PropTypes.bool.isRequired,
-    users: PropTypes.array,
-    teams: PropTypes.array,
   }).isRequired,
-  projectOptions: PropTypes.object,
-};
-
-ProjectItem.defaultProps = {
-  projectOptions: {},
 };
 
 export default ProjectItem;

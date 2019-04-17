@@ -14,6 +14,7 @@ import Markdown from 'Components/text/markdown';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
+import SmallProjectItem from 'Components/project/small-project-item';
 import SmallCollectionItem from 'Components/collection/small-collection-item';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
@@ -255,6 +256,21 @@ storiesOf('ProjectItem', module).add(
           showAsGlitchTeam: false,
           users: [users.modernserf],
           teams: [],
+        }}
+      />
+    </div>
+  )),
+);
+
+storiesOf('SmallProjectItem', module).add(
+  'base',
+  provideContext({ currentUser: {} }, () => (
+    <div style={{ margin: '2em', width: '25%' }}>
+      <SmallProjectItem
+        project={{
+          id: 'foo',
+          domain: 'judicious-pruner',
+          private: false,
         }}
       />
     </div>
