@@ -2,9 +2,9 @@
 
 // What collections to show in the expanded area on the homepage
 export const featuredCollections = [
-  { owner: 'glitch', name: 'sketch-with-p-5' },
-  { owner: 'glitch', name: 'code-with-comics' },
-  { owner: 'glitch', name: 'draw-with-music' }
+  { owner: 'glitch', name: 'glitch-this-week-april-17-2019' },
+  { owner: 'glitch', name: 'digital-deliciousness' },
+  { owner: 'glitch', name: 'apps-for-writers' },
 ];
 
 // More ideas is populated from this team
