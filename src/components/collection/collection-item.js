@@ -24,7 +24,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 );
 
 const CollectionItem = ({ collection }) => (
-  <div className={styles.collectionItem}>
+  <div className={styles.collectin}>
     <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
     </div>
@@ -63,12 +63,10 @@ CollectionItem.propTypes = {
     teamId: PropTypes.number,
   }).isRequired,
   collectionOptions: PropTypes.object,
-  showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
   collectionOptions: {},
-  showCurator: false,
 }
 
 export default CollectionItem;
