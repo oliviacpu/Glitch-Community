@@ -35,9 +35,7 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
   </div>
 );
 
-const ProjectEmbedWithRef = React.forwardRef((props, ref) => <ProjectEmbed ref={ref} {...props} />);
-
-                                             const FeaturedProject = ({
+const FeaturedProject = ({
   addProjectToCollection,
   collection,
   currentUser,
@@ -72,7 +70,6 @@ const ProjectEmbedWithRef = React.forwardRef((props, ref) => <ProjectEmbed ref={
     </div>
   );
 };
-
 
 
 FeaturedProject.propTypes = {
