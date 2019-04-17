@@ -63,6 +63,7 @@ Note.propTypes = {
 
 Note.defaultProps = {
   update: null,
+  hideNote: () => {},
 };
 
 export default Note;
