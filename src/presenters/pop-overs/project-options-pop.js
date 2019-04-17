@@ -78,7 +78,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
-  const showPinOrFeatureSection = (props.addPin || props.removePin || props.featureProject) && (!props.project.private);
+  const showPinOrFeatureSection = (props.addPin || props.removePin || (props.featureProject && !props.project.private));
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -90,7 +90,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     <dialog className="pop-over project-options-pop">
       { showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {!!props.featureProject && (
+          {!!props.featureProject && !props.project.private && (
             <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />
           )}
           {!!props.addPin && (

@@ -45,7 +45,9 @@ const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCol
   return (
     <section className={styles.projectEmbed}>
       {top}
-      <Embed domain={project.domain} />
+      <div className={styles.embedWrap}>
+        <Embed domain={project.domain} />
+      </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
           <BottomLeft />
