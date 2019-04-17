@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 
 import Helmet from 'react-helmet';
 import Text from 'Components/text/text';
-// import ProjectItem from 'Components/project/project-item';
 import Image from 'Components/images/image';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile/profile-list';
@@ -30,29 +29,12 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import MoreCollectionsContainer from '../more-collections';
-// import Note from '../note';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function syncPageToUrl(collection, url) {
   history.replaceState(null, null, getLink({ ...collection, url }));
 }
-
-// const ProjectsUL = ({ projects, collection, ...props }) => (
-//   <ul className="projects-container">
-//     {projects.map((project) => (
-//       <li key={project.id}>
-//         <Note
-//           collection={collection}
-//           project={project}
-//           update={props.projectOptions.updateNote ? (note) => props.projectOptions.updateNote({ note, projectId: project.id }) : null}
-//           hideNote={props.hideNote}
-//         />
-//         <ProjectItem project={project} {...props} />
-//       </li>
-//     ))}
-//   </ul>
-// );
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -160,10 +142,10 @@ const CollectionPageContents = ({
                     projects={collection.projects}
                     collection={collection}
                     noteOptions={{
-                      hideNote, 
+                      hideNote,
                       updateNote,
                       isAuthorized: true,
-                    }} 
+                    }}
                     projectOptions={{
                       removeProjectFromCollection,
                       addProjectToCollection,

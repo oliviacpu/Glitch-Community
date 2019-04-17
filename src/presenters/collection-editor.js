@@ -54,12 +54,12 @@ class CollectionEditor extends React.Component {
   }
 
   async updateNote({ note, projectId }) {
-    console.log("do we get here?", note, projectId)
     note = _.trim(note);
     this.setState(({ projects }) => ({
       projects: projects.map((project) => {
         if (project.id === projectId) {
           project.note = note;
+          project.isAddingANewNote = true;
         }
         return { ...project };
       }),

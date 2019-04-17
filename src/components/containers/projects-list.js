@@ -170,7 +170,7 @@ export const ProjectsUL = ({ showProjectDescriptions, collection, projects, note
             collection={collection}
             isAuthorized={noteOptions.isAuthorized}
             hideNote={noteOptions.hideNote}
-            updateNote={(note) => noteOptions.updateNote({ note, projectId: project.id })}
+            updateNote={noteOptions.updateNote}
           />
         )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
@@ -183,7 +183,7 @@ ProjectsUL.propTypes = {
   projects: PropTypes.array.isRequired,
   collection: PropTypes.object,
   showProjectDescriptions: PropTypes.bool,
-  noteOptions: PropTypes.object
+  noteOptions: PropTypes.object,
 };
 
 ProjectsUL.defaultProps = {
