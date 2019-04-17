@@ -64,10 +64,10 @@ const dateFormat = (currentTimeFrame) => {
   if (currentTimeFrame === 'Last 24 Hours') {
     return '%H:%M %p';
   }
-  return '%b-%d';
+  return '%b %d';
 };
 
-const renderChart = (c3, analytics, currentTimeFrame) => {
+const renderChart = (activeFilter, c3, analytics, currentTimeFrame) => {
   let columns = [];
   if (!_.isEmpty(analytics)) {
     columns = chartColumns(analytics, currentTimeFrame);
@@ -90,14 +90,41 @@ const renderChart = (c3, analytics, currentTimeFrame) => {
           format: dateFormat(currentTimeFrame),
         },
       },
+      y: {
+        min: 0,
+        padding: { bottom: 0 },
+      },
+    },
+    point: {
+      r: 3,
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      format: {
+        value: (value, ratio, id) => {
+          if (id === 'Total App Views') return `${value} views`;
+          if (id === 'Remixes') return `${value} remixes`;
+          return null;
+        },
+      },
     },
   });
+
+  if (activeFilter === 'views') {
+    chart.hide(['Remixes']);
+  } else if (activeFilter === 'remixes') {
+    chart.hide(['Total App Views']);
+  }
 };
 
 class TeamAnalyticsActivity extends React.Component {
   componentDidUpdate(prevProps) {
-    if (prevProps.isGettingData === true && this.props.isGettingData === false) {
-      renderChart(this.props.c3, this.props.analytics, this.props.currentTimeFrame);
+    const newFilter = prevProps.activeFilter !== this.props.activeFilter;
+    const stillGettingData = prevProps.isGettingData && !this.props.isGettingData;
+    if (newFilter || stillGettingData) {
+      renderChart(this.props.activeFilter, this.props.c3, this.props.analytics, this.props.currentTimeFrame);
     }
   }
 
@@ -107,6 +134,7 @@ class TeamAnalyticsActivity extends React.Component {
 }
 
 TeamAnalyticsActivity.propTypes = {
+  activeFilter: PropTypes.string.isRequired,
   c3: PropTypes.object.isRequired,
   analytics: PropTypes.object.isRequired,
   currentTimeFrame: PropTypes.string.isRequired,

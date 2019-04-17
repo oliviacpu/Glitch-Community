@@ -53,13 +53,16 @@ TeamAnalyticsTimePop.propTypes = {
   currentTimeFrame: PropTypes.string.isRequired,
 };
 
-const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => (
-  <PopoverWithButton buttonClass="button-small button-tertiary button-select" buttonText={<span>{currentTimeFrame}</span>}>
-    {({ togglePopover }) => (
-      <TeamAnalyticsTimePop updateTimeFrame={updateTimeFrame} currentTimeFrame={currentTimeFrame} togglePopover={togglePopover} />
-    )}
-  </PopoverWithButton>
-);
+const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => {
+  const dropdown = <div className="down-arrow" aria-label="options" />;
+  return (
+    <PopoverWithButton buttonClass="button-small button-tertiary button-select" buttonText={<>{currentTimeFrame} {dropdown}</>}>
+      {({ togglePopover }) => (
+        <TeamAnalyticsTimePop updateTimeFrame={updateTimeFrame} currentTimeFrame={currentTimeFrame} togglePopover={togglePopover} />
+      )}
+    </PopoverWithButton>
+  );
+};
 
 TeamAnalyticsTimePopButton.propTypes = {
   updateTimeFrame: PropTypes.func.isRequired,

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getLink as getCollectionLink } from '../../models/collection';
+import { getLink as getCollectionLink } from 'Models/collection';
+import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
-import { UserAvatar, TeamAvatar } from './avatar';
 import CollectionAvatar from './collection-avatar';
 
 const addProject = (addProjectToCollection, project, collection, collectionPath, notification, togglePopover) => {

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
 import CoverContainer from 'Components/containers/cover-container';
+import ProfileList from 'Components/profile/profile-list';
 
 import { useTrackedFunc } from '../segment-analytics';
-import TeamsList from '../teams-list';
 
 // Image Buttons
 
@@ -81,7 +81,7 @@ export class ProfileContainer extends React.PureComponent {
         </InfoContainer>
         {!!teams && !!teams.length && (
           <div className="teams-information">
-            <TeamsList teams={teams} />
+            <ProfileList layout="block" teams={teams} />
           </div>
         )}
       </CoverContainer>

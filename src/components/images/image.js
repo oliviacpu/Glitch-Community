@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
  * @param {number} height - Image height
  * @param {string} role - Image role (typically presentation)
  * @param {object | string} className - extra classes to be passed down to the component
+ * @param {string} backgroundColor - If we want to fill the space behind the image with a color
  * @param {boolean} backgroundImage - If we want the image to be rendered as a background image
  */
 
@@ -20,7 +21,7 @@ const handleDefaultSrc = (defaultSrc) => (event) => {
   }
 };
 
-const Image = ({ alt, backgroundImage, backgroundRatio, className, height, role, src, srcSet, sizes, width, defaultSrc }) =>
+const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, role, src, srcSet, sizes, width, defaultSrc }) =>
   !backgroundImage ? (
     <img
       alt={alt}
@@ -30,6 +31,7 @@ const Image = ({ alt, backgroundImage, backgroundRatio, className, height, role,
       sizes={sizes}
       src={src}
       srcSet={srcSet.length > 0 ? srcSet : undefined}
+      style={backgroundColor ? { backgroundColor } : undefined}
       width={width || undefined}
       onError={handleDefaultSrc(defaultSrc)}
     />
@@ -38,6 +40,7 @@ const Image = ({ alt, backgroundImage, backgroundRatio, className, height, role,
       className={className || undefined}
       role={role}
       style={{
+        backgroundColor,
         backgroundImage: `url(${src})`,
         paddingBottom: `${backgroundRatio}%`,
         backgroundRepeat: 'no-repeat',
@@ -49,6 +52,7 @@ const Image = ({ alt, backgroundImage, backgroundRatio, className, height, role,
 
 Image.propTypes = {
   alt: PropTypes.string.isRequired,
+  backgroundColor: PropTypes.string,
   backgroundImage: PropTypes.bool,
   backgroundRatio: PropTypes.number,
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
@@ -62,6 +66,7 @@ Image.propTypes = {
 };
 
 Image.defaultProps = {
+  backgroundColor: null,
   backgroundImage: false,
   backgroundRatio: 65,
   className: '',

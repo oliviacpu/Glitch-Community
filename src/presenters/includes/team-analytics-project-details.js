@@ -51,6 +51,10 @@ const ProjectDetails = ({ projectDetails }) => (
     <table>
       <tbody>
         <tr>
+          <td className="label">Name</td>
+          <td>{projectDetails.domain}</td>
+        </tr>
+        <tr>
           <td className="label">Created</td>
           <td>{dayjs(projectDetails.createdAt).fromNow()}</td>
         </tr>
@@ -150,19 +154,24 @@ class TeamAnalyticsProjectDetails extends React.Component {
     return (
       <>
         <ProjectDetails projectDetails={this.state.projectDetails} />
-        <article className="project-remixes">
-          <h4>Latest Remixes</h4>
-          {this.state.projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
-          {this.state.projectRemixes.map((remix) => (
-            <ProjectRemixItem key={remix.id} remix={remix} />
-          ))}
-        </article>
+        {this.props.activeFilter === 'remixes' && (
+          <article className="project-remixes">
+            <h4>Latest Remixes</h4>
+            <div className="project-remixes-container">
+              {this.state.projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
+              {this.state.projectRemixes.map((remix) => (
+                <ProjectRemixItem key={remix.id} remix={remix} />
+              ))}
+            </div>
+          </article>
+        )}
       </>
     );
   }
 }
 
 TeamAnalyticsProjectDetails.propTypes = {
+  activeFilter: PropTypes.string.isRequired,
   currentProjectDomain: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
 };

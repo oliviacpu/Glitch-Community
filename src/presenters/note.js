@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
+import { ProfileItem } from 'Components/profile/profile-list';
+
 // TODO: let's move these into components
 import { AuthDescription } from './includes/description-field';
-import { UserTile } from './users-list';
-import { TeamTile } from './teams-list';
 
 import { isDarkColor } from '../models/collection';
 
@@ -44,7 +44,9 @@ const Note = ({ collection, project, update, hideNote }) => {
           allowImages
         />
       </div>
-      <div className="user">{collection.teamId === -1 ? <UserTile user={collection.user} /> : <TeamTile team={collection.team} />}</div>
+      <div className="user">
+        <ProfileItem user={collection.user} team={collection.team} />
+      </div>
     </div>
   );
 };
