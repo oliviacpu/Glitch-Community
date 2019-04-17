@@ -35,44 +35,46 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
   </div>
 );
 
-class FeaturedProject extends React.component {
-  render () {
-    const {
-      addProjectToCollection,
-      collection,
-      currentUser,
-      displayNewNote,
-      featuredProject,
-      hideNote,
-      isAuthorized,
-      updateNote,
-      unfeatureProject,
-      featuredProjectRef,
-    } = this.props;
-    const featuredProjectRef = React.createRef();
-    
-    return (
-      <ProjectEmbed
-        top={<Top
-          featuredProject={featuredProject}
-          collection={collection}
-          hideNote={hideNote}
-          updateNote={updateNote}
-          isAuthorized={isAuthorized}
-          unfeatureProject={unfeatureProject}
-          displayNewNote={() => displayNewNote(featuredProject.id)}
-          hasNote={!!featuredProject.note}
-          featuredProjectRef={featuredProjectRef}
-        />}
-        project={featuredProject}
+const FeaturedProjectWithRef = React.forwardRef((props, featuredProjectRef) => {
+  const {
+    addProjectToCollection,
+    collection,
+    currentUser,
+    displayNewNote,
+    featuredProject,
+    hideNote,
+    isAuthorized,
+    updateNote,
+    unfeatureProject,
+  } = props;
+  
+  return (
+    <ProjectEmbed
+      top={<Top
+        featuredProject={featuredProject}
+        collection={collection}
+        hideNote={hideNote}
+        updateNote={updateNote}
         isAuthorized={isAuthorized}
-        currentUser={currentUser}
-        addProjectToCollection={addProjectToCollection}
-      />
-    );
-  }
-};
+        unfeatureProject={unfeatureProject}
+        displayNewNote={() => displayNewNote(featuredProject.id)}
+        hasNote={!!featuredProject.note}
+        featuredProjectRef={featuredProjectRef}
+      />}
+      project={featuredProject}
+      isAuthorized={isAuthorized}
+      currentUser={currentUser}
+      addProjectToCollection={addProjectToCollection}
+    />
+  );
+});
 
+class FeaturedProject extends React.component {
+  render() {
+    const featuredProjectRef = React.createRef();
+    return <FeaturedProjectWithRef ref={featuredProjectRef} {...this.props}
+  }
+}
 
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
@@ -93,6 +95,6 @@ FeaturedProject.defaultProps = {
   updateNote: () => {},
 };
 
-export const FeaturedProjectWithRef = React.forwardRef((props, ref) => (<FeaturedProject ref={ref} {...props} />));
+
 
 export default FeaturedProject;
