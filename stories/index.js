@@ -498,6 +498,9 @@ storiesOf('CoverContainer', module)
   ))
   .add('when passed buttons', () => (
     <CoverContainer item={team} type="team" buttons={buttons}>
-      <div style={{backgroundColor: "white"}}>We are the children</div>
+      <div style={{backgroundColor: "white"}}>
+        <p>We are the children</p>
+        <p>Notice the buttons are up and to the right</p>
+      </div>
     </CoverContainer>
   ))
