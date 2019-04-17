@@ -35,46 +35,42 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
   </div>
 );
 
-const FeaturedProjectWithRef = React.forwardRef((props, featuredProjectRef) => {
-  const {
-    addProjectToCollection,
-    collection,
-    currentUser,
-    displayNewNote,
-    featuredProject,
-    hideNote,
-    isAuthorized,
-    updateNote,
-    unfeatureProject,
-  } = props;
-  
-  return (
-    <ProjectEmbed
-      top={<Top
-        featuredProject={featuredProject}
-        collection={collection}
-        hideNote={hideNote}
-        updateNote={updateNote}
-        isAuthorized={isAuthorized}
-        unfeatureProject={unfeatureProject}
-        displayNewNote={() => displayNewNote(featuredProject.id)}
-        hasNote={!!featuredProject.note}
-        featuredProjectRef={featuredProjectRef}
-      />}
-      project={featuredProject}
-      isAuthorized={isAuthorized}
-      currentUser={currentUser}
-      addProjectToCollection={addProjectToCollection}
-    />
-  );
-});
+const FeaturedProject = ({
+  addProjectToCollection,
+  collection,
+  currentUser,
+  displayNewNote,
+  featuredProject,
+  hideNote,
+  isAuthorized,
+  updateNote,
+  unfeatureProject,
+}) => {
+  const featuredProjectRef = useRef();
 
-class FeaturedProject extends React.Component {
-  render() {
-    const featuredProjectRef = React.createRef();
-    return <FeaturedProjectWithRef ref={featuredProjectRef} {...this.props} />
-  }
-}
+  return (
+    <div ref={featuredProjectRef}>
+      <ProjectEmbed
+        top={<Top
+          featuredProject={featuredProject}
+          collection={collection}
+          hideNote={hideNote}
+          updateNote={updateNote}
+          isAuthorized={isAuthorized}
+          unfeatureProject={unfeatureProject}
+          displayNewNote={() => displayNewNote(featuredProject.id)}
+          hasNote={!!featuredProject.note}
+          featuredProjectRef={featuredProjectRef}
+        />}
+        project={featuredProject}
+        isAuthorized={isAuthorized}
+        currentUser={currentUser}
+        addProjectToCollection={addProjectToCollection}
+      />
+    </div>
+  );
+};
+
 
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
@@ -94,7 +90,5 @@ FeaturedProject.defaultProps = {
   hideNote: () => {},
   updateNote: () => {},
 };
-
-
 
 export default FeaturedProject;

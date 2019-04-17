@@ -73,4 +73,7 @@ ProjectEmbed.defaultProps = {
   top: null,
 };
 
+// used for project embeds that slide in and out with animation (see FeaturedProject)
+export const ProjectEmbedWithRef = React.forwardRef((props, ref) => (<ProjectEmbed ref={ref} {...props} />));
+
 export default ProjectEmbed;
