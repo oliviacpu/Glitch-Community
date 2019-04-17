@@ -24,7 +24,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 );
 
 const CollectionItem = ({ collection }) => (
-  <div className={styles.smallContainer}>
+  <div className={styles.collectionItem}>
     <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
     </div>
@@ -58,9 +58,17 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
+    projects: PropTypes.node,
     userId: PropTypes.number,
     teamId: PropTypes.number,
   }).isRequired,
+  collectionOptions: PropTypes.object,
+  showCurator: PropTypes.bool,
 };
+
+CollectionItem.defaultProps = {
+  collectionOptions: {},
+  showCurator: false,
+}
 
 export default CollectionItem;
