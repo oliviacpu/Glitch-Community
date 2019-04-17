@@ -14,7 +14,9 @@ const CoverContainer = ({ buttons, children, type, item }) => {
   return (
     <div className={styles.coverContainer} style={getProfileStyles[type]({ ...item, cache })}>
       {children}
-      {buttons}
+      <div className={styles.buttonWrap}>
+        {buttons}
+      </div>
     </div>
   );
 };
