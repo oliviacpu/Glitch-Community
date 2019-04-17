@@ -162,7 +162,7 @@ const CollectionPageContents = ({
                     noteOptions={{
                       hideNote, 
                       updateNote,
-                      isAuthorized: currentUserIsAuthor,
+                      isAuthorized: true,
                     }} 
                     projectOptions={{
                       removeProjectFromCollection,
@@ -176,6 +176,7 @@ const CollectionPageContents = ({
                     {...props}
                     projects={collection.projects}
                     collection={collection}
+                    noteOptions={{ isAuthorized: false }}
                     projectOptions={{
                       addProjectToCollection,
                     }}
