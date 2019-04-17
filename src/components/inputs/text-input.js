@@ -20,6 +20,7 @@ const TextInput = ({
   labelText,
   maxLength,
   name,
+  onBlur,
   onChange,
   opaque,
   placeholder,
@@ -49,6 +50,7 @@ const TextInput = ({
           id={uniqueId}
           maxLength={maxLength}
           name={name}
+          onBlur={() => onBlur()}
           onChange={(evt) => onChange(evt.target.value)}
           placeholder={placeholder}
           type={type}
@@ -74,6 +76,7 @@ TextInput.propTypes = {
   labelText: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
   name: PropTypes.string,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   opaque: PropTypes.bool,
   placeholder: PropTypes.string,
@@ -90,6 +93,7 @@ TextInput.defaultProps = {
   error: null,
   maxLength: undefined,
   name: undefined,
+  onBlur: null,
   opaque: false,
   placeholder: undefined,
   postfix: null,
