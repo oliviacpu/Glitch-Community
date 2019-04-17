@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
-import { ProjectEmbedWithRef }from 'Components/project/project-embed';
+import ProjectEmbed from 'Components/project/project-embed';
 import Emoji from 'Components/images/emoji';
 import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-project-options-pop';
 import Note from '../../presenters/note';
@@ -35,23 +35,24 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
   </div>
 );
 
-const FeaturedProject = ({
-  addProjectToCollection,
-  collection,
-  currentUser,
-  displayNewNote,
-  featuredProject,
-  hideNote,
-  isAuthorized,
-  updateNote,
-  unfeatureProject,
-}) => {
-  const featuredProjectRef = useRef();
-
-  return (
-
-      <ProjectEmbedWithRef
-        ref={featuredProjectRef}
+class FeaturedProject extends React.component {
+  render () {
+    const {
+      addProjectToCollection,
+      collection,
+      currentUser,
+      displayNewNote,
+      featuredProject,
+      hideNote,
+      isAuthorized,
+      updateNote,
+      unfeatureProject,
+      featuredProjectRef,
+    } = this.props;
+    const featuredProjectRef = React.createRef();
+    
+    return (
+      <ProjectEmbed
         top={<Top
           featuredProject={featuredProject}
           collection={collection}
@@ -68,7 +69,8 @@ const FeaturedProject = ({
         currentUser={currentUser}
         addProjectToCollection={addProjectToCollection}
       />
-  );
+    );
+  }
 };
 
 
@@ -90,5 +92,7 @@ FeaturedProject.defaultProps = {
   hideNote: () => {},
   updateNote: () => {},
 };
+
+export const FeaturedProjectWithRef = React.forwardRef((props, ref) => (<FeaturedProject ref={ref} {...props} />));
 
 export default FeaturedProject;
