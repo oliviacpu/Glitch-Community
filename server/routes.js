@@ -85,7 +85,7 @@ module.exports = function(external) {
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       CONSTANTS: constants,
-      RUNNING_ON: process.env.RUNNING_ON,
+      RUNNING_ON: constants.currentEnv,
     });
   }
 
@@ -161,11 +161,11 @@ module.exports = function(external) {
 
   app.get('/auth/:domain', async (req, res) => {
     const { domain } = req.params;
-    console.log("Olivia", process.env.RUNNING_ON)
+    
     res.render('api-auth.ejs', {
       domain: domain,
       CONSTANTS: constants,
-      RUNNING_ON: process.env.RUNNING_ON,
+      RUNNING_ON: constants.currentEnv,
     });
   });
 
