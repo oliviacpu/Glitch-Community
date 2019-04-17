@@ -40,7 +40,7 @@ function syncPageToUrl(collection, url) {
 const ProjectsUL = ({ projects, collection, updateNote, hideNote, isAuthorized, ...props }) => (
   <ul className="projects-container">
     {projects.map((project) => (
-      <li key={project.id} >
+      <li key={project.id}>
         <div className="project-item-note">
           <Note
             collection={collection}
