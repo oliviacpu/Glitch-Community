@@ -53,7 +53,7 @@ class CollectionEditor extends React.Component {
     await this.props.api.delete(`/collections/${this.state.id}`);
   }
 
-  async updateOrAddNote({ note, projectId }) {
+  async updateNote({ note, projectId }) {
     note = _.trim(note);
     this.setState(({ projects }) => ({
       projects: projects.map((project) => {
@@ -95,7 +95,7 @@ class CollectionEditor extends React.Component {
       removeProjectFromCollection: (project) => this.removeProjectFromCollection(project).catch(handleError),
       deleteCollection: () => this.deleteCollection().catch(handleError),
       updateNameAndUrl: ({ name, url }) => this.updateFields({ name, url }).catch(handleErrorForInput),
-      updateOrAddNote: ({ note, projectId }) => this.updateOrAddNote({ note, projectId }),
+      updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       displayNewNote: (projectId) => this.displayNewNote(projectId),
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),

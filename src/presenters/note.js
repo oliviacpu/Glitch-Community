@@ -13,7 +13,7 @@ import { isDarkColor } from '../models/collection';
 /**
  * Note Component
  */
-const Note = ({ collection, project, update, hideNote }) => {
+const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function updateNoteVisibility(description) {
     description = _.trim(description);
     if (!description || description.length === 0) {
@@ -36,10 +36,10 @@ const Note = ({ collection, project, update, hideNote }) => {
     <div className="note">
       <div className={className} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
         <AuthDescription
-          authorized={!!update}
+          authorized={isAuthorized}
           description={project.note || ''}
           placeholder="Share why you love this app."
-          update={update}
+          update={updateNote}
           onBlur={updateNoteVisibility}
           allowImages
         />
@@ -52,17 +52,18 @@ const Note = ({ collection, project, update, hideNote }) => {
 };
 
 Note.propTypes = {
+  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     note: PropTypes.string,
     isAddingANewNote: PropTypes.bool,
     collectionCoverColor: PropTypes.string,
   }).isRequired,
-  update: PropTypes.any,
+  updateNote: PropTypes.func,
   hideNote: PropTypes.func,
 };
 
 Note.defaultProps = {
-  update: null,
+  updateNote: () => {},
   hideNote: () => {},
 };
 

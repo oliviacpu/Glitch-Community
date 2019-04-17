@@ -181,11 +181,13 @@ ProjectsUL.propTypes = {
   projects: PropTypes.array.isRequired,
   collection: PropTypes.object,
   showProjectDescriptions: PropTypes.bool,
+  noteOptions: PropTypes.object
 };
 
 ProjectsUL.defaultProps = {
   collection: null,
   showProjectDescriptions: true,
+  noteOptions: {},
 };
 
 export default ProjectsList;
