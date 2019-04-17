@@ -21,10 +21,7 @@ module.exports = function(external) {
   // CORS - Allow pages from any domain to make requests to our API
   app.use(function(request, response, next) {
     response.header('Access-Control-Allow-Origin', '*');
-    response.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
-    );
+    response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     // security headers added by jenn to get mozilla observatory score up
     response.header('X-XSS-Protection', '1; mode=block');
@@ -66,9 +63,7 @@ module.exports = function(external) {
         }
       });
     } catch (error) {
-      console.error(
-        "Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.",
-      );
+      console.error("Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.");
       built = false;
     }
 
@@ -99,7 +94,7 @@ module.exports = function(external) {
       },
     }),
   );
-  
+
   app.use(function(req, res, next) {
     res.header('Cache-Control', 'public, max-age=1');
     return next();
@@ -161,7 +156,7 @@ module.exports = function(external) {
 
   app.get('/auth/:domain', async (req, res) => {
     const { domain } = req.params;
-    
+
     res.render('api-auth.ejs', {
       domain: domain,
       CONSTANTS: constants,
