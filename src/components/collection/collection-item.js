@@ -23,11 +23,12 @@ const CollectionLink = ({ collection, children, ...props }) => (
   </a>
 );
 
-const CollectionItem = ({ collection }) => (
-  <div className={styles.collectin}>
+const CollectionItem = ({ collection, showCurator }) => (
+  <div className={styles.collection}>
     <div className={styles.curator}>
-      <ProfileItem user={collection.user} team={collection.team} />
+      { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
     </div>
+    
     <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
       <div className={styles.smallNameDescriptionArea}>
         <div className={styles.nameArea}>
@@ -63,10 +64,12 @@ CollectionItem.propTypes = {
     teamId: PropTypes.number,
   }).isRequired,
   collectionOptions: PropTypes.object,
+  showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
   collectionOptions: {},
+  showCurator: false,
 }
 
 export default CollectionItem;
