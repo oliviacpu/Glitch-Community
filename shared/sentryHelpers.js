@@ -1,5 +1,5 @@
-const onProductionSite = (projectDomain, apiEnvironment) =>
-  (projectDomain === 'community' || projectDomain === 'community-staging') && apiEnvironment === 'production';
+const productionDomains = ['community', 'community-staging'];
+const onProductionSite = (projectDomain, apiEnvironment) => productionDomains.includes(projectDomain) && apiEnvironment === 'production';
 
 const filterSecrets = function(jsonEvent) {
   const secrets = ['\\w+Token', 'email'];
