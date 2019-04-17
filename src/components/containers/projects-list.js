@@ -11,6 +11,8 @@ import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
 import ProjectItem from 'Components/project/project-item';
 
+import Note from '../../presenters/note';
+
 import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);
@@ -158,10 +160,14 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-export const ProjectsUL = ({ showProjectDescriptions, ...props }) => (
+export const ProjectsUL = ({ showProjectDescriptions, collection, ...props }) => (
   <ul className="projects-container">
     {props.projects.map((project) => (
       <li key={project.id}>
+        <Note
+          collection={collection}
+          project={project}
+        />
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
       </li>
     ))}
@@ -169,6 +175,7 @@ export const ProjectsUL = ({ showProjectDescriptions, ...props }) => (
 );
 
 ProjectsUL.propTypes = {
+  collection: PropTypes.object.isRequired,
   projects: PropTypes.array.isRequired,
   showProjectDescriptions: PropTypes.bool,
 };

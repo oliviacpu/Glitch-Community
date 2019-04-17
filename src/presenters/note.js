@@ -58,7 +58,7 @@ Note.propTypes = {
     collectionCoverColor: PropTypes.string,
   }).isRequired,
   update: PropTypes.any,
-  hideNote: PropTypes.func.isRequired,
+  hideNote: PropTypes.func,
 };
 
 Note.defaultProps = {
