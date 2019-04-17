@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
-import ProjectEmbed from 'Components/project/project-embed';
+import { ProjectEmbedWithRef }from 'Components/project/project-embed';
 import Emoji from 'Components/images/emoji';
 import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-project-options-pop';
 import Note from '../../presenters/note';
@@ -49,8 +49,9 @@ const FeaturedProject = ({
   const featuredProjectRef = useRef();
 
   return (
-    <div ref={featuredProjectRef}>
-      <ProjectEmbed
+
+      <ProjectEmbedWithRef
+        ref={featuredProjectRef}
         top={<Top
           featuredProject={featuredProject}
           collection={collection}
@@ -67,7 +68,6 @@ const FeaturedProject = ({
         currentUser={currentUser}
         addProjectToCollection={addProjectToCollection}
       />
-    </div>
   );
 };
 
