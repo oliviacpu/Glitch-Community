@@ -168,7 +168,9 @@ export const ProjectsUL = ({ showProjectDescriptions, collection, projects, note
           <Note
             project={project}
             collection={collection}
-            noteOptions={noteOptions}
+            isAuthorized={noteOptions.isAuthorized}
+            hideNote={noteOptions.hideNote}
+            updateNote={(note) => noteOptions.updateNote({ note, projectId: project.id })}
           />
         )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
