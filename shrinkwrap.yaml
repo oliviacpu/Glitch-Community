@@ -53,7 +53,7 @@ dependencies:
   memory-cache: 0.2.0
   mini-css-extract-plugin: 0.6.0
   module-alias: 2.2.0
-  nodemon: 1.18.10
+  nodemon: 1.18.11
   prop-types: 15.7.2
   quantize: 1.0.2
   randomcolor: 0.5.4
@@ -3408,10 +3408,10 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
-  /async-each/1.0.2:
+  /async-each/1.0.3:
     dev: false
     resolution:
-      integrity: sha512-6xrbvN0MOBKSJDdonmSSz2OwFSgxRaVtBDes26mj9KIGtDo+g9xosFRSC+i1gQh2oAN/tQ62AI/pGZGQjVOiRg==
+      integrity: sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
   /async/2.6.2:
     dependencies:
       lodash: 4.17.11
@@ -4259,7 +4259,7 @@ packages:
   /chokidar/2.1.5:
     dependencies:
       anymatch: 2.0.0
-      async-each: 1.0.2
+      async-each: 1.0.3
       braces: 2.3.2
       glob-parent: 3.1.0
       inherits: 2.0.3
@@ -4271,7 +4271,7 @@ packages:
       upath: 1.1.2
     dev: false
     optionalDependencies:
-      fsevents: 1.2.7
+      fsevents: 1.2.8
     resolution:
       integrity: sha512-i0TprVWp+Kj4WRPtInjexJ8Q+BqTE909VpH8xVhXrJkoc5QC8VO9TryGOqTr+2hljzc1sC62t22h5tZePodM/A==
   /chownr/1.1.1:
@@ -6458,7 +6458,7 @@ packages:
     dev: false
     resolution:
       integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
-  /fsevents/1.2.7:
+  /fsevents/1.2.8:
     bundledDependencies:
       - node-pre-gyp
     dependencies:
@@ -6469,7 +6469,7 @@ packages:
     optional: true
     requiresBuild: true
     resolution:
-      integrity: sha512-Pxm6sI2MeBD7RdD12RYsqaP0nMiwx8eZBXCa6z2L+mRHm2DYrOYwihmhjpkdjUHwQhslWQjRpEgNq4XvBmaAuw==
+      integrity: sha512-tPvHgPGB7m40CZ68xqFGkKuzN+RnpGmSV+hgeKxhRpbxdqKXUFJGC3yonBOLzQBcJyGpdZFDfCsdOC2KFsXzeA==
   /function-bind/1.1.1:
     dev: false
     resolution:
@@ -8665,7 +8665,7 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-ma6oU4Sk0qOoKEAymVoTvk8EdXEobdS7m/mAGhDJ8Rouugho48crHBORAmy5BoOcv8wraPM6xumapQp5hl4iIQ==
-  /nodemon/1.18.10:
+  /nodemon/1.18.11:
     dependencies:
       chokidar: 2.1.5
       debug: 3.2.6
@@ -8683,7 +8683,7 @@ packages:
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-we51yBb1TfEvZamFchRgcfLbVYgg0xlGbyXmOtbBzDwxwgewYS/YbZ5tnlnsH51+AoSTTsT3A2E/FloUbtH8cQ==
+      integrity: sha512-KdN3tm1zkarlqNo4+W9raU3ihM4H15MVMSE/f9rYDZmFgDHAfAJsomYrHhApAkuUemYjFyEeXlpCOQ2v5gtBEw==
   /nopt/1.0.10:
     dependencies:
       abbrev: 1.1.1
@@ -12203,7 +12203,7 @@ specifiers:
   memory-cache: ^0.2.0
   mini-css-extract-plugin: ^0.6.0
   module-alias: ^2.2.0
-  nodemon: ^1.18.10
+  nodemon: ^1.18.11
   prop-types: ^15.6.2
   quantize: ^1.0.2
   randomcolor: ^0.5.4
