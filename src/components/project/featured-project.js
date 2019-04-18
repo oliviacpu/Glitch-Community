@@ -8,8 +8,9 @@ import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-proje
 import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => (
-  <div className={styles.top}>
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
+  console.log({featuredProject})
+  return (<div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
@@ -34,6 +35,7 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
     )}
   </div>
 );
+};
 
 const FeaturedProject = ({
   addProjectToCollection,
