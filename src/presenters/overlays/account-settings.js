@@ -69,12 +69,20 @@ class PasswordSettings extends React.Component {
   }
 
   checkPWStrength() {
+    // if password is part of weak pw list, show it as weak
     // has capital letter(s) = +1
     // has number(s) = +1
     // has special characters = +1
     // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
-    
-    const passwordIsWeak = weakPWs.includes(this.state.password);
+    const pw = this.state.password;
+    let pwStrength = 0;
+    if(!weakPWs.includes(password)){
+      const hasCapScore = /^(?=.*[A-Z])/.test(pw) ? 1 : 0;
+      const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
+      const hasCharScore = /^(?=.*\W])/.test(pw) ? 1 : 0;
+      pwStrength = hasCapScore + hasNumScore + hasCharScore;
+    }
+
     this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
   }
 
