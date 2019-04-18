@@ -30,9 +30,6 @@ const weakPWs = [
   'qwerty123',
 ];
 
-// correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
-const strengthMsg = ['😑 weak', '🙂 okay', '🙂 okay', '💪 strong'];
-
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
@@ -106,17 +103,22 @@ class PasswordSettings extends React.Component {
     evt.preventDefault();
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
   }
+  
+  // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
+const strengthMsg = [<><Emoji name='faceExpressionless' /> weak</>
+  <><Emoji name='faceSlightlySmiling' /> okay</>, 
+  <><Emoji name="faceSlightlySmiling" /> okay</>,
+  <><Emoji name="bicep" />strong'];
 
   render() {
     const pwMinCharCount = 8;
-    const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
     const userHasPassword = false; // placeholder fortoggling between set and change password forms. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
     const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
     return (
       <>
-        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{userHasPassword ?'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
           {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
