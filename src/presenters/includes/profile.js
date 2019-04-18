@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
+import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile/profile-list';
+
 import { useTrackedFunc } from '../segment-analytics';
 
 // Image Buttons
@@ -62,31 +64,14 @@ InfoContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-// Cover Container
-
-export const CoverContainer = ({ buttons, children, className, ...props }) => (
-  <div className={`cover-container ${className}`} {...props}>
-    {children}
-    {buttons}
-  </div>
-);
-CoverContainer.propTypes = {
-  buttons: PropTypes.node,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
-CoverContainer.defaultProps = {
-  className: '',
-  buttons: null,
-};
 
 // Profile Container
 
 export class ProfileContainer extends React.PureComponent {
   render() {
-    const { avatarStyle, avatarButtons, coverStyle, coverButtons, children, teams } = this.props;
+    const { avatarStyle, avatarButtons, type, item, coverButtons, children, teams } = this.props;
     return (
-      <CoverContainer style={coverStyle} buttons={coverButtons}>
+      <CoverContainer type={type} item={item} buttons={coverButtons}>
         <InfoContainer>
           <div className="avatar-container">
             <div className="user-avatar" style={avatarStyle} />
