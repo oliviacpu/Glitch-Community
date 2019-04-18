@@ -8,7 +8,7 @@ import { ProfileItem } from 'Components/profile/profile-list';
 import Loader from 'Components/loaders/loader';
 import ProjectItemSmall from 'Components/project/project-item-small';
 
-import { isDarkColor } from '../models/collection';
+import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 
 import styles from './collection-item.styl';
