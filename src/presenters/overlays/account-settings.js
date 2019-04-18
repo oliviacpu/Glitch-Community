@@ -12,7 +12,9 @@ import TextInput from 'Components/inputs/text-input';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
-// top worst passwords from Splashdata - edited to only include tyhose with at least 8-character
+// top worst passwords from Splashdata (https://en.wikipedia.org/wiki/List_of_the_most_common_passwords#cite_note-splashdata2018-10)
+// edited to only include those with at least 8-character
+// users aren't allowed to set their password to any of these items
 const weakPWs = [
   'password',
   '123456789',
@@ -86,10 +88,10 @@ class PasswordSettings extends React.Component {
       const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
       const hasCharScore = /[!@#$%^&*(),.?":{}|<>]/.test(pw) ? 1 : 0;
       pwStrength = hasCapScore + hasNumScore + hasCharScore;
-    }else{
+    } else {
       this.setState({ weakPasswordErrorMsg: weakPWErrorMsg });
     }
-    
+
     this.setState({ passwordStrength: pwStrength });
   }
 
@@ -109,30 +111,31 @@ class PasswordSettings extends React.Component {
     const pwMinCharCount = 8;
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
-    const userHasPassword = false; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
+    const userHasPassword = false; // placeholder fortoggling between set and change password forms. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
     const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
     return (
       <>
-        <Heading tagName="h2">{userHasPassword && !userRequestedPWreset ? 'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
           {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
-          <TextInput 
-            type="password" 
-            labelText="password" 
-            placeholder="new password" 
-            onChange={this.onChangePW} 
-            error={this.state.weakPasswordErrorMsg} />
+          <TextInput
+            type="password"
+            labelText="password"
+            placeholder="new password"
+            onChange={this.onChangePW}
+            error={this.state.weakPasswordErrorMsg}
+          />
 
           {this.state.password.length >= pwMinCharCount ? (
-            <div class="pw-strength">
+            <div className="pw-strength">
               <progress value={Math.max(this.state.passwordStrength, 1)} max="3" className={`pw-strength score-${this.state.passwordStrength}`} />
-              <span class="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
+              <span className="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
             </div>
           ) : (
             this.state.password.length > 0 && (
-              <div class="pw-strength">
+              <div className="pw-strength">
                 <span className="note">{pwMinCharCount - this.state.password.length} characters to go....</span>
               </div>
             )
@@ -145,15 +148,6 @@ class PasswordSettings extends React.Component {
             onChange={this.onChangePWConfirm}
             error={this.state.passwordConfirmErrorMsg}
           />
-
-          {/*
-          {this.state.password.length < pwMinCharCount && (
-            <>
-              <progress value={progress} max="100" />
-              <p className="info-description">Your password should contain at least 8 characters</p>
-            </>
-          )}
-          */}
 
           <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
             Set Password
@@ -180,11 +174,6 @@ const OverlayAccountSettings = ({ children, user }) => (
             Account Settings <Emoji name="key" />
           </section>
           <section className="pop-over-actions pop-over-main">
-            {/*
-                  <div className="nav-selection">
-                    <Button active>Set Password</Button>
-                  </div>
-                */}
             <div className="nav-content">
               <PasswordSettings user={user} />
             </div>
