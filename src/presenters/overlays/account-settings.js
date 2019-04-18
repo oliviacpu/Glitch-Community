@@ -43,7 +43,7 @@ class PasswordSettings extends React.Component {
     };
     this.onChangePW = this.onChangePW.bind(this);
     this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
-    this.checkWeakPW = this.checkWeakPW.bind(this);
+    this.checkPWStrength = this.checkPWStrength.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
     this.setPassword = this.setPassword.bind(this);
   }
@@ -51,7 +51,7 @@ class PasswordSettings extends React.Component {
   onChangePW(password) {
     // check if it's a bad password
     this.setState({ password }, () => {
-      this.checkWeakPW();
+      this.checkPWStrength();
       if (this.state.passwordConfirm) {
         this.validatePasswordMatch();
       }
@@ -68,7 +68,12 @@ class PasswordSettings extends React.Component {
     this.setState({ done: true });
   }
 
-  checkWeakPW() {
+  checkPWStrength() {
+    // has capital letter(s) = +1
+    // has number(s) = +1
+    // has special characters = +1
+    // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
+    
     const passwordIsWeak = weakPWs.includes(this.state.password);
     this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
   }
