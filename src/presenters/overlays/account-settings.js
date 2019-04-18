@@ -126,7 +126,7 @@ class PasswordSettings extends React.Component {
           { this.state.password.length > 0 &&
             <div class="pw-strength">
               <progress value={this.state.passwordStrength} max="3" />
-              <span class="pw-strength-word">{strengthMsg[score]}</span>
+              <span class="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
             </div>
             
           }
@@ -138,13 +138,15 @@ class PasswordSettings extends React.Component {
             onChange={this.onChangePWConfirm}
             error={this.state.passwordConfirmErrorMsg}
           />
-
+          
+          {/*
           {this.state.password.length < pwMinCharCount && (
             <>
               <progress value={progress} max="100" />
               <p className="info-description">Your password should contain at least 8 characters</p>
             </>
           )}
+          */}
 
           <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
             Set Password
