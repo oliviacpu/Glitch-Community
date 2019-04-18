@@ -69,7 +69,8 @@ class CollectionEditor extends React.Component {
 
   async featureProject(id) {
     if (this.state.featuredProjectId) {
-      this.setState({ featuredProjectId: null }); // this is needed to force an updat
+      // this is needed to force an dismount of an optimistic state value of a note and to ensure the old featured collection goes where it's supposed to.
+      this.setState({ featuredProjectId: null });
     }
     await this.updateFields({ featuredProjectId: id });
   }
