@@ -61,27 +61,26 @@ ProjectsPreview.propTypes = {
 
 const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
   <div className={styles.collection}>
-    <div className={styles.curator}>
-      { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
-    </div>
-    
-    <CollectionLink collection={collection} style={collectionColorStyles(collection)}>
-      <div className={styles.collectionItemContainer}>
-        <div className={styles.nameArea}>
-          <div className={styles.collectionAvatarContainer}>
-            <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
-          </div>
-          <div className={styles.collectionNameWrap}>
-            <Button decorative>
-              <div className={styles.collectionName}>{collection.name}</div>
-            </Button>
-          </div>
-        </div>
-        <div className={styles.description} style={{color: isDarkColor(collection.coverColor) ? 'white': ''}}>
-          <Markdown>{collection.description || ' '}</Markdown>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.curator}>
+        { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
       </div>
-    </CollectionLink>
+    
+      <CollectionLink collection={collection} className={styles.linkBody} style={collectionColorStyles(collection)}>      
+        <div className={styles.avatarContainer}>
+          <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+        </div>
+        <div className={styles.nameDescriptionArea}>
+          <Button decorative>
+            <div className={styles.collectionName}>{collection.name}</div>
+          </Button>
+          <div className={styles.description} style={{color: isDarkColor(collection.coverColor) ? 'white': ''}}>
+            <Markdown>{collection.description || ' '}</Markdown>
+          </div>
+      </div>
+      
+      </CollectionLink>
+    </div>
     
     <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
     
