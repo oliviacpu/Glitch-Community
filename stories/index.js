@@ -15,6 +15,7 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
 import ProjectItemSmall from 'Components/project/project-item-small';
+import CollectionItem from 'Components/collection/collection-item';
 import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';

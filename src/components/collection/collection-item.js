@@ -6,6 +6,7 @@ import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile/profile-list';
 import Loader from 'Components/loaders/loader';
+import ProjectItemSmall from 'Components/project/project-item-small';
 
 import { isDarkColor } from '../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
@@ -32,19 +33,10 @@ const ProjectPreview = ({ }) => {
         <ul className="projects-preview">
           {collection.projects.slice(0, 3).map((project) => (
             <li key={project.id} className={`project-container ${project.private ? 'private' : ''}`}>
-              <ProjectLink project={project} className="project-link">
-                <Image className="avatar" src={getAvatarUrl(project.id)} alt="" />
-                <div className="project-name">{project.domain}</div>
-                <div className="project-badge private-project-badge" aria-label="private" />
-              </ProjectLink>
+              <ProjectItemSmall project={project} />
             </li>
           ))}
         </ul>
-        <CollectionLink collection={collection} className="collection-link">
-          {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-          <Pluralize count={collection.projects.length} singular="project" />
-          <span aria-hidden="true"> →</span>
-        </CollectionLink>
       </>
     );
   }
@@ -97,6 +89,12 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
     </CollectionLink>
     
     <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
+    
+    <CollectionLink collection={collection} className={styles.footerLink}>
+      {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+      <Pluralize count={collection.projects.length} singular="project" />
+      <span aria-hidden="true"> →</span>
+    </CollectionLink>
     
   </div>
 );
