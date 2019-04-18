@@ -106,8 +106,8 @@ CollectionItem.propTypes = {
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
     projects: PropTypes.node,
-    userId: PropTypes.number,
-    teamId: PropTypes.number,
+    user: PropTypes.object,
+    team: PropTypes.object,
   }).isRequired,
   collectionOptions: PropTypes.object,
   isAuthorized: PropTypes.bool,
@@ -116,7 +116,7 @@ CollectionItem.propTypes = {
 
 CollectionItem.defaultProps = {
   collectionOptions: {},
-  isAuthorized: false
+  isAuthorized: false,
   showCurator: false,
 }
 

@@ -264,8 +264,7 @@ storiesOf('ProjectItem', module).add(
 );
 
 storiesOf('ProjectItemSmall', module).add(
-  'base',
-  provideContext({ currentUser: {} }, () => (
+  'base', () => (
     <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
       <ProjectItemSmall
         project={{
@@ -275,7 +274,18 @@ storiesOf('ProjectItemSmall', module).add(
         }}
       />
     </div>
-  )),
+  ))
+  .add('private', () => (
+    <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+      <ProjectItemSmall
+        project={{
+          id: 'foo',
+          domain: 'judicious-pruner',
+          private: true,
+        }}
+      />
+    </div>
+  ))
 );
 
 const mockAPI = {
@@ -286,6 +296,41 @@ const mockAPI = {
     '/v1/users/by/id/?id=271885': { 271885: users.modernserf },
   },
 };
+
+storiesOf('CollectionItem', module).add(
+  'with projects',
+  provideContext({ currentUser: {}, api: mockAPI }, () => (
+    <div style={{ margin: '2em', width: '25%' }}>
+      <CollectionItem
+        collection={{
+          id: 12345,
+          name: 'Cool Projects',
+          description: 'A collection of cool projects',
+          coverColor: '#efe',
+          user: users.modernserf,
+          projects:
+            [{
+              id: 'foo',
+              domain: 'stencilfy',
+            },    
+            {
+              id: 'foo2',
+              domain: 'svg-animator',
+            },     
+            {
+              id: 'foo3',
+              domain: 'bongo-cat',
+            },
+            {
+              id: 'foo4',
+              domain: 'community',
+            },
+          ],
+        }}
+      />
+    </div>
+  )),
+);
 
 storiesOf('CollectionItemSmall', module).add(
   'with user',
