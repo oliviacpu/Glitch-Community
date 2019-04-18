@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Redirect } from 'react-router-dom';
@@ -87,11 +87,15 @@ const CollectionPageContents = ({
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
   const userIsLoggedIn = currentUser && currentUser.login;
-  let featuredProject = null;
-  let { projects } = collection;
-  if (collection.featuredProjectId) {
-    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
-  }
+  const [featuredProject, setFeaturedProject] = useState(null);
+  const [projects, setProjects] = useState(collection.projects);
+  useEffect(() => {
+    if (collection.featuredProjectId) {
+      const [[fp], ps] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+      setProjects(ps);
+      setFeaturedProject(fp);
+    }
+  }, collection.featuredProjectId)
 
   return (
     <>
