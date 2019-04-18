@@ -179,7 +179,9 @@ storiesOf('Badge', module)
   .add('regular', () => <Badge>Regular</Badge>)
   .add('success', () => <Badge type="success">Success</Badge>)
   .add('warning', () => <Badge type="warning">Warning</Badge>)
-  .add('error', () => <Badge type="error">Error</Badge>);
+  .add('error', () => <Badge type="error">Error</Badge>)
+  .add('private', () => <Badge type="private"></Badge>);
+  
 
 storiesOf('Segmented-Buttons', module)
   .add(
