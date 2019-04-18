@@ -81,31 +81,6 @@ PureEditableFieldHolder.defaultProps = {
   error: '',
 };
 
-export const PureEditableTextArea = (props) => (
-  <PureEditableFieldHolder {...props}>{(inputProps, inputRef) => <textarea {...inputProps} ref={inputRef} />}</PureEditableFieldHolder>
-);
-
-PureEditableTextArea.propTypes = {
-  value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  update: PropTypes.func.isRequired,
-  blur: PropTypes.func,
-  prefix: PropTypes.node,
-  suffix: PropTypes.node,
-  autoFocus: PropTypes.bool,
-  error: PropTypes.string,
-  inputType: PropTypes.string,
-};
-
-PureEditableTextArea.defaultProps = {
-  blur: () => {},
-  prefix: null,
-  suffix: null,
-  autoFocus: false,
-  error: '',
-  inputType: 'text',
-};
-
 const PureEditableField = (props) => (
   <PureEditableFieldHolder {...props}>{(inputProps, inputRef) => <input {...inputProps} ref={inputRef} />}</PureEditableFieldHolder>
 );
