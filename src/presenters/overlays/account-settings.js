@@ -28,6 +28,8 @@ const weakPWs = [
   'qwerty123',
 ];
 
+const strengthMsg = ['😑 weak','🙂 okay', '💪 strong'];
+
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
@@ -120,6 +122,14 @@ class PasswordSettings extends React.Component {
             onChange={this.onChangePW} 
             error={this.state.passwordErrorMsg} 
             />
+          
+          { this.state.password.length > 0 &&
+            <div class="pw-strength">
+              <progress value={this.state.passwordStrength} max="3" />
+              <span class="pw-strength-word">{strengthMsg[score]}</span>
+            </div>
+            
+          }
 
           <TextInput
             type="password"
