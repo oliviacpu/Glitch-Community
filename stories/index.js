@@ -14,8 +14,8 @@ import Markdown from 'Components/text/markdown';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
-import SmallProjectItem from 'Components/project/small-project-item';
-import SmallCollectionItem from 'Components/collection/small-collection-item';
+import ProjectItemSmall from 'Components/project/project-item-small';
+import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/blocks/search-result-cover-bar';
@@ -262,11 +262,11 @@ storiesOf('ProjectItem', module).add(
   )),
 );
 
-storiesOf('SmallProjectItem', module).add(
+storiesOf('ProjectItemSmall', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
     <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
-      <SmallProjectItem
+      <ProjectItemSmall
         project={{
           id: 'foo',
           domain: 'judicious-pruner',
@@ -286,7 +286,7 @@ const mockAPI = {
   },
 };
 
-storiesOf('SmallCollectionItem', module).add(
+storiesOf('CollectionItemSmall', module).add(
   'with user',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
