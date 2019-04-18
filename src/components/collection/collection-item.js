@@ -26,7 +26,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
     return (
-      <div className={styles.collectionLink}>
+      <div className={classnames(styles.projectsContainer, styles.empty)}>
         <Loader />
       </div>
     );
@@ -36,7 +36,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
       <>
         <ul className={styles.projectsContainer}>
           {collection.projects.slice(0, 3).map((project) => (
-            <li key={project.id} className={`project-container ${project.private ? 'private' : ''}`}>
+            <li key={project.id}>
               <ProjectItemSmall project={project} />
             </li>
           ))}
@@ -45,15 +45,15 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
     );
   }
 
-const emptyState = isAuthorized ? (
-  <Text>
-    {'This collection is empty – add some projects '}
-    <Emoji name="index"/>
-  </Text>
+  const emptyState = isAuthorized ? (
+    <Text>
+      {'This collection is empty – add some projects '}
+      <Emoji name="index" />
+    </Text>
   ) : (
     <Text>No projects to see in this collection just yet.</Text>
   );
-  return <div className="projects-preview empty">{emptyState}</div>;
+  return <div className={classnames(styles.projectsContainer, styles.empty)}>{emptyState}</div>;
 };
 
 ProjectsPreview.propTypes = {
