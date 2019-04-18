@@ -9,7 +9,7 @@ import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
 const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
-  
+  console.log({ hideNote });
   return (<div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
@@ -37,6 +37,14 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
 );
 };
 
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 const FeaturedProject = ({
   addProjectToCollection,
   collection,
@@ -49,9 +57,11 @@ const FeaturedProject = ({
   unfeatureProject,
 }) => {
   const featuredProjectRef = useRef();
-
+  const oldId = usePrevious(featuredProject.id);
   useEffect(() => {
-    featuredProjectRef.current.classList.add('slide-down');
+    if (oldId && featuredProject.id && oldId !== featuredProject.id) {
+      featuredProjectRef.current.classList.add('slide-down');
+    }
   }, [featuredProject.id]);
   return (
     <div ref={featuredProjectRef}>
