@@ -5,12 +5,11 @@ import classnames from 'classnames';
 
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
+import Badge from 'Components/badges/badge';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { ProjectLink } from '../../presenters/includes/link';
 
 import styles from './project-item.styl';
-
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
@@ -24,7 +23,7 @@ const ProjectItemSmall = ({ project }) => (
           <ProfileAvatar project={project} />
         </span>
         <Text>
-          <span className={styles.projectName}>{project.domain}</span> {project.private && <PrivateIcon />}
+          <span className={styles.projectName}>{project.domain}</span> {project.private && <Badge type="private" aria-label="private" />}
         </Text>
       </div>
     </ProjectLink>
