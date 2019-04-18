@@ -28,7 +28,8 @@ const weakPWs = [
   'qwerty123',
 ];
 
-const strengthMsg = ['😑 weak', '🙂 okay', '💪 strong'];
+// correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
+const strengthMsg = ['😑 weak', '🙂 okay', '🙂 okay', '💪 strong'];
 
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
@@ -40,7 +41,7 @@ class PasswordSettings extends React.Component {
       password: '',
       passwordConfirm: '',
       passwordStrength: 0,
-      passwordErrorMsg: '',
+      weakPasswordErrorMsg: '',
       passwordConfirmErrorMsg: '',
       done: false,
     };
@@ -80,13 +81,14 @@ class PasswordSettings extends React.Component {
     const pw = this.state.password;
     let pwStrength = 0;
     if (!weakPWs.includes(pw)) {
+      this.setState({ weakPasswordErrorMsg: '' });
       const hasCapScore = /^(?=.*[A-Z])/.test(pw) ? 1 : 0;
       const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
       const hasCharScore = /[!@#$%^&*(),.?":{}|<>]/.test(pw) ? 1 : 0;
       pwStrength = hasCapScore + hasNumScore + hasCharScore;
     }else{
+      this.setState({ weakPasswordErrorMsg: weakPWErrorMsg });
     }
-    console.log(pwStrength);
     
     this.setState({ passwordStrength: pwStrength });
   }
@@ -106,7 +108,7 @@ class PasswordSettings extends React.Component {
   render() {
     const pwMinCharCount = 8;
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
-    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.passwordConfirmErrorMsg;
+    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
     const userHasPassword = false; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
     const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
@@ -116,7 +118,12 @@ class PasswordSettings extends React.Component {
         <form onSubmit={this.handleSubmit}>
           {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
-          <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
+          <TextInput 
+            type="password" 
+            labelText="password" 
+            placeholder="new password" 
+            onChange={this.onChangePW} 
+            error={this.state.weakPasswordErrorMsg} />
 
           {this.state.password.length >= pwMinCharCount ? (
             <div class="pw-strength">
