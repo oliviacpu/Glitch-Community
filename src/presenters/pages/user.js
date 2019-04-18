@@ -15,7 +15,6 @@ import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
 import { AuthDescription } from '../includes/description-field';
-import EditableField from '../includes/editable-field';
 import UserEditor from '../user-editor';
 
 import DeletedProjects from '../deleted-projects';
@@ -49,10 +48,10 @@ const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) =>
   return (
     <>
       <Heading tagName="h1">
-        <UserNameInput value={editableName} onChange={updateName} />
+        <UserNameInput name={editableName} onChange={updateName} />
       </Heading>
       <Heading tagName="h2">
-        <UserLoginInput value={login} onChange={updateLogin} />
+        <UserLoginInput login={login} onChange={updateLogin} />
       </Heading>
     </>
   );
