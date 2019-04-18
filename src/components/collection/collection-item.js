@@ -42,17 +42,18 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
     );
   }
 
-  const emptyState = isAuthorized ? (
-    <Text>
-      {'This collection is empty – add some projects '}
-      <span role="img" aria-label="">
-        ☝️
-      </span>
-    </Text>
-  ) : (
-    <Text>No projects to see in this collection just yet.</Text>
-  );
-  return <div className="projects-preview empty">{emptyState}</div>;  
+  // const emptyState = isAuthorized ? (
+  //   <Text>
+  //     {'This collection is empty – add some projects '}
+  //     <span role="img" aria-label="">
+  //       ☝️
+  //     </span>
+  //   </Text>
+  // ) : (
+  //   <Text>No projects to see in this collection just yet.</Text>
+  // );
+  // return <div className="projects-preview empty">{emptyState}</div>;  
+  return null;
 }
 
 ProjectsPreview.propTypes = {
@@ -79,18 +80,16 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
           </div>
       </div>
       </CollectionLink>
+      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />          
+      {/*
+      <CollectionLink collection={collection} className={styles.footerLink}>
+        {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+        <Pluralize count={collection.projects.length} singular="project" />
+        <span aria-hidden="true"> →</span>
+      </CollectionLink>
+
+      */}
     </div>
-    
-    <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
-    
-    {/*
-    <CollectionLink collection={collection} className={styles.footerLink}>
-      {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-      <Pluralize count={collection.projects.length} singular="project" />
-      <span aria-hidden="true"> →</span>
-    </CollectionLink>
-    
-    */}
     
   </div>
 );
@@ -101,7 +100,7 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    projects: PropTypes.object,
+    projects: PropTypes.array,
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
