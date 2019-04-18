@@ -7,6 +7,8 @@ import { orderBy, partition } from 'lodash';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/blocks/thanks';
+import UserNameInput from 'Components/fields/user-name-input';
+import UserLoginInput from 'Components/fields/user-login-input';
 
 import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
 
@@ -47,10 +49,10 @@ const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) =>
   return (
     <>
       <Heading tagName="h1">
-        <EditableField value={editableName} update={updateName} placeholder="What's your name?" />
+        <UserNameInput value={editableName} onChange={updateName} />
       </Heading>
       <Heading tagName="h2">
-        <EditableField value={login} update={updateLogin} prefix="@" placeholder="Nickname?" />
+        <UserLoginInput value={login} onChange={updateLogin} />
       </Heading>
     </>
   );
