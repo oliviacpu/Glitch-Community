@@ -103,22 +103,17 @@ class PasswordSettings extends React.Component {
     evt.preventDefault();
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
   }
-  
-  // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
-const strengthMsg = [<><Emoji name='faceExpressionless' /> weak</>
-  <><Emoji name='faceSlightlySmiling' /> okay</>, 
-  <><Emoji name="faceSlightlySmiling" /> okay</>,
-  <><Emoji name="bicep" />strong'];
 
   render() {
     const pwMinCharCount = 8;
     const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
     const userHasPassword = false; // placeholder fortoggling between set and change password forms. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
     const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
-
+    // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
+    const { passwordStrength } = this.state;
     return (
       <>
-        <Heading tagName="h2">{userHasPassword ?'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
           {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
@@ -132,8 +127,24 @@ const strengthMsg = [<><Emoji name='faceExpressionless' /> weak</>
 
           {this.state.password.length >= pwMinCharCount ? (
             <div className="pw-strength">
-              <progress value={Math.max(this.state.passwordStrength, 1)} max="3" className={`pw-strength score-${this.state.passwordStrength}`} />
-              <span className="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
+              <progress value={Math.max(passwordStrength, 1)} max="3" className={`pw-strength score-${passwordStrength}`} />
+              <span className="pw-strength-word">
+                { passwordStrength === 0 &&
+                <>
+                  <Emoji name="faceExpressionless" /> weak
+                </>
+                } 
+                { (passwordStrength === 1 || passwordStrength === 2) &&
+                <>
+                  <Emoji name="faceSlightlySmiling" /> okay
+                </>
+                } 
+                { passwordStrength === 3 &&
+                <>
+                  <Emoji name="bicep" /> strong
+                </>
+                }
+              </span>
             </div>
           ) : (
             this.state.password.length > 0 && (
