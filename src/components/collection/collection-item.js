@@ -53,7 +53,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   //   <Text>No projects to see in this collection just yet.</Text>
   // );
   // return <div className="projects-preview empty">{emptyState}</div>;  
-  return null;
+  return <div className="projects-preview empty"></div>;
 }
 
 ProjectsPreview.propTypes = {
@@ -63,9 +63,11 @@ ProjectsPreview.propTypes = {
 const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
   <div className={styles.collection}>
     <div className={styles.container}>
-      <div className={styles.curator}>
-        { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
-      </div>
+      { showCurator && 
+        <div className={styles.curator}>
+          { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
+        </div>
+      }
     
       <CollectionLink collection={collection} className={styles.linkBody} style={collectionColorStyles(collection)}>      
         <div className={styles.avatarContainer}>
@@ -80,15 +82,19 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
           </div>
       </div>
       </CollectionLink>
-      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />          
-      {/*
-      <CollectionLink collection={collection} className={styles.footerLink}>
-        {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-        <Pluralize count={collection.projects.length} singular="project" />
-        <span aria-hidden="true"> →</span>
-      </CollectionLink>
-
-      */}
+      
+      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} /> 
+      
+      { collection.projects &&
+      
+        <CollectionLink collection={collection} className={styles.footerLink}>
+          {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+          <Pluralize count={collection.projects.length} singular="project" />
+          <span aria-hidden="true"> →</span>
+        </CollectionLink>
+        
+      }
+      
     </div>
     
   </div>
