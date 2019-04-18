@@ -67,9 +67,7 @@ class CollectionEditor extends React.Component {
     this.updateProject({ isAddingANewNote: false }, projectId);
   }
   
-  async featureProject(id) {
-    await this.updateFields({ featuredProjectId: null });
-    await this.updateFields({ featuredProjectId: id });
+  featureProject(id) {
   }
 
   updateProject(projectUpdates, projectId) {
@@ -95,7 +93,7 @@ class CollectionEditor extends React.Component {
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updateColor: (color) => this.updateFields({ coverColor: color }),
-      featureProject: (id) => this.featureProject(id).catch(handleError),
+      featureProject: (id) => this.updateFields({ featuredProjectId: id }).catch(handleError),
       unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
     };
     return this.props.children(this.state, funcs, this.currentUserIsAuthor());
