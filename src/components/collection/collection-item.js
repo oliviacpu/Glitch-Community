@@ -10,6 +10,7 @@ import ProjectItemSmall from 'Components/project/project-item-small';
 
 import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
+import { CollectionLink } from '../../presenters/includes/link';
 
 import styles from './collection-item.styl';
 
@@ -57,12 +58,6 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
 ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
-
-const CollectionLink = ({ collection, children, ...props }) => (
-  <a href={`/@${collection.fullUrl}`} {...props}>
-    {children}
-  </a>
-);
 
 const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
   <div className={styles.collection}>
