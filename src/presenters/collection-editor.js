@@ -66,10 +66,10 @@ class CollectionEditor extends React.Component {
   hideNote(projectId) {
     this.updateProject({ isAddingANewNote: false }, projectId);
   }
-  
+
   async featureProject(id) {
     await this.updateFields({ featuredProjectId: id });
-    this.updateProject({}, null);
+    this.updateProject({}, null); // this refreshes the projects array so they are re-filtered properly
   }
 
   updateProject(projectUpdates, projectId) {

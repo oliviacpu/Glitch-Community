@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -8,9 +8,8 @@ import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-proje
 import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => {
-  console.log({ hideNote });
-  return (<div className={styles.top}>
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => (
+  <div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
@@ -35,15 +34,6 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
     )}
   </div>
 );
-};
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
 
 const FeaturedProject = ({
   addProjectToCollection,
@@ -57,16 +47,7 @@ const FeaturedProject = ({
   unfeatureProject,
 }) => {
   const featuredProjectRef = useRef();
-  // const oldId = usePrevious(featuredProject.id);
-  // useEffect(() => {
-  //   if (oldId && featuredProject.id && oldId !== featuredProject.id) {
-  //     console.log({oldId, newId: featuredProject.id})
-  //     featuredProjectRef.current.classList.add('slide-down');
-  //     featuredProjectRef.current.addEventListener('animationend', () => {
-  //       featuredProjectRef.current.classList.remove('slide-down');
-  //     })
-  //   }
-  // }, [featuredProject.id]);
+
   return (
     <div ref={featuredProjectRef}>
       <ProjectEmbed
