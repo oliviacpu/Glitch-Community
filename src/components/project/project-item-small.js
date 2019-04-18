@@ -22,7 +22,7 @@ const getLinkBodyStyles = (project) =>
 
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
-const SmallProjectItem = ({ project, projectOptions }) => (
+const ProjectItemSmall = ({ project, projectOptions }) => (
   <div className={styles.projectItemSmall}>
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
@@ -37,7 +37,7 @@ const SmallProjectItem = ({ project, projectOptions }) => (
   </div>
 );
 
-SmallProjectItem.propTypes = {
+ProjectItemSmall.propTypes = {
   project: PropTypes.shape({
     domain: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
@@ -45,4 +45,4 @@ SmallProjectItem.propTypes = {
   }).isRequired,
 };
 
-export default SmallProjectItem;
+export default ProjectItemSmall;

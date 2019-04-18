@@ -23,7 +23,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
   </a>
 );
 
-const SmallCollectionItem = ({ collection }) => (
+const CollectionItemSmall = ({ collection }) => (
   <div className={styles.smallContainer}>
     <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
@@ -54,7 +54,7 @@ const SmallCollectionItem = ({ collection }) => (
   </div>
 );
 
-SmallCollectionItem.propTypes = {
+CollectionItemSmall.propTypes = {
   collection: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
@@ -65,4 +65,4 @@ SmallCollectionItem.propTypes = {
   }).isRequired,
 };
 
-export default SmallCollectionItem;
+export default CollectionItemSmall;

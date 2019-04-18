@@ -9,7 +9,7 @@ import Heading from 'Components/text/heading';
 import UserItem from 'Components/user/user-item';
 import TeamItem from 'Components/team/team-item';
 import ProjectItem from 'Components/project/project-item';
-import SmallCollectionItem from 'Components/collection/small-collection-item';
+import CollectionItemSmall from 'Components/collection/collection-item-small';
 import StarterKitItem from 'Components/search/starter-kit-result';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loaders/loader';
@@ -104,14 +104,14 @@ function CollectionWithDataLoading({ collection }) {
   const { value: users = [] } = useUsers(collection.userIDs);
   const { value: teams = [] } = useTeams(collection.teamIDs);
   const collectionWithData = { ...collection, user: users[0], team: teams[0] };
-  return <SmallCollectionItem collection={collectionWithData} />;
+  return <CollectionItemSmall collection={collectionWithData} />;
 }
 
 function CollectionResult({ result }) {
   if (!result.user && !result.team) {
     return <CollectionWithDataLoading collection={result} />;
   }
-  return <SmallCollectionItem collection={result} />;
+  return <CollectionItemSmall collection={result} />;
 }
 
 const groups = [

@@ -265,7 +265,7 @@ storiesOf('ProjectItem', module).add(
 storiesOf('SmallProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
-    <div style={{ backgroundColor: '#F5F5F5', width: '375px' }}>
+    <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
       <SmallProjectItem
         project={{
           id: 'foo',

@@ -11,26 +11,29 @@
     border-radius: 5px
     padding: 7px 15px
     display: flex
+    margin-bottom: 10px
     -webkit-box-orient: horizontal
     -webkit-box-direction: normal
     flex-direction: row
     &.private
       background-color: private
     &:hover
-      text-decoration: underline
+      a
+        text-decoration: underline
   .avatarWrap
     img
       width: 25px
       height: 25px
       margin-right: 12px
-    p
-      margin-top: 2px
-      margin-bottom: 0
-      text-overflow: ellipsis
-      overflow: hidden
-      white-space: nowrap
+  p
+    margin-top: 2px
+    margin-bottom: 0
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
   a
     color: primary
+    text-decoration: none
   &:hover
     .linkBodySmall
       background-color: secondary-hover-on-color
