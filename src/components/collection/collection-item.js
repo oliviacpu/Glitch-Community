@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
+import classnames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
@@ -19,11 +20,14 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
+const noProjectsToSee = () => {
+}
+
 const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
     return (
-      <div className="collection-link">
+      <div className={styles.collectionLink}>
         <Loader />
       </div>
     );
@@ -31,7 +35,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   if (collection.projects.length > 0) {
     return (
       <>
-        <ul className="projects-preview">
+        <ul className={styles.projectsContainer}>
           {collection.projects.slice(0, 3).map((project) => (
             <li key={project.id} className={`project-container ${project.private ? 'private' : ''}`}>
               <ProjectItemSmall project={project} />
@@ -41,19 +45,24 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
       </>
     );
   }
-
-  // const emptyState = isAuthorized ? (
-  //   <Text>
-  //     {'This collection is empty – add some projects '}
-  //     <span role="img" aria-label="">
-  //       ☝️
-  //     </span>
-  //   </Text>
-  // ) : (
-  //   <Text>No projects to see in this collection just yet.</Text>
-  // );
-  // return <div className="projects-preview empty">{emptyState}</div>;  
-  return <div className="projects-preview empty"></div>;
+  
+  if (isAuthorized) {
+    return (
+      <div className="projects-preview empty">
+        <Text>
+          {'This collection is empty – add some projects '}
+          <span role="img" aria-label="">
+            ☝️
+          </span>
+        </Text>
+      </div>
+    )
+  }
+  return (
+    <div classNames={classnames(styles.projectsPreview, styles.empty)}>  
+      
+    </div>
+  );
 }
 
 ProjectsPreview.propTypes = {
