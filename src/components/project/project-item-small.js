@@ -2,27 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Markdown from 'Components/text/markdown';
-import Button from 'Components/buttons/button';
+
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { ProjectLink } from '../../presenters/includes/link';
-import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
+
 import styles from './project-item.styl';
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
-const getLinkBodyStyles = (project) =>
-  classnames(styles.linkBodySmall, styles.projectItemSmall, 
-    {[styles.private]: project.private},
-  );
+const getLinkBodyStyles = (project) => classnames(styles.linkBodySmall, { [styles.private]: project.private });
 
-const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
-
-const ProjectItemSmall = ({ project, projectOptions }) => (
+const ProjectItemSmall = ({ project }) => (
+  <div className={styles.projectItemSmall}>
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
         <span className={styles.avatarWrap}>
@@ -33,6 +28,7 @@ const ProjectItemSmall = ({ project, projectOptions }) => (
         </Text>
       </div>
     </ProjectLink>
+  </div>
 );
 
 ProjectItemSmall.propTypes = {
