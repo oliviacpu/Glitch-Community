@@ -285,8 +285,7 @@ storiesOf('ProjectItemSmall', module).add(
         }}
       />
     </div>
-  ))
-);
+  ));
 
 const mockAPI = {
   async get(url) {

@@ -18,7 +18,7 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
-const ProjectPreview = ({ }) => {
+const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
     return (
