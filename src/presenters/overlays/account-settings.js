@@ -89,13 +89,14 @@ class PasswordSettings extends React.Component {
     const pwMinCharCount = 8;
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
     const isEnabled = !this.state.passwordErrorMsg && !this.state.passwordConfirmErrorMsg;
-    const userHasPassword = true; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
+    const userHasPassword = false; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
+    const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
     return (
       <>
-        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{(userHasPassword && !userRequestedPWreset) ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
-          {userHasPassword && <TextInput type="password" labelText="current password" placeholder="current password" />}
+          {(userHasPassword && !userRequestedPWreset) && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
           <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
 
