@@ -5,11 +5,12 @@ import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
 import Text from 'Components/text/text';
-import ProjectItem from 'Components/project/project-item';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile/profile-list';
+import { ProjectsUL } from 'Components/containers/projects-list';
+
 import Layout from '../layout';
 import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
@@ -29,32 +30,12 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import MoreCollectionsContainer from '../more-collections';
-import Note from '../note';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function syncPageToUrl(collection, url) {
   history.replaceState(null, null, getLink({ ...collection, url }));
 }
-
-const ProjectsUL = ({ projects, collection, updateNote, hideNote, isAuthorized, ...props }) => (
-  <ul className="projects-container">
-    {projects.map((project) => (
-      <li key={project.id}>
-        <div className="project-item-note">
-          <Note
-            collection={collection}
-            project={project}
-            updateNote={updateNote}
-            hideNote={hideNote}
-            isAuthorized={isAuthorized}
-          />
-        </div>
-        <ProjectItem project={project} {...props} />
-      </li>
-    ))}
-  </ul>
-);
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -181,9 +162,11 @@ const CollectionPageContents = ({
                     {...props}
                     projects={projects}
                     collection={collection}
-                    isAuthorized={currentUserIsAuthor}
-                    updateNote={updateNote}
-                    hideNote={hideNote}
+                    noteOptions={{
+                      hideNote,
+                      updateNote,
+                      isAuthorized: true,
+                    }}
                     projectOptions={{
                       removeProjectFromCollection,
                       addProjectToCollection,
@@ -197,12 +180,15 @@ const CollectionPageContents = ({
                     {...props}
                     projects={collection.projects}
                     collection={collection}
+                    noteOptions={{ isAuthorized: false }}
                     projectOptions={{
                       addProjectToCollection,
                     }}
                   />
                 )}
-                {!currentUserIsAuthor && !userIsLoggedIn && <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} />}
+                {!currentUserIsAuthor && !userIsLoggedIn && (
+                  <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} noteOptions={{ isAuthorized: false }} />
+                )}
               </div>
             </>
           )}

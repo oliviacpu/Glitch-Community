@@ -53,6 +53,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 };
 
 Note.propTypes = {
+  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     note: PropTypes.string,
     isAddingANewNote: PropTypes.bool,
