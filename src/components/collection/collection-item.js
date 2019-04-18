@@ -5,6 +5,8 @@ import classnames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
+import Text from 'Components/text/text';
+import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile/profile-list';
 import Loader from 'Components/loaders/loader';
 import ProjectItemSmall from 'Components/project/project-item-small';
@@ -19,9 +21,6 @@ const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,
   border: collection.coverColor,
 });
-
-const noProjectsToSee = () => {
-}
 
 const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
@@ -45,25 +44,17 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
       </>
     );
   }
-  
-  if (isAuthorized) {
-    return (
-      <div className="projects-preview empty">
-        <Text>
-          {'This collection is empty – add some projects '}
-          <span role="img" aria-label="">
-            ☝️
-          </span>
-        </Text>
-      </div>
-    )
-  }
-  return (
-    <div classNames={classnames(styles.projectsPreview, styles.empty)}>  
-      
-    </div>
+
+const emptyState = isAuthorized ? (
+  <Text>
+    {'This collection is empty – add some projects '}
+    <Emoji name="index"/>
+  </Text>
+  ) : (
+    <Text>No projects to see in this collection just yet.</Text>
   );
-}
+  return <div className="projects-preview empty">{emptyState}</div>;
+};
 
 ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
@@ -72,40 +63,32 @@ ProjectsPreview.propTypes = {
 const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
   <div className={styles.collection}>
     <div className={styles.container}>
-      { showCurator && 
-        <div className={styles.curator}>
-          { showCurator && <ProfileItem user={collection.user} team={collection.team} /> }
-        </div>
-      }
-    
-      <CollectionLink collection={collection} className={styles.linkBody} style={collectionColorStyles(collection)}>      
+      {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
+
+      <CollectionLink collection={collection} className={styles.linkBody} style={collectionColorStyles(collection)}>
         <div className={styles.avatarContainer}>
           <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
         </div>
-        <div className={styles.nameDescriptionArea}>
+        <div className={styles.nameDescriptionContainer}>
           <Button decorative>
             <div className={styles.name}>{collection.name}</div>
           </Button>
-          <div className={styles.description} style={{color: isDarkColor(collection.coverColor) ? 'white': ''}}>
+          <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
             <Markdown>{collection.description || ' '}</Markdown>
           </div>
-      </div>
+        </div>
       </CollectionLink>
-      
-      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} /> 
-      
-      { collection.projects &&
-      
+
+      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
+
+      {collection.projects && (
         <CollectionLink collection={collection} className={styles.footerLink}>
           {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
           <Pluralize count={collection.projects.length} singular="project" />
           <span aria-hidden="true"> →</span>
         </CollectionLink>
-        
-      }
-      
+      )}
     </div>
-    
   </div>
 );
 
@@ -128,6 +111,6 @@ CollectionItem.defaultProps = {
   collectionOptions: {},
   isAuthorized: false,
   showCurator: false,
-}
+};
 
 export default CollectionItem;
