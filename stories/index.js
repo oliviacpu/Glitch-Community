@@ -473,9 +473,6 @@ storiesOf('FeaturedProject', module)
         currentUser={{ login: '@sarahzinger' }}
       />
     )),
-<<<<<<< HEAD
-  );
-=======
   );
 
 const team = {
@@ -506,4 +503,3 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ))
->>>>>>> 71c5ccdc68b7826388aa9c95106f300d7fc6e022
