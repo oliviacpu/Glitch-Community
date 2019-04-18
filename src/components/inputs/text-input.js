@@ -50,7 +50,7 @@ const TextInput = ({
           id={uniqueId}
           maxLength={maxLength}
           name={name}
-          onBlur={() => onBlur()}
+          onBlur={onBlur ? () => onBlur() : null}
           onChange={(evt) => onChange(evt.target.value)}
           placeholder={placeholder}
           type={type}

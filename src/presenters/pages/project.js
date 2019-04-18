@@ -100,7 +100,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
                 <ProjectDomainInput
                   domain={domain}
                   onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  suffix={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
                 />
               ) : (
                 <>
