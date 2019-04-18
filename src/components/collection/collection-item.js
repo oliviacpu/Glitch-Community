@@ -72,23 +72,25 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
         </div>
         <div className={styles.nameDescriptionArea}>
           <Button decorative>
-            <div className={styles.collectionName}>{collection.name}</div>
+            <div className={styles.name}>{collection.name}</div>
           </Button>
           <div className={styles.description} style={{color: isDarkColor(collection.coverColor) ? 'white': ''}}>
             <Markdown>{collection.description || ' '}</Markdown>
           </div>
       </div>
-      
       </CollectionLink>
     </div>
     
     <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
     
+    {/*
     <CollectionLink collection={collection} className={styles.footerLink}>
       {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
       <Pluralize count={collection.projects.length} singular="project" />
       <span aria-hidden="true"> →</span>
     </CollectionLink>
+    
+    */}
     
   </div>
 );
@@ -99,7 +101,7 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    projects: PropTypes.node,
+    projects: PropTypes.object,
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
