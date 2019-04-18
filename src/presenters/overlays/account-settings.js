@@ -28,7 +28,7 @@ const weakPWs = [
   'qwerty123',
 ];
 
-const strengthMsg = ['😑 weak','🙂 okay', '💪 strong'];
+const strengthMsg = ['😑 weak', '🙂 okay', '💪 strong'];
 
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
@@ -79,15 +79,16 @@ class PasswordSettings extends React.Component {
     // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
     const pw = this.state.password;
     let pwStrength = 0;
-    if(!weakPWs.includes(pw)){
+    if (!weakPWs.includes(pw)) {
       const hasCapScore = /^(?=.*[A-Z])/.test(pw) ? 1 : 0;
       const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
-      const hasCharScore = /^(?=.*\W])/.test(pw) ? 1 : 0;
+      const hasCharScore = /[!@#$%^&*(),.?":{}|<>]/.test(pw) ? 1 : 0;
       pwStrength = hasCapScore + hasNumScore + hasCharScore;
+    }else{
     }
     console.log(pwStrength);
-    this.setState({ passWordErrorMsg: pwStrength === 0 ? weakPWErrorMsg : '' });
-    this.setState({ passwordStrength : pwStrength });
+    
+    this.setState({ passwordStrength: pwStrength });
   }
 
   validatePasswordMatch() {
@@ -105,34 +106,30 @@ class PasswordSettings extends React.Component {
   render() {
     const pwMinCharCount = 8;
     const progress = Math.round((this.state.password.length / pwMinCharCount) * 100);
-    const isEnabled = !this.state.passwordErrorMsg && !this.state.passwordConfirmErrorMsg;
+    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.passwordConfirmErrorMsg;
     const userHasPassword = false; // this is just a test toggle to change the form, depending on whether the user has a password. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
     const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
     return (
       <>
-        <Heading tagName="h2">{(userHasPassword && !userRequestedPWreset) ? 'Change Password' : 'Set Password'}</Heading>
+        <Heading tagName="h2">{userHasPassword && !userRequestedPWreset ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
-          {(userHasPassword && !userRequestedPWreset) && <TextInput type="password" labelText="current password" placeholder="current password" />}
+          {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
-          <TextInput 
-            type="password" 
-            labelText="password" 
-            placeholder="new password" 
-            onChange={this.onChangePW} 
-            error={this.state.passwordErrorMsg} 
-            />
-          
-          { this.state.password.length > 0 &&
+          <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
+
+          {this.state.password.length >= pwMinCharCount ? (
             <div class="pw-strength">
-              <progress 
-                value={Math.max(this.state.passwordStrength, 1)}
-                max="4" 
-                className={`pw-strength score-${this.state.passwordStrength}`}/>
+              <progress value={Math.max(this.state.passwordStrength, 1)} max="3" className={`pw-strength score-${this.state.passwordStrength}`} />
               <span class="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
             </div>
-            
-          }
+          ) : (
+            this.state.password.length > 0 && (
+              <div class="pw-strength">
+                <span className="note">{pwMinCharCount - this.state.password.length} characters to go....</span>
+              </div>
+            )
+          )}
 
           <TextInput
             type="password"
@@ -141,7 +138,7 @@ class PasswordSettings extends React.Component {
             onChange={this.onChangePWConfirm}
             error={this.state.passwordConfirmErrorMsg}
           />
-          
+
           {/*
           {this.state.password.length < pwMinCharCount && (
             <>
