@@ -13,6 +13,8 @@ export class OptimisticValue extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.update = debounce(this.update.bind(this), 500);
   }
+  
+  
 
   onChange(value) {
     this.update(value);

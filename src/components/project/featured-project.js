@@ -57,12 +57,16 @@ const FeaturedProject = ({
   unfeatureProject,
 }) => {
   const featuredProjectRef = useRef();
-  const oldId = usePrevious(featuredProject.id);
-  useEffect(() => {
-    if (oldId && featuredProject.id && oldId !== featuredProject.id) {
-      featuredProjectRef.current.classList.add('slide-down');
-    }
-  }, [featuredProject.id]);
+  // const oldId = usePrevious(featuredProject.id);
+  // useEffect(() => {
+  //   if (oldId && featuredProject.id && oldId !== featuredProject.id) {
+  //     console.log({oldId, newId: featuredProject.id})
+  //     featuredProjectRef.current.classList.add('slide-down');
+  //     featuredProjectRef.current.addEventListener('animationend', () => {
+  //       featuredProjectRef.current.classList.remove('slide-down');
+  //     })
+  //   }
+  // }, [featuredProject.id]);
   return (
     <div ref={featuredProjectRef}>
       <ProjectEmbed

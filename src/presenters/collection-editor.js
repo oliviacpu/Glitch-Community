@@ -69,7 +69,7 @@ class CollectionEditor extends React.Component {
   
   async featureProject(id) {
     await this.updateFields({ featuredProjectId: id });
-    this.updateProject({}, id);
+    this.updateProject({}, null);
   }
 
   updateProject(projectUpdates, projectId) {
