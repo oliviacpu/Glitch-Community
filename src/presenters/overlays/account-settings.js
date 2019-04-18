@@ -125,7 +125,10 @@ class PasswordSettings extends React.Component {
           
           { this.state.password.length > 0 &&
             <div class="pw-strength">
-              <progress value={this.state.passwordStrength} max="3" />
+              <progress 
+                value={Math.max(this.state.passwordStrength, 1)}
+                max="4" 
+                className={`pw-strength score-${this.state.passwordStrength}`}/>
               <span class="pw-strength-word">{strengthMsg[this.state.passwordStrength]}</span>
             </div>
             
