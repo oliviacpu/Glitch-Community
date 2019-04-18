@@ -14,13 +14,16 @@ export class OptimisticValue extends React.Component {
     this.update = debounce(this.update.bind(this), 500);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const serverResponse = nextProps.value && nextProps.value.trim();
-    const currentState = this.state.value && this.state.value.trim();
-    if (serverResponse !== currentState) {
-      this.setState({ value: nextProps.value });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const serverResponse = nextProps.value; 
+  //   const currentState = this.state.value;
+  //   if (serverResponse !== currentState) {
+  //     const areStrings = typeof serverResponse === "string" && typeof currentState === "string";
+  //     if (areStrings && serverResponse.trim() !== currentState.trim()) {
+  //       this.setState({ value: nextProps.value });
+  //     }
+  //   }
+  // }
 
   onChange(value) {
     this.update(value);
