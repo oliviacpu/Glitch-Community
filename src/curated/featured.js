@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Generate Random Game Systems',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F4_3%20(1).png?1554715796559',
-    link: 'https://glitch.com/~pbta-generator',
+    title: 'Talks at a Never-ending Tech Conf',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Finfinite-conference.png?1555319742021',
+    link: 'https://glitch.com/~infinite-conference'
   },
   {
-    title: 'Support the Girls Club',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F6_3%20(1).png?1554715798287',
-    link: 'https://girlsclubspringfling.org',
-  },
+    title: 'Rock a Sign Bunny like it\'s 2014',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsign-bunny.png?1555319743076',
+    link: 'https://glitch.com/~sign-bunny'  
+  },  
   {
-    title: 'Make a Web Map with Leaflet',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F5_2%20(1).png?1554715796764',
-    link: 'https://glitch.com/~starter-leaflet',  
+    title: 'Random Pixel Blocks',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F2500%20squares.png?1555319741780',
+    link: 'https://glitch.com/~2500squares'
   }
 ];

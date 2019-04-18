@@ -4,7 +4,7 @@ import Pluralize from 'react-pluralize';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
-import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
+import { ProfileItem } from 'Components/profile/profile-list';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 
@@ -17,16 +17,6 @@ const collectionColorStyles = (collection) => ({
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
-const CollectionCurator = ({ collection }) => {
-  if (collection.user) {
-    return <UserAvatar user={collection.user} />;
-  }
-  if (collection.team) {
-    return <TeamAvatar team={collection.team} />;
-  }
-  return <div className={styles.placeholderAvatar} />;
-};
-
 const CollectionLink = ({ collection, children, ...props }) => (
   <a href={`/@${collection.fullUrl}`} {...props}>
     {children}
@@ -36,7 +26,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 const SmallCollectionItem = ({ collection }) => (
   <div className={styles.smallContainer}>
     <div className={styles.curator}>
-      <CollectionCurator collection={collection} />
+      <ProfileItem user={collection.user} team={collection.team} />
     </div>
     <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
       <div className={styles.smallNameDescriptionArea}>

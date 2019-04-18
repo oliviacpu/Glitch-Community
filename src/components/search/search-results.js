@@ -38,11 +38,28 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
   );
 };
 
-// Project and collection search results (from algolia) do not contain their associated users,
+// Search results from algolia do not contain their associated users or teams,
 // so those need to be fetched after the search results have loaded.
+const useTeamUsers = createAPIHook(async (api, teamID) => {
+  const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
+  return res.data.items;
+});
+
+function TeamWithDataLoading({ team }) {
+  const { value: users } = useTeamUsers(team.id);
+  return <TeamItem team={{ ...team, users }} />;
+}
+
+const TeamResult = ({ result }) => {
+  if (!result.users) {
+    return <TeamWithDataLoading team={result} />;
+  }
+  return <TeamItem team={result} />;
+};
+
 const useUsers = createAPIHook(async (api, userIDs) => {
   if (!userIDs.length) {
-    return [];
+    return undefined;
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
 
@@ -52,7 +69,7 @@ const useUsers = createAPIHook(async (api, userIDs) => {
 
 const useTeams = createAPIHook(async (api, teamIDs) => {
   if (!teamIDs.length) {
-    return [];
+    return undefined;
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
 
@@ -71,9 +88,9 @@ function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
 
-  const props = { project: result };
+  const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
-    props.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
   if (!result.users) {
@@ -105,7 +122,7 @@ const groups = [
 ];
 
 const resultComponents = {
-  team: ({ result }) => <TeamItem team={result} />,
+  team: TeamResult,
   user: ({ result }) => <UserItem user={result} />,
   project: ProjectResult,
   collection: CollectionResult,

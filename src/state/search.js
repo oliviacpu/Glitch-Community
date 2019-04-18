@@ -43,7 +43,7 @@ const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
 // search provider logic -- shared between algolia & legacy API
-function useSearchProvider(provider, query) {
+function useSearchProvider(provider, query, params) {
   const { handleError } = useErrorHandlers();
   const emptyResults = mapValues(provider, () => []);
   const [results, setResults] = useState(emptyResults);
@@ -54,13 +54,13 @@ function useSearchProvider(provider, query) {
       return;
     }
     setStatus('loading');
-    allByKeys(mapValues(provider, (index) => index(query)))
+    allByKeys(mapValues(provider, (index) => index(query, params)))
       .then((res) => {
         setResults(res);
         setStatus('ready');
       })
       .catch(handleError);
-  }, [query]);
+  }, [query, params]);
 
   const totalHits = sumBy(Object.values(results), (items) => items.length);
   const resultsWithEmpties = { ...emptyResults, ...results };
@@ -89,7 +89,6 @@ const formatByType = {
     thanksCount: user.thanks,
   }),
   team: (team) => ({
-    users: [],
     isVerified: false,
     ...team,
     id: Number(team.objectID.replace('team-', '')),
@@ -124,11 +123,21 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 
 const algoliaProvider = {
   ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
+  project: (query, { notSafeForKids }) =>
+    searchIndices.project
+      .search({
+        query,
+        hitsPerPage: 100,
+        facetFilters: [notSafeForKids ? '' : 'notSafeForKids:false'],
+      })
+      .then(formatAlgoliaResult('project')),
   starterKit: (query) => Promise.resolve(findStarterKits(query)),
 };
 
-export function useAlgoliaSearch(query) {
-  return useSearchProvider(algoliaProvider, query);
+const defaultParams = { notSafeForKids: false };
+
+export function useAlgoliaSearch(query, params = defaultParams) {
+  return useSearchProvider(algoliaProvider, query, params);
 }
 
 // legacy search

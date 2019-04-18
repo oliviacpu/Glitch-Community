@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import Loader from 'Components/loaders/loader';
-import { getAvatarStyle, getProfileStyle } from '../models/user';
+import CoverContainer from 'Components/containers/cover-container';
+
+import { getAvatarStyle } from '../models/user';
 import { useCurrentUser } from '../state/current-user';
 import { UserLink } from './includes/link';
 
-import { CoverContainer } from './includes/profile';
 import ProjectsLoader from './projects-loader';
 import SignInPop from './pop-overs/sign-in-pop';
 
@@ -47,7 +48,7 @@ const RecentProjectsContainer = ({ children, user, clearUser }) => (
       <UserLink user={user}>Your Projects →</UserLink>
     </Heading>
     {!user.login && <SignInNotice />}
-    <CoverContainer style={getProfileStyle(user)}>
+    <CoverContainer type="user" item={user}>
       <div className="profile-avatar">
         <div className="user-avatar-container">
           <UserLink user={user}>
