@@ -68,8 +68,10 @@ class CollectionEditor extends React.Component {
   }
 
   async featureProject(id) {
+    if (this.state.featuredProjectId) {
+      this.setState({ featuredProjectId: null }); // this is needed to force an updat
+    }
     await this.updateFields({ featuredProjectId: id });
-    this.updateProject({}, null); // this refreshes the projects array so they are re-filtered properly
   }
 
   updateProject(projectUpdates, projectId) {
