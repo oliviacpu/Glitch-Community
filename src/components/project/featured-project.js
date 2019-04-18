@@ -61,6 +61,7 @@ const FeaturedProject = ({
           displayNewNote={() => displayNewNote(featuredProject.id)}
           hasNote={!!featuredProject.note}
           featuredProjectRef={featuredProjectRef}
+          canAddNote={!!collection}
         />}
         project={featuredProject}
         isAuthorized={isAuthorized}
