@@ -164,7 +164,9 @@ const CollectionPageContents = ({
                     }}
                   />
                 )}
-                {!currentUserIsAuthor && !userIsLoggedIn && <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} />}
+                {!currentUserIsAuthor && !userIsLoggedIn && (
+                  <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} noteOptions={{ isAuthorized: false }} />
+                )}
               </div>
             </>
           )}
