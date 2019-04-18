@@ -121,7 +121,7 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
   const [invitee, setInvitee] = React.useState('');
   const [newlyInvited, setNewlyInvited] = React.useState([]);
 
-  const alreadyInvitedAndNewInvited = props.invitedMembers.concat(newlyInvited);
+  const alreadyInvitedAndNewInvited = uniqBy(props.invitedMembers.concat(newlyInvited), (user) => user.id);
   const track = useTracker('Add to Team clicked');
 
   const onSetWhitelistedDomain = async (togglePopover, domain) => {
@@ -157,7 +157,15 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
 
   return (
     <span className="add-user-container">
-      {alreadyInvitedAndNewInvited.length > 0 && <UsersList users={alreadyInvitedAndNewInvited} />}
+      <ul className="users">
+        {alreadyInvitedAndNewInvited.map((user) => (
+          <li key={user.id}>
+            <UserLink user={user} className="user">
+              <UserAvatar user={user} />
+            </UserLink>
+          </li>
+        ))}
+      </ul>
       <span className="add-user-wrap">
         <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
           {({ togglePopover }) => (
