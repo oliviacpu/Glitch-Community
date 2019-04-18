@@ -47,9 +47,9 @@ const LoginPage = ({ provider, url }) => {
   const api = useAPI();
   const { login } = useCurrentUser();
 
-  const [done, setDone] = React.useState(false);
-  const [didError, setDidError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const [state, setState] = React.useState({ status: 'active' });
+  const setDone = () => setState({ status: 'done' });
+  const setError = (message) => setState({ status: 'error', message });
 
   const perform = async () => {
     try {
@@ -61,15 +61,12 @@ const LoginPage = ({ provider, url }) => {
       console.log('LOGGED IN', data.id);
       login(data);
 
-      setDone(true);
+      setDone();
       analytics.track('Signed In', { provider });
       notifyParent({ success: true, details: { provider } });
     } catch (error) {
       const errorData = error && error.response && error.response.data;
-      if (errorData && errorData.message) {
-        setErrorMessage(errorData.message);
-      }
-      setDidError(true);
+      setError(errorData && errorData.message);
 
       if (error && error.response && error.response.status !== 401) {
         console.error('Login error.', errorData);
@@ -83,15 +80,16 @@ const LoginPage = ({ provider, url }) => {
     perform();
   }, [provider, url]);
 
-  if (done) {
+  if (state.status === 'done') {
     return <RedirectToDestination />;
   }
-  if (didError) {
+  if (state.status === 'error') {
     const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
+    const errorMessage = state.message || genericDescription;
     if (provider === 'Email') {
-      return <EmailErrorPage title={`${provider} Login Problem`} description={errorMessage || genericDescription} />;
+      return <EmailErrorPage title={`${provider} Login Problem`} description={errorMessage} />;
     }
-    return <OauthErrorPage title={`${provider} Login Problem`} description={errorMessage || genericDescription} />;
+    return <OauthErrorPage title={`${provider} Login Problem`} description={errorMessage} />;
   }
   return <div className="content" />;
 };
