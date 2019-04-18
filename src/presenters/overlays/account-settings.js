@@ -37,6 +37,7 @@ class PasswordSettings extends React.Component {
     this.state = {
       password: '',
       passwordConfirm: '',
+      passwordStrength: 0,
       passwordErrorMsg: '',
       passwordConfirmErrorMsg: '',
       done: false,
@@ -76,14 +77,15 @@ class PasswordSettings extends React.Component {
     // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
     const pw = this.state.password;
     let pwStrength = 0;
-    if(!weakPWs.includes(password)){
+    if(!weakPWs.includes(pw)){
       const hasCapScore = /^(?=.*[A-Z])/.test(pw) ? 1 : 0;
       const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
       const hasCharScore = /^(?=.*\W])/.test(pw) ? 1 : 0;
       pwStrength = hasCapScore + hasNumScore + hasCharScore;
     }
-
-    this.setState({ passwordErrorMsg: passwordIsWeak ? weakPWErrorMsg : undefined });
+    console.log(pwStrength);
+    this.setState({ passWordErrorMsg: pwStrength === 0 ? weakPWErrorMsg : '' });
+    this.setState({ passwordStrength : pwStrength });
   }
 
   validatePasswordMatch() {
@@ -111,7 +113,13 @@ class PasswordSettings extends React.Component {
         <form onSubmit={this.handleSubmit}>
           {(userHasPassword && !userRequestedPWreset) && <TextInput type="password" labelText="current password" placeholder="current password" />}
 
-          <TextInput type="password" labelText="password" placeholder="new password" onChange={this.onChangePW} error={this.state.passwordErrorMsg} />
+          <TextInput 
+            type="password" 
+            labelText="password" 
+            placeholder="new password" 
+            onChange={this.onChangePW} 
+            error={this.state.passwordErrorMsg} 
+            />
 
           <TextInput
             type="password"
