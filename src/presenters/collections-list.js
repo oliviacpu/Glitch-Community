@@ -7,7 +7,6 @@ import Loader from 'Components/loaders/loader';
 import CollectionItem from 'Components/collection/collection-item';
 
 import { useTrackedFunc } from './segment-analytics';
-// import CollectionItem from './collection-item';
 import { getLink, createCollection } from '../models/collection';
 import { useNotifications } from './notifications';
 

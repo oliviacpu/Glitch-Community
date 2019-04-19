@@ -9,18 +9,19 @@
   padding-bottom: 1.5rem
   height: 320px
   transition: 0.1s all
-  background-color: secondary-background
 
   .container
     overflow: hidden
     height: calc(100% + 45px)
+    a
+      text-decoration: none
+      color: primary
     .linkBody
       display: flex
       height: 130px
       padding: 12px
       border-top-right-radius: 5px
       border-top-left-radius: 5px
-      text-decoration: none
       .avatarContainer
         flex: 0 0 55px
         margin-right: 1rem
@@ -29,15 +30,16 @@
           height: auto
       .nameDescriptionContainer
         overflow: hidden
-    &:hover
-      .nameDescriptionContainer
-        button
-          box-shadow: 2px 2px 0 primary
+      &:hover
+        .nameDescriptionContainer
+          button
+            box-shadow: 2px 2px 0 primary
     .projectsContainer
       height: 150px
       list-style-type: none
       padding: 0
       padding-top: 1em
+      background-color: secondary-background
       > li
         margin: 0 10px 5px
       &.empty

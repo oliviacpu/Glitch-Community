@@ -301,7 +301,6 @@ const mockAPI = {
 storiesOf('CollectionItem', module).add(
   'with projects',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
-    <div style={{ margin: '2em', width: '25%' }}>
       <CollectionItem
         collection={{
           id: 12345,
@@ -329,7 +328,6 @@ storiesOf('CollectionItem', module).add(
           ],
         }}
       />
-    </div>
   )),
 );
 

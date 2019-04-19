@@ -3,7 +3,8 @@ import { sampleSize } from 'lodash';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import { createAPIHook } from '../../state/api';
 
-import CollectionItem from '../collection-item';
+// import CollectionItem from '../collection-item';
+import CollectionItem from 'Components/collection/collection-item';
 
 const useIncludingCollections = createAPIHook(async (api, projectId) => {
   const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
