@@ -14,7 +14,7 @@ import { isDarkColor } from '../models/collection';
  * Note Component
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
-  function updateNoteVisibility(description) {
+  function hideEmptyNote(description) {
     description = _.trim(description);
     if (!description || description.length === 0) {
       setTimeout(() => hideNote(project.id), 500);
@@ -28,7 +28,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   const collectionCoverColor = collection.coverColor;
 
   const className = classNames({
-    'description-container': true,
+    descriptionContainer: true,
     dark: isDarkColor(collectionCoverColor),
   });
 
@@ -40,7 +40,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
           description={project.note || ''}
           placeholder="Share why you love this app."
           update={(note) => updateNote({ note, projectId: project.id })}
-          onBlur={updateNoteVisibility}
+          onBlur={hideEmptyNote}
           allowImages
         />
       </div>
