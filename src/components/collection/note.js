@@ -18,7 +18,8 @@ const cx = classNames.bind(styles);
  * Note Component
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
-  console.log({ collection, project, updateNote, hideNote, isAuthorized })
+  console.log({ collection, project, updateNote, hideNote, isAuthorized });
+
   function hideEmptyNote(description) {
     description = _.trim(description);
     if (!description || description.length === 0) {
@@ -34,7 +35,10 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 
   return (
     <div className={styles.note}>
-      <div className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
+      <div
+        className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })}
+        style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}
+      >
         <AuthDescription
           authorized={isAuthorized}
           description={project.note || ''}
