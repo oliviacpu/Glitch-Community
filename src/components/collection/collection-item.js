@@ -37,7 +37,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
       <>
         <ul className={styles.projectsContainer}>
           {collection.projects.slice(0, 3).map((project) => (
-            <li key={project.id}>
+            <li key={project.id} className={styles.projectItem}>
               <ProjectItemSmall project={project} />
             </li>
           ))}
