@@ -1,6 +1,7 @@
 @require '../constants'
 
 .collection
+  position: relative
   margin-top: 0px
   margin-bottom: 1em
   font-size: 0.9rem
@@ -9,17 +10,6 @@
   padding-bottom: 1.5rem
   height: 320px
   transition: 0.1s all
-  &.showCurator
-    top: -13px
-    left: 8.5px
-    border: solid transparent
-    content: " "
-    height: 0
-    width: 0
-    position: absolute
-    pointer-events: none
-    border-bottom-color: inherit
-    border-width: 7px
   .container
     overflow: hidden
     height: calc(100% + 45px)
@@ -32,6 +22,17 @@
       padding: 12px
       border-top-right-radius: 5px
       border-top-left-radius: 5px
+      &.showCurator:after
+        top: 27px
+        left: 8.5px
+        border: solid transparent
+        content: " "
+        height: 0
+        width: 0
+        position: absolute
+        pointer-events: none
+        border-bottom-color: inherit
+        border-width: 7px
       .avatarContainer
         flex: 0 0 55px
         margin-right: 1rem

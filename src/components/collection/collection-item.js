@@ -22,10 +22,6 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
-const linkBodyStyles = (showCurator) => 
-  ({ linkBody: true, showCurator: showCurator});
-
-
 const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
@@ -69,7 +65,7 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
     <div className={styles.container}>
       {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
 
-      <CollectionLink collection={collection} className={cx(linkBodyStyles(showCurator)} style={collectionColorStyles(collection)}>
+      <CollectionLink collection={collection} className={classNames(styles.linkBody, {[styles.showCurator]: showCurator})} style={collectionColorStyles(collection)}>
         <div className={styles.avatarContainer}>
           <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
         </div>
