@@ -65,7 +65,11 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
     <div className={styles.container}>
       {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
 
-      <CollectionLink collection={collection} className={classNames(styles.linkBody, {[styles.showCurator]: showCurator})} style={collectionColorStyles(collection)}>
+      <CollectionLink
+        collection={collection}
+        className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
+        style={collectionColorStyles(collection)}
+      >
         <div className={styles.avatarContainer}>
           <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
         </div>
