@@ -338,11 +338,12 @@ storiesOf('Collection', module).add(
           description: 'A collection of cool projects',
           coverColor: '#efe',
           user: users.modernserf,
+          projects: null,
         }}
       />
     ))
   )
-  .add('Collection Item with authorization',
+  .add('Collection Item with curator',
     provideContext({ currentUser: {}, api: mockAPI}, () => (
       <CollectionItem
         collection={{
@@ -351,7 +352,7 @@ storiesOf('Collection', module).add(
           description: 'A collection of cool projects',
           coverColor: '#efe',
           user: users.modernserf,
-          isAuthorized: true,
+          showCurator: true,
           projects:
             [{
               id: 'foo',

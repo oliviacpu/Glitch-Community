@@ -131,7 +131,14 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
 };
 
 CollectionItem.propTypes = {
-  collection: PropTypes.object.isRequired,
+  collection: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    coverColor: PropTypes.string.isRequired,
+    user: PropTypes.object,
+    team: PropTypes.object,
+  }),
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
   deleteCollection: PropTypes.func,
