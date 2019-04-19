@@ -39,7 +39,12 @@ const CollectionWide = ({ collection }) => {
         </div>
       </header>
       <div className="collection-contents">
-        <ProjectsUL projects={featuredProjects} collection={collection} hideProjectDescriptions={featuredProjectsHaveAtLeastOneNote} />
+        <ProjectsUL
+          projects={featuredProjects}
+          collection={collection}
+          hideProjectDescriptions={featuredProjectsHaveAtLeastOneNote}
+          noteOptions={{ isAuthorized: false }}
+        />
         <CollectionLink collection={collection} className="collection-view-all">
           View all <Pluralize count={collection.projectCount} singular="project" /> <span aria-hidden>→</span>
         </CollectionLink>
