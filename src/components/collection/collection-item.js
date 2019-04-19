@@ -62,7 +62,7 @@ ProjectsPreview.propTypes = {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <div className={classNames(styles.collection, {[styles.authorized]: isAuthorized})}>
+  <div className={classNames(styles.collection, { [styles.authorized]: isAuthorized })}>
     <div className={styles.container}>
       {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
 
@@ -115,7 +115,7 @@ CollectionItem.propTypes = {
 };
 
 CollectionItem.defaultProps = {
-  deleteCollection: false,
+  deleteCollection: null,
   isAuthorized: false,
   showCurator: false,
 };
