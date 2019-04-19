@@ -510,15 +510,18 @@ const collection = {
   user: users[0],
 };
 
-const project = {};
+const project = {
+  note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server"
+};
   
 storiesOf('Note', module)
-  .add('when authorized', () => (
+  .add('when authorized', 
+  provideContext({ currentUser: {} }, () => (
     <Note
       collection={collection}
       project={project}
-      updateNote={() => {}}
-      hideNote={() => {}}
+      updateNote={() => console.log("server would have been pinged to update this note")}
+      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
       isAuthorized={true}
     />
-  ))
+  )))

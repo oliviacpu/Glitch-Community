@@ -18,6 +18,7 @@ const cx = classNames.bind(styles);
  * Note Component
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
+  console.log({ collection, project, updateNote, hideNote, isAuthorized })
   function hideEmptyNote(description) {
     description = _.trim(description);
     if (!description || description.length === 0) {
@@ -52,7 +53,9 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 
 Note.propTypes = {
   collection: PropTypes.shape({
-    coverColor: PropTypes.string
+    coverColor: PropTypes.string,
+    user: PropTypes.object,
+    team: PropTypes.object,
   }).isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
