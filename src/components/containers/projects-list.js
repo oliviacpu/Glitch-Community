@@ -12,8 +12,6 @@ import Image from 'Components/images/image';
 import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 
-// import Note from '../../presenters/note';
-
 import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);

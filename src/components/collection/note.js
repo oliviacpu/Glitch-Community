@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
-import styles from './note.styl';
 
 import { ProfileItem } from 'Components/profile/profile-list';
+
+import styles from './note.styl';
 
 // TODO: let's move these into components
 import { AuthDescription } from '../../presenters/includes/description-field';
 
 import { isDarkColor } from '../../models/collection';
+
+const cx = classNames.bind(styles);
 
 /**
  * Note Component
@@ -28,14 +31,9 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 
   const collectionCoverColor = collection.coverColor;
 
-  const className = classNames({
-    styles.descriptionContainer: true,
-    dark: isDarkColor(collectionCoverColor),
-  });
-
   return (
-    <div className="note">
-      <div className={className} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
+    <div className={styles.note}>
+      <div className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
         <AuthDescription
           authorized={isAuthorized}
           description={project.note || ''}
@@ -45,7 +43,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
           allowImages
         />
       </div>
-      <div className="user">
+      <div className={styles.user}>
         <ProfileItem user={collection.user} team={collection.team} />
       </div>
     </div>
