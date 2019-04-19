@@ -14,6 +14,7 @@ import ProjectItemSmall from 'Components/project/project-item-small';
 import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import { CollectionLink } from '../../presenters/includes/link';
+import CollectionOptionsContainer from '../../presenters/pop-overs/collection-options-pop';
 
 import styles from './collection-item.styl';
 
@@ -60,9 +61,11 @@ ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
 
-const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
-  <div className={styles.collection}>
+const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
+  <div className={classNames(styles.collection, {[styles.authorized]: isAuthorized})}>
     <div className={styles.container}>
+      {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
+
       {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
 
       <CollectionLink
@@ -106,13 +109,13 @@ CollectionItem.propTypes = {
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
-  collectionOptions: PropTypes.object,
+  deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
-  collectionOptions: {},
+  deleteCollection: false,
   isAuthorized: false,
   showCurator: false,
 };
