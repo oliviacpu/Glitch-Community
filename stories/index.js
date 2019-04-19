@@ -328,8 +328,51 @@ storiesOf('CollectionItem', module).add(
           ],
         }}
       />
-  )),
-);
+  ))
+  .add('without projects',
+    provideContext({ currentUser: {}, api: mockAPI }, () => (
+      <CollectionItem
+        collection={{
+          id: 12345,
+          name: 'Cool Projects',
+          description: 'A collection of cool projects',
+          coverColor: '#efe',
+          user: users.modernserf,
+        }}
+      />
+    ))
+  )
+  .add('with authorization',
+    provideContext({ currentUser: {}, api: mockAPI, isAuthorized: true }, () => (
+      <CollectionItem
+        collection={{
+          id: 12345,
+          name: 'Cool Projects',
+          description: 'A collection of cool projects',
+          coverColor: '#efe',
+          user: users.modernserf,
+          projects:
+            [{
+              id: 'foo',
+              domain: 'stencilfy',
+            },    
+            {
+              id: 'foo2',
+              domain: 'svg-animator',
+            },     
+            {
+              id: 'foo3',
+              domain: 'bongo-cat',
+            },
+            {
+              id: 'foo4',
+              domain: 'community',
+            },
+          ],
+        }}
+      />
+  ))
+));
 
 storiesOf('CollectionItemSmall', module).add(
   'with user',
