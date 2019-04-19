@@ -338,7 +338,7 @@ storiesOf('Collection', module).add(
           description: 'A collection of cool projects',
           coverColor: '#efe',
           user: users.modernserf,
-          projects: null,
+          projects: [],
         }}
       />
     ))

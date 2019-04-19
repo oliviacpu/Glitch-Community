@@ -90,9 +90,13 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
 
       {collection.projects && (
         <CollectionLink collection={collection} className={styles.footerLink}>
-          {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-          <Pluralize count={collection.projects.length} singular="project" />
-          <span aria-hidden="true"> →</span>
+          { collection.projects.length > 0 &&
+            <>
+              {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+              <Pluralize count={collection.projects.length} singular="project" />
+              <span aria-hidden="true"> →</span>
+            </>
+          }
         </CollectionLink>
       )}
     </div>
