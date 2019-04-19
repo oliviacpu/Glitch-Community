@@ -27,7 +27,7 @@ const TeamItem = ({ team }) => (
       </div>
       <div className={styles.body}>
         <div>
-          <Button href={getLink(team)}>{team.name}</Button>
+          <Button decorative>{team.name}</Button>
           {!!team.isVerified && <VerifiedBadge />}
         </div>
         <div className={styles.usersList}>
