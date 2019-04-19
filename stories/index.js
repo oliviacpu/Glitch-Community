@@ -506,7 +506,7 @@ storiesOf('CoverContainer', module)
   ))
 
 const collection = {
-  coverColor: "rgb(12,84,124)",
+  coverColor: "#000000",
   user: users[0],
 };
 
@@ -515,8 +515,7 @@ const project = {
 };
   
 storiesOf('Note', module)
-  .add('when authorized', 
-  provideContext({ currentUser: users[0] }, () => (
+  .add('when authorized', () => (
     <Note
       collection={collection}
       project={project}
@@ -524,4 +523,4 @@ storiesOf('Note', module)
       hideNote={() => console.log("after a certain amount of time we would have hid the note")}
       isAuthorized={true}
     />
-  )))
+  ))
