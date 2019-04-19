@@ -246,8 +246,8 @@ const users = {
   },
 };
 
-storiesOf('ProjectItem', module).add(
-  'base',
+storiesOf('Project', module).add(
+  'Project Item',
   provideContext({ currentUser: {} }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
       <ProjectItem
@@ -263,31 +263,30 @@ storiesOf('ProjectItem', module).add(
       />
     </div>
   )),
-);
+)
+.add('Project Item Small', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: false,
+      }}
+    />
+  </div>
+))
+.add('Project Item Small - private', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: true,
+      }}
+    />
+  </div>
+));
 
-storiesOf('ProjectItemSmall', module).add(
-  'base', () => (
-    <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
-      <ProjectItemSmall
-        project={{
-          id: 'foo',
-          domain: 'judicious-pruner',
-          private: false,
-        }}
-      />
-    </div>
-  ))
-  .add('private', () => (
-    <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
-      <ProjectItemSmall
-        project={{
-          id: 'foo',
-          domain: 'judicious-pruner',
-          private: true,
-        }}
-      />
-    </div>
-  ));
 
 const mockAPI = {
   async get(url) {
@@ -298,8 +297,8 @@ const mockAPI = {
   },
 };
 
-storiesOf('CollectionItem', module).add(
-  'with projects',
+storiesOf('Collection', module).add(
+  'Collection Item with projects',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
       <CollectionItem
         collection={{
@@ -329,7 +328,8 @@ storiesOf('CollectionItem', module).add(
         }}
       />
   ))
-  .add('without projects',
+  )
+  .add('Collection Item without projects',
     provideContext({ currentUser: {}, api: mockAPI }, () => (
       <CollectionItem
         collection={{
@@ -342,8 +342,8 @@ storiesOf('CollectionItem', module).add(
       />
     ))
   )
-  .add('with authorization',
-    provideContext({ currentUser: {}, api: mockAPI, isAuthorized: true }, () => (
+  .add('Collection Item with authorization',
+    provideContext({ currentUser: {}, api: mockAPI}, () => (
       <CollectionItem
         collection={{
           id: 12345,
@@ -351,6 +351,7 @@ storiesOf('CollectionItem', module).add(
           description: 'A collection of cool projects',
           coverColor: '#efe',
           user: users.modernserf,
+          isAuthorized: true,
           projects:
             [{
               id: 'foo',
@@ -372,10 +373,8 @@ storiesOf('CollectionItem', module).add(
         }}
       />
   ))
-));
-
-storiesOf('CollectionItemSmall', module).add(
-  'with user',
+)
+.add('Collection Item Small',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
       <CollectionItemSmall
@@ -389,7 +388,7 @@ storiesOf('CollectionItemSmall', module).add(
         }}
       />
     </div>
-  )),
+  ))
 );
 
 storiesOf('UserItem', module).add('base', () => (
