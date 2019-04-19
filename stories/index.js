@@ -346,7 +346,7 @@ storiesOf('Collection', module).add(
   .add('Collection Item with curator',
     provideContext({ currentUser: {}, api: mockAPI}, () => (
       <CollectionItem
-        showCurator=true,
+        showCurator={true}
         collection={{
           id: 12345,
           name: 'Show Curator',
@@ -372,7 +372,7 @@ storiesOf('Collection', module).add(
             },
           ],
         }}
-      />,
+      />
   ))
 )
 .add('Collection Item Small',
