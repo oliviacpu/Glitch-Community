@@ -9,39 +9,38 @@
   transition: 0.1s all
   &.authorized
     margin-top: 30px
-  .container
-    a
-      text-decoration: none
-      color: primary
-    .linkBody
-      display: flex
-      height: 130px
-      padding: 12px
-      border-top-right-radius: 5px
-      border-top-left-radius: 5px
-      &.showCurator:after
-        top: 27px
-        left: 8.5px
-        border: solid transparent
-        content: " "
-        height: 0
-        width: 0
-        position: absolute
-        pointer-events: none
-        border-bottom-color: inherit
-        border-width: 7px
-      .avatarContainer
-        flex: 0 0 55px
-        margin-right: 1rem
-        svg
-          width: 100%
-          height: auto
+  a
+    text-decoration: none
+    color: primary
+  .linkBody
+    display: flex
+    height: 130px
+    padding: 12px
+    border-top-right-radius: 5px
+    border-top-left-radius: 5px
+    &.showCurator:after
+      top: 27px
+      left: 8.5px
+      border: solid transparent
+      content: " "
+      height: 0
+      width: 0
+      position: absolute
+      pointer-events: none
+      border-bottom-color: inherit
+      border-width: 7px
+    .avatarContainer
+      flex: 0 0 55px
+      margin-right: 1rem
+      svg
+        width: 100%
+        height: auto
+    .nameDescriptionContainer
+      overflow: hidden
+    &:hover
       .nameDescriptionContainer
-        overflow: hidden
-      &:hover
-        .nameDescriptionContainer
-          button
-            box-shadow: 2px 2px 0 primary
+        button
+          box-shadow: 2px 2px 0 primary
     .projectsContainer
       width: 100%
       height: 150px
