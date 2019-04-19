@@ -51,11 +51,13 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 };
 
 Note.propTypes = {
+  collection: PropTypes.shape({
+    coverColor: PropTypes.string
+  }).isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     note: PropTypes.string,
     isAddingANewNote: PropTypes.bool,
-    collectionCoverColor: PropTypes.string,
   }).isRequired,
   updateNote: PropTypes.func,
   hideNote: PropTypes.func,

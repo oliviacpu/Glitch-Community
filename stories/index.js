@@ -505,7 +505,11 @@ storiesOf('CoverContainer', module)
     </CoverContainer>
   ))
 
-const collection = {};
+const collection = {
+  coverColor: "rgb(12,84,124)",
+  user: users[0],
+};
+
 const project = {};
   
 storiesOf('Note', module)
