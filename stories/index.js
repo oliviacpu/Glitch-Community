@@ -505,23 +505,23 @@ storiesOf('CoverContainer', module)
     </CoverContainer>
   ))
 
-// const collection = {
-//   coverColor: "rgb(12,84,124)",
-//   user: users[0],
-// };
+const collection = {
+  coverColor: "rgb(12,84,124)",
+  user: users[0],
+};
 
-// const project = {
-//   note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server"
-// };
+const project = {
+  note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server"
+};
   
-// storiesOf('Note', module)
-//   .add('when authorized', 
-//   provideContext({ currentUser: {} }, () => (
-//     <Note
-//       collection={collection}
-//       project={project}
-//       updateNote={() => console.log("server would have been pinged to update this note")}
-//       hideNote={() => console.log("after a certain amount of time we would have hid the note")}
-//       isAuthorized={true}
-//     />
-//   )))
+storiesOf('Note', module)
+  .add('when authorized', 
+  provideContext({ currentUser: users[0] }, () => (
+    <Note
+      collection={collection}
+      project={project}
+      updateNote={() => console.log("server would have been pinged to update this note")}
+      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      isAuthorized={true}
+    />
+  )))
