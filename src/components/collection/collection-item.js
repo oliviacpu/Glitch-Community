@@ -74,7 +74,7 @@ const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
             <div className={styles.name}>{collection.name}</div>
           </Button>
           <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
-            <Markdown>{collection.description || ' '}</Markdown>
+            <Markdown length={80}>{collection.description || ' '}</Markdown>
           </div>
         </div>
       </CollectionLink>
