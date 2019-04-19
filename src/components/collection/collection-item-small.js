@@ -7,6 +7,7 @@ import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile/profile-list';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
+import { isDarkColor } from '../../models/collection';
 
 import styles from './collection-item.styl';
 
@@ -41,7 +42,12 @@ const CollectionItemSmall = ({ collection }) => (
             </Button>
           </div>
         </div>
-        <div className={styles.description}>
+        <div
+          className={styles.description}
+          style={{
+            color: isDarkColor(collection.coverColor) ? 'white' : '',
+          }}
+        >
           <Markdown>{collection.description || ' '}</Markdown>
         </div>
       </div>
