@@ -36,10 +36,12 @@ const CollectionItemSmall = ({ collection }) => (
             <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
           </div>
           <div className={styles.collectionNameWrap}>
-            <Button decorative>
-              {collection.private && <PrivateIcon />}
-              <div className={styles.collectionName}>{collection.name}</div>
-            </Button>
+            <div className={styles.itemButtonWrap}>
+              <Button decorative>
+                {collection.private && <PrivateIcon />}
+                <div className={styles.collectionName}>{collection.name}</div>
+              </Button>
+            </div>
           </div>
         </div>
         <div

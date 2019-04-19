@@ -37,9 +37,11 @@ const ProjectItem = ({ project, projectOptions }) => (
           <ProfileAvatar project={project} />
         </div>
         <div className={styles.nameWrap}>
-          <Button decorative>
-            {project.private && <PrivateIcon />} <span className={styles.projectDomain}>{project.domain}</span>
-          </Button>
+          <div className={styles.itemButtonWrap}>
+            <Button decorative>
+              {project.private && <PrivateIcon />} <span className={styles.projectDomain}>{project.domain}</span>
+            </Button>
+          </div>
         </div>
       </div>
       <div className={styles.description}>
