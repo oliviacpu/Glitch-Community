@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
@@ -17,6 +17,8 @@ import { CollectionLink } from '../../presenters/includes/link';
 
 import styles from './collection-item.styl';
 
+const cs = classNames.bind(styles);
+
 const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,
   border: collection.coverColor,
@@ -26,7 +28,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
     return (
-      <div className={classnames(styles.projectsContainer, styles.empty)}>
+      <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Loader />
       </div>
     );
@@ -53,7 +55,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   ) : (
     <Text>No projects to see in this collection just yet.</Text>
   );
-  return <div className={classnames(styles.projectsContainer, styles.empty)}>{emptyState}</div>;
+  return <div className={classNames(styles.projectsContainer, styles.empty)}>{emptyState}</div>;
 };
 
 ProjectsPreview.propTypes = {
