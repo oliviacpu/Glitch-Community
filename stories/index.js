@@ -29,6 +29,7 @@ import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
+import Note from 'Components/collection/note';
 
 // initialize globals
 window.CDN_URL = 'https://cdn.glitch.com';
@@ -502,4 +503,18 @@ storiesOf('CoverContainer', module)
         <p>Notice the buttons are up and to the right</p>
       </div>
     </CoverContainer>
+  ))
+
+const collection = {};
+const project = {};
+  
+storiesOf('Note', module)
+  .add('when authorized', () => (
+    <Note
+      collection={collection}
+      project={project}
+      updateNote={() => {}}
+      hideNote={() => {}}
+      isAuthorized={true}
+    />
   ))

@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
+import styles from './note.styl';
 
 import { ProfileItem } from 'Components/profile/profile-list';
 
 // TODO: let's move these into components
-import { AuthDescription } from './includes/description-field';
+import { AuthDescription } from '../../presenters/includes/description-field';
 
-import { isDarkColor } from '../models/collection';
+import { isDarkColor } from '../../models/collection';
 
 /**
  * Note Component
@@ -28,7 +29,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   const collectionCoverColor = collection.coverColor;
 
   const className = classNames({
-    descriptionContainer: true,
+    styles.descriptionContainer: true,
     dark: isDarkColor(collectionCoverColor),
   });
 
