@@ -43,9 +43,7 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
           </div>
           {collection.description.length > 0 && (
             <div className="result-description">
-              <Markdown renderAsPlainText length={150}>
-                {collection.description}
-              </Markdown>
+              <Markdown renderAsPlainText>{collection.description}</Markdown>
             </div>
           )}
           {collection.team && <TeamAvatar team={collection.team} />}
