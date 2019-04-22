@@ -25,9 +25,9 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
 1. Generate the new storybook guide on your remix as explained in the Storybook section below.
 
 Some notes for the migration stage of this process:
-1. At this point, our highest priority is getting styles out of /styles and into the src/ folder with their respective presenters. If you only have time to do that and not to componentise it properly, please do! Keep these in the /presenters folder for now until the true componentization has happened.
+1. At this point, our highest priority is getting styles out of styles/ and into the src/ folder with their respective presenters. If you only have time to do that and not to componentise it properly, please do! Keep these somewhere in the src/presenters folder for now until the true componentization has happened.
 1. In some cases, your component might be using other elements that aren't properly componentized yet. The important part is to ensure that layout for your component still looks good, and then once it's using the future subcomponents, it can be re-QAed for those updates.
-1. We still need Storybook stories for anything in the /components folder, but the expectation is that they won't look identical to how they look on the website (see above point)
+1. We still need Storybook stories for anything in the src/components folder, but the expectation is that they won't look identical to how they look on the website (see above point)
 
 ### Storybook
 
