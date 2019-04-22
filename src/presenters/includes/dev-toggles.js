@@ -40,7 +40,7 @@ const toggleData = [
 // };
 
 export const DevTogglesProvider = ({ children }) => {
-  const defaultEnabledToggles = toggleData.filter(toggle => toggle.enabledByDefault).map(toggle => toggle.name);
+  const defaultEnabledToggles = toggleData.filter((toggle) => toggle.enabledByDefault).map((toggle) => toggle.name);
   const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', defaultEnabledToggles);
   return <Context.Provider value={{ enabledToggles, toggleData, setEnabledToggles }}>{children}</Context.Provider>;
 };
