@@ -28,7 +28,7 @@ const md = ({ allowImages }) => {
  */
 const Markdown = ({ children, length, allowImages }) => {
   let rendered = md({ allowImages }).render(children || '');
-  console.log(rendered);
+  console.log(stripHtml(rendered);
   if (length > 0) {
     rendered = truncate(rendered, length, { ellipsis: '…' });
   }
@@ -39,6 +39,11 @@ const Markdown = ({ children, length, allowImages }) => {
     />
   );
 };
+
+function stripHtml (html) {
+  const regex = /<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi;
+  return html ? html.replace(regex, '').trim() : '';
+}
 
 Markdown.propTypes = {
   /** element(s) to display in the button */
