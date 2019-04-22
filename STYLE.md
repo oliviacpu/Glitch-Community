@@ -17,8 +17,13 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
 1. Create a new `.js` and `.styl` file in `src/components/`. Use your best judgement for how it should be organized.
     * Only export one component per `.js` file. The component you're exporting should have the same name as the file it's contained in (e.g. `TextArea` is exported from `text-area.js` and styles should be in `text-area.styl`). 
     * Classnames should be camelcased to make them easier to refer to in Javascript (e.g. `markdownContent` not `markdown-content`).
+1. In general don't add margins, absolute positioning or fixed width/heights into the component - leave that to the parent components.
 1. Where possible, we'd like to avoid passing styles into the components via props and instead rely on named props that cover the use cases of the different modes of the component (e.g. `Button` accepts a `type` prop like `"tertiary"` or `"dangerZone"`) that can be passed into the component. The named props then define the styles that apply - the classnames npm package can be used to combine these in more readable ways (see [Button.js](https://glitch.com/edit/#!/community?path=src/components/buttons/button.js:15:0) for an example)
-    * Don't use HTML tag names like button or p to override styles in parent components though - if this is happening, either define a different set of props on the child component to accommodate the style you need or pass in classNames.
+    * Sometimes you'll need additional styles from parent components. Here's the preferred order of options to use here - ideally use the first one that works for your use case:
+        1. Use a wrapper class and define the styles you need on that wrapper. If you'll use this same set of overrides in multiple places, it could make sense to pull this out as a separate component of its own.
+        1. Add a new named prop to the component that fits your use case.
+        1. Pass in className.
+        1. Directly style the HTML tag names like button or p
 1. Create stories for each relevant variant of the component in `stories/index.js`.
     * As well as providing a visual guide for all the building blocks of our site, our designers use this for visual QA.
     * Once this file gets too big, we'll likely start splitting it out, but for now all stories should go in there. 
