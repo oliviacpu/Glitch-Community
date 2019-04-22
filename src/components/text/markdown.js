@@ -17,7 +17,10 @@ const md = ({ allowImages }) => {
   if (!allowImages) {
     mdIt.disable('image');
   }
-  return mdIt.use(markdownEmoji).use(markdownSanitizer);
+  const md = mdIt.use(markdownEmoji).use(markdownSanitizer);
+  console.log('md', md);
+  console.log('md.innerText', md.innerText);
+  return md;
 };
 
 /**
@@ -25,6 +28,7 @@ const md = ({ allowImages }) => {
  */
 const Markdown = ({ children, length, allowImages }) => {
   let rendered = md({ allowImages }).render(children || '');
+  console.log(rendered);
   if (length > 0) {
     rendered = truncate(rendered, length, { ellipsis: '…' });
   }
