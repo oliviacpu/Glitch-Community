@@ -15,7 +15,7 @@ Example:
 export default [
   {
     title: 'Talks at a Never-ending Tech Conf',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Finfinite-conference.png?1555319742021',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F2bdfb3f8-05ef-4035-a06e-2043962a3a13_infinite-conference.png?1555700774937',
     link: 'https://glitch.com/~infinite-conference'
   },
   {
@@ -25,7 +25,7 @@ export default [
   },  
   {
     title: 'Random Pixel Blocks',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F2500%20squares.png?1555319741780',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F2bdfb3f8-05ef-4035-a06e-2043962a3a13_2500%20squares.png?1555700747320',
     link: 'https://glitch.com/~2500squares'
   }
 ];
