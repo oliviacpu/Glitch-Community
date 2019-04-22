@@ -29,11 +29,12 @@ const Markdown = ({ children, length, allowImages, renderAsPlaintext }) => {
     rendered = truncate(rendered, length, { ellipsis: '…' });
   }
   if (renderAsPlaintext) {
+    console.log('renderAsPlaintext');
     rendered = stripHtml(rendered);
   }
   return (
     <span
-      className={styles.markdownContent}
+      className={!renderAsPlaintext ? styles.markdownContent : ''}
       dangerouslySetInnerHTML={{ __html: rendered }} // eslint-disable-line react/no-danger
     />
   );
