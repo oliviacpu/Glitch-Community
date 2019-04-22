@@ -9,6 +9,7 @@ const UserLoginInput = ({ login, onChange }) => (
     value={login}
     onChange={onChange}
     placeholder="Nickname?"
+    prefix="@"
   />
 );
 

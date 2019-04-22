@@ -7,6 +7,7 @@ import InputErrorIcon from './input-error-icon';
 import useUniqueId from '../../hooks/use-unique-id';
 
 import styles from './text-input.styl';
+import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
@@ -40,7 +41,7 @@ const TextInput = ({
   });
   return (
     <label className={outerClassName} htmlFor={uniqueId}>
-      <span className="visually-hidden">{labelText}</span>
+      <span className={visuallyHidden}>{labelText}</span>
       <span className={borderClassName}>
         {!!prefix && <InputPart>{prefix}</InputPart>}
         <input
