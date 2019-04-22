@@ -29,7 +29,9 @@ const useResizeObserver = () => {
   const [width, setWidth] = useState(0);
   useEffect(() => {
     const setWidthOfRef = () => {
-      setWidth(ref.current.getBoundingClientRect().width);
+      if (ref.current) {
+        setWidth(ref.current.getBoundingClientRect().width);
+      }
     };
     const debouncedSetWidth = debounce(setWidthOfRef, 100);
     setWidthOfRef();
