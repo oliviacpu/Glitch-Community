@@ -27,7 +27,7 @@ inputStory.add('affixes', () => <DirectInputProps>{props => <TextInput {...props
 inputStory.add('search', () => <DirectInputProps>{props => <TextInput {...props} type="search" opaque={true} search={true} placeholder="bots, apps, users" />}</DirectInputProps>);
 inputStory.add('with error', () => <DirectInputProps>{props => <TextInput {...props} placeholder="glitch" error="That team already exists" />}</DirectInputProps>);
 inputStory.add('text area', () => <DirectInputProps>{props => <TextArea {...props} placeholder="This is a multiline text field" error="Reason is required" />}</DirectInputProps>);
-inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a text field that wraps instead of scrolling" error="An error could go here!" />}</DirectInputProps>);
+inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a single line text input that wraps" error="An error could go here!" />}</DirectInputProps>);
 
 const OptimisticProps = ({ children }) => {
   const [value, setValue] = React.useState('');
