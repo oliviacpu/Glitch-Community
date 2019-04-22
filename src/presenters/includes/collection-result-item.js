@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { getLink as getCollectionLink } from 'Models/collection';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
+import Markdown from 'Components/text/markdown';
 import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
 import CollectionAvatar from './collection-avatar';
 
@@ -40,7 +41,13 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
           <div className="result-name" title={collection.name}>
             {collection.name}
           </div>
-          {collection.description.length > 0 && <Markdown renderAsPlainText className="result-description">{collection.description}</Markdown>}
+          {collection.description.length > 0 && (
+            <div className="result-description">
+              <Markdown renderAsPlainText length={150}>
+                {collection.description}
+              </Markdown>
+            </div>
+          )}
           {collection.team && <TeamAvatar team={collection.team} />}
           {collection.user && <UserAvatar user={collection.user} />}
         </div>
