@@ -66,14 +66,16 @@ const seeAllResultsSelected = { id: 'see-all-results' };
 
 function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
-  if (!selectedResult || selectedResult === seeAllResultsSelected) {
-    if (offset > 0) {
-      return flatResults[offset - 1] || seeAllResultsSelected;
-    }
-    if (offset < 0) {
-      return flatResults[flatResults.length + offset] || seeAllResultsSelected;
-    }
+  if (!selectedResult && offset < 0) {
+    return seeAllResultsSelected;
   }
+  if (selectedResult === seeAllResultsSelected && offset < 0) {
+    return flatResults[flatResults.length + offset];
+  }
+  if ((!selectedResult || selectedResult === seeAllResultsSelected) && offset > 0) {
+    return flatResults[offset - 1];
+  }
+
   const nextIndex = flatResults.indexOf(selectedResult) + offset;
   return flatResults[nextIndex] || seeAllResultsSelected;
 }
