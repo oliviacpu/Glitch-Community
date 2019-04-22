@@ -90,7 +90,10 @@ const resultComponents = {
 const Result = ({ value, selected }) => {
   const ref = useRef()
   useEffect(()=>{
-  }, [selected])
+    if (!ref.current) return
+    const link = ref.current.
+    
+  }, [ref, selected])
   const Component = resultComponents[value.type];
   
   return (
