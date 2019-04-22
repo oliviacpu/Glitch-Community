@@ -1,3 +1,4 @@
+
 // Collections shown on the homepage and in the more ideas area
 
 // What collections to show in the expanded area on the homepage

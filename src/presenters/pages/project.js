@@ -127,7 +127,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
           </ProjectInfoContainer>
         </InfoContainer>
       </section>
-      <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+      <div className="project-embed-wrap">
+        <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+      </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>

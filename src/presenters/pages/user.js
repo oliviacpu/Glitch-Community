@@ -144,8 +144,8 @@ const UserPage = ({
         projects={pinnedProjects}
         isAuthorized={isAuthorized}
         removePin={removePin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,
@@ -170,8 +170,8 @@ const UserPage = ({
         projects={recentProjects}
         isAuthorized={isAuthorized}
         addPin={addPin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,

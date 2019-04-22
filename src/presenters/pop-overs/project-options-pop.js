@@ -75,8 +75,10 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     props.togglePopover();
     props.displayNewNote(props.project.id);
   }
+
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
+  const showPinOrFeatureSection = (props.addPin || props.removePin || (props.featureProject && !props.project.private));
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -86,19 +88,19 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
   return (
     <dialog className="pop-over project-options-pop">
-      {!!props.addPin && (
+      { showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {!props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
-          <PopoverButton onClick={onClickAddPin} text="Pin " emoji="pushpin" />
+          {!!props.featureProject && !props.project.private && (
+            <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />
+          )}
+          {!!props.addPin && (
+            <PopoverButton onClick={onClickAddPin} text="Pin " emoji="pushpin" />
+          )}
+          {!!props.removePin && (
+            <PopoverButton onClick={onClickRemovePin} text="Un-Pin " emoji="pushpin" />
+          )}
         </section>
       )}
-      {!!props.removePin && (
-        <section className="pop-over-actions">
-          {!props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
-          <PopoverButton onClick={onClickRemovePin} text="Un-Pin " emoji="pushpin" />
-        </section>
-      )}
-
       {showAddNote && (
         <section className="pop-over-actions">
           <PopoverButton onClick={toggleAndDisplayNote} {...props} text="Add Note" emoji="spiral_note_pad" />
