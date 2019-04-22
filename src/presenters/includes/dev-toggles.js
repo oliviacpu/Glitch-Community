@@ -26,6 +26,7 @@ const toggleData = [
   {
     name: 'Algolia Search',
     description: 'Use the new Algolia-powered search API.',
+    enabledByDefault: true,
   },
 ].slice(0, 3); // <-- Yeah really, only 3.  If you need more, clean up one first.
 
@@ -39,7 +40,8 @@ const toggleData = [
 // };
 
 export const DevTogglesProvider = ({ children }) => {
-  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', []);
+  const defaultEnabledToggles = toggleData.filter(toggle => toggle.enabledByDefault).map(toggle => toggle.name);
+  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', defaultEnabledToggles);
   return <Context.Provider value={{ enabledToggles, toggleData, setEnabledToggles }}>{children}</Context.Provider>;
 };
 DevTogglesProvider.propTypes = {
