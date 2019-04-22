@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
@@ -87,10 +87,17 @@ const resultComponents = {
   collection: CollectionResult,
 };
 
-const Result = ({ value }) => {
+const Result = ({ value, selected }) => {
+  const ref = useRef()
+  useEffect(()=>{
+  }, [selected])
   const Component = resultComponents[value.type];
-  if (!Component) return null;
-  return <Component value={value} />;
+  
+  return (
+    <li ref={ref} className={styles.resultItem}>
+      {Component && <Component value={value} />}
+    </li>
+  )
 };
 
 const Autocomplete = ({ query, results }) => (
@@ -101,9 +108,7 @@ const Autocomplete = ({ query, results }) => (
           <header className={styles.resultGroupHeader}>{label}</header>
           <ul>
             {items.map((item) => (
-              <li key={item.id} className={classnames(styles.resultItem, item.selected && styles.selected)}>
-                <Result value={item} />
-              </li>
+              <Result key={item.id} value={item} selected={item.selecged} />
             ))}
           </ul>
         </li>
