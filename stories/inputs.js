@@ -13,18 +13,26 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
+const DirectInputProps = ({ children }) => {
+  const [value, setValue] = React.useState('');
+  const onChange = (newValue) => {
+    setValue(newValue);
+  };
+  return children({ onChange, value });
+};
+
 const inputStory = storiesOf('Text Input', module);
-inputStory.add('text input', () => <TextInput placeholder="type something!" />);
-inputStory.add('affixes', () => <TextInput placeholder="type something!" prefix="#" postfix="#" />);
-inputStory.add('search', () => <TextInput type="search" opaque={true} search={true} placeholder="bots, apps, users" />);
-inputStory.add('with error', () => <TextInput placeholder="glitch" error="That team already exists" />);
-inputStory.add('text area', () => <TextArea placeholder="This is a multiline text field" error="Reason is required" />);
-inputStory.add('wrapping text', () => <WrappingTextInput placeholder="This is a text field that wraps instead of scrolling" error="An error could go here!" />);
+inputStory.add('text input', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" />}</DirectInputProps>);
+inputStory.add('affixes', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" prefix="#" postfix="#" />}</DirectInputProps>);
+inputStory.add('search', () => <DirectInputProps>{props => <TextInput {...props} type="search" opaque={true} search={true} placeholder="bots, apps, users" />}</DirectInputProps>);
+inputStory.add('with error', () => <DirectInputProps>{props => <TextInput {...props} placeholder="glitch" error="That team already exists" />}</DirectInputProps>);
+inputStory.add('text area', () => <DirectInputProps>{props => <TextArea {...props} placeholder="This is a multiline text field" error="Reason is required" />}</DirectInputProps>);
+inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a text field that wraps instead of scrolling" error="An error could go here!" />}</DirectInputProps>);
 
 const OptimisticProps = ({ children }) => {
   const [value, setValue] = React.useState('');
   const onChange = async (newValue) => {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     if (newValue === 'error') {
       throw 'error is no good!';
     }
