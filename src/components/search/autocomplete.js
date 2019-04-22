@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
 import { Link, TeamLink, UserLink, ProjectLink } from '../../presenters/includes/link';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
-import { useAlgoliaSearch } from '../../state/search';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
@@ -73,8 +73,8 @@ const CollectionResult = ({ value: collection }) => (
   </CollectionLink>
 );
 
-const SeeAllResults = ({ query }) => (
-  <Link to={`/search?q=${query}`} className={styles.seeAllResults}>
+const SeeAllResults = ({ query, selected }) => (
+  <Link to={`/search?q=${query}`} className={classnames(styles.seeAllResults, selected && styles.selected)}>
     See all results →
   </Link>
 );
@@ -87,84 +87,29 @@ const resultComponents = {
   collection: CollectionResult,
 };
 
-const Result = ({ value }) => {
+const Result = ({ value, selected }) => {
   const Component = resultComponents[value.type];
-  if (!Component) return null;
-  return <Component value={value} />;
+  return <li className={classnames(styles.resultItem, selected && styles.selected)}>{Component && <Component value={value} />}</li>;
 };
 
-const resultGroups = [
-  { id: 'team', label: 'Teams' },
-  { id: 'user', label: 'Users' },
-  { id: 'project', label: 'Projects' },
-  { id: 'collection', label: 'Collections' },
-];
-
-const MAX_RESULTS_PER_TYPE = 3;
-
-export const AutocompleteResults = ({ query, results }) => {
-  const notTopResult = (result) => !results.topResults.includes(result);
-  const resultGroupsWithItems = resultGroups
-    .map((group) => ({ ...group, items: results[group.id].filter(notTopResult).slice(0, MAX_RESULTS_PER_TYPE) }))
-    .filter((group) => group.items.length > 0);
-  const topResultItems = [...results.starterKit, ...results.topResults];
-  return (
-    <div className={styles.container}>
-      <ul>
-        {topResultItems.length > 0 && (
-          <li>
-            <header className={styles.resultGroupHeader}>Top Results</header>
-            <ul>
-              {topResultItems.map((item) => (
-                <li key={item.id} className={styles.resultItem}>
-                  <Result value={item} />
-                </li>
-              ))}
-            </ul>
-          </li>
-        )}
-        {resultGroupsWithItems.map(({ id, label, items }) => (
-          <li key={id}>
-            <header className={styles.resultGroupHeader}>{label}</header>
-            <ul>
-              {items.map((item) => (
-                <li key={item.id} className={styles.resultItem}>
-                  <Result value={item} />
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-        <li>
-          <SeeAllResults query={query} />
+const Autocomplete = ({ query, results, seeAllResultsSelected }) => (
+  <div className={styles.container}>
+    <ul>
+      {results.map(({ id, label, items }) => (
+        <li key={id}>
+          <header className={styles.resultGroupHeader}>{label}</header>
+          <ul>
+            {items.map((item) => (
+              <Result key={item.id} value={item} selected={item.selected} />
+            ))}
+          </ul>
         </li>
-      </ul>
-    </div>
-  );
-};
-
-// when results are loading, show the previous set of results instead.
-function useLastCompleteSearchResult(query) {
-  const results = useAlgoliaSearch(query);
-  const [lastCompleteResults, setLastCompleteResults] = useState(results);
-  useEffect(() => {
-    if (results.status === 'ready') {
-      setLastCompleteResults(results);
-    }
-  }, [results.status]);
-  return lastCompleteResults;
-}
-
-const Autocomplete = ({ query }) => {
-  const results = useLastCompleteSearchResult(query);
-  if (query && results.totalHits > 0 && results.status === 'ready') {
-    return (
-      <div className={styles.popOver}>
-        <AutocompleteResults query={query} results={results} />
-      </div>
-    );
-  }
-  return null;
-};
+      ))}
+      <li>
+        <SeeAllResults query={query} selected={seeAllResultsSelected} />
+      </li>
+    </ul>
+  </div>
+);
 
 export default Autocomplete;
