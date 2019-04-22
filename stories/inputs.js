@@ -30,13 +30,13 @@ const OptimisticProps = ({ children }) => {
     }
     setValue(newValue);
   };
-  return children(props);
+  return children({ onChange, value });
 };
 
 const fieldStory = storiesOf('Text Fields', module);
-fieldStory.add('optimistic input', () => <OptimisticTextInput {...useOptimisticProps()} />);
-fieldStory.add('project domain', () => <ProjectDomainInput />);
-fieldStory.add('team name', () => <TeamNameInput />);
-fieldStory.add('team url', () => <TeamUrlInput />);
-fieldStory.add('user name', () => <UserNameInput />);
-fieldStory.add('user login', () => <UserLoginInput />);
+fieldStory.add('optimistic input', () => <OptimisticProps>{props => <OptimisticTextInput {...props} placeholder="type error for an error" />}</OptimisticProps>);
+fieldStory.add('project domain', () => <OptimisticProps>{props => <ProjectDomainInput {...props} />}</OptimisticProps>);
+fieldStory.add('team name', () => <OptimisticProps>{props => <TeamNameInput {...props} />}</OptimisticProps>);
+fieldStory.add('team url', () => <OptimisticProps>{props => <TeamUrlInput {...props} />}</OptimisticProps>);
+fieldStory.add('user name', () => <OptimisticProps>{props => <UserNameInput {...props} />}</OptimisticProps>);
+fieldStory.add('user login', () => <OptimisticProps>{props => <UserLoginInput {...props} />}</OptimisticProps>);
