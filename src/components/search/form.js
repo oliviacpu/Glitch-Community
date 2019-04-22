@@ -54,15 +54,16 @@ const urlForItem = {
   user: getUserLink,
   project: getProjectLink,
   collection: (collection) => `/@${collection.fullUrl}`,
+  seeAllResults: (_, query) => `/search?q=${query}`,
 };
+
+const seeAllResultsSelected = { type: 'seeAllResults' };
 
 const redirectFor = ({ query, selectedResult }) => {
   if (!query) return null;
   if (!selectedResult) return `/search?q=${query}`;
-  return urlForItem[selectedResult.type](selectedResult);
+  return urlForItem[selectedResult.type](selectedResult, query);
 };
-
-const seeAllResultsSelected = { id: 'see-all-results' };
 
 function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
