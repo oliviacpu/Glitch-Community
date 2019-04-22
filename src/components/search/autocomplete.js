@@ -88,13 +88,8 @@ const resultComponents = {
 };
 
 const Result = ({ value, selected }) => {
-  const ref = useRef()
-  useEffect(()=>{
-    if (!ref.current) return
-    const link = ref.current.
-    
-  }, [ref, selected])
   const Component = resultComponents[value.type];
+  if (!Component) return null
   
   return (
     <li ref={ref} className={styles.resultItem}>
