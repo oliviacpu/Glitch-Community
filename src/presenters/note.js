@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
+import { ProfileItem } from 'Components/profile/profile-list';
+
 // TODO: let's move these into components
 import { AuthDescription } from './includes/description-field';
-import { UserTile } from './users-list';
-import { TeamTile } from './teams-list';
 
 import { isDarkColor } from '../models/collection';
 
 /**
  * Note Component
  */
-const Note = ({ collection, project, update, hideNote }) => {
+const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function updateNoteVisibility(description) {
     description = _.trim(description);
+
     if (!description || description.length === 0) {
       setTimeout(() => hideNote(project.id), 500);
     }
@@ -36,31 +37,35 @@ const Note = ({ collection, project, update, hideNote }) => {
     <div className="note">
       <div className={className} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
         <AuthDescription
-          authorized={!!update}
+          authorized={isAuthorized}
           description={project.note || ''}
           placeholder="Share why you love this app."
-          update={update}
+          update={(note) => updateNote({ note, projectId: project.id })}
           onBlur={updateNoteVisibility}
           allowImages
         />
       </div>
-      <div className="user">{collection.teamId === -1 ? <UserTile user={collection.user} /> : <TeamTile team={collection.team} />}</div>
+      <div className="user">
+        <ProfileItem user={collection.user} team={collection.team} />
+      </div>
     </div>
   );
 };
 
 Note.propTypes = {
+  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     note: PropTypes.string,
     isAddingANewNote: PropTypes.bool,
     collectionCoverColor: PropTypes.string,
   }).isRequired,
-  update: PropTypes.any,
-  hideNote: PropTypes.func.isRequired,
+  updateNote: PropTypes.func,
+  hideNote: PropTypes.func,
 };
 
 Note.defaultProps = {
-  update: null,
+  updateNote: () => {},
+  hideNote: () => {},
 };
 
 export default Note;

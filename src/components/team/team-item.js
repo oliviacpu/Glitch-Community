@@ -7,10 +7,10 @@ import Markdown from 'Components/text/markdown';
 import Cover from 'Components/blocks/search-result-cover-bar';
 import Image from 'Components/images/image';
 import Thanks from 'Components/blocks/thanks';
-import { StaticUsersList } from 'Components/user/users-list';
-import { getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
-import { TeamLink } from '../../presenters/includes/link';
+import ProfileList from 'Components/profile/profile-list';
+import { getLink, getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
 import { VerifiedBadge } from '../../presenters/includes/team-elements';
+import WrappingLink from '../../presenters/includes/wrapping-link';
 
 import styles from './team-item.styl';
 
@@ -19,7 +19,7 @@ const ProfileAvatar = ({ team }) => <Image className={styles.avatar} src={getAva
 const getTeamThanksCount = (team) => sumBy(team.users, (user) => user.thanksCount);
 
 const TeamItem = ({ team }) => (
-  <TeamLink className={styles.container} team={team}>
+  <WrappingLink className={styles.container} href={getLink(team)}>
     <Cover type="team" item={team} size="medium" />
     <div className={styles.mainContent}>
       <div className={styles.avatarWrap}>
@@ -27,17 +27,17 @@ const TeamItem = ({ team }) => (
       </div>
       <div className={styles.body}>
         <div>
-          <Button decorative>{team.name}</Button>
+          <Button href={getLink(team)}>{team.name}</Button>
           {!!team.isVerified && <VerifiedBadge />}
         </div>
         <div className={styles.usersList}>
-          <StaticUsersList users={team.users} layout="block" />
+          <ProfileList layout="block" users={team.users} />
         </div>
         <Markdown length={96}>{team.description || ' '}</Markdown>
         <Thanks count={getTeamThanksCount(team)} />
       </div>
     </div>
-  </TeamLink>
+  </WrappingLink>
 );
 
 TeamItem.propTypes = {
@@ -45,7 +45,7 @@ TeamItem.propTypes = {
     description: PropTypes.string.isRequired,
     isVerified: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
-    users: PropTypes.array.isRequired,
+    users: PropTypes.array,
     url: PropTypes.string.isRequired,
   }).isRequired,
 };

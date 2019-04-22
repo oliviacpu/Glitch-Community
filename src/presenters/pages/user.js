@@ -8,7 +8,7 @@ import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/blocks/thanks';
 
-import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
+import { getAvatarStyle, getLink } from '../../models/user';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
@@ -73,7 +73,6 @@ const UserPage = ({
   user: {
     // has science gone too far?
     _deletedProjects,
-    _cacheCover,
     featuredProjectId,
     ...user
   },
@@ -105,7 +104,8 @@ const UserPage = ({
       <section>
         <ProfileContainer
           avatarStyle={getAvatarStyle(user)}
-          coverStyle={getProfileStyle({ ...user, cache: _cacheCover })}
+          type="user"
+          item={user}
           coverButtons={
             isAuthorized &&
             !!user.login && <ImageButtons name="Cover" uploadImage={uploadCover} clearImage={user.hasCoverImage ? clearCover : null} />
@@ -144,8 +144,8 @@ const UserPage = ({
         projects={pinnedProjects}
         isAuthorized={isAuthorized}
         removePin={removePin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,
@@ -170,8 +170,8 @@ const UserPage = ({
         projects={recentProjects}
         isAuthorized={isAuthorized}
         addPin={addPin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,

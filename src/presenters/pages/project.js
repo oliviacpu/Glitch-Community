@@ -7,7 +7,7 @@ import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
-import UsersList from 'Components/user/users-list';
+import ProfileList from 'Components/profile/profile-list';
 import { getAvatarUrl } from '../../models/project';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -19,7 +19,7 @@ import EditableField from '../includes/editable-field';
 import { AuthDescription } from '../includes/description-field';
 import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
 import { ShowButton, EditButton } from '../includes/project-actions';
-import TeamsList from '../teams-list';
+
 import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
@@ -109,10 +109,11 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
                 </>
               )}
             </Heading>
-            <div className="users-information">
-              <UsersList users={users} layout="block" />
-              {!!teams.length && <TeamsList teams={teams} />}
-            </div>
+            {users.length + teams.length > 0 && (
+              <div className="users-information">
+                <ProfileList hasLinks teams={teams} users={users} layout="block" />
+              </div>
+            )}
             <AuthDescription
               authorized={isAuthorized}
               description={project.description}
@@ -126,12 +127,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
           </ProjectInfoContainer>
         </InfoContainer>
       </section>
-      <ProjectEmbed
-        project={project}
-        isAuthorized={isAuthorized}
-        currentUser={currentUser}
-        addProjectToCollection={addProjectToCollection}
-      />
+      <div className="project-embed-wrap">
+        <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+      </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>

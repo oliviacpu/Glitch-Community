@@ -2,6 +2,7 @@
   <body>
     <script>
       const CONSTANTS = <%- JSON.stringify(CONSTANTS) %>;
+      const RUNNING_ON = '<%= RUNNING_ON %>';
       let _env;
       if (RUNNING_ON === 'development') {
         _env = 'development';

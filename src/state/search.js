@@ -103,7 +103,6 @@ const formatByType = {
     thanksCount: user.thanks,
   }),
   team: (team) => ({
-    users: [],
     isVerified: false,
     ...team,
     id: Number(team.objectID.replace('team-', '')),

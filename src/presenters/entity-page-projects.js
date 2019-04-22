@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import ProjectsList from 'Components/containers/projects-list';
 
-const EntityPageProjects = ({ projects, currentUser, isAuthorized, addPin, removePin, projectOptions, ...props }) => {
+const EntityPageProjects = ({ projects, currentUser, isAuthorized, addPin, removePin, featureProject, projectOptions, ...props }) => {
   const pinnedTitle = (
     <>
       Pinned Projects
@@ -14,7 +14,7 @@ const EntityPageProjects = ({ projects, currentUser, isAuthorized, addPin, remov
 
   let projectOptionsToPass = {};
   if (isAuthorized) {
-    projectOptionsToPass = { addPin, removePin, ...projectOptions };
+    projectOptionsToPass = { addPin, removePin, featureProject, ...projectOptions };
   } else if (currentUser && currentUser.login) {
     projectOptionsToPass = { ...projectOptions };
   }

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
+import CoverContainer from 'Components/containers/cover-container';
+
 import { getSingleItem } from '../../shared/api';
 
-import { getProfileStyle as getUserStyle, getDisplayName } from '../models/user';
-import { getProfileStyle as getTeamStyle } from '../models/team';
+import { getDisplayName } from '../models/user';
 
 import { DataLoader } from './includes/loader';
-import { CoverContainer } from './includes/profile';
 import { UserLink, TeamLink } from './includes/link';
 
 import CollectionItem from './collection-item';
@@ -40,12 +40,10 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
 };
 
 
-// TODO: componentize this (CoverContainer, Links, CollectionItem, More Collections itself?)
+// TODO: componentize this (Links, CollectionItem, More Collections itself?)
 const MoreCollections = ({ currentCollection, collections }) => {
   const isUserCollection = currentCollection.teamId === -1;
-  const coverStyle = isUserCollection
-    ? getUserStyle({ ...currentCollection.user })
-    : getTeamStyle({ ...currentCollection.team });
+  const type = isUserCollection ? 'user' : 'team';
 
   return (
     <section>
@@ -56,18 +54,20 @@ const MoreCollections = ({ currentCollection, collections }) => {
             : (<TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>)
         }
       </h2>
-      <CoverContainer style={coverStyle} className="collections more-collections">
-        {
-          collections.map((collection) => (
-            <CollectionItem
-              key={collection.id}
-              collection={collection}
-              showCurator={false}
-              showProjectPreview={false}
-              showCollectionAvatar={false}
-            />
-          ))
-        }
+      <CoverContainer type={type} item={currentCollection[type]}>
+        <div className="collections more-collections">
+          {
+            collections.map((collection) => (
+              <CollectionItem
+                key={collection.id}
+                collection={collection}
+                showCurator={false}
+                showProjectPreview={false}
+                showCollectionAvatar={false}
+              />
+            ))
+          }
+        </div>
       </CoverContainer>
     </section>
   );
