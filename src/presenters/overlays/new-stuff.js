@@ -119,6 +119,7 @@ NewStuff.propTypes = {
 const NewStuffContainer = ({ children, isSignedIn }) => {
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
+  console.log(showNewStuff, newStuffReadId)
   return (
     <NewStuff
       {...{
