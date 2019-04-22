@@ -17,20 +17,19 @@ const md = ({ allowImages }) => {
   if (!allowImages) {
     mdIt.disable('image');
   }
-  const md = mdIt.use(markdownEmoji).use(markdownSanitizer);
-  console.log('md', md);
-  console.log('md.innerText', md.innerText);
-  return md;
+  return mdIt.use(markdownEmoji).use(markdownSanitizer);
 };
 
 /**
  * Markdown Component
  */
-const Markdown = ({ children, length, allowImages }) => {
+const Markdown = ({ children, length, allowImages, renderAsPlaintext }) => {
   let rendered = md({ allowImages }).render(children || '');
-  console.log(stripHtml(rendered);
   if (length > 0) {
     rendered = truncate(rendered, length, { ellipsis: '…' });
+  }
+  if (renderAsPlaintext) {
+    rendered = stripHtml(rendered);
   }
   return (
     <span

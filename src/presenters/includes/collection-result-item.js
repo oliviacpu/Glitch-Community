@@ -40,7 +40,7 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
           <div className="result-name" title={collection.name}>
             {collection.name}
           </div>
-          {collection.description.length > 0 && <div className="result-description">{collection.description}</div>}
+          {collection.description.length > 0 && <Markdown renderAsPlainText className="result-description">{collection.description}</Markdown>}
           {collection.team && <TeamAvatar team={collection.team} />}
           {collection.user && <UserAvatar user={collection.user} />}
         </div>
