@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
@@ -89,11 +89,7 @@ const resultComponents = {
 
 const Result = ({ value, selected }) => {
   const Component = resultComponents[value.type];
-  return (
-    <li className={classnames(styles.resultItem, selected && styles.selected)}>
-      {Component && <Component value={value} />}
-    </li>
-  )
+  return <li className={classnames(styles.resultItem, selected && styles.selected)}>{Component && <Component value={value} />}</li>;
 };
 
 const Autocomplete = ({ query, results, seeAllResultsSelected }) => (
