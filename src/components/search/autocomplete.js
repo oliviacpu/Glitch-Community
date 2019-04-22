@@ -73,8 +73,8 @@ const CollectionResult = ({ value: collection }) => (
   </CollectionLink>
 );
 
-const SeeAllResults = ({ query }) => (
-  <Link to={`/search?q=${query}`} className={styles.seeAllResults}>
+const SeeAllResults = ({ query, selected }) => (
+  <Link to={`/search?q=${query}`} className={classnames(styles.seeAllResults, selected && styles.selected)}>
     See all results →
   </Link>
 );
@@ -89,16 +89,14 @@ const resultComponents = {
 
 const Result = ({ value, selected }) => {
   const Component = resultComponents[value.type];
-  if (!Component) return null
-  
   return (
-    <li ref={ref} className={styles.resultItem}>
+    <li className={classnames(styles.resultItem, selected && styles.selected)}>
       {Component && <Component value={value} />}
     </li>
   )
 };
 
-const Autocomplete = ({ query, results }) => (
+const Autocomplete = ({ query, results, seeAllResultsSelected }) => (
   <div className={styles.container}>
     <ul>
       {results.map(({ id, label, items }) => (
@@ -106,13 +104,13 @@ const Autocomplete = ({ query, results }) => (
           <header className={styles.resultGroupHeader}>{label}</header>
           <ul>
             {items.map((item) => (
-              <Result key={item.id} value={item} selected={item.selecged} />
+              <Result key={item.id} value={item} selected={item.selected} />
             ))}
           </ul>
         </li>
       ))}
       <li>
-        <SeeAllResults query={query} />
+        <SeeAllResults query={query} selected={seeAllResultsSelected} />
       </li>
     </ul>
   </div>

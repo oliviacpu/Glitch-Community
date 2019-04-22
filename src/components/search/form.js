@@ -62,18 +62,20 @@ const redirectFor = ({ query, selectedResult }) => {
   return urlForItem[selectedResult.type](selectedResult);
 };
 
+const seeAllResultsSelected = { id: 'see-all-results' };
+
 function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
-  if (!selectedResult) {
+  if (!selectedResult || selectedResult === seeAllResultsSelected) {
     if (offset > 0) {
-      return flatResults[offset - 1];
+      return flatResults[offset - 1] || seeAllResultsSelected;
     }
     if (offset < 0) {
-      return flatResults[flatResults.length + offset];
+      return flatResults[flatResults.length + offset] || seeAllResultsSelected;
     }
   }
   const nextIndex = flatResults.indexOf(selectedResult) + offset;
-  return flatResults[nextIndex];
+  return flatResults[nextIndex] || seeAllResultsSelected;
 }
 
 const { actions, reducer } = createSlice({
@@ -147,7 +149,11 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     autoComplete: 'off',
     autoCompleteResults: query && visible && (
       <div className={styles.popOver}>
-        <AutocompleteSearch query={query} results={resultsWithSelection(results, selectedResult)} />
+        <AutocompleteSearch
+          query={query}
+          results={resultsWithSelection(results, selectedResult)}
+          seeAllResultsSelected={selectedResult === seeAllResultsSelected}
+        />
       </div>
     ),
   });
