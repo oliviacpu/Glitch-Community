@@ -18,10 +18,15 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
     * Only export one component per `.js` file. The component you're exporting should have the same name as the file it's contained in (e.g. `TextArea` is exported from `text-area.js` and styles should be in `text-area.styl`). 
     * Classnames should be camelcased to make them easier to refer to in Javascript (e.g. `markdownContent` not `markdown-content`).
 1. Where possible, we'd like to avoid passing styles into the components via props and instead rely on named props that cover the use cases of the different modes of the component (e.g. `Button` accepts a `type` prop like `"tertiary"` or `"dangerZone"`) that can be passed into the component. The named props then define the styles that apply - the classnames npm package can be used to combine these in more readable ways (see [Button.js](https://glitch.com/edit/#!/community?path=src/components/buttons/button.js:15:0) for an example)
+    * Don't use HTML tag names like button or p to override styles in parent components though - if this is happening, either define a different set of props on the child component or pass in classNames.
 1. Create stories for each relevant variant of the component in `stories/index.js`.
     * As well as providing a visual guide for all the building blocks of our site, our designers use this for visual QA.
     * Once this file gets too big, we'll likely start splitting it out, but for now all stories should go in there. 
 1. Generate the new storybook guide on your remix as explained in the Storybook section below.
+
+Some notes for the migration stage of this process:
+1. In some cases, your component might be using elements that aren't properly componentized yet. The important part is to ensure that layout for your component still looks good, and then once it's using the future subcomponents, it can be re-QAed for those updates.
+1. We still need Storybook stories for the above, but the expectation is that they won't look identical to how they look on the website (see above point)
 
 ### Storybook
 
