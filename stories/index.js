@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
@@ -31,7 +31,8 @@ import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
 import { users, teams, projects, collections } from './data';
-import 'search
+import { withState, provideContext } from './data';
+import 'Components/search-form/story.js';
 
 // initialize globals
 window.CDN_URL = 'https://cdn.glitch.com';
@@ -41,22 +42,6 @@ window.APP_URL = 'https://glitch.com';
 const helloAlert = () => {
   alert('hello');
 };
-
-const withState = (initState, Component) => {
-  const WrappedComponent = () => {
-    const [state, setState] = useState(initState);
-    return <Component state={state} setState={setState} />;
-  };
-  return () => <WrappedComponent />;
-};
-
-const provideContext = ({ currentUser = {}, api = {} } = {}, Component) => () => (
-  <CurrentUserContext.Provider value={{ currentUser }}>
-    <APIContext.Provider value={api}>
-      <Component />
-    </APIContext.Provider>
-  </CurrentUserContext.Provider>
-);
 
 storiesOf('Button', module)
   .add('regular', () => <Button onClick={helloAlert}>Hello Button</Button>)
@@ -307,40 +292,6 @@ storiesOf('SearchResults', module).add(
       />
     )),
   ),
-);
-
-const mockSearchDB = {
-  user: Object.values(users).map((user) => ({ ...user, __searchKeys: [user.name, user.login], type: 'user' })),
-  team: Object.values(teams).map((team) => ({ ...team, __searchKeys: [team.name, team.url], type: 'team' })),
-  project: Object.values(projects).map((project) => ({ ...project, __searchKeys: [project.domain, project.description], type: 'project' })),
-  collection: Object.values(collections).map((collection) => ({
-    ...collection,
-    __searchKeys: [collection.name, collection.description],
-    type: 'collection',
-  })),
-  starterKit: [],
-};
-
-const useMockSearchProvider = memoize((query) => {
-  const queryRE = new RegExp(query.replace(/[^A-Za-z]/g, ''), 'i');
-  const resultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKeys.some((key) => queryRE.test(key))));
-  const topResultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKeys.some((key) => query === key)));
-  const topResults = [].concat(...Object.values(topResultsByType).map((sublist) => sublist.slice(0, 1)));
-  return {
-    status: 'ready',
-    totalHits: sumBy(Object.values(resultsByType), (items) => items.length),
-    topResults,
-    ...resultsByType,
-  };
-});
-
-storiesOf('SearchForm', module).add(
-  'results',
-  provideContext({ currentUser: {}, api: mockAPI }, () => (
-    <div style={{ width: 300, position: 'relative' }}>
-      <BaseSearchForm defaultValue="" showAutocomplete useSearchProvider={useMockSearchProvider} />
-    </div>
-  )),
 );
 
 storiesOf('MaskImage', module)
