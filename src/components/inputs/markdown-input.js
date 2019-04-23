@@ -13,6 +13,7 @@ const MarkdownInput = ({ error, onChange, placeholder, value }) => {
   if (error || focused || !value) {
     return (
       <TextArea
+        autoFocus={focused}
         error={error}
         onBlur={onBlur}
         onChange={onChange}
@@ -37,6 +38,10 @@ const MarkdownInput = ({ error, onChange, placeholder, value }) => {
 };
 
 MarkdownInput.propTypes = {
+  error: PropTypes.node,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  value: PropTypes.string.isRequired,
 };
 
 export default MarkdownInput;

@@ -6,7 +6,7 @@ import Markdown from 'Components/text/markdown';
 import MarkdownInput from 'Components/inputs/markdown-input';
 import { OptimisticValue } from './field-helpers';
 
-function EditableDescriptionImpl({ description, placeholder, maxLength, allowImages, maxRows, update, onBlur: outerOnBlur }) {
+function EditableDescriptionImpl({ description, placeholder, maxLength, allowImages, update, onBlur: outerOnBlur }) {
   const [focused, setFocused] = useState(false);
   const onFocus = (event) => {
     if (event.currentTarget === event.target) {
@@ -31,7 +31,6 @@ function EditableDescriptionImpl({ description, placeholder, maxLength, allowIma
       placeholder={placeholder}
       spellCheck={false}
       maxLength={maxLength}
-      maxRows={maxRows}
       autoFocus // eslint-disable-line jsx-a11y/no-autofocus
     />
   ) : (
@@ -55,27 +54,23 @@ EditableDescriptionImpl.propTypes = {
   placeholder: PropTypes.string,
   update: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
-  maxLength: PropTypes.number,
 };
 
 EditableDescriptionImpl.defaultProps = {
   allowImages: true,
   placeholder: '',
   onBlur: () => {},
-  maxLength: 524288, // this is the built in default
 };
 
-const EditableDescription = ({ description, placeholder, update, onBlur, maxLength, allowImages, maxRows }) => (
+const EditableDescription = ({ description, placeholder, update, onBlur, allowImages }) => (
   <OptimisticValue value={description} update={update}>
     {({ optimisticValue, optimisticUpdate }) => (
-      <EditableDescriptionImpl
-        description={optimisticValue}
-        update={optimisticUpdate}
+      <MarkdownInput
+        value={optimisticValue}
+        onChange={optimisticUpdate}
         onBlur={onBlur}
         placeholder={placeholder}
-        maxLength={maxLength}
         allowImages={allowImages}
-        maxRows={maxRows}
       />
     )}
   </OptimisticValue>
@@ -106,7 +101,7 @@ StaticDescription.propTypes = {
   description: PropTypes.string.isRequired,
 };
 
-export const AuthDescription = ({ authorized, description, placeholder, update, onBlur, maxLength, allowImages, maxRows }) =>
+export const AuthDescription = ({ authorized, description, placeholder, update, onBlur, maxLength, allowImages }) =>
   authorized ? (
     <EditableDescription
       description={description}
@@ -115,7 +110,6 @@ export const AuthDescription = ({ authorized, description, placeholder, update, 
       placeholder={placeholder}
       maxLength={maxLength}
       allowImages={allowImages}
-      maxRows={maxRows}
     />
   ) : (
     <StaticDescription description={description} />
