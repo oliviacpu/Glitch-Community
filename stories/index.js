@@ -372,6 +372,10 @@ storiesOf('SearchResults', module).add(
   ),
 );
 
+storiesOf('SearchForm', module).add(
+
+)
+
 storiesOf('MaskImage', module)
   .add('random mask', () => <MaskImage src="https://glitch.com/culture/content/images/2018/10/react-starter-kit-1.jpg" />)
   .add(
