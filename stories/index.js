@@ -461,42 +461,42 @@ storiesOf('FeaturedProject', module)
   .add(
     'does not own featured project',
     provideContext({ currentUser: { login: '@sarahzinger' } }, () => (
-      <FeaturedProject
-        featuredProject={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: '@sarahzinger' }}
-      />
+      <FeaturedProject featuredProject={{ id: '123', domain: 'community-staging' }} isAuthorized={false} currentUser={{ login: '@sarahzinger' }} />
     )),
   );
 
 const team = {
-  backgroundColor: "rgb(116,236,252)",
-  coverColor: "rgb(12,84,124)",
+  backgroundColor: 'rgb(116,236,252)',
+  coverColor: 'rgb(12,84,124)',
   hasCoverImage: true,
-  name: "Glitch",
-  id: 74
-}
+  name: 'Glitch',
+  id: 74,
+};
 
-const buttons = <><button>one</button><button>two</button></>
+const buttons = (
+  <>
+    <button>one</button>
+    <button>two</button>
+  </>
+);
 storiesOf('CoverContainer', module)
   .add('when passed a user', () => (
     <CoverContainer item={users.modernserf} type="user">
-      <div style={{backgroundColor: "white"}}>We are the children</div>
+      <div style={{ backgroundColor: 'white' }}>We are the children</div>
     </CoverContainer>
   ))
   .add('when passed a team', () => (
     <CoverContainer item={team} type="team">
-      <div style={{backgroundColor: "white"}}>We are the children</div>
+      <div style={{ backgroundColor: 'white' }}>We are the children</div>
     </CoverContainer>
   ))
   .add('when passed buttons', () => (
     <CoverContainer item={team} type="team" buttons={buttons}>
-      <div style={{backgroundColor: "white"}}>
+      <div style={{ backgroundColor: 'white' }}>
         <p>We are the children</p>
         <p>Notice the buttons are up and to the right</p>
       </div>
     </CoverContainer>
-  ))
+  ));
 
-storiesOf('MoreIdeas', module)
-  .add('more ideas', () => <MoreIdeas />)
+storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
