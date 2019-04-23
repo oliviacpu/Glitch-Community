@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import SearchForm from 'Components/search-form/search-form';
 import { TrackedExternalLink } from './segment-analytics';
 import { Link } from './includes/link';
 import Logo from './includes/logo';
-import SearchForm from '../components/search/form';
-
 import UserOptionsPop from './pop-overs/user-options-pop';
 import SignInPop from './pop-overs/sign-in-pop';
 import NewProjectPop from './pop-overs/new-project-pop';

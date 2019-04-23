@@ -9,7 +9,7 @@ import { useAlgoliaSearch } from '../../state/search';
 import useDevToggle from '../../presenters/includes/dev-toggles';
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import AutocompleteSearch from './autocomplete';
-import styles from './form.styl';
+import styles from './search-form.styl';
 
 const createSlice = (handlers) => {
   const actions = mapValues(handlers, (_, type) => (payload) => ({ type, payload }));
@@ -22,6 +22,7 @@ const createSlice = (handlers) => {
 
 const resultGroups = [
   { id: 'top', label: 'Top Results', getItems: (results) => [...results.starterKit, ...results.topResults] },
+  { id: 'team', label: 'Teams' },
   { id: 'team', label: 'Teams' },
   { id: 'user', label: 'Users' },
   { id: 'project', label: 'Projects' },
