@@ -20,8 +20,8 @@ function EditableDescriptionImpl({ description, placeholder, maxLength, allowIma
     outerOnBlur(event.target.value);
   };
 
-  return focused ? (
-    <TextArea
+  // return focused ? (
+  return  <TextArea
       className="description content-editable"
       value={description}
       onChange={onChange}
@@ -33,19 +33,19 @@ function EditableDescriptionImpl({ description, placeholder, maxLength, allowIma
       maxRows={maxRows}
       autoFocus // eslint-disable-line jsx-a11y/no-autofocus
     />
-  ) : (
-    <p
-      className="description content-editable"
-      placeholder={placeholder}
-      aria-label={placeholder}
-      role="textbox" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
-      tabIndex={0}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      {description && <Markdown allowImages={allowImages}>{description}</Markdown>}
-    </p>
-  );
+  // ) : (
+  //   <p
+  //     className="description content-editable"
+  //     placeholder={placeholder}
+  //     aria-label={placeholder}
+  //     role="textbox" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
+  //     tabIndex={0}
+  //     onFocus={onFocus}
+  //     onBlur={onBlur}
+  //   >
+  //     {description && <Markdown allowImages={allowImages}>{description}</Markdown>}
+  //   </p>
+  // );
 }
 
 EditableDescriptionImpl.propTypes = {
