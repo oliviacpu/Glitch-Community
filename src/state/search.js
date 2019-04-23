@@ -130,11 +130,9 @@ const defaultParams = { notSafeForKids: false };
 
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
-  // const clientPromise = Promise.resolve(algoliasearch('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160'));
   return {
     initIndex: (indexName) => {
       const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
-
       return {
         search: (...args) => indexPromise.then((index) => index.search(...args)),
       };
