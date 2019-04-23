@@ -8,9 +8,11 @@ import { Link } from './includes/link';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">
-    <Link to={`culture${blogUrl}`}>
-      <MaskImage maskClass={mask} src={image} />
-    </Link>
+    <div className="mask-container">
+      <Link to={`culture${blogUrl}`}>
+        <MaskImage maskClass={mask} src={image} />
+      </Link>
+    </div>
 
     <div className="content" style={{ backgroundColor: color }}>
       <div className="description">

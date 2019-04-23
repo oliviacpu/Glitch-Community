@@ -25,7 +25,11 @@ const ZineItems = () => {
         {posts.map(({ id, title, url, feature_image, primary_tag }, n) => (
           <li key={id} className="zine-item">
             <Link to={`/culture${url}`}>
-              {!!feature_image && <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} alt="" />}
+              {!!feature_image && (
+                <div className="mask-container">
+                  <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} />
+                </div>
+              )}
               <div className="zine-item-meta">
                 <h1 className="zine-item-title">{title}</h1>
                 {!!primary_tag && <p className="zine-item-tag">{primary_tag.name}</p>}

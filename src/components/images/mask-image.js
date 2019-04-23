@@ -9,9 +9,9 @@ const maskClasses = maskClassesWithDash.map((className) => className.replace('-'
 
 const MaskImage = ({ maskClass: controlledMaskClass, ...props }) => {
   const randomMaskClass = useRef(sample(maskClasses));
-  const maskClass = controlledMaskClass.replace('-','') || randomMaskClass.current;
+  const maskClass = controlledMaskClass || randomMaskClass.current;
 
-  return <img alt="" {...props} className={classnames(styles.mask, styles[maskClass])} />;
+  return <img alt="" {...props} className={classnames(styles.mask, styles[maskClass.replace('-', '')])} />;
 };
 
 MaskImage.propTypes = {
