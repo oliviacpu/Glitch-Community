@@ -134,7 +134,7 @@ module.exports = function(external) {
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
-    console.log('should see error');
+    console.log('should see error, res: ', res);
     await render(res, `@team-404`, `We couldn't find '@team-404'`);
   });
 
