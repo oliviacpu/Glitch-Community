@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchForm from 'Components/search-form/search-form';
+import SearchForm from 'Components/search-form';
 import { TrackedExternalLink } from './segment-analytics';
 import { Link } from './includes/link';
 import Logo from './includes/logo';
