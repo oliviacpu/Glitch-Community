@@ -128,6 +128,14 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 
 const defaultParams = { notSafeForKids: false };
 
+function setupIndex () {
+  return {
+    search: async (...args) => {
+      const 
+    }
+  }
+}
+
 function createAlgoliaProvider (appID, apiKey) {
   const searchClient = algoliasearch(appID, apiKey);
   const searchIndices = {
@@ -136,7 +144,7 @@ function createAlgoliaProvider (appID, apiKey) {
     project: searchClient.initIndex('search_projects'),
     collection: searchClient.initIndex('search_collections'),
   };
-  const algoliaProvider = {
+  return {
     ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
     project: (query, { notSafeForKids }) =>
       searchIndices.project
@@ -151,6 +159,7 @@ function createAlgoliaProvider (appID, apiKey) {
 }
  
 export function useAlgoliaSearch(query, params = defaultParams) {
+  const api = useAPI();
   const algoliaProvider = createAlgoliaProvider('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160');
   return useSearchProvider(algoliaProvider, query, params);
 }
