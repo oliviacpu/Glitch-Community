@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 import Image from 'Components/images/image';
+import MaskImage from 'Components/images/mask-image';
 
 import FeaturedItems from '../curated/featured';
 import FeaturedEmbedObject from '../curated/featured-embed';
@@ -25,9 +26,7 @@ const ZineItems = () => {
           <li key={id} className="zine-item">
             <Link to={`/culture${url}`}>
               {!!feature_image && (
-                <div className="mask-container">
-                  <img className={`mask mask-${masks[n]}`} src={feature_image} alt="" />
-                </div>
+                <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} alt="" />
               )}
               <div className="zine-item-meta">
                 <h1 className="zine-item-title">{title}</h1>
