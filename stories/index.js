@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { mapValues, sumBy } from 'lodash';
+import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 import Button from 'Components/buttons/button';
@@ -321,10 +321,10 @@ const mockSearchDB = {
   starterKit: [],
 };
 
-function useMockSearchProvider(query) {
-  const queryRE = new RegExp(query.trim(), 'i');
-  const resultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKey.some((key) => queryRE.test(key))));
-  const topResultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKey.some((key) => query === key)));
+const useMockSearchProvider = memoize((query) => {
+  const queryRE = new RegExp(query.replace(/[^A-Za-z]/g, ''), 'i');
+  const resultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKeys.some((key) => queryRE.test(key))));
+  const topResultsByType = mapValues(mockSearchDB, (items) => items.filter((item) => item.__searchKeys.some((key) => query === key)));
   const topResults = [].concat(...Object.values(topResultsByType).map((sublist) => sublist.slice(0, 1)));
   return {
     status: 'ready',
@@ -332,11 +332,15 @@ function useMockSearchProvider(query) {
     topResults,
     ...resultsByType,
   };
-}
+});
 
 storiesOf('SearchForm', module).add(
   'results',
-  provideContext({ currentUser: {}, api: mockAPI }, () => <BaseSearchForm showAutocomplete useSearchProvider={useMockSearchProvider} />),
+  provideContext({ currentUser: {}, api: mockAPI }, () => (
+    <div style={{ width: 300, position: 'relative' }}>
+      <BaseSearchForm defaultValue="" showAutocomplete useSearchProvider={useMockSearchProvider} />
+    </div>
+  )),
 );
 
 storiesOf('MaskImage', module)
