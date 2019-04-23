@@ -516,7 +516,7 @@ storiesOf('Note', module)
     <Note
       collection={collection}
       project={{
-        note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest",
+        note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
         isAddingANewNote: true
       }}
       updateNote={() => console.log("update note would have been called")}
@@ -540,7 +540,7 @@ storiesOf('Note', module)
     <Note
       collection={collection}
       project={{
-        note: "this note you do not own, it has no editable state"
+        note: "this note you do not own, you can not edit it, you can not hide it"
       }}
       updateNote={() => console.log("update note would have been called")}
       hideNote={() => console.log("hide note would have been called")}
