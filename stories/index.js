@@ -22,6 +22,7 @@ import Thanks from 'Components/blocks/thanks';
 import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search/search-results';
+import { BaseSearchForm } from 'Components/search-form/search-form';
 import StarterKitResult from 'Components/search/starter-kit-result';
 import { Context as CurrentUserContext } from '../src/state/current-user';
 import { Context as APIContext } from '../src/state/api';
@@ -372,13 +373,16 @@ storiesOf('SearchResults', module).add(
   ),
 );
 
-const moc
+function useMockSearchProvider (query) {
+  const db = [users.modernserf, ]
+
+}
 
 storiesOf('SearchForm', module).add(
   'results',
   provideContext(
-    { currentUser: {}, api: mockAPI, devToggles: ['Algolia Search'], search: mockSearch },
-    () => <SearchForm />
+    { currentUser: {}, api: mockAPI },
+    () => <BaseSearchForm showAutocomplete useSearchProvider={useMockSearchProvider} />
   )
 )
 

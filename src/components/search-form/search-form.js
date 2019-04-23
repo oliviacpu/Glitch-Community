@@ -105,7 +105,7 @@ const { actions, reducer } = createSlice({
   }),
 });
 
-function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
+function AlgoliaSearchController({ visible, setVisible, children, defaultValue, useSearchProvider }) {
   const initialState = {
     selectedResult: null,
     query: defaultValue,
@@ -113,7 +113,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
     results: [],
   };
   const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState);
-  const algoliaResults = useAlgoliaSearch(query);
+  const algoliaResults = useSearchProvider(query);
 
   useEffect(() => {
     // use last complete results
@@ -179,14 +179,12 @@ function LegacySearchController({ children, defaultValue }) {
   });
 }
 
-function SearchController({ children, defaultValue }) {
-  const algoliaFlag = useDevToggle('Algolia Search');
-
-  if (algoliaFlag) {
+function SearchController({ children, defaultValue, showAutocomplete, useSearchProvider }) {
+  if (showAutocomplete) {
     return (
       <PopoverContainer>
         {(popoverProps) => (
-          <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue}>
+          <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue} useSearchProvider={useSearchProvider}>
             {children}
           </AlgoliaSearchController>
         )}
@@ -196,8 +194,8 @@ function SearchController({ children, defaultValue }) {
   return <LegacySearchController defaultValue={defaultValue}>{children}</LegacySearchController>;
 }
 
-const SearchForm = ({ defaultValue }) => (
-  <SearchController defaultValue={defaultValue}>
+export const BaseSearchForm = (props) => (
+  <SearchController {...props}>
     {({ query, onChange, onFocus, onSubmit, onKeyDown, autoComplete, autoCompleteResults }) => (
       <form
         className={styles.container}
@@ -224,6 +222,12 @@ const SearchForm = ({ defaultValue }) => (
     )}
   </SearchController>
 );
+
+const SearchForm = ({ defaultValue }) => {
+  const algoliaFlag = useDevToggle('Algolia Search');
+  return <BaseSearchForm defaultValue={defaultValue} showAutocomplete={algoliaFlag} useSearchProvider={useAlgoliaSearch} />
+}
+
 
 SearchForm.propTypes = {
   defaultValue: PropTypes.string,
