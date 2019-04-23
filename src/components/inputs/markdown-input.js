@@ -4,13 +4,17 @@ import PropTypes from 'prop-types';
 import TextArea from './text-area';
 import Markdown from '../text/markdown';
 
-const MarkdownInput = ({ onChange, placeholder, value }) => {
+const MarkdownInput = ({ error, onChange, placeholder, value }) => {
   const [focused, setFocused] = React.useState(false);
-  if (focused) {
+  const onFocus = () => setFocused(true);
+  const onBlur = () => setFocused(false);
+  if (error || focused) {
     return (
       <TextArea
-        onBlur={() => setFocused(false)}
+        error={error}
+        onBlur={onBlur}
         onChange={onChange}
+        onFocus={onFocus}
         placeholder={placeholder}
         value={value}
       />
@@ -18,11 +22,11 @@ const MarkdownInput = ({ onChange, placeholder, value }) => {
   }
   return (
     <p
-      placeholder={placeholder}
       aria-label={placeholder}
+      onFocus={onFocus}
+      placeholder={placeholder}
       role="textbox" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
       tabIndex={0}
-      onFocus={() => setFocused(true)}
     >
       <Markdown>{value}</Markdown>
     </p>
