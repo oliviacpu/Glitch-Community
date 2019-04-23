@@ -23,7 +23,6 @@ const createSlice = (handlers) => {
 const resultGroups = [
   { id: 'top', label: 'Top Results', getItems: (results) => [...results.starterKit, ...results.topResults] },
   { id: 'team', label: 'Teams' },
-  { id: 'team', label: 'Teams' },
   { id: 'user', label: 'Users' },
   { id: 'project', label: 'Projects' },
   { id: 'collection', label: 'Collections' },
