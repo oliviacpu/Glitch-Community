@@ -28,28 +28,32 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   if (!project.isAddingANewNote && !project.note) {
     return null;
   }
-
+  console.log("project?",project)
   const collectionCoverColor = collection.coverColor;
-  return (
-    <div className={styles.note}>
-      <div
-        className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })}
-        style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}
-      >
-        <AuthDescription
-          authorized={isAuthorized}
-          description={project.note || ''}
-          placeholder="Share why you love this app."
-          update={(note) => updateNote({ note, projectId: project.id })}
-          onBlur={hideEmptyNote}
-          allowImages
-        />
+  try {
+    return (
+      <div className={styles.note}>
+        <div
+          className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })}
+          style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}
+        >
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.note || ''}
+            placeholder="Share why you love this app."
+            update={(note) => updateNote({ note, projectId: project.id })}
+            onBlur={hideEmptyNote}
+            allowImages
+          />
+        </div>
+        <div className={styles.user}>
+          <ProfileItem user={collection.user} team={collection.team} />
+        </div>
       </div>
-      <div className={styles.user}>
-        <ProfileItem user={collection.user} team={collection.team} />
-      </div>
-    </div>
-  );
+    );
+  } catch(e) {
+    console.log("e", e)
+  }
 };
 
 Note.propTypes = {

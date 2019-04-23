@@ -506,21 +506,44 @@ storiesOf('CoverContainer', module)
   ))
 
 const collection = {
-  coverColor: "#000000",
+  coverColor: "#bfabf2",
   user: users[0],
 };
 
-const project = {
-  note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server"
-};
   
 storiesOf('Note', module)
   .add('when authorized', () => (
     <Note
       collection={collection}
-      project={project}
+      project={{
+        note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server",
+        isAddingANewNote: true
+      }}
       updateNote={() => console.log("server would have been pinged to update this note")}
       hideNote={() => console.log("after a certain amount of time we would have hid the note")}
       isAuthorized={true}
+    />
+  ))
+  .add('empty state', () => (
+    <Note
+      collection={collection}
+      project={{
+        note: "",
+        isAddingANewNote: true
+      }}
+      updateNote={() => console.log("server would have been pinged to update this note")}
+      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      isAuthorized={true}
+    />
+  ))
+  .add('when unauthorized', () => (
+    <Note
+      collection={collection}
+      project={{
+        note: "this note you do not own, it has no editable state"
+      }}
+      updateNote={() => console.log("server would have been pinged to update this note")}
+      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      isAuthorized={false}
     />
   ))
