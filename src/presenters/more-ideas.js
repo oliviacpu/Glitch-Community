@@ -12,45 +12,6 @@ import { DataLoader } from './includes/loader';
 
 import { useAPI } from '../state/api';
 
-const MoreIdeasCollectionsDisplay = ({ collections }) => (
-  <section className="more-ideas">
-    <Heading tagName="h2">More Ideas</Heading>
-    <ul>
-      {collections.map((collection) => (
-        <li key={collection.id}>
-          <CollectionLink
-            collection={collection}
-            style={{ backgroundColor: collection.coverColor }}
-            className={`more-ideas-box ${isDarkColor(collection.coverColor) ? 'dark' : ''}`}
-          >
-            <CollectionAvatar color={collection.coverColor} />
-            {collection.name}
-          </CollectionLink>
-        </li>
-      ))}
-    </ul>
-  </section>
-);
-
-export const MoreIdeasCollections = () => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => api.get(`teamid/byUrl/${moreIdeasTeam}`)}>
-      {({ data }) => (
-        <DataLoader get={() => (data !== 'NOT FOUND' ? api.get(`collections?teamId=${data}`) : null)}>
-          {({ loadedData }) => (
-            <MoreIdeasCollectionsDisplay
-              collections={loadedData.map((collection) => ({
-                ...collection,
-                team: { url: moreIdeasTeam },
-              }))}
-            />
-          )}
-        </DataLoader>
-      )}
-    </DataLoader>
-  );
-};
 export const MoreIdeasCategories = () => (
   <section className="more-ideas">
     <Heading tagName="h2">More Ideas</Heading>
