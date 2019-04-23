@@ -366,6 +366,7 @@ storiesOf('SearchResults', module).add(
             },
           ],
           collection: [],
+          starterKit: [],
         }}
       />
     )),
