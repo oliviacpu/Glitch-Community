@@ -1,10 +1,9 @@
 import React from 'react';
 
 import Helmet from 'react-helmet';
+import MoreIdeas from 'Components/more-ideas/more-ideas';
 import Layout from '../layout';
-
 import Questions from '../questions';
-import MoreIdeas from '../more-ideas';
 
 const QuestionsPage = () => (
   <Layout>

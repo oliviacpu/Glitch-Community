@@ -1,18 +1,18 @@
-.container
+import '../constants.styl'
 
 .grid
+  display: grid
+  grid-gap: 10px
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
   padding: 0
-  margin-bottom: 0
-
+  list-style-type: none
+  
 .gridItem
   display: inline-block
   list-style-type: none
   margin-bottom: 10px
   width: calc(20% - 10px)
   margin-right: 10px
-  &:hover
-    .more-ideas-box-label
-      text-decoration: underline
   @media (max-width: largeViewport)
     width: calc(25% - 10px)
   @media (max-width: mediumViewport)
@@ -22,7 +22,7 @@
   @media (max-width: 300px)
     width: 100%
 
-.more-ideas-box
+.link
   background-color: lightgrey
   color: primary
   display: flex
@@ -35,9 +35,8 @@
   font-size: 14px
   font-weight: 600
   height: 160px
-  img, svg
-    flex-grow: 1
-    max-height: 95px
-    object-fit: scale-down
-  &.dark
-    color: white
+    
+.image
+  flex-grow: 1
+  max-height: 95px
+  object-fit: scale-down
