@@ -1,26 +1,11 @@
-import '../constants.styl'
+@import '../constants.styl'
 
 .grid
   display: grid
   grid-gap: 10px
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
   padding: 0
   list-style-type: none
-  
-.gridItem
-  display: inline-block
-  list-style-type: none
-  margin-bottom: 10px
-  width: calc(20% - 10px)
-  margin-right: 10px
-  @media (max-width: largeViewport)
-    width: calc(25% - 10px)
-  @media (max-width: mediumViewport)
-    width: calc(100% / 3 - 10px)
-  @media (max-width: mediumSmallViewport)
-    width: calc(50% - 10px)
-  @media (max-width: 300px)
-    width: 100%
 
 .link
   background-color: lightgrey
@@ -29,8 +14,7 @@ import '../constants.styl'
   flex-direction: column
   align-items: center
   justify-content: space-between
-  padding-top: 15px
-  padding-bottom: 15px
+  padding: 15px 0
   border-radius: 5px
   font-size: 14px
   font-weight: 600
