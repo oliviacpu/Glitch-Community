@@ -1,6 +1,6 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useMemo } from 'react';
 import { mapValues, sumBy } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';
@@ -130,6 +130,7 @@ const defaultParams = { notSafeForKids: false };
 
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
+  // const clientPromise = Promise.resolve(algoliasearch('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160'));
   return {
     initIndex: (indexName) => {
       const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
@@ -141,7 +142,8 @@ function createSearchClient(api) {
   };
 }
 
-function createAlgoliaProvider(searchClient) {
+function createAlgoliaProvider(api) {
+  const searchClient = createSearchClient(api);
   const searchIndices = {
     team: searchClient.initIndex('search_teams'),
     user: searchClient.initIndex('search_users'),
@@ -163,9 +165,8 @@ function createAlgoliaProvider(searchClient) {
 }
 
 export function useAlgoliaSearch(query, params = defaultParams) {
-  // const api = useAPI();
-  const client = algoliasearch('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160');
-  const algoliaProvider = createAlgoliaProvider(client);
+  const api = useAPI();
+  const algoliaProvider = useMemo(() => createAlgoliaProvider(api), []);
   return useSearchProvider(algoliaProvider, query, params);
 }
 
