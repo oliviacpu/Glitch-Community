@@ -196,7 +196,7 @@ function SearchController({ children, defaultValue }) {
   return <LegacySearchController defaultValue={defaultValue}>{children}</LegacySearchController>;
 }
 
-const Form = ({ defaultValue }) => (
+const SearchForm = ({ defaultValue }) => (
   <SearchController defaultValue={defaultValue}>
     {({ query, onChange, onFocus, onSubmit, onKeyDown, autoComplete, autoCompleteResults }) => (
       <form
@@ -225,11 +225,11 @@ const Form = ({ defaultValue }) => (
   </SearchController>
 );
 
-Form.propTypes = {
+SearchForm.propTypes = {
   defaultValue: PropTypes.string,
 };
-Form.defaultProps = {
+SearchForm.defaultProps = {
   defaultValue: '',
 };
 
-export default Form;
+export default SearchForm;

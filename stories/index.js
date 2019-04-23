@@ -372,8 +372,14 @@ storiesOf('SearchResults', module).add(
   ),
 );
 
-storiesOf('SearchForm', module).add(
+const moc
 
+storiesOf('SearchForm', module).add(
+  'results',
+  provideContext(
+    { currentUser: {}, api: mockAPI, devToggles: ['Algolia Search'], search: mockSearch },
+    () => <SearchForm />
+  )
 )
 
 storiesOf('MaskImage', module)
