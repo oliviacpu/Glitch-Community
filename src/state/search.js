@@ -128,16 +128,20 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 
 const defaultParams = { notSafeForKids: false };
 
-function setupIndex () {
+function createSearchClient(api) {
+  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
   return {
-    search: async (...args) => {
-      const 
-    }
-  }
+    initIndex: (indexName) => {
+      const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
+
+      return {
+        search: (...args) => indexPromise.then((index) => index.search(...args)),
+      };
+    },
+  };
 }
 
-function createAlgoliaProvider (appID, apiKey) {
-  const searchClient = algoliasearch(appID, apiKey);
+function createAlgoliaProvider(searchClient) {
   const searchIndices = {
     team: searchClient.initIndex('search_teams'),
     user: searchClient.initIndex('search_users'),
@@ -157,10 +161,11 @@ function createAlgoliaProvider (appID, apiKey) {
     starterKit: (query) => Promise.resolve(findStarterKits(query)),
   };
 }
- 
+
 export function useAlgoliaSearch(query, params = defaultParams) {
-  const api = useAPI();
-  const algoliaProvider = createAlgoliaProvider('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160');
+  // const api = useAPI();
+  const client = algoliasearch('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160');
+  const algoliaProvider = createAlgoliaProvider(client);
   return useSearchProvider(algoliaProvider, query, params);
 }
 
