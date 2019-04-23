@@ -2,43 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Markdown from 'Components/text/markdown';
-import MarkdownInput from 'Components/inputs/markdown-input';
-import { OptimisticValue } from './field-helpers';
+import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
 
-const EditableDescription = ({ description, placeholder, update, onBlur, allowImages }) => (
-  <OptimisticValue value={description} update={update}>
-    {({ optimisticValue, optimisticUpdate }) => (
-      <MarkdownInput
-        value={optimisticValue}
-        onChange={optimisticUpdate}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        allowImages={allowImages}
-      />
-    )}
-  </OptimisticValue>
-);
-EditableDescription.propTypes = {
-  allowImages: PropTypes.bool,
-  description: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  update: PropTypes.func.isRequired,
-  onBlur: PropTypes.func,
-};
-EditableDescription.defaultProps = {
-  allowImages: true,
-  placeholder: '',
-  onBlur: () => {},
-};
-
-export const AuthDescription = ({ authorized, description, placeholder, update, onBlur, maxLength, allowImages }) =>
+export const AuthDescription = ({ authorized, description, placeholder, update, onBlur, allowImages }) =>
   authorized ? (
-    <EditableDescription
-      description={description}
-      update={update}
+    <OptimisticMarkdownInput
+      value={description}
+      onChange={update}
       onBlur={onBlur}
       placeholder={placeholder}
-      maxLength={maxLength}
       allowImages={allowImages}
     />
   ) : (
