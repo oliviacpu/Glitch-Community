@@ -29,7 +29,7 @@ export default function Footer() {
           🔮
         </span>
       </FooterLine>
-      <FooterLine href="https://medium.com/glitch" track="blog">
+      <FooterLine href="/culture" track="blog">
         Blog{' '}
         <span aria-hidden="true">
           📰
