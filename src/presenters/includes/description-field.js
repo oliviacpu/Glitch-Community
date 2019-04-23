@@ -4,22 +4,25 @@ import PropTypes from 'prop-types';
 import Markdown from 'Components/text/markdown';
 import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
 
-export const AuthDescription = ({ authorized, description, placeholder, update, onBlur, allowImages }) =>
+const AuthDescription = ({ authorized, description, placeholder, update, onBlur, allowImages }) => (
   authorized ? (
-    <OptimisticMarkdownInput
-      value={description}
-      onChange={update}
-      onBlur={onBlur}
-      placeholder={placeholder}
-      allowImages={allowImages}
-    />
+    <div className="description">
+      <OptimisticMarkdownInput
+        value={description}
+        onChange={update}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        allowImages={allowImages}
+      />
+    </div>
   ) : (
     description && (
-      <p className="description read-only">
+      <div className="description read-only">
         <Markdown allowImages={allowImages}>{description}</Markdown>
-      </p>
+      </div>
     )
-  );
+  )
+);
 
 AuthDescription.propTypes = {
   allowImages: PropTypes.bool,
@@ -34,3 +37,5 @@ AuthDescription.defaultProps = {
   placeholder: '',
   update: null,
 };
+
+export default AuthDescription;

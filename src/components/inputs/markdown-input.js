@@ -27,7 +27,7 @@ const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, plac
     );
   }
   return (
-    <p
+    <div
       className={styles.fakeInput}
       aria-label={placeholder}
       onBlur={onBlur}
@@ -36,7 +36,7 @@ const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, plac
       tabIndex={0}
     >
       <Markdown allowImages={allowImages}>{value}</Markdown>
-    </p>
+    </div>
   );
 };
 
