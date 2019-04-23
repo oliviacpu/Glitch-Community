@@ -244,21 +244,57 @@ const users = {
   },
 };
 
+const projects = {
+  'judicious-pruner': {
+    id: 'judicious-pruner',
+    domain: 'judicious-pruner',
+    description: 'a judicious project that does pruner things',
+    private: false,
+    showAsGlitchTeam: false,
+    users: [users.modernserf],
+    teams: [],
+  },
+  'modernserf-zebu': {
+    id: 'modernserf-zebu',
+    domain: 'modernserf-zebu',
+    description: 'a modernserf project that does zebu things',
+    private: false,
+    showAsGlitchTeam: false,
+    users: [users.modernserf],
+    teams: [],
+  },
+};
+
+const collections = {
+  12345: {
+    id: 12345,
+    name: 'Cool Projects',
+    description: 'A collection of cool projects',
+    coverColor: '#efe',
+    user: users.modernserf,
+    projects: [projects['judicious-pruner']],
+  },
+};
+
+const teams = {
+  12345: {
+    id: 12345,
+    coverColor: '#efe',
+    description: 'An example team',
+    hasAvatarImage: false,
+    hasCoverImage: false,
+    isVerified: false,
+    name: 'Example Team',
+    url: 'example-team',
+    users: [users.modernserf],
+  },
+};
+
 storiesOf('ProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <ProjectItem
-        project={{
-          id: 'foo',
-          domain: 'judicious-pruner',
-          description: 'a judicious project that does pruner things',
-          private: false,
-          showAsGlitchTeam: false,
-          users: [users.modernserf],
-          teams: [],
-        }}
-      />
+      <ProjectItem project={projects['judicious-pruner']} />
     </div>
   )),
 );
@@ -276,16 +312,7 @@ storiesOf('SmallCollectionItem', module).add(
   'with user',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <SmallCollectionItem
-        collection={{
-          id: 12345,
-          name: 'Cool Projects',
-          description: 'A collection of cool projects',
-          coverColor: '#efe',
-          user: users.modernserf,
-          projects: [{}],
-        }}
-      />
+      <SmallCollectionItem collection={collections[12345]} />
     </div>
   )),
 );
@@ -298,19 +325,7 @@ storiesOf('UserItem', module).add('base', () => (
 
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
-    <TeamItem
-      team={{
-        id: 12345,
-        coverColor: '#efe',
-        description: 'An example team',
-        hasAvatarImage: false,
-        hasCoverImage: false,
-        isVerified: false,
-        name: ['Example Team'],
-        url: 'example-team',
-        users: [users.modernserf],
-      }}
-    />
+    <TeamItem team={teams[12345]} />
   </div>
 ));
 
@@ -354,18 +369,7 @@ storiesOf('SearchResults', module).add(
           topResults: [{ ...users.modernserf, type: 'user', isExactMatch: true }],
           team: [],
           user: [{ ...users.modernserf, type: 'user', isExactMatch: true }],
-          project: [
-            {
-              type: 'project',
-              id: 'foo',
-              domain: 'modernserf-zebu',
-              description: 'a modernserf project that does zebu things',
-              private: false,
-              showAsGlitchTeam: false,
-              users: [users.modernserf],
-              teams: [],
-            },
-          ],
+          project: [{ ...projects['modernserf-zebu'], type: 'project' }],
           collection: [],
         }}
       />
@@ -373,18 +377,23 @@ storiesOf('SearchResults', module).add(
   ),
 );
 
-function useMockSearchProvider (query) {
-  const db = [users.modernserf, ]
+const mockSearchDB = {
+  user: Object.values(users).map((user) => ({ ...user, __searchKeys: [user.name, user.login],  type: 'user' })),
+  team: Object.values(teams).map((team) => ({ ...team, __searchKeys: [],  type: 'team' })),
+  project: Object.values(projects).map((project) => ({ ...project, type: 'project' })),
+  collection: Object.values(collections).map((collection) => ({ ...collection, type: 'collection' })),
+  starterKit: [],
+};
 
+function useMockSearchProvider(query) {
+  const queryRE = new RegExp(query.trim(), 'i')
+  const resultsByType = mapValues(mockSearchDB, (items) => items.filter())
 }
 
 storiesOf('SearchForm', module).add(
   'results',
-  provideContext(
-    { currentUser: {}, api: mockAPI },
-    () => <BaseSearchForm showAutocomplete useSearchProvider={useMockSearchProvider} />
-  )
-)
+  provideContext({ currentUser: {}, api: mockAPI }, () => <BaseSearchForm showAutocomplete useSearchProvider={useMockSearchProvider} />),
+);
 
 storiesOf('MaskImage', module)
   .add('random mask', () => <MaskImage src="https://glitch.com/culture/content/images/2018/10/react-starter-kit-1.jpg" />)
@@ -481,39 +490,40 @@ storiesOf('FeaturedProject', module)
   .add(
     'does not own featured project',
     provideContext({ currentUser: { login: '@sarahzinger' } }, () => (
-      <FeaturedProject
-        featuredProject={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: '@sarahzinger' }}
-      />
+      <FeaturedProject featuredProject={{ id: '123', domain: 'community-staging' }} isAuthorized={false} currentUser={{ login: '@sarahzinger' }} />
     )),
   );
 
 const team = {
-  backgroundColor: "rgb(116,236,252)",
-  coverColor: "rgb(12,84,124)",
+  backgroundColor: 'rgb(116,236,252)',
+  coverColor: 'rgb(12,84,124)',
   hasCoverImage: true,
-  name: "Glitch",
-  id: 74
-}
+  name: 'Glitch',
+  id: 74,
+};
 
-const buttons = <><button>one</button><button>two</button></>
+const buttons = (
+  <>
+    <button>one</button>
+    <button>two</button>
+  </>
+);
 storiesOf('CoverContainer', module)
   .add('when passed a user', () => (
     <CoverContainer item={users.modernserf} type="user">
-      <div style={{backgroundColor: "white"}}>We are the children</div>
+      <div style={{ backgroundColor: 'white' }}>We are the children</div>
     </CoverContainer>
   ))
   .add('when passed a team', () => (
     <CoverContainer item={team} type="team">
-      <div style={{backgroundColor: "white"}}>We are the children</div>
+      <div style={{ backgroundColor: 'white' }}>We are the children</div>
     </CoverContainer>
   ))
   .add('when passed buttons', () => (
     <CoverContainer item={team} type="team" buttons={buttons}>
-      <div style={{backgroundColor: "white"}}>
+      <div style={{ backgroundColor: 'white' }}>
         <p>We are the children</p>
         <p>Notice the buttons are up and to the right</p>
       </div>
     </CoverContainer>
-  ))
+  ));
