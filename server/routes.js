@@ -129,11 +129,13 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
+      console.log('got user');
       const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
-    await render(res, `@${name}`, `We couldn't find @${name}`);
+    console.log('should see error');
+    await render(res, `@team-404`, `We couldn't find '@team-404'`);
   });
 
   app.get('/@:name/:collection', async (req, res) => {
