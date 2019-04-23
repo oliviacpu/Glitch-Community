@@ -5,7 +5,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loaders/loader';
-import { PureEditableField } from '../includes/editable-field';
+import InputText from 'Components/inputs/text-input';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from '../../utils/abuse-reporting';
@@ -61,13 +61,13 @@ class ReportAbusePop extends React.Component {
     }
     return (
       <section className="pop-over-info">
-        <PureEditableField
+        <InputText
           value={this.state.email}
-          update={this.emailOnChange}
-          blur={() => this.debouncedValidateEmail()}
+          onChange={this.emailOnChange}
+          onBlur={() => this.debouncedValidateEmail()}
           placeholder="your@email.com"
           error={this.state.emailError}
-          inputType="email"
+          type="email"
         />
       </section>
     );
