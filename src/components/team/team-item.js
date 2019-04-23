@@ -7,7 +7,7 @@ import Markdown from 'Components/text/markdown';
 import Cover from 'Components/blocks/search-result-cover-bar';
 import Image from 'Components/images/image';
 import Thanks from 'Components/blocks/thanks';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
 import { getLink, getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
 import { VerifiedBadge } from '../../presenters/includes/team-elements';
 import WrappingLink from '../../presenters/includes/wrapping-link';

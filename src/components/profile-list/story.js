@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import ProfileList from './profile-list';
+import ProfileList from './index';
 
 const ProfileListWrap = ({ children }) => <div style={{ width: '25%' }}>{children}</div>;
 

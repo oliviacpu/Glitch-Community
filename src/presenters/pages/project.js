@@ -7,7 +7,7 @@ import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import { getAvatarUrl } from '../../models/project';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
