@@ -29,6 +29,7 @@ import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
+import ProfileList from 'Components/profile/profile-list';
 
 // initialize globals
 window.CDN_URL = 'https://cdn.glitch.com';
@@ -496,3 +497,9 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ))
+
+storiesOf('ProfileList', module)
+  .add('loading', () => <ProfileList users={[]} />)
+  .add('row', () => <ProfileList layout="row" teams={[team]} users={[users.modernserf]}/>)
+  .add('grid', () => <ProfileList layout="grid" teams={[team]} users={[users.modernserf]}/>)
+  .add('glitchTeam', () => <ProfileList layout="grid" glitchTeam teams={[team]} users={[users.modernserf]}/>)
