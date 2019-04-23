@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import Image from 'Components/images/image';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
-import MoreIdeas from 'Components/more-ideas/more-ideas';
+import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
 
 import { AnalyticsContext } from '../segment-analytics';

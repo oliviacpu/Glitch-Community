@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import SearchResults from 'Components/search/search-results';
 import NotFound from 'Components/errors/not-found';
-import MoreIdeas from 'Components/more-ideas/more-ideas';
+import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
 
 import { useAlgoliaSearch, useLegacySearch } from '../../state/search';

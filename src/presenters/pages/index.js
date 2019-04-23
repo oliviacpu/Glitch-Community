@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
-import MoreIdeas from 'Components/more-ideas/more-ideas';
+import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
 
 import { getEditorUrl } from '../../models/project';
