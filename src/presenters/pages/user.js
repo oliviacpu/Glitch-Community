@@ -29,11 +29,14 @@ function syncPageToLogin(login) {
 }
 
 const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) => {
+  console.log('user page NameAndLogin');
   if (!login) {
+    console.log('user page Anon');
     return <Heading tagName="h1">Anonymous</Heading>;
   }
 
   if (!isAuthorized) {
+    console.log('user page !isAuthorized');
     if (!name) {
       return <Heading tagName="h1">@{login}</Heading>;
     }
@@ -45,6 +48,7 @@ const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) =>
     );
   }
   const editableName = name !== null ? name : '';
+  console.log('user page User');
   return (
     <>
       <Heading tagName="h1">
