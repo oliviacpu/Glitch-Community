@@ -23,7 +23,6 @@ import Thanks from 'Components/blocks/thanks';
 import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search/search-results';
-import { BaseSearchForm } from 'Components/search-form/search-form';
 import StarterKitResult from 'Components/search/starter-kit-result';
 import { Context as CurrentUserContext } from '../src/state/current-user';
 import { Context as APIContext } from '../src/state/api';
@@ -32,6 +31,7 @@ import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
 import { users, teams, projects, collections } from './data';
+import 'search
 
 // initialize globals
 window.CDN_URL = 'https://cdn.glitch.com';
