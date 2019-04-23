@@ -103,7 +103,7 @@ const UserPage = ({
   // filter featuredProject out of both pinned & recent projects
   const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
-
+  console.log('got to render');
   return (
     <main className="profile-page user-page">
       <section>
