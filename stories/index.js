@@ -21,7 +21,7 @@ import SearchResultCoverBar from 'Components/blocks/search-result-cover-bar';
 import Thanks from 'Components/blocks/thanks';
 import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
-import SearchResults from 'Components/search/search-results';
+import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
 import { Context as CurrentUserContext } from '../src/state/current-user';
 import { Context as APIContext } from '../src/state/api';
@@ -127,6 +127,13 @@ storiesOf('TooltipContainer', module)
       <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
     </div>
   ));
+
+storiesOf('Text Input', module)
+  .add('regular', () => <TextInput placeholder="type something!" />)
+  .add('login', () => <TextInput placeholder="type something!" prefix="@" />)
+  .add('search', () => <TextInput type="search" opaque={true} search={true} placeholder="bots, apps, users" />)
+  .add('with error', () => <TextInput placeholder="glitch" error="That team already exists" />)
+  .add('text area', () => <TextArea placeholder="[Something here] doesn't seem appropriate for Glitch because..." error="Reason is required" />);
 
 storiesOf('Image', module)
   .add('regular', () => <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />)
@@ -359,6 +366,7 @@ storiesOf('SearchResults', module).add(
             },
           ],
           collection: [],
+          starterKit: [],
         }}
       />
     )),
