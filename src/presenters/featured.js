@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 import Image from 'Components/images/image';
@@ -14,8 +14,8 @@ import FeaturedEmbed from './featured-embed';
 import { FeaturedCollections } from './featured-collections';
 
 const ZineItems = () => {
-  const [posts] = React.useState(window.ZINE_POSTS.slice(0, 4));
-  const [masks] = React.useState(sampleSize([1, 2, 3, 4, 5], 4));
+  const { current: posts } = useRef(window.ZINE_POSTS.slice(0, 4));
+  const { current: masks } = useRef(sampleSize([1, 2, 3, 4, 5], 4));
   if (!posts.length) {
     return null;
   }
@@ -25,9 +25,7 @@ const ZineItems = () => {
         {posts.map(({ id, title, url, feature_image, primary_tag }, n) => (
           <li key={id} className="zine-item">
             <Link to={`/culture${url}`}>
-              {!!feature_image && (
-                <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} alt="" />
-              )}
+              {!!feature_image && <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} alt="" />}
               <div className="zine-item-meta">
                 <h1 className="zine-item-title">{title}</h1>
                 {!!primary_tag && <p className="zine-item-tag">{primary_tag.name}</p>}
