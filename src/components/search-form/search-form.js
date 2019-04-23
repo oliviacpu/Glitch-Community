@@ -225,9 +225,8 @@ export const BaseSearchForm = (props) => (
 
 const SearchForm = ({ defaultValue }) => {
   const algoliaFlag = useDevToggle('Algolia Search');
-  return <BaseSearchForm defaultValue={defaultValue} showAutocomplete={algoliaFlag} useSearchProvider={useAlgoliaSearch} />
-}
-
+  return <BaseSearchForm defaultValue={defaultValue} showAutocomplete={algoliaFlag} useSearchProvider={useAlgoliaSearch} />;
+};
 
 SearchForm.propTypes = {
   defaultValue: PropTypes.string,
