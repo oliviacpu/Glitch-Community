@@ -6,10 +6,13 @@ import Markdown from '../text/markdown';
 
 import styles from './markdown-input.styl';
 
-const MarkdownInput = ({ error, onChange, placeholder, value }) => {
+const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, placeholder, value }) => {
   const [focused, setFocused] = React.useState(false);
   const onFocus = () => setFocused(true);
-  const onBlur = () => setFocused(false);
+  const onBlur = () => {
+    setFocused(false);
+    outerOnBlur();
+  };
   if (error || focused || !value) {
     return (
       <TextArea
@@ -32,16 +35,25 @@ const MarkdownInput = ({ error, onChange, placeholder, value }) => {
       role="textbox" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
       tabIndex={0}
     >
-      <Markdown>{value}</Markdown>
+      <Markdown allowImages={allowImages}>{value}</Markdown>
     </p>
   );
 };
 
 MarkdownInput.propTypes = {
+  allowImages: PropTypes.bool,
   error: PropTypes.node,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
+};
+
+MarkdownInput.defaultProps = {
+  allowImages: true,
+  error: null,
+  onBlur: () => {},
+  placeholder: null,
 };
 
 export default MarkdownInput;
