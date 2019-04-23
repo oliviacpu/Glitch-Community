@@ -107,6 +107,7 @@ const formatByType = {
     teams: null,
     userIDs: project.members,
     teamIDs: project.teams,
+    private: project.isPrivate,
   }),
   collection: (collection) => ({
     coverColor: '#eee',
@@ -133,6 +134,7 @@ function createSearchClient(api) {
   return {
     initIndex: (indexName) => {
       const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
+
       return {
         search: (...args) => indexPromise.then((index) => index.search(...args)),
       };
