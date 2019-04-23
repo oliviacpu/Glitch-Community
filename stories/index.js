@@ -215,8 +215,6 @@ storiesOf('Segmented-Buttons', module)
 
 const users = {
   modernserf: {
-    isSupport: false,
-    isInfrastructureUser: false,
     id: 271885,
     avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/560e4b07-a70b-4f87-b8d4-699d738792d0-large.jpg',
     avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/560e4b07-a70b-4f87-b8d4-699d738792d0-small.jpg',
@@ -231,9 +229,98 @@ const users = {
     thanksCount: 1,
     utcOffset: -240,
     featuredProjectId: '22a883dc-a45d-4257-b44c-a43b6b8cabe9',
-    createdAt: '2017-03-21T00:14:37.651Z',
-    updatedAt: '2019-04-03T13:34:21.147Z',
-    features: [],
+  },
+  pirijan: {
+    id: 2,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/2ea4260e-b6aa-4b23-b867-503fdcdf175d-large.png',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/2ea4260e-b6aa-4b23-b867-503fdcdf175d-small.png',
+    login: 'pirijan',
+    name: 'Pirijan',
+    location: 'New York',
+    color: '#f2c48c',
+    description:
+      'I make the interface of Glitch. Here are some [tweets](https://twitter.com/pketh), some [words](http://pketh.org), and some [feels](http://frogfeels.com). (cover by [mushbuh](https://twitter.com/mushbuh/status/940675887116173312))',
+    hasCoverImage: true,
+    coverColor: 'rgb(4,4,4)',
+    thanksCount: 21,
+    utcOffset: -240,
+    featuredProjectId: null,
+  },
+  whimsicallyson: {
+    id: 9,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/096df579-e72b-44df-8469-cd93f8edae48-large.png',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/096df579-e72b-44df-8469-cd93f8edae48-small.png',
+    login: 'whimsicallyson',
+    name: 'allyson',
+    location: 'Pittsburgh, PA',
+    color: '#d8adf7',
+    description: 'this is my profile field',
+    hasCoverImage: false,
+    coverColor: 'rgb(37,15,14)',
+    thanksCount: 6,
+    utcOffset: -240,
+    featuredProjectId: null,
+  },
+  _gw: {
+    id: 11,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/755fa7c0-ae97-4782-9b54-5e49b95e053f-large.png',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/755fa7c0-ae97-4782-9b54-5e49b95e053f-small.png',
+    login: '_gw',
+    name: 'Gareth',
+    location: null,
+    color: '#8bf9cf',
+    description:
+      '1x developer turned evil marketer. working on [glitch](https://glitch.com). curate [devrel.io](https://devrel.io). [🤳🏼.ws](http://🤳🏼.ws)',
+    hasCoverImage: true,
+    coverColor: 'rgb(156,28,236)',
+    thanksCount: 186,
+    utcOffset: 60,
+    featuredProjectId: 'd2baacc0-73e4-4fb1-8fad-a682accdc36a',
+  },
+  TimKingtonFC: {
+    id: 18,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/5a52db65-0d61-4adc-9109-cd3809fca27e-large.png',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/5a52db65-0d61-4adc-9109-cd3809fca27e-small.png',
+    login: 'TimKingtonFC',
+    name: 'Tim Kington',
+    location: null,
+    color: '#aef28c',
+    description: 'I work at Glitch.',
+    hasCoverImage: true,
+    coverColor: 'rgb(81,78,66)',
+    thanksCount: 16,
+    utcOffset: -240,
+    featuredProjectId: null,
+  },
+  anildash: {
+    id: 21,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/cb0f7d08-d1e4-47de-be5c-b75d5f122135-large.png',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/cb0f7d08-d1e4-47de-be5c-b75d5f122135-small.png',
+    login: 'anildash',
+    name: 'Anil Dash',
+    location: 'NYC',
+    color: '#f9bbd4',
+    description: "I'm the CEO of 🎏 Glitch! And I am fighting for more ethical, humane and just tech. https://anildash.com/",
+    hasCoverImage: true,
+    coverColor: 'rgb(4,12,10)',
+    thanksCount: 18,
+    utcOffset: -240,
+    featuredProjectId: 'f0e649a1-3610-45f3-885a-217df0379e77',
+  },
+  Greg: {
+    id: 97325,
+    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/78e39bd1-b5b0-4393-8b3a-1b12867d7fb4-large.jpg',
+    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/78e39bd1-b5b0-4393-8b3a-1b12867d7fb4-small.jpg',
+    login: 'Greg',
+    name: 'Greg Weil',
+    location: null,
+    color: '#bfeeff',
+    description: '_Hi!_',
+    hasCoverImage: false,
+    coverColor: 'rgb(148,76,52)',
+    thanksCount: 11,
+    utcOffset: -240,
+    featuredProjectId: '89ad7cb1-b44e-4e54-a61b-74eff6677de5',
   },
 };
 
@@ -499,204 +586,9 @@ storiesOf('CoverContainer', module)
     </CoverContainer>
   ));
 
-const ProfileListWrap = ({ children }) => <div style={{ width: 100 }}>{children}</div>;
+const ProfileListWrap = ({ children }) => <div style={{ width: '25%' }}>{children}</div>;
 
-const glitchTeam = [
- {
-      "id": 2,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/2ea4260e-b6aa-4b23-b867-503fdcdf175d-large.png",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/2ea4260e-b6aa-4b23-b867-503fdcdf175d-small.png",
-      "login": "pirijan",
-      "name": "Pirijan",
-      "location": "New York",
-      "color": "#f2c48c",
-      "description": "I make the interface of Glitch. Here are some [tweets](https://twitter.com/pketh), some [words](http://pketh.org), and some [feels](http://frogfeels.com). (cover by [mushbuh](https://twitter.com/mushbuh/status/940675887116173312))",
-      "hasCoverImage": true,
-      "coverColor": "rgb(4,4,4)",
-    },
-    {
-      "isSupport": false,
-      "isInfrastructureUser": false,
-      "id": 9,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/096df579-e72b-44df-8469-cd93f8edae48-large.png",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/096df579-e72b-44df-8469-cd93f8edae48-small.png",
-      "login": "whimsicallyson",
-      "name": "allyson",
-      "location": "Pittsburgh, PA",
-      "color": "#d8adf7",
-      "description": "this is my profile field",
-      "hasCoverImage": false,
-      "coverColor": "rgb(37,15,14)",
-      "thanksCount": 6,
-      "utcOffset": -240,
-      "featuredProjectId": null,
-      "createdAt": "2015-10-19T15:37:04.449Z",
-      "updatedAt": "2019-04-23T00:32:02.257Z",
-      "features": [
-        {
-          "id": 411,
-          "name": "custom_domains",
-          "data": null,
-          "expiresAt": "2118-10-27T15:13:46.985Z"
-        }
-      ],
-      "teamPermission": {
-        "userId": 9,
-        "teamId": 74,
-        "accessLevel": 30,
-        "createdAt": "2018-08-06T18:14:08.426Z",
-        "updatedAt": "2018-11-06T15:55:09.628Z"
-      }
-    },
-    {
-      "isSupport": true,
-      "isInfrastructureUser": false,
-      "id": 11,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/755fa7c0-ae97-4782-9b54-5e49b95e053f-large.png",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/755fa7c0-ae97-4782-9b54-5e49b95e053f-small.png",
-      "login": "_gw",
-      "name": "Gareth",
-      "location": null,
-      "color": "#8bf9cf",
-      "description": "1x developer turned evil marketer. working on [glitch](https://glitch.com). curate [devrel.io](https://devrel.io). [🤳🏼.ws](http://🤳🏼.ws)",
-      "hasCoverImage": true,
-      "coverColor": "rgb(156,28,236)",
-      "thanksCount": 186,
-      "utcOffset": 60,
-      "featuredProjectId": "d2baacc0-73e4-4fb1-8fad-a682accdc36a",
-      "createdAt": "2015-10-22T17:02:25.858Z",
-      "updatedAt": "2019-04-23T12:31:18.347Z",
-      "features": [
-        {
-          "id": 27,
-          "name": "super_user",
-          "data": null,
-          "expiresAt": "2019-10-15T14:30:23.229Z"
-        },
-        {
-          "id": 765,
-          "name": "custom_domains",
-          "data": null,
-          "expiresAt": "2118-10-27T15:13:46.985Z"
-        }
-      ],
-      "teamPermission": {
-        "userId": 11,
-        "teamId": 74,
-        "accessLevel": 30,
-        "createdAt": "2018-04-04T16:16:57.162Z",
-        "updatedAt": "2018-07-31T14:52:58.949Z"
-      }
-    },
-    {
-      "isSupport": true,
-      "isInfrastructureUser": false,
-      "id": 18,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/5a52db65-0d61-4adc-9109-cd3809fca27e-large.png",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/5a52db65-0d61-4adc-9109-cd3809fca27e-small.png",
-      "login": "TimKingtonFC",
-      "name": "Tim Kington",
-      "location": null,
-      "color": "#aef28c",
-      "description": "I work at Glitch.",
-      "hasCoverImage": true,
-      "coverColor": "rgb(81,78,66)",
-      "thanksCount": 16,
-      "utcOffset": -240,
-      "featuredProjectId": null,
-      "createdAt": "2015-11-12T16:07:36.913Z",
-      "updatedAt": "2019-04-22T14:01:40.271Z",
-      "features": [
-        {
-          "id": 29,
-          "name": "super_user",
-          "data": null,
-          "expiresAt": "2019-10-15T14:31:18.837Z"
-        },
-        {
-          "id": 839,
-          "name": "custom_domains",
-          "data": null,
-          "expiresAt": "2118-10-27T15:13:46.985Z"
-        }
-      ],
-      "teamPermission": {
-        "userId": 18,
-        "teamId": 74,
-        "accessLevel": 30,
-        "createdAt": "2018-04-04T16:17:01.282Z",
-        "updatedAt": "2018-04-04T16:17:01.282Z"
-      }
-    },
-    {
-      "isSupport": false,
-      "isInfrastructureUser": false,
-      "id": 21,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/cb0f7d08-d1e4-47de-be5c-b75d5f122135-large.png",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/cb0f7d08-d1e4-47de-be5c-b75d5f122135-small.png",
-      "login": "anildash",
-      "name": "Anil Dash",
-      "location": "NYC",
-      "color": "#f9bbd4",
-      "description": "I'm the CEO of 🎏 Glitch! And I am fighting for more ethical, humane and just tech. https://anildash.com/",
-      "hasCoverImage": true,
-      "coverColor": "rgb(4,12,10)",
-      "thanksCount": 18,
-      "utcOffset": -240,
-      "featuredProjectId": "f0e649a1-3610-45f3-885a-217df0379e77",
-      "createdAt": "2016-01-14T18:14:41.608Z",
-      "updatedAt": "2019-04-23T03:26:43.636Z",
-      "features": [
-        {
-          "id": 791,
-          "name": "custom_domains",
-          "data": null,
-          "expiresAt": "2118-10-27T15:13:46.985Z"
-        }
-      ],
-      "teamPermission": {
-        "userId": 21,
-        "teamId": 74,
-        "accessLevel": 30,
-        "createdAt": "2018-04-04T16:17:12.177Z",
-        "updatedAt": "2018-04-04T16:17:12.177Z"
-      }
-    },
-    {
-      "isSupport": false,
-      "isInfrastructureUser": false,
-      "id": 97325,
-      "avatarUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/78e39bd1-b5b0-4393-8b3a-1b12867d7fb4-large.jpg",
-      "avatarThumbnailUrl": "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/78e39bd1-b5b0-4393-8b3a-1b12867d7fb4-small.jpg",
-      "login": "Greg",
-      "name": "Greg Weil",
-      "location": null,
-      "color": "#bfeeff",
-      "description": "_Hi!_",
-      "hasCoverImage": false,
-      "coverColor": "rgb(148,76,52)",
-      "thanksCount": 11,
-      "utcOffset": -240,
-      "featuredProjectId": "89ad7cb1-b44e-4e54-a61b-74eff6677de5",
-      "createdAt": "2016-07-08T18:51:40.548Z",
-      "updatedAt": "2019-04-23T14:33:19.290Z",
-      "features": [
-        {
-          "id": 842,
-          "name": "custom_domains",
-          "data": null,
-          "expiresAt": "2118-10-27T15:13:46.985Z"
-        }
-      ],
-      "teamPermission": {
-        "userId": 97325,
-        "teamId": 74,
-        "accessLevel": 30,
-        "createdAt": "2018-07-25T21:02:19.601Z",
-        "updatedAt": "2018-08-14T18:58:58.067Z"
-      }
-    },
-]
+const usersList = Object.values(users);
 
 storiesOf('ProfileList', module)
   .add('loading', () => (
@@ -706,16 +598,16 @@ storiesOf('ProfileList', module)
   ))
   .add('row', () => (
     <ProfileListWrap>
-      <ProfileList layout="row" teams={[team]} users={[users.modernserf]} />
+      <ProfileList layout="row" teams={[team]} users={usersList} />
     </ProfileListWrap>
   ))
   .add('grid', () => (
     <ProfileListWrap>
-      <ProfileList layout="grid" teams={[team]} users={[users.modernserf]} />
+      <ProfileList layout="grid" teams={[team]} users={usersList} />
     </ProfileListWrap>
   ))
   .add('glitchTeam', () => (
     <ProfileListWrap>
-      <ProfileList layout="grid" glitchTeam teams={[team]} users={[users.modernserf]} />
+      <ProfileList layout="grid" glitchTeam teams={[team]} users={usersList} />
     </ProfileListWrap>
   ));
