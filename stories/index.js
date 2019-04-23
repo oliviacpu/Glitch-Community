@@ -516,11 +516,11 @@ storiesOf('Note', module)
     <Note
       collection={collection}
       project={{
-        note: "this note you own and thus you can edit if you so desire. Everytime you type into it we ping to update the server",
+        note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest",
         isAddingANewNote: true
       }}
-      updateNote={() => console.log("server would have been pinged to update this note")}
-      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      updateNote={() => console.log("update note would have been called")}
+      hideNote={() => console.log("hide note would have been called")}
       isAuthorized={true}
     />
   ))
@@ -531,8 +531,8 @@ storiesOf('Note', module)
         note: "",
         isAddingANewNote: true
       }}
-      updateNote={() => console.log("server would have been pinged to update this note")}
-      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      updateNote={() => console.log("update note would have been called")}
+      hideNote={() => console.log("hide note would have been called")}
       isAuthorized={true}
     />
   ))
@@ -542,8 +542,8 @@ storiesOf('Note', module)
       project={{
         note: "this note you do not own, it has no editable state"
       }}
-      updateNote={() => console.log("server would have been pinged to update this note")}
-      hideNote={() => console.log("after a certain amount of time we would have hid the note")}
+      updateNote={() => console.log("update note would have been called")}
+      hideNote={() => console.log("hide note would have been called")}
       isAuthorized={false}
     />
   ))

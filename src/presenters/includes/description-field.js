@@ -19,6 +19,7 @@ function EditableDescriptionImpl({ description, placeholder, maxLength, allowIma
     setFocused(false);
     outerOnBlur(event.target.value);
   };
+  console.log("description, placeholder", description, placeholder)
 
   return focused ? (
     <TextArea
