@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextArea from 'react-textarea-autosize';
 
 import Markdown from 'Components/text/markdown';
+import MarkdownInput from 'Components/inputs/markdown-input';
 import { OptimisticValue } from './field-helpers';
 
 function EditableDescriptionImpl({ description, placeholder, maxLength, allowImages, maxRows, update, onBlur: outerOnBlur }) {
