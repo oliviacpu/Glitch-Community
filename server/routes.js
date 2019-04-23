@@ -44,6 +44,7 @@ module.exports = function(external) {
     let built = true;
 
     const zine = (await getZine()) || [];
+    console.log('got zine', zine);
     let scripts = [];
     let styles = [];
 
@@ -66,7 +67,8 @@ module.exports = function(external) {
       console.error("Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.");
       built = false;
     }
-
+    
+    console.log('about to render', title, description);
     res.render('index.ejs', {
       title,
       description,
@@ -129,12 +131,11 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
-      console.log('got user');
       const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
-    console.log('should see error, res: ', res);
+    console.log('should see error');
     await render(res, `@team-404`, `We couldn't find '@team-404'`);
   });
 
