@@ -504,17 +504,14 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ))
-
-const collection = {
-  coverColor: "#bfabf2",
-  user: users[0],
-};
-
   
 storiesOf('Note', module)
   .add('when authorized', () => (
     <Note
-      collection={collection}
+      collection={{
+        coverColor: "#bfabf2",
+        user: users[0],
+      }}
       project={{
         note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
         isAddingANewNote: true
@@ -526,7 +523,10 @@ storiesOf('Note', module)
   ))
   .add('empty state', () => (
     <Note
-      collection={collection}
+      collection={{
+        coverColor: "#bfabf2",
+        user: users[0],
+      }}
       project={{
         note: "",
         isAddingANewNote: true
@@ -538,12 +538,29 @@ storiesOf('Note', module)
   ))
   .add('when unauthorized', () => (
     <Note
-      collection={collection}
+      collection={{
+        coverColor: "#bfabf2",
+        user: users[0],
+      }}
       project={{
         note: "this note you do not own, you can not edit it, you can not hide it"
       }}
       updateNote={() => console.log("update note would have been called")}
       hideNote={() => console.log("hide note would have been called")}
       isAuthorized={false}
+    />
+  ))
+  .add('dark notes', () => (
+    <Note
+      collection={{
+        coverColor: "#000000",
+        user: users[0],
+      }}
+      project={{
+        note: "text color is lightened for dark backgrounds"
+      }}
+      updateNote={() => console.log("update note would have been called")}
+      hideNote={() => console.log("hide note would have been called")}
+      isAuthorized={true}
     />
   ))
