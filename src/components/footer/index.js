@@ -5,14 +5,14 @@ import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import { Link } from '../../presenters/includes/link';
-import styles from './styles';
+import styles from './footer.styl';
 
 const FooterLine = ({ href, track, children }) => (
-  <Text>
+  <div className={styles.footerLine}>
     <Link to={href} data-track={`footer → ${track}`}>
       {children}
     </Link>
-  </Text>
+  </div>
 );
 
 FooterLine.propTypes = {
@@ -21,30 +21,36 @@ FooterLine.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default function Footer() {
-  const srcForPlatforms = 'https://cdn.glitch.com/be1ad2d2-68ab-404a-82f4-6d8e98d28d93%2Ffor-platforms-icon.svg?1506442305188';
-  return (
-    <footer role="contentinfo">
-      <FooterLine href="/about" track="about">
-        About Glitch <Emoji name="crystalBall"/>
-      </FooterLine>
-      <FooterLine href="/culture" track="blog">
-        Blog <Emoji namme="newspaper"/>
-      </FooterLine>
-      <FooterLine href="/help/" track="faq">
-        Help Center <Emoji name="umbrella"/>
-      </FooterLine>
-      <FooterLine href="http://status.glitch.com/" track="system status">
-        System Status <Emoji name="horizontalTrafficLight"/>
-      </FooterLine>
-      <FooterLine href="/legal" track="legal stuff">
-        Legal Stuff <Emoji name="police"/>
-      </FooterLine>
-      <hr />
-      <FooterLine href="/teams" track="platforms">
-        <Image className="for-platforms-icon" src={srcForPlatforms} alt="" />
-        <span className="for-platforms-text">Glitch Teams</span>
-      </FooterLine>
-    </footer>
-  );
-}
+const PlatformsIcon = () => (
+  <Image
+    className="for-platforms-icon"
+    src="https://cdn.glitch.com/be1ad2d2-68ab-404a-82f4-6d8e98d28d93%2Ffor-platforms-icon.svg?1506442305188"
+    alt=""
+  />
+);
+
+const Footer = () => (
+  <footer className={styles.container} role="contentinfo">
+    <FooterLine href="/about" track="about">
+      About Glitch <Emoji name="crystalBall" />
+    </FooterLine>
+    <FooterLine href="/culture" track="blog">
+      Blog <Emoji name="newspaper" />
+    </FooterLine>
+    <FooterLine href="/help/" track="faq">
+      Help Center <Emoji name="umbrella" />
+    </FooterLine>
+    <FooterLine href="http://status.glitch.com/" track="system status">
+      System Status <Emoji name="horizontalTrafficLight" />
+    </FooterLine>
+    <FooterLine href="/legal" track="legal stuff">
+      Legal Stuff <Emoji name="policeOfficer" />
+    </FooterLine>
+    <hr />
+    <FooterLine href="/teams" track="platforms">
+      <span className="for-platforms-text">Glitch Teams</span>
+    </FooterLine>
+  </footer>
+);
+
+export default Footer;
