@@ -72,7 +72,7 @@ const LoginPage = ({ provider, url }) => {
         if (error.response.status === 403) {
           // Our API returns a 403 when the login provider didn't return an email address
           // We can suggest using email for login and avoid capturing this error in Sentry
-          const title = "Missing Email Address";
+          const title = 'Missing Email Address';
           const message = `${provider} didn't return an email address for your account.  Try using "Sign in with Email" instead to create an account on Glitch.`;
           setError(title, message);
         } else if (error.response.status !== 401) {
