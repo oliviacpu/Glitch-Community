@@ -96,27 +96,13 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-class DeleteProject extends React.Component {
-  constructor(props){
-    super(props);
-    this.deleteProject = this.deleteProject.bind(this);
+const DeleteProject = ({ project, deleteProject }) => {
+  const [done, setDone] = useState(false);
+  if (done){
+    return <Redirect to={getUserLink(this.props.currentUser)}/>
   }
-  
-  async deleteProject(){
-    try{
-      const api = useAPI();
-      console.log(`delete project for ${this.props.currentUser.login}`);
-      await api.delete(`project/${this.props.project.id}`);
-      <Redirect to={getUserLink(this.props.currentUser)}/>
-    }catch(error){
-      console.log('deleteProject', error, error.response);
-      this.props.createErrorNotification('Something went wrong, try refreshing?');
-    }
-  }
-  
-  render(){
-    return(
-      <section>
+  return(
+     <section>
         <PopoverWithButton
           buttonClass="button-small button-tertiary"
           buttonText={
@@ -133,7 +119,11 @@ class DeleteProject extends React.Component {
                   <div className="action-description">
                     You can always undelete a project from your profile page.
                   </div>
-                  <Button type="dangerZone" small="size" onClick={this.deleteProject}>
+                  <Button type="dangerZone" small="size" onClick={() => 
+                    {
+                      deleteProject();
+                      setDone(true);
+                    }}>
                     Delete {this.props.project.domain} <Emoji name="bomb"/>
                   </Button>
                 </section>
@@ -142,8 +132,7 @@ class DeleteProject extends React.Component {
         }
         </PopoverWithButton>
       </section>
-      )
-  }
+    )
 }
 
 DeleteProject.propTypes = {
@@ -153,7 +142,7 @@ DeleteProject.propTypes = {
 
 
 
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
+const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate, deleteProject }) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
@@ -198,7 +187,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
         <ReadmeLoader domain={domain} />
       </section>
       
-      { isAuthorized && <DeleteProject project={project} currentUser={currentUser}/> }
+      { isAuthorized && <DeleteProject project={project} currentUser={currentUser} deleteProject={deleteProject}/> }
           
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
@@ -220,6 +209,10 @@ ProjectPage.propTypes = {
     teams: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
   }).isRequired,
+  updateDomain: PropTypes.func.isRequired,
+  updateDescription: PropTypes.func.isRequired,
+  updatePrivate: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
 };
 
 async function getProject(api, domain) {
