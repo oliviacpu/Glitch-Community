@@ -88,6 +88,54 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
+class DeleteProject extends React.Component {
+  
+  async deleteProject(){
+    try{
+      console.log('delete project');
+      // await this.props.api.delete(`project/${this.props.project.id}`);
+    }catch(error){
+      console.log('deleteProject', error, error.response);
+      this.props.createErrorNotification('Something went wrong, try refreshing?');
+    }
+  }
+  
+  render(){
+    return(
+      <section>
+        <PopoverWithButton
+          buttonClass="button-small button-tertiary danger-zone"
+          buttonText={
+            <>
+              Delete {props.project.name}
+            </>
+          }
+        >
+          {({ togglePopover }) => 
+            <>
+              <dialog className="pop-over delete-project-pop" open>
+                <section className="pop-over-actions">
+                  <div className="action-description">
+                    You can always undelete a project from your profile page.
+                    <Button type="dangerZone" small="size" onClick={null}>
+                      Delete {props.project.name}
+                    </Button>
+                  </div>
+                </section>
+              </dialog>
+            </>
+        </PopoverWithButton>
+      </section>
+      )
+  }
+}
+
+DeleteProject.propTypes = {
+  project: PropTypes.object.isRequired,
+}
+
+
+
 const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
   const { domain, users, teams } = project;
   return (
@@ -132,6 +180,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
+      
+      { isAuthorized && <DeleteProject project={project}/> }
+          
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
       </section>
