@@ -19,9 +19,9 @@ const TextArea = ({ autoFocus, disabled, error, name, onBlur, onChange, onFocus,
           disabled={disabled}
           id={uniqueId}
           name={name}
-          onBlur={() => onBlur()}
+          onBlur={onBlur}
           onChange={(evt) => onChange(evt.target.value)}
-          onFocus={() => onFocus()}
+          onFocus={onFocus}
           placeholder={placeholder}
           value={value}
         />
@@ -49,8 +49,8 @@ TextArea.defaultProps = {
   disabled: false,
   error: null,
   name: undefined,
-  onBlur: () => {},
-  onFocus: () => {},
+  onBlur: null,
+  onFocus: null,
   placeholder: undefined,
 };
 
