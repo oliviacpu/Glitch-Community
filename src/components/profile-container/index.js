@@ -3,54 +3,36 @@ import PropTypes from 'prop-types';
 
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
+import Button from 'Components/buttons/button';
+import { useTrackedFunc } from '../../presenters/segment-analytics';
 
 const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
 
-const ImageButtons = ({ name, uploadImage, clearImage }) => {
-  const onClickUpload = useTrackedFunc(uploadImage, `Upload ${name}`);
-  const onClickClear = useTrackedFunc(clearImage, `Clear ${name}`);
-  return (
-    <div>
-      {!!uploadImage && (
-        <Button size="small" type="tertiary" onClick={onClickUpload}>
-          Upload {name}
-        </Button>
-      )}
-      {!!clearImage && (
-        <Button size="small" type="tertiary" onClick={onClickClear}>
-          Clear {name}
-        </Button>
-      )}
-    </div>
-  );
-};
-ImageButtons.propTypes = {
-  name: PropTypes.string.isRequired,
-  uploadImage: PropTypes.func,
-  clearImage: PropTypes.func,
-};
-ImageButtons.defaultProps = {
-  uploadImage: null,
-  clearImage: null,
-};
-
 const TrackedButton = ({ label, onClick }) => {
   const trackedOnClick = useTrackedFunc(onClick, label);
-  return <Button size="small" type="tertiary" onClick={trackedOnClick}>{label}</Button>
-}
+  return (
+    <Button size="small" type="tertiary" onClick={trackedOnClick}>
+      {label}
+    </Button>
+  );
+};
 
-const ProfileContainer = ({ avatarStyle, avatarButtons, type, item, coverActions, coverButtons, children, teams }) => (
-  <CoverContainer 
-    type={type} 
-    item={item} 
-    buttons={<>
-      {Object.entries(coverActions).map(([label, fn]) => <)}    
-    </>}
-  >
+const TrackedButtonGroup = ({ items }) => (
+  <>
+    {Object.entries(items)
+      .filter(([, onClick]) => onClick)
+      .map(([label, onClick]) => (
+        <TrackedButton key={label} label={label} onClick={onClick} />
+      ))}
+  </>
+);
+
+const ProfileContainer = ({ avatarStyle, avatarActions, type, item, coverActions, children, teams }) => (
+  <CoverContainer type={type} item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
     <InfoContainer>
       <div className="avatar-container">
         <div className="user-avatar" style={avatarStyle} />
-        {avatarButtons}
+        <TrackedButtonGroup items={avatarActions} />
       </div>
       <div className="profile-information">{children}</div>
     </InfoContainer>
@@ -63,7 +45,20 @@ const ProfileContainer = ({ avatarStyle, avatarButtons, type, item, coverActions
 );
 
 ProfileContainer.propTypes = {
+  item: PropTypes.object.isRequired,
+  type: PropTypes.oneOfType(['user', 'team']).isRequired,
+  children: PropTypes.node.isRequired,
+  avatarStyle: PropTypes.object,
+  avatarActions: PropTypes.object,
+  coverActions: PropTypes.object,
+  teams: PropTypes.array,
+};
 
-}
+ProfileContainer.defaultProps = {
+  avatarStyle: {},
+  avatarActions: {},
+  coverActions: {},
+  teams: [],
+};
 
 export default ProfileContainer;

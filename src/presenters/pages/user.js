@@ -9,7 +9,6 @@ import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
-import ImageButtons from 'Components/image-buttons';
 import ProfileContainer from 'Components/profile-container';
 
 import { getAvatarStyle, getLink } from '../../models/user';
@@ -115,12 +114,6 @@ const UserPage = ({
           avatarActions={{
             'Upload Avatar': isAuthorized && user.login ? uploadAvatar : null,
           }}
-          
-          coverButtons={
-            isAuthorized &&
-            !!user.login && <ImageButtons name="Cover" uploadImage={uploadCover} clearImage={user.hasCoverImage ? clearCover : null} />
-          }
-          avatarButtons={isAuthorized && !!user.login && <ImageButtons name="Avatar" uploadImage={uploadAvatar} />}
           teams={user.teams}
         >
           <NameAndLogin

@@ -9,7 +9,6 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
-import ImageButtons from 'Components/image-buttons';
 import ProfileContainer from 'Components/profile-container';
 
 import { AnalyticsContext } from '../segment-analytics';
@@ -149,12 +148,13 @@ class TeamPage extends React.Component {
             avatarStyle={getAvatarStyle({ ...team, cache: team._cacheAvatar })} // eslint-disable-line
             item={team}
             type="team"
-            avatarButtons={this.props.currentUserIsTeamAdmin ? <ImageButtons name="Avatar" uploadImage={this.props.uploadAvatar} /> : null}
-            coverButtons={
-              this.props.currentUserIsTeamAdmin ? (
-                <ImageButtons name="Cover" uploadImage={this.props.uploadCover} clearImage={team.hasCoverImage ? this.props.clearCover : null} />
-              ) : null
-            }
+            coverActions={{
+              'Upload Cover': this.props.currentUserIsTeamAdmin ? this.props.uploadCover : null,
+              'Clear Cover': this.props.currentUserIsTeamAdmin && team.hasCoverImage ? this.props.clearCover : null,
+            }}
+            avatarActions={{
+              'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
+            }}
           >
             {this.props.currentUserIsTeamAdmin ? (
               <TeamNameUrlFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
