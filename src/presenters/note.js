@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { ProfileItem } from 'Components/profile/profile-list';
 
 // TODO: let's move these into components
-import AuthDescription from './includes/description-field';
+import AuthDescription from './includes/auth-description';
 
 import { isDarkColor } from '../models/collection';
 
