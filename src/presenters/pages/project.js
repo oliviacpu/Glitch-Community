@@ -95,7 +95,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProject({ deleteProject, currentUser }) {
+function DeleteProjectBtn({ deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   if (done) {
     return <Redirect to={getUserLink(currentUser)} />;
@@ -136,9 +136,9 @@ function DeleteProject({ deleteProject, currentUser }) {
   );
 }
 
-DeleteProject.propTypes = {
+DeleteProjectBtn.propTypes = {
   currentUser: PropTypes.object.isRequired,
-  deleteProject: PropTypes.func.isREquired,
+  deleteProject: PropTypes.func.isRequired,
 };
 
 const ProjectPage = ({
@@ -195,7 +195,7 @@ const ProjectPage = ({
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProject currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProjectBtn currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
