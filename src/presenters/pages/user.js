@@ -150,12 +150,12 @@ const UserPage = ({
             </>
           }
           projects={pinnedProjects}
-          isAuthorized={isAuthorized}
           projectOptions={{
+            removePin: isAuthorized ? removePin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            removePin: isAuthorized ? removePin : undefined,
           }}
         />
       )}
@@ -177,14 +177,14 @@ const UserPage = ({
         <ProjectsList
           title="Recent Projects"
           projects={recentProjects}
-          isAuthorized={isAuthorized}
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
+            addPin: isAuthorized ? addPin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            addPin: isAuthorized ? addPin : undefined,
           }}
         />
       )}
