@@ -24,7 +24,7 @@ const useDirectInputProps = (error) => {
   return { error, onChange, value };
 };
 
-const BasicTextInputs = () => {
+const GenericTextInputs = () => {
   const [showError, setShowError] = React.useState(false);
   const error = showError ? "Nope, that won't do" : null;
   const singleLineProps = useDirectInputProps(error);
@@ -42,9 +42,9 @@ const BasicTextInputs = () => {
   );
 };
 
-inputStory.add('generic', () => <BasicTextInputs />);
+inputStory.add('generic', () => <GenericTextInputs />);
 
-const OptimisticProps = ({ children, name = 'value' }) => {
+const useOptimisticProps = (name) => {
   const [value, setValue] = React.useState('');
   const onChange = async (newValue) => {
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -53,8 +53,17 @@ const OptimisticProps = ({ children, name = 'value' }) => {
     }
     setValue(newValue);
   };
-  return children({ onChange, [name]: value });
+  return { onChange, [name]: value };
 };
+
+const ProperTextInputs = () => {
+  return (
+    <div style={{ maxWidth: '400px' }}>
+    </div>
+  );
+};
+
+inputStory.add('proper', () => <ProperTextInputs />);
 
 const fieldStory = storiesOf('Text Fields', module);
 fieldStory.add('optimistic input', () => <OptimisticProps>{props => <OptimisticTextInput {...props} placeholder="type error for an error" />}</OptimisticProps>);
