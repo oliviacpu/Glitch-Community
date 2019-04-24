@@ -13,21 +13,33 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
-const DirectInputProps = ({ children }) => {
+const useDirectInputProps = () => {
   const [value, setValue] = React.useState('');
   const onChange = (newValue) => {
     setValue(newValue);
   };
-  return children({ onChange, value });
+  return { onChange, value };
 };
 
-const inputStory = storiesOf('Text Input', module);
+const BasicInputs = () => {
+  const [showError, setShowError] = React.useState(false);
+  const textInputProps = useDirectInputProps();
+  const error = showError ? 
+  return (
+    <>
+      <TextInput {...textInputProps} placeholder="type something!" />
+    </>
+  );
+};
+
+const inputStory = storiesOf('Input Fields', module);
 inputStory.add('text input', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" />}</DirectInputProps>);
 inputStory.add('affixes', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" prefix="#" postfix="#" />}</DirectInputProps>);
 inputStory.add('search', () => <DirectInputProps>{props => <TextInput {...props} type="search" opaque={true} search={true} placeholder="bots, apps, users" />}</DirectInputProps>);
 inputStory.add('with error', () => <DirectInputProps>{props => <TextInput {...props} placeholder="glitch" error="That team already exists" />}</DirectInputProps>);
 inputStory.add('text area', () => <DirectInputProps>{props => <TextArea {...props} placeholder="This is a multiline text field" error="Reason is required" />}</DirectInputProps>);
 inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a single line text input that wraps" error="An error could go here!" />}</DirectInputProps>);
+inputStory.add('markdown text', () => <DirectInputProps>{props => <MarkdownInput {...props} placeholder="This renders as markdown when it isn't focused" error="An error could go here!" />}</DirectInputProps>);
 
 const OptimisticProps = ({ children, name = 'value' }) => {
   const [value, setValue] = React.useState('');
@@ -43,8 +55,8 @@ const OptimisticProps = ({ children, name = 'value' }) => {
 
 const fieldStory = storiesOf('Text Fields', module);
 fieldStory.add('optimistic input', () => <OptimisticProps>{props => <OptimisticTextInput {...props} placeholder="type error for an error" />}</OptimisticProps>);
-fieldStory.add('project domain', () => <OptimisticProps>{props => <ProjectDomainInput {...props} />}</OptimisticProps>);
-fieldStory.add('team name', () => <OptimisticProps>{props => <TeamNameInput {...props} />}</OptimisticProps>);
-fieldStory.add('team url', () => <OptimisticProps>{props => <TeamUrlInput {...props} />}</OptimisticProps>);
-fieldStory.add('user name', () => <OptimisticProps>{props => <UserNameInput {...props} />}</OptimisticProps>);
-fieldStory.add('user login', () => <OptimisticProps>{props => <UserLoginInput {...props} />}</OptimisticProps>);
+fieldStory.add('project domain', () => <OptimisticProps name="domain">{props => <ProjectDomainInput {...props} />}</OptimisticProps>);
+fieldStory.add('team name', () => <OptimisticProps name="name">{props => <TeamNameInput {...props} />}</OptimisticProps>);
+fieldStory.add('team url', () => <OptimisticProps name="url">{props => <TeamUrlInput {...props} />}</OptimisticProps>);
+fieldStory.add('user name', () => <OptimisticProps name="name">{props => <UserNameInput {...props} />}</OptimisticProps>);
+fieldStory.add('user login', () => <OptimisticProps name="login">{props => <UserLoginInput {...props} />}</OptimisticProps>);
