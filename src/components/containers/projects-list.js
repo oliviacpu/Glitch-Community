@@ -27,18 +27,21 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   let { projects } = props;
 
   function filterProjects() {
+    console.log("filterProject is getting called", { propsprojects: props.projects, projects }, validFilter, filter); 
     setIsDoneFiltering(false);
 
     if (validFilter) {
+      console.log("Valid vilter")
       const lowercaseFilter = filter.toLowerCase();
       setFilteredProjects(props.projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
+      console.log("not a valid filter")
       setFilteredProjects([]);
     }
   }
 
-  useEffect(() => debounce(filterProjects, 400)(), [filter]);
+  useEffect(() => debounce(filterProjects, 400)(), [filter, projects]);
 
   const filtering = validFilter && isDoneFiltering;
   projects = filtering ? filteredProjects : projects;
@@ -49,7 +52,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   } else {
     projectsEl = <ProjectsUL {...props} projects={projects} />;
   }
-
+  console.log("filtering?", filtering)
   const placeholderEl = filtering ? (
     <div className={styles.filterResultsPlaceholder}>
       <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
