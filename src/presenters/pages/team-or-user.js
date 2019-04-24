@@ -85,16 +85,19 @@ UserPageLoader.propTypes = {
 
 const TeamOrUserPageLoader = ({ name, ...props }) => {
   const api = useAPI();
+  const user = getUserByLogin(api, name);
+  console.log('USER', user);
   return (
     <DataLoader get={() => getTeam(api, name)}>
       {(team) =>
         team ? (
           <TeamPage team={team} {...props} />
-        ) : (
-          <DataLoader get={() => getUserByLogin(api, name)}>
-            {(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}
-          </DataLoader>
-        )
+        ) : 'user'
+        // ) : (
+        //   <DataLoader get={() => getUserByLogin(api, name)}>
+        //     {(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}
+        //   </DataLoader>
+        // )
       }
     </DataLoader>
   );
