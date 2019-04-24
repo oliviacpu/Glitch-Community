@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -43,18 +45,15 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     return <Redirect to={getOwnerLink(collection)} />;
   }
   return (
-    <button
-      className="button delete-collection button-tertiary"
-      onClick={() => {
+    <Button type="tertiary" size="small" onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
         }
         deleteCollection();
         setDone(true);
-      }}
-    >
-      Delete Collection
-    </button>
+      }}>
+      Delete Collection <Emoji name="bomb"/>
+    </Button>
   );
 }
 

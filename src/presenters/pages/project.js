@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
@@ -119,6 +120,7 @@ class DeleteProject extends React.Component {
           buttonText={
             <>
               Delete {this.props.project.domain}
+              <Emoji name="bomb"/>
             </>
           }
         >
@@ -130,7 +132,7 @@ class DeleteProject extends React.Component {
                     You can always undelete a project from your profile page.
                   </div>
                   <Button type="dangerZone" small="size" onClick={this.deleteProject}>
-                    Delete {this.props.project.doamin}
+                    Delete {this.props.project.domain}
                   </Button>
                 </section>
               </dialog>
