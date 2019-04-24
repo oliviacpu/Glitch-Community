@@ -45,14 +45,18 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     return <Redirect to={getOwnerLink(collection)} />;
   }
   return (
-    <Button type="tertiary" size="small" onClick={() => {
+    <Button
+      type="tertiary"
+      size="small"
+      onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
         }
         deleteCollection();
         setDone(true);
-      }}>
-      Delete Collection <Emoji name="bomb"/>
+      }}
+    >
+      Delete Collection <Emoji name="bomb" />
     </Button>
   );
 }

@@ -27,8 +27,8 @@ class ProjectEditor extends React.Component {
   async addProjectToCollection(project, collection) {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
-  
-  async deleteProject(){
+
+  async deleteProject() {
     await this.props.api.delete(`projects/$[this.state.id}`);
   }
 

@@ -30,10 +30,9 @@ import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI } from '../../state/api';
-import useErrorHandlers from './error-handlers';
 import { useCurrentUser } from '../../state/current-user';
 
-import { getLink as getUserLink } from './user';
+import { getLink as getUserLink } from '../../models/user';
 
 import Layout from '../layout';
 
@@ -96,53 +95,61 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProject({ project, deleteProject }) {
+function DeleteProject({ project, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
-  if (done){
-    return <Redirect to={getUserLink(this.props.currentUser)}/>
+  if (done) {
+    return <Redirect to={getUserLink(currentUser)} />;
   }
-  return(
-     <section>
-        <PopoverWithButton
-          buttonClass="button-small button-tertiary"
-          buttonText={
-            <>
-              Delete {this.props.project.domain}
-              <Emoji name="bomb"/>
-            </>
-          }
-        >
-          {({ togglePopover }) => 
-            <>
-              <dialog className="pop-over delete-project-pop" open>
-                <section className="pop-over-actions">
-                  <div className="action-description">
-                    You can always undelete a project from your profile page.
-                  </div>
-                  <Button type="dangerZone" small="size" onClick={() => 
-                    {
-                      deleteProject();
-                      setDone(true);
-                    }}>
-                    Delete {this.props.project.domain} <Emoji name="bomb"/>
-                  </Button>
-                </section>
-              </dialog>
-            </>
+  return (
+    <section>
+      <PopoverWithButton
+        buttonClass="button-small button-tertiary"
+        buttonText={
+          <>
+            Delete {project.domain}
+            <Emoji name="bomb" />
+          </>
         }
-        </PopoverWithButton>
-      </section>
-    )
+      >
+        {({ togglePopover }) => (
+          <>
+            <dialog className="pop-over delete-project-pop" open>
+              <section className="pop-over-actions">
+                <div className="action-description">You can always undelete a project from your profile page.</div>
+                <Button
+                  type="dangerZone"
+                  small="size"
+                  onClick={() => {
+                    deleteProject();
+                    setDone(true);
+                  }}
+                >
+                  Delete {project.domain} <Emoji name="bomb" />
+                </Button>
+              </section>
+            </dialog>
+          </>
+        )}
+      </PopoverWithButton>
+    </section>
+  );
 }
 
 DeleteProject.propTypes = {
   project: PropTypes.object.isRequired,
   currentUser: PropTypes.object.isRequired,
-}
+};
 
-
-
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate, deleteProject }) => {
+const ProjectPage = ({
+  project,
+  addProjectToCollection,
+  currentUser,
+  isAuthorized,
+  updateDomain,
+  updateDescription,
+  updatePrivate,
+  deleteProject,
+}) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
@@ -186,9 +193,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
-      
-      { isAuthorized && <DeleteProject project={project} currentUser={currentUser} deleteProject={deleteProject}/> }
-          
+
+      {isAuthorized && <DeleteProject project={project} currentUser={currentUser} deleteProject={deleteProject} />}
+
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
       </section>
