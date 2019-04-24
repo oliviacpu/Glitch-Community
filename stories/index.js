@@ -24,20 +24,14 @@ import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
-import { Context as CurrentUserContext } from '../src/state/current-user';
-import { Context as APIContext } from '../src/state/api';
 import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
+import 'Components/profile-list/story';
+import 'Components/search-form/story';
 import { users, teams, projects, collections } from './data';
-import { withState, provideContext } from './data';
-import 'Components/search-form/story.js';
-
-// initialize globals
-window.CDN_URL = 'https://cdn.glitch.com';
-window.EDITOR_URL = 'https://glitch.com/edit/';
-window.APP_URL = 'https://glitch.com';
+import { withState, provideContext } from './util';
 
 const helloAlert = () => {
   alert('hello');

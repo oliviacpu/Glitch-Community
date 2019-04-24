@@ -3,6 +3,7 @@ import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import { users, teams, projects, collections } from '../../../stories/data';
 import { provideContext } from '../../../stories/util';
+import { BaseSearchForm } from './index';
 
 const mockSearchDB = {
   user: Object.values(users).map((user) => ({ ...user, __searchKeys: [user.name, user.login], type: 'user' })),
