@@ -121,6 +121,7 @@ function DeleteProject({ deleteProject, currentUser }) {
                   small="size"
                   onClick={() => {
                     deleteProject();
+                    togglePopover();
                     setDone(true);
                   }}
                 >
@@ -136,8 +137,8 @@ function DeleteProject({ deleteProject, currentUser }) {
 }
 
 DeleteProject.propTypes = {
-  project: PropTypes.object.isRequired,
   currentUser: PropTypes.object.isRequired,
+  deleteProject: PropTypes.func.isREquired,
 };
 
 const ProjectPage = ({
@@ -194,7 +195,7 @@ const ProjectPage = ({
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProject project={project} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProject currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
