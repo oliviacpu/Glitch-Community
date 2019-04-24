@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
-import { Redirect } from 'react-router-dom';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
+import Loader from 'Components/loaders/loader';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import { getAvatarUrl } from '../../models/project';
@@ -97,13 +97,14 @@ ReadmeLoader.propTypes = {
 
 function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    if(done){
+    if (done) {
       window.location = getUserLink(currentUser);
     }
-  })
-  
+  });
+
   return (
     <section>
       <PopoverWithButton
@@ -122,18 +123,22 @@ function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
                 <div className="action-description">You can always undelete a project from your profile page.</div>
               </section>
               <section className="pop-over-actions danger-zone">
-                <Button
-                  type="tertiary"
-                  size="small"
-                  onClick={() => {
-                    togglePopover();
-                    deleteProject().then(() => {
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <Button
+                    type="tertiary"
+                    size="small"
+                    onClick={() => {
+                      setLoading(true);
+                      deleteProject();
+                      togglePopover();
                       setDone(true);
-                    });
-                  }}
-                >
-                  Delete {projectDomain} <Emoji name="bomb" />
-                </Button>
+                    }}
+                  >
+                    Delete {projectDomain} <Emoji name="bomb" />
+                  </Button>
+                )}
               </section>
             </dialog>
           </>
