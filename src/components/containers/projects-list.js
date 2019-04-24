@@ -41,10 +41,10 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
     }
   }
 
-  useEffect(() => debounce(filterProjects, 400)(), [filter, projects]);
+  useEffect(() => debounce(filterProjects, 400)(), [filter, props.projects]);
 
   const filtering = validFilter && isDoneFiltering;
-  projects = filtering ? filteredProjects : projects;
+  projects = filtering ? filteredProjects : props.projects;
 
   let projectsEl;
   if (enablePagination) {
@@ -52,7 +52,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   } else {
     projectsEl = <ProjectsUL {...props} projects={projects} />;
   }
-  console.log("filtering?", filtering)
+
   const placeholderEl = filtering ? (
     <div className={styles.filterResultsPlaceholder}>
       <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
