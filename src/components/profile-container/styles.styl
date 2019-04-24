@@ -1,12 +1,15 @@
 @import '../constants'
 
 .profileWrap
-  display: block
+  display: flex
+  align-items: flex-start
   max-width: 460px
+  background-color: section-line
+  border-radius: 5px 5px 0 0
+  padding: 12px
   
 .avatarContainer
-  display: block
-  width: 35%
+  flex: 0 1 35%
   
 .avatar
   display: block
@@ -16,12 +19,27 @@
   background-size: cover
   background-repeat: no-repeat
   background-position: center
+  &.user
+    border-radius: 50%
+  &.team
+    border-radius: 5px
  
+.avatarButtons    
+  padding-top: 5px
+  text-align: center
+
 .profileInfo
-  display: block
+  flex: 1 0 auto
+  padding-left: 16px
+  h1, h2, p
+    margin-top: 0
+    margin-bottom: 12px
+    &:last-child
+      margin-bottom: 0
   
 .teamsContainer
   background: secondary-background
   padding: 12px
+  max-width: 460px
   border-radius: 0 0 5px 5px
  
