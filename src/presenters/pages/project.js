@@ -95,7 +95,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProjectBtn({ deleteProject, currentUser }) {
+function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   if (done) {
     return <Redirect to={getUserLink(currentUser)} />;
@@ -116,9 +116,11 @@ function DeleteProjectBtn({ deleteProject, currentUser }) {
             <dialog className="pop-over delete-project-pop" open>
               <section className="pop-over-actions">
                 <div className="action-description">You can always undelete a project from your profile page.</div>
+              </section>
+              <section className="pop-over-actions danger-zone">
                 <Button
-                  type="dangerZone"
-                  small="size"
+                  type="tertiary"
+                  size="small"
                   onClick={() => {
                     deleteProject().then(() => {
                       togglePopover();
@@ -126,7 +128,7 @@ function DeleteProjectBtn({ deleteProject, currentUser }) {
                     });
                   }}
                 >
-                  Delete Project <Emoji name="bomb" />
+                  Delete {projectDomain} <Emoji name="bomb" />
                 </Button>
               </section>
             </dialog>
@@ -196,7 +198,7 @@ const ProjectPage = ({
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectBtn currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProjectBtn projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
