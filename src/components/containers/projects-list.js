@@ -23,7 +23,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
-  
+
   function filterProjects() {
     setIsDoneFiltering(false);
     if (validFilter) {
@@ -37,10 +37,10 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
 
   useEffect(() => filterProjects(), [projects]);
   useEffect(() => debounce(filterProjects, 400)(), [filter]);
-  
+
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
-  
+
   let projectsEl;
   if (enablePagination) {
     projectsEl = <PaginatedProjects {...props} projects={displayedProjects} />;
