@@ -120,9 +120,10 @@ function DeleteProjectBtn({ deleteProject, currentUser }) {
                   type="dangerZone"
                   small="size"
                   onClick={() => {
-                    deleteProject();
-                    togglePopover();
-                    setDone(true);
+                    deleteProject().then(() => {
+                      togglePopover();
+                      setDone(true);
+                    });
                   }}
                 >
                   Delete Project <Emoji name="bomb" />
