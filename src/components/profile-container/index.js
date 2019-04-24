@@ -5,8 +5,7 @@ import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
 import Button from 'Components/buttons/button';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
-
-const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
+import styles from './styles.styl';
 
 const TrackedButton = ({ label, onClick }) => {
   const trackedOnClick = useTrackedFunc(onClick, label);
@@ -29,15 +28,15 @@ const TrackedButtonGroup = ({ items }) => (
 
 const ProfileContainer = ({ avatarStyle, avatarActions, type, item, coverActions, children, teams }) => (
   <CoverContainer type={type} item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
-    <InfoContainer>
-      <div className="avatar-container">
-        <div className="user-avatar" style={avatarStyle} />
+    <div className={styles.profileWrap}>
+      <div className={styles.avatarContainer}>
+        <div className={styles.avatar} style={avatarStyle} />
         <TrackedButtonGroup items={avatarActions} />
       </div>
-      <div className="profile-information">{children}</div>
-    </InfoContainer>
+      <div className={styles.profileInfo}>{children}</div>
+    </div>
     {!!teams && !!teams.length && (
-      <div className="teams-information">
+      <div className={styles.teamsContainer}>
         <ProfileList layout="block" teams={teams} />
       </div>
     )}
