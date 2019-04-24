@@ -1,15 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames'
-
-import Text from 'Components/text/text';
+import classnames from 'classnames';
 import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import { Link } from '../../presenters/includes/link';
 import styles from './footer.styl';
 
-const FooterLine = ({ className, href, track, children }) => (
-  <Link className={classnames(styles.footerLine, className)} to={href} data-track={`footer → ${track}`}>
+const FooterLink = ({ className, href, track, children }) => (
+  <Link className={classnames(styles.footerLink, className)} to={href} data-track={`footer → ${track}`}>
     {children}
   </Link>
 );
@@ -24,29 +21,29 @@ const PlatformsIcon = () => (
 
 const Footer = () => (
   <footer className={styles.container} role="contentinfo">
-    <FooterLine href="/about" track="about">
+    <FooterLink href="/about" track="about">
       About Glitch
       <Emoji name="crystalBall" />
-    </FooterLine>
-    <FooterLine href="/culture" track="blog">
+    </FooterLink>
+    <FooterLink href="/culture" track="blog">
       Blog
       <Emoji name="newspaper" />
-    </FooterLine>
-    <FooterLine href="/help/" track="faq">
+    </FooterLink>
+    <FooterLink href="/help/" track="faq">
       Help Center
       <Emoji name="umbrella" />
-    </FooterLine>
-    <FooterLine href="http://status.glitch.com/" track="system status">
+    </FooterLink>
+    <FooterLink href="http://status.glitch.com/" track="system status">
       System Status
       <Emoji name="horizontalTrafficLight" />
-    </FooterLine>
-    <FooterLine href="/legal" track="legal stuff">
+    </FooterLink>
+    <FooterLink href="/legal" track="legal stuff">
       Legal Stuff
       <Emoji name="policeOfficer" />
-    </FooterLine>
-    <FooterLine className={styles.teams} href="/teams" track="platforms">
-      <PlatformsIcon/> Glitch Teams
-    </FooterLine>
+    </FooterLink>
+    <FooterLink className={styles.teams} href="/teams" track="platforms">
+      <PlatformsIcon /> Glitch Teams
+    </FooterLink>
   </footer>
 );
 
