@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
+import { Redirect } from 'react-router-dom';
+
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
@@ -9,6 +11,7 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
+import PopoverWithButton from '../pop-overs/popover-with-button';
 import { getAvatarUrl } from '../../models/project';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -26,6 +29,8 @@ import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
+
+import { getLink as getUserLink } from './user';
 
 import Layout from '../layout';
 
@@ -94,6 +99,7 @@ class DeleteProject extends React.Component {
     try{
       console.log('delete project');
       // await this.props.api.delete(`project/${this.props.project.id}`);
+      <Redirect to={getUserLink(this.props.currentUser)}/>
     }catch(error){
       console.log('deleteProject', error, error.response);
       this.props.createErrorNotification('Something went wrong, try refreshing?');
@@ -107,7 +113,7 @@ class DeleteProject extends React.Component {
           buttonClass="button-small button-tertiary danger-zone"
           buttonText={
             <>
-              Delete {props.project.name}
+              Delete {this.props.project.name}
             </>
           }
         >
@@ -118,12 +124,13 @@ class DeleteProject extends React.Component {
                   <div className="action-description">
                     You can always undelete a project from your profile page.
                     <Button type="dangerZone" small="size" onClick={null}>
-                      Delete {props.project.name}
+                      Delete {this.props.project.name}
                     </Button>
                   </div>
                 </section>
               </dialog>
             </>
+        }
         </PopoverWithButton>
       </section>
       )
@@ -132,6 +139,7 @@ class DeleteProject extends React.Component {
 
 DeleteProject.propTypes = {
   project: PropTypes.object.isRequired,
+  currentUser: PropTypes.object.isRequired,
 }
 
 
@@ -181,7 +189,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
         <ReadmeLoader domain={domain} />
       </section>
       
-      { isAuthorized && <DeleteProject project={project}/> }
+      { isAuthorized && <DeleteProject project={project} currentUser={currentUser}/> }
           
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
