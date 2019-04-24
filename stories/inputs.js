@@ -59,16 +59,14 @@ const useOptimisticProps = (name) => {
 const ProperTextInputs = () => {
   return (
     <div style={{ maxWidth: '400px' }}>
+      <p>Generic <OptimisticTextInput {...useOptimisticProps('value')} /></p>
+      <p>Project domain <ProjectDomainInput {...useOptimisticProps('domain')} /></p>
+      <p>Team name <TeamNameInput {...useOptimisticProps('name')} /></p>
+      <p>Team url <TeamUrlInput {...useOptimisticProps('url')} /></p>
+      <p>User name <UserNameInput {...useOptimisticProps('name')} /></p>
+      <p>User login <UserLoginInput {...useOptimisticProps('login')} /></p>
     </div>
   );
 };
 
-inputStory.add('proper', () => <ProperTextInputs />);
-
-const fieldStory = storiesOf('Text Fields', module);
-fieldStory.add('optimistic input', () => <OptimisticProps>{props => <OptimisticTextInput {...props} placeholder="type error for an error" />}</OptimisticProps>);
-fieldStory.add('project domain', () => <OptimisticProps name="domain">{props => <ProjectDomainInput {...props} />}</OptimisticProps>);
-fieldStory.add('team name', () => <OptimisticProps name="name">{props => <TeamNameInput {...props} />}</OptimisticProps>);
-fieldStory.add('team url', () => <OptimisticProps name="url">{props => <TeamUrlInput {...props} />}</OptimisticProps>);
-fieldStory.add('user name', () => <OptimisticProps name="name">{props => <UserNameInput {...props} />}</OptimisticProps>);
-fieldStory.add('user login', () => <OptimisticProps name="login">{props => <UserLoginInput {...props} />}</OptimisticProps>);
+inputStory.add('optimistic', () => <ProperTextInputs />);
