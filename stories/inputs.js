@@ -59,7 +59,7 @@ const useOptimisticProps = (name) => {
 const ProperTextInputs = () => {
   return (
     <div style={{ maxWidth: '400px' }}>
-      <p>Generic <OptimisticTextInput {...useOptimisticProps('value')} /></p>
+      <p><OptimisticTextInput {...useOptimisticProps('value')} placeholder="Live field, type error to get an error" /></p>
       <p>Project domain <ProjectDomainInput {...useOptimisticProps('domain')} /></p>
       <p>Team name <TeamNameInput {...useOptimisticProps('name')} /></p>
       <p>Team url <TeamUrlInput {...useOptimisticProps('url')} /></p>
