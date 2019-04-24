@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -96,7 +96,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const DeleteProject = ({ project, deleteProject }) => {
+function DeleteProject({ project, deleteProject }) {
   const [done, setDone] = useState(false);
   if (done){
     return <Redirect to={getUserLink(this.props.currentUser)}/>
