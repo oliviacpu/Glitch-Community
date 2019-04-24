@@ -29,7 +29,7 @@ inputStory.add('with error', () => <DirectInputProps>{props => <TextInput {...pr
 inputStory.add('text area', () => <DirectInputProps>{props => <TextArea {...props} placeholder="This is a multiline text field" error="Reason is required" />}</DirectInputProps>);
 inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a single line text input that wraps" error="An error could go here!" />}</DirectInputProps>);
 
-const OptimisticProps = ({ children }) => {
+const OptimisticProps = ({ children, name = 'value' }) => {
   const [value, setValue] = React.useState('');
   const onChange = async (newValue) => {
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -38,7 +38,7 @@ const OptimisticProps = ({ children }) => {
     }
     setValue(newValue);
   };
-  return children({ onChange, value });
+  return children({ onChange, [name]: value });
 };
 
 const fieldStory = storiesOf('Text Fields', module);
