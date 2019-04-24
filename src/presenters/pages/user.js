@@ -6,7 +6,7 @@ import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
