@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Redirect } from 'react-router-dom';
 
+import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
@@ -94,6 +95,10 @@ ReadmeLoader.propTypes = {
 };
 
 class DeleteProject extends React.Component {
+  constructor(props){
+    super(props);
+    this.deleteProject = this.deleteProject.bind(this);
+  }
   
   async deleteProject(){
     try{
@@ -110,10 +115,10 @@ class DeleteProject extends React.Component {
     return(
       <section>
         <PopoverWithButton
-          buttonClass="button-small button-tertiary danger-zone"
+          buttonClass="button-small button-tertiary"
           buttonText={
             <>
-              Delete {this.props.project.name}
+              Delete {this.props.project.domain}
             </>
           }
         >
@@ -123,10 +128,10 @@ class DeleteProject extends React.Component {
                 <section className="pop-over-actions">
                   <div className="action-description">
                     You can always undelete a project from your profile page.
-                    <Button type="dangerZone" small="size" onClick={null}>
-                      Delete {this.props.project.name}
-                    </Button>
                   </div>
+                  <Button type="dangerZone" small="size" onClick={this.deleteProject}>
+                    Delete {this.props.project.doamin}
+                  </Button>
                 </section>
               </dialog>
             </>
