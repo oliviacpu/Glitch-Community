@@ -131,9 +131,10 @@ function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
                     size="small"
                     onClick={() => {
                       setLoading(true);
-                      deleteProject();
-                      togglePopover();
-                      setDone(true);
+                      deleteProject().then(() => {
+                        togglePopover();
+                        setDone(true);
+                      });
                     }}
                   >
                     Delete {projectDomain} <Emoji name="bomb" />
