@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 import Button from 'Components/buttons/button';
@@ -21,7 +22,7 @@ import SearchResultCoverBar from 'Components/blocks/search-result-cover-bar';
 import Thanks from 'Components/blocks/thanks';
 import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
-import SearchResults from 'Components/search/search-results';
+import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
 import { Context as CurrentUserContext } from '../src/state/current-user';
 import { Context as APIContext } from '../src/state/api';
@@ -30,31 +31,13 @@ import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
 import 'Components/profile-list/story';
-
-// initialize globals
-window.CDN_URL = 'https://cdn.glitch.com';
-window.EDITOR_URL = 'https://glitch.com/edit/';
-window.APP_URL = 'https://glitch.com';
+import 'Components/search-form/story';
+import { users, teams, projects, collections } from './data';
+import { withState, provideContext } from './util';
 
 const helloAlert = () => {
   alert('hello');
 };
-
-const withState = (initState, Component) => {
-  const WrappedComponent = () => {
-    const [state, setState] = useState(initState);
-    return <Component state={state} setState={setState} />;
-  };
-  return () => <WrappedComponent />;
-};
-
-const provideContext = ({ currentUser = {}, api = {} } = {}, Component) => () => (
-  <CurrentUserContext.Provider value={{ currentUser }}>
-    <APIContext.Provider value={api}>
-      <Component />
-    </APIContext.Provider>
-  </CurrentUserContext.Provider>
-);
 
 storiesOf('Button', module)
   .add('regular', () => <Button onClick={helloAlert}>Hello Button</Button>)
@@ -128,6 +111,13 @@ storiesOf('TooltipContainer', module)
       <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
     </div>
   ));
+
+storiesOf('Text Input', module)
+  .add('regular', () => <TextInput placeholder="type something!" />)
+  .add('login', () => <TextInput placeholder="type something!" prefix="@" />)
+  .add('search', () => <TextInput type="search" opaque={true} search={true} placeholder="bots, apps, users" />)
+  .add('with error', () => <TextInput placeholder="glitch" error="That team already exists" />)
+  .add('text area', () => <TextArea placeholder="[Something here] doesn't seem appropriate for Glitch because..." error="Reason is required" />);
 
 storiesOf('Image', module)
   .add('regular', () => <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />)
@@ -213,40 +203,11 @@ storiesOf('Segmented-Buttons', module)
     )),
   );
 
-const users = {
-  modernserf: {
-    id: 271885,
-    avatarUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/560e4b07-a70b-4f87-b8d4-699d738792d0-large.jpg',
-    avatarThumbnailUrl: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/560e4b07-a70b-4f87-b8d4-699d738792d0-small.jpg',
-    login: 'modernserf',
-    name: 'Justin Falcone',
-    location: 'Brooklyn, NY',
-    color: '#ea6996',
-    description:
-      'programmer & writer\n\n[🐦](https://twitter.com/modernserf) [🐙](https://github.com/modernserf) [🏠](https://justinfalcone.com) [☄](http://pronoun.is/they/.../themselves)',
-    hasCoverImage: true,
-    coverColor: 'rgb(84,138,53)',
-    thanksCount: 1,
-    utcOffset: -240,
-    featuredProjectId: '22a883dc-a45d-4257-b44c-a43b6b8cabe9',
-  },
-};
-
 storiesOf('ProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <ProjectItem
-        project={{
-          id: 'foo',
-          domain: 'judicious-pruner',
-          description: 'a judicious project that does pruner things',
-          private: false,
-          showAsGlitchTeam: false,
-          users: [users.modernserf],
-          teams: [],
-        }}
-      />
+      <ProjectItem project={projects['judicious-pruner']} />
     </div>
   )),
 );
@@ -264,16 +225,7 @@ storiesOf('SmallCollectionItem', module).add(
   'with user',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <SmallCollectionItem
-        collection={{
-          id: 12345,
-          name: 'Cool Projects',
-          description: 'A collection of cool projects',
-          coverColor: '#efe',
-          user: users.modernserf,
-          projects: [{}],
-        }}
-      />
+      <SmallCollectionItem collection={collections[12345]} />
     </div>
   )),
 );
@@ -286,19 +238,7 @@ storiesOf('UserItem', module).add('base', () => (
 
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
-    <TeamItem
-      team={{
-        id: 12345,
-        coverColor: '#efe',
-        description: 'An example team',
-        hasAvatarImage: false,
-        hasCoverImage: false,
-        isVerified: false,
-        name: ['Example Team'],
-        url: 'example-team',
-        users: [users.modernserf],
-      }}
-    />
+    <TeamItem team={teams[12345]} />
   </div>
 ));
 
@@ -342,19 +282,9 @@ storiesOf('SearchResults', module).add(
           topResults: [{ ...users.modernserf, type: 'user', isExactMatch: true }],
           team: [],
           user: [{ ...users.modernserf, type: 'user', isExactMatch: true }],
-          project: [
-            {
-              type: 'project',
-              id: 'foo',
-              domain: 'modernserf-zebu',
-              description: 'a modernserf project that does zebu things',
-              private: false,
-              showAsGlitchTeam: false,
-              users: [users.modernserf],
-              teams: [],
-            },
-          ],
+          project: [{ ...projects['modernserf-zebu'], type: 'project' }],
           collection: [],
+          starterKit: [],
         }}
       />
     )),
