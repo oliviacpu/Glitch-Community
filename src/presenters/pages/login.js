@@ -68,9 +68,13 @@ const LoginPage = ({ provider, url }) => {
       const errorData = error && error.response && error.response.data;
       setError(errorData && errorData.message);
 
-      if (error && error.response && error.response.status !== 401) {
-        console.error('Login error.', errorData);
-        captureException(error);
+      if (error && error.response) {
+        if (error.response.status === 403) {
+          setError("403");
+        } else if (error.response.status !== 401) {
+          console.error('Login error.', errorData);
+          captureException(error);
+        }
       }
       const details = { provider, error: errorData };
       notifyParent({ success: false, details });
