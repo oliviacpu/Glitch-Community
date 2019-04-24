@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
 import Button from 'Components/buttons/button';
+import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
+import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
 
@@ -27,11 +29,16 @@ const TrackedButtonGroup = ({ items }) => (
   </>
 );
 
-const ProfileContainer = ({ avatarStyle, avatarActions, type, item, coverActions, children, teams }) => (
+const getStyle = {
+  user: getUserAvatarStyle,
+  team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar })
+};
+
+const ProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => (
   <CoverContainer type={type} item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
     <div className={styles.profileWrap}>
       <div className={styles.avatarContainer}>
-        <div className={classnames(styles.avatar, styles[type])} style={avatarStyle} />
+        <div className={classnames(styles.avatar, styles[type])} style={getStyle[type](item)} />
         <div className={styles.avatarButtons}>
           <TrackedButtonGroup items={avatarActions} />
         </div>
@@ -50,14 +57,12 @@ ProfileContainer.propTypes = {
   item: PropTypes.object.isRequired,
   type: PropTypes.oneOf(['user', 'team']).isRequired,
   children: PropTypes.node.isRequired,
-  avatarStyle: PropTypes.object,
   avatarActions: PropTypes.object,
   coverActions: PropTypes.object,
   teams: PropTypes.array,
 };
 
 ProfileContainer.defaultProps = {
-  avatarStyle: {},
   avatarActions: {},
   coverActions: {},
   teams: [],

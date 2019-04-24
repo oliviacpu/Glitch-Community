@@ -16,7 +16,7 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
-import { getLink, getAvatarStyle } from '../../models/team';
+import { getLink } from '../../models/team';
 import { AuthDescription } from '../includes/description-field';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';
@@ -145,7 +145,6 @@ class TeamPage extends React.Component {
             </div>
           </a>
           <ProfileContainer
-            avatarStyle={getAvatarStyle({ ...team, cache: team._cacheAvatar })} // eslint-disable-line
             item={team}
             type="team"
             coverActions={{

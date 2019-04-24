@@ -11,7 +11,7 @@ import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProfileContainer from 'Components/profile-container';
 
-import { getAvatarStyle, getLink } from '../../models/user';
+import { getLink } from '../../models/user';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
@@ -104,7 +104,6 @@ const UserPage = ({
     <main className="profile-page user-page">
       <section>
         <ProfileContainer
-          avatarStyle={getAvatarStyle(user)}
           type="user"
           item={user}
           coverActions={{
