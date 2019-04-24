@@ -49,8 +49,8 @@ TextArea.defaultProps = {
   disabled: false,
   error: null,
   name: undefined,
-  onBlur: null,
-  onFocus: null,
+  onBlur: () => {},
+  onFocus: () => {},
   placeholder: undefined,
 };
 

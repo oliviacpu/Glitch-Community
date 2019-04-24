@@ -14,6 +14,8 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
+const inputStory = storiesOf('Input Fields', module);
+
 const useDirectInputProps = (error) => {
   const [value, setValue] = React.useState('');
   const onChange = (newValue) => {
@@ -28,19 +30,18 @@ const BasicTextInputs = () => {
   const singleLineProps = useDirectInputProps(error);
   const multiLineProps = useDirectInputProps(error);
   return (
-    <div style={{ maxWidth}}>
+    <div style={{ maxWidth: '400px' }}>
       <p><TextInput {...singleLineProps} placeholder="A generic text input" /></p>
       <p><TextInput {...singleLineProps} prefix="#" postfix="#" placeholder="A generic input with a prefix and postfix" /></p>
       <p><TextInput {...singleLineProps} type="search" opaque={true} search={true} placeholder="Generic input styled like a search box" /></p>
       <p><WrappingTextInput {...singleLineProps} placeholder="This is a single line text input that wraps" /></p>
       <p><TextArea {...multiLineProps} placeholder="This is a multiline text area" /></p>
       <p><MarkdownInput {...multiLineProps} placeholder="This text area renders as markdown when it isn't focused" /></p>
-      <p><label><input type="checkbox" checked={showError} onChange={(evt) => setShowError(evt.target.checked)} /> show error</label></p>
-    </>
+      <p><label><input type="checkbox" checked={showError} onChange={(evt) => setShowError(evt.target.checked)} /> show an error</label></p>
+    </div>
   );
 };
 
-const inputStory = storiesOf('Input Fields', module);
 inputStory.add('generic', () => <BasicTextInputs />);
 
 const OptimisticProps = ({ children, name = 'value' }) => {
