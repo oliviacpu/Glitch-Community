@@ -17,7 +17,6 @@ import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import { AuthDescription } from '../includes/description-field';
-import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
 import { ShowButton, EditButton } from '../includes/project-actions';
 
 import RelatedProjects from '../includes/related-projects';
@@ -62,6 +61,26 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => {
 PrivateToggle.propTypes = {
   isPrivate: PropTypes.bool.isRequired,
   setPrivate: PropTypes.func.isRequired,
+};
+
+const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
+
+export const ProjectInfoContainer = ({ style, children, buttons }) => (
+  <>
+    <div className="avatar-container">
+      <div className="user-avatar" style={style} />
+      {buttons}
+    </div>
+    <div className="profile-information">{children}</div>
+  </>
+);
+ProjectInfoContainer.propTypes = {
+  style: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
+  buttons: PropTypes.element,
+};
+ProjectInfoContainer.defaultProps = {
+  buttons: null,
 };
 
 const ReadmeError = (error) =>

@@ -37,32 +37,8 @@ ImageButtons.defaultProps = {
   clearImage: null,
 };
 
-// Project Info Container
 
-export const ProjectInfoContainer = ({ style, children, buttons }) => (
-  <>
-    <div className="avatar-container">
-      <div className="user-avatar" style={style} />
-      {buttons}
-    </div>
-    <div className="profile-information">{children}</div>
-  </>
-);
-ProjectInfoContainer.propTypes = {
-  style: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  buttons: PropTypes.element,
-};
-ProjectInfoContainer.defaultProps = {
-  buttons: null,
-};
-
-// Info Container (generic)
-
-export const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
-InfoContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
 
 
 // Profile Container
