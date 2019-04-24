@@ -28,7 +28,7 @@ const BasicTextInputs = () => {
   const singleLineProps = useDirectInputProps(error);
   const multiLineProps = useDirectInputProps(error);
   return (
-    <>
+    <div style={{ maxWidth}}>
       <p><TextInput {...singleLineProps} placeholder="A generic text input" /></p>
       <p><TextInput {...singleLineProps} prefix="#" postfix="#" placeholder="A generic input with a prefix and postfix" /></p>
       <p><TextInput {...singleLineProps} type="search" opaque={true} search={true} placeholder="Generic input styled like a search box" /></p>
