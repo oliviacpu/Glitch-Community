@@ -24,8 +24,6 @@ import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
-import { Context as CurrentUserContext } from '../src/state/current-user';
-import { Context as APIContext } from '../src/state/api';
 import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
