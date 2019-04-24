@@ -70,7 +70,8 @@ const LoginPage = ({ provider, url }) => {
 
       if (error && error.response) {
         if (error.response.status === 403) {
-          setError("403");
+          const noEmailReturnedMessage = "We didn't get an email back from your login provider. Try signing in with your email address instead.";
+          setError(noEmailReturnedMessage);
         } else if (error.response.status !== 401) {
           console.error('Login error.', errorData);
           captureException(error);
