@@ -23,22 +23,27 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
-  const totalUnfilteredProjects = props.projects;
   let { projects } = props;
-  console.log(...projects, ...props.projects)
+  console.log("no props", projects.length, "with props", props.projects.length)
   function filterProjects() {
     setIsDoneFiltering(false);
-
+    console.log("inside filterProjects", projects.length)
     if (validFilter) {
+      console.log("validFilter")
       const lowercaseFilter = filter.toLowerCase();
       setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
+      console.log("not a valid filter")
       setFilteredProjects([]);
     }
   }
 
-  useEffect(() => debounce(filterProjects, 400)(), [filter, projects]);
+  useEffect(() => debounce(filterProjects, 400)(), [filter]);
+  useEffect(() => {
+    console.log("calling filterProjects");
+    filterProjects()
+  }, [projects]);
   
   const filtering = validFilter && isDoneFiltering;
   projects = filtering ? filteredProjects : projects;
