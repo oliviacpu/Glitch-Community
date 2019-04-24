@@ -8,6 +8,7 @@ import WrappingTextInput from 'Components/inputs/wrapping-text-input';
 import MarkdownInput from 'Components/inputs/markdown-input';
 
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
+import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import TeamNameInput from 'Components/fields/team-name-input';
 import TeamUrlInput from 'Components/fields/team-url-input';
@@ -60,6 +61,7 @@ const ProperTextInputs = () => {
   return (
     <div style={{ maxWidth: '400px' }}>
       <p><OptimisticTextInput {...useOptimisticProps('value')} placeholder="Live field, type error to get an error" /></p>
+      <p><OptimisticMarkdownInput {...useOptimisticProps('value')} placeholder="Live markdown, type error to get an error" /></p>
       <p>Project domain <ProjectDomainInput {...useOptimisticProps('domain')} /></p>
       <p>Team name <TeamNameInput {...useOptimisticProps('name')} /></p>
       <p>Team url <TeamUrlInput {...useOptimisticProps('url')} /></p>
