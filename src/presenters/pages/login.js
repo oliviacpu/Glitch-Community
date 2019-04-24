@@ -49,7 +49,7 @@ const LoginPage = ({ provider, url }) => {
 
   const [state, setState] = React.useState({ status: 'active' });
   const setDone = () => setState({ status: 'done' });
-  const setError = (message) => setState({ status: 'error', message });
+  const setError = (title, message) => setState({ status: 'error', title, message });
 
   const perform = async () => {
     try {
@@ -66,11 +66,12 @@ const LoginPage = ({ provider, url }) => {
       notifyParent({ success: true, details: { provider } });
     } catch (error) {
       const errorData = error && error.response && error.response.data;
-      setError(errorData && errorData.message);
+      setError(undefined, errorData && errorData.message);
 
       if (error && error.response) {
         if (error.response.status === 403) {
-          const noEmailReturnedMessage = "We didn't get an email back from your login provider. Try signing in with your email address instead.";
+          const noEmailReturnedTitle = "Missing Email Address";
+          const noEmailReturnedMessage = `${provider} didn't return an email address for your account.  Try using "Sign in with Email" instead to create an account on Glitch.`;
           setError(noEmailReturnedMessage);
         } else if (error.response.status !== 401) {
           console.error('Login error.', errorData);
@@ -89,12 +90,14 @@ const LoginPage = ({ provider, url }) => {
     return <RedirectToDestination />;
   }
   if (state.status === 'error') {
+    const genericTitle = `${provider} Login Problem`;
     const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
+    const errorTitle = state.title || genericTitle;
     const errorMessage = state.message || genericDescription;
     if (provider === 'Email') {
-      return <EmailErrorPage title={`${provider} Login Problem`} description={errorMessage} />;
+      return <EmailErrorPage title={errorTitle} description={errorMessage} />;
     }
-    return <OauthErrorPage title={`${provider} Login Problem`} description={errorMessage} />;
+    return <OauthErrorPage title={errorTitle} description={errorMessage} />;
   }
   return <div className="content" />;
 };
