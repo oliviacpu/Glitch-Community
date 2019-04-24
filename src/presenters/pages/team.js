@@ -9,6 +9,8 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
+import ImageButtons from 'Components/image-buttons';
+import ProfileContainer from 'Components/profile-container';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -17,7 +19,6 @@ import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
 import { getLink, getAvatarStyle } from '../../models/team';
 import { AuthDescription } from '../includes/description-field';
-import { ProfileContainer, ImageButtons } from '../includes/profile';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 

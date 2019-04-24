@@ -9,6 +9,8 @@ import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
+import ImageButtons from 'Components/image-buttons';
+import ProfileContainer from 'Components/profile-container';
 
 import { getAvatarStyle, getLink } from '../../models/user';
 
@@ -20,7 +22,6 @@ import UserEditor from '../user-editor';
 import DeletedProjects from '../deleted-projects';
 import EntityPageProjects from '../entity-page-projects';
 import CollectionsList from '../collections-list';
-import { ProfileContainer, ImageButtons } from '../includes/profile';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
 

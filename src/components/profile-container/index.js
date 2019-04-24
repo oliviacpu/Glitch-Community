@@ -6,9 +6,7 @@ import ProfileList from 'Components/profile-list';
 
 const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
 
-// Profile Container
-
-export class ProfileContainer extends React.PureComponent {
+class ProfileContainer extends React.PureComponent {
   render() {
     const { avatarStyle, avatarButtons, type, item, coverButtons, children, teams } = this.props;
     return (
@@ -29,3 +27,5 @@ export class ProfileContainer extends React.PureComponent {
     );
   }
 }
+
+export default ProfileContainer;
