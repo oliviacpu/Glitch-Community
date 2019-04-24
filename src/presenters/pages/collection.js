@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import Pluralize from 'react-pluralize';
 import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
@@ -124,7 +125,7 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
+              <Text><Pluralize count={collection.projects.length} singular="Project" /></Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}

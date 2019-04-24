@@ -14,7 +14,11 @@ const AuthDescription = ({ authorized, description, placeholder, update, onBlur,
       allowImages={allowImages}
     />
   ) : (
-    description && <Markdown allowImages={allowImages}>{description}</Markdown>
+    description && (
+      <div>
+        <Markdown allowImages={allowImages}>{description}</Markdown>
+      </div>
+    )
   )
 );
 
