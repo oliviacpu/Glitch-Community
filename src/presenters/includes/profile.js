@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
 import CoverContainer from 'Components/containers/cover-container';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
 
 import { useTrackedFunc } from '../segment-analytics';
 

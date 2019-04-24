@@ -8,7 +8,7 @@ import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 import { ProjectsUL } from 'Components/containers/projects-list';
 
 import Layout from '../layout';
