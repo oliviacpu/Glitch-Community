@@ -1,6 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'Components/loaders/loader';
+
+const initState = { status: 'loading', value: null  }
+
+const DataLoader = ({ children, get, renderError, renderLoader }) => {
+  const [state, setState] = useState(initState)
+  useEffect(() => {
+    get().then(
+      (data) => {
+        setState()
+        this.setState({
+          maybeData: data,
+          loaded: true,
+        });
+      },
+      (error) => {
+        console.error(error);
+        this.setState({
+          maybeError: error,
+        });
+      })
+  }, [])
+}
 
 // eslint-disable-next-line import/prefer-default-export
 export class DataLoader extends React.Component {
