@@ -17,35 +17,36 @@ import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);
 
-function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, ...props }) {
+function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, projects, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
 
-  let { projects } = props;
+  // let { projects } = props;
 
   function filterProjects() {
-    console.log("filterProject is getting called", { propsprojects: props.projects, projects }, validFilter, filter); 
     setIsDoneFiltering(false);
 
     if (validFilter) {
-      console.log("Valid vilter")
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredProjects(props.projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
+      console.log("projects in filter projects", ...projects)
+      setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
-      console.log("not a valid filter")
       setFilteredProjects([]);
     }
   }
 
-  useEffect(() => debounce(filterProjects, 400)(), [filter, props.projects]);
-
+  useEffect(() => debounce(filterProjects, 400)(), [filter]);
+  useEffect(() => {
+    console.log("projects in useEffect", ...projects)
+    setFilter(filter)
+  }, [projects]);
+  
   const filtering = validFilter && isDoneFiltering;
-  projects = filtering ? filteredProjects : props.projects;
-
+  projects = filtering ? filteredProjects : projects;
   let projectsEl;
   if (enablePagination) {
     projectsEl = <PaginatedProjects {...props} projects={projects} />;
