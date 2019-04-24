@@ -14,7 +14,7 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
-  <dialog className="pop-over overlay new-stuff-overlay overlay-narrow" open>
+  <dialog className="pop-over overlay new-stuff-overlay" open>
     <section className="pop-over-info">
       <figure className="new-stuff-avatar" />
       <div className="overlay-title">New Stuff</div>
@@ -119,6 +119,7 @@ NewStuff.propTypes = {
 const NewStuffContainer = ({ children, isSignedIn }) => {
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
+
   return (
     <NewStuff
       {...{
