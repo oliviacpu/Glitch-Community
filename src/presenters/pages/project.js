@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -97,9 +97,13 @@ ReadmeLoader.propTypes = {
 
 function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
-  if (done) {
-    return <Redirect to={getUserLink(currentUser)} />;
-  }
+  
+  useEffect(() => {
+    if(done){
+      window.location = getUserLink(currentUser);
+    }
+  })
+  
   return (
     <section>
       <PopoverWithButton
