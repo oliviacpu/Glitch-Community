@@ -17,21 +17,20 @@ import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);
 
-function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, projects, ...props }) {
+function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
-
-  // let { projects } = props;
-
+  const totalUnfilteredProjects = props.projects;
+  let { projects } = props;
+  console.log(...projects, ...props.projects)
   function filterProjects() {
     setIsDoneFiltering(false);
 
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      console.log("projects in filter projects", ...projects)
       setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
@@ -39,11 +38,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
     }
   }
 
-  useEffect(() => debounce(filterProjects, 400)(), [filter]);
-  useEffect(() => {
-    console.log("projects in useEffect", ...projects)
-    setFilter(filter)
-  }, [projects]);
+  useEffect(() => debounce(filterProjects, 400)(), [filter, projects]);
   
   const filtering = validFilter && isDoneFiltering;
   projects = filtering ? filteredProjects : projects;
