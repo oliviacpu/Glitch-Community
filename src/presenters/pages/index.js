@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
+import Link from 'Components/link';
 import Layout from '../layout';
 
 import { getEditorUrl } from '../../models/project';
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
-import Link from 'Components/link';
 
 import Featured from '../featured';
 import MoreIdeas from '../more-ideas';

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
-import { useCurrentUser } from '../../state/current-user';
 import Link from 'Components/link';
+import { useCurrentUser } from '../../state/current-user';
 import { useNotifications } from '../notifications';
 
 const NameConflictWarning = ({ id }) => (

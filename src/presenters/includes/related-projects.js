@@ -5,10 +5,10 @@ import { sampleSize, difference } from 'lodash';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
 
+import { TeamLink, UserLink } from 'Components/link';
 import { getDisplayName } from '../../models/user';
 
 import { DataLoader } from './loader';
-import { TeamLink, UserLink } from 'Components/link';
 import { useAPI } from '../../state/api';
 
 const PROJECT_COUNT = 3;

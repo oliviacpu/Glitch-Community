@@ -5,10 +5,10 @@ import { sampleSize } from 'lodash';
 import Image from 'Components/images/image';
 import MaskImage from 'Components/images/mask-image';
 
+import Link from 'Components/link';
 import FeaturedItems from '../curated/featured';
 import FeaturedEmbedObject from '../curated/featured-embed';
 
-import Link from 'Components/link';
 
 import FeaturedEmbed from './featured-embed';
 import { FeaturedCollections } from './featured-collections';
