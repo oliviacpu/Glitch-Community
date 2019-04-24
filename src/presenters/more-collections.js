@@ -9,7 +9,7 @@ import { getSingleItem } from '../../shared/api';
 import { getDisplayName } from '../models/user';
 
 import { DataLoader } from './includes/loader';
-import { UserLink, TeamLink } from './includes/link';
+import { UserLink, TeamLink } from 'Components/link';
 
 import CollectionItem from './collection-item';
 

@@ -8,7 +8,7 @@ import MaskImage from 'Components/images/mask-image';
 import FeaturedItems from '../curated/featured';
 import FeaturedEmbedObject from '../curated/featured-embed';
 
-import { Link } from './includes/link';
+import Link from 'Components/link';
 
 import FeaturedEmbed from './featured-embed';
 import { FeaturedCollections } from './featured-collections';

@@ -9,7 +9,7 @@ import Layout from '../layout';
 import { getEditorUrl } from '../../models/project';
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
-import { Link } from '../includes/link';
+import Link from 'Components/link';
 
 import Featured from '../featured';
 import MoreIdeas from '../more-ideas';

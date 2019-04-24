@@ -5,7 +5,7 @@ import Markdown from 'Components/text/markdown';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import { useTracker } from '../segment-analytics';
-import { Link } from '../includes/link';
+import Link from 'Components/link';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
 

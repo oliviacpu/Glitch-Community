@@ -8,7 +8,7 @@ import CoverContainer from 'Components/containers/cover-container';
 import { getDisplayName } from '../../models/user';
 
 import { DataLoader } from './loader';
-import { TeamLink, UserLink } from './link';
+import { TeamLink, UserLink } from 'Components/link';
 import { useAPI } from '../../state/api';
 
 const PROJECT_COUNT = 3;

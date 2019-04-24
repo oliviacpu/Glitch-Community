@@ -7,7 +7,7 @@ import { moreIdeasTeam } from '../curated/collections';
 import { isDarkColor } from '../models/collection';
 
 import CollectionAvatar from './includes/collection-avatar';
-import { CollectionLink, Link } from './includes/link';
+import Link, { CollectionLink } from 'Components/link';
 import { DataLoader } from './includes/loader';
 
 import { useAPI } from '../state/api';

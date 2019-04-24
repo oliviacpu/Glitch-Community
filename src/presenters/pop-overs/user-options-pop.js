@@ -6,7 +6,7 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { getAvatarUrl as getTeamAvatarUrl } from '../../models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from '../../models/user';
 import { useTrackedFunc, useTracker } from '../segment-analytics';
-import { Link, TeamLink, UserLink } from '../includes/link';
+import Link, { TeamLink, UserLink } from 'Components/link';
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';

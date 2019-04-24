@@ -7,7 +7,7 @@ import { getAvatarThumbnailUrl, getDisplayName } from '../../models/user';
 
 import { useTrackedFunc } from '../segment-analytics';
 import { NestedPopover } from './popover-nested';
-import { UserLink } from '../includes/link';
+import { UserLink } from 'Components/link';
 import { useNotifications } from '../notifications';
 import TeamUserRemovePop from './team-user-remove-pop';
 import { useAPI } from '../../state/api';

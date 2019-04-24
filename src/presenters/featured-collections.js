@@ -13,7 +13,7 @@ import { isDarkColor } from '../models/collection';
 
 import { getSingleItem, getFromApi, joinIdsToQueryString } from '../../shared/api';
 import CollectionAvatar from './includes/collection-avatar';
-import { CollectionLink } from './includes/link';
+import { CollectionLink } from 'Components/link';
 import { DataLoader } from './includes/loader';
 
 import { useAPI } from '../state/api';

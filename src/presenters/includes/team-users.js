@@ -11,7 +11,7 @@ import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
-import { UserLink } from './link';
+import { UserLink } from 'Components/link';
 
 // Team Users list (in profile container)
 
