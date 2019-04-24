@@ -17,41 +17,35 @@ import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);
 
-function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, ...props }) {
+function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, projects, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
-  let { projects } = props;
-  console.log("no props", projects.length, "with props", props.projects.length)
+  
   function filterProjects() {
     setIsDoneFiltering(false);
-    console.log("inside filterProjects", projects.length)
     if (validFilter) {
-      console.log("validFilter")
       const lowercaseFilter = filter.toLowerCase();
       setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
-      console.log("not a valid filter")
       setFilteredProjects([]);
     }
   }
 
+  useEffect(() => filterProjects(), [projects]);
   useEffect(() => debounce(filterProjects, 400)(), [filter]);
-  useEffect(() => {
-    console.log("calling filterProjects");
-    filterProjects()
-  }, [projects]);
   
   const filtering = validFilter && isDoneFiltering;
-  projects = filtering ? filteredProjects : projects;
+  const displayedProjects = filtering ? filteredProjects : projects;
+  
   let projectsEl;
   if (enablePagination) {
-    projectsEl = <PaginatedProjects {...props} projects={projects} />;
+    projectsEl = <PaginatedProjects {...props} projects={displayedProjects} />;
   } else {
-    projectsEl = <ProjectsUL {...props} projects={projects} />;
+    projectsEl = <ProjectsUL {...props} projects={displayedProjects} />;
   }
 
   const placeholderEl = filtering ? (
@@ -80,8 +74,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
           />
         ) : null}
       </div>
-
-      {projects.length ? projectsEl : placeholderEl}
+      {displayedProjects.length ? projectsEl : placeholderEl}
     </article>
   );
 }
