@@ -35,7 +35,7 @@ export default function Footer() {
         Help Center <Emoji name="umbrella"/>
       </FooterLine>
       <FooterLine href="http://status.glitch.com/" track="system status">
-        System Status <Emoji name="trafficLight"/>
+        System Status <Emoji name="horizontalTrafficLight"/>
       </FooterLine>
       <FooterLine href="/legal" track="legal stuff">
         Legal Stuff <Emoji name="police"/>
