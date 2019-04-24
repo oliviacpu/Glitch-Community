@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Thanks from 'Components/blocks/thanks';
-import { getAvatarThumbnailUrl, getDisplayName } from '../../models/user';
+import { UserLink } from 'Components/link';
 
 import { useTrackedFunc } from '../segment-analytics';
 import { NestedPopover } from './popover-nested';
-import { UserLink } from 'Components/link';
 import { useNotifications } from '../notifications';
 import TeamUserRemovePop from './team-user-remove-pop';
 import { useAPI } from '../../state/api';
