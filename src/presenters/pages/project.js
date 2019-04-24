@@ -30,6 +30,7 @@ import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI } from '../../state/api';
+import useErrorHandlers from './error-handlers';
 import { useCurrentUser } from '../../state/current-user';
 
 import { getLink as getUserLink } from './user';
@@ -103,8 +104,9 @@ class DeleteProject extends React.Component {
   
   async deleteProject(){
     try{
-      console.log('delete project');
-      // await this.props.api.delete(`project/${this.props.project.id}`);
+      const api = useAPI();
+      console.log(`delete project for ${this.props.currentUser.login}`);
+      await api.delete(`project/${this.props.project.id}`);
       <Redirect to={getUserLink(this.props.currentUser)}/>
     }catch(error){
       console.log('deleteProject', error, error.response);
@@ -132,7 +134,7 @@ class DeleteProject extends React.Component {
                     You can always undelete a project from your profile page.
                   </div>
                   <Button type="dangerZone" small="size" onClick={this.deleteProject}>
-                    Delete {this.props.project.domain}
+                    Delete {this.props.project.domain} <Emoji name="bomb"/>
                   </Button>
                 </section>
               </dialog>
