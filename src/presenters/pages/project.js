@@ -95,7 +95,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProject({ project, deleteProject, currentUser }) {
+function DeleteProject({ deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   if (done) {
     return <Redirect to={getUserLink(currentUser)} />;
@@ -103,10 +103,10 @@ function DeleteProject({ project, deleteProject, currentUser }) {
   return (
     <section>
       <PopoverWithButton
-        buttonClass="button-small button-tertiary"
+        buttonClass="button-small button-tertiary danger-zone"
         buttonText={
           <>
-            Delete {project.domain}
+            Delete Project
             <Emoji name="bomb" />
           </>
         }
@@ -124,7 +124,7 @@ function DeleteProject({ project, deleteProject, currentUser }) {
                     setDone(true);
                   }}
                 >
-                  Delete {project.domain} <Emoji name="bomb" />
+                  Delete Project <Emoji name="bomb" />
                 </Button>
               </section>
             </dialog>

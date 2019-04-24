@@ -46,7 +46,7 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
   }
   return (
     <Button
-      type="tertiary"
+      type="dangerZone"
       size="small"
       onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {

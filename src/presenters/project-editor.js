@@ -29,7 +29,7 @@ class ProjectEditor extends React.Component {
   }
 
   async deleteProject() {
-    await this.props.api.delete(`projects/$[this.state.id}`);
+    await this.props.api.delete(`projects/${this.state.id}`);
   }
 
   render() {
