@@ -34,7 +34,6 @@ import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
-
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
@@ -210,22 +209,33 @@ class TeamPage extends React.Component {
         )}
 
         {/* Pinned Projects */}
-        <EntityPageProjects
-          projects={pinnedProjects}
-          isAuthorized={this.props.currentUserIsOnTeam}
-          removePin={this.props.removePin}
-          projectOptions={this.getProjectOptions()}
-        />
+        <>
+          {pinnedProjects.length > 0 && (
+            <ProjectsList
+              title={<>Pinned Projects <span className="emoji pushpin emoji-in-title" /></>}
+              projects={pinnedProjects}
+              isAuthorized={this.props.currentUserIsOnTeam}
+              removePin={this.props.removePin}
+              projectOptions={{ ...this.getProjectOptions(), removePin: this.props.currentUserIsOnTeam && this.props.removePin }}
+            />
+          )}
+        </>
 
         {/* Recent Projects */}
-        <EntityPageProjects
-          projects={recentProjects}
-          isAuthorized={this.props.currentUserIsOnTeam}
-          addPin={this.props.addPin}
-          projectOptions={this.getProjectOptions()}
-          enablePagination
-          enableFiltering={recentProjects.length > 6}
-        />
+        <>
+          {recentProjects.length > 0 && (
+            <ProjectsList
+              title="Recent Projects"
+              projects={recentProjects}
+              isAuthorized={this.props.currentUserIsOnTeam}
+              addPin={this.props.addPin}
+              projectOptions={this.getProjectOptions()}
+              enablePagination
+              enableFiltering={recentProjects.length > 6}
+              projectOptions={{ ...this.getProjectOptions(), addPin: this.props.currentUserIsOnTeam && this.props.addPin }}
+            />
+          )}
+        </>
 
         {team.projects.length === 0 && this.props.currentUserIsOnTeam && (
           <aside className="inline-banners add-project-to-empty-team-banner">
