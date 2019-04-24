@@ -5,6 +5,7 @@ import 'Components/global.styl';
 import TextInput from 'Components/inputs/text-input';
 import TextArea from 'Components/inputs/text-area';
 import WrappingTextInput from 'Components/inputs/wrapping-text-input';
+import MarkdownInput from 'Components/inputs/markdown-input';
 
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
@@ -13,33 +14,34 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
-const useDirectInputProps = () => {
+const useDirectInputProps = (error) => {
   const [value, setValue] = React.useState('');
   const onChange = (newValue) => {
     setValue(newValue);
   };
-  return { onChange, value };
+  return { error, onChange, value };
 };
 
-const BasicInputs = () => {
+const BasicTextInputs = () => {
   const [showError, setShowError] = React.useState(false);
-  const textInputProps = useDirectInputProps();
-  const error = showError ? 
+  const error = showError ? "Nope, that won't do" : null;
+  const singleLineProps = useDirectInputProps(error);
+  const multiLineProps = useDirectInputProps(error);
   return (
     <>
-      <TextInput {...textInputProps} placeholder="type something!" />
+      <p><TextInput {...singleLineProps} placeholder="A generic text input" /></p>
+      <p><TextInput {...singleLineProps} prefix="#" postfix="#" placeholder="A generic input with a prefix and postfix" /></p>
+      <p><TextInput {...singleLineProps} type="search" opaque={true} search={true} placeholder="Generic input styled like a search box" /></p>
+      <p><WrappingTextInput {...singleLineProps} placeholder="This is a single line text input that wraps" /></p>
+      <p><TextArea {...multiLineProps} placeholder="This is a multiline text area" /></p>
+      <p><MarkdownInput {...multiLineProps} placeholder="This text area renders as markdown when it isn't focused" /></p>
+      <p><label><input type="checkbox" checked={showError} onChange={(evt) => setShowError(evt.target.checked)} /> show error</label></p>
     </>
   );
 };
 
 const inputStory = storiesOf('Input Fields', module);
-inputStory.add('text input', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" />}</DirectInputProps>);
-inputStory.add('affixes', () => <DirectInputProps>{props => <TextInput {...props} placeholder="type something!" prefix="#" postfix="#" />}</DirectInputProps>);
-inputStory.add('search', () => <DirectInputProps>{props => <TextInput {...props} type="search" opaque={true} search={true} placeholder="bots, apps, users" />}</DirectInputProps>);
-inputStory.add('with error', () => <DirectInputProps>{props => <TextInput {...props} placeholder="glitch" error="That team already exists" />}</DirectInputProps>);
-inputStory.add('text area', () => <DirectInputProps>{props => <TextArea {...props} placeholder="This is a multiline text field" error="Reason is required" />}</DirectInputProps>);
-inputStory.add('wrapping text', () => <DirectInputProps>{props => <WrappingTextInput {...props} placeholder="This is a single line text input that wraps" error="An error could go here!" />}</DirectInputProps>);
-inputStory.add('markdown text', () => <DirectInputProps>{props => <MarkdownInput {...props} placeholder="This renders as markdown when it isn't focused" error="An error could go here!" />}</DirectInputProps>);
+inputStory.add('generic', () => <BasicTextInputs />);
 
 const OptimisticProps = ({ children, name = 'value' }) => {
   const [value, setValue] = React.useState('');
