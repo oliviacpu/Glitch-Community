@@ -6,21 +6,15 @@ import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input
 
 const AuthDescription = ({ authorized, description, placeholder, update, onBlur, allowImages }) => (
   authorized ? (
-    <div className="description">
-      <OptimisticMarkdownInput
-        value={description}
-        onChange={update}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        allowImages={allowImages}
-      />
-    </div>
+    <OptimisticMarkdownInput
+      value={description}
+      onChange={update}
+      onBlur={onBlur}
+      placeholder={placeholder}
+      allowImages={allowImages}
+    />
   ) : (
-    description && (
-      <div className="description">
-        <Markdown allowImages={allowImages}>{description}</Markdown>
-      </div>
-    )
+    description && <Markdown allowImages={allowImages}>{description}</Markdown>
   )
 );
 
