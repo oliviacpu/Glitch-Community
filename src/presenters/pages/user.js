@@ -108,6 +108,14 @@ const UserPage = ({
           avatarStyle={getAvatarStyle(user)}
           type="user"
           item={user}
+          coverActions={{
+            'Upload Cover': isAuthorized && user.login ? uploadCover : null,
+            'Clear Cover': isAuthorized && user.hasCoverImage ? clearCover : null,
+          }}
+          avatarActions={{
+            'Upload Avatar': isAuthorized && user.login ? uploadAvatar : null,
+          }}
+          
           coverButtons={
             isAuthorized &&
             !!user.login && <ImageButtons name="Cover" uploadImage={uploadCover} clearImage={user.hasCoverImage ? clearCover : null} />

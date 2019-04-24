@@ -9,7 +9,7 @@ const ImageButtons = ({ name, uploadImage, clearImage }) => {
   const onClickUpload = useTrackedFunc(uploadImage, `Upload ${name}`);
   const onClickClear = useTrackedFunc(clearImage, `Clear ${name}`);
   return (
-    <div className="upload-image-buttons">
+    <div>
       {!!uploadImage && (
         <Button size="small" type="tertiary" onClick={onClickUpload}>
           Upload {name}
