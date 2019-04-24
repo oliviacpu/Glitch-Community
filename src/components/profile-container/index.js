@@ -31,7 +31,7 @@ const TrackedButtonGroup = ({ items }) => (
 
 const getStyle = {
   user: getUserAvatarStyle,
-  team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar })
+  team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
 };
 
 const ProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => (
