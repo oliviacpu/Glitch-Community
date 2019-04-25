@@ -30,10 +30,12 @@ const TrackedButtonGroup = ({ items }) => (
   </>
 );
 
+const now = Date.now()
+
 const getStyle = {
   user: getUserAvatarStyle,
   team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
-  project: (project) => ({ backgroundImage: `url('${getProjectAvatarUrl(project.id)}')` }),
+  project: (project) => ({ backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${now}')` }),
 };
 
 const ProjectProfileContainer = ({ item, children, avatarActions }) => (
