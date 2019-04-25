@@ -16,7 +16,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
         setState((prevState) => prevState.value === debouncedValue ? newState : prevState);
       };
       // this scope can't be async/await because it's an effect
-      setValueAsync(debouncedValue).then(
+      setValueAsync(debouncedValue)&& setValueAsync(debouncedValue).then(
         () => setStateIfMatches({ value: undefined, error: null }),
         (error) => setStateIfMatches({ value: debouncedValue, error }),
       );

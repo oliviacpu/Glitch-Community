@@ -18,6 +18,7 @@ const cx = classNames.bind(styles);
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function hideEmptyNote(description) {
+    console.log("description in blur", description)
     description = _.trim(description);
 
     if (!description || description.length === 0) {
