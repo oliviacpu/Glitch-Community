@@ -15,11 +15,6 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
-import Note from 'Components/collection/note';
-
-import { pickRandom } from './data';
-import { withState } from './util';
-
 const inputStory = storiesOf('Input Fields', module);
 
 const useDirectInputProps = (error) => {
@@ -77,79 +72,3 @@ const ProperTextInputs = () => {
 };
 
 inputStory.add('optimistic', () => <ProperTextInputs />);
-
-storiesOf('Note', module)
-  .add(
-    'when authorized', 
-    withState({
-      note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
-      isAddingANewNote: true
-    }, 
-    ({ state, setState }) => (
-      <Note
-        collection={{
-          coverColor: "#bfabf2",
-          user: pickRandom("users"),
-        }}
-        project={state}
-        updateNote={async ({ note }) => {
-          setState({ note, isAddingANewNote: true });
-          await new Promise((resolve) => setTimeout(resolve, 300));
-        }}
-        hideNote={() => setState({ isAddingANewNote: false })}
-        isAuthorized={true}
-      />
-    ))
-  )
-  .add('empty state', withState({
-      note: "",
-      isAddingANewNote: true
-    }, ({ state, setState }) => (
-      <Note
-        collection={{
-          coverColor: "#bfabf2",
-          user: pickRandom("users"),
-        }}
-        project={{
-          note: "",
-          isAddingANewNote: true
-        }}
-        updateNote={async ({ note }) => {
-          setState({ note, isAddingANewNote: true });
-          await new Promise((resolve) => setTimeout(resolve, 300));
-        }}
-        hideNote={() => setState({ isAddingANewNote: false })}
-        isAuthorized={true}
-      />
-    ))
-  )
-  .add('when unauthorized', withState({
-    note: "this note you do not own, you can not edit it, you can not hide it",
-    isAddingANewNote: true
-  }, ({ state, setState }) => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={false}
-    />
-  ))
-    // .add('dark notes', () => (
-    //   <Note
-    //     collection={{
-    //       coverColor: "#000000",
-    //       user: pickRandom("users"),
-    //     }}
-    //     project={{
-    //       note: "text color is lightened for dark backgrounds"
-    //     }}
-    //     updateNote={mockUpdateNote}
-    //     hideNote={mockHideNote}
-    //     isAuthorized={true}
-    //   />
-    // ));
