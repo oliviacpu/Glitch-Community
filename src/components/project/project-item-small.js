@@ -24,12 +24,12 @@ const ProjectItemSmall = ({ project }) => (
         </span>
         <Text>
           <span className={styles.projectName}>{project.domain}</span>{' '}
-          {project.private && (
-            <Badge type="private" aria-label="private">
-              {''}
-            </Badge>
-          )}
         </Text>
+        {project.private && (
+          <Badge type="private" aria-label="private">
+            {' '}
+          </Badge>
+        )}
       </div>
     </ProjectLink>
   </div>

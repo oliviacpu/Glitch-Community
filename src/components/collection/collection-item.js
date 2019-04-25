@@ -90,17 +90,17 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
 
       <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
 
-      {collection.projects && (
-        <CollectionLink collection={collection} className={styles.footerLink}>
-          { collection.projects.length > 0 &&
+      <CollectionLink collection={collection} className={styles.footerLink}>
+        <>
+          {collection.projects && collection.projects.length > 0 && (
             <>
               {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
               <Pluralize count={collection.projects.length} singular="project" />
               <span aria-hidden="true"> →</span>
             </>
-          }
-        </CollectionLink>
-      )}
+          )}
+        </>
+      </CollectionLink>
     </div>
   </div>
 );
