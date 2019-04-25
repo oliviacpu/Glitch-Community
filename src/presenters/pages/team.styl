@@ -1,45 +1,20 @@
 @import "../../components/constants"
 
-.container :global 
+.container :global
+  // projects-list
   .projects
     padding: 0
     margin-bottom: 1rem
     display: inline-block
   .projects-container
     margin-bottom: 1rem
+  // collections-list
   .collections
     padding: 0
-          
+  // add-team-project
   .add-project-container
     position: relative
-
-  .whitelisted-domain-container
-    vertical-align: top
-    margin-top: 5px
-    margin-right: 5px
-    margin-left: 5px
-
-  .add-user-container
-    position: relative
-    vertical-align: top
-    margin-left: 5px
-    .users
-      li:last-of-type
-        margin-right: 0px
-      img
-        opacity: 0.5
-    .add-user-wrap
-      position: relative
-    .add-user
-      margin-top: 4px
-      transition: all .2s
-    .success
-      background-color: success-background
-      
-  .join-team-button
-    vertical-align: top
-    margin-top: 3px
-  
+  // team-analytics
   .placeholder-mask
     position: absolute
     top: 25px
@@ -48,7 +23,7 @@
     bottom: 0
     background: linear-gradient(to bottom, rgba(255,255,255,0.2), white)
     pointer-events: none
-    
+  // team-elements
   .team-marketing
     border-top: 1px solid #e5e5e5
     padding-top: 1rem
@@ -82,6 +57,7 @@
     
 .usersInformation
   padding-bottom: 12px
+  // team-users
   :global
     .users
       display: inline // ?
@@ -90,3 +66,27 @@
       margin-right: -7px
     .user img.whitelisted-domain
       margin: auto
+    .whitelisted-domain-container
+      vertical-align: top
+      margin-top: 5px
+      margin-right: 5px
+      margin-left: 5px
+    .add-user-container
+      position: relative
+      vertical-align: top
+      margin-left: 5px
+      .users
+        li:last-of-type
+          margin-right: 0px
+        img
+          opacity: 0.5
+      .add-user-wrap
+        position: relative
+      .add-user
+        margin-top: 4px
+        transition: all .2s
+      .success
+        background-color: success-background
+    .join-team-button
+      vertical-align: top
+      margin-top: 3px
