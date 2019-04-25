@@ -9,7 +9,8 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
-import { getAvatarUrl } from '../../models/project';
+import ProjectProfileContainer from 'Components/project-profile-container';
+
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
@@ -63,25 +64,7 @@ PrivateToggle.propTypes = {
   setPrivate: PropTypes.func.isRequired,
 };
 
-const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
 
-export const ProjectInfoContainer = ({ style, children, buttons }) => (
-  <>
-    <div className="avatar-container">
-      <div className="user-avatar" style={style} />
-      {buttons}
-    </div>
-    <div className="profile-information">{children}</div>
-  </>
-);
-ProjectInfoContainer.propTypes = {
-  style: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  buttons: PropTypes.element,
-};
-ProjectInfoContainer.defaultProps = {
-  buttons: null,
-};
 
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
@@ -112,8 +95,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
   return (
     <main className="project-page">
       <section id="info">
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
+          <ProjectProfileContainer project={project}>
             <Heading tagName="h1">
               {isAuthorized ? (
                 <ProjectDomainInput
@@ -142,8 +124,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
               <ShowButton name={domain} />
               <EditButton name={domain} isMember={isAuthorized} />
             </p>
-          </ProjectInfoContainer>
-        </InfoContainer>
+          </ProjectProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
