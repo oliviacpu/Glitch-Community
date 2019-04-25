@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SearchForm from 'Components/search-form';
+import Button from 'Components/buttons/button';
 import { TrackedExternalLink } from '../../presenters/segment-analytics';
 import { Link } from '../../presenters/includes/link';
 import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
@@ -14,7 +15,7 @@ import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" className="button button-small button-cta" to={EDITOR_URL}>
-    Resume Coding
+    <Resume Coding
   </TrackedExternalLink>
 );
 
@@ -30,12 +31,26 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         <div className={styles.searchWrap}>
           <SearchForm defaultValue={searchQuery} />
         </div>
-        <div className={styles.buttonWrap}>
-          <NewProjectPop />
-          {!!currentUser && !!currentUser.projects.length && <ResumeCoding />}
-          {!(currentUser && currentUser.login) && <SignInPop />}
-          {!!currentUser && currentUser.login && <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />}
-        </div>
+        <ul className={styles.buttons}>
+          <li className={styles.buttonWrap}>
+            <NewProjectPop />
+          </li>
+          {!!currentUser && !!currentUser.projects.length && (
+            <li className={styles.buttonWrap}>
+              <ResumeCoding />
+            </li>
+          )}
+          {!(currentUser && currentUser.login) && (
+            <li className={styles.buttonWrap}>
+              <SignInPop />
+            </li>
+          )}
+          {!!currentUser && currentUser.login && (
+            <li className={styles.buttonWrap}>
+              <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />
+            </li>
+          )}
+        </ul>
       </nav>
     </header>
   );
