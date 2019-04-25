@@ -23,7 +23,7 @@ import EntityPageProjects from '../entity-page-projects';
 import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
-import styles from './user.styl'
+import styles from './user.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
