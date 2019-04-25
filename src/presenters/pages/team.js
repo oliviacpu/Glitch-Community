@@ -60,6 +60,16 @@ const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTe
   />
 );
 
+const Beta = () => (
+  <a href="/teams/" target="_blank" className={styles.beta}>
+    <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
+    <div>
+      <Heading tagName="h4">Teams are in beta</Heading>
+      <Text>Learn More</Text>
+    </div>
+  </a>
+);
+
 // Team Page
 
 class TeamPage extends React.Component {
@@ -137,13 +147,7 @@ class TeamPage extends React.Component {
     return (
       <main className={styles.container}>
         <section>
-          <a href="/teams/" target="_blank" className="beta">
-            <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
-            <div>
-              <Heading tagName="h4">Teams are in beta</Heading>
-              <Text>Learn More</Text>
-            </div>
-          </a>
+          <Beta />
           <ProfileContainer
             item={team}
             type="team"
@@ -162,7 +166,7 @@ class TeamPage extends React.Component {
                 <Heading tagName="h1">
                   {team.name} {team.isVerified && <VerifiedBadge />}
                 </Heading>
-                <p className="team-url">@{team.url}</p>
+                <p className={styles.teamUrl}>@{team.url}</p>
               </>
             )}
             <div className="users-information">
