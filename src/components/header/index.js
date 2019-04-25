@@ -10,6 +10,7 @@ import SignInPop from '../../presenters/pop-overs/sign-in-pop';
 import NewProjectPop from '../../presenters/pop-overs/new-project-pop';
 import { useCurrentUser } from '../../state/current-user';
 import Logo from './logo';
+import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" className="button button-small button-cta" to={EDITOR_URL}>
@@ -20,24 +21,21 @@ const ResumeCoding = () => (
 const Header = ({ searchQuery, showNewStuffOverlay }) => {
   const { currentUser, clear } = useCurrentUser();
   return (
-    <header role="banner">
-      <div className="header-info">
-        <Link to="/">
-          <Logo />
-        </Link>
-      </div>
+    <header role="banner" className={styles.header}>
+      <Link to="/" className={styles.logoWrap}>
+        <Logo />
+      </Link>
 
-      <nav>
-        <div>
-          <span className="header-search">
-            <SearchForm defaultValue={searchQuery} />
-          </span>
+      <nav className={styles.headerActions}>
+        <div className={styles.searchWrap}>
+          <SearchForm defaultValue={searchQuery} />
         </div>
-
-        <NewProjectPop />
-        {!!currentUser && !!currentUser.projects.length && <ResumeCoding />}
-        {!(currentUser && currentUser.login) && <SignInPop />}
-        {!!currentUser && currentUser.login && <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />}
+        <div className={styles.buttonWrap}>
+          <NewProjectPop />
+          {!!currentUser && !!currentUser.projects.length && <ResumeCoding />}
+          {!(currentUser && currentUser.login) && <SignInPop />}
+          {!!currentUser && currentUser.login && <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />}
+        </div>
       </nav>
     </header>
   );
