@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { useNotifications } from '../notifications';
 import { useAPI } from '../../state/api';
 

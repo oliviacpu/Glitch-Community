@@ -9,12 +9,12 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
+import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
-import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
 import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';

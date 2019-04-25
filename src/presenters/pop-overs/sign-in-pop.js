@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
-import { Link } from '../includes/link';
+import Link from 'Components/link';
 import useLocalStorage from '../../state/local-storage';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';

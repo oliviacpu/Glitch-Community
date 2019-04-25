@@ -9,11 +9,11 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
+import DataLoader from 'Components/data-loader';
 import { getAvatarUrl } from '../../models/project';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';

@@ -11,12 +11,12 @@ import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
 import { ProjectsUL } from 'Components/containers/projects-list';
+import DataLoader from 'Components/data-loader';
 
 import Layout from '../layout';
 import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
