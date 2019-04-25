@@ -437,7 +437,7 @@ storiesOf('Note', module)
   .add(
     'when authorized', 
     withState({
-      note: "You are authorized to edit this note, go on ahead and try, if you erase my contents and click away, I disappear after a short time",
+      note: "You are authorized to edit this note, go on ahead and try, if you erase its contents and click away, this note will disappear after a short time",
       isAddingANewNote: true
     }, 
     ({ state: project, setState }) => (
