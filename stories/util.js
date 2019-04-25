@@ -1,7 +1,7 @@
 import { Context as CurrentUserContext } from '../src/state/current-user';
 import { Context as APIContext } from '../src/state/api';
 import { Context as UserPrefsContext } from '../src/presenters/includes/user-prefs';
-import { Context as DevTogglesCOntext } from '../src/presenters/includes/dev-toggles';
+import { Context as DevTogglesContext } from '../src/presenters/includes/dev-toggles';
 
 /* eslint-disable import/prefer-default-export */
 
