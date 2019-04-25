@@ -6,6 +6,7 @@ import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import { ProfileItem } from 'Components/profile-list';
+import { CollectionLink } from 'Components/link';
 import DataLoader from 'Components/data-loader';
 import { captureException } from '../utils/sentry';
 
@@ -14,7 +15,6 @@ import { isDarkColor } from '../models/collection';
 
 import { getSingleItem, getFromApi, joinIdsToQueryString } from '../../shared/api';
 import CollectionAvatar from './includes/collection-avatar';
-import { CollectionLink } from './includes/link';
 
 import { useAPI } from '../state/api';
 

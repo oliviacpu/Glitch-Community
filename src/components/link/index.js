@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import { getLink as getCollectionLink } from '../../models/collection';
-import { getLink as getProjectLink } from '../../models/project';
-import { getLink as getTeamLink } from '../../models/team';
-import { getLink as getUserLink } from '../../models/user';
+import { getLink as getCollectionLink } from 'Models/collection';
+import { getLink as getProjectLink } from 'Models/project';
+import { getLink as getTeamLink } from 'Models/team';
+import { getLink as getUserLink } from 'Models/user';
 
 /* global */
 const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
 
-export const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+const Link = React.forwardRef(({ to, children, ...props }, ref) => {
   if (typeof to === 'string') {
     const currentUrl = new URL(window.location.href);
     const targetUrl = new URL(to, currentUrl);
@@ -98,3 +98,5 @@ UserLink.propTypes = {
     login: PropTypes.string,
   }).isRequired,
 };
+
+export default Link;

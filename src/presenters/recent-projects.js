@@ -5,11 +5,10 @@ import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
+import { UserLink } from 'Components/link';
+import { getAvatarStyle } from 'Models/user';
 
-import { getAvatarStyle } from '../models/user';
 import { useCurrentUser } from '../state/current-user';
-import { UserLink } from './includes/link';
-
 import ProjectsLoader from './projects-loader';
 import SignInPop from './pop-overs/sign-in-pop';
 

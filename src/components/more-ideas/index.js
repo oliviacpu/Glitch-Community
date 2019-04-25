@@ -2,8 +2,8 @@ import React from 'react';
 
 import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
+import Link from 'Components/link';
 import categories from '../../curated/categories';
-import { Link } from '../../presenters/includes/link';
 import styles from './more-ideas.styl';
 
 const MoreIdeas = () => (
