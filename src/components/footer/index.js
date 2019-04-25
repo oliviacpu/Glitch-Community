@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
-import { Link } from '../../presenters/includes/link';
+import Link from 'Components/link';
 import styles from './footer.styl';
 
 const FooterLink = ({ className, href, track, children }) => (

@@ -7,7 +7,7 @@ import Cover from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
 import Image from 'Components/images/image';
 import { getAvatarUrl, ANON_AVATAR_URL } from 'Models/user';
-import { UserLink } from '../../presenters/includes/link';
+import { UserLink } from 'Components/link';
 import styles from './user-item.styl';
 
 const ProfileAvatar = ({ user }) => <Image className={styles.avatar} src={getAvatarUrl(user)} backgroundColor={user.color} defaultSrc={ANON_AVATAR_URL} alt="" />;

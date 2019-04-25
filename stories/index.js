@@ -20,7 +20,7 @@ import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
@@ -32,6 +32,7 @@ import MoreIdeas from 'Components/more-ideas';
 import Footer from 'Components/footer';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
+import 'Components/profile-container/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 

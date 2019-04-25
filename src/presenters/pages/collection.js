@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import Pluralize from 'react-pluralize';
 import { Redirect } from 'react-router-dom';
 import { partition } from 'lodash';
 
@@ -10,13 +11,13 @@ import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
 import { ProjectsUL } from 'Components/containers/projects-list';
+import DataLoader from 'Components/data-loader';
 
 import Layout from '../layout';
 import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
@@ -124,7 +125,7 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
+              <Text><Pluralize count={collection.projects.length} singular="Project" /></Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}

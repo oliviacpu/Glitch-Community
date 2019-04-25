@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 import TextInput from 'Components/inputs/text-input';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { getPredicates, getTeamPair } from '../../models/words';
