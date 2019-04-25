@@ -36,11 +36,6 @@ import 'Components/profile-container/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
-const pickRandom = (datatype) => {
-  const allData = { users, teams, projects, collections };
-  const allDataByType = Object.values(allData[datatype]);
-  return allDataByType[Math.floor(Math.random() * allDataByType.length)];
-};
 
 const helloAlert = () => {
   alert('hello');
@@ -430,73 +425,5 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ))
-
-
-const mockUpdateNote = (note) => {
-  console.log("update note would have been called")
-  return Promise.resolve(note)
-}
-
-const mockHideNote = () => console.log("hide note would have been called")
-
-storiesOf('Note', module)
-  .add('when authorized', () => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
-        isAddingANewNote: true
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={true}
-    />
-  ))
-  .add('empty state', () => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "",
-        isAddingANewNote: true
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={true}
-    />
-  ))
-  .add('when unauthorized', () => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "this note you do not own, you can not edit it, you can not hide it"
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={false}
-    />
-  ))
-  .add('dark notes', () => (
-    <Note
-      collection={{
-        coverColor: "#000000",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "text color is lightened for dark backgrounds"
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={true}
-    />
-  ));
 
 storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
