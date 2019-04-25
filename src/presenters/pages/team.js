@@ -33,7 +33,7 @@ import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
-
+import styles from './team.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
@@ -135,7 +135,7 @@ class TeamPage extends React.Component {
     const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
     return (
-      <main className="profile-page team-page">
+      <main className={styles.container}>
         <section>
           <a href="/teams/" target="_blank" className="beta">
             <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
