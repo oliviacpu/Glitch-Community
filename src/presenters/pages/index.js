@@ -5,6 +5,7 @@ import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import Link from 'Components/link';
+import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
 
 import { getEditorUrl } from '../../models/project';
@@ -12,7 +13,6 @@ import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
 
 import Featured from '../featured';
-import MoreIdeas from '../more-ideas';
 import OverlayVideo from '../overlays/overlay-video';
 import Questions from '../questions';
 import RecentProjects from '../recent-projects';

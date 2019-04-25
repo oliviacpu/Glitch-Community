@@ -3,8 +3,8 @@ import React from 'react';
 
 import Button from 'Components/buttons/button';
 import Markdown from 'Components/text/markdown';
-import Cover from 'Components/blocks/search-result-cover-bar';
-import Thanks from 'Components/blocks/thanks';
+import Cover from 'Components/search-result-cover-bar';
+import Thanks from 'Components/thanks';
 import Image from 'Components/images/image';
 import { getAvatarUrl, ANON_AVATAR_URL } from 'Models/user';
 import { UserLink } from 'Components/link';

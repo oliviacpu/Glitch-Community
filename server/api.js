@@ -38,7 +38,7 @@ async function getCultureZinePosts() {
   return response.data.posts;
 }
 
-const CACHE_TIMEOUT = dayjs.convert(15, 'minutes', 'ms');
+const CACHE_TIMEOUT = dayjs.convert(1, 'hour', 'ms');
 const cache = new Cache();
 
 async function getFromCacheOrApi(key, api, ...args) {

@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { getAvatarUrl } from '../models/project';
 
 import { useAPI } from '../state/api';
