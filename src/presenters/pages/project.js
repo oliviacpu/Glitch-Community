@@ -88,7 +88,16 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate, uploadAvatar }) => {
+const ProjectPage = ({
+  project,
+  addProjectToCollection,
+  currentUser,
+  isAuthorized,
+  updateDomain,
+  updateDescription,
+  updatePrivate,
+  uploadAvatar,
+}) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
