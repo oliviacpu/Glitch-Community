@@ -64,8 +64,6 @@ PrivateToggle.propTypes = {
   setPrivate: PropTypes.func.isRequired,
 };
 
-
-
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
     <>
@@ -95,36 +93,36 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
   return (
     <main className="project-page">
       <section id="info">
-          <ProfileContainer type="project" item={project}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <ProjectDomainInput
-                  domain={domain}
-                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
-              )}
-            </Heading>
-            {users.length + teams.length > 0 && (
-              <div className="users-information">
-                <ProfileList hasLinks teams={teams} users={users} layout="block" />
-              </div>
+        <ProfileContainer type="project" item={project}>
+          <Heading tagName="h1">
+            {isAuthorized ? (
+              <ProjectDomainInput
+                domain={domain}
+                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
+                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+              />
+            ) : (
+              <>
+                {domain} {project.private && <PrivateBadge />}
+              </>
             )}
-            <AuthDescription
-              authorized={isAuthorized}
-              description={project.description}
-              update={updateDescription}
-              placeholder="Tell us about your app"
-            />
-            <p className="buttons">
-              <ShowButton name={domain} />
-              <EditButton name={domain} isMember={isAuthorized} />
-            </p>
-          </ProfileContainer>
+          </Heading>
+          {users.length + teams.length > 0 && (
+            <div className="users-information">
+              <ProfileList hasLinks teams={teams} users={users} layout="block" />
+            </div>
+          )}
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.description}
+            update={updateDescription}
+            placeholder="Tell us about your app"
+          />
+          <p className="buttons">
+            <ShowButton name={domain} />
+            <EditButton name={domain} isMember={isAuthorized} />
+          </p>
+        </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
