@@ -90,9 +90,9 @@ storiesOf('Note', module)
         user: pickRandom("users"),
       }}
       project={state}
-      updateNote={(note) => {
+      updateNote={async (note) => {
         setState({ note });
-        Promise.resolve(note);
+        await new Promise((resolve) => setTimeout(resolve(note), 300));
       }}
       hideNote={() => setState({ isAddingANewNote: false })}
       isAuthorized={true}
