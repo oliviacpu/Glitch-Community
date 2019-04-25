@@ -153,11 +153,11 @@ export function getTeamCoverImagePolicy(api, id) {
 }
 
 export function getProjectAvatarImagePolicy(api, id) {
-  return api.get(`projects/${id}/policy`);
+  return api.get(`projects/${id}/avatar/policy`);
 }
 
-export function uploadAsset(blob, policy, key) {
-  return S3Uploader(policy).upload({ key, blob });
+export function uploadAsset(blob, policy, key, cacheControl) {
+  return S3Uploader(policy).upload({ key, blob, cacheControl });
 }
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
