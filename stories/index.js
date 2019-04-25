@@ -424,13 +424,17 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ))
-  
+
+const pickRandomUser = () => Object.values(users)[Math.random() * users.length];
+console.log(pickRandomUser())
+console.log(Math.random() * users.length)
+console.log(users)
 storiesOf('Note', module)
   .add('when authorized', () => (
     <Note
       collection={{
         coverColor: "#bfabf2",
-        user: users[0],
+        user: pickRandomUser(),
       }}
       project={{
         note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
@@ -445,7 +449,7 @@ storiesOf('Note', module)
     <Note
       collection={{
         coverColor: "#bfabf2",
-        user: users[0],
+        user: pickRandomUser(),
       }}
       project={{
         note: "",
@@ -460,7 +464,7 @@ storiesOf('Note', module)
     <Note
       collection={{
         coverColor: "#bfabf2",
-        user: users[0],
+        user: pickRandomUser(),
       }}
       project={{
         note: "this note you do not own, you can not edit it, you can not hide it"
@@ -474,7 +478,7 @@ storiesOf('Note', module)
     <Note
       collection={{
         coverColor: "#000000",
-        user: users[0],
+        user: pickRandomUser(),
       }}
       project={{
         note: "text color is lightened for dark backgrounds"
