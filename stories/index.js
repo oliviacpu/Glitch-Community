@@ -36,7 +36,6 @@ import 'Components/profile-container/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
-
 const helloAlert = () => {
   alert('hello');
 };
@@ -424,14 +423,14 @@ storiesOf('CoverContainer', module)
         <p>Notice the buttons are up and to the right</p>
       </div>
     </CoverContainer>
-  ))
+  ));
 
 storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
 
 const mockUpdateNote = (setState) => async ({ note }) => {
   setState({ note, isAddingANewNote: true });
   await new Promise((resolve) => setTimeout(resolve, 300));
-}
+};
 
 storiesOf('Note', module)
   .add(
