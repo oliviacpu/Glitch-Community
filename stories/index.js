@@ -425,10 +425,8 @@ storiesOf('CoverContainer', module)
     </CoverContainer>
   ))
 
-const pickRandomUser = () => Object.values(users)[Math.random() * users.length];
-console.log(pickRandomUser())
-console.log(Math.random() * users.length)
-console.log(users)
+
+
 storiesOf('Note', module)
   .add('when authorized', () => (
     <Note
