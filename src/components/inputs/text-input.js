@@ -12,7 +12,9 @@ import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children }) => <span className={styles.inputPart}>{children}</span>;
+const InputPart = ({ children, className }) => (
+  <span className={classNames(styles.inputPart, className)}>{children}</span>
+);
 
 const TextInput = ({
   autoFocus,
@@ -60,7 +62,7 @@ const TextInput = ({
           value={value}
         />
         {!!error && (
-          <InputPart>
+          <InputPart className={styles.errorIcon}>
             <InputErrorIcon />
           </InputPart>
         )}
