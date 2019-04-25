@@ -17,8 +17,8 @@ const cx = classNames.bind(styles);
  * Note Component
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
-  function hideEmptyNote(description) {
-    console.log("description in blur", description)
+  function hideEmptyNote(event) {
+    let description = event.target.value || '';
     description = _.trim(description);
 
     if (!description || description.length === 0) {
