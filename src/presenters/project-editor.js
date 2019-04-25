@@ -5,6 +5,7 @@ import * as assets from '../utils/assets';
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
+import useUploader from './includes/uploader';
 
 class ProjectEditor extends React.Component {
   constructor(props) {
@@ -30,15 +31,9 @@ class ProjectEditor extends React.Component {
   }
 
   async uploadAvatar(blob) {
-    const { data: policy } = await assets.getTeamAvatarImagePolicy(this.props.api, this.state.id);
-    await this.props.uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
-
-    const image = await assets.blobToImage(blob);
-    const color = assets.getDominantColor(image);
-    await this.updateFields({
-      hasAvatarImage: true,
-      backgroundColor: color,
-    });
+    const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
+    await this.props.uploadAsset(blob, policy, 'temporary-user-avatar');
+    // TODO: bust cache?
   }
 
   render() {
@@ -71,8 +66,9 @@ const ProjectEditorContainer = ({ children, initialProject }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const errorFuncs = useErrorHandlers();
+  const uploadFuncs = useUploader();
   return (
-    <ProjectEditor api={api} currentUser={currentUser} initialProject={initialProject} {...errorFuncs}>
+    <ProjectEditor api={api} currentUser={currentUser} initialProject={initialProject} {...errorFuncs} {...uploadFuncs}>
       {children}
     </ProjectEditor>
   );

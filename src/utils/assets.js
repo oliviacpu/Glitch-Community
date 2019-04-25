@@ -150,9 +150,11 @@ export function getTeamAvatarImagePolicy(api, id) {
 
 export function getTeamCoverImagePolicy(api, id) {
   return api.get(`teams/${id}/cover/policy`);
-}i
+}
 
-export function getProjectAvatarImagePolicy(ap)
+export function getProjectAvatarImagePolicy(api, id) {
+  return api.get(`projects/${id}/avatar/policy`);
+}
 
 export function uploadAsset(blob, policy, key) {
   return S3Uploader(policy).upload({ key, blob });
@@ -168,4 +170,3 @@ export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
 }
 
 /* eslint-enable no-param-reassign */
-d
