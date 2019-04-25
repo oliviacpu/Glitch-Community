@@ -1,40 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 
-export default class Logo extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hour: new Date().getHours(),
-    };
-  }
+const LOGO_DAY = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg';
+const LOGO_SUNSET = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-sunset.svg';
+const LOGO_NIGHT = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-night.svg';
 
-  componentDidMount() {
-    this.interval = window.setInterval(() => {
-      this.setState({
-        hour: new Date().getHours(),
-      });
+const LogoImage = ({ src }) => <img className="logo" src={src} alt="Glitch" />;
+
+function Logo() {
+  const [hour, setHour] = useState(new Date().getHours());
+  useEffect(() => {
+    const handle = window.setInterval(() => {
+      setHour(new Date().getHours());
     }, dayjs.convert(5, 'minutes', 'ms'));
-  }
 
-  componentWillUnmount() {
-    window.clearInterval(this.interval);
-  }
+    return () => window.clearInterval(handle);
+  }, []);
 
-  render() {
-    const { hour } = this.state;
-
-    const LOGO_DAY = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg';
-    const LOGO_SUNSET = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-sunset.svg';
-    const LOGO_NIGHT = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-night.svg';
-
-    let logo = LOGO_DAY;
-    if (hour >= 16 && hour <= 18) {
-      logo = LOGO_SUNSET;
-    } else if (hour > 18 || hour <= 8) {
-      logo = LOGO_NIGHT;
-    }
-
-    return <img className="logo" src={logo} alt="Glitch" />;
-  }
+  if (hour >= 16 && hour <= 18) return <LogoImage src={LOGO_SUNSET} />;
+  if (hour > 18 || hour <= 8) return <LogoImage src={LOGO_NIGHT} />;
+  return <LogoImage src={LOGO_DAY} />;
 }
+
+export default Logo;

@@ -4,8 +4,8 @@ import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
 import Header from 'Components/header';
-import NewStuffContainer from './new-stuff';
 import Footer from './footer';
+import NewStuffContainer from './overlays/new-stuff';
 import ErrorBoundary from './includes/error-boundary';
 import Konami from './includes/konami';
 
