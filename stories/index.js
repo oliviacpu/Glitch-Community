@@ -33,7 +33,7 @@ import MoreIdeas from 'Components/more-ideas';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/profile-container/story';
-import { users, teams, projects, collections, pickRandom } from './data';
+import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
 
@@ -431,20 +431,21 @@ storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
 const mockUpdateNote = (setState) => async ({ note }) => {
   setState({ note, isAddingANewNote: true });
   await new Promise((resolve) => setTimeout(resolve, 300));
-} 
+}
+
 storiesOf('Note', module)
   .add(
     'when authorized', 
     withState({
-      note: "You are authorized to edit this note, go on ahead and try, if you erase my contents, I disapear after a short time",
+      note: "You are authorized to edit this note, go on ahead and try, if you erase my contents and click away, I disapear after a short time",
       isAddingANewNote: true
     }, 
-    ({ project, setState }) => (
+    ({ state: project, setState }) => (
       <Note
         isAuthorized={true}
         collection={{
           coverColor: "#bfabf2",
-          user: pickRandom("users"),
+          user: users.modernserf,
         }}
         project={project}
         updateNote={mockUpdateNote(setState)}
@@ -455,45 +456,45 @@ storiesOf('Note', module)
   .add('empty state', withState({
     note: "",
     isAddingANewNote: true
-  }, ({ project, setState }) => (
+  }, ({ state: project, setState }) => (
     <Note
       isAuthorized={true}
       collection={{
         coverColor: "#bfabf2",
-        user: pickRandom("users"),
+        user: users.modernserf,
       }}
       project={project}
-              updateNote={mockUpdateNote(setState)}
+      updateNote={mockUpdateNote(setState)}
       hideNote={() => setState({ isAddingANewNote: false })}
     />
   )))
   .add('when unauthorized', withState({
     note: "this note you do not own, you can not edit it, you can not hide it",
     isAddingANewNote: true
-  }, ({ project, setState }) => (
+  }, ({ state: project, setState }) => (
     <Note
       isAuthorized={false}
       collection={{
         coverColor: "#bfabf2",
-        user: pickRandom("users"),
+        user: users.modernserf,
       }}
       project={project}
-              updateNote={mockUpdateNote(setState)}
+      updateNote={mockUpdateNote(setState)}
       hideNote={() => setState({ isAddingANewNote: false })}
     />
   )))
   .add('dark notes', withState({
     note: "the background is dark, the text is light",
     isAddingANewNote: true
-  }, ({ project, setState }) => (
+  }, ({ state: project, setState }) => (
     <Note
       isAuthorized={true}
       collection={{
         coverColor: "#000000",
-        user: pickRandom("users"),
+        user: users.modernserf,
       }}
       project={project}
-              updateNote={mockUpdateNote(setState)}
+      updateNote={mockUpdateNote(setState)}
       hideNote={() => setState({ isAddingANewNote: false })}
     />
   )));

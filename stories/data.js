@@ -154,9 +154,3 @@ export const teams = {
     users: [users.modernserf],
   },
 };
-
-export const pickRandom = (datatype) => {
-  const allData = { users, teams, projects, collections };
-  const allDataByType = Object.values(allData[datatype]);
-  return allDataByType[Math.floor(Math.random() * allDataByType.length)];
-};
