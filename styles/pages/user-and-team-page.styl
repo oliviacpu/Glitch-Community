@@ -9,20 +9,6 @@
 
     @media (min-width: largeViewport)
       grid-template-columns: 1fr 1fr 1fr
-  .collections-container
-    margin-top: 15px
-    
-  #featured-project-embed
-
-    &.slide-down
-      animation: slideDown 0.1s ease-out
-      animation-fill-mode: forwards
-    &.slide-up
-      animation: slideUpThenShow 0.1s ease-out
-      animation-fill-mode: forwards
-    button.project-options
-      display: block
-      padding-left: 5px
 
   .glitch-embed-wrap
     width: 100%
@@ -54,14 +40,6 @@
 
     .project-options
       display: block
-    
-    .slide-up
-      animation: slideUp 0.1s ease-out
-      animation-fill-mode: forwards
-
-    .slide-down
-      animation: slideDown 0.1s ease-out
-      animation-fill-mode: forwards
   
 .user-page
   .profile-info
@@ -123,6 +101,8 @@
         margin-right: 0px
       img
         opacity: 0.5
+    .add-user-wrap
+      position: relative
     .add-user
       margin-top: 4px
       transition: all .2s

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { Redirect } from 'react-router-dom';
-
 import Helmet from 'react-helmet';
+import { Redirect } from 'react-router-dom';
+import { partition } from 'lodash';
+
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
+import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 import { ProjectsUL } from 'Components/containers/projects-list';
 
 import Layout from '../layout';
@@ -77,13 +78,20 @@ const CollectionPageContents = ({
   addProjectToCollection,
   removeProjectFromCollection,
   updateColor,
-  updateNote,
   displayNewNote,
+  updateNote,
   hideNote,
+  featureProject,
+  unfeatureProject,
   ...props
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
   const userIsLoggedIn = currentUser && currentUser.login;
+  let featuredProject = null;
+  let { projects } = collection;
+  if (collection.featuredProjectId) {
+    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+  }
 
   return (
     <>
@@ -136,10 +144,23 @@ const CollectionPageContents = ({
                 <div className="collection-project-container-header">
                   {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
                 </div>
+                {featuredProject && (
+                  <FeaturedProject
+                    isAuthorized={currentUserIsAuthor}
+                    currentUser={currentUser}
+                    featuredProject={featuredProject}
+                    unfeatureProject={unfeatureProject}
+                    addProjectToCollection={addProjectToCollection}
+                    collection={collection}
+                    displayNewNote={displayNewNote}
+                    updateNote={updateNote}
+                    hideNote={hideNote}
+                  />
+                )}
                 {currentUserIsAuthor && (
                   <ProjectsUL
                     {...props}
-                    projects={collection.projects}
+                    projects={projects}
                     collection={collection}
                     noteOptions={{
                       hideNote,
@@ -150,6 +171,7 @@ const CollectionPageContents = ({
                       removeProjectFromCollection,
                       addProjectToCollection,
                       displayNewNote,
+                      featureProject,
                     }}
                   />
                 )}
@@ -192,14 +214,14 @@ CollectionPageContents.propTypes = {
   deleteCollection: PropTypes.func.isRequired,
   currentUserIsAuthor: PropTypes.bool.isRequired,
   removeProjectFromCollection: PropTypes.func.isRequired,
-  updateNote: PropTypes.func,
   displayNewNote: PropTypes.func,
+  updateNote: PropTypes.func,
   hideNote: PropTypes.func,
 };
 
 CollectionPageContents.defaultProps = {
-  updateNote: null,
   displayNewNote: null,
+  updateNote: null,
   hideNote: null,
 };
 
@@ -227,6 +249,7 @@ async function loadCollection(api, ownerName, collectionName) {
       );
       collection.projects = projectsWithUsers;
     }
+
     return collection;
   } catch (error) {
     if (error && error.response && error.response.status === 404) {

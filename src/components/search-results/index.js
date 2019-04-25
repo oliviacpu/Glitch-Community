@@ -246,6 +246,7 @@ SearchResults.propTypes = {
     user: PropTypes.array.isRequired,
     project: PropTypes.array.isRequired,
     collection: PropTypes.array.isRequired,
+    starterKit: PropTypes.array.isRequired,
   }).isRequired,
   activeFilter: PropTypes.string.isRequired,
   setActiveFilter: PropTypes.func.isRequired,

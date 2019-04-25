@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 
 // TODO: let's move these into components
 import { AuthDescription } from './includes/description-field';
@@ -16,6 +16,7 @@ import { isDarkColor } from '../models/collection';
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function updateNoteVisibility(description) {
     description = _.trim(description);
+
     if (!description || description.length === 0) {
       setTimeout(() => hideNote(project.id), 500);
     }

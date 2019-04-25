@@ -70,29 +70,29 @@ const Router = () => (
         path="/login/facebook"
         exact
         render={({ location }) => (
-          <FacebookLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
+          <FacebookLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
         )}
       />
       <Route
         path="/login/github"
         exact
-        render={({ location }) => <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
       />
       <Route
         path="/login/google"
         exact
-        render={({ location }) => <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
       />
       <Route
         path="/login/slack"
         exact
-        render={({ location }) => <SlackLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => <SlackLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
       />
       <Route
         path="/login/email"
         exact
         render={({ location }) => (
-          <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} hash={parse(location.search, 'hash')} />
+          <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />
         )}
       />
 
@@ -100,7 +100,7 @@ const Router = () => (
         path="/join/@:teamUrl/:joinToken"
         exact
         render={({ match }) => (
-          <JoinTeamPage key={location.key} {...match.params} /> // eslint-disable-line no-restricted-globals
+          <JoinTeamPage key={location.key} {...match.params} />
         )}
       />
 

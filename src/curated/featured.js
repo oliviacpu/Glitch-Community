@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Talks at a Never-ending Tech Conf',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Finfinite-conference.png?1555319742021',
-    link: 'https://glitch.com/~infinite-conference'
+    title: 'Which Domain Costs More?',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fdomainpricing_final.jpg?1549281323718',
+    link: 'https://glitch.com/~domain-pricing'
   },
   {
-    title: 'Rock a Sign Bunny like it\'s 2014',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsign-bunny.png?1555319743076',
-    link: 'https://glitch.com/~sign-bunny'  
+    title: 'Just Take A Moment',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FYourMomentofZen.jpg?1541072010180',
+    link: 'https://glitch.com/~your-moment-of-zen'  
   },  
   {
-    title: 'Random Pixel Blocks',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2F2500%20squares.png?1555319741780',
-    link: 'https://glitch.com/~2500squares'
+    title: 'I\'d Totally Eat That!',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Ffood-hype.jpg?1540206366423',
+    link: 'https://glitch.com/~food-hype'
   }
 ];

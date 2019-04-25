@@ -13,14 +13,6 @@
   a
     color: inherit
     text-decoration: none
-
-.popOver
-  position: absolute
-  overflow: hidden
-  width: 100%
-  z-index: 2
-  box-shadow: pop-shadow
-  border-radius: 3px
   
 .resultGroupHeader
   background-color: secondary-background
@@ -31,14 +23,26 @@
   
 .resultItem
   border-bottom: 1px solid secondary
+    
+.seeAllResults
+  display: block
+  font-weight: 600
   padding: 6px 12px
-  &:hover, &:focus
-    background-color: secondary-background-hover
+
+.resultItem .resultContainer:hover,
+.resultItem .resultContainer:focus,
+.resultItem.selected .resultContainer,
+.seeAllResults:hover,
+.seeAllResults:focus,
+.seeAllResults.selected
+  background-color: general-link
+  color: white
 
 .resultContainer
   display: flex
   flex-direction: row
   align-items: center
+  padding: 6px 12px
 
 .avatarContainer
   flex: 0 0 40px
@@ -63,12 +67,3 @@
 .memberContainer
   flex: 0 0 100px
   padding-left: 4px
-
-.seeAllResults
-  display: block
-  font-weight: 600
-  padding: 6px 12px
-  &:hover, &:focus
-    background-color: secondary-background-hover
-    text-decoration: underline
-      

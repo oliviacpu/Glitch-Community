@@ -49,6 +49,7 @@ try {
 require('dayjs').extend(require('../shared/dayjs-convert'));
 
 const app = express();
+app.enable('trust proxy');
 
 app.use(Sentry.Handlers.requestHandler());
 

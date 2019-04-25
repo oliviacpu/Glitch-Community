@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase } from 'lodash';
 
+import WrappingTextInput from 'Components/inputs/wrapping-text-input';
 import { OptimisticValue, TrimmedValue } from './field-helpers';
-import { PureEditableWrappingField } from './editable-wrapping-field';
 
 // This recreates EditableField but OptimisticValue tracks both the name and url
 // That way the url preview updates in real time as you type into the name field
@@ -17,7 +17,7 @@ const EditCollectionNameAndUrl = ({ name, url, update, isAuthorized }) => {
           {({ value: trimmedValue, update: trimmedUpdate }) => (
             <h1 className="collection-name">
               {isAuthorized ? (
-                <PureEditableWrappingField value={trimmedValue} update={trimmedUpdate} placeholder={placeholder} error={error} />
+                <WrappingTextInput value={trimmedValue} onChange={trimmedUpdate} placeholder={placeholder} error={error} />
               ) : (
                 name
               )}

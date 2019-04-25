@@ -6,14 +6,15 @@ import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
+import UserNameInput from 'Components/fields/user-name-input';
+import UserLoginInput from 'Components/fields/user-login-input';
 
 import { getAvatarStyle, getLink } from '../../models/user';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
 import { AuthDescription } from '../includes/description-field';
-import EditableField from '../includes/editable-field';
 import UserEditor from '../user-editor';
 
 import DeletedProjects from '../deleted-projects';
@@ -47,10 +48,10 @@ const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) =>
   return (
     <>
       <Heading tagName="h1">
-        <EditableField value={editableName} update={updateName} placeholder="What's your name?" />
+        <UserNameInput name={editableName} onChange={updateName} />
       </Heading>
       <Heading tagName="h2">
-        <EditableField value={login} update={updateLogin} prefix="@" placeholder="Nickname?" />
+        <UserLoginInput login={login} onChange={updateLogin} />
       </Heading>
     </>
   );
@@ -144,8 +145,8 @@ const UserPage = ({
         projects={pinnedProjects}
         isAuthorized={isAuthorized}
         removePin={removePin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,
@@ -170,8 +171,8 @@ const UserPage = ({
         projects={recentProjects}
         isAuthorized={isAuthorized}
         addPin={addPin}
+        featureProject={featureProject}
         projectOptions={{
-          featureProject,
           leaveProject,
           deleteProject,
           addProjectToCollection,
