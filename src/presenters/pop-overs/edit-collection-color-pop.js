@@ -43,10 +43,7 @@ class EditCollectionColorPop extends React.Component {
     this.update(newCoverColor);
   }
 
-  handleChange(e) {
-    let query = e.currentTarget.value.trim();
-    const errorMsg = document.getElementsByClassName('editable-field-error-message')[0];
-    errorMsg.style.display = 'none';
+  handleChange(query) {
     this.setState({ error: false, query });
     if (query && query.length <= 7) {
       if (validHex(query)) {
@@ -56,11 +53,11 @@ class EditCollectionColorPop extends React.Component {
         this.setState({ color: query });
         this.update(query);
       } else {
-        errorMsg.style.display = 'inherit';
+        this.setState({ error: true });
       }
     } else {
       // user has cleared the input field
-      errorMsg.style.display = 'inherit';
+      this.setState({ error: true });
     }
   }
 
@@ -69,7 +66,7 @@ class EditCollectionColorPop extends React.Component {
       // enter key pressed - dismiss pop-over
       this.props.togglePopover();
     } else {
-      document.getElementsByClassName('editable-field-error-message')[0].style.display = 'none';
+      this.setState({ error: false });
     }
   }
 
@@ -97,13 +94,14 @@ class EditCollectionColorPop extends React.Component {
 
           <div className="custom-color-input">
             <TextInput
+              opaque
               value={this.state.query}
               onChange={this.handleChange}
               onKeyPress={this.keyPress}
               placeholder="Custom color hex"
+              labelText="Custom color hex"
+              error={this.state.error ? 'Invalid Hex' : null}
             />
-
-            <div className="editable-field-error-message">Invalid Hex</div>
           </div>
         </section>
 
