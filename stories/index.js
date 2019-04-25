@@ -32,6 +32,7 @@ import MoreIdeas from 'Components/more-ideas';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
+import 'Components/profile-container/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
