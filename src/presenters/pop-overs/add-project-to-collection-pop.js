@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { orderBy, remove } from 'lodash';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { captureException } from '../../utils/sentry';
 
 import { useTrackedFunc } from '../segment-analytics';

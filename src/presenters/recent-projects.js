@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 
 import { getAvatarStyle } from '../models/user';
