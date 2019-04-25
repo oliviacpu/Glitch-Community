@@ -8,7 +8,7 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';

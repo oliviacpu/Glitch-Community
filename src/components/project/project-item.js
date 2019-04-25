@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { ProjectLink } from '../../presenters/includes/link';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';

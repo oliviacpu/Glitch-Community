@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 import Image from 'Components/images/image';
+import MaskImage from 'Components/images/mask-image';
 
 import FeaturedItems from '../curated/featured';
 import FeaturedEmbedObject from '../curated/featured-embed';
@@ -13,8 +14,8 @@ import FeaturedEmbed from './featured-embed';
 import { FeaturedCollections } from './featured-collections';
 
 const ZineItems = () => {
-  const [posts] = React.useState(window.ZINE_POSTS.slice(0, 4));
-  const [masks] = React.useState(sampleSize([1, 2, 3, 4, 5], 4));
+  const { current: posts } = useRef(window.ZINE_POSTS.slice(0, 4));
+  const { current: masks } = useRef(sampleSize([1, 2, 3, 4, 5], 4));
   if (!posts.length) {
     return null;
   }
@@ -26,7 +27,7 @@ const ZineItems = () => {
             <Link to={`/culture${url}`}>
               {!!feature_image && (
                 <div className="mask-container">
-                  <img className={`mask mask-${masks[n]}`} src={feature_image} alt="" />
+                  <MaskImage maskClass={`mask${masks[n]}`} src={feature_image} />
                 </div>
               )}
               <div className="zine-item-meta">

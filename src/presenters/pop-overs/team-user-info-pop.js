@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
 import { getAvatarThumbnailUrl, getDisplayName } from '../../models/user';
 
 import { useTrackedFunc } from '../segment-analytics';

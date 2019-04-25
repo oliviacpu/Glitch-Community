@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import Embed from 'Components/project/embed';
+import MaskImage from 'Components/images/mask-image';
 import { Link } from './includes/link';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">
     <div className="mask-container">
       <Link to={`culture${blogUrl}`}>
-        <img className={`mask ${mask}`} src={image} alt="" />
+        <MaskImage maskClass={mask} src={image} />
       </Link>
     </div>
 
