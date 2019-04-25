@@ -72,3 +72,8 @@ const ProperTextInputs = () => {
 };
 
 inputStory.add('optimistic', () => <ProperTextInputs />);
+
+inputStory.add('errors', () => (
+  <>
+    </
+));
