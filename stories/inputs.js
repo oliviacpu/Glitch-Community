@@ -78,7 +78,6 @@ const ProperTextInputs = () => {
 
 inputStory.add('optimistic', () => <ProperTextInputs />);
 
-
 storiesOf('Note', module)
   .add('when authorized', 
   withState({
@@ -91,7 +90,10 @@ storiesOf('Note', module)
         user: pickRandom("users"),
       }}
       project={state}
-      updateNote={(note) => setState({ note })}
+      updateNote={(note) => {
+        setState({ note });
+        Promise.resolve(note);
+      }}
       hideNote={() => setState({ isAddingANewNote: false })}
       isAuthorized={true}
     />
