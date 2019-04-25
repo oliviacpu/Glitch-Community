@@ -139,7 +139,6 @@ const NewStuffContainer = ({ children }) => {
 };
 NewStuffContainer.propTypes = {
   children: PropTypes.func.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
 };
 
 export default NewStuffContainer;

@@ -58,12 +58,12 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
 
 Header.propTypes = {
   searchQuery: PropTypes.string,
-  showNewStuffOverlay: PropTypes.bool,
+  showNewStuffOverlay: PropTypes.func,
 };
 
 Header.defaultProps = {
   searchQuery: '',
-  showNewStuffOverlay: false,
+  showNewStuffOverlay: () => {},
 };
 
 export default Header;
