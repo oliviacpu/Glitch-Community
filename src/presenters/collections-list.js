@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { useTrackedFunc } from './segment-analytics';
 import CollectionItem from './collection-item';
 import { getLink, createCollection } from '../models/collection';

@@ -6,10 +6,10 @@ import Image from 'Components/images/image';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
+import DataLoader from 'Components/data-loader';
 import Layout from '../layout';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
 import ProjectsLoader from '../projects-loader';
 
 import CollectionEditor from '../collection-editor';
