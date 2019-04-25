@@ -18,6 +18,7 @@ import UserLoginInput from 'Components/fields/user-login-input';
 import Note from 'Components/collection/note';
 
 import { pickRandom } from './data';
+import { withState } from './util';
 
 const inputStory = storiesOf('Input Fields', module);
 
@@ -78,78 +79,63 @@ const ProperTextInputs = () => {
 inputStory.add('optimistic', () => <ProperTextInputs />);
 
 
-// const mockHideNote = () => console.log("hide note would have been called")
-// const mockUpdateNote = (defaultProject) => {
-//   const [value, setValue] = React.useState(defaultProject.note);
-//   const update = async (newValue) => {
-//     console.log("update note would have pinged the server now")
-//     await new Promise((resolve) => setTimeout(resolve, 300));
-//     if (newValue === 'error') {
-//       throw 'error is no good!';
-//     }
-//     setValue(newValue);
-//   };
-//   return { update, project: {...defaultProject, note: value} };
-// };
-
-
 storiesOf('Note', module)
-  .add('when authorized', withState('note', ({ state, setState }) => (
-
+  .add('when authorized', 
+  withState({
+    note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
+    isAddingANewNote: true
+  }, ({ state, setState }) => (
     <Note
       collection={{
         coverColor: "#bfabf2",
         user: pickRandom("users"),
       }}
-      project={{
-        note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
-        isAddingANewNote: true
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
+      project={state}
+      updateNote={(note) => setState({ note })}
+      hideNote={() => setState({ isAddingANewNote: false })}
       isAuthorized={true}
     />
-  ))
-  .add('empty state', () => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "",
-        isAddingANewNote: true
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={true}
-    />
-  ))
-  .add('when unauthorized', () => (
-    <Note
-      collection={{
-        coverColor: "#bfabf2",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "this note you do not own, you can not edit it, you can not hide it"
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={false}
-    />
-  ))
-  .add('dark notes', () => (
-    <Note
-      collection={{
-        coverColor: "#000000",
-        user: pickRandom("users"),
-      }}
-      project={{
-        note: "text color is lightened for dark backgrounds"
-      }}
-      updateNote={mockUpdateNote}
-      hideNote={mockHideNote}
-      isAuthorized={true}
-    />
-  ));
+  )))
+  // .add('empty state', () => (
+  //   <Note
+  //     collection={{
+  //       coverColor: "#bfabf2",
+  //       user: pickRandom("users"),
+  //     }}
+  //     project={{
+  //       note: "",
+  //       isAddingANewNote: true
+  //     }}
+  //     updateNote={mockUpdateNote}
+  //     hideNote={mockHideNote}
+  //     isAuthorized={true}
+  //   />
+  // ))
+  // .add('when unauthorized', () => (
+  //   <Note
+  //     collection={{
+  //       coverColor: "#bfabf2",
+  //       user: pickRandom("users"),
+  //     }}
+  //     project={{
+  //       note: "this note you do not own, you can not edit it, you can not hide it"
+  //     }}
+  //     updateNote={mockUpdateNote}
+  //     hideNote={mockHideNote}
+  //     isAuthorized={false}
+  //   />
+  // ))
+  // .add('dark notes', () => (
+  //   <Note
+  //     collection={{
+  //       coverColor: "#000000",
+  //       user: pickRandom("users"),
+  //     }}
+  //     project={{
+  //       note: "text color is lightened for dark backgrounds"
+  //     }}
+  //     updateNote={mockUpdateNote}
+  //     hideNote={mockHideNote}
+  //     isAuthorized={true}
+  //   />
+  // ));
