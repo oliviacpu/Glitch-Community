@@ -39,7 +39,7 @@ const getStyle = {
 const ProjectProfileContainer = ({ item, children, avatarActions }) => (
   <div className={styles.profileWrap}>
     <div className={styles.avatarContainer}>
-      <div className={styles.avatar} style={getStyle.project(item)} />
+      <div className={classnames(styles.avatar, styles.project)} style={getStyle.project(item)} />
       <div className={styles.avatarButtons}>
         <TrackedButtonGroup items={avatarActions} />
       </div>
@@ -47,26 +47,19 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => (
     <div className={styles.profileInfo}>{children}</div>
   </div>
 );
-ProjectProfileContainer.propTypes = {
-  style: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  buttons: PropTypes.element,
-};
-ProjectProfileContainer.defaultProps = {
-  buttons: null,
-};
 
 const ProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => {
   if (type === 'project') {
     return (
-      <ProjectrProfileContainer item={item} avatarActions={avatarActions}>
+      <ProjectProfileContainer item={item} avatarActions={avatarActions}>
         {children}
-      </ProjectrProfileContainer>
+      </ProjectProfileContainer>
     );
   }
+  const hasTeams = !!(teams && teams.length);
   return (
     <CoverContainer type={type} item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
-      <div className={styles.profileWrap}>
+      <div className={classnames(styles.profileWrap, hasTeams && styles.hasTeams)}>
         <div className={styles.avatarContainer}>
           <div className={classnames(styles.avatar, styles[type])} style={getStyle[type](item)} />
           <div className={styles.avatarButtons}>
@@ -75,7 +68,7 @@ const ProfileContainer = ({ item, type, children, avatarActions, coverActions, t
         </div>
         <div className={styles.profileInfo}>{children}</div>
       </div>
-      {!!teams && !!teams.length && (
+      {hasTeams && (
         <div className={styles.teamsContainer}>
           <ProfileList layout="block" teams={teams} />
         </div>

@@ -118,10 +118,14 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
             update={updateDescription}
             placeholder="Tell us about your app"
           />
-          <p className="buttons">
-            <ShowButton name={domain} />
-            <EditButton name={domain} isMember={isAuthorized} />
-          </p>
+          <div className="project-page__profile-button-wrap">
+            <span className="project-page__profile-button">
+              <ShowButton name={domain} />
+            </span>
+            <span className="project-page__profile-button">
+              <EditButton name={domain} isMember={isAuthorized} />
+            </span>
+          </div>
         </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
