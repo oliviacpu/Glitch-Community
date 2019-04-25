@@ -13,7 +13,7 @@ import styles from './project-embed.styl';
 
 const cx = classNames.bind(styles);
 
-const ProjectEmbed = ({ project, topLeft, topRight, isAuthorized, currentUser, addProjectToCollection }) => {
+const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCollection }) => {
   const trackRemix = useTracker('Click Remix', {
     baseProjectId: project.id,
     baseDomain: project.domain,
@@ -44,10 +44,7 @@ const ProjectEmbed = ({ project, topLeft, topRight, isAuthorized, currentUser, a
 
   return (
     <section className={styles.projectEmbed}>
-      <div className={styles.buttonContainer}>
-        <div className={styles.left}>{topLeft}</div>
-        <div className={styles.right}>{topRight}</div>
-      </div>
+      {top}
       <div className={styles.embedWrap}>
         <Embed domain={project.domain} />
       </div>
@@ -68,14 +65,12 @@ ProjectEmbed.propTypes = {
   currentUser: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   addProjectToCollection: PropTypes.func,
-  topLeft: PropTypes.any,
-  topRight: PropTypes.any,
+  top: PropTypes.any,
 };
 
 ProjectEmbed.defaultProps = {
   addProjectToCollection: null,
-  topLeft: null,
-  topRight: null,
+  top: null,
 };
 
 export default ProjectEmbed;

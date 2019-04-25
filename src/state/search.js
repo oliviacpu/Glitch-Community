@@ -1,6 +1,6 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
-import { useState, useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
 import { mapValues, sumBy } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';
@@ -46,31 +46,45 @@ const getTopResults = (resultsByType, query) =>
 function useSearchProvider(provider, query, params) {
   const { handleError } = useErrorHandlers();
   const emptyResults = mapValues(provider, () => []);
-  const [results, setResults] = useState(emptyResults);
-  const [status, setStatus] = useState('init');
+  const initialState = {
+    status: 'init',
+    totalHits: 0,
+    topResults: [],
+    ...emptyResults,
+  };
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'clearQuery':
+        return initialState;
+      case 'loading':
+        return { ...state, status: 'loading' };
+      case 'ready': {
+        const resultsWithEmpties = { ...emptyResults, ...action.payload };
+        return {
+          status: 'ready',
+          totalHits: sumBy(Object.values(action.payload), (items) => items.length),
+          topResults: getTopResults(resultsWithEmpties, query),
+          ...resultsWithEmpties,
+        };
+      }
+      default:
+        return state;
+    }
+  };
+  const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     if (!query) {
-      setResults(emptyResults);
+      dispatch({ type: 'clearQuery' });
       return;
     }
-    setStatus('loading');
+    dispatch({ type: 'loading' });
     allByKeys(mapValues(provider, (index) => index(query, params)))
       .then((res) => {
-        setResults(res);
-        setStatus('ready');
+        dispatch({ type: 'ready', payload: res });
       })
       .catch(handleError);
   }, [query, params]);
-
-  const totalHits = sumBy(Object.values(results), (items) => items.length);
-  const resultsWithEmpties = { ...emptyResults, ...results };
-
-  return {
-    status,
-    totalHits,
-    topResults: getTopResults(resultsWithEmpties, query),
-    ...resultsWithEmpties,
-  };
+  return state;
 }
 
 // algolia search

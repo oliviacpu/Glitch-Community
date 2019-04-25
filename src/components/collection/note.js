@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 
 import styles from './note.styl';
 
-// TODO: let's move these into components
-import { AuthDescription } from '../../presenters/includes/description-field';
-
 import { isDarkColor } from '../../models/collection';
+
+import AuthDescription from '../../presenters/includes/auth-description';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +19,7 @@ const cx = classNames.bind(styles);
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function hideEmptyNote(description) {
     description = _.trim(description);
+
     if (!description || description.length === 0) {
       setTimeout(() => hideNote(project.id), 500);
     }

@@ -7,7 +7,8 @@ import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
-import ProfileList from 'Components/profile/profile-list';
+import ProfileList from 'Components/profile-list';
+import ProjectDomainInput from 'Components/fields/project-domain-input';
 import { getAvatarUrl } from '../../models/project';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -15,9 +16,7 @@ import { AnalyticsContext } from '../segment-analytics';
 import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
-import EditableField from '../includes/editable-field';
-import { AuthDescription } from '../includes/description-field';
-import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
+import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
 
 import RelatedProjects from '../includes/related-projects';
@@ -64,6 +63,26 @@ PrivateToggle.propTypes = {
   setPrivate: PropTypes.func.isRequired,
 };
 
+const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
+
+export const ProjectInfoContainer = ({ style, children, buttons }) => (
+  <>
+    <div className="avatar-container">
+      <div className="user-avatar" style={style} />
+      {buttons}
+    </div>
+    <div className="profile-information">{children}</div>
+  </>
+);
+ProjectInfoContainer.propTypes = {
+  style: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
+  buttons: PropTypes.element,
+};
+ProjectInfoContainer.defaultProps = {
+  buttons: null,
+};
+
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
     <>
@@ -97,11 +116,10 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
           <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
             <Heading tagName="h1">
               {isAuthorized ? (
-                <EditableField
-                  value={domain}
-                  placeholder="Name your project"
-                  update={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  suffix={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+                <ProjectDomainInput
+                  domain={domain}
+                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
+                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
                 />
               ) : (
                 <>
@@ -127,7 +145,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
           </ProjectInfoContainer>
         </InfoContainer>
       </section>
-      <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+      <div className="project-embed-wrap">
+        <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+      </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>

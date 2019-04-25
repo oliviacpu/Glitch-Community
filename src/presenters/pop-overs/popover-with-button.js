@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PopoverContainer from './popover-container';
 
-const PopoverWithButton = ({ dataTrack, containerClass, buttonClass, buttonText, children: renderChildren }) => (
-  <PopoverContainer>
+const PopoverWithButton = ({ dataTrack, containerClass, buttonClass, buttonText, children: renderChildren, onOpen }) => (
+  <PopoverContainer onOpen={onOpen}>
     {({ visible, togglePopover }) => (
       <div className={`button-wrap ${containerClass}`}>
         <button className={buttonClass} data-track={dataTrack} onClick={togglePopover} type="button">
@@ -21,12 +21,14 @@ PopoverWithButton.propTypes = {
   dataTrack: PropTypes.string,
   buttonText: PropTypes.node.isRequired,
   children: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
 };
 
 PopoverWithButton.defaultProps = {
   buttonClass: '',
   containerClass: '',
   dataTrack: '',
+  onOpen: null,
 };
 
 export default PopoverWithButton;

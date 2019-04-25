@@ -55,34 +55,31 @@ class CollectionEditor extends React.Component {
 
   async updateNote({ note, projectId }) {
     note = _.trim(note);
-    this.setState(({ projects }) => ({
-      projects: projects.map((project) => {
-        if (project.id === projectId) {
-          project.note = note;
-          project.isAddingANewNote = true;
-        }
-        return { ...project };
-      }),
-    }));
     await this.props.api.patch(`collections/${this.state.id}/project/${projectId}`, { annotation: note });
+    this.updateProject({ note, isAddingANewNote: true }, projectId);
   }
 
   displayNewNote(projectId) {
-    this.setState(({ projects }) => ({
-      projects: projects.map((project) => {
-        if (project.id === projectId) {
-          project.isAddingANewNote = true;
-        }
-        return { ...project };
-      }),
-    }));
+    this.updateProject({ isAddingANewNote: true }, projectId);
   }
 
   hideNote(projectId) {
+    this.updateProject({ isAddingANewNote: false }, projectId);
+  }
+
+  async featureProject(id) {
+    if (this.state.featuredProjectId) {
+      // this is needed to force an dismount of an optimistic state value of a note and to ensure the old featured collection goes where it's supposed to.
+      this.setState({ featuredProjectId: null });
+    }
+    await this.updateFields({ featuredProjectId: id });
+  }
+
+  updateProject(projectUpdates, projectId) {
     this.setState(({ projects }) => ({
       projects: projects.map((project) => {
         if (project.id === projectId) {
-          project.isAddingANewNote = false;
+          return { ...project, ...projectUpdates };
         }
         return { ...project };
       }),
@@ -96,11 +93,13 @@ class CollectionEditor extends React.Component {
       removeProjectFromCollection: (project) => this.removeProjectFromCollection(project).catch(handleError),
       deleteCollection: () => this.deleteCollection().catch(handleError),
       updateNameAndUrl: ({ name, url }) => this.updateFields({ name, url }).catch(handleErrorForInput),
-      updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       displayNewNote: (projectId) => this.displayNewNote(projectId),
+      updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updateColor: (color) => this.updateFields({ coverColor: color }),
+      featureProject: (id) => this.featureProject(id).catch(handleError),
+      unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
     };
     return this.props.children(this.state, funcs, this.currentUserIsAuthor());
   }

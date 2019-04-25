@@ -5,7 +5,7 @@ import { uniqBy } from 'lodash';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
 import { getDisplayName } from '../../models/user';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTracker } from '../segment-analytics';
 import { WhitelistedDomainIcon } from './team-elements';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
@@ -117,106 +117,80 @@ WhitelistedDomain.defaultProps = {
 
 // Add Team User
 
-export class AddTeamUser extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      invitee: '',
-      newlyInvited: [],
-    };
-    this.removeNotifyInvited = this.removeNotifyInvited.bind(this);
-  }
+export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...props }) => {
+  const [invitee, setInvitee] = React.useState('');
+  const [newlyInvited, setNewlyInvited] = React.useState([]);
 
-  async setWhitelistedDomain(togglePopover, domain) {
+  const alreadyInvitedAndNewInvited = uniqBy(props.invitedMembers.concat(newlyInvited), (user) => user.id);
+  const track = useTracker('Add to Team clicked');
+
+  const onSetWhitelistedDomain = async (togglePopover, domain) => {
     togglePopover();
-    await this.props.setWhitelistedDomain(domain);
-  }
+    await setWhitelistedDomain(domain);
+  };
 
-  async inviteUser(togglePopover, user) {
+  const onInviteUser = async (togglePopover, user) => {
     togglePopover();
-
-    this.setState((state) => ({
-      invitee: getDisplayName(user),
-      newlyInvited: [...state.newlyInvited, user],
-    }));
+    setInvitee(getDisplayName(user));
+    setNewlyInvited((invited) => [...invited, user]);
     try {
-      await this.props.inviteUser(user);
+      await inviteUser(user);
     } catch (error) {
-      this.setState((state) => ({
-        invitee: '',
-        newlyInvited: state.newlyInvited.filter((u) => u.id !== user.id),
-      }));
+      setInvitee('');
+      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
     }
-  }
+  };
 
-  async inviteEmail(togglePopover, email) {
+  const onInviteEmail = async (togglePopover, email) => {
     togglePopover();
-    this.setState({
-      invitee: email,
-    });
+    setInvitee(email);
     try {
-      await this.props.inviteEmail(email);
+      await inviteEmail(email);
     } catch (error) {
-      this.setState({
-        invitee: '',
-      });
+      setInvitee('');
     }
-  }
+  };
 
-  removeNotifyInvited() {
-    this.setState({
-      invitee: '',
-    });
-  }
+  const removeNotifyInvited = () => {
+    setInvitee('');
+  };
 
-  render() {
-    const alreadyInvitedAndNewInvited = uniqBy(this.props.invitedMembers.concat(this.state.newlyInvited), (user) => user.id);
-    const { inviteEmail, inviteUser, setWhitelistedDomain, ...props } = this.props;
-    return (
-      <PopoverContainer>
-        {({ visible, togglePopover }) => {
-          const onClickToggle = useTrackedFunc(togglePopover, 'Add to Team clicked');
-          return (
-            <span className="add-user-container">
-              <ul className="users">
-                {alreadyInvitedAndNewInvited.map((user) => (
-                  <li key={user.id}>
-                    <UserLink user={user} className="user">
-                      <UserAvatar user={user} />
-                    </UserLink>
-                  </li>
-                ))}
-              </ul>
-
-              <button onClick={onClickToggle} className="button button-small button-tertiary add-user">
-                Add
-              </button>
-              {!!this.state.invitee && (
-                <div className="notification notifySuccess inline-notification" onAnimationEnd={this.removeNotifyInvited}>
-                  Invited {this.state.invitee}
-                </div>
-              )}
-              {visible && (
-                <AddTeamUserPop
-                  {...props}
-                  setWhitelistedDomain={setWhitelistedDomain ? (domain) => this.setWhitelistedDomain(togglePopover, domain) : null}
-                  inviteUser={inviteUser ? (user) => this.inviteUser(togglePopover, user) : null}
-                  inviteEmail={inviteEmail ? (email) => this.inviteEmail(togglePopover, email) : null}
-                />
-              )}
-            </span>
-          );
-        }}
-      </PopoverContainer>
-    );
-  }
-}
+  return (
+    <span className="add-user-container">
+      <ul className="users">
+        {alreadyInvitedAndNewInvited.map((user) => (
+          <li key={user.id}>
+            <UserLink user={user} className="user">
+              <UserAvatar user={user} />
+            </UserLink>
+          </li>
+        ))}
+      </ul>
+      <span className="add-user-wrap">
+        <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
+          {({ togglePopover }) => (
+            <AddTeamUserPop
+              {...props}
+              setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
+              inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
+              inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
+            />
+          )}
+        </PopoverWithButton>
+        {!!invitee && (
+          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+            Invited {invitee}
+          </div>
+        )}
+      </span>
+    </span>
+  );
+};
 AddTeamUser.propTypes = {
   inviteEmail: PropTypes.func,
   inviteUser: PropTypes.func,
   setWhitelistedDomain: PropTypes.func,
 };
-
 AddTeamUser.defaultProps = {
   setWhitelistedDomain: null,
   inviteUser: null,

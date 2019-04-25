@@ -16,37 +16,35 @@ import styles from './projects-list.styl';
 
 const cx = classNames.bind(styles);
 
-function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, ...props }) {
+function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, projects, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
 
-  let { projects } = props;
-
   function filterProjects() {
     setIsDoneFiltering(false);
-
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredProjects(props.projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
+      setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
       setFilteredProjects([]);
     }
   }
 
+  useEffect(() => filterProjects(), [projects]);
   useEffect(() => debounce(filterProjects, 400)(), [filter]);
 
   const filtering = validFilter && isDoneFiltering;
-  projects = filtering ? filteredProjects : projects;
+  const displayedProjects = filtering ? filteredProjects : projects;
 
   let projectsEl;
   if (enablePagination) {
-    projectsEl = <PaginatedProjects {...props} projects={projects} />;
+    projectsEl = <PaginatedProjects {...props} projects={displayedProjects} />;
   } else {
-    projectsEl = <ProjectsUL {...props} projects={projects} />;
+    projectsEl = <ProjectsUL {...props} projects={displayedProjects} />;
   }
 
   const placeholderEl = filtering ? (
@@ -75,8 +73,7 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
           />
         ) : null}
       </div>
-
-      {projects.length ? projectsEl : placeholderEl}
+      {displayedProjects.length ? projectsEl : placeholderEl}
     </article>
   );
 }

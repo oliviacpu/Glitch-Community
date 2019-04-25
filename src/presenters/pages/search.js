@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 
-import SearchResults from 'Components/search/search-results';
+import SearchResults from 'Components/search-results';
 import NotFound from 'Components/errors/not-found';
+import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
-import MoreIdeas from '../more-ideas';
 
 import { useAlgoliaSearch, useLegacySearch } from '../../state/search';
 import useDevToggle from '../includes/dev-toggles';

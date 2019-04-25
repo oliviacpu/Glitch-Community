@@ -4,17 +4,18 @@ import classnames from 'classnames';
 import { sample } from 'lodash';
 import styles from './mask-image.styl';
 
-const maskClasses = ['mask1', 'mask2', 'mask3', 'mask4'];
+const maskClassesWithDash = ['mask-1', 'mask-2', 'mask-3', 'mask-4', 'mask-5'];
+const maskClasses = maskClassesWithDash.map((className) => className.replace('-', ''));
 
 const MaskImage = ({ maskClass: controlledMaskClass, ...props }) => {
   const randomMaskClass = useRef(sample(maskClasses));
   const maskClass = controlledMaskClass || randomMaskClass.current;
 
-  return <img {...props} alt="" className={classnames(styles.mask, styles[maskClass])} />;
+  return <img alt="" {...props} className={classnames(styles.mask, styles[maskClass.replace('-', '')])} />;
 };
 
 MaskImage.propTypes = {
-  maskClass: PropTypes.oneOf(maskClasses),
+  maskClass: PropTypes.oneOf([...maskClasses, ...maskClassesWithDash]),
 };
 
 MaskImage.defaultProps = {

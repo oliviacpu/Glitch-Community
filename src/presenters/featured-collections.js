@@ -5,7 +5,7 @@ import { sampleSize, flatMap, uniq } from 'lodash';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import { ProjectsUL } from 'Components/containers/projects-list';
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 import { captureException } from '../utils/sentry';
 
 import { featuredCollections } from '../curated/collections';
