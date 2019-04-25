@@ -5,6 +5,8 @@ import Pluralize from 'react-pluralize';
 import { Redirect } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
+import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
+
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -15,7 +17,6 @@ import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 
 import Layout from '../layout';
-import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
 
 import { AnalyticsContext } from '../segment-analytics';
 import AuthDescription from '../includes/auth-description';
