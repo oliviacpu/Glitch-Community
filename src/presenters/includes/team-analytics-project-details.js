@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { ProjectLink } from './link';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from '../../models/project';
 import { useAPI } from '../../state/api';

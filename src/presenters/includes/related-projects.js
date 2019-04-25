@@ -4,10 +4,10 @@ import { sampleSize, difference } from 'lodash';
 
 import { ProjectsUL } from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
+import DataLoader from 'Components/data-loader';
 
 import { getDisplayName } from '../../models/user';
 
-import { DataLoader } from './loader';
 import { TeamLink, UserLink } from './link';
 import { useAPI } from '../../state/api';
 
