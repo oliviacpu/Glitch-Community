@@ -10,16 +10,15 @@ import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import ProfileContainer from 'Components/profile-container';
+import DataLoader from 'Components/data-loader';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-
 import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';

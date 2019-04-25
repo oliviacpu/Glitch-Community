@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
 import CoverContainer from 'Components/containers/cover-container';
+import DataLoader from 'Components/data-loader';
 
+import { UserLink, TeamLink } from 'Components/link';
 import { getSingleItem } from '../../shared/api';
 
 import { getDisplayName } from '../models/user';
-
-import { DataLoader } from './includes/loader';
-import { UserLink, TeamLink } from './includes/link';
 
 import CollectionItem from './collection-item';
 

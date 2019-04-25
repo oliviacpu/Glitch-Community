@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'Components/images/image';
 
-import { getEditorUrl } from '../models/project';
-import { Link } from './includes/link';
+import Image from 'Components/images/image';
+import { getEditorUrl } from 'Models/project';
+import Link from 'Components/link';
 
 const iconHelp = 'https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fask-for-help.svg?1494954687906';
 
