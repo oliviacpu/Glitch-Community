@@ -8,8 +8,8 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
-import Thanks from 'Components/blocks/thanks';
 import ProjectsList from 'Components/containers/projects-list';
+import Thanks from 'Components/thanks';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';

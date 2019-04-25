@@ -18,8 +18,8 @@ import ProjectItem from 'Components/project/project-item';
 import SmallCollectionItem from 'Components/collection/small-collection-item';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
-import SearchResultCoverBar from 'Components/blocks/search-result-cover-bar';
-import Thanks from 'Components/blocks/thanks';
+import SearchResultCoverBar from 'Components/search-result-cover-bar';
+import Thanks from 'Components/thanks';
 import Loader from 'Components/loaders/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
@@ -28,6 +28,7 @@ import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
+import MoreIdeas from 'Components/more-ideas';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import { users, teams, projects, collections } from './data';
@@ -421,3 +422,5 @@ storiesOf('CoverContainer', module)
       </div>
     </CoverContainer>
   ));
+
+storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
