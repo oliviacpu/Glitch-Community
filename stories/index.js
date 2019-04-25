@@ -432,6 +432,12 @@ storiesOf('CoverContainer', module)
   ))
 
 
+const mockUpdateNote = (note) => {
+  console.log("update note would have been called")
+  return Promise.resolve(note)
+}
+
+const mockHideNote = () => console.log("hide note would have been called")
 
 storiesOf('Note', module)
   .add('when authorized', () => (
@@ -444,8 +450,8 @@ storiesOf('Note', module)
         note: "this note you own and thus you can edit if you so desire. As you type updates are called to ping the server with the latest, open the console to see when things fire off",
         isAddingANewNote: true
       }}
-      updateNote={() => console.log("update note would have been called")}
-      hideNote={() => console.log("hide note would have been called")}
+      updateNote={mockUpdateNote}
+      hideNote={mockHideNote}
       isAuthorized={true}
     />
   ))
@@ -459,8 +465,8 @@ storiesOf('Note', module)
         note: "",
         isAddingANewNote: true
       }}
-      updateNote={() => console.log("update note would have been called")}
-      hideNote={() => console.log("hide note would have been called")}
+      updateNote={mockUpdateNote}
+      hideNote={mockHideNote}
       isAuthorized={true}
     />
   ))
@@ -473,8 +479,8 @@ storiesOf('Note', module)
       project={{
         note: "this note you do not own, you can not edit it, you can not hide it"
       }}
-      updateNote={() => console.log("update note would have been called")}
-      hideNote={() => console.log("hide note would have been called")}
+      updateNote={mockUpdateNote}
+      hideNote={mockHideNote}
       isAuthorized={false}
     />
   ))
@@ -487,8 +493,8 @@ storiesOf('Note', module)
       project={{
         note: "text color is lightened for dark backgrounds"
       }}
-      updateNote={() => console.log("update note would have been called")}
-      hideNote={() => console.log("hide note would have been called")}
+      updateNote={mockUpdateNote}
+      hideNote={mockHideNote}
       isAuthorized={true}
     />
   ));
