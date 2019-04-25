@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { ProfileItem } from 'Components/profile-list';
 
 // TODO: let's move these into components
-import { AuthDescription } from './includes/description-field';
+import AuthDescription from './includes/auth-description';
 
 import { isDarkColor } from '../models/collection';
 
@@ -36,14 +36,16 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   return (
     <div className="note">
       <div className={className} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
-        <AuthDescription
-          authorized={isAuthorized}
-          description={project.note || ''}
-          placeholder="Share why you love this app."
-          update={(note) => updateNote({ note, projectId: project.id })}
-          onBlur={updateNoteVisibility}
-          allowImages
-        />
+        <div className="description">
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.note || ''}
+            placeholder="Share why you love this app."
+            update={(note) => updateNote({ note, projectId: project.id })}
+            onBlur={updateNoteVisibility}
+            allowImages
+          />
+        </div>
       </div>
       <div className="user">
         <ProfileItem user={collection.user} team={collection.team} />

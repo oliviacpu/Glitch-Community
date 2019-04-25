@@ -67,6 +67,10 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     animate(event, 'slide-down', () => props.deleteProject(props.project.id));
   }
 
+  function animateThenRemoveProjectFromTeam(event) {
+    animate(event, 'slide-down', () => props.removeProjectFromTeam(props.project.id));
+  }
+
   function featureProject(event) {
     animate(event, 'slide-up', () => props.featureProject(props.project.id));
   }
@@ -134,7 +138,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
       {(props.currentUserIsOnProject || !!props.removeProjectFromTeam) && !props.removeProjectFromCollection && (
         <section className="pop-over-actions danger-zone last-section">
           {!!props.removeProjectFromTeam && (
-            <PopoverButton onClick={() => props.removeProjectFromTeam(props.project.id)} text="Remove Project " emoji="thumbs_down" />
+            <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />
           )}
 
           {props.currentUserIsOnProject && !props.removeProjectFromCollection && (
