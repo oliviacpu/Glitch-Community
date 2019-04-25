@@ -91,7 +91,7 @@ storiesOf('Note', module)
       }}
       project={state}
       updateNote={async (note) => {
-        setState({ note });
+        setState(note);
         await new Promise((resolve) => setTimeout(resolve(note), 300));
       }}
       hideNote={() => setState({ isAddingANewNote: false })}
