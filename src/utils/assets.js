@@ -153,7 +153,7 @@ export function getTeamCoverImagePolicy(api, id) {
 }
 
 export function getProjectAvatarImagePolicy(api, id) {
-  return api.get(`projects/${id}/avatar/policy`);
+  return api.get(`projects/${id}/policy`);
 }
 
 export function uploadAsset(blob, policy, key) {

@@ -32,7 +32,7 @@ class ProjectEditor extends React.Component {
 
   async uploadAvatar(blob) {
     const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
-    await this.props.uploadAsset(blob, policy, 'temporary-user-avatar');
+    await this.props.uploadAsset(blob, policy, blob.name);
     // TODO: bust cache?
   }
 
