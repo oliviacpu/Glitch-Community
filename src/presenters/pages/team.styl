@@ -60,12 +60,13 @@
   // team-users
   :global
     .users
-      display: inline // ?
+      display: inline
       margin-right: 5px
-    .user li
+      padding: 1px 0 0;
+      vertical-align: middle
+    .users > li
+      display: inline-grid
       margin-right: -7px
-    .user img.whitelisted-domain
-      margin: auto
     .whitelisted-domain-container
       vertical-align: top
       margin-top: 5px
@@ -90,3 +91,20 @@
     .join-team-button
       vertical-align: top
       margin-top: 3px
+    // team-elements
+    .whitelisted-domain
+      display: inline-block
+      width: 22px
+      height: 22px
+    div.whitelisted-domain
+      display: inline-flex
+      justify-content: center
+      align-items: center
+      background-color: line-on-secondary-background
+      font-size: 13px
+      font-weight: 600
+      color: white
+      border-radius: 3px
+    img.whitelisted-domain
+      object-fit: contain
+      margin: auto
