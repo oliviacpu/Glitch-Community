@@ -156,8 +156,8 @@ export function getProjectAvatarImagePolicy(api, id) {
   return api.get(`projects/${id}/avatar/policy`);
 }
 
-export function uploadAsset(blob, policy, key, cacheControl) {
-  return S3Uploader(policy).upload({ key, blob, cacheControl });
+export function uploadAsset(blob, policy, key, options = {}) {
+  return S3Uploader(policy).upload({ key, blob, ...options });
 }
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
