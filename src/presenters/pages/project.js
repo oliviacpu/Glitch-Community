@@ -9,7 +9,7 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
-import ProjectProfileContainer from 'Components/project-profile-container';
+import ProfileContainer from 'Components/profile-container';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -95,7 +95,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
   return (
     <main className="project-page">
       <section id="info">
-          <ProjectProfileContainer project={project}>
+          <ProfileContainer type="project" item={project}>
             <Heading tagName="h1">
               {isAuthorized ? (
                 <ProjectDomainInput
@@ -124,7 +124,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
               <ShowButton name={domain} />
               <EditButton name={domain} isMember={isAuthorized} />
             </p>
-          </ProjectProfileContainer>
+          </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
