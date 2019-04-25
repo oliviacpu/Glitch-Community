@@ -95,7 +95,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
+function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -149,7 +149,7 @@ function DeleteProjectBtn({ projectDomain, deleteProject, currentUser }) {
   );
 }
 
-DeleteProjectBtn.propTypes = {
+DeleteProjectButton.propTypes = {
   currentUser: PropTypes.object.isRequired,
   deleteProject: PropTypes.func.isRequired,
 };
@@ -208,7 +208,7 @@ const ProjectPage = ({
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectBtn projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProjectButton projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
