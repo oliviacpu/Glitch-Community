@@ -8,6 +8,7 @@ import { useTracker } from '../segment-analytics';
 import { Link } from '../includes/link';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
+import { useCurrentUser } from '../../state/current-user';
 
 import newStuffLog from '../../curated/new-stuff-log';
 
@@ -116,9 +117,11 @@ NewStuff.propTypes = {
   setNewStuffReadId: PropTypes.func.isRequired,
 };
 
-const NewStuffContainer = ({ children, isSignedIn }) => {
+const NewStuffContainer = ({ children }) => {
+  const { currentUser } = useCurrentUser();
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
+  const isSignedIn = !!currentUser && !!currentUser.login;
 
   return (
     <NewStuff

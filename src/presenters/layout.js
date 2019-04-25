@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
-import Header from './header';
+import Header from 'Components/header';
+import NewStuffContainer from './new-stuff';
 import Footer from './footer';
 import ErrorBoundary from './includes/error-boundary';
 import Konami from './includes/konami';
@@ -11,7 +12,9 @@ import Konami from './includes/konami';
 const Layout = ({ children, searchQuery }) => (
   <div className="content">
     <Helmet title="Glitch" />
-    <Header searchQuery={searchQuery} />
+    <NewStuffContainer>
+      {(showNewStuffOverlay) => <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />}
+    </NewStuffContainer>
     <ErrorBoundary>{children}</ErrorBoundary>
     <Footer />
     <ErrorBoundary fallback={null}>
