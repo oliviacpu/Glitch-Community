@@ -9,15 +9,15 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
+import ProfileContainer from 'Components/profile-container';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
-import { getLink, getAvatarStyle } from '../../models/team';
+import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
-import { ProfileContainer, ImageButtons } from '../includes/profile';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 
@@ -145,15 +145,15 @@ class TeamPage extends React.Component {
             </div>
           </a>
           <ProfileContainer
-            avatarStyle={getAvatarStyle({ ...team, cache: team._cacheAvatar })} // eslint-disable-line
             item={team}
             type="team"
-            avatarButtons={this.props.currentUserIsTeamAdmin ? <ImageButtons name="Avatar" uploadImage={this.props.uploadAvatar} /> : null}
-            coverButtons={
-              this.props.currentUserIsTeamAdmin ? (
-                <ImageButtons name="Cover" uploadImage={this.props.uploadCover} clearImage={team.hasCoverImage ? this.props.clearCover : null} />
-              ) : null
-            }
+            coverActions={{
+              'Upload Cover': this.props.currentUserIsTeamAdmin ? this.props.uploadCover : null,
+              'Clear Cover': this.props.currentUserIsTeamAdmin && team.hasCoverImage ? this.props.clearCover : null,
+            }}
+            avatarActions={{
+              'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
+            }}
           >
             {this.props.currentUserIsTeamAdmin ? (
               <TeamNameUrlFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
