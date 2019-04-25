@@ -112,6 +112,7 @@ const formatByType = {
   collection: (collection) => ({
     coverColor: '#eee',
     color: '#eee',
+    description: '',
     ...collection,
     id: Number(collection.objectID.replace('collection-', '')),
     team: null,
@@ -166,7 +167,7 @@ function createAlgoliaProvider(api) {
 
 export function useAlgoliaSearch(query, params = defaultParams) {
   const api = useAPI();
-  const algoliaProvider = useMemo(() => createAlgoliaProvider(api), []);
+  const algoliaProvider = useMemo(() => createAlgoliaProvider(api), [api]);
   return useSearchProvider(algoliaProvider, query, params);
 }
 
