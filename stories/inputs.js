@@ -15,6 +15,9 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
+import InputErrorIcon from 'Components/inputs/input-error-icon';
+import InputErrorMessage from 'Components/inputs/input-error-message';
+
 const inputStory = storiesOf('Input Fields', module);
 
 const useDirectInputProps = (error) => {
@@ -74,6 +77,8 @@ const ProperTextInputs = () => {
 inputStory.add('optimistic', () => <ProperTextInputs />);
 
 inputStory.add('errors', () => (
-  <>
-    </
+  <div style={{ maxWidth: '200px' }}>
+    <p>input error icon → <InputErrorIcon /></p>
+    <p><InputErrorMessage>This is an error message</InputErrorMessage></p>
+  </div>
 ));
