@@ -11,53 +11,46 @@ import NewProjectPop from '../../presenters/new-project-pop';
 import { useCurrentUser } from '../../state/current-user';
 import Logo from './logo';
 
-
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" className="button button-small button-cta" to={EDITOR_URL}>
     Resume Coding
   </TrackedExternalLink>
 );
 
-const Header = ({ searchQuery, showNewStuffOverlay }) => 
+const Header = ({ searchQuery, showNewStuffOverlay }) => {
   const { currentUser, clear } = useCurrentUser();
   return (
-  <header role="banner">
-    <div className="header-info">
-      <Link to="/">
-        <Logo />
-      </Link>
-    </div>
-
-    <nav>
-      <div>
-        <span className="header-search">
-          <SearchForm defaultValue={searchQuery} />
-        </span>
+    <header role="banner">
+      <div className="header-info">
+        <Link to="/">
+          <Logo />
+        </Link>
       </div>
 
-      <NewProjectPop />
-      {!!currentUser && !!currentUser.projects.length && <ResumeCoding />}
-      {!(currentUser && currentUser.login) && <SignInPop />}
-      {!!currentUser && currentUser.login && <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />}
-    </nav>
-  </header>
-);
-}
+      <nav>
+        <div>
+          <span className="header-search">
+            <SearchForm defaultValue={searchQuery} />
+          </span>
+        </div>
 
-Header.propTypes = {
-  searchQuery: PropTypes.string,
-  showNewStuffOverlay: 
-};
-
-Header.defaultProps = {
-  maybeUser: null,
-};
-
-const HeaderContainer = ({ ...props }) => {
-  
-  return (
-    
+        <NewProjectPop />
+        {!!currentUser && !!currentUser.projects.length && <ResumeCoding />}
+        {!(currentUser && currentUser.login) && <SignInPop />}
+        {!!currentUser && currentUser.login && <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />}
+      </nav>
+    </header>
   );
 };
 
-export default HeaderContainer;
+Header.propTypes = {
+  searchQuery: PropTypes.string,
+  showNewStuffOverlay: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  searchQuery: '',
+  showNewStuffOverlay: false,
+};
+
+export default Header;
