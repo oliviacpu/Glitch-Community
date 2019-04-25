@@ -437,7 +437,7 @@ storiesOf('Note', module)
   .add(
     'when authorized', 
     withState({
-      note: "You are authorized to edit this note, go on ahead and try, if you erase my contents and click away, I disapear after a short time",
+      note: "You are authorized to edit this note, go on ahead and try, if you erase my contents and click away, I disappear after a short time",
       isAddingANewNote: true
     }, 
     ({ state: project, setState }) => (
@@ -453,21 +453,6 @@ storiesOf('Note', module)
       />
     ))
   )
-  .add('empty state', withState({
-    note: "",
-    isAddingANewNote: true
-  }, ({ state: project, setState }) => (
-    <Note
-      isAuthorized={true}
-      collection={{
-        coverColor: "#bfabf2",
-        user: users.modernserf,
-      }}
-      project={project}
-      updateNote={mockUpdateNote(setState)}
-      hideNote={() => setState({ isAddingANewNote: false })}
-    />
-  )))
   .add('when unauthorized', withState({
     note: "this note you do not own, you can not edit it, you can not hide it",
     isAddingANewNote: true
