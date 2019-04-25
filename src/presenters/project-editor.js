@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as assets from '../utils/assets';
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
@@ -28,6 +29,18 @@ class ProjectEditor extends React.Component {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
+  async uploadAvatar(blob) {
+    const { data: policy } = await assets.getTeamAvatarImagePolicy(this.props.api, this.state.id);
+    await this.props.uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
+
+    const image = await assets.blobToImage(blob);
+    const color = assets.getDominantColor(image);
+    await this.updateFields({
+      hasAvatarImage: true,
+      backgroundColor: color,
+    });
+  }
+
   render() {
     const { handleError, handleErrorForInput, handleCustomError } = this.props;
     const funcs = {
@@ -35,6 +48,7 @@ class ProjectEditor extends React.Component {
       updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),
+      uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
     };
     return this.props.children(this.state, funcs, this.userIsMember());
   }

@@ -88,12 +88,18 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
+const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate, uploadAvatar }) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
       <section id="info">
-        <ProfileContainer type="project" item={project}>
+        <ProfileContainer
+          type="project"
+          item={project}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
+        >
           <Heading tagName="h1">
             {isAuthorized ? (
               <ProjectDomainInput
@@ -118,7 +124,7 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
             update={updateDescription}
             placeholder="Tell us about your app"
           />
-          <div className="project-page__profile-button-wrap">
+          <div>
             <span className="project-page__profile-button">
               <ShowButton name={domain} />
             </span>
