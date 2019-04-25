@@ -44,7 +44,7 @@ const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
     <Heading tagName="h1">
       <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
     </Heading>
-    <p className="team-url">
+    <p className={styles.teamUrl}>
       <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
     </p>
   </>
@@ -69,6 +69,19 @@ const Beta = () => (
     </div>
   </a>
 );
+
+const ProjectPals = () => (
+  <aside className="inline-banners add-project-to-empty-team-banner">
+    <div className="description-container">
+      <img
+        className="project-pals"
+        src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925"
+        alt=""
+      />
+      <div className="description">Add projects to share them with your team</div>
+    </div>
+  </aside>
+)
 
 // Team Page
 
@@ -169,7 +182,7 @@ class TeamPage extends React.Component {
                 <p className={styles.teamUrl}>@{team.url}</p>
               </>
             )}
-            <div className="users-information">
+            <div className={styles.usersInformation}>
               <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
               {!!team.whitelistedDomain && (
                 <WhitelistedDomain
@@ -232,16 +245,7 @@ class TeamPage extends React.Component {
         />
 
         {team.projects.length === 0 && this.props.currentUserIsOnTeam && (
-          <aside className="inline-banners add-project-to-empty-team-banner">
-            <div className="description-container">
-              <img
-                className="project-pals"
-                src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925"
-                alt=""
-              />
-              <div className="description">Add projects to share them with your team</div>
-            </div>
-          </aside>
+          <ProjectPals />
         )}
 
         {/* TEAM COLLECTIONS */}

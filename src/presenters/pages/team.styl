@@ -9,18 +9,7 @@
     margin-bottom: 1rem
   .collections
     padding: 0
-    
-  .user-avatar
-    border-radius: 5px 
-    
-  .users-information
-    padding-bottom: 12px
-    .users
-      display: inline
-    .user
-      img.whitelisted-domain
-        margin: auto
-      
+          
   .add-project-container
     position: relative
 
@@ -90,3 +79,14 @@
     font-size: smaller
   &:hover
     text-decoration: underline
+    
+.usersInformation
+  padding-bottom: 12px
+  :global
+    .users
+      display: inline // ?
+      margin-right: 5px
+    .user li
+      margin-right: -7px
+    .user img.whitelisted-domain
+      margin: auto
