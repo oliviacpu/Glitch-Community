@@ -267,7 +267,7 @@ storiesOf('Collection', module).add(
 .add('Collection Item Small',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <SmallCollectionItem collection={collections[12345]} />
+      <CollectionItemSmall collection={collections[12345]} />
     </div>
   ))
 );

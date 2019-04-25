@@ -7,7 +7,7 @@ import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
-import { ProfileItem } from 'Components/profile/profile-list';
+import { ProfileItem } from 'Components/profile-list';
 import Loader from 'Components/loaders/loader';
 import ProjectItemSmall from 'Components/project/project-item-small';
 
@@ -62,8 +62,8 @@ ProjectsPreview.propTypes = {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <div className={classNames(styles.collection, { [styles.authorized]: isAuthorized })}>
-    <div className={styles.container}>
+  <div className={classNames(styles.collectionItem, { [styles.authorized]: isAuthorized })}>
+    <div>
       {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
 
       {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
