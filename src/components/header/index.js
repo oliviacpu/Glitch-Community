@@ -14,8 +14,8 @@ import Logo from './logo';
 import styles from './header.styl';
 
 const ResumeCoding = () => (
-  <TrackedExternalLink name="Resume Coding clicked" className="button button-small button-cta" to={EDITOR_URL}>
-    <Resume Coding
+  <TrackedExternalLink name="Resume Coding clicked" to={EDITOR_URL}>
+    <Button type="cta" size="small" decorative>Resume Coding</Button>
   </TrackedExternalLink>
 );
 

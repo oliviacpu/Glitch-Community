@@ -13,7 +13,9 @@ const Layout = ({ children, searchQuery }) => (
   <div className="content">
     <Helmet title="Glitch" />
     <NewStuffContainer>
-      {(showNewStuffOverlay) => <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />}
+      {(showNewStuffOverlay) => <div className="header-wrap">
+        <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
+      </div>}
     </NewStuffContainer>
     <ErrorBoundary>{children}</ErrorBoundary>
     <Footer />
