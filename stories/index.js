@@ -251,79 +251,17 @@ const mockAPI = {
 storiesOf('Collection', module).add(
   'Collection Item with projects',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
-      <CollectionItem
-        collection={{
-          id: 12345,
-          name: 'Cool Projects',
-          description: 'A collection of cool projects',
-          coverColor: '#efe',
-          user: users.modernserf,
-          projects:
-            [{
-              id: 'foo',
-              domain: 'stencilfy',
-            },    
-            {
-              id: 'foo2',
-              domain: 'svg-animator',
-            },     
-            {
-              id: 'foo3',
-              domain: 'bongo-cat',
-            },
-            {
-              id: 'foo4',
-              domain: 'community',
-            },
-          ],
-        }}
-      />
+    <CollectionItem collection={collections[12345]} />
   ))
   )
   .add('Collection Item without projects',
     provideContext({ currentUser: {}, api: mockAPI }, () => (
-      <CollectionItem
-        collection={{
-          id: 12345,
-          name: 'Cool Projects',
-          description: 'A collection of cool projects',
-          coverColor: '#efe',
-          user: users.modernserf,
-          projects: [],
-        }}
-      />
+      <CollectionItem collection={collections['empty']} />
     ))
   )
   .add('Collection Item with curator',
     provideContext({ currentUser: {}, api: mockAPI}, () => (
-      <CollectionItem
-        showCurator={true}
-        collection={{
-          id: 12345,
-          name: 'Show Curator',
-          description: 'A collection of cool projects',
-          coverColor: '#efe',
-          user: users.modernserf,
-          projects:
-            [{
-              id: 'foo',
-              domain: 'stencilfy',
-            },    
-            {
-              id: 'foo2',
-              domain: 'svg-animator',
-            },     
-            {
-              id: 'foo3',
-              domain: 'bongo-cat',
-            },
-            {
-              id: 'foo4',
-              domain: 'community',
-            },
-          ],
-        }}
-      />
+    <CollectionItem collection={collections[12345]} showCurator />
   ))
 )
 .add('Collection Item Small',
