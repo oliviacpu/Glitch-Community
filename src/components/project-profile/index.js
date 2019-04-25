@@ -33,11 +33,6 @@ const ProfileContainer = ({ item, type, children, avatarActions, coverActions, t
       </div>
       <div className={styles.profileInfo}>{children}</div>
     </div>
-    {!!teams && !!teams.length && (
-      <div className={styles.teamsContainer}>
-        <ProfileList layout="block" teams={teams} />
-      </div>
-    )}
   </CoverContainer>
 );
 
@@ -45,7 +40,7 @@ const ProfileContainer = ({ item, type, children, avatarActions, coverActions, t
 const ProjectProfileContainer = ({ project, children, avatarActions }) => (
   <div className={styles.profileWrap}>
     <div className={styles.avatarContainer}>
-      <div className={classnames(styles.avatar, styles[type])} style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }} />
+      <div className={styles.avatar} style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }} />
       <div className={styles.avatarButtons}>
           <TrackedButtonGroup items={avatarActions} />
         </div>
