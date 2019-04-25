@@ -139,6 +139,14 @@ export const collections = {
     user: users.modernserf,
     projects: [projects['judicious-pruner']],
   },
+  dark: {
+    id: 12345,
+    name: 'Cool Projects',
+    description: 'A collection of cool projects',
+    coverColor: '#000000',
+    user: users.modernserf,
+    projects: [projects['judicious-pruner']],
+  },
 };
 
 export const teams = {

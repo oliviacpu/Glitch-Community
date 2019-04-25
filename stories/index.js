@@ -443,10 +443,7 @@ storiesOf('Note', module)
     ({ state: project, setState }) => (
       <Note
         isAuthorized={true}
-        collection={{
-          coverColor: "#bfabf2",
-          user: users.modernserf,
-        }}
+        collection={collections["12345"]}
         project={project}
         updateNote={mockUpdateNote(setState)}
         hideNote={() => setState({ isAddingANewNote: false })}
@@ -459,10 +456,7 @@ storiesOf('Note', module)
   }, ({ state: project, setState }) => (
     <Note
       isAuthorized={false}
-      collection={{
-        coverColor: "#bfabf2",
-        user: users.modernserf,
-      }}
+      collection={collections["12345"]}
       project={project}
       updateNote={mockUpdateNote(setState)}
       hideNote={() => setState({ isAddingANewNote: false })}
@@ -474,10 +468,7 @@ storiesOf('Note', module)
   }, ({ state: project, setState }) => (
     <Note
       isAuthorized={true}
-      collection={{
-        coverColor: "#000000",
-        user: users.modernserf,
-      }}
+      collection={collections.dark}
       project={project}
       updateNote={mockUpdateNote(setState)}
       hideNote={() => setState({ isAddingANewNote: false })}
