@@ -24,7 +24,7 @@ export default [
     link: 'https://glitch.com/~planet-generator'
   },
   {
-    title: 'Step into the Metaverse... D\'oh',
+    title: 'Step Into the Metaverse',
     img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fglitch_homer.jpg?1552302001952',
     link: 'https://glitch.com/~homer-metaverse'  
   }
