@@ -4,6 +4,8 @@ import randomColor from 'randomcolor';
 
 import { throttle } from 'lodash';
 
+import TextInput from 'Components/inputs/text-input';
+
 const validHex = (hex) => {
   const re = /[0-9A-Fa-f]{6}/g;
   if (re.test(hex)) {
@@ -19,6 +21,7 @@ class EditCollectionColorPop extends React.Component {
     this.state = {
       query: this.props.initialColor,
       color: this.props.initialColor,
+      error: false,
     };
 
     this.onClick = this.onClick.bind(this);
@@ -44,7 +47,7 @@ class EditCollectionColorPop extends React.Component {
     let query = e.currentTarget.value.trim();
     const errorMsg = document.getElementsByClassName('editable-field-error-message')[0];
     errorMsg.style.display = 'none';
-    this.setState({ query });
+    this.setState({ error: false, query });
     if (query && query.length <= 7) {
       if (validHex(query)) {
         if (query[0] !== '#') {
@@ -93,12 +96,10 @@ class EditCollectionColorPop extends React.Component {
           />
 
           <div className="custom-color-input">
-            <input
-              id="color-picker-hex"
+            <TextInput
               value={this.state.query}
               onChange={this.handleChange}
               onKeyPress={this.keyPress}
-              className="pop-over-input pop-over-search"
               placeholder="Custom color hex"
             />
 
