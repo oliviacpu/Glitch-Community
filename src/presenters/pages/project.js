@@ -16,7 +16,7 @@ import { AnalyticsContext } from '../segment-analytics';
 import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
 import { ShowButton, EditButton } from '../includes/project-actions';
 

@@ -16,7 +16,7 @@ import { useCurrentUser } from '../../state/current-user';
 import { DataLoader } from '../includes/loader';
 import TeamEditor from '../team-editor';
 import { getLink, getAvatarStyle } from '../../models/team';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import { ProfileContainer, ImageButtons } from '../includes/profile';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';

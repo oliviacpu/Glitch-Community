@@ -14,7 +14,7 @@ import { getAvatarStyle, getLink } from '../../models/user';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
 import DeletedProjects from '../deleted-projects';
