@@ -110,7 +110,7 @@ const CollectionPageContents = ({
             <h1 className="collection-name">
               {currentUserIsAuthor ? (
                 <CollectionNameInput name={collection.name} onChange={onNameChange} />
-              ) : name}
+              ) : collection.name}
             </h1>
 
             <div className="collection-owner">

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import OptimisticTextInput from './optimistic-text-input';
+import OptimisticWrappingTextInput from './optimistic-wrapping-text-input';
 
 const CollectionNameInput = ({ name, onChange }) => (
-  <OptimisticTextInput
+  <OptimisticWrappingTextInput
     labelText="Collection Name"
     value={name}
     onChange={onChange}
