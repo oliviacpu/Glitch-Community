@@ -6,6 +6,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
 import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
@@ -13,15 +14,13 @@ import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
 const DeletedProject = ({ id, domain, onClick }) => (
-  <Button type="transparent" onClick={onClick}>
-    <div className={styles.deletedProject}>
-      <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-      <div className={styles.projectName}>{domain}</div>
-      <Button small decorative>
-        Undelete
-      </Button>
-    </div>
-  </Button>
+  <TransparentButton onClick={onClick} className={styles.deletedProject}>
+    <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+    <div className={styles.projectName}>{domain}</div>
+    <Button small decorative>
+      Undelete
+    </Button>
+  </TransparentButton>
 );
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
