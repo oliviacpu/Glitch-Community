@@ -6,10 +6,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
-import { getAvatarUrl } from '../models/project';
+import { getAvatarUrl } from 'Models/project';
 
-import { useAPI } from '../state/api';
-import { useTrackedFunc } from './segment-analytics';
+import { useAPI } from '../../state/api';
+import { useTrackedFunc } from '../../presenters/segment-analytics';
 
 function clickUndelete(event, callback) {
   const node = event.target.closest('li');

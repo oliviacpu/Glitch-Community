@@ -10,6 +10,7 @@ import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProfileContainer from 'Components/profile-container';
+import DeletedProjects from 'Components/deleted-projects';
 
 import { getLink } from '../../models/user';
 
@@ -18,7 +19,6 @@ import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
-import DeletedProjects from '../deleted-projects';
 import EntityPageProjects from '../entity-page-projects';
 import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
