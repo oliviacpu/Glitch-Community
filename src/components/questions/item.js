@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Image from 'Components/images/image';
+import Button from 'Components/buttons/button';
 import { getEditorUrl } from 'Models/project';
 import Link from 'Components/link';
 
@@ -27,7 +28,7 @@ const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvat
       <div className="project" style={{ backgroundColor: colorOuter }}>
         <div className="project-container" style={{ backgroundColor: colorInner }}>
           <Image className="avatar" src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
-          <div className="button">Help {userLogin}</div>
+          <Button decorative>Help {userLogin}</Button>
           <div className="description question" title={question}>
             {truncateQuestion(question)}
           </div>

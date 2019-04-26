@@ -57,6 +57,13 @@ async function load(api, max) {
   }
 }
 
+function useRepeatingEffect(effectHandler, dependencies) {
+  const [counter, setCounter] = useState(0);
+  useEffect(effectHandler, [...dependencies, counter]);
+  const increment = () => setCounter((x) => x + 1);
+  return increment;
+}
+
 function Questions({ max }) {
   const api = useAPI();
   const [{ kaomoji, loading, questions }, setState] = useState({
@@ -64,15 +71,14 @@ function Questions({ max }) {
     loading: true,
     questions: [],
   });
-  useEffect(() => {
-    // TODO: handle unmount
+  const reload = useRepeatingEffect(() => {
     load(api, max).then(setState);
   }, []);
 
   return (
     <section className={styles.container}>
       <Heading tagName="h2">
-        <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={() => this.load()} />
+        <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={reload} />
       </Heading>
       <div>
         {questions.length ? (
@@ -87,8 +93,7 @@ function Questions({ max }) {
           </ErrorBoundary>
         ) : (
           <>
-            {kaomoji} Looks like nobody is asking for help right now.{' '}
-            {/* TODO: 'general' prop on Link? */}
+            {kaomoji} Looks like nobody is asking for help right now. {/* TODO: 'general' prop on Link? */}
             <Link className="general-link" to="/help/how-can-i-get-help-with-code-in-my-project/">
               Learn about helping
             </Link>
