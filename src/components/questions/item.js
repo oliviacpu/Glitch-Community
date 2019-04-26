@@ -35,9 +35,9 @@ const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvat
       <div className={styles.questionInner} style={{ backgroundColor: colorInner }}>
         <div className={styles.questionAsker}>
           <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
-        <Button decorative>Help {userLogin}</Button>
+          <Button decorative>Help {userLogin}</Button>
         </div>
-        
+
         <div className={styles.questionText} title={question}>
           {truncateQuestion(question)}
         </div>
