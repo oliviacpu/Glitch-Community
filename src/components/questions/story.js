@@ -21,7 +21,7 @@ in reprehenderit in voluptate velit esse cillum dolore eu fugiat
 nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
 sunt in culpa qui officia deserunt mollit anim id est laborum`,
       tags: ['Lorem', 'ipsum', 'dolor', 'sit', 'amet'],
-      userAvatar: null,
+      userAvatar: 'https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/560e4b07-a70b-4f87-b8d4-699d738792d0-small.jpg',
       userColor: '#ccc',
       userLogin: 'lorem',
       path: '/ipsum',
