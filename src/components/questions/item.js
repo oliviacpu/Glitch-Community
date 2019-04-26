@@ -33,8 +33,11 @@ const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvat
       style={{ backgroundColor: colorOuter }}
     >
       <div className={styles.questionInner} style={{ backgroundColor: colorInner }}>
-        <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
+        <div className={styles.questionAsker}>
+          <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
         <Button decorative>Help {userLogin}</Button>
+        </div>
+        
         <div className={styles.questionText} title={question}>
           {truncateQuestion(question)}
         </div>

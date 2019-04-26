@@ -3,6 +3,9 @@
 .container
   margin: 0
   padding: 0
+  a
+    text-decoration: none
+    color: primary
 
 .questionsContainer
   display: grid  
@@ -16,19 +19,18 @@
 .helpIcon
   vertical-align: middle
   width: 28px
-  margin-bottom: -3px
   margin-left: 6px
 
 .question
   display: block
   background-color: secondary-background-active
   padding: 8px
-  margin-top: 2px
-  color: primary
-  text-decoration: none
   border-radius: 5px
-  &:after
-    border: none
+    
+.questionAsker
+  display: flex
+  flex-direction: row
+  align-items: center
   
 .questionInner
   padding: 8px
@@ -37,6 +39,8 @@
   
 .avatar
   border-radius: 50%
+  width: 32px
+  margin-right: 4px
   
 .questionText
   margin: 8px 0
