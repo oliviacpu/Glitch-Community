@@ -2,7 +2,7 @@
 // it loads the projects from the api, but expects them to be stored elsewhere
 // so it takes an initially empty list of projects and a function to fill it once they load
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
@@ -13,38 +13,43 @@ import { useAPI } from '../../state/api';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
-function clickUndelete(event, callback) {
-  const node = event.target.closest('li');
-  node.addEventListener('animationend', callback, { once: true });
-  node.classList.add('slide-up');
-}
-
-const DeletedProject = ({ id, domain, onClick }) => {
-  const onClickUndelete = (evt) => clickUndelete(evt, onClick);
-  const onClickTracked = useTrackedFunc(onClickUndelete, 'Undelete clicked');
-  return (
-    <div className="deleted-project">
-      <img className="avatar" src={getAvatarUrl(id)} alt="" />
-      <div className="deleted-project-name">{domain}</div>
-      <Button small onClick={onClickTracked}>Undelete</div>
-    </div>
-  );
-};
+const DeletedProject = ({ id, domain, onClick }) => (
+  <div className=>
+ }   <img className="avatar" src={getAvatarUrl(id)} alt="" />
+    <div className="deleted-project-name">{domain}</div>
+    <Button small onClick={onClick}>
+      Undelete
+    </Button>
+  </div>
+);
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const DeletedProjectsList = ({ deletedProjects, undelete }) => (
-  <ul className="projects-container deleted-projects-container">
-    {deletedProjects.map(({ id, domain }) => (
-      <li key={id} className="deleted-project-container">
-        <DeletedProject id={id} domain={domain} onClick={() => undelete(id)} />
-      </li>
-    ))}
-  </ul>
-);
+const DeletedProjectsList = ({ deletedProjects, undelete }) => {
+  const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
+
+  const ref = useRef();
+  // TODO: can this be more ... react-y?
+  const onClick = (id) => {
+    const node = ref.current;
+    if (!node) return;
+    node.addEventListener('animationend', () => undeleteTracked(id), { once: true });
+    node.classList.add('slide-up');
+  };
+
+  return (
+    <ul className={styles.deletedProjectsContainer}>
+      {deletedProjects.map(({ id, domain }) => (
+        <li ref={ref} key={id} className={styles.deletedProjectItemWrap}>
+          <DeletedProject id={id} domain={domain} onClick={() => onClick(id)} />
+        </li>
+      ))}
+    </ul>
+  );
+};
 DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
   undelete: PropTypes.func.isRequired,
@@ -102,3 +107,4 @@ DeletedProjects.defaultProps = {
 };
 
 export default DeletedProjects;
+{
