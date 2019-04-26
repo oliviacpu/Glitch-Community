@@ -79,12 +79,13 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     props.togglePopover();
     props.displayNewNote(props.project.id);
   }
-  
-
 
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
   const showPinOrFeatureSection = (props.addPin || props.removePin || (props.featureProject && !props.project.private));
+  const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
+  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
+  const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -137,19 +138,16 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
         </section>
       )}
 
-      {(props.currentUserIsOnProject || !!props.removeProjectFromTeam) && !props.removeProjectFromCollection && (
+      {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
-          {!!props.removeProjectFromTeam && (
+          {showRemoveProjectFromTeam && (
             <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />
           )}
 
-          {props.currentUserIsAdminOnProject && !props.removeProjectFromCollection && (
+          {showDeleteProject && (
             <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
           )}
-        </section>
-      )}
-      {props.removeProjectFromCollection && (
-        <section className="pop-over-actions danger-zone last-section">
+
           {props.removeProjectFromCollection && (
             <PopoverButton onClick={() => props.removeProjectFromCollection(props.project)} text="Remove from Collection" emoji="thumbs_down" />
           )}
@@ -211,9 +209,9 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     }
     return false;
   }
-  
+
   function currentUserIsAdminOnProject(user) {
-    const projectPermissions = project.permissions.find(p => p.userId === user.id);
+    const projectPermissions = project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
 
