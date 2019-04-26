@@ -129,11 +129,13 @@ class CurrentUserManager extends React.Component {
   }
 
   async getSharedUser() {
+    const persistentToken = this.persistentToken();
+    if (!persistentToken) {
+      return undefined;
+    }
     try {
-      const {
-        data: { user },
-      } = await this.api().get('boot?latestProjectOnly=true');
-      return user;
+      const { data } = await this.api().get(`v1/users/by/persistentToken?persistentToken=${persistentToken}`);
+      return data[persistentToken];
     } catch (error) {
       if (error.response && error.response.status === 401) {
         return undefined;
