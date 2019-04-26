@@ -1,25 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import randomColor from 'randomcolor';
 import { sample } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import Link from 'Components/link';
-import ErrorBoundary from './includes/error-boundary';
-import QuestionItem from './question-item';
-import { captureException } from '../utils/sentry';
-import { useAPI } from '../state/api';
+import QuestionItem from './item';
 
+import ErrorBoundary from '../../presenters/includes/error-boundary';
+import { captureException } from '../../utils/sentry';
+import { useAPI } from '../../state/api';
+import styles from '../questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
 
-const QuestionTimer = ({ animating, callback }) => (
-  <div className="loader-pie" title="Looking for more questions...">
-    <div className="left-side">
-      <div className={`slice ${animating ? 'animated' : ''}`} onAnimationEnd={callback} />
+// TODO: story
+export const QuestionTimer = ({ animating, callback }) => (
+  <div className={styles.loaderPie} title="Looking for more questions...">
+    <div className={styles.leftSide}>
+      <div className={classnames(styles.slice, animating && styles.animated)} onAnimationEnd={callback} />
     </div>
-    <div className="right-side">
-      <div className={`slice ${animating ? 'animated' : ''}`} />
+    <div className={styles.rightSide}>
+      <div className={classnames(styles.slice, animating && styles.animated)} />
     </div>
   </div>
 );
@@ -28,22 +31,7 @@ QuestionTimer.propTypes = {
   callback: PropTypes.func.isRequired,
 };
 
-class Questions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      kaomoji: '',
-      loading: true,
-      questions: [],
-    };
-  }
-
-  componentDidMount() {
-    this.load();
-  }
-
-  async load() {
-    this.setState({ loading: true });
+async function load() {
     try {
       const { data } = await this.props.api.get('projects/questions');
       const questions = data
@@ -60,11 +48,32 @@ class Questions extends React.Component {
       this.setState({
         kaomoji: sample(kaomojis),
         questions,
+        loading: false
       });
     } catch (error) {
       console.error(error);
       captureException(error);
     }
+    
+  }
+
+class Questions extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      kaomoji: '',
+      loading: true,
+      questions: [],
+    };
+  }
+
+  componentDidMount() {
+    this.load();
+  }
+
+  async load() {
+        this.setState({ loading: true });
+    await load()
     this.setState({ loading: false });
   }
 
