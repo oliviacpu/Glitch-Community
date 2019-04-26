@@ -149,16 +149,23 @@ class CurrentUserManager extends React.Component {
     if (!sharedUser) return undefined;
     if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
     try {
+      const api = this.api();
+      const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
       const {
-        user, emails, projects, teams, collections
-      } = allByKeys({
+        baseUser, emails, projects, teams, collections,
+      } = await allByKeys({
+        baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
+        emails: getAllPages(api, makeUrl('emails')),
+        projects: getAllPages(api, makeUrl('projects')),
+        teams: getAllPages(api, makeUrl('teams')),
+        collections: getAllPages(api, makeUrl('collections')),
       });
-      const fullUser = { ...user, emails, projects, teams, collections };
-      const { data } = await this.api().get(`users/${sharedUser.id}`);
-      if (!usersMatch(sharedUser, fullUser)) {
+      const user = { ...baseUser, emails, projects, teams, collections };
+      console.log(user);
+      if (!usersMatch(sharedUser, user)) {
         return 'error';
       }
-      return fullUser;
+      return user;
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 404)) {
         // 401 means our token is bad, 404 means the user doesn't exist
