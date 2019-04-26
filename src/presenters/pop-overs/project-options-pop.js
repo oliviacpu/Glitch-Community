@@ -79,6 +79,8 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     props.togglePopover();
     props.displayNewNote(props.project.id);
   }
+  
+
 
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
@@ -141,7 +143,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
             <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />
           )}
 
-          {props.currentUserIsOnProject && !props.removeProjectFromCollection && (
+          {props.currentUserIsAdminOnProject && !props.removeProjectFromCollection && (
             <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
           )}
         </section>
@@ -209,6 +211,11 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     }
     return false;
   }
+  
+  function currentUserIsAdminOnProject(user) {
+    const projectPermissions = project.permissions.find(p => p.userId === user.id);
+    return projectPermissions && projectPermissions.accessLevel === 30;
+  }
 
   return (
     <PopoverWithButton
@@ -223,6 +230,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           project={project}
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
+          currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           togglePopover={togglePopover}
         />
       )}
