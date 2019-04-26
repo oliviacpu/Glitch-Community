@@ -182,7 +182,15 @@ const UserPage = ({
         enableFiltering={recentProjects.length > 6}
         enablePagination
       />
-      {isAuthorized && <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />}
+      {isAuthorized && (
+        <article className="deleted-projects">
+          <Heading tagName="h2">
+            <Emoji name="bomb" />
+            Deleted Projects
+          </Heading>
+          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+        </article>
+      )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>
   );

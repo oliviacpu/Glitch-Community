@@ -10,6 +10,7 @@ import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
+import styles from './deleted-projects.styl';
 
 function clickUndelete(event, callback) {
   const node = event.target.closest('li');
@@ -101,13 +102,4 @@ DeletedProjects.defaultProps = {
   deletedProjects: [],
 };
 
-const DeletedProjectsWrap = (props) => (
-  <article className="deleted-projects">
-    <Heading tagName="h2">
-      Deleted Projects <span className="emoji bomb emoji-in-title" />
-    </Heading>
-    <DeletedProjects {...props} />
-  </article>
-);
-
-export default DeletedProjectsWrap;
+export default DeletedProjects;
