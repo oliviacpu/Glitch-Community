@@ -25,21 +25,25 @@ function truncateTag(tag) {
 const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvatar, userColor, userLogin, path, line, character }) => (
   <>
     <Image className={styles.helpIcon} src={iconHelp} alt="Help icon" />
-    <Link to={getEditorUrl(domain, path, line, character)} data-track="question" data-track-label={domain}>
-      <div className={styles.question} style={{ backgroundColor: colorOuter }}>
-        <div className={styles.questionInner} style={{ backgroundColor: colorInner }}>
-          <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
-          <Button decorative>Help {userLogin}</Button>
-          <div className={styles.questionText} title={question}>
-            {truncateQuestion(question)}
-          </div>
-          <div className={styles.questionTags}>
-            {tags.map((tag) => (
-              <div key={tag} className={styles.tag} title={tag}>
-                {truncateTag(tag)}
-              </div>
-            ))}
-          </div>
+    <Link
+      to={getEditorUrl(domain, path, line, character)}
+      data-track="question"
+      data-track-label={domain}
+      className={styles.question}
+      style={{ backgroundColor: colorOuter }}
+    >
+      <div className={styles.questionInner} style={{ backgroundColor: colorInner }}>
+        <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
+        <Button decorative>Help {userLogin}</Button>
+        <div className={styles.questionText} title={question}>
+          {truncateQuestion(question)}
+        </div>
+        <div className={styles.questionTags}>
+          {tags.map((tag) => (
+            <div key={tag} className={styles.tag} title={tag}>
+              {truncateTag(tag)}
+            </div>
+          ))}
         </div>
       </div>
     </Link>
