@@ -1,3 +1,9 @@
+@import '../constants.styl'
+
+// questions grid
+
+
+
 .questions-page
   .projects-container
     li
@@ -49,11 +55,14 @@
       &:last-child
         margin-bottom: 0
 
+        
+// question timer        
+
 pie-duration = 10s
 pie-size = 20px
 count = infinite
 
-.loader-pie
+.loaderPie
   position: relative
   width: pie-size
   height: pie-size
@@ -64,41 +73,41 @@ count = infinite
   vertical-align: top
   transform: rotate(180deg)
 
-  .slice,
-  .left-side,
-  .right-side
-    overflow: hidden
-    position: absolute
-    width: 50%
-    height:100%
+.slice,
+.leftSide,
+.rightSide
+  overflow: hidden
+  position: absolute
+  width: 50%
+  height:100%
 
+.slice
+  background-color: line-on-secondary-background
+  position: absolute
+  left:100%
+  top:0
+  width:100%
+  height:100%
+  border-radius: 100%
+
+.leftSide
+  left: 0
   .slice
-    background-color: line-on-secondary-background
-    position: absolute
-    left:100%
-    top:0
-    width:100%
-    height:100%
-    border-radius: 100%
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+    transform-origin: 0 50% 0
+    &.animated
+      animation: pie-left pie-duration linear
 
-  .left-side
-    left: 0
-    .slice
-      border-top-left-radius: 0
-      border-bottom-left-radius: 0
-      transform-origin: 0 50% 0
-      &.animated
-        animation: pie-left pie-duration linear
-
-  .right-side
-    left: 50%
-    .slice
-      left:-100%;
-      border-bottom-right-radius: 0
-      border-top-right-radius: 0	
-      transform-origin: 100% 50% 0
-      &.animated
-        animation: pie-right pie-duration linear
+.rightSide
+  left: 50%
+  .slice
+    left:-100%;
+    border-bottom-right-radius: 0
+    border-top-right-radius: 0	
+    transform-origin: 100% 50% 0
+    &.animated
+      animation: pie-right pie-duration linear
 
 @keyframes pie-left
   0%

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import randomColor from 'randomcolor';
@@ -31,83 +31,74 @@ QuestionTimer.propTypes = {
   callback: PropTypes.func.isRequired,
 };
 
-async function load() {
-    try {
-      const { data } = await this.props.api.get('projects/questions');
-      const questions = data
-        .map((q) => JSON.parse(q.details))
-        .filter((q) => !!q)
-        .slice(0, this.props.max)
-        .map((question) => {
-          const [colorInner, colorOuter] = randomColor({
-            luminosity: 'light',
-            count: 2,
-          });
-          return { colorInner, colorOuter, ...question };
+async function load(api, max) {
+  try {
+    const { data } = await api.get('projects/questions');
+    const questions = data
+      .map((q) => JSON.parse(q.details))
+      .filter((q) => !!q)
+      .slice(0, max)
+      .map((question) => {
+        const [colorInner, colorOuter] = randomColor({
+          luminosity: 'light',
+          count: 2,
         });
-      this.setState({
-        kaomoji: sample(kaomojis),
-        questions,
-        loading: false
+        return { colorInner, colorOuter, ...question };
       });
-    } catch (error) {
-      console.error(error);
-      captureException(error);
-    }
-    
-  }
-
-class Questions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      kaomoji: '',
-      loading: true,
-      questions: [],
+    return {
+      kaomoji: sample(kaomojis),
+      questions,
+      loading: false,
     };
-  }
-
-  componentDidMount() {
-    this.load();
-  }
-
-  async load() {
-        this.setState({ loading: true });
-    await load()
-    this.setState({ loading: false });
-  }
-
-  render() {
-    const { kaomoji, loading, questions } = this.state;
-    return (
-      <section className="questions">
-        <Heading tagName="h2">
-          <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={() => this.load()} />
-        </Heading>
-        <article className="projects">
-          {questions.length ? (
-            <ErrorBoundary>
-              <ul className="projects-container">
-                {questions.map((question) => (
-                  <li key={question.questionId}>
-                    <QuestionItem {...question} />
-                  </li>
-                ))}
-              </ul>
-            </ErrorBoundary>
-          ) : (
-            <>
-              {kaomoji} Looks like nobody is asking for help right now.{' '}
-              <Link className="general-link" to="/help/how-can-i-get-help-with-code-in-my-project/">
-                Learn about helping
-              </Link>
-            </>
-          )}
-        </article>
-      </section>
-    );
+  } catch (error) {
+    console.error(error);
+    captureException(error);
+    return { loading: false };
   }
 }
+
+function Questions({ max }) {
+  const api = useAPI();
+  const [{ kaomoji, loading, questions }, setState] = useState({
+    kaomoji: '',
+    loading: true,
+    questions: [],
+  });
+  useEffect(() => {
+    // TODO: handle unmount
+    load(api, max).then(setState);
+  }, []);
+
+  return (
+    <section className={styles.container}>
+      <Heading tagName="h2">
+        <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={() => this.load()} />
+      </Heading>
+      <div>
+        {questions.length ? (
+          <ErrorBoundary>
+            <ul className={styles.questionsContainer}>
+              {questions.map((question) => (
+                <li key={question.questionId}>
+                  <QuestionItem {...question} />
+                </li>
+              ))}
+            </ul>
+          </ErrorBoundary>
+        ) : (
+          <>
+            {kaomoji} Looks like nobody is asking for help right now.{' '}
+            {/* TODO: 'general' prop on Link? */}
+            <Link className="general-link" to="/help/how-can-i-get-help-with-code-in-my-project/">
+              Learn about helping
+            </Link>
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
+
 Questions.propTypes = {
   max: PropTypes.number,
 };
@@ -115,9 +106,4 @@ Questions.defaultProps = {
   max: 3,
 };
 
-const QuestionsWrap = (props) => {
-  const api = useAPI();
-  return <Questions {...props} api={api} />;
-};
-
-export default QuestionsWrap;
+export default Questions;
