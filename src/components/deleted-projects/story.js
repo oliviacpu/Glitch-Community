@@ -38,15 +38,30 @@ const deletedProjects = [
   { id: 'b1f9dbf0-a32d-43b9-800f-de2ec4e81b08', domain: 'sturdy-pancake-deleted' },
 ];
 
-const mockAPI = () => {
-  get: () => Promise.resolve({ data: deletedProjects });
+const mockAPI = {
+  get: () => Promise.resolve({ data: [] }),
 };
 
-storiesOf('DeletedProjects', module).add(
-  'items',
-  provideContext({}, () => (
-    <div style={{ maxWidth: 960, margin: 20 }}>
-      <DeletedProjectsList deletedProjects={deletedProjects} undelete={clickedUndelete} />
-    </div>
-  )),
-);
+storiesOf('DeletedProjects', module)
+  .add(
+    'items',
+    provideContext({}, () => (
+      <div style={{ maxWidth: 960, margin: 20 }}>
+        <DeletedProjectsList deletedProjects={deletedProjects} undelete={clickedUndelete} />
+      </div>
+    )),
+  )
+  .add(
+    'container',
+    provideContext({ api: mockAPI }, () => (
+      <div style={{ maxWidth: 960, margin: 20 }}>
+        <DeletedProjects
+          deletedProjects={deletedProjects}
+          setDeletedProjects={() => {
+            console.log('set deleted projects');
+          }}
+          undelete={clickedUndelete}
+        />
+      </div>
+    )),
+  );
