@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api';
@@ -134,8 +135,7 @@ class CurrentUserManager extends React.Component {
       return undefined;
     }
     try {
-      const { data } = await this.api().get(`v1/users/by/persistentToken?persistentToken=${persistentToken}`);
-      return data[persistentToken];
+      return await getSingleItem(this.api(), `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         return undefined;
@@ -149,11 +149,16 @@ class CurrentUserManager extends React.Component {
     if (!sharedUser) return undefined;
     if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
     try {
+      const {
+        user, emails, projects, teams, collections
+      } = allByKeys({
+      });
+      const fullUser = { ...user, emails, projects, teams, collections };
       const { data } = await this.api().get(`users/${sharedUser.id}`);
-      if (!usersMatch(sharedUser, data)) {
+      if (!usersMatch(sharedUser, fullUser)) {
         return 'error';
       }
-      return data;
+      return fullUser;
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 404)) {
         // 401 means our token is bad, 404 means the user doesn't exist
