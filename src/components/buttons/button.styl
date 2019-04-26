@@ -66,19 +66,25 @@
     &:hover
       color: primary
       border-color: line-on-secondary-background
-      
-  &.unstyled
-    padding: 0
-    border-radius: 0
-    border: none
-    background: none
-    font-weight: normal
-    &:hover
-      opacity: 1;
-      background-color: #eaeaea;
-      border-radius: 5px;
-      border: none;
 
+.transparentButton
+  display: block
+  width: 100%
+  
+.btn.unstyled,
+.transparentButton
+  padding: 0
+  border-radius: 0
+  border: none
+  background: none
+  font-weight: normal
+  &:hover
+    opacity: 1;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    border: none;
+    
+    
 // apply hover effects if decorative button is inside a link/button that's being hovered
 a:hover .btn.decorative,
 button:hover .btn.decorative
