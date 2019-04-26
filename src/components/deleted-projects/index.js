@@ -28,11 +28,9 @@ DeletedProject.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const DeletedProjectsList = ({ deletedProjects, undelete }) => {
+export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
-
   const ref = useRef();
-  // TODO: can this be more ... react-y?
   const onClick = (id) => {
     const node = ref.current;
     if (!node) return;
