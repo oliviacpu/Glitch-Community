@@ -11,12 +11,11 @@ import QuestionItem from './item';
 import ErrorBoundary from '../../presenters/includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
-import styles from '../questions.styl';
+import styles from './questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
 
-// TODO: story
-export const QuestionTimer = ({ animating, callback }) => (
+const QuestionTimer = ({ animating, callback }) => (
   <div className={styles.loaderPie} title="Looking for more questions...">
     <div className={styles.leftSide}>
       <div className={classnames(styles.slice, animating && styles.animated)} onAnimationEnd={callback} />
