@@ -8,7 +8,7 @@ import Questions from '../questions';
 const QuestionsPage = () => (
   <Layout>
     <Helmet title="Questions" />
-    <main className="questions-page">
+    <main>
       <Questions max={12} />
       <MoreIdeas />
     </main>
