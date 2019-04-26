@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
-import { Link, TeamLink, UserLink, ProjectLink } from '../../presenters/includes/link';
+import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './autocomplete.styl';

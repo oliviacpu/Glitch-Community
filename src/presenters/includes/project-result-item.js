@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ProfileList from 'Components/profile-list';
-import { ProjectLink } from './link';
+import { ProjectLink } from 'Components/link';
 import ProjectAvatar from './project-avatar';
 
 const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {

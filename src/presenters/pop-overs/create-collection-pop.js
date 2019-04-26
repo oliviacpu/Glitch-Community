@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import { kebabCase, orderBy } from 'lodash';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
 import { useTracker } from '../segment-analytics';

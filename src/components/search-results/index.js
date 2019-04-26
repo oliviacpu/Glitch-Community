@@ -12,7 +12,7 @@ import ProjectItem from 'Components/project/project-item';
 import CollectionItemSmall from 'Components/collection/collection-item-small';
 import StarterKitItem from 'Components/search/starter-kit-result';
 import NotFound from 'Components/errors/not-found';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 
 import { useAPI, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';

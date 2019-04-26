@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { debounce } from 'lodash';
 import { Avatar, UserAvatar, TeamAvatar } from 'Components/images/avatar';
 
-import { UserLink, TeamLink } from '../../presenters/includes/link';
+import { UserLink, TeamLink } from 'Components/link';
 
 import styles from './profile-list.styl';
 
