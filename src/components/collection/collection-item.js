@@ -8,12 +8,12 @@ import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader/';
+import { CollectionLink } from 'Components/link';
 import ProjectItemSmall from 'Components/project/project-item-small';
 
 import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
-import { CollectionLink } from '../../presenters/includes/link';
 import CollectionOptionsContainer from '../../presenters/pop-overs/collection-options-pop';
 
 import styles from './collection-item.styl';

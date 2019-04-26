@@ -7,7 +7,7 @@ import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Badge from 'Components/badges/badge';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
-import { ProjectLink } from '../../presenters/includes/link';
+import { ProjectLink } from 'Components/link';
 
 import styles from './project-item.styl';
 
