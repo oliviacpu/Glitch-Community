@@ -7,7 +7,7 @@ import styles from './button.styl';
 
 const cx = classNames.bind(styles);
 
-export const TYPES = ['tertiary', 'cta', 'dangerZone', 'dropDown'];
+export const TYPES = ['tertiary', 'cta', 'dangerZone', 'dropDown', 'unstyled'];
 export const SIZES = ['small'];
 
 /**
@@ -21,7 +21,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
     tertiary: ['tertiary', 'dangerZone'].includes(type),
     dangerZone: type === 'dangerZone',
-    unstyled: type === 'dropDown',
+    unstyled: ['dropDown', 'unstyled'].includes(type),
     hasEmoji: React.Children.toArray(children).some((child) => child.type && child.type === Emoji),
     matchBackground: matchBackground === true,
     active,

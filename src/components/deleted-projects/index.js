@@ -4,7 +4,6 @@
 
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import { getAvatarUrl } from 'Models/project';
@@ -14,13 +13,15 @@ import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
 const DeletedProject = ({ id, domain, onClick }) => (
-  <div className=>
- }   <img className="avatar" src={getAvatarUrl(id)} alt="" />
-    <div className="deleted-project-name">{domain}</div>
-    <Button small onClick={onClick}>
-      Undelete
-    </Button>
-  </div>
+  <Button type="transparent" onClick={onClick}>
+    <div className={styles.deletedProject}>
+      <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+      <div className={styles.projectName}>{domain}</div>
+      <Button small decorative>
+        Undelete
+      </Button>
+    </div>
+  </Button>
 );
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
@@ -107,4 +108,3 @@ DeletedProjects.defaultProps = {
 };
 
 export default DeletedProjects;
-{
