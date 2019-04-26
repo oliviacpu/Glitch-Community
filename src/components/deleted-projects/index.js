@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
+import Button from 'Components/buttons/button';
 import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
@@ -22,13 +23,11 @@ const DeletedProject = ({ id, domain, onClick }) => {
   const onClickUndelete = (evt) => clickUndelete(evt, onClick);
   const onClickTracked = useTrackedFunc(onClickUndelete, 'Undelete clicked');
   return (
-    <button className="button-unstyled" onClick={onClickTracked}>
-      <div className="deleted-project">
-        <img className="avatar" src={getAvatarUrl(id)} alt="" />
-        <div className="deleted-project-name">{domain}</div>
-        <div className="button button-small">Undelete</div>
-      </div>
-    </button>
+    <div className="deleted-project">
+      <img className="avatar" src={getAvatarUrl(id)} alt="" />
+      <div className="deleted-project-name">{domain}</div>
+      <Button small onClick={onClickTracked}>Undelete</div>
+    </div>
   );
 };
 DeletedProject.propTypes = {
@@ -71,9 +70,9 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
 
   if (state === 'hidden') {
     return (
-      <button className="button button-tertiary" onClick={clickShow}>
+      <Button type="tertiary" onClick={clickShow}>
         Show
-      </button>
+      </Button>
     );
   }
   if (state === 'loading') {
@@ -85,9 +84,9 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
   return (
     <>
       <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-      <button className="button button-tertiary" onClick={clickHide}>
+      <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
-      </button>
+      </Button>
     </>
   );
 }

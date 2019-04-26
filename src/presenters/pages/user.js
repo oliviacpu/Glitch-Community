@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
+import Emoji from 'Components/images/emoji';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
@@ -185,8 +186,8 @@ const UserPage = ({
       {isAuthorized && (
         <article className="deleted-projects">
           <Heading tagName="h2">
-            <Emoji name="bomb" />
             Deleted Projects
+            <Emoji name="bomb" />
           </Heading>
           <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
         </article>
