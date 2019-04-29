@@ -155,7 +155,7 @@ const ProjectPage = ({
             )}
           </Heading>
           {users.length + teams.length > 0 && (
-            <div className="users-information">
+            <div>
               <ProfileList hasLinks teams={teams} users={users} layout="block" />
             </div>
           )}

@@ -23,6 +23,7 @@ import UserEditor from '../user-editor';
 import DeletedProjects from '../deleted-projects';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import styles from './user.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -101,7 +102,7 @@ const UserPage = ({
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className="profile-page user-page">
+    <main className={styles.container}>
       <section>
         <ProfileContainer
           type="user"

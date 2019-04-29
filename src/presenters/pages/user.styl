@@ -1,0 +1,20 @@
+@import  "../../components/constants"
+
+.container :global 
+  // projects-list
+  .projects
+    padding: 0
+    margin-bottom: 1rem
+    display: inline-block
+  .projects-container
+    margin-bottom: 1rem
+    
+  // permit a 2-column layout on user and team pages	
+  // in-between mediumViewport and largeViewport	
+  .projects-container
+    row-gap: 1.5rem	
+    @media (min-width: mediumViewport)	
+      grid-template-columns: 1fr 1fr	
+
+    @media (min-width: largeViewport)	
+      grid-template-columns: 1fr 1fr 1fr	

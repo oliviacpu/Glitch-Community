@@ -11,7 +11,6 @@ const aliases = require('./shared/aliases');
 const BUILD = path.resolve(__dirname, 'build');
 const SRC = path.resolve(__dirname, 'src');
 const SHARED = path.resolve(__dirname, 'shared');
-const CSS_MODULES = path.resolve(__dirname, 'src/components');
 const STYLES = path.resolve(__dirname, 'styles');
 const NODE_MODULES = path.resolve(__dirname, 'node_modules');
 const STYLE_BUNDLE_NAME = 'styles';
@@ -97,7 +96,7 @@ module.exports = smp.wrap({
           },
           {
             test: /\.styl/,
-            include: CSS_MODULES,
+            include: SRC,
             use: [
               MiniCssExtractPlugin.loader,
               {
