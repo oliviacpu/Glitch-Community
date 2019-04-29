@@ -12,6 +12,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
+import CollectionsList from 'Components/collections-list';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -22,8 +23,6 @@ import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 
-// import SampleTeamCollections from '../../curated/sample-team-collections';
-import CollectionsList from '../collections-list';
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
 import DeleteTeam from '../includes/delete-team';

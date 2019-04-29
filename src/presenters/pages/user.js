@@ -11,6 +11,7 @@ import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProjectsList from 'Components/containers/projects-list';
 import ProfileContainer from 'Components/profile-container';
+import CollectionsList from 'Components/collections-list';
 
 import { getLink } from '../../models/user';
 
@@ -20,8 +21,6 @@ import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
 import DeletedProjects from '../deleted-projects';
-
-import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
 

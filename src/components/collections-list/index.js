@@ -5,7 +5,7 @@ import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import CollectionItem from 'Components/collection/collection-item';
-import Button from 'Components/button';
+import Button from 'Components/buttons/button';
 import { getLink, createCollection } from 'Models/collection';
 
 import { useTrackedFunc } from '../../presenters/segment-analytics';
@@ -14,52 +14,10 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import styles from './styles.styl';
 
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam }) {
-  const api = useAPI();
-  const { currentUser } = useCurrentUser();
-  const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
-
-  function deleteCollection(id) {
-    setDeletedCollectionIds((ids) => [...ids, id]);
-    return api.delete(`/collections/${id}`);
-  }
-
-  const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
-  const hasCollections = !!collections.length;
-  const canMakeCollections = isAuthorized && !!currentUser;
-
-  if (!hasCollections && !canMakeCollections) {
-    return null;
-  }
-  return (
-    <article className={styles.collections}>
-      <Heading tagName="h2">{title}</Heading>
-      {canMakeCollections && (
-        <>
-          <CreateCollectionButton maybeTeam={maybeTeam} />
-          {!hasCollections && <CreateFirstCollection />}
-        </>
-      )}
-      <CollectionsUL collections={collections} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
-    </article>
-  );
-}
-
-CollectionsList.propTypes = {
-  collections: PropTypes.array.isRequired,
-  maybeTeam: PropTypes.object,
-  title: PropTypes.node.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-};
-
-CollectionsList.defaultProps = {
-  maybeTeam: undefined,
-};
-
 const CreateFirstCollection = () => (
-  <div className="create-first-collection">
+  <div className={styles.createFirstCollection}>
     <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
-    <p className="placeholder">Create collections to organize your favorite projects.</p>
+    <p className={styles.placeholder}>Create collections to organize your favorite projects.</p>
     <br />
   </div>
 );
@@ -100,20 +58,10 @@ function CreateCollectionButton({ maybeTeam }) {
     return <Redirect to={state.value} push />;
   }
   if (state.type === 'loading') {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
-  return (
-    <div>
-      <Button onClick={onClick}>
-        Create Collection
-      </Button>
-    </div>
-  );
+  return <Button onClick={onClick}>Create Collection</Button>;
 }
 
 CreateCollectionButton.propTypes = {
@@ -124,12 +72,11 @@ CreateCollectionButton.defaultProps = {
   maybeTeam: undefined,
 };
 
-export const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) => {
+const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) => {
   // order by updatedAt date
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt).reverse();
   return (
     <ul className={styles.collectionsContainer}>
-
       {orderedCollections.map((collection) => (
         <CollectionItem
           key={collection.id}
@@ -152,6 +99,50 @@ CollectionsUL.propTypes = {
 
 CollectionsUL.defaultProps = {
   deleteCollection: () => {},
+};
+
+function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam }) {
+  const api = useAPI();
+  const { currentUser } = useCurrentUser();
+  const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
+
+  function deleteCollection(id) {
+    setDeletedCollectionIds((ids) => [...ids, id]);
+    return api.delete(`/collections/${id}`);
+  }
+
+  const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
+  const hasCollections = !!collections.length;
+  const canMakeCollections = isAuthorized && !!currentUser;
+
+  if (!hasCollections && !canMakeCollections) {
+    return null;
+  }
+  return (
+    <article className={styles.collections}>
+      <Heading tagName="h2">{title}</Heading>
+      {canMakeCollections && (
+        <>
+          <div>
+            <CreateCollectionButton maybeTeam={maybeTeam} />
+          </div>
+          {!hasCollections && <CreateFirstCollection />}
+        </>
+      )}
+      <CollectionsUL collections={collections} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
+    </article>
+  );
+}
+
+CollectionsList.propTypes = {
+  collections: PropTypes.array.isRequired,
+  maybeTeam: PropTypes.object,
+  title: PropTypes.node.isRequired,
+  isAuthorized: PropTypes.bool.isRequired,
+};
+
+CollectionsList.defaultProps = {
+  maybeTeam: undefined,
 };
 
 export default CollectionsList;
