@@ -11,6 +11,7 @@ import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
+import IncludedInCollections from 'Components/collections-list/included-in-collections';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -20,7 +21,6 @@ import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
 import RelatedProjects from '../includes/related-projects';
-import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI } from '../../state/api';

@@ -103,7 +103,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
         </>
       )}
       <ul className={styles.collectionsContainer}>
-        {collections.map((collection) => (
+        {orderedCollections.map((collection) => (
           <li key={collection.id}>
             <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} showCurator={showCurator} />
           </li>
@@ -118,7 +118,7 @@ CollectionsList.propTypes = {
   maybeTeam: PropTypes.object,
   title: PropTypes.node.isRequired,
   isAuthorized: PropTypes.bool,
-  showCurator: PropTypes.bool
+  showCurator: PropTypes.bool,
 };
 
 CollectionsList.defaultProps = {

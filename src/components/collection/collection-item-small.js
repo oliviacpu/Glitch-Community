@@ -24,11 +24,11 @@ const CollectionLink = ({ collection, children, ...props }) => (
   </a>
 );
 
-const CollectionItemSmall = ({ collection }) => (
+const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
-    <div className={styles.curator}>
+    {showCurator && <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
-    </div>
+    </div>}
     <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
       <div className={styles.smallNameDescriptionArea}>
         <div className={styles.nameArea}>
@@ -50,7 +50,7 @@ const CollectionItemSmall = ({ collection }) => (
             color: isDarkColor(collection.coverColor) ? 'white' : '',
           }}
         >
-          <Markdown>{collection.description || ' '}</Markdown>
+          <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>
       <div className={styles.smallProjectCount}>
@@ -69,6 +69,11 @@ CollectionItemSmall.propTypes = {
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
+  showCurator: PropTypes.bool,
 };
+
+CollectionItemSmall.defaultProps = {
+  showCurator: false,
+}
 
 export default CollectionItemSmall;

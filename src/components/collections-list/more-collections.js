@@ -4,13 +4,12 @@ import { sampleSize } from 'lodash';
 
 import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
-
+import SmallCollectionItem from 'Components/collection/collection-item-small';
 import { UserLink, TeamLink } from 'Components/link';
-import { getSingleItem } from '../../shared/api';
+import { getDisplayName } from 'Models/user';
 
-import { getDisplayName } from '../models/user';
-
-import CollectionItem from './collection-item';
+import { getSingleItem } from '../../../shared/api';
+import styles from './styles.styl';
 
 const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   const authorType = collection.teamId === -1 ? 'user' : 'team';
@@ -18,16 +17,22 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   const authorId = authorType === 'user' ? collection.userId : collection.teamId;
 
   // get up to 10 collections from the author
-  let moreCollectionsFromAuthor = await getSingleItem(api, `v1/${authorEndpoint}/${authorId}/collections?limit=10&orderKey=createdAt&orderDirection=DESC`, 'items');
+  let moreCollectionsFromAuthor = await getSingleItem(
+    api,
+    `v1/${authorEndpoint}/${authorId}/collections?limit=10&orderKey=createdAt&orderDirection=DESC`,
+    'items',
+  );
 
   // filter out the current collection
   moreCollectionsFromAuthor = moreCollectionsFromAuthor.filter((c) => c.id !== collection.id);
 
   // get project details for each collection
-  let moreCollectionsWithProjects = await Promise.all(moreCollectionsFromAuthor.map(async (c) => {
-    c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}`, 'items');
-    return c;
-  }));
+  let moreCollectionsWithProjects = await Promise.all(
+    moreCollectionsFromAuthor.map(async (c) => {
+      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}`, 'items');
+      return c;
+    }),
+  );
 
   // filter out empty collections that don't have projects
   moreCollectionsWithProjects = moreCollectionsWithProjects.filter((c) => c.projects && c.projects.length > 0);
@@ -38,8 +43,6 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   return moreCollectionsWithProjects;
 };
 
-
-// TODO: componentize this (Links, CollectionItem, More Collections itself?)
 const MoreCollections = ({ currentCollection, collections }) => {
   const isUserCollection = currentCollection.teamId === -1;
   const type = isUserCollection ? 'user' : 'team';
@@ -47,26 +50,20 @@ const MoreCollections = ({ currentCollection, collections }) => {
   return (
     <section>
       <h2>
-        {
-          isUserCollection
-            ? (<UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} →</UserLink>)
-            : (<TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>)
-        }
+        {isUserCollection ? (
+          <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} →</UserLink>
+        ) : (
+          <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>
+        )}
       </h2>
       <CoverContainer type={type} item={currentCollection[type]}>
-        <div className="collections more-collections">
-          {
-            collections.map((collection) => (
-              <CollectionItem
-                key={collection.id}
-                collection={collection}
-                showCurator={false}
-                showProjectPreview={false}
-                showCollectionAvatar={false}
-              />
-            ))
-          }
-        </div>
+        <ul className={styles.collectionsContainer}>
+          {collections.map((collection) => (
+            <li key={collection.id}>
+              <SmallCollectionItem key={collection.id} collection={collection} />
+            </li>
+          ))}
+        </ul>
       </CoverContainer>
     </section>
   );
@@ -77,16 +74,11 @@ MoreCollections.propTypes = {
   collections: PropTypes.array.isRequired,
 };
 
-const MoreCollectionsContainer = ({ api, collection }) => (
+const MoreCollectionsContainer = ({ collection }) => [
   <DataLoader get={() => loadMoreCollectionsFromAuthor({ api, collection })}>
-    {
-      (collections) => collections.length > 0
-        ? <MoreCollections currentCollection={collection} collections={collections} />
-        : null
-    }
+    {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
   </DataLoader>
 );
-
 
 MoreCollectionsContainer.propTypes = {
   collection: PropTypes.object.isRequired,

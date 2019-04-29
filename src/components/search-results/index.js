@@ -104,14 +104,14 @@ function CollectionWithDataLoading({ collection }) {
   const { value: users = [] } = useUsers(collection.userIDs);
   const { value: teams = [] } = useTeams(collection.teamIDs);
   const collectionWithData = { ...collection, user: users[0], team: teams[0] };
-  return <CollectionItemSmall collection={collectionWithData} />;
+  return <CollectionItemSmall showCurator collection={collectionWithData} />;
 }
 
 function CollectionResult({ result }) {
   if (!result.user && !result.team) {
     return <CollectionWithDataLoading collection={result} />;
   }
-  return <CollectionItemSmall collection={result} />;
+  return <CollectionItemSmall showCurator collection={result} />;
 }
 
 const groups = [
