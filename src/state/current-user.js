@@ -151,13 +151,14 @@ class CurrentUserManager extends React.Component {
     try {
       const api = this.api();
       const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
+      const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
       const {
         baseUser, emails, projects, teams, collections,
       } = await allByKeys({
         baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
         emails: getAllPages(api, makeUrl('emails')),
-        projects: getAllPages(api, makeUrl('projects')),
-        teams: getAllPages(api, makeUrl('teams')),
+        projects: getAllPages(api, makeOrderedUrl('projects', 'userLastAccess', 'DESC')),
+        teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
         collections: getAllPages(api, makeUrl('collections')),
       });
       const user = { ...baseUser, emails, projects, teams, collections };
