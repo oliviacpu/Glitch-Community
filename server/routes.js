@@ -149,7 +149,7 @@ module.exports = function(external) {
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
     if (!validateEntityName(name) || !validateEntityName(collection)) {
-      await render(res, `${collection}`, `We couldn't find @${name}/${collection}`);
+      await render(res, collection, `We couldn't find @${name}/${collection}`);
       return;
     }
     const collectionObj = await getCollection(`${name}/${collection}`);
@@ -165,7 +165,7 @@ module.exports = function(external) {
       await render(res, name, description);
       return;
     }
-    await render(res, `${collection}`, `We couldn't find @${name}/${collection}`);
+    await render(res, collection, `We couldn't find @${name}/${collection}`);
   });
 
   app.get('/auth/:domain', async (req, res) => {
