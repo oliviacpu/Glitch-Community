@@ -6,9 +6,11 @@ import Link from 'Components/link';
 import styles from './footer.styl';
 
 const FooterLink = ({ className, href, track, children }) => (
-  <Link className={classnames(styles.footerLink, className)} to={href} data-track={`footer → ${track}`}>
-    {children}
-  </Link>
+  <div className={classnames(styles.footerLinkWrap, className)}>
+    <Link className={styles.footerLink} to={href} data-track={`footer → ${track}`}>
+      {children}
+    </Link>
+  </div>
 );
 
 const PlatformsIcon = () => (
@@ -42,7 +44,8 @@ const Footer = () => (
       <Emoji name="policeOfficer" />
     </FooterLink>
     <FooterLink className={styles.teams} href="/teams" track="platforms">
-      <PlatformsIcon /> Glitch Teams
+      <PlatformsIcon />
+      Glitch Teams
     </FooterLink>
   </footer>
 );
