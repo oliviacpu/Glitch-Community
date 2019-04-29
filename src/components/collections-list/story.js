@@ -7,9 +7,12 @@ import CollectionsList from './index';
 import MoreCollections from './more-collections';
 
 const mockAPI = {
+  get: () => Promise.resolve({ data: Object.values(collections) })
 }
 
 storiesOf('Collections', module)
   .add('CollectionsList', provideContext({ api: mockAPI }, () => (
     <CollectionsList collections={Object.values(collections)} />
-))).add('MoreCollections', provideCon)
+))).add('MoreCollections', provideContext({ api: mockAPI }, () => (
+  <MoreCollections collection={collections.empty} />
+))
