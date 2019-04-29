@@ -63,17 +63,21 @@ function useRepeatingEffect(effectHandler, dependencies) {
   return increment;
 }
 
+const initState = {
+  kaomoji: '',
+  loading: true,
+  questions: [],
+};
+
 function Questions({ max }) {
   const api = useAPI();
-  const [{ kaomoji, loading, questions }, setState] = useState({
-    kaomoji: '',
-    loading: true,
-    questions: [],
-  });
+  const [{ kaomoji, loading, questions }, setState] = useState(initState);
   const reload = useRepeatingEffect(() => {
+    setState(initState);
     load(api, max).then(setState);
   }, []);
 
+  console.log(loading);
   return (
     <section className={styles.container}>
       <Heading tagName="h2">
