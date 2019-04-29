@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
+import AnimationContainer from 'Components/animation-container';
 import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
@@ -18,7 +19,7 @@ const DeletedProject = ({ id, domain, onClick }) => {
   const [exiting, setExiting] = useState(false);
 
   return (
-    <div className={exiting ? 'slide-up' : ''} onAnimationEnd={onClick}>
+    <AnimationContainer type="slideUp" active={exiting} onAnimationEnd={onClick}>
       <TransparentButton onClick={() => setExiting(true)} className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
@@ -28,7 +29,7 @@ const DeletedProject = ({ id, domain, onClick }) => {
           </Button>
         </div>
       </TransparentButton>
-    </div>
+    </AnimationContainer>
   );
 };
 
