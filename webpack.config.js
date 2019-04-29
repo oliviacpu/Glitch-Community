@@ -65,7 +65,7 @@ module.exports = smp.wrap({
   },
   context: path.resolve(__dirname),
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.styl'],
     alias: aliases,
   },
   module: {
