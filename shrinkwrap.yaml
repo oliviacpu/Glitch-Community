@@ -56,7 +56,6 @@ dependencies:
   module-alias: 2.2.0
   nodemon: 1.18.11
   prop-types: 15.7.2
-  punycode: 2.1.1
   quantize: 1.0.2
   randomcolor: 0.5.4
   react: 16.8.6
@@ -12811,7 +12810,6 @@ specifiers:
   module-alias: ^2.2.0
   nodemon: ^1.18.11
   prop-types: ^15.6.2
-  punycode: ^2.1.1
   quantize: ^1.0.2
   randomcolor: ^0.5.4
   react: ^16.8.4
