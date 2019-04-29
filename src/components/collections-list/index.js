@@ -5,12 +5,14 @@ import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import CollectionItem from 'Components/collection/collection-item';
+import Button from 'Components/button';
 import { getLink, createCollection } from 'Models/collection';
 
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import { useNotifications } from '../../presenters/notifications';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
+import styles from './styles.styl';
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam }) {
   const api = useAPI();
@@ -30,7 +32,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
     return null;
   }
   return (
-    <article className="collections">
+    <article className={styles.collections}>
       <Heading tagName="h2">{title}</Heading>
       {canMakeCollections && (
         <>
@@ -99,17 +101,17 @@ function CreateCollectionButton({ maybeTeam }) {
   }
   if (state.type === 'loading') {
     return (
-      <div id="create-collection-container">
+      <div>
         <Loader />
       </div>
     );
   }
 
   return (
-    <div id="create-collection-container">
-      <button className="button" id="create-collection" onClick={onClick}>
+    <div>
+      <Button onClick={onClick}>
         Create Collection
-      </button>
+      </Button>
     </div>
   );
 }
@@ -126,7 +128,7 @@ export const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) =
   // order by updatedAt date
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt).reverse();
   return (
-    <ul className="collections-container">
+    <ul className={styles.collectionsContainer}>
 
       {orderedCollections.map((collection) => (
         <CollectionItem
