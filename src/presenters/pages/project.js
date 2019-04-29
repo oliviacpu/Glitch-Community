@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
+import CollectionsList from 'Components/collections-list';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
-import IncludedInCollections from 'Components/collections-list/included-in-collections';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -23,7 +24,7 @@ import { ShowButton, EditButton } from '../includes/project-actions';
 import RelatedProjects from '../includes/related-projects';
 import { addBreadcrumb } from '../../utils/sentry';
 
-import { useAPI } from '../../state/api';
+import { useAPI, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import Layout from '../layout';
@@ -31,6 +32,38 @@ import Layout from '../layout';
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
+
+const useIncludingCollections = createAPIHook(async (api, projectId) => {
+  const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
+  const selectedCollections = sampleSize(collections, 3);
+  return Promise.all(
+    selectedCollections.map(async (collection) => {
+      const { projects, user, team } = await allByKeys({
+        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+        user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
+        team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
+      });
+      return { ...collection, projects, user, team };
+    }),
+  );
+});
+
+const IncludedInCollections = ({ projectId }) => {
+  const { status, value: rawCollections } = useIncludingCollections(projectId);
+  if (status === 'loading') {
+    return null;
+  }
+  const collections = rawCollections.filter((c) => c.team || c.user);
+  if (!collections.length) {
+    return null;
+  }
+  return (
+    <CollectionsList title="Included in Collections" showCurator collections={collections} />
+  );
+};
+
+export default IncludedInCollections;
+
 
 const PrivateTooltip = 'Only members can view code';
 const PublicTooltip = 'Visible to everyone';
