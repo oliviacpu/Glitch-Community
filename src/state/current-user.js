@@ -161,7 +161,6 @@ class CurrentUserManager extends React.Component {
         collections: getAllPages(api, makeUrl('collections')),
       });
       const user = { ...baseUser, emails, projects, teams, collections };
-      console.log(user);
       if (!usersMatch(sharedUser, user)) {
         return 'error';
       }
