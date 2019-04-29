@@ -4,6 +4,7 @@ import { uniqBy } from 'lodash';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
+import { UserLink } from 'Components/link';
 import { getDisplayName } from '../../models/user';
 import { useTracker } from '../segment-analytics';
 import { WhitelistedDomainIcon } from './team-elements';
@@ -11,7 +12,6 @@ import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
-import { UserLink } from './link';
 
 // Team Users list (in profile container)
 

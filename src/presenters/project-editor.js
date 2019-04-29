@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as assets from '../utils/assets';
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
+import useUploader from './includes/uploader';
 
 class ProjectEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ...props.initialProject,
+      _avatarCache: Date.now(),
     };
   }
 
@@ -28,6 +31,12 @@ class ProjectEditor extends React.Component {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
+  async uploadAvatar(blob) {
+    const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
+    await this.props.uploadAsset(blob, policy, '', { cacheControl: 60 });
+    this.setState({ _avatarCache: Date.now() });
+  }
+
   render() {
     const { handleError, handleErrorForInput, handleCustomError } = this.props;
     const funcs = {
@@ -35,6 +44,7 @@ class ProjectEditor extends React.Component {
       updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),
+      uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
     };
     return this.props.children(this.state, funcs, this.userIsMember());
   }
@@ -57,8 +67,9 @@ const ProjectEditorContainer = ({ children, initialProject }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const errorFuncs = useErrorHandlers();
+  const uploadFuncs = useUploader();
   return (
-    <ProjectEditor api={api} currentUser={currentUser} initialProject={initialProject} {...errorFuncs}>
+    <ProjectEditor api={api} currentUser={currentUser} initialProject={initialProject} {...errorFuncs} {...uploadFuncs}>
       {children}
     </ProjectEditor>
   );
