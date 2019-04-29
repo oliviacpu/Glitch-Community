@@ -5,14 +5,12 @@ import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import CollectionItem from 'Components/collection/collection-item';
+import { getLink, createCollection } from 'Models/collection';
 
-import { useTrackedFunc } from './segment-analytics';
-import { getLink, createCollection } from '../models/collection';
-import { useNotifications } from './notifications';
-
-import { useAPI } from '../state/api';
-import { useCurrentUser } from '../state/current-user';
-
+import { useTrackedFunc } from '../../presenters/segment-analytics';
+import { useNotifications } from '../../presenters/notifications';
+import { useAPI } from '../../state/api';
+import { useCurrentUser } from '../../state/current-user';
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam }) {
   const api = useAPI();
