@@ -2,17 +2,32 @@
 
 .collectionsContainer
   display: grid
-  grid-template-columns: 1fr
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
   grid-gap: 10px
-  align-items: start
   list-style-type: none
+  margin: 0
   padding: 0
 
+.createCollectionButtonWrap
+  margin-bottom: 1rem
+    
+.createFirstCollection
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  width: 100%
+  // align with grids
   @media (min-width: mediumViewport)
-    grid-template-columns: 1fr 1fr 1fr
-    > li
-      min-width: 33%  
+    width: 50%
+    padding-right: 10px
+  @media (min-width: largeViewport)
+    width: 33%
 
-  > li
-    margin-top: 2px
-    min-width: 100%
+.createFirstCollectionText
+  padding-left: 15px
+  margin: 0
+    
+
+
+
+  

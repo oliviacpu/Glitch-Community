@@ -17,7 +17,7 @@ import styles from './styles.styl';
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
     <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
-    <p className={styles.placeholder}>Create collections to organize your favorite projects.</p>
+    <p className={styles.createFirstCollectionText}>Create collections to organize your favorite projects.</p>
     <br />
   </div>
 );
@@ -123,7 +123,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       <Heading tagName="h2">{title}</Heading>
       {canMakeCollections && (
         <>
-          <div>
+          <div className={styles.createCollectionButtonWrap}>
             <CreateCollectionButton maybeTeam={maybeTeam} />
           </div>
           {!hasCollections && <CreateFirstCollection />}
