@@ -1,6 +1,6 @@
 import React from 'react';
 import { sampleSize } from 'lodash';
-import CollectionItem from 'Components/collection/collection-item';
+import CollectionsList from 'Components/collections-list';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import { createAPIHook } from '../../state/api';
 
@@ -29,14 +29,7 @@ const IncludedInCollections = ({ projectId }) => {
     return null;
   }
   return (
-    <div className="collections">
-      <h2>Included in Collections</h2>
-      <ul className="collections-container">
-        {collections.map((collection) => (
-          <CollectionItem showCurator key={collection.id} collection={collection} />
-        ))}
-      </ul>
-    </div>
+    <CollectionsList title="Included in Collections" showCurator collections={collections} />
   );
 };
 

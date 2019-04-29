@@ -72,27 +72,7 @@ CreateCollectionButton.defaultProps = {
   maybeTeam: undefined,
 };
 
-const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) => (
-  <ul className={styles.collectionsContainer}>
-    {collections.map((collection) => (
-      <li key={collection.id}>
-        <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
-      </li>
-    ))}
-  </ul>
-);
-
-CollectionsUL.propTypes = {
-  collections: PropTypes.array.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-  deleteCollection: PropTypes.func,
-};
-
-CollectionsUL.defaultProps = {
-  deleteCollection: () => {},
-};
-
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam }) {
+function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -122,7 +102,13 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}
-      <CollectionsUL collections={orderedCollections} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
+      <ul className={styles.collectionsContainer}>
+        {collections.map((collection) => (
+          <li key={collection.id}>
+            <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} showCurator={showCurator} />
+          </li>
+        ))}
+      </ul>
     </article>
   );
 }
@@ -131,11 +117,14 @@ CollectionsList.propTypes = {
   collections: PropTypes.array.isRequired,
   maybeTeam: PropTypes.object,
   title: PropTypes.node.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
+  isAuthorized: PropTypes.bool,
+  showCurator: PropTypes.bool
 };
 
 CollectionsList.defaultProps = {
   maybeTeam: undefined,
+  isAuthorized: false,
+  showCurator: false,
 };
 
 export default CollectionsList;
