@@ -13,14 +13,12 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
-<<<<<<< HEAD
-import PopoverWithButton from '../pop-overs/popover-with-button';
-import { getAvatarUrl } from '../../models/project';
-=======
 import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
 
->>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
+import PopoverWithButton from '../pop-overs/popover-with-button';
+import { getAvatarUrl } from '../../models/project';
+
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
@@ -98,7 +96,6 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-<<<<<<< HEAD
 function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -158,8 +155,6 @@ DeleteProjectButton.propTypes = {
   deleteProject: PropTypes.func.isRequired,
 };
 
-=======
->>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
 const ProjectPage = ({
   project,
   addProjectToCollection,
@@ -168,11 +163,8 @@ const ProjectPage = ({
   updateDomain,
   updateDescription,
   updatePrivate,
-<<<<<<< HEAD
   deleteProject,
-=======
   uploadAvatar,
->>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
 }) => {
   const { domain, users, teams } = project;
   return (

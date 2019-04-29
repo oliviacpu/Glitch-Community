@@ -31,15 +31,14 @@ class ProjectEditor extends React.Component {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
-<<<<<<< HEAD
   async deleteProject() {
     await this.props.api.delete(`projects/${this.state.id}`);
-=======
+  }
+  
   async uploadAvatar(blob) {
     const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
     await this.props.uploadAsset(blob, policy, '', { cacheControl: 60 });
     this.setState({ _avatarCache: Date.now() });
->>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
   }
 
   render() {
