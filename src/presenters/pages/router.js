@@ -115,7 +115,7 @@ const Router = () => (
         path="/@:owner/:name"
         exact
         render={({ location, match }) => (
-          <CollectionPage key={location.key} ownerName={punycode.toASCII(match.params.owner)} name={punycode.toASCII(match.params.name)} />
+          <CollectionPage key={location.key} ownerName={punycode.toASCII(match.params.owner)} name={match.params.name} />
         )}
       />
 

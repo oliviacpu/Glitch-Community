@@ -140,7 +140,7 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
-    const collectionObj = await getCollection(`${punycode.toASCII(name)}/${punycode.toASCII(collection)}`);
+    const collectionObj = await getCollection(`${punycode.toASCII(name)}/${encodeURIComponent(collection)}`);
     const author = name;
 
     if (collectionObj) {
