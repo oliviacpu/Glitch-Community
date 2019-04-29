@@ -72,24 +72,15 @@ CreateCollectionButton.defaultProps = {
   maybeTeam: undefined,
 };
 
-const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) => {
-  // order by updatedAt date
-  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt).reverse();
-  return (
-    <ul className={styles.collectionsContainer}>
-      {orderedCollections.map((collection) => (
-        <CollectionItem
-          key={collection.id}
-          {...{
-            collection,
-            isAuthorized,
-            deleteCollection,
-          }}
-        />
-      ))}
-    </ul>
-  );
-};
+const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) => (
+  <ul className={styles.collectionsContainer}>
+    {collections.map((collection) => (
+      <li key={collection.id}>
+        <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
+      </li>
+    ))}
+  </ul>
+);
 
 CollectionsUL.propTypes = {
   collections: PropTypes.array.isRequired,
@@ -115,6 +106,8 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
+  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
@@ -129,7 +122,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}
-      <CollectionsUL collections={collections} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
+      <CollectionsUL collections={orderedCollections} isAuthorized={isAuthorized} deleteCollection={deleteCollection} />
     </article>
   );
 }
