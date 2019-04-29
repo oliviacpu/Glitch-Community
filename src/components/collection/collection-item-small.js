@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
+import classnames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
@@ -29,7 +30,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
     {showCurator && <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
     </div>}
-    <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
+    <CollectionLink collection={collection} className={classnames(styles.bubbleContainer, showCurator && styles.showCurator)} style={collectionColorStyles(collection)}>
       <div className={styles.smallNameDescriptionArea}>
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
