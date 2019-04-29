@@ -101,27 +101,6 @@ const ProjectPage = ({
   return (
     <main className="project-page">
       <section id="info">
-<<<<<<< HEAD
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <ProjectDomainInput
-                  domain={domain}
-                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
-              )}
-            </Heading>
-            {users.length + teams.length > 0 && (
-              <div>
-                <ProfileList hasLinks teams={teams} users={users} layout="block" />
-              </div>
-=======
         <ProfileContainer
           type="project"
           item={project}
@@ -140,11 +119,10 @@ const ProjectPage = ({
               <>
                 {domain} {project.private && <PrivateBadge />}
               </>
->>>>>>> 62b6da4c1d22ee4e7054b2eb25e93a1343d5a506
             )}
           </Heading>
           {users.length + teams.length > 0 && (
-            <div className="users-information">
+            <div>
               <ProfileList hasLinks teams={teams} users={users} layout="block" />
             </div>
           )}
