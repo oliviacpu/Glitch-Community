@@ -5,6 +5,7 @@ import { sampleSize } from 'lodash';
 import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
 import SmallCollectionItem from 'Components/collection/collection-item-small';
+import Heading from 'Components/text/heading';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 
@@ -49,14 +50,16 @@ const MoreCollections = ({ currentCollection, collections }) => {
   const type = isUserCollection ? 'user' : 'team';
 
   return (
-    <section>
-      <h2>
-        {isUserCollection ? (
-          <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} →</UserLink>
-        ) : (
-          <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>
-        )}
-      </h2>
+    <>
+      <div className={styles.moreByLinkWrap}>
+        <Heading tagName="h2">
+          {isUserCollection ? (
+            <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} →</UserLink>
+          ) : (
+            <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>
+          )}
+        </Heading>
+      </div>
       <CoverContainer type={type} item={currentCollection[type]}>
         <ul className={styles.collectionsContainer}>
           {collections.map((collection) => (
@@ -66,7 +69,7 @@ const MoreCollections = ({ currentCollection, collections }) => {
           ))}
         </ul>
       </CoverContainer>
-    </section>
+    </>
   );
 };
 

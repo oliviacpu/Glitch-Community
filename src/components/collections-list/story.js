@@ -26,6 +26,7 @@ const glitchCollections = [
     team: {
       id: 74,
       url: 'glitch',
+      name: 'Glitch',
     },
     user: null,
   },
