@@ -13,6 +13,8 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 
+const validateEntityName = (name) => /^[A-Za-z0-9-]+$/.test(name);
+
 module.exports = function(external) {
   const app = express.Router();
 
@@ -102,6 +104,10 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
+    if (!validateEntityName(domain)) {
+      await render(res, domain, `We couldn't find ~${domain}`);
+      return;
+    }
     const project = await getProject(domain);
     if (!project) {
       await render(res, domain, `We couldn't find ~${domain}`);
@@ -115,6 +121,10 @@ module.exports = function(external) {
 
   app.get('/@:name', async (req, res) => {
     const { name } = req.params;
+    if (!validateEntityName(name)) {
+      await render(res, name, `We couldn't find @${name}`);
+      return;
+    }
     const team = await getTeam(name);
     if (team) {
       const description = team.description ? cheerio.load(md.render(team.description)).text() : '';
@@ -138,6 +148,10 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
+    if (!validateEntityName(name) || !validateEntityName(collection)) {
+      await render(res, `${collection}`, `We couldn't find @${name}/${collection}`);
+      return;
+    }
     const collectionObj = await getCollection(`${name}/${collection}`);
     const author = name;
 
