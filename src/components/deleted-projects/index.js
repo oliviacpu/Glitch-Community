@@ -17,9 +17,11 @@ const DeletedProject = ({ id, domain, onClick }) => (
   <TransparentButton onClick={onClick} className={styles.deletedProject}>
     <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
     <div className={styles.projectName}>{domain}</div>
-    <Button small decorative>
-      Undelete
-    </Button>
+    <div className={styles.buttonWrap}>
+      <Button size="small" decorative>
+        Undelete
+      </Button>
+    </div>
   </TransparentButton>
 );
 DeletedProject.propTypes = {
@@ -34,6 +36,7 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const onClick = (id) => {
     const node = ref.current;
     if (!node) return;
+    node.classList.add('slide-up');
     node.addEventListener('animationend', () => undeleteTracked(id), { once: true });
     node.classList.add('slide-up');
   };
