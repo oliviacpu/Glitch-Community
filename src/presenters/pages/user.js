@@ -10,6 +10,7 @@ import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
+import ProjectsList from 'Components/containers/projects-list';
 import ProfileContainer from 'Components/profile-container';
 import DeletedProjects from 'Components/deleted-projects';
 
@@ -20,10 +21,10 @@ import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
-import EntityPageProjects from '../entity-page-projects';
 import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import styles from './user.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -102,7 +103,7 @@ const UserPage = ({
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className="profile-page user-page">
+    <main className={styles.container}>
       <section>
         <ProfileContainer
           type="user"
@@ -143,18 +144,23 @@ const UserPage = ({
       )}
 
       {/* Pinned Projects */}
-      <EntityPageProjects
-        projects={pinnedProjects}
-        isAuthorized={isAuthorized}
-        removePin={removePin}
-        featureProject={featureProject}
-        projectOptions={{
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-      />
+      {pinnedProjects.length > 0 && (
+        <ProjectsList
+          title={
+            <>
+              Pinned Projects <Emoji inTitle name="pushpin" />
+            </>
+          }
+          projects={pinnedProjects}
+          projectOptions={{
+            removePin: isAuthorized ? removePin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
+            leaveProject,
+            deleteProject,
+            addProjectToCollection,
+          }}
+        />
+      )}
 
       {!!user.login && (
         <CollectionsList
@@ -169,25 +175,26 @@ const UserPage = ({
       )}
 
       {/* Recent Projects */}
-      <EntityPageProjects
-        projects={recentProjects}
-        isAuthorized={isAuthorized}
-        addPin={addPin}
-        featureProject={featureProject}
-        projectOptions={{
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-        enableFiltering={recentProjects.length > 6}
-        enablePagination
-      />
+      {recentProjects.length > 0 && (
+        <ProjectsList
+          title="Recent Projects"
+          projects={recentProjects}
+          enablePagination
+          enableFiltering={recentProjects.length > 6}
+          projectOptions={{
+            addPin: isAuthorized ? addPin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
+            leaveProject,
+            deleteProject,
+            addProjectToCollection,
+          }}
+        />
+      )}
       {isAuthorized && (
-        <article className="deleted-projects">
+        <article>
           <Heading tagName="h2">
             Deleted Projects
-            <Emoji name="bomb" />
+            <Emoji inTitle name="bomb" />
           </Heading>
           <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
         </article>

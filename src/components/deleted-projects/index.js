@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
@@ -19,19 +18,20 @@ const DeletedProject = ({ id, domain, onClick }) => {
   const [exiting, setExiting] = useState(false);
 
   return (
-      <TransparentButton onClick={() => setExiting(true)} 
-        className={classnames(styles.deletedProject, exiting && "slide-up")}>
-      <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-      <div className={styles.projectName}>{domain}</div>
-      <div className={styles.buttonWrap}>
-        <Button size="small" decorative>
-          Undelete
-        </Button>
-      </div>
-    </TransparentButton>
+    <div className={exiting ? 'slide-up' : ''} onAnimationEnd={onClick}>
+      <TransparentButton onClick={() => setExiting(true)} className={styles.deletedProject}>
+        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+        <div className={styles.projectName}>{domain}</div>
+        <div className={styles.buttonWrap}>
+          <Button size="small" decorative>
+            Undelete
+          </Button>
+        </div>
+      </TransparentButton>
+    </div>
   );
-}
-  
+};
+
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,

@@ -9,11 +9,15 @@ import MarkdownInput from 'Components/inputs/markdown-input';
 
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
+import CollectionNameInput from 'Components/fields/collection-name-input';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import TeamNameInput from 'Components/fields/team-name-input';
 import TeamUrlInput from 'Components/fields/team-url-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
+
+import InputErrorIcon from 'Components/inputs/input-error-icon';
+import InputErrorMessage from 'Components/inputs/input-error-message';
 
 const inputStory = storiesOf('Input Fields', module);
 
@@ -62,6 +66,7 @@ const ProperTextInputs = () => {
     <div style={{ maxWidth: '400px' }}>
       <p><OptimisticTextInput {...useOptimisticProps('value')} placeholder="Live field, type error to get an error" /></p>
       <p><OptimisticMarkdownInput {...useOptimisticProps('value')} placeholder="Live markdown, type error to get an error" /></p>
+      <p>Collection name <CollectionNameInput {...useOptimisticProps('name')} /></p>
       <p>Project domain <ProjectDomainInput {...useOptimisticProps('domain')} /></p>
       <p>Team name <TeamNameInput {...useOptimisticProps('name')} /></p>
       <p>Team url <TeamUrlInput {...useOptimisticProps('url')} /></p>
@@ -72,3 +77,10 @@ const ProperTextInputs = () => {
 };
 
 inputStory.add('optimistic', () => <ProperTextInputs />);
+
+inputStory.add('errors', () => (
+  <div style={{ maxWidth: '200px' }}>
+    <p>input error icon → <InputErrorIcon /></p>
+    <p><InputErrorMessage>This is an error message</InputErrorMessage></p>
+  </div>
+));

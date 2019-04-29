@@ -4,8 +4,9 @@ import { Redirect } from 'react-router-dom';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
+import CollectionItem from 'Components/collection/collection-item';
+
 import { useTrackedFunc } from './segment-analytics';
-import CollectionItem from './collection-item';
 import { getLink, createCollection } from '../models/collection';
 import { useNotifications } from './notifications';
 
@@ -128,9 +129,6 @@ export const CollectionsUL = ({ collections, deleteCollection, isAuthorized }) =
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt).reverse();
   return (
     <ul className="collections-container">
-      {/* FAVORITES COLLECTION CARD - note this currently references empty favorites category in categories.js
-        <CollectionItem key={null} collection={null}isAuthorized={isAuthorized}></CollectionItem>
-      */}
 
       {orderedCollections.map((collection) => (
         <CollectionItem

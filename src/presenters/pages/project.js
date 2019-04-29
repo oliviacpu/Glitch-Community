@@ -9,8 +9,9 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
+import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
-import { getAvatarUrl } from '../../models/project';
+
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
@@ -18,7 +19,6 @@ import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-
 import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
@@ -63,26 +63,6 @@ PrivateToggle.propTypes = {
   setPrivate: PropTypes.func.isRequired,
 };
 
-const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
-
-export const ProjectInfoContainer = ({ style, children, buttons }) => (
-  <>
-    <div className="avatar-container">
-      <div className="user-avatar" style={style} />
-      {buttons}
-    </div>
-    <div className="profile-information">{children}</div>
-  </>
-);
-ProjectInfoContainer.propTypes = {
-  style: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  buttons: PropTypes.element,
-};
-ProjectInfoContainer.defaultProps = {
-  buttons: null,
-};
-
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
     <>
@@ -107,43 +87,60 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
+const ProjectPage = ({
+  project,
+  addProjectToCollection,
+  currentUser,
+  isAuthorized,
+  updateDomain,
+  updateDescription,
+  updatePrivate,
+  uploadAvatar,
+}) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
       <section id="info">
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <ProjectDomainInput
-                  domain={domain}
-                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
-              )}
-            </Heading>
-            {users.length + teams.length > 0 && (
-              <div className="users-information">
-                <ProfileList hasLinks teams={teams} users={users} layout="block" />
-              </div>
+        <ProfileContainer
+          type="project"
+          item={project}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
+        >
+          <Heading tagName="h1">
+            {isAuthorized ? (
+              <ProjectDomainInput
+                domain={domain}
+                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
+                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+              />
+            ) : (
+              <>
+                {domain} {project.private && <PrivateBadge />}
+              </>
             )}
-            <AuthDescription
-              authorized={isAuthorized}
-              description={project.description}
-              update={updateDescription}
-              placeholder="Tell us about your app"
-            />
-            <p className="buttons">
+          </Heading>
+          {users.length + teams.length > 0 && (
+            <div>
+              <ProfileList hasLinks teams={teams} users={users} layout="block" />
+            </div>
+          )}
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.description}
+            update={updateDescription}
+            placeholder="Tell us about your app"
+          />
+          <div>
+            <span className="project-page__profile-button">
               <ShowButton name={domain} />
+            </span>
+            <span className="project-page__profile-button">
               <EditButton name={domain} isMember={isAuthorized} />
-            </p>
-          </ProjectInfoContainer>
-        </InfoContainer>
+            </span>
+          </div>
+        </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
