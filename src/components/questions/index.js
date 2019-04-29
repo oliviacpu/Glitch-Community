@@ -31,6 +31,7 @@ QuestionTimer.propTypes = {
 };
 
 async function load(api, max) {
+  const kaomoji = sample(kaomojis);
   try {
     const { data } = await api.get('projects/questions');
     const questions = data
@@ -44,15 +45,11 @@ async function load(api, max) {
         });
         return { colorInner, colorOuter, ...question };
       });
-    return {
-      kaomoji: sample(kaomojis),
-      questions,
-      loading: false,
-    };
+    return { kaomoji, questions, loading: false };
   } catch (error) {
     console.error(error);
     captureException(error);
-    return { loading: false };
+    return { kaomoji, questions: [], loading: false };
   }
 }
 
@@ -93,10 +90,8 @@ function Questions({ max }) {
           </ErrorBoundary>
         ) : (
           <>
-            {kaomoji} Looks like nobody is asking for help right now. {/* TODO: 'general' prop on Link? */}
-            <Link to="/help/how-can-i-get-help-with-code-in-my-project/">
-              Learn about helping
-            </Link>
+            {kaomoji} Looks like nobody is asking for help right now.{" "}
+            <Link className={styles.link} to="/help/how-can-i-get-help-with-code-in-my-project/">Learn about helping</Link>
           </>
         )}
       </div>
