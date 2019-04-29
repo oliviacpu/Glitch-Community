@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
-import { Link } from './includes/link';
+import Link from 'Components/link';
 
 const FooterLine = ({ href, track, children }) => (
   <Text>

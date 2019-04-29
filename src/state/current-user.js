@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api';
@@ -129,11 +130,12 @@ class CurrentUserManager extends React.Component {
   }
 
   async getSharedUser() {
+    const persistentToken = this.persistentToken();
+    if (!persistentToken) {
+      return undefined;
+    }
     try {
-      const {
-        data: { user },
-      } = await this.api().get('boot?latestProjectOnly=true');
-      return user;
+      return await getSingleItem(this.api(), `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         return undefined;
@@ -147,11 +149,23 @@ class CurrentUserManager extends React.Component {
     if (!sharedUser) return undefined;
     if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
     try {
-      const { data } = await this.api().get(`users/${sharedUser.id}`);
-      if (!usersMatch(sharedUser, data)) {
+      const api = this.api();
+      const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
+      const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
+      const {
+        baseUser, emails, projects, teams, collections,
+      } = await allByKeys({
+        baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
+        emails: getAllPages(api, makeUrl('emails')),
+        projects: getAllPages(api, makeOrderedUrl('projects', 'userLastAccess', 'DESC')),
+        teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
+        collections: getAllPages(api, makeUrl('collections')),
+      });
+      const user = { ...baseUser, emails, projects, teams, collections };
+      if (!usersMatch(sharedUser, user)) {
         return 'error';
       }
-      return data;
+      return user;
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 404)) {
         // 401 means our token is bad, 404 means the user doesn't exist

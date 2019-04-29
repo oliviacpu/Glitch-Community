@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import Pluralize from 'react-pluralize';
 import { Redirect } from 'react-router-dom';
-import { partition } from 'lodash';
+import { kebabCase, partition } from 'lodash';
+
+import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
 
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
@@ -12,17 +15,16 @@ import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
 import { ProjectsUL } from 'Components/containers/projects-list';
+import CollectionNameInput from 'Components/fields/collection-name-input';
+import DataLoader from 'Components/data-loader';
 
 import Layout from '../layout';
-import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
-import EditCollectionNameAndUrl from '../includes/edit-collection-name-and-url';
 import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
@@ -34,10 +36,6 @@ import { useCurrentUser } from '../../state/current-user';
 import MoreCollectionsContainer from '../more-collections';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
-
-function syncPageToUrl(collection, url) {
-  history.replaceState(null, null, getLink({ ...collection, url }));
-}
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -96,6 +94,13 @@ const CollectionPageContents = ({
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
 
+  const onNameChange = async (name) => {
+    const url = kebabCase(name);
+    const result = await updateNameAndUrl({ name, url });
+    history.replaceState(null, null, getLink({ ...collection, url }));
+    return result;
+  };
+
   return (
     <>
       <Helmet title={collection.name} />
@@ -106,12 +111,11 @@ const CollectionPageContents = ({
               <CollectionAvatar color={collection.coverColor} />
             </div>
 
-            <EditCollectionNameAndUrl
-              isAuthorized={currentUserIsAuthor}
-              name={collection.name}
-              url={collection.url}
-              update={(data) => updateNameAndUrl(data).then(() => syncPageToUrl(collection, data.url))}
-            />
+            <h1 className="collection-name">
+              {currentUserIsAuthor ? (
+                <CollectionNameInput name={collection.name} onChange={onNameChange} />
+              ) : collection.name}
+            </h1>
 
             <div className="collection-owner">
               <ProfileItem hasLink team={collection.team} user={collection.user} />
@@ -127,7 +131,7 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
+              <Text><Pluralize count={collection.projects.length} singular="Project" /></Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}

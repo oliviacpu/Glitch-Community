@@ -26,7 +26,7 @@ const TeamItem = ({ team }) => (
         <ProfileAvatar team={team} />
       </div>
       <div className={styles.body}>
-        <div>
+        <div className={styles.itemButtonWrap}>
           <Button href={getLink(team)}>{team.name}</Button>
           {!!team.isVerified && <VerifiedBadge />}
         </div>

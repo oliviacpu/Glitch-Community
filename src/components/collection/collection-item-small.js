@@ -7,6 +7,7 @@ import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
+import { isDarkColor } from '../../models/collection';
 
 import styles from './collection-item.styl';
 
@@ -23,7 +24,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
   </a>
 );
 
-const SmallCollectionItem = ({ collection }) => (
+const CollectionItemSmall = ({ collection }) => (
   <div className={styles.smallContainer}>
     <div className={styles.curator}>
       <ProfileItem user={collection.user} team={collection.team} />
@@ -35,13 +36,20 @@ const SmallCollectionItem = ({ collection }) => (
             <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
           </div>
           <div className={styles.collectionNameWrap}>
-            <Button decorative>
-              {collection.private && <PrivateIcon />}
-              <div className={styles.collectionName}>{collection.name}</div>
-            </Button>
+            <div className={styles.itemButtonWrap}>
+              <Button decorative>
+                {collection.private && <PrivateIcon />}
+                <div className={styles.collectionName}>{collection.name}</div>
+              </Button>
+            </div>
           </div>
         </div>
-        <div className={styles.description}>
+        <div
+          className={styles.description}
+          style={{
+            color: isDarkColor(collection.coverColor) ? 'white' : '',
+          }}
+        >
           <Markdown>{collection.description || ' '}</Markdown>
         </div>
       </div>
@@ -52,15 +60,15 @@ const SmallCollectionItem = ({ collection }) => (
   </div>
 );
 
-SmallCollectionItem.propTypes = {
+CollectionItemSmall.propTypes = {
   collection: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    userId: PropTypes.number,
-    teamId: PropTypes.number,
+    user: PropTypes.object,
+    team: PropTypes.object,
   }).isRequired,
 };
 
-export default SmallCollectionItem;
+export default CollectionItemSmall;

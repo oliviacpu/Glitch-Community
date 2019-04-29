@@ -6,7 +6,7 @@ import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
-import { ProjectLink } from '../../presenters/includes/link';
+import { ProjectLink } from 'Components/link';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
 import styles from './project-item.styl';
 
@@ -37,9 +37,11 @@ const ProjectItem = ({ project, projectOptions }) => (
           <ProfileAvatar project={project} />
         </div>
         <div className={styles.nameWrap}>
-          <Button decorative>
-            {project.private && <PrivateIcon />} <span className={styles.projectDomain}>{project.domain}</span>
-          </Button>
+          <div className={styles.itemButtonWrap}>
+            <Button decorative>
+              {project.private && <PrivateIcon />} <span className={styles.projectDomain}>{project.domain}</span>
+            </Button>
+          </div>
         </div>
       </div>
       <div className={styles.description}>

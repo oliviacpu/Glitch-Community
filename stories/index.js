@@ -5,8 +5,6 @@ import 'Components/global.styl';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import TextInput from 'Components/inputs/text-input';
-import TextArea from 'Components/inputs/text-area';
 import Image from 'Components/images/image';
 import MaskImage from 'Components/images/mask-image';
 import Text from 'Components/text/text';
@@ -15,12 +13,14 @@ import Markdown from 'Components/text/markdown';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
-import SmallCollectionItem from 'Components/collection/small-collection-item';
+import ProjectItemSmall from 'Components/project/project-item-small';
+import CollectionItem from 'Components/collection/collection-item';
+import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
@@ -31,6 +31,7 @@ import CoverContainer from 'Components/containers/cover-container';
 import MoreIdeas from 'Components/more-ideas';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
+import 'Components/profile-container/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
@@ -111,13 +112,6 @@ storiesOf('TooltipContainer', module)
     </div>
   ));
 
-storiesOf('Text Input', module)
-  .add('regular', () => <TextInput placeholder="type something!" />)
-  .add('login', () => <TextInput placeholder="type something!" prefix="@" />)
-  .add('search', () => <TextInput type="search" opaque={true} search={true} placeholder="bots, apps, users" />)
-  .add('with error', () => <TextInput placeholder="glitch" error="That team already exists" />)
-  .add('text area', () => <TextArea placeholder="[Something here] doesn't seem appropriate for Glitch because..." error="Reason is required" />);
-
 storiesOf('Image', module)
   .add('regular', () => <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />)
   .add('background Image', () => (
@@ -161,7 +155,9 @@ storiesOf('Badge', module)
   .add('regular', () => <Badge>Regular</Badge>)
   .add('success', () => <Badge type="success">Success</Badge>)
   .add('warning', () => <Badge type="warning">Warning</Badge>)
-  .add('error', () => <Badge type="error">Error</Badge>);
+  .add('error', () => <Badge type="error">Error</Badge>)
+  .add('private', () => <Badge type="private"></Badge>);
+  
 
 storiesOf('Segmented-Buttons', module)
   .add(
@@ -202,6 +198,7 @@ storiesOf('Segmented-Buttons', module)
     )),
   );
 
+
 storiesOf('ProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
@@ -209,7 +206,30 @@ storiesOf('ProjectItem', module).add(
       <ProjectItem project={projects['judicious-pruner']} />
     </div>
   )),
-);
+)
+.add('Project Item Small', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: false,
+      }}
+    />
+  </div>
+))
+.add('Project Item Small - private', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: true,
+      }}
+    />
+  </div>
+));
+
 
 const mockAPI = {
   async get(url) {
@@ -220,13 +240,28 @@ const mockAPI = {
   },
 };
 
-storiesOf('SmallCollectionItem', module).add(
-  'with user',
+storiesOf('Collection', module).add(
+  'Collection Item with projects',
+  provideContext({ currentUser: {}, api: mockAPI }, () => (
+    <CollectionItem collection={collections[12345]} />
+  ))
+  )
+  .add('Collection Item without projects',
+    provideContext({ currentUser: {}, api: mockAPI }, () => (
+      <CollectionItem collection={collections['empty']} />
+    ))
+  )
+  .add('Collection Item with curator',
+    provideContext({ currentUser: {}, api: mockAPI}, () => (
+    <CollectionItem collection={collections[12345]} showCurator />
+  ))
+)
+.add('Collection Item Small',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <SmallCollectionItem collection={collections[12345]} />
+      <CollectionItemSmall collection={collections[12345]} />
     </div>
-  )),
+  ))
 );
 
 storiesOf('UserItem', module).add('base', () => (

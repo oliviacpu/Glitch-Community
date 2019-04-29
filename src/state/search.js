@@ -1,13 +1,11 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useMemo } from 'react';
 import { mapValues, sumBy } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';
 import useErrorHandlers from '../presenters/error-handlers';
 import starterKits from '../curated/starter-kits';
-
-const searchClient = algoliasearch('LAS7VGSQIQ', '27938e7e8e998224b9e1c3f61dd19160');
 
 // TODO: this is super hacky; this would probably work a lot better with algolia
 const normalize = (str) =>
@@ -89,13 +87,6 @@ function useSearchProvider(provider, query, params) {
 
 // algolia search
 
-const searchIndices = {
-  team: searchClient.initIndex('search_teams'),
-  user: searchClient.initIndex('search_users'),
-  project: searchClient.initIndex('search_projects'),
-  collection: searchClient.initIndex('search_collections'),
-};
-
 const formatByType = {
   user: (user) => ({
     ...user,
@@ -116,10 +107,12 @@ const formatByType = {
     teams: null,
     userIDs: project.members,
     teamIDs: project.teams,
+    private: project.isPrivate,
   }),
   collection: (collection) => ({
     coverColor: '#eee',
     color: '#eee',
+    description: '',
     ...collection,
     id: Number(collection.objectID.replace('collection-', '')),
     team: null,
@@ -135,22 +128,46 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
     ...formatByType[type](value),
   }));
 
-const algoliaProvider = {
-  ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
-  project: (query, { notSafeForKids }) =>
-    searchIndices.project
-      .search({
-        query,
-        hitsPerPage: 100,
-        facetFilters: [notSafeForKids ? '' : 'notSafeForKids:false'],
-      })
-      .then(formatAlgoliaResult('project')),
-  starterKit: (query) => Promise.resolve(findStarterKits(query)),
-};
-
 const defaultParams = { notSafeForKids: false };
 
+function createSearchClient(api) {
+  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
+  return {
+    initIndex: (indexName) => {
+      const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
+
+      return {
+        search: (...args) => indexPromise.then((index) => index.search(...args)),
+      };
+    },
+  };
+}
+
+function createAlgoliaProvider(api) {
+  const searchClient = createSearchClient(api);
+  const searchIndices = {
+    team: searchClient.initIndex('search_teams'),
+    user: searchClient.initIndex('search_users'),
+    project: searchClient.initIndex('search_projects'),
+    collection: searchClient.initIndex('search_collections'),
+  };
+  return {
+    ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
+    project: (query, { notSafeForKids }) =>
+      searchIndices.project
+        .search({
+          query,
+          hitsPerPage: 100,
+          facetFilters: [notSafeForKids ? '' : 'notSafeForKids:false'],
+        })
+        .then(formatAlgoliaResult('project')),
+    starterKit: (query) => Promise.resolve(findStarterKits(query)),
+  };
+}
+
 export function useAlgoliaSearch(query, params = defaultParams) {
+  const api = useAPI();
+  const algoliaProvider = useMemo(() => createAlgoliaProvider(api), [api]);
   return useSearchProvider(algoliaProvider, query, params);
 }
 

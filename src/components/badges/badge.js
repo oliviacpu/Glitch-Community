@@ -6,7 +6,7 @@ import styles from './badge.styl';
 
 const cx = classNames.bind(styles);
 
-export const TYPES = ['success', 'warning', 'error'];
+export const TYPES = ['success', 'warning', 'error', 'private'];
 
 /**
  * Badge Component

@@ -13,18 +13,21 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
+<<<<<<< HEAD
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import { getAvatarUrl } from '../../models/project';
+=======
+import ProfileContainer from 'Components/profile-container';
+import DataLoader from 'Components/data-loader';
+
+>>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
-import { AuthDescription } from '../includes/description-field';
-import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
+import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-
 import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
@@ -95,6 +98,7 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
+<<<<<<< HEAD
 function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -154,6 +158,8 @@ DeleteProjectButton.propTypes = {
   deleteProject: PropTypes.func.isRequired,
 };
 
+=======
+>>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
 const ProjectPage = ({
   project,
   addProjectToCollection,
@@ -162,44 +168,56 @@ const ProjectPage = ({
   updateDomain,
   updateDescription,
   updatePrivate,
+<<<<<<< HEAD
   deleteProject,
+=======
+  uploadAvatar,
+>>>>>>> 65af2403cdb453c416ecaf48cca3f666d68c026d
 }) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
       <section id="info">
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <ProjectDomainInput
-                  domain={domain}
-                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
-              )}
-            </Heading>
-            {users.length + teams.length > 0 && (
-              <div className="users-information">
-                <ProfileList hasLinks teams={teams} users={users} layout="block" />
-              </div>
+        <ProfileContainer
+          type="project"
+          item={project}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
+        >
+          <Heading tagName="h1">
+            {isAuthorized ? (
+              <ProjectDomainInput
+                domain={domain}
+                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
+                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+              />
+            ) : (
+              <>
+                {domain} {project.private && <PrivateBadge />}
+              </>
             )}
-            <AuthDescription
-              authorized={isAuthorized}
-              description={project.description}
-              update={updateDescription}
-              placeholder="Tell us about your app"
-            />
-            <p className="buttons">
+          </Heading>
+          {users.length + teams.length > 0 && (
+            <div className="users-information">
+              <ProfileList hasLinks teams={teams} users={users} layout="block" />
+            </div>
+          )}
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.description}
+            update={updateDescription}
+            placeholder="Tell us about your app"
+          />
+          <div>
+            <span className="project-page__profile-button">
               <ShowButton name={domain} />
+            </span>
+            <span className="project-page__profile-button">
               <EditButton name={domain} isMember={isAuthorized} />
-            </p>
-          </ProjectInfoContainer>
-        </InfoContainer>
+            </span>
+          </div>
+        </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
