@@ -34,7 +34,7 @@ class ProjectEditor extends React.Component {
   async deleteProject() {
     await this.props.api.delete(`projects/${this.state.id}`);
   }
-  
+
   async uploadAvatar(blob) {
     const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
     await this.props.uploadAsset(blob, policy, '', { cacheControl: 60 });

@@ -7,7 +7,7 @@ import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
@@ -17,7 +17,6 @@ import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
 
 import PopoverWithButton from '../pop-overs/popover-with-button';
-import { getAvatarUrl } from '../../models/project';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
