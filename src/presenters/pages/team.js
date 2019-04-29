@@ -8,6 +8,7 @@ import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
+import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
@@ -23,12 +24,11 @@ import { captureException } from '../../utils/sentry';
 
 // import SampleTeamCollections from '../../curated/sample-team-collections';
 import CollectionsList from '../collections-list';
-
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
 import DeleteTeam from '../includes/delete-team';
 import { AddTeamUser, TeamUsers, WhitelistedDomain, JoinTeam } from '../includes/team-users';
-import EntityPageProjects from '../entity-page-projects';
+
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
@@ -223,22 +223,37 @@ class TeamPage extends React.Component {
         )}
 
         {/* Pinned Projects */}
-        <EntityPageProjects
-          projects={pinnedProjects}
-          isAuthorized={this.props.currentUserIsOnTeam}
-          removePin={this.props.removePin}
-          projectOptions={this.getProjectOptions()}
-        />
+        {pinnedProjects.length > 0 && (
+          <ProjectsList
+            title={
+              <>
+                Pinned Projects <span className="emoji pushpin emoji-in-title" />
+              </>
+            }
+            projects={pinnedProjects}
+            isAuthorized={this.props.currentUserIsOnTeam}
+            removePin={this.props.removePin}
+            projectOptions={{
+              removePin: this.props.currentUserIsOnTeam ? this.props.removePin : undefined,
+              ...this.getProjectOptions(),
+            }}
+          />
+        )}
 
         {/* Recent Projects */}
-        <EntityPageProjects
-          projects={recentProjects}
-          isAuthorized={this.props.currentUserIsOnTeam}
-          addPin={this.props.addPin}
-          projectOptions={this.getProjectOptions()}
-          enablePagination
-          enableFiltering={recentProjects.length > 6}
-        />
+        {recentProjects.length > 0 && (
+          <ProjectsList
+            title="Recent Projects"
+            projects={recentProjects}
+            isAuthorized={this.props.currentUserIsOnTeam}
+            enablePagination
+            enableFiltering={recentProjects.length > 6}
+            projectOptions={{
+              addPin: this.props.currentUserIsOnTeam ? this.props.addPin : undefined,
+              ...this.getProjectOptions(),
+            }}
+          />
+        )}
 
         {team.projects.length === 0 && this.props.currentUserIsOnTeam && <ProjectPals />}
 

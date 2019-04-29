@@ -15,7 +15,9 @@ import Markdown from 'Components/text/markdown';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
-import SmallCollectionItem from 'Components/collection/small-collection-item';
+import ProjectItemSmall from 'Components/project/project-item-small';
+import CollectionItem from 'Components/collection/collection-item';
+import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
@@ -162,7 +164,9 @@ storiesOf('Badge', module)
   .add('regular', () => <Badge>Regular</Badge>)
   .add('success', () => <Badge type="success">Success</Badge>)
   .add('warning', () => <Badge type="warning">Warning</Badge>)
-  .add('error', () => <Badge type="error">Error</Badge>);
+  .add('error', () => <Badge type="error">Error</Badge>)
+  .add('private', () => <Badge type="private"></Badge>);
+  
 
 storiesOf('Segmented-Buttons', module)
   .add(
@@ -203,6 +207,7 @@ storiesOf('Segmented-Buttons', module)
     )),
   );
 
+
 storiesOf('ProjectItem', module).add(
   'base',
   provideContext({ currentUser: {} }, () => (
@@ -210,7 +215,30 @@ storiesOf('ProjectItem', module).add(
       <ProjectItem project={projects['judicious-pruner']} />
     </div>
   )),
-);
+)
+.add('Project Item Small', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: false,
+      }}
+    />
+  </div>
+))
+.add('Project Item Small - private', () => (
+  <div style={{ backgroundColor: '#F5F5F5', width: '375px', padding: '10px' }}>
+    <ProjectItemSmall
+      project={{
+        id: 'foo',
+        domain: 'judicious-pruner',
+        private: true,
+      }}
+    />
+  </div>
+));
+
 
 const mockAPI = {
   async get(url) {
@@ -221,13 +249,28 @@ const mockAPI = {
   },
 };
 
-storiesOf('SmallCollectionItem', module).add(
-  'with user',
+storiesOf('Collection', module).add(
+  'Collection Item with projects',
+  provideContext({ currentUser: {}, api: mockAPI }, () => (
+    <CollectionItem collection={collections[12345]} />
+  ))
+  )
+  .add('Collection Item without projects',
+    provideContext({ currentUser: {}, api: mockAPI }, () => (
+      <CollectionItem collection={collections['empty']} />
+    ))
+  )
+  .add('Collection Item with curator',
+    provideContext({ currentUser: {}, api: mockAPI}, () => (
+    <CollectionItem collection={collections[12345]} showCurator />
+  ))
+)
+.add('Collection Item Small',
   provideContext({ currentUser: {}, api: mockAPI }, () => (
     <div style={{ margin: '2em', width: '25%' }}>
-      <SmallCollectionItem collection={collections[12345]} />
+      <CollectionItemSmall collection={collections[12345]} />
     </div>
-  )),
+  ))
 );
 
 storiesOf('UserItem', module).add('base', () => (
