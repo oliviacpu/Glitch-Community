@@ -94,7 +94,7 @@ function Questions({ max }) {
         ) : (
           <>
             {kaomoji} Looks like nobody is asking for help right now. {/* TODO: 'general' prop on Link? */}
-            <Link className="general-link" to="/help/how-can-i-get-help-with-code-in-my-project/">
+            <Link to="/help/how-can-i-get-help-with-code-in-my-project/">
               Learn about helping
             </Link>
           </>
