@@ -33,6 +33,7 @@ import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import styles from './team.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
@@ -43,7 +44,7 @@ const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
     <Heading tagName="h1">
       <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
     </Heading>
-    <p className="team-url">
+    <p className={styles.teamUrl}>
       <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
     </p>
   </>
@@ -57,6 +58,25 @@ const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTe
     maybeTeam={team}
     isAuthorized={currentUserIsOnTeam}
   />
+);
+
+const Beta = () => (
+  <a href="/teams/" target="_blank" className={styles.beta}>
+    <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
+    <div>
+      <Heading tagName="h4">Teams are in beta</Heading>
+      <Text>Learn More</Text>
+    </div>
+  </a>
+);
+
+const ProjectPals = () => (
+  <aside className="inline-banners add-project-to-empty-team-banner">
+    <div className="description-container">
+      <img className="project-pals" src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
+      <div className="description">Add projects to share them with your team</div>
+    </div>
+  </aside>
 );
 
 // Team Page
@@ -134,15 +154,9 @@ class TeamPage extends React.Component {
     const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
     return (
-      <main className="profile-page team-page">
+      <main className={styles.container}>
         <section>
-          <a href="/teams/" target="_blank" className="beta">
-            <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
-            <div>
-              <Heading tagName="h4">Teams are in beta</Heading>
-              <Text>Learn More</Text>
-            </div>
-          </a>
+          <Beta />
           <ProfileContainer
             item={team}
             type="team"
@@ -161,10 +175,10 @@ class TeamPage extends React.Component {
                 <Heading tagName="h1">
                   {team.name} {team.isVerified && <VerifiedBadge />}
                 </Heading>
-                <p className="team-url">@{team.url}</p>
+                <p className={styles.teamUrl}>@{team.url}</p>
               </>
             )}
-            <div className="users-information">
+            <div className={styles.usersInformation}>
               <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
               {!!team.whitelistedDomain && (
                 <WhitelistedDomain
@@ -241,18 +255,7 @@ class TeamPage extends React.Component {
           />
         )}
 
-        {team.projects.length === 0 && this.props.currentUserIsOnTeam && (
-          <aside className="inline-banners add-project-to-empty-team-banner">
-            <div className="description-container">
-              <img
-                className="project-pals"
-                src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925"
-                alt=""
-              />
-              <div className="description">Add projects to share them with your team</div>
-            </div>
-          </aside>
-        )}
+        {team.projects.length === 0 && this.props.currentUserIsOnTeam && <ProjectPals />}
 
         {/* TEAM COLLECTIONS */}
         <ErrorBoundary>
