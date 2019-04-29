@@ -5,8 +5,6 @@ import 'Components/global.styl';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import TextInput from 'Components/inputs/text-input';
-import TextArea from 'Components/inputs/text-area';
 import Image from 'Components/images/image';
 import MaskImage from 'Components/images/mask-image';
 import Text from 'Components/text/text';
@@ -113,13 +111,6 @@ storiesOf('TooltipContainer', module)
       <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
     </div>
   ));
-
-storiesOf('Text Input', module)
-  .add('regular', () => <TextInput placeholder="type something!" />)
-  .add('login', () => <TextInput placeholder="type something!" prefix="@" />)
-  .add('search', () => <TextInput type="search" opaque={true} search={true} placeholder="bots, apps, users" />)
-  .add('with error', () => <TextInput placeholder="glitch" error="That team already exists" />)
-  .add('text area', () => <TextArea placeholder="[Something here] doesn't seem appropriate for Glitch because..." error="Reason is required" />);
 
 storiesOf('Image', module)
   .add('regular', () => <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />)
