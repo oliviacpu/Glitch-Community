@@ -103,7 +103,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
     if (done) {
       window.location = getUserLink(currentUser);
     }
-  });
+  }, [done, currentUser]);
 
   return (
     <section>
