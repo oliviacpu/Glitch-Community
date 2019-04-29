@@ -4,7 +4,6 @@ const axios = require('axios');
 const { Cache } = require('memory-cache');
 const dayjs = require('dayjs');
 const { captureException } = require('@sentry/node');
-const { toASCII } = require('punycode');
 
 const { API_URL } = require('./constants').current;
 const { getSingleItem } = require('Shared/api');
@@ -15,17 +14,14 @@ const api = axios.create({
 });
 
 async function getProjectFromApi(domain) {
-  domain = toASCII(domain);
   return await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
 }
 
 async function getTeamFromApi(url) {
-  url = toASCII(url)
   return await getSingleItem(api, `v1/teams/by/url?url=${url}`, url);
 }
 
 async function getUserFromApi(login) {
-  login = toASCII(login)
   return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
 }
 

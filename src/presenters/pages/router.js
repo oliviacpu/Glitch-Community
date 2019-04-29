@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-
 import { Route, Switch, withRouter } from 'react-router-dom';
+import punycode from 'punycode';
 
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
@@ -106,15 +106,15 @@ const Router = () => (
 
       <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
-      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={match.params.name} />} />
+      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
       <Route path="/~:name/404" exact render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />} />
 
-      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
+      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
+        render={({ location, match }) => <CollectionPage key={location.key} ownerName={punycode.toASCII(match.params.owner)} name={punycode.toASCII(match.params.name)} />}
       />
 
       <Route
