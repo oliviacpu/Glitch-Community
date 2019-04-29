@@ -27,10 +27,16 @@ const CollectionLink = ({ collection, children, ...props }) => (
 
 const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
-    {showCurator && <div className={styles.curator}>
-      <ProfileItem user={collection.user} team={collection.team} />
-    </div>}
-    <CollectionLink collection={collection} className={classnames(styles.bubbleContainer, showCurator && styles.showCurator)} style={collectionColorStyles(collection)}>
+    {showCurator && (
+      <div className={styles.curator}>
+        <ProfileItem user={collection.user} team={collection.team} />
+      </div>
+    )}
+    <CollectionLink
+      collection={collection}
+      className={classnames(styles.bubbleContainer, showCurator && styles.showCurator)}
+      style={collectionColorStyles(collection)}
+    >
       <div className={styles.smallNameDescriptionArea}>
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
@@ -75,6 +81,6 @@ CollectionItemSmall.propTypes = {
 
 CollectionItemSmall.defaultProps = {
   showCurator: false,
-}
+};
 
 export default CollectionItemSmall;

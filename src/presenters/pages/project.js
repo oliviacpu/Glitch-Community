@@ -62,9 +62,6 @@ const IncludedInCollections = ({ projectId }) => {
   );
 };
 
-export default IncludedInCollections;
-
-
 const PrivateTooltip = 'Only members can view code';
 const PublicTooltip = 'Visible to everyone';
 
