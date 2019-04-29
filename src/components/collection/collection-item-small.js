@@ -65,7 +65,7 @@ CollectionItemSmall.propTypes = {
   collection: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     coverColor: PropTypes.string.isRequired,
     user: PropTypes.object,
     team: PropTypes.object,
