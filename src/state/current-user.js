@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
-import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
+import { sortProjectsByLastAccess } from 'Models/project';
+import { configureScope, captureException, captureMessage, addBreadcrumb } from 'Utils/sentry';
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api';
 
@@ -162,11 +163,10 @@ class CurrentUserManager extends React.Component {
         collections: getAllPages(api, makeUrl('collections')),
       });
       const sortedProjects = projects.sort((a, b) => {
+        if (
         const aLastAccess = Date.parse(a.permission.userLastAccess || a.lastAccess);
         const bLastAccess = Date.parse(b.permission.userLastAccess || b.lastAccess);
-        if (aLastAccess > bLastAccess) return -1;
-        if (aLastAccess < bLastAccess) return 1;
-        return 0;
+        return bLastAccess - aLastAccess;
       });
       const user = { ...baseUser, emails, projects: sortedProjects, teams, collections };
       if (!usersMatch(sharedUser, user)) {

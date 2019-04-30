@@ -24,3 +24,16 @@ export function getEditorUrl(domain, path, line, character, editorUrl = EDITOR_U
 export function getRemixUrl(domain, editorUrl = EDITOR_URL) {
   return `${editorUrl}#!/remix/${domain}`;
 }
+
+export function sortByLastAccess(projects) {
+  return projects.sort((a, b) => {
+    if (a.permission.userLastAccess && b.permission.userLastAccess) {
+      return Date.parse(b.permission.userLastAccess) - Date.parse(a.permission.userLastAccess);
+    } else if (a.permission.userLastAccess) {
+      return -1;
+    } else if (b.permission.userLastAccess) {
+      return 1;
+    }
+    return Date.parse(b.lastAccess) - Date.parse(a.lastAccess);
+  });
+}
