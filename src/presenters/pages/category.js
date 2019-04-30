@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Image from 'Components/images/image';
 import Heading from 'Components/text/heading';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
 import Layout from '../layout';
@@ -39,26 +39,26 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
               </div>
 
               {currentUser.login ? (
-                <ProjectsUL
+                <ProjectsList
+                  className="collection-page__grid"
                   {...{
                     projects,
                     currentUser,
                     addProjectToCollection,
                   }}
-                  category
                   projectOptions={{
                     addProjectToCollection,
                   }}
                   {...props}
                 />
               ) : (
-                <ProjectsUL
+                <ProjectsList
+                  className="collection-page__grid"
                   {...{
                     projects,
                     currentUser,
                     addProjectToCollection,
                   }}
-                  category
                   projectOptions={{}}
                   {...props}
                 />
