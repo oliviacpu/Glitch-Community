@@ -161,13 +161,15 @@ export const ProjectsUL = ({ showProjectDescriptions, collection, projects, note
     {projects.map((project) => (
       <li key={project.id}>
         {collection && (
-          <Note
-            project={project}
-            collection={collection}
-            isAuthorized={noteOptions.isAuthorized}
-            hideNote={noteOptions.hideNote}
-            updateNote={noteOptions.updateNote}
-          />
+          <div className="projects-container-note">
+            <Note
+              project={project}
+              collection={collection}
+              isAuthorized={noteOptions.isAuthorized}
+              hideNote={noteOptions.hideNote}
+              updateNote={noteOptions.updateNote}
+            />
+          </div>
         )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
       </li>
