@@ -162,13 +162,7 @@ class CurrentUserManager extends React.Component {
         teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
         collections: getAllPages(api, makeUrl('collections')),
       });
-      const sortedProjects = projects.sort((a, b) => {
-        if (
-        const aLastAccess = Date.parse(a.permission.userLastAccess || a.lastAccess);
-        const bLastAccess = Date.parse(b.permission.userLastAccess || b.lastAccess);
-        return bLastAccess - aLastAccess;
-      });
-      const user = { ...baseUser, emails, projects: sortedProjects, teams, collections };
+      const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
       if (!usersMatch(sharedUser, user)) {
         return 'error';
       }
