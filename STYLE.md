@@ -30,10 +30,11 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
         1. Use a wrapper class and define the styles you need on that wrapper. If you'll use this same set of overrides in multiple places, it could make sense to pull this out as a separate component of its own.
           * This works in situations where you need to add positioning or margins to a component
         1. Add a new named prop to the component that fits your use case.
-          * You'll need to do this if the component itself needs to look different
+          * You'll need to do this if the component itself needs to look different (e.g. font or folors
         1. Pass in className.
-          * This makes sense in situations where there are lots of different styling needs that don't correspond to a particular mode that can be defined on the component.
+          * This makes sense in situations where there are lots of different styling needs that don't correspond to a particular mode that can be defined on the component - eg. <Image> currently allows a className prop.
         1. Directly style the HTML tag names like button or p
+          * This is discouraged, but can be used if none of the above options make sense.
 1. Create stories for each relevant variant of the component in `stories/index.js`.
     * As well as providing a visual guide for all the building blocks of our site, our designers use this for visual QA.
     * Once this file gets too big, we'll likely start splitting it out, but for now all stories should go in there. 
