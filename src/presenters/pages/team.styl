@@ -1,0 +1,121 @@
+@import  "../../components/constants"
+
+.container :global
+  // projects-list
+  .projects
+    padding: 0
+    margin-bottom: 1rem
+    display: inline-block
+  .projects-container
+    margin-bottom: 1rem
+  // collections-list
+  .collections
+    padding: 0
+  // permit a 2-column layout on user and team pages	
+  // in-between mediumViewport and largeViewport	
+  .projects-container,	
+  .collections-container	
+    row-gap: 1.5rem	
+    @media (min-width: mediumViewport)	
+      grid-template-columns: 1fr 1fr	
+
+     @media (min-width: largeViewport)	
+      grid-template-columns: 1fr 1fr 1fr	
+
+  // add-team-project
+  .add-project-container
+    position: relative
+  // team-analytics
+  .placeholder-mask
+    position: absolute
+    top: 25px
+    left: 0
+    right: 0
+    bottom: 0
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2), white)
+    pointer-events: none
+  // team-elements
+  .team-marketing
+    border-top: 1px solid #e5e5e5
+    padding-top: 1rem
+    
+.teamUrl
+  color: text-on-secondary-background
+  font-weight: 600
+
+.beta
+  display: inline-flex
+  background-color: beta
+  font-size: 12px
+  font-weight: bold
+  padding: 6px 12px
+  padding-bottom: 2px
+  user-select: none
+  border-radius: 5px
+  margin-bottom: 10px
+  img
+    padding-right: 10px
+    height: 30px
+  h4
+    color: primary
+    margin: 2px 0
+  p
+    margin-top: -5px
+    margin-bottom: 0px 
+    font-size: smaller
+  &:hover
+    text-decoration: underline
+    
+.usersInformation
+  padding-bottom: 12px
+  // team-users
+  :global
+    .users
+      display: inline
+      margin-right: 5px
+      padding: 1px 0 0;
+      vertical-align: middle
+    .users > li
+      display: inline-grid
+      margin-right: -7px
+    .whitelisted-domain-container
+      vertical-align: top
+      margin-top: 5px
+      margin-right: 5px
+      margin-left: 5px
+    .add-user-container
+      position: relative
+      vertical-align: top
+      margin-left: 5px
+      .users
+        li:last-of-type
+          margin-right: 0px
+        img
+          opacity: 0.5
+      .add-user-wrap
+        position: relative
+      .add-user
+        margin-top: 4px
+        transition: all .2s
+      .success
+        background-color: success-background
+    .join-team-button
+      vertical-align: top
+      margin-top: 3px
+    // team-elements
+    .whitelisted-domain
+      display: inline-block
+      width: 22px
+      height: 22px
+    div.whitelisted-domain
+      display: inline-flex
+      justify-content: center
+      align-items: center
+      background-color: line-on-secondary-background
+      font-size: 13px
+      font-weight: 600
+      color: white
+      border-radius: 3px
+    img.whitelisted-domain
+      object-fit: contain
+      margin: auto

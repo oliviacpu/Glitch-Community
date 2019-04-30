@@ -4,47 +4,54 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Heading from 'Components/text/heading';
+
 import Loader from 'Components/loader';
-import { getAvatarUrl } from '../models/project';
+import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
+import AnimationContainer from 'Components/animation-container';
+import { getAvatarUrl } from 'Models/project';
 
-import { useAPI } from '../state/api';
-import { useTrackedFunc } from './segment-analytics';
-
-function clickUndelete(event, callback) {
-  const node = event.target.closest('li');
-  node.addEventListener('animationend', callback, { once: true });
-  node.classList.add('slide-up');
-}
+import { useAPI } from '../../state/api';
+import { useTrackedFunc } from '../../presenters/segment-analytics';
+import styles from './deleted-projects.styl';
 
 const DeletedProject = ({ id, domain, onClick }) => {
-  const onClickUndelete = (evt) => clickUndelete(evt, onClick);
-  const onClickTracked = useTrackedFunc(onClickUndelete, 'Undelete clicked');
+  const [exiting, setExiting] = useState(false);
+
   return (
-    <button className="button-unstyled" onClick={onClickTracked}>
-      <div className="deleted-project">
-        <img className="avatar" src={getAvatarUrl(id)} alt="" />
-        <div className="deleted-project-name">{domain}</div>
-        <div className="button button-small">Undelete</div>
-      </div>
-    </button>
+    <AnimationContainer type="slideUp" active={exiting} onAnimationEnd={onClick}>
+      <TransparentButton onClick={() => setExiting(true)} className={styles.deletedProject}>
+        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+        <div className={styles.projectName}>{domain}</div>
+        <div className={styles.buttonWrap}>
+          <Button size="small" decorative>
+            Undelete
+          </Button>
+        </div>
+      </TransparentButton>
+    </AnimationContainer>
   );
 };
+
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const DeletedProjectsList = ({ deletedProjects, undelete }) => (
-  <ul className="projects-container deleted-projects-container">
-    {deletedProjects.map(({ id, domain }) => (
-      <li key={id} className="deleted-project-container">
-        <DeletedProject id={id} domain={domain} onClick={() => undelete(id)} />
-      </li>
-    ))}
-  </ul>
-);
+export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
+  const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
+
+  return (
+    <ul className={styles.deletedProjectsContainer}>
+      {deletedProjects.map(({ id, domain }) => (
+        <li key={id} className={styles.deletedProjectItemWrap}>
+          <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />
+        </li>
+      ))}
+    </ul>
+  );
+};
 DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
   undelete: PropTypes.func.isRequired,
@@ -70,9 +77,9 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
 
   if (state === 'hidden') {
     return (
-      <button className="button button-tertiary" onClick={clickShow}>
+      <Button type="tertiary" onClick={clickShow}>
         Show
-      </button>
+      </Button>
     );
   }
   if (state === 'loading') {
@@ -84,9 +91,9 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
   return (
     <>
       <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-      <button className="button button-tertiary" onClick={clickHide}>
+      <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
-      </button>
+      </Button>
     </>
   );
 }
@@ -101,13 +108,4 @@ DeletedProjects.defaultProps = {
   deletedProjects: [],
 };
 
-const DeletedProjectsWrap = (props) => (
-  <article className="deleted-projects">
-    <Heading tagName="h2">
-      Deleted Projects <span className="emoji bomb emoji-in-title" />
-    </Heading>
-    <DeletedProjects {...props} />
-  </article>
-);
-
-export default DeletedProjectsWrap;
+export default DeletedProjects;

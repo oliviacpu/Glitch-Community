@@ -5,9 +5,11 @@
   align-items: flex-start
   max-width: 460px
   background-color: section-line
-  border-radius: 5px 5px 0 0
+  border-radius: 5px
   padding: 12px
-  
+  &.hasTeams
+    border-radius: 5px 5px 0 0
+    
 .avatarContainer
   flex: 0 0 35%
   
@@ -21,7 +23,8 @@
   background-position: center
   &.user
     border-radius: 50%
-  &.team
+  &.team,
+  &.project
     border-radius: 5px
  
 .avatarButtons    
