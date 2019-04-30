@@ -276,7 +276,7 @@ const TermsAndPrivacySection = () => (
 );
 
 const SignInPopWithoutRouter = (props) => {
-  const { header, prompt, api, location, hash } = props;
+  const { header, prompt, api, location, hash, focusDialog } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -295,7 +295,7 @@ const SignInPopWithoutRouter = (props) => {
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
-            <div className="pop-over sign-in-pop">
+            <dialog className="pop-over sign-in-pop" tabIndex="0" ref={focusDialog}>
               {header}
               <NewUserInfoSection />
               <section className="pop-over-actions">
@@ -318,7 +318,7 @@ const SignInPopWithoutRouter = (props) => {
                 }}
               />
               <TermsAndPrivacySection />
-            </div>
+            </dialog>
           )}
         </NestedPopover>
       )}
@@ -338,7 +338,7 @@ const SignInPopContainer = (props) => {
   const api = useAPI();
   return (
     <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-      {({ togglePopover }) => <SignInPopBase {...props} api={api} togglePopover={togglePopover} />}
+      {({ togglePopover, focusDialog }) => <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusDialog={focusDialog} />}
     </PopoverWithButton>
   );
 };

@@ -59,7 +59,7 @@ const NewProjectPop = ({ projects, focusDialog }) => (
         <span>Clone from Git Repo</span>
       </button>
     </section>
-  </di>
+  </dialog>
 );
 NewProjectPop.propTypes = {
   projects: PropTypes.arrayOf(
