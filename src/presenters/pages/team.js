@@ -226,6 +226,7 @@ class TeamPage extends React.Component {
         {/* Pinned Projects */}
         {pinnedProjects.length > 0 && (
           <ProjectsList
+            className={styles.projectContainer}
             title={
               <>
                 Pinned Projects <Emoji inTitle name="pushpin" />
@@ -244,6 +245,7 @@ class TeamPage extends React.Component {
         {/* Recent Projects */}
         {recentProjects.length > 0 && (
           <ProjectsList
+            className={styles.projectContainer}
             title="Recent Projects"
             projects={recentProjects}
             isAuthorized={this.props.currentUserIsOnTeam}
