@@ -29,6 +29,7 @@ import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
 import MoreIdeas from 'Components/more-ideas';
+import Footer from 'Components/footer';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/profile-container/story';
@@ -459,3 +460,4 @@ storiesOf('CoverContainer', module)
   ));
 
 storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
+storiesOf('Footer', module).add('footer', () => <Footer />);
