@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-
 import { Route, Switch, withRouter } from 'react-router-dom';
+import punycode from 'punycode';
 
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
@@ -76,12 +76,16 @@ const Router = () => (
       <Route
         path="/login/github"
         exact
-        render={({ location }) => <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
+        render={({ location }) => (
+          <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
+        )}
       />
       <Route
         path="/login/google"
         exact
-        render={({ location }) => <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
+        render={({ location }) => (
+          <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
+        )}
       />
       <Route
         path="/login/slack"
@@ -91,30 +95,32 @@ const Router = () => (
       <Route
         path="/login/email"
         exact
-        render={({ location }) => (
-          <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />
-        )}
+        render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
       />
 
-      <Route
-        path="/join/@:teamUrl/:joinToken"
-        exact
-        render={({ match }) => (
-          <JoinTeamPage key={location.key} {...match.params} />
-        )}
-      />
+      <Route path="/join/@:teamUrl/:joinToken" exact render={({ match }) => <JoinTeamPage key={location.key} {...match.params} />} />
 
       <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
-      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={match.params.name} />} />
-      <Route path="/~:name/404" exact render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />} />
+      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
+      <Route
+        path="/~:name/404"
+        exact
+        render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
+      />
 
-      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
+      <Route
+        path="/@:name"
+        exact
+        render={({ location, match }) => <TeamOrUserPage key={location.key} name={punycode.toASCII(match.params.name)} />}
+      />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
+        render={({ location, match }) => (
+          <CollectionPage key={location.key} ownerName={punycode.toASCII(match.params.owner)} name={match.params.name} />
+        )}
       />
 
       <Route
