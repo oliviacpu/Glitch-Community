@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Footer from 'Components/footer';
 import Header from './header';
-import Footer from './footer';
 import ErrorBoundary from './includes/error-boundary';
 import Konami from './includes/konami';
 

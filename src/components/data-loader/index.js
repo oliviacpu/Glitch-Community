@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 
@@ -28,6 +28,6 @@ DataLoader.propTypes = {
 };
 DataLoader.defaultProps = {
   renderError: () => 'Something went wrong, try refreshing?',
-  renderLoader: () => Loader,
+  renderLoader: () => <Loader />,
 };
 export default DataLoader;

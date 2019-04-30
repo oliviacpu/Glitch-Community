@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
+
+import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
+import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
+import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
-import { getAvatarUrl } from '../../models/project';
+
+import PopoverWithButton from '../pop-overs/popover-with-button';
+
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
 import { AnalyticsContext } from '../segment-analytics';
@@ -18,13 +25,14 @@ import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-
 import RelatedProjects from '../includes/related-projects';
 import IncludedInCollections from '../includes/included-in-collections';
 import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
+
+import { getLink as getUserLink } from '../../models/user';
 
 import Layout from '../layout';
 
@@ -63,26 +71,6 @@ PrivateToggle.propTypes = {
   setPrivate: PropTypes.func.isRequired,
 };
 
-const InfoContainer = ({ children }) => <div className="profile-info">{children}</div>;
-
-export const ProjectInfoContainer = ({ style, children, buttons }) => (
-  <>
-    <div className="avatar-container">
-      <div className="user-avatar" style={style} />
-      {buttons}
-    </div>
-    <div className="profile-information">{children}</div>
-  </>
-);
-ProjectInfoContainer.propTypes = {
-  style: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  buttons: PropTypes.element,
-};
-ProjectInfoContainer.defaultProps = {
-  buttons: null,
-};
-
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
     <>
@@ -107,43 +95,120 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
+function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
+  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
+
+  return (
+    <section>
+      <PopoverWithButton
+        buttonClass="button-small button-tertiary danger-zone"
+        buttonText={
+          <>
+            Delete Project
+            <Emoji name="bomb" />
+          </>
+        }
+      >
+        {({ togglePopover }) => (
+          <>
+            <dialog className="pop-over delete-project-pop" open>
+              <section className="pop-over-actions">
+                <div className="action-description">You can always undelete a project from your profile page.</div>
+              </section>
+              <section className="pop-over-actions danger-zone">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <Button
+                    type="tertiary"
+                    size="small"
+                    onClick={() => {
+                      setLoading(true);
+                      deleteProject().then(() => {
+                        togglePopover();
+                        setDone(true);
+                      });
+                    }}
+                  >
+                    Delete {projectDomain} <Emoji name="bomb" />
+                  </Button>
+                )}
+              </section>
+            </dialog>
+          </>
+        )}
+      </PopoverWithButton>
+    </section>
+  );
+}
+
+DeleteProjectButton.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  deleteProject: PropTypes.func.isRequired,
+};
+
+const ProjectPage = ({
+  project,
+  addProjectToCollection,
+  currentUser,
+  isAuthorized,
+  updateDomain,
+  updateDescription,
+  updatePrivate,
+  deleteProject,
+  uploadAvatar,
+}) => {
   const { domain, users, teams } = project;
   return (
     <main className="project-page">
       <section id="info">
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <ProjectDomainInput
-                  domain={domain}
-                  onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
-              )}
-            </Heading>
-            {users.length + teams.length > 0 && (
-              <div className="users-information">
-                <ProfileList hasLinks teams={teams} users={users} layout="block" />
-              </div>
+        <ProfileContainer
+          type="project"
+          item={project}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
+        >
+          <Heading tagName="h1">
+            {isAuthorized ? (
+              <ProjectDomainInput
+                domain={domain}
+                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
+                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+              />
+            ) : (
+              <>
+                {domain} {project.private && <PrivateBadge />}
+              </>
             )}
-            <AuthDescription
-              authorized={isAuthorized}
-              description={project.description}
-              update={updateDescription}
-              placeholder="Tell us about your app"
-            />
-            <p className="buttons">
+          </Heading>
+          {users.length + teams.length > 0 && (
+            <div>
+              <ProfileList hasLinks teams={teams} users={users} layout="block" />
+            </div>
+          )}
+          <AuthDescription
+            authorized={isAuthorized}
+            description={project.description}
+            update={updateDescription}
+            placeholder="Tell us about your app"
+          />
+          <div>
+            <span className="project-page__profile-button">
               <ShowButton name={domain} />
+            </span>
+            <span className="project-page__profile-button">
               <EditButton name={domain} isMember={isAuthorized} />
-            </p>
-          </ProjectInfoContainer>
-        </InfoContainer>
+            </span>
+          </div>
+        </ProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
@@ -151,6 +216,9 @@ const ProjectPage = ({ project, addProjectToCollection, currentUser, isAuthorize
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
+
+      {isAuthorized && <DeleteProjectButton projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
       </section>
@@ -171,6 +239,10 @@ ProjectPage.propTypes = {
     teams: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
   }).isRequired,
+  updateDomain: PropTypes.func.isRequired,
+  updateDescription: PropTypes.func.isRequired,
+  updatePrivate: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
 };
 
 async function getProject(api, domain) {
