@@ -274,3 +274,20 @@ article.collection-wide
       flex-grow: 1
   .hide-description
      height: auto
+
+.collections-container
+  display: grid
+  grid-template-columns: 1fr
+  grid-gap: 10px
+  align-items: start
+  list-style-type: none
+  padding: 0
+
+  @media (min-width: mediumViewport)
+    grid-template-columns: 1fr 1fr 1fr
+    > li
+      min-width: 33%  
+
+  > li
+    margin-top: 2px
+    min-width: 100% 

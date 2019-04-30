@@ -2,13 +2,8 @@
 
 .projectContainer
   margin-bottom: 1rem
-  grid-template-columns: 1fr
   row-gap: 1.5rem	
-  @media (min-width: mediumViewport)	
-    grid-template-columns: 1fr 1fr	
-
-   @media (min-width: largeViewport)	
-    grid-template-columns: 1fr 1fr 1fr	
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr))
 
 .container :global
   // collections-list
@@ -16,12 +11,7 @@
     padding: 0
   .collections-container	
     row-gap: 1.5rem	
-    @media (min-width: mediumViewport)	
-      grid-template-columns: 1fr 1fr	
-
-     @media (min-width: largeViewport)	
-      grid-template-columns: 1fr 1fr 1fr	
-
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr))
 
   // add-team-project
   .add-project-container

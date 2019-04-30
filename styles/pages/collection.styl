@@ -89,22 +89,9 @@
       border-bottom-right-radius: 5px
       border-top-right-radius: 0px
   .collection-project-container-header
-    margin: 0px 10px
-  .projects-container
-    margin: 10px
-    grid-gap: 15px
-      
-    @media (max-width: mediumViewport)
-      grid-template-columns: 1fr
-      
-  .projects-container > li
-    width: auto
-    min-width: calc(33.3% - 10px)
-    align-self: end
-    margin-bottom: 20px
-    
-    .project-options-pop
-      width: 200px
+    margin: 0px 10px    
+  .project-options-pop
+    width: 200px
   .empty-collection-hint
     border-radius: 4px
     margin: 25px 16px
@@ -129,3 +116,5 @@ a.collection-view-all
 a.collection-view-all:hover
   text-decoration: underline !important  
   
+.collection-page__projects-grid
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr))
