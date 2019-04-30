@@ -157,16 +157,15 @@ class CreateTeamPopBase extends React.Component {
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.func.isRequired,
-  focusDialog: PropTypes.func.isRequired,
 };
 
 const CreateTeamPop = withRouter(CreateTeamPopBase);
 
-const CreateTeamPopOrSignIn = () => {
+const CreateTeamPopOrSignIn = ({...props}) => {
   const api = useAPI();
   const { currentUser: user } = useCurrentUser();
   return user && user.login ? (
-    <CreateTeamPop api={api} />
+    <CreateTeamPop api={api} {...{props}}/>
   ) : (
     <SignInPopBase
       hash="create-team"

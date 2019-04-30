@@ -191,7 +191,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
               >
                 {visible && (
                   <NestedPopover
-                    alternateContent={() => <CreateTeamPop {...props} {...{focusDialog={focusDialog} />}
+                    alternateContent={() => <CreateTeamPop {...props} {...{focusDialog}} />}
                     startAlternateVisible={createTeamOpen}
                   >
                     {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusDialog }} />}

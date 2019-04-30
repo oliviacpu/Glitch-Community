@@ -159,8 +159,8 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
 // Project Options Pop
 const ProjectOptionsPop = ({ ...props }) => (
-  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} />}>
-    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} />}
+  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusDialog={props.focusDialog}/>}>
+    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusDialog={props.focusDialog}/>}
   </NestedPopover>
 );
 
@@ -170,6 +170,7 @@ ProjectOptionsPop.propTypes = {
     users: PropTypes.array.isRequired,
   }).isRequired,
   togglePopover: PropTypes.func.isRequired,
+  focusDialog: PropTypes.func.isRequired,
   addPin: PropTypes.func,
   removePin: PropTypes.func,
   deleteProject: PropTypes.func,
@@ -221,7 +222,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
       buttonText={<div className="down-arrow" aria-label="options" />}
       containerClass="project-options-pop-btn"
     >
-      {({ togglePopover }) => (
+      {({ togglePopover, focusDialog }) => (
         <ProjectOptionsPop
           {...props}
           {...projectOptions}
@@ -230,7 +231,9 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           togglePopover={togglePopover}
+          focusDialog={focusDialog}
         />
+        
       )}
     </PopoverWithButton>
   );
