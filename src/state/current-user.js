@@ -157,11 +157,18 @@ class CurrentUserManager extends React.Component {
       } = await allByKeys({
         baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
         emails: getAllPages(api, makeUrl('emails')),
-        projects: getAllPages(api, makeOrderedUrl('projects', 'userLastAccess', 'DESC')),
+        projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
         teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
         collections: getAllPages(api, makeUrl('collections')),
       });
-      const user = { ...baseUser, emails, projects, teams, collections };
+      const sortedProjects = projects.sort((a, b) => {
+        const aLastAccess = Date.parse(a.permission.userLastAccess || a.lastAccess);
+        const bLastAccess = Date.parse(b.permission.userLastAccess || b.lastAccess);
+        if (aLastAccess > bLastAccess) return -1;
+        if (aLastAccess < bLastAccess) return 1;
+        return 0;
+      });
+      const user = { ...baseUser, emails, projects: sortedProjects, teams, collections };
       if (!usersMatch(sharedUser, user)) {
         return 'error';
       }
