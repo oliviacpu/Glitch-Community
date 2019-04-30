@@ -31,8 +31,8 @@ const NewProjectResultItem = ({ id, domain, description }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects }) => (
-  <div className="pop-over new-project-pop">
+const NewProjectPop = ({ projects, focusDialog }) => (
+  <dialog className="pop-over new-project-pop" ref={focusDialog} tabIndex="0">
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
@@ -59,7 +59,7 @@ const NewProjectPop = ({ projects }) => (
         <span>Clone from Git Repo</span>
       </button>
     </section>
-  </div>
+  </di>
 );
 NewProjectPop.propTypes = {
   projects: PropTypes.arrayOf(
@@ -68,6 +68,7 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  focusDialog: PropTypes.func.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
@@ -91,7 +92,7 @@ function NewProjectPopButton() {
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {() => <NewProjectPop projects={projects} />}
+      {({ focusDialog }) => <NewProjectPop projects={projects} {...{ focusDialog }} />}
     </PopoverWithButton>
   );
 }
