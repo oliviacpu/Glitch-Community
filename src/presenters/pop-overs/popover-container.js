@@ -31,6 +31,10 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   };
   const togglePopover = () => setVisible(!visible);
 
+  const focusDialog = (element) => {
+    if (element) element.focus();
+  };
+
   React.useEffect(() => {
     if (!visible) return undefined;
     const keyHandler = (event) => {
@@ -43,7 +47,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [visible]);
 
-  const props = { visible, setVisible, togglePopover };
+  const props = { visible, setVisible, togglePopover, focusDialog };
 
   const inner = children(props);
   if (isFragment(inner)) {

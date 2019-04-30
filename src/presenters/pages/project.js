@@ -116,9 +116,9 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
           </>
         }
       >
-        {({ togglePopover }) => (
+        {({ togglePopover, focusDialog }) => (
           <>
-            <dialog className="pop-over delete-project-pop" open>
+            <dialog className="pop-over delete-project-pop" open ref={focusDialog} tabIndex="0">
               <section className="pop-over-actions">
                 <div className="action-description">You can always undelete a project from your profile page.</div>
               </section>
