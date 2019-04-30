@@ -11,17 +11,27 @@ We're not strict about enforcing the "latest styles" on any new code, we merely 
 
 ### Components
 
-We're in the process of moving our React architecture towards an Atomic Design-inspired approach, using CSS Modules as the backbone of that to better manage our styles across the app. All components live in src/components, and anything in there should be packaged as a CSS Module (i.e. a `.styl` file with the same name should be present in the same directory, and imported into the component). Webpack builds the `src/components` directory as CSS Modules, and treats the `styles/` directory as traditional CSS/Stylus styles.
+We're in the process of moving our React architecture towards an Atomic Design-inspired approach, using CSS Modules as the backbone of that to better manage our styles across the app. All components live in src/components, and anything in there should be packaged as a CSS Module as follows:
+```
++-- button/
+|   +-- index.js
+|   +-- styles.styl
+```
+
+Webpack builds the `src/components` directory as CSS Modules, and treats the `styles/` directory as traditional CSS/Stylus styles.
 
 To add a new component, or convert an existing piece of our code into a CSS Module-enabled component, here's what you should do:
-1. Create a new `.js` and `.styl` file in `src/components/`. Use your best judgement for how it should be organized.
-    * Only export one component per `.js` file. The component you're exporting should have the same name as the file it's contained in (e.g. `TextArea` is exported from `text-area.js` and styles should be in `text-area.styl`). 
+1. Create a new folder in `src/components/`. Use your best judgement for how it should be organized.
+    * Only export one component per `.js` file. The component you're exporting should have the same name as the folder it's contained in (e.g. `TextArea` is exported from `text-area/` via `index.js` and styles should be in `styles.styl`). 
     * Classnames should be camelcased to make them easier to refer to in Javascript (e.g. `markdownContent` not `markdown-content`).
 1. In general don't add margins, absolute positioning or fixed width/heights into the component - leave that to the parent components.
 1. Where possible, we'd like to avoid passing styles into the components via props and instead rely on named props that cover the use cases of the different modes of the component (e.g. `Button` accepts a `type` prop like `"tertiary"` or `"dangerZone"`) that can be passed into the component. The named props then define the styles that apply - the classnames npm package can be used to combine these in more readable ways (see [Button.js](https://glitch.com/edit/#!/community?path=src/components/buttons/button.js:15:0) for an example)
     * Sometimes you'll need additional styles from parent components. Here's the preferred order of options to use here - ideally use the first one that works for your use case:
         1. Use a wrapper class and define the styles you need on that wrapper. If you'll use this same set of overrides in multiple places, it could make sense to pull this out as a separate component of its own.
+          * Example: 
+          * This won't work if the 
         1. Add a new named prop to the component that fits your use case.
+          * You'll need to do this if the component needs to have different colours
         1. Pass in className.
         1. Directly style the HTML tag names like button or p
 1. Create stories for each relevant variant of the component in `stories/index.js`.
