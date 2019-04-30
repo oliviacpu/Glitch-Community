@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
+import { isDarkColor } from 'Models/collection';
 import { ProfileItem } from 'Components/profile-list';
 
-import styles from './note.styl';
-
-import { isDarkColor } from '../../models/collection';
-
 import AuthDescription from '../../presenters/includes/auth-description';
+import styles from './note.styl';
 
 const cx = classNames.bind(styles);
 
