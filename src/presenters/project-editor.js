@@ -31,6 +31,10 @@ class ProjectEditor extends React.Component {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
+  async deleteProject() {
+    await this.props.api.delete(`projects/${this.state.id}`);
+  }
+
   async uploadAvatar(blob) {
     const { data: policy } = await assets.getProjectAvatarImagePolicy(this.props.api, this.state.id);
     await this.props.uploadAsset(blob, policy, '', { cacheControl: 60 });
@@ -41,6 +45,7 @@ class ProjectEditor extends React.Component {
     const { handleError, handleErrorForInput, handleCustomError } = this.props;
     const funcs = {
       addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
+      deleteProject: () => this.deleteProject().catch(handleError),
       updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),

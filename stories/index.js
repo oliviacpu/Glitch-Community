@@ -30,9 +30,11 @@ import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
 import Note from 'Components/collection/note';
 import MoreIdeas from 'Components/more-ideas';
+import Footer from 'Components/footer';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/profile-container/story';
+import 'Components/deleted-projects/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
@@ -507,3 +509,5 @@ storiesOf('Note', module)
       hideNote={() => setState({ isAddingANewNote: false })}
     />
   )));
+
+storiesOf('Footer', module).add('footer', () => <Footer />);

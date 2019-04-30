@@ -446,16 +446,20 @@ popover-secondary-background()
   .results-info
     width: 100% !important
 
-.delete-team-pop
-  top: 22px
-  left: 8px
+.delete-team-pop, .delete-project-pop
+  top: 25px
+  left: 0px
   margin-bottom: side-padding
   .users 
     margin: 0
   .info-description
     margin-top: 10px
   .illustration
-    width: 110px
+    width: 110px  
+.delete-project-pop .pop-over-actions:first-of-type
+  &:focus
+    outline: none
+  
 
 .upgrade-team-pop
   top: 26px

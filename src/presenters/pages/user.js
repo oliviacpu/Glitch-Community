@@ -5,12 +5,14 @@ import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
+import Emoji from 'Components/images/emoji';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProjectsList from 'Components/containers/projects-list';
 import ProfileContainer from 'Components/profile-container';
+import DeletedProjects from 'Components/deleted-projects';
 
 import { getLink } from '../../models/user';
 
@@ -19,11 +21,10 @@ import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
-import DeletedProjects from '../deleted-projects';
-
 import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import styles from './user.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -102,7 +103,7 @@ const UserPage = ({
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className="profile-page user-page">
+    <main className={styles.container}>
       <section>
         <ProfileContainer
           type="user"
@@ -147,7 +148,7 @@ const UserPage = ({
         <ProjectsList
           title={
             <>
-              Pinned Projects <span className="emoji pushpin emoji-in-title" />
+              Pinned Projects <Emoji inTitle name="pushpin" />
             </>
           }
           projects={pinnedProjects}
@@ -189,7 +190,15 @@ const UserPage = ({
           }}
         />
       )}
-      {isAuthorized && <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />}
+      {isAuthorized && (
+        <article>
+          <Heading tagName="h2">
+            Deleted Projects
+            <Emoji inTitle name="bomb" />
+          </Heading>
+          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+        </article>
+      )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>
   );
