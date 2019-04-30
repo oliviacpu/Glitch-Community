@@ -28,11 +28,11 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
 1. Where possible, we'd like to avoid passing styles into the components via props and instead rely on named props that cover the use cases of the different modes of the component (e.g. `Button` accepts a `type` prop like `"tertiary"` or `"dangerZone"`) that can be passed into the component. The named props then define the styles that apply - the classnames npm package can be used to combine these in more readable ways (see [Button.js](https://glitch.com/edit/#!/community?path=src/components/buttons/button.js:15:0) for an example)
     * Sometimes you'll need additional styles from parent components. Here's the preferred order of options to use here - ideally use the first one that works for your use case:
         1. Use a wrapper class and define the styles you need on that wrapper. If you'll use this same set of overrides in multiple places, it could make sense to pull this out as a separate component of its own.
-          * Example: 
-          * This won't work if the 
+          * This works in situations where you need to add positioning or margins to a component
         1. Add a new named prop to the component that fits your use case.
-          * You'll need to do this if the component needs to have different colours
+          * You'll need to do this if the component itself needs to look different
         1. Pass in className.
+          * This makes sense in situations where there are lots of different styling needs that don't correspond to a particular mode that can be defined on the component.
         1. Directly style the HTML tag names like button or p
 1. Create stories for each relevant variant of the component in `stories/index.js`.
     * As well as providing a visual guide for all the building blocks of our site, our designers use this for visual QA.
