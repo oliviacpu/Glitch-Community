@@ -64,7 +64,11 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuffReadId, setNewStuffReadId }) => {
+const NewStuff = ({ children }) => {
+  const { currentUser } = useCurrentUser();
+  const isSignedIn = !!currentUser && !!currentUser.login;
+  const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
+  const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = React.useState(newStuffLog);
   const track = useTracker('Pupdate');
 
@@ -111,34 +115,6 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
 };
 NewStuff.propTypes = {
   children: PropTypes.func.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
-  showNewStuff: PropTypes.bool.isRequired,
-  newStuffReadId: PropTypes.number.isRequired,
-  setNewStuffReadId: PropTypes.func.isRequired,
 };
 
-const NewStuffContainer = ({ children }) => {
-  const { currentUser } = useCurrentUser();
-  const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
-  const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
-  const isSignedIn = !!currentUser && !!currentUser.login;
-
-  return (
-    <NewStuff
-      {...{
-        isSignedIn,
-        showNewStuff,
-        newStuffReadId,
-        setShowNewStuff,
-        setNewStuffReadId,
-      }}
-    >
-      {children}
-    </NewStuff>
-  );
-};
-NewStuffContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-};
-
-export default NewStuffContainer;
+export default NewStuff;
