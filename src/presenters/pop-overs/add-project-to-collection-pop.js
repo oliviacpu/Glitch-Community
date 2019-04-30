@@ -85,7 +85,7 @@ class AddProjectToCollectionPopContents extends React.Component {
   render() {
     const { filteredCollections, query } = this.state;
     return (
-      <dialog className="pop-over add-project-to-collection-pop wide-pop">
+      <dialog className="pop-over add-project-to-collection-pop wide-pop" tabIndex="0" ref={this.props.focusDialog}>
         {/* Only show this nested popover title from project-options */}
         {!this.props.fromProject && <AddProjectPopoverTitle project={this.props.project} />}
 
@@ -125,6 +125,7 @@ AddProjectToCollectionPopContents.propTypes = {
   collections: PropTypes.array,
   currentUser: PropTypes.object,
   togglePopover: PropTypes.func, // required but added dynamically
+  focusDialog: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
   fromProject: PropTypes.bool,
 };

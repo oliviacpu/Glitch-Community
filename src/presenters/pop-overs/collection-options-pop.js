@@ -20,7 +20,7 @@ const CollectionOptionsPop = (props) => {
   }
 
   return (
-    <dialog className="pop-over collection-options-pop">
+    <dialog className="pop-over collection-options-pop" tabIndex="0" ref={props.focusDialog}>
       <section className="pop-over-actions danger-zone last-section">
         {props.deleteCollection && <PopoverButton onClick={animateThenDeleteCollection} text="Delete Collection " emoji="bomb" />}
       </section>
@@ -30,6 +30,7 @@ const CollectionOptionsPop = (props) => {
 
 CollectionOptionsPop.propTypes = {
   deleteCollection: PropTypes.func,
+  focusDialog: PropTypes.func.isRequired,
 };
 
 CollectionOptionsPop.defaultProps = {
@@ -50,7 +51,7 @@ export default function CollectionOptions({ deleteCollection, collection }) {
       containerClass="collection-options-pop-btn"
       buttonClass="collection-options button-borderless"
     >
-      {() => <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} currentUser={currentUser} />}
+      {({ focusDialog }) => <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} currentUser={currentUser} focusDialog={focusDialog}/>}
     </PopoverWithButton>
   );
 }

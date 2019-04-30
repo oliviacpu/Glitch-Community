@@ -94,7 +94,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
 
   return (
-    <dialog className="pop-over project-options-pop">
+    <dialog className="pop-over project-options-pop" tabIndex="0" ref={props.focusDialog}>
       { showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {!!props.featureProject && !props.project.private && (
