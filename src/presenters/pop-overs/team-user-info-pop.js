@@ -86,7 +86,7 @@ const TeamUserInfo = ({ currentUser, currentUserIsTeamAdmin, showRemove, userTea
   }
 
   return (
-    <dialog className="pop-over team-user-info-pop">
+    <dialog className="pop-over team-user-info-pop" tabIndex="0" ref={props.focusDialog}>
       <section className="pop-over-info user-info">
         <UserLink user={props.user}>
           <img className="avatar" src={getAvatarThumbnailUrl(props.user)} alt={props.user.login} style={userAvatarStyle} />

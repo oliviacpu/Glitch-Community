@@ -33,13 +33,14 @@ export const TeamUsers = (props) => (
             buttonClass="user button-unstyled tooltip-container-button"
             buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(props.adminIds, user)} withinButton />}
           >
-            {({ togglePopover }) => (
+            {({ togglePopover, focusDialog }) => (
               <TeamUserInfoPop
                 userIsTeamAdmin={userIsTeamAdmin}
                 userIsTheOnlyAdmin={userIsTeamAdmin && props.adminIds.length === 1}
                 userIsTheOnlyMember={props.users.length === 1}
                 user={user}
                 togglePopover={togglePopover}
+                focusDialog={focusDialog}
                 {...props}
               />
             )}
