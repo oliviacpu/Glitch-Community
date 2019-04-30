@@ -41,11 +41,15 @@ export function getAvatarStyle({ avatarUrl, color }) {
   };
 }
 
-export function getProfileStyle({ id, hasCoverImage, coverColor, cache = cacheBuster, size = 'large' }) {
+export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) {
   const customImage = `${CDN_URL}/user-cover/${id}/${size}?${cache}`;
   const defaultImage = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fdefault-cover-wide.svg?1503518400625';
+  return hasCoverImage ? customImage : defaultImage
+}
+
+export function getProfileStyle(params) {
   return {
-    backgroundColor: coverColor,
-    backgroundImage: `url('${hasCoverImage ? customImage : defaultImage}')`,
+    backgroundColor: params.coverColor,
+    backgroundImage: `url('${getCoverUrl(params)}')`,
   };
 }
