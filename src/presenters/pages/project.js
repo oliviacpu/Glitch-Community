@@ -117,7 +117,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {suspendedReason ? ("suspended project") : (domain)} {project.private && <PrivateBadge />}
+                {suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
@@ -128,7 +128,7 @@ const ProjectPage = ({
           )}
           <AuthDescription
             authorized={isAuthorized}
-            description={project.description}
+            description={!isAuthorized && suspendedReason ? ('suspended project') : project.description}
             update={updateDescription}
             placeholder="Tell us about your app"
           />
