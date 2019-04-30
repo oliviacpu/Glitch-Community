@@ -97,7 +97,7 @@ const ProjectPage = ({
   updatePrivate,
   uploadAvatar,
 }) => {
-  const { domain, users, teams } = project;
+  const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
       <section id="info">
@@ -117,7 +117,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {domain} {project.private && <PrivateBadge />}
+                {suspendedReason ? (▓▓▓▓▓▓▓) : (domain)} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
