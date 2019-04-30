@@ -55,7 +55,7 @@ const RecentProjectsContainer = ({ children, user, clearUser }) => (
           </UserLink>
         </div>
       </div>
-      <article className="projects">{children}</article>
+      <article className="recent-projects__projects-wrap">{children}</article>
       {!user.login && <ClearSession clearUser={clearUser} />}
     </CoverContainer>
   </section>

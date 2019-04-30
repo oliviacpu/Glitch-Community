@@ -14,7 +14,9 @@ const PROJECT_COUNT = 3;
 const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
     <CoverContainer type={type} item={item}>
-      <ProjectsList className="related-projects__grid" projects={projects} />
+      <div className="related-projects__projects-wrap">
+        <ProjectsList className="related-projects__grid" projects={projects} />
+      </div>
     </CoverContainer>
   ) : null;
 
