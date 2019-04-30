@@ -82,7 +82,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
-  const showPinOrFeatureSection = (props.addPin || props.removePin || (props.featureProject && !props.project.private));
+  const showPinOrFeatureSection = props.addPin || props.removePin || (props.featureProject && !props.project.private);
   const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
   const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
@@ -95,17 +95,11 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
   return (
     <dialog className="pop-over project-options-pop" tabIndex="0" ref={props.focusDialog}>
-      { showPinOrFeatureSection && (
+      {showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {!!props.featureProject && !props.project.private && (
-            <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />
-          )}
-          {!!props.addPin && (
-            <PopoverButton onClick={onClickAddPin} text="Pin " emoji="pushpin" />
-          )}
-          {!!props.removePin && (
-            <PopoverButton onClick={onClickRemovePin} text="Un-Pin " emoji="pushpin" />
-          )}
+          {!!props.featureProject && !props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
+          {!!props.addPin && <PopoverButton onClick={onClickAddPin} text="Pin " emoji="pushpin" />}
+          {!!props.removePin && <PopoverButton onClick={onClickRemovePin} text="Un-Pin " emoji="pushpin" />}
         </section>
       )}
       {showAddNote && (
@@ -140,13 +134,9 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
-          {showRemoveProjectFromTeam && (
-            <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />
-          )}
+          {showRemoveProjectFromTeam && <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />}
 
-          {showDeleteProject && (
-            <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
-          )}
+          {showDeleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
             <PopoverButton onClick={() => props.removeProjectFromCollection(props.project)} text="Remove from Collection" emoji="thumbs_down" />
@@ -159,8 +149,10 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
 // Project Options Pop
 const ProjectOptionsPop = ({ ...props }) => (
-  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusDialog={props.focusDialog}/>}>
-    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusDialog={props.focusDialog}/>}
+  <NestedPopover
+    alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusDialog={props.focusDialog} />}
+  >
+    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusDialog={props.focusDialog} />}
   </NestedPopover>
 );
 
@@ -233,7 +225,6 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           togglePopover={togglePopover}
           focusDialog={focusDialog}
         />
-        
       )}
     </PopoverWithButton>
   );

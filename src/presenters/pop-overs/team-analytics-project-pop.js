@@ -32,7 +32,7 @@ const isActive = (currentProjectDomain, project) => {
   return false;
 };
 
-const PopOver = ({ projects, togglePopover, setFilter, filter, updateProjectDomain, currentProjectDomain, focusDialog }) => {
+const PopOver = ({ projects, togglePopover, setFilter, filter, updateProjectDomain, currentProjectDomain }) => {
   const onClick = (domain) => {
     togglePopover();
     updateProjectDomain(domain);
@@ -42,7 +42,7 @@ const PopOver = ({ projects, togglePopover, setFilter, filter, updateProjectDoma
   const filteredProjects = projects.filter(({ domain }) => domain.toLowerCase().includes(filter.toLowerCase()));
 
   return (
-    <dialog className="pop-over analytics-projects-pop wide-pop" tabIndex="0" ref={focusDialog}>
+    <dialog className="pop-over analytics-projects-pop wide-pop">
       <section className="pop-over-info">
         <input
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
@@ -84,7 +84,6 @@ PopOver.propTypes = {
   filter: PropTypes.string.isRequired,
   updateProjectDomain: PropTypes.func.isRequired,
   currentProjectDomain: PropTypes.string.isRequired,
-  focusDialog: PropTypes.func.isRequired,
 };
 
 PopOver.defaultProps = {
@@ -111,7 +110,7 @@ class TeamAnalyticsProjectPop extends React.Component {
         buttonClass="button-small button-tertiary"
         buttonText={currentProjectDomain ? <>Project: {currentProjectDomain} {dropdown}</> : <>All Projects {dropdown}</>}
       >
-        {({ togglePopover, focusDialog }) => (
+        {({ togglePopover }) => (
           <PopOver
             projects={projects}
             updateProjectDomain={updateProjectDomain}
@@ -119,7 +118,6 @@ class TeamAnalyticsProjectPop extends React.Component {
             setFilter={this.setFilter}
             filter={this.state.filter}
             togglePopover={togglePopover}
-            focusDialog={focusDialog}
           />
         )}
       </PopoverWithButton>

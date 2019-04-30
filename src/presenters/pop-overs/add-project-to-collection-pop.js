@@ -98,6 +98,7 @@ class AddProjectToCollectionPopContents extends React.Component {
               }}
               placeholder="Filter collections"
               aria-label="Filter collections"
+              autofocus
             />
           </section>
         )}
