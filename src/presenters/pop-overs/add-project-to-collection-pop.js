@@ -92,13 +92,13 @@ class AddProjectToCollectionPopContents extends React.Component {
         {this.props.collections.length > 3 && (
           <section className="pop-over-info">
             <input
+              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               className="pop-over-input search-input pop-over-search"
               onChange={(evt) => {
                 this.updateFilter(evt.target.value);
               }}
               placeholder="Filter collections"
               aria-label="Filter collections"
-              autofocus
             />
           </section>
         )}
