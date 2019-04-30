@@ -12,6 +12,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
+import Emoji from 'Components/images/emoji';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -227,7 +228,7 @@ class TeamPage extends React.Component {
           <ProjectsList
             title={
               <>
-                Pinned Projects <span className="emoji pushpin emoji-in-title" />
+                Pinned Projects <Emoji inTitle name="pushpin" />
               </>
             }
             projects={pinnedProjects}
