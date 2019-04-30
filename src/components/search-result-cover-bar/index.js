@@ -1,4 +1,3 @@
-/* globals CDN_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
