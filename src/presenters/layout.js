@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Header from 'Components/header';
 import Footer from 'Components/footer';
-import Header from './header';
+import NewStuffContainer from './overlays/new-stuff';
 import ErrorBoundary from './includes/error-boundary';
 import Konami from './includes/konami';
 
 const Layout = ({ children, searchQuery }) => (
   <div className="content">
     <Helmet title="Glitch" />
-    <Header searchQuery={searchQuery} />
+    <NewStuffContainer>
+      {(showNewStuffOverlay) => (
+        <div className="header-wrap">
+          <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
+        </div>
+      )}
+    </NewStuffContainer>
     <ErrorBoundary>{children}</ErrorBoundary>
     <Footer />
     <ErrorBoundary fallback={null}>

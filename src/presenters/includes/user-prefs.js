@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import useLocalStorage from '../../state/local-storage';
 
-const Context = React.createContext();
+export const Context = React.createContext();
 
 export const UserPrefsProvider = ({ children }) => {
   const [prefs, set] = useLocalStorage('community-userPrefs', {});
