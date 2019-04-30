@@ -117,7 +117,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {suspendedReason ? (▓▓▓▓▓▓▓) : (domain)} {project.private && <PrivateBadge />}
+                {suspendedReason ? ("suspended project") : (domain)} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
