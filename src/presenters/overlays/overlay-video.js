@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Overlay from 'Components/overlays/overlay';
+import OverlaySection from 'Components/overlays/overlay-section';
+
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 
@@ -26,11 +29,11 @@ const OverlayVideo = ({ children }) => {
         return (
           <details onToggle={onToggle} open={visible} className="overlay-container">
             <summary>{children}</summary>
-            <dialog className="overlay video-overlay">
-              <section className="pop-over-actions">
+            <Overlay className="video-overlay">
+              <OverlaySection type="actions">
                 <Video />
-              </section>
-            </dialog>
+              </OverlaySection>
+            </Overlay>
           </details>
         );
       }}
