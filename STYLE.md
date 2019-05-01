@@ -30,18 +30,18 @@ To add a new component, or convert an existing piece of our code into a CSS Modu
     1. Use a wrapper class and define the styles you need on that wrapper. If you'll use this same set of overrides in multiple places, it could make sense to pull this out as a separate component of its own.
       * This works in situations where you need to add positioning or margins to a component
     2. Add a new named prop to the component that fits your use case.
-      * You'll need to do this if the internals of the component itself needs to look different in certain cases (e.g. font or colors) - editable Markdown could be a good example of this.
+      * You'll need to do this if the internals of the component itself needs to look different in certain cases (e.g. font or colors) - editable Markdown would be a good example of this.
     3. Pass in className.
       * This makes sense in situations where there are lots of different styling needs that don't correspond to a particular mode that can be defined on the component - eg. <Image> currently allows a className prop.
     4. Directly style the HTML tag names like button or p
-      * This is discouraged, but can be used if none of the above options make sense.
+      * This is discouraged, but can be used if none of the above options make sense (e.g. if you need to override global styles that haven't been componentized yet).
 3. Create stories for each relevant variant of the component in `stories/index.js`.
   * As well as providing a visual guide for all the building blocks of our site, our designers use this for visual QA.
   * Once this file gets too big, we'll likely start splitting it out, but for now all stories should go in there. 
 4. Generate the new storybook guide on your remix as explained in the Storybook section below.
 
 Some notes for the migration stage of this process:
-1. At this point, our highest priority is getting styles out of styles/ and into the src/ folder with their respective presenters. If you only have time to do that and not to componentise it properly, please do! Keep these somewhere in the src/presenters folder for now until the true componentization has happened.
+1. At this point, our highest priority is getting styles out of styles/ and into the src/ folder with their respective presenters. If you only have time to do that and not to componentize it properly, please do! Keep these somewhere in the src/presenters folder for now until the true componentization has happened.
 2. In some cases, your component might be using other elements that aren't properly componentized yet. The important part is to ensure that layout for your component still looks good, and then once it's using the future subcomponents, it can be re-QAed for those updates.
 3. We still need Storybook stories for anything in the src/components folder, but the expectation is that they won't look identical to how they look on the website (see above point)
 
