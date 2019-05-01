@@ -20,15 +20,18 @@ const TrackedButton = ({ label, onClick }) => {
   );
 };
 
-const TrackedButtonGroup = ({ items }) => (
-  <>
-    {Object.entries(items)
-      .filter(([, onClick]) => onClick)
-      .map(([label, onClick]) => (
-        <TrackedButton key={label} label={label} onClick={onClick} />
-      ))}
-  </>
-);
+const TrackedButtonGroup = ({ items }) => {
+  console.log(items);
+  return (
+    <>
+      {Object.entries(items)
+        .filter(([, onClick]) => onClick)
+        .map(([label, onClick]) => (
+          <TrackedButton key={label} label={label} onClick={onClick} />
+        ))}
+    </>
+  );
+};
 
 const getStyle = {
   user: getUserAvatarStyle,
