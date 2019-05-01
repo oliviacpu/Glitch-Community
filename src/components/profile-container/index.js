@@ -21,7 +21,7 @@ const TrackedButton = ({ label, onClick }) => {
 };
 
 const TrackedButtonGroup = ({ items }) => {
-  console.log(items);
+  if (!items) return null;
   return (
     <>
       {Object.entries(items)
@@ -45,17 +45,25 @@ const getStyle = {
   },
 };
 
-const ProjectProfileContainer = ({ item, children, avatarActions }) => (
-  <div className={styles.profileWrap}>
-    <div className={styles.avatarContainer}>
-      <div className={classnames(styles.avatar, styles.project)} style={getStyle.project(item)} />
-      <div className={styles.avatarButtons}>
-        <TrackedButtonGroup items={avatarActions} />
+const ProjectProfileContainer = ({ item, children, avatarActions }) => {
+  let avatarStyle;
+  if (item.suspendedReason && !avatarActions) {
+    avatarStyle = { backgroundImage: `url('https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930')` }; // eslint-disable-line no-underscore-dangle
+  } else {
+    avatarStyle = { backgroundImage: `url('${getProjectAvatarUrl(item.id)}?${item._avatarCache}')` }; // eslint-disable-line no-underscore-dangle
+  }
+  return (
+    <div className={styles.profileWrap}>
+      <div className={styles.avatarContainer}>
+        <div className={classnames(styles.avatar, styles.project)} style={avatarStyle} />
+        <div className={styles.avatarButtons}>
+          <TrackedButtonGroup items={avatarActions} />
+        </div>
       </div>
+      <div className={styles.profileInfo}>{children}</div>
     </div>
-    <div className={styles.profileInfo}>{children}</div>
-  </div>
-);
+  );
+};
 
 const ProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => {
   if (type === 'project') {
