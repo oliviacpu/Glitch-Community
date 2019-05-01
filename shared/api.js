@@ -1,3 +1,5 @@
+const Sentry = require('@sentry/minimal');
+
 /// Api helper functions
 
 const joinIdsToQueryString = (ids) => {
@@ -31,8 +33,9 @@ const getAllPages = async (api, url) => {
     const data = await getFromApi(api, url);
     results.push(...data.items);
     if (data.hasMore && !data.lastOrderValue) {
-      console.warn('hasMore', data.hasMore, 'lastOrderValue', data.lastOrderValue);
-      throw new Error('The rest api responded with hasMore but no lastOrderValue');
+      Sentry.captureBreadcrumb(`Broken api pagination hasMore=${data.hasMore} lastOrderValue=${data.lastOrderValue}`);
+      Sentry.captureMessage('The rest api responded with hasMore but no lastOrderValue');
+      return results;
     }
     hasMore = data.hasMore;
     url = data.nextPage;
