@@ -7,12 +7,13 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
-import CollectionsList from 'Components/collections-list';
+import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
 import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
+import Row from 'Components/containers/row';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -58,7 +59,10 @@ const IncludedInCollections = ({ projectId }) => {
     return null;
   }
   return (
-    <CollectionsList title="Included in Collections" showCurator collections={collections} />
+    <>
+      <Heading tagName="h2">Included in Collections</Heading>
+      <Row items={collections}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
+    </>
   );
 };
 
