@@ -32,6 +32,10 @@ const getAllPages = async (api, url) => {
     results.push(...data.items);
     hasMore = data.hasMore;
     url = data.nextPage;
+    if (hasMore && !data.lastOrderValue) {
+      console.warn('Rest api lastOrderValue was unexpectedly empty', url);
+      break;
+    }
   }
   return results;
 };
