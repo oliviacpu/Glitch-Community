@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import ProjectEmbed from 'Components/project/project-embed';
 import Emoji from 'Components/images/emoji';
+import Note from 'Components/collection/note';
 import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-project-options-pop';
-import Note from '../../presenters/note';
 import styles from './featured-project.styl';
 
 const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => (

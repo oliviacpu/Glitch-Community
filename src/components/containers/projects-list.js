@@ -10,8 +10,7 @@ import TextInput from 'Components/inputs/text-input';
 import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
 import ProjectItem from 'Components/project/project-item';
-
-import Note from '../../presenters/note';
+import Note from 'Components/collection/note';
 
 import styles from './projects-list.styl';
 
@@ -159,13 +158,15 @@ const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions
     {projects.map((project) => (
       <li key={project.id}>
         {collection && (
-          <Note
-            project={project}
-            collection={collection}
-            isAuthorized={noteOptions.isAuthorized}
-            hideNote={noteOptions.hideNote}
-            updateNote={noteOptions.updateNote}
-          />
+          <div className="projects-container-note">
+            <Note
+              project={project}
+              collection={collection}
+              isAuthorized={noteOptions.isAuthorized}
+              hideNote={noteOptions.hideNote}
+              updateNote={noteOptions.updateNote}
+            />
+          </div>
         )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
       </li>

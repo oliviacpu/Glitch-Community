@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
+import { isDarkColor } from 'Models/collection';
 import { ProfileItem } from 'Components/profile-list';
 
-// TODO: let's move these into components
-import AuthDescription from './includes/auth-description';
+import AuthDescription from '../../presenters/includes/auth-description';
+import styles from './note.styl';
 
-import { isDarkColor } from '../models/collection';
+const cx = classNames.bind(styles);
 
 /**
  * Note Component
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
-  function updateNoteVisibility(description) {
+  function hideEmptyNote(event) {
+    let description = event.target.value || '';
     description = _.trim(description);
 
     if (!description || description.length === 0) {
@@ -25,29 +27,24 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   if (!project.isAddingANewNote && !project.note) {
     return null;
   }
-
   const collectionCoverColor = collection.coverColor;
 
-  const className = classNames({
-    'description-container': true,
-    dark: isDarkColor(collectionCoverColor),
-  });
-
   return (
-    <div className="note">
-      <div className={className} style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}>
-        <div className="description">
-          <AuthDescription
-            authorized={isAuthorized}
-            description={project.note || ''}
-            placeholder="Share why you love this app."
-            update={(note) => updateNote({ note, projectId: project.id })}
-            onBlur={updateNoteVisibility}
-            allowImages
-          />
-        </div>
+    <div className={styles.note}>
+      <div
+        className={cx({ descriptionContainer: true, dark: isDarkColor(collectionCoverColor) })}
+        style={{ backgroundColor: collectionCoverColor, borderColor: collectionCoverColor }}
+      >
+        <AuthDescription
+          authorized={isAuthorized}
+          description={project.note || ''}
+          placeholder="Share why you love this app."
+          update={(note) => updateNote({ note, projectId: project.id })}
+          onBlur={hideEmptyNote}
+          allowImages
+        />
       </div>
-      <div className="user">
+      <div className={styles.user}>
         <ProfileItem user={collection.user} team={collection.team} />
       </div>
     </div>
@@ -55,11 +52,15 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
 };
 
 Note.propTypes = {
+  collection: PropTypes.shape({
+    coverColor: PropTypes.string,
+    user: PropTypes.object,
+    team: PropTypes.object,
+  }).isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     note: PropTypes.string,
     isAddingANewNote: PropTypes.bool,
-    collectionCoverColor: PropTypes.string,
   }).isRequired,
   updateNote: PropTypes.func,
   hideNote: PropTypes.func,
