@@ -16,11 +16,11 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
-  <dialog className="pop-over overlay new-stuff-overlay" open>
-    <section className="pop-over-info">
+  <Overlay className="new-stuff-overlay">
+    <OverlaySection type="info">
       <figure className="new-stuff-avatar" />
-      <div className="overlay-title">New Stuff</div>
-      <div>
+      <OverlayTitle>New Stuff</OverlayTitle>
+      <div className="showNewStuff-toggle">
         <label className="button button-small" htmlFor="showNewStuff">
           <input
             id="showNewStuff"
@@ -32,8 +32,8 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
           Keep showing me these
         </label>
       </div>
-    </section>
-    <section className="pop-over-actions">
+    </OverlaySection>
+    <OverlaySection type="actions">
       {newStuff.map(({ id, title, body, link }) => (
         <article key={id}>
           <div className="title">{title}</div>
@@ -49,8 +49,8 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
           )}
         </article>
       ))}
-    </section>
-  </dialog>
+    </OverlaySection>
+  </Overlay>
 );
 NewStuffOverlay.propTypes = {
   setShowNewStuff: PropTypes.func.isRequired,
