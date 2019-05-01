@@ -10,12 +10,12 @@ import styles from './new-stuff-article.styl';
 const NewStuffArticle = ({ title, body, link }) => (
   <article className={styles.article}>
     <h2 className={styles.title}>{title}</h2>
-    <div className="body">
+    <div className={styles.body}>
       <Markdown>{body}</Markdown>
     </div>
     {!!link && (
       <Text>
-        <Link className="link" to={link}>
+        <Link to={link}>
           Read the blog post →
         </Link>
       </Text>
@@ -24,7 +24,7 @@ const NewStuffArticle = ({ title, body, link }) => (
 );
 
 NewStuffArticle.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   body: PropTypes.string.isRequired,
   link: PropTypes.string,
 };
