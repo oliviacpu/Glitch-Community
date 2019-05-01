@@ -35,9 +35,9 @@ const getStyle = {
   team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
   project: (project) => {
     if (project.suspendedReason) {
-      return { backgroundImage: `url('https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930')` } // eslint-disable-line no-underscore-dangle
+      return { backgroundImage: `url('https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930')` }; // eslint-disable-line no-underscore-dangle
     } else {
-      return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` } // eslint-disable-line no-underscore-dangle
+      return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` }; // eslint-disable-line no-underscore-dangle
     }
   },
 };
@@ -82,11 +82,11 @@ const ProfileContainer = ({ item, type, children, avatarActions, coverActions, t
     </CoverContainer>
   );
 };
+
 ProfileContainer.propTypes = {
   item: PropTypes.object.isRequired,
   type: PropTypes.oneOf(['user', 'team', 'project']).isRequired,
   children: PropTypes.node.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
   avatarActions: PropTypes.object,
   coverActions: PropTypes.object,
   teams: PropTypes.array,
