@@ -92,7 +92,7 @@ function NewProjectPopButton() {
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {({ focusDialog }) => <NewProjectPop projects={projects} {...{ focusDialog }} />}
+      {({ focusDialog }) => <NewProjectPop projects={projects} focusDialog = {focusDialog } />}
     </PopoverWithButton>
   );
 }
