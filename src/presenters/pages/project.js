@@ -104,6 +104,7 @@ const ProjectPage = ({
         <ProfileContainer
           type="project"
           item={project}
+          isAuthorized={isAuthorized}
           avatarActions={{
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}
