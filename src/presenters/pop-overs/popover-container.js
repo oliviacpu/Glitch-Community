@@ -31,10 +31,10 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   };
   const togglePopover = (event) => {
     setVisible(!visible);
-    if(event.detail === 0){
+    if (event.detail === 0) {
       // opened on keyboard press - should focus on first tabbable element in pop-over here
     }
-  }
+  };
 
   const focusDialog = (element) => {
     if (element) element.focus();
