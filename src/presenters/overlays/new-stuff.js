@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Markdown from 'Components/text/markdown';
+import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Text from 'Components/text/text';
-import Link from 'Components/link';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
@@ -33,21 +31,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
       </div>
     </section>
     <section className="pop-over-actions">
-      {newStuff.map(({ id, title, body, link }) => (
-        <article key={id}>
-          <div className="title">{title}</div>
-          <div className="body">
-            <Markdown>{body}</Markdown>
-          </div>
-          {!!link && (
-            <Text>
-              <Link className="link" to={link}>
-                Read the blog post →
-              </Link>
-            </Text>
-          )}
-        </article>
-      ))}
+      {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
     </section>
   </dialog>
 );
