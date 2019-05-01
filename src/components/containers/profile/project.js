@@ -2,41 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import CoverContainer from 'Components/containers/cover-container';
-import ProfileList from 'Components/profile-list';
 import Button from 'Components/buttons/button';
-import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
-import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
 import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
-
-const TrackedButton = ({ label, onClick }) => {
-  const trackedOnClick = useTrackedFunc(onClick, label);
-  return (
-    <Button size="small" type="tertiary" onClick={trackedOnClick}>
-      {label}
-    </Button>
-  );
-};
-
-const TrackedButtonGroup = ({ items }) => {
-  if (!items) return null;
-  return (
-    <>
-      {Object.entries(items)
-        .filter(([, onClick]) => onClick)
-        .map(([label, onClick]) => (
-          <TrackedButton key={label} label={label} onClick={onClick} />
-        ))}
-    </>
-  );
-};
-
-const getStyle = {
-  user: getUserAvatarStyle,
-  team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
-};
 
 const ProjectProfileContainer = ({ item, children, avatarActions }) => {
   let avatarStyle;
@@ -58,22 +27,14 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
   );
 };
 
-const ProfileContainer = ({ item, children, avatarActions }) => {
-  return (
-    <ProjectProfileContainer item={item} avatarActions={avatarActions}>
-      {children}
-    </ProjectProfileContainer>
-  );
-};
-
-ProfileContainer.propTypes = {
+ProjectProfileContainer.propTypes = {
   item: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   avatarActions: PropTypes.object,
 };
 
-ProfileContainer.defaultProps = {
+ProjectProfileContainer.defaultProps = {
   avatarActions: {},
 };
 
-export default ProfileContainer;
+export default ProjectProfileContainer;
