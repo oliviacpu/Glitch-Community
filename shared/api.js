@@ -33,9 +33,8 @@ const getAllPages = async (api, url) => {
     hasMore = data.hasMore;
     url = data.nextPage;
     if (hasMore && !data.lastOrderValue) {
-      console.warn('Rest api lastOrderValue is empty', url);
-      // can't use sentry since this is shared... should it throw?
-      break;
+      console.warn('hasMore', data.hasMore, 'lastOrderValue', data.lastOrderValue);
+      throw new Error('The rest api responded with hasMore but no lastOrderValue');
     }
   }
   return results;
