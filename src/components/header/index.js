@@ -21,6 +21,7 @@ const ResumeCoding = () => (
 
 const Header = ({ searchQuery, showNewStuffOverlay }) => {
   const { currentUser, clear } = useCurrentUser();
+  const showResumeCoding = !!currentUser && !!currentUser.projects.length
   return (
     <header role="banner" className={styles.header}>
       <Link to="/" className={styles.logoWrap}>
@@ -33,9 +34,9 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         </div>
         <ul className={styles.buttons}>
           <li className={styles.buttonWrap}>
-            <NewProjectPop />
+            <NewProjectPop opensFromRight={showResumeCoding}/>
           </li>
-          {!!currentUser && !!currentUser.projects.length && (
+          {showResumeCoding && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
             </li>

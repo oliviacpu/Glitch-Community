@@ -26,7 +26,6 @@ popover-secondary-background()
   cursor: initial
   display: block
   position: absolute
-  top: 55px
   left: initial
   border-radius: 3px
   border: 1px solid secondary
@@ -432,11 +431,8 @@ popover-secondary-background()
         height: project-result-avatar-size      
       
 .new-project-pop
-  top: 40px
-  right: 0
   @media(max-width: smallViewport)
     right: 0px
-    max-width: 200px
   .view-result-link
     display: none
   .avatar
@@ -445,6 +441,9 @@ popover-secondary-background()
     margin-right: 10px
   .results-info
     width: 100% !important
+  &.open-right
+    right: 0
+
 
 .delete-team-pop, .delete-project-pop
   top: 25px
