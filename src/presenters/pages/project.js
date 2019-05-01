@@ -106,7 +106,7 @@ const ProjectPage = ({
           item={project}
           avatarActions={isAuthorized ? {
             'Upload Avatar': uploadAvatar,
-          } : null}
+          } : undefined}
         >
           <Heading tagName="h1">
             {isAuthorized ? (
