@@ -28,6 +28,7 @@ import Embed from 'Components/project/embed';
 import ProjectEmbed from 'Components/project/project-embed';
 import FeaturedProject from 'Components/project/featured-project';
 import CoverContainer from 'Components/containers/cover-container';
+import Note from 'Components/collection/note';
 import MoreIdeas from 'Components/more-ideas';
 import Footer from 'Components/footer';
 import 'Components/profile-list/story';
@@ -463,4 +464,52 @@ storiesOf('CoverContainer', module)
   ));
 
 storiesOf('MoreIdeas', module).add('more ideas', () => <MoreIdeas />);
+
+const mockUpdateNote = (setState) => async ({ note }) => {
+  setState({ note, isAddingANewNote: true });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+};
+
+storiesOf('Note', module)
+  .add(
+    'when authorized', 
+    withState({
+      note: "You are authorized to edit this note, go on ahead and try, if you erase its contents and click away, this note will disappear after a short time",
+      isAddingANewNote: true
+    }, 
+    ({ state: project, setState }) => (
+      <Note
+        isAuthorized={true}
+        collection={collections["12345"]}
+        project={project}
+        updateNote={mockUpdateNote(setState)}
+        hideNote={() => setState({ isAddingANewNote: false })}
+      />
+    ))
+  )
+  .add('when unauthorized', withState({
+    note: "this note you do not own, you can not edit it, you can not hide it",
+    isAddingANewNote: true
+  }, ({ state: project, setState }) => (
+    <Note
+      isAuthorized={false}
+      collection={collections["12345"]}
+      project={project}
+      updateNote={mockUpdateNote(setState)}
+      hideNote={() => setState({ isAddingANewNote: false })}
+    />
+  )))
+  .add('dark notes', withState({
+    note: "the background is dark, the text is light",
+    isAddingANewNote: true
+  }, ({ state: project, setState }) => (
+    <Note
+      isAuthorized={true}
+      collection={collections.dark}
+      project={project}
+      updateNote={mockUpdateNote(setState)}
+      hideNote={() => setState({ isAddingANewNote: false })}
+    />
+  )));
+
 storiesOf('Footer', module).add('footer', () => <Footer />);
