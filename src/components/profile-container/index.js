@@ -35,7 +35,7 @@ const getStyle = {
   team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
   project: (project) => {
     if (project.suspendedReason) {
-      return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` } // eslint-disable-line no-underscore-dangle
+      return { backgroundImage: `url('https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/198/no-entry_26d4.png')` } // eslint-disable-line no-underscore-dangle
     } else {
       return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` } // eslint-disable-line no-underscore-dangle
     }
