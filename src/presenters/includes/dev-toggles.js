@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useUserPref from './user-prefs';
 
-const Context = React.createContext();
+export const Context = React.createContext();
 
 //  Dev Toggles!
 //

@@ -38,11 +38,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   if (decorative) {
-    return (
-      <button className={className} disabled={disabled} tabIndex={-1}>
-        {children}
-      </button>
-    );
+    return <span className={className}>{children}</span>;
   }
 
   return (

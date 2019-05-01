@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
+
+import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
+import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
@@ -14,6 +18,8 @@ import ProjectDomainInput from 'Components/fields/project-domain-input';
 import ProfileContainer from 'Components/profile-container';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
+
+import PopoverWithButton from '../pop-overs/popover-with-button';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 
@@ -27,6 +33,8 @@ import { addBreadcrumb } from '../../utils/sentry';
 
 import { useAPI, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
+
+import { getLink as getUserLink } from '../../models/user';
 
 import Layout from '../layout';
 
@@ -121,6 +129,65 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
+function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
+  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
+
+  return (
+    <section>
+      <PopoverWithButton
+        buttonClass="button-small button-tertiary danger-zone"
+        buttonText={
+          <>
+            Delete Project
+            <Emoji name="bomb" />
+          </>
+        }
+      >
+        {({ togglePopover }) => (
+          <>
+            <dialog className="pop-over delete-project-pop" open>
+              <section className="pop-over-actions">
+                <div className="action-description">You can always undelete a project from your profile page.</div>
+              </section>
+              <section className="pop-over-actions danger-zone">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <Button
+                    type="tertiary"
+                    size="small"
+                    onClick={() => {
+                      setLoading(true);
+                      deleteProject().then(() => {
+                        togglePopover();
+                        setDone(true);
+                      });
+                    }}
+                  >
+                    Delete {projectDomain} <Emoji name="bomb" />
+                  </Button>
+                )}
+              </section>
+            </dialog>
+          </>
+        )}
+      </PopoverWithButton>
+    </section>
+  );
+}
+
+DeleteProjectButton.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  deleteProject: PropTypes.func.isRequired,
+};
+
 const ProjectPage = ({
   project,
   addProjectToCollection,
@@ -129,6 +196,7 @@ const ProjectPage = ({
   updateDomain,
   updateDescription,
   updatePrivate,
+  deleteProject,
   uploadAvatar,
 }) => {
   const { domain, users, teams } = project;
@@ -182,6 +250,9 @@ const ProjectPage = ({
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
+
+      {isAuthorized && <DeleteProjectButton projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
       </section>
@@ -202,6 +273,10 @@ ProjectPage.propTypes = {
     teams: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
   }).isRequired,
+  updateDomain: PropTypes.func.isRequired,
+  updateDescription: PropTypes.func.isRequired,
+  updatePrivate: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
 };
 
 async function getProject(api, domain) {
