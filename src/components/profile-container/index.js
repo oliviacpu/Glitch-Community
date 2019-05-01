@@ -33,7 +33,13 @@ const TrackedButtonGroup = ({ items }) => (
 const getStyle = {
   user: getUserAvatarStyle,
   team: (team) => getTeamAvatarStyle({ ...team, cache: team._cacheAvatar }), // eslint-disable-line no-underscore-dangle
-  project: (project) => ({ backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` }), // eslint-disable-line no-underscore-dangle
+  project: (project) => {
+    if (project.suspendedReason) {
+      return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` } // eslint-disable-line no-underscore-dangle
+    } else {
+      return { backgroundImage: `url('${getProjectAvatarUrl(project.id)}?${project._avatarCache}')` } // eslint-disable-line no-underscore-dangle
+    }
+  },
 };
 
 const ProjectProfileContainer = ({ item, children, avatarActions }) => (
