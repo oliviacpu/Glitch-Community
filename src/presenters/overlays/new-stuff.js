@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import Markdown from 'Components/text/markdown';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';

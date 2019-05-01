@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Overlay from 'Components/overlays/overlay';
-import OverlaySection from 'Components/overlays/overlay-section';
+import { Overlay, OverlaySection } from 'Components/overlays';
 
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';

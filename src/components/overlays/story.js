@@ -2,9 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 
-import Overlay from './overlay';
-import OverlaySection from './overlay-section';
-import OverlayTitle from './overlay-title';
+import { Overlay, OverlaySection, OverlayTitle } from './';
 
 const story = storiesOf('Overlays', module);
 
