@@ -6,6 +6,7 @@ import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
 import SmallCollectionItem from 'Components/collection/collection-item-small';
 import Heading from 'Components/text/heading';
+import Row from 'Components/containers/row';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 
@@ -61,13 +62,7 @@ const MoreCollections = ({ currentCollection, collections }) => {
         </Heading>
       </div>
       <CoverContainer type={type} item={currentCollection[type]}>
-        <ul className={styles.collectionsContainer}>
-          {collections.map((collection) => (
-            <li key={collection.id}>
-              <SmallCollectionItem key={collection.id} collection={collection} />
-            </li>
-          ))}
-        </ul>
+        <Row items={collections.slice(0,1)} minItems={3}>{(collection) => <SmallCollectionItem key={collection.id} collection={collection} />}</Row>
       </CoverContainer>
     </>
   );

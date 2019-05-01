@@ -10,7 +10,10 @@
   --modifier: calc((var(--min-width) * 3) + (var(--gap) * 2) - 100%)
   margin: calc(var(--gap) * -0.5)
 
-.item
+.item,
+.filler
   flex-grow: 1
   flex-basis: calc(var(--modifier) * 999)
+  
+.item
   margin: calc(var(--gap) * 0.5)
