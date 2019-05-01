@@ -62,7 +62,7 @@ const MoreCollections = ({ currentCollection, collections }) => {
         </Heading>
       </div>
       <CoverContainer type={type} item={currentCollection[type]}>
-        <Row items={collections.slice(0,1)} minItems={3}>{(collection) => <SmallCollectionItem key={collection.id} collection={collection} />}</Row>
+        <Row items={collections}>{(collection) => <SmallCollectionItem key={collection.id} collection={collection} />}</Row>
       </CoverContainer>
     </>
   );
