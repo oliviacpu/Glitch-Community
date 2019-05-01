@@ -165,7 +165,7 @@ const CreateTeamPopOrSignIn = (props) => {
   const api = useAPI();
   const { currentUser: user } = useCurrentUser();
   return user && user.login ? (
-    <CreateTeamPop api={api} {... props } />
+    <CreateTeamPop api={api} {...props} />
   ) : (
     <SignInPopBase
       hash="create-team"
