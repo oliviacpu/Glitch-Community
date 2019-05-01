@@ -7,6 +7,17 @@ import OverlaySection from 'Components/overlays/overlay-section';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 
+const loadedScripts = new Set();
+function loadScript(src) {
+  if (!loadedScripts.has(src)) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    document.head.appendChild(script);
+    loadedScripts.add(src);
+  }
+}
+
 const Video = () => (
   <div className="wistia_responsive_padding">
     <div className="wistia_responsive_wrapper">
@@ -16,6 +27,10 @@ const Video = () => (
 );
 
 const OverlayVideo = ({ children }) => {
+  React.useEffect(() => {
+    loadScript('//fast.wistia.com/embed/medias/i0m98yntdb.jsonp');
+    loadScript('//fast.wistia.com/assets/external/E-v1.js');
+  }, []);
   const track = useTracker('How it works clicked');
   return (
     <PopoverContainer>
