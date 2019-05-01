@@ -35,6 +35,9 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           <li className={styles.buttonWrap}>
             <NewProjectPop />
           </li>
+           <li className={styles.buttonWrap}>
+              <ResumeCoding />
+            </li>
           {!!currentUser && !!currentUser.projects.length && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
