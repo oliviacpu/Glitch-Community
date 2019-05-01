@@ -30,12 +30,12 @@ const getAllPages = async (api, url) => {
   while (hasMore) {
     const data = await getFromApi(api, url);
     results.push(...data.items);
-    hasMore = data.hasMore;
-    url = data.nextPage;
-    if (hasMore && !data.lastOrderValue) {
+    if (data.hasMore && !data.lastOrderValue) {
       console.warn('hasMore', data.hasMore, 'lastOrderValue', data.lastOrderValue);
       throw new Error('The rest api responded with hasMore but no lastOrderValue');
     }
+    hasMore = data.hasMore;
+    url = data.nextPage;
   }
   return results;
 };
