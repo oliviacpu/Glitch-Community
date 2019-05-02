@@ -42,22 +42,22 @@ const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions 
 
 const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
-const PaginationController = ({ projects, projectsPerPage, children }) => {
+const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
   const [page, setPage] = useState(1);
   const [expanded, setExpanded] = useState(false);
 
   const numProjects = projects.length;
   const numPages = Math.ceil(projects.length / projectsPerPage);
-  const canPaginate = !expanded && projectsPerPage < numProjects;
+  const canPaginate = enabled && !expanded && projectsPerPage < numProjects;
 
-  if (!expanded && canPaginate) {
+  if (canPaginate) {
     const startIdx = (page - 1) * projectsPerPage;
     projects = projects.slice(startIdx, startIdx + projectsPerPage);
   }
   return (
     <>
-      {children({ projects })}
-      {canPaginate ? (
+      {children(projects)}
+      {canPaginate && (
         <div className={styles.viewControls}>
           <div className={styles.paginationControls}>
             <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
@@ -74,12 +74,12 @@ const PaginationController = ({ projects, projectsPerPage, children }) => {
             Show all<Badge>{numProjects}</Badge>
           </Button>
         </div>
-      ) : null}
+      )}
     </>
   );
 };
 
-const useFilter = (projects) => {
+const FilterContainer = ({ enabled, placeholder, projects, children }) => {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -102,75 +102,52 @@ const useFilter = (projects) => {
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
-  return { displayedProjects, filtering, filter, setFilter } 
- 
-} 
+  return children({
+    filterInput: enabled && (
+      <TextInput
+        className={styles.headerSearch}
+        name="filter"
+        onChange={setFilter}
+        opaque
+        placeholder="find a project"
+        labelText="project search"
+        type="search"
+        value={filter}
+      />
+    ),
+    renderProjects: (renderFn) => {
+      if (displayedProjects.length) return renderFn(displayedProjects);
+
+      if (filtering) {
+        return (
+          <div className={styles.filterResultsPlaceholder}>
+            <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
+            <Text>No projects found</Text>
+          </div>
+        );
+      }
+      return placeholder;
+    },
+  });
+};
 
 function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, projectsPerPage, ...props }) {
-  const { displayedProjects, filtering, filter, setFilter } = useFilter(projects);
-
-  const projectsEl = enablePagination ? (
-    <PaginationController projects={displayedProjects} projectsPerPage={projectsPerPage}>
-      {({ projects: paginatedProjects }) => <ProjectsUL {...props} projects={paginatedProjects} />};
-    </PaginationController>
-  ) : (
-    <ProjectsUL {...props} projects={displayedProjects} />
-  );
-
-  const placeholderEl = filtering ? (
-    <div className={styles.filterResultsPlaceholder}>
-      <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
-      <Text>No projects found</Text>
-    </div>
-  ) : (
-    props.placeholder
-  );
-
   return (
-    <FilterController enabled={}>{() => (
-      <article className={classNames(styles.projectsContainer)}>
-      <div className={styles.header}>
-        {title && <Heading tagName="h2">{title}</Heading>}
-        {enableFiltering ? (
-          <TextInput
-            className={styles.headerSearch}
-            name="filter"
-            onChange={setFilter}
-            opaque
-            placeholder="find a project"
-            labelText="project search"
-            type="search"
-            value={filter}
-          />
-        ) : null}
-      </div>
-      {displayedProjects.length ? projectsEl : placeholderEl}
-    </article>
-    )}
+    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
+      {({ filterInput, renderProjects }) => (
+        <article className={classNames(styles.projectsContainer)}>
+          <div className={styles.header}>
+            {title && <Heading tagName="h2">{title}</Heading>}
+            {filterInput}
+          </div>
+          {renderProjects((filteredProjects) => (
+            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+              {(paginatedProjects) => <ProjectsUL projects={paginatedProjects} />};
+            </PaginationController>
+          ))}
+        </article>
+      )}
     </FilterController>
-  )
-  
-  
-  
-  return (
-    <article className={classNames(styles.projectsContainer)}>
-      <div className={styles.header}>
-        {title && <Heading tagName="h2">{title}</Heading>}
-        {enableFiltering ? (
-          <TextInput
-            className={styles.headerSearch}
-            name="filter"
-            onChange={setFilter}
-            opaque
-            placeholder="find a project"
-            labelText="project search"
-            type="search"
-            value={filter}
-          />
-        ) : null}
-      </div>
-      {displayedProjects.length ? projectsEl : placeholderEl}
-    </article>
   );
 }
 
@@ -180,25 +157,6 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
-};
-
-ProjectsList.defaultProps = {
-  title: null,
-  placeholder: null,
-  enableFiltering: false,
-  enablePagination: false,
-};
-
-PaginatedProjects.propTypes = {
-  projects: PropTypes.array.isRequired,
-  projectsPerPage: PropTypes.number,
-};
-
-PaginatedProjects.defaultProps = {
-  projectsPerPage: 6,
-};
-
-ProjectsUL.propTypes = {
   projects: PropTypes.array.isRequired,
   layout: PropTypes.oneOf(['row', 'grid']).isRequired,
   collection: PropTypes.object,
@@ -206,8 +164,12 @@ ProjectsUL.propTypes = {
   projectOptions: PropTypes.object,
 };
 
-ProjectsUL.defaultProps = {
-  collection: null,
+ProjectsList.defaultProps = {
+  title: null,
+  placeholder: null,
+  enableFiltering: false,
+  enablePagination: false,
+    collection: null,
   noteOptions: {},
   projectOptions: {},
 };
