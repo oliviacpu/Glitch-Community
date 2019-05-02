@@ -86,6 +86,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
   const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
+  const showAddProjectToCollection = props.currentUserIsAnon
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -213,9 +214,6 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
-
-  // anonymous users can't take actions on projects
-  if (!(currentUser && currentUser.login)) return null;
 
   return (
     <PopoverWithButton
