@@ -6,7 +6,7 @@ import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
 import Button from 'Components/buttons/button';
 import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
-import { useTrackedFunc } from '../../presenters/segment-analytics';
+import { useTrackedFunc } from '../../../presenters/segment-analytics';
 import styles from './styles.styl';
 
 const TeamProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
