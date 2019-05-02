@@ -81,7 +81,7 @@ function Questions({ max }) {
       <div>
         {questions.length ? (
           <ErrorBoundary>
-            <Grid>{(question) => <QuestionItem {...question} />}</Grid>
+            <Grid items={questions}>{(question) => <QuestionItem {...question} />}</Grid>
           </ErrorBoundary>
         ) : (
           <>
