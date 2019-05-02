@@ -63,45 +63,42 @@ ProjectsPreview.propTypes = {
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <div className={classNames(styles.collectionItem, { [styles.authorized]: isAuthorized })}>
-    <div>
-      {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
+    {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
 
-      {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
-
-      <CollectionLink
-        collection={collection}
-        className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
-        style={collectionColorStyles(collection)}
-      >
-        <div className={styles.avatarContainer}>
-          <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+    {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
+    <CollectionLink
+      collection={collection}
+      className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
+      style={collectionColorStyles(collection)}
+    >
+      <div className={styles.avatarContainer}>
+        <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+      </div>
+      <div className={styles.nameDescriptionContainer}>
+        <div className={styles.itemButtonWrap}>
+          <Button decorative>
+            <div className={styles.name}>{collection.name}</div>
+          </Button>
         </div>
-        <div className={styles.nameDescriptionContainer}>
-          <div className={styles.itemButtonWrap}>
-            <Button decorative>
-              <div className={styles.name}>{collection.name}</div>
-            </Button>
-          </div>
-          <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
-            <Markdown length={100}>{collection.description || ' '}</Markdown>
-          </div>
+        <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
+          <Markdown length={100}>{collection.description || ' '}</Markdown>
         </div>
-      </CollectionLink>
+      </div>
+    </CollectionLink>
 
-      <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
+    <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
 
-      <CollectionLink collection={collection} className={styles.footerLink}>
-        <>
-          {collection.projects && collection.projects.length > 0 && (
-            <>
-              {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-              <Pluralize count={collection.projects.length} singular="project" />
-              <span aria-hidden="true"> →</span>
-            </>
-          )}
-        </>
-      </CollectionLink>
-    </div>
+    <CollectionLink collection={collection} className={styles.footerLink}>
+      <>
+        {collection.projects && collection.projects.length > 0 && (
+          <>
+            {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+            <Pluralize count={collection.projects.length} singular="project" />
+            <span aria-hidden="true"> →</span>
+          </>
+        )}
+      </>
+    </CollectionLink>
   </div>
 );
 

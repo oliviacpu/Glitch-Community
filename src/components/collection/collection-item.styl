@@ -1,14 +1,15 @@
 @require '../constants'
 
 .collectionItem
+  display: flex
+  flex-direction: column
+  height: 100%
   position: relative
   margin-top: 0px
   font-size: 0.9rem
   border-radius: 5px
   min-width: 100%
   transition: 0.1s all
-  display: flex
-  flex-direction: column
   :global .collection-options-pop-btn
     display: block
     position: inherit
@@ -18,7 +19,9 @@
   a
     text-decoration: none
     color: primary
+        
 .linkBody
+  flex: 1 0 130px
   display: flex
   // height: 130px
   padding: 12px
@@ -53,12 +56,11 @@
         box-shadow: 2px 2px 0 primary
         border-radius: 5px
 .projectsContainer
-  width: 100%
+  flex: 2 0 auto
   // height: 150px
   margin: 0
   list-style-type: none
-  padding: 0
-  padding-top: 1em
+  padding: 1rem 0
   background-color: secondary-background
   .projectItem
     margin: 0 10px -5px
@@ -70,9 +72,10 @@
       margin: 0
 
 .footerLink
+  flex: 0 0 auto
   display: block
-  min-height: 33px
-  padding: 3px 12px 12px
+  // min-height: 33px
+  padding: 0 12px 12px
   font-weight: 600
   font-size: 13px
   background-color: secondary-background
