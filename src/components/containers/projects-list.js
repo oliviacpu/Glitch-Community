@@ -79,9 +79,7 @@ const PaginationController = ({ projects, projectsPerPage, children }) => {
   );
 };
 
-
-
-function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, projectsPerPage, ...props }) {
+const useFilter = (projects) => {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -104,6 +102,12 @@ function ProjectsList({ title, placeholder, enableFiltering, enablePagination, p
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
+  return { displayedProjects, filtering, filter, setFilter } 
+ 
+} 
+
+function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, projectsPerPage, ...props }) {
+  const { displayedProjects, filtering, filter, setFilter } = useFilter(projects);
 
   const projectsEl = enablePagination ? (
     <PaginationController projects={displayedProjects} projectsPerPage={projectsPerPage}>
@@ -122,6 +126,32 @@ function ProjectsList({ title, placeholder, enableFiltering, enablePagination, p
     props.placeholder
   );
 
+  return (
+    <FilterController enabled={}>{() => (
+      <article className={classNames(styles.projectsContainer)}>
+      <div className={styles.header}>
+        {title && <Heading tagName="h2">{title}</Heading>}
+        {enableFiltering ? (
+          <TextInput
+            className={styles.headerSearch}
+            name="filter"
+            onChange={setFilter}
+            opaque
+            placeholder="find a project"
+            labelText="project search"
+            type="search"
+            value={filter}
+          />
+        ) : null}
+      </div>
+      {displayedProjects.length ? projectsEl : placeholderEl}
+    </article>
+    )}
+    </FilterController>
+  )
+  
+  
+  
   return (
     <article className={classNames(styles.projectsContainer)}>
       <div className={styles.header}>
