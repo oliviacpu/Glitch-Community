@@ -1,3 +1,4 @@
+import React from 'react';
 import Button from 'Components/buttons/button';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 

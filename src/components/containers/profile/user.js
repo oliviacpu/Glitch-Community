@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
-import { TrackedButton as Button } from 'Components/buttons/tracked-button';
+import TrackedButton from 'Components/buttons/tracked-button';
 import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
 import styles from './styles.styl';
 
@@ -20,9 +20,9 @@ const UserProfileContainer = ({ item, type, children, avatarActions, coverAction
               Object.entries(avatarActions)
                 .filter(([, onClick]) => onClick)
                 .map(([label, onClick]) => (
-                  <Button key={label} size="small" type="tertiary" label={label} onClick={onClick}>
+                  <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
                     {label}
-                  </Button>
+                  </TrackedButton>
                 ))}
           </div>
         </div>

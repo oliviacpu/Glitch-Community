@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'Components/buttons/button';
+import TrackedButton from 'Components/buttons/tracked-button';
 
 import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
 import { getProfileStyle as getUserProfileStyle } from 'Models/user';
-import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './cover-container.styl';
 
 const getProfileStyles = {
@@ -22,9 +21,9 @@ const CoverContainer = ({ coverActions, children, type, item }) => {
           Object.entries(coverActions)
             .filter(([, onClick]) => onClick)
             .map(([label, onClick]) => (
-              <Button key={label} size="small" type="tertiary" onClick={useTrackedFunc(onClick, label)}>
+              <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
                 {label}
-              </Button>
+              </TrackedButton>
             ))}
       </div>
     </div>

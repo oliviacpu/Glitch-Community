@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Button from 'Components/buttons/button';
+import TrackedButton from 'Components/buttons/tracked-button';
 import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
-import { useTrackedFunc } from '../../../presenters/segment-analytics';
 import styles from './styles.styl';
 
 const ProjectProfileContainer = ({ item, children, avatarActions }) => {
@@ -23,9 +22,9 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
             Object.entries(avatarActions)
               .filter(([, onClick]) => onClick)
               .map(([label, onClick]) => (
-                <Button key={label} size="small" type="tertiary" onClick={() => useTrackedFunc(onClick, label)}>
+                <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
                   {label}
-                </Button>
+                </TrackedButton>
               ))}
         </div>
       </div>

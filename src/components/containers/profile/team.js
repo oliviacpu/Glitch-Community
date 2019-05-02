@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import CoverContainer from 'Components/containers/cover-container';
-import Button from 'Components/buttons/button';
+import TrackedButton from 'Components/buttons/tracked-button';
 import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
-import { useTrackedFunc } from '../../../presenters/segment-analytics';
 import styles from './styles.styl';
 
 const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) => (
@@ -19,9 +18,9 @@ const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) =
             Object.entries(avatarActions)
               .filter(([, onClick]) => onClick)
               .map(([label, onClick]) => (
-                <Button key={label} size="small" type="tertiary" onClick={useTrackedFunc(onClick, label)}>
+                <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
                   {label}
-                </Button>
+                </TrackedButton>
               ))}
         </div>
       </div>
