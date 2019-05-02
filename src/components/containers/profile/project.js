@@ -10,7 +10,7 @@ import styles from './styles.styl';
 const ProjectProfileContainer = ({ item, children, avatarActions }) => {
   let avatarStyle;
   if (item.suspendedReason && avatarActions === undefined) {
-    avatarStyle = { backgroundImage: `url('https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930')` }; // eslint-disable-line no-underscore-dangle
+    avatarStyle = { backgroundImage: 'url(https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930)' }; // eslint-disable-line no-underscore-dangle
   } else {
     avatarStyle = { backgroundImage: `url('${getProjectAvatarUrl(item.id)}?${item._avatarCache}')` }; // eslint-disable-line no-underscore-dangle
   }
@@ -27,7 +27,6 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
                   {label}
                 </Button>
               ))}
-          }
         </div>
       </div>
       <div className={styles.profileInfo}>{children}</div>
