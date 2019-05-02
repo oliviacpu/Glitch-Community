@@ -235,13 +235,9 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
 
-  function currentUserIsLoggedIn(user) {
-    return user && user.login;
-  }
-
   const showLeaveProject = projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject(currentUser);
   const showDeleteProject = currentUserIsAdminOnProject(currentUser) && !projectOptions.removeProjectFromCollection;
-  const isAnon = !currentUserIsLoggedIn(currentUser);
+  const isAnon = currentUser && currentUser.login;
   const shouldShowAnonView = isAnon && (showLeaveProject || showDeleteProject);
 
   if (isAnon && !shouldShowAnonView) {
@@ -262,7 +258,6 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
-          currentUserIsLoggedIn={currentUserIsLoggedIn(currentUser)}
           shouldShowAnonView={shouldShowAnonView}
           togglePopover={togglePopover}
         />
