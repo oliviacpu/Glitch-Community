@@ -102,8 +102,7 @@ const UserPage = ({
   const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
   const currentUserIsLoggedIn = !!(maybeCurrentUser && maybeCurrentUser.login);
-  console.log(currentUserIsLoggedIn)
-  
+
   return (
     <main className={styles.container}>
       <section>

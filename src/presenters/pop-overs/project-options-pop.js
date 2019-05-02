@@ -92,10 +92,10 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickLeaveTeamProject = useTrackedFunc(leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
-  
-  // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer) 
+
+  // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer)
   // and render different components rather than determine what shows by what functions we have
-  // arguably this kind of determination on the type of user should happen in the user model and/or available
+  // arguably this kind of determination on the type of user should happen in the user model rather than in this component
   if (props.shouldShowAnonView) {
     return (
       <dialog className="pop-over project-options-pop">
@@ -112,7 +112,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
       </dialog>
     );
   }
-  
+
   return (
     <dialog className="pop-over project-options-pop">
       {showPinOrFeatureSection && (
@@ -238,16 +238,16 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
   function currentUserIsLoggedIn(user) {
     return user && user.login;
   }
-  
-  const showLeaveProject = props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject(currentUser);
-  const showDeleteProject = currentUserIsAdminOnProject(currentUser) && !props.projectOptions.removeProjectFromCollection;
-  const isAnon = !currentUserIsLoggedIn(currentUser)
-  const shouldShowAnonView = isAnon && (showLeaveProject || showDeleteProject)
-  
+
+  const showLeaveProject = projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject(currentUser);
+  const showDeleteProject = currentUserIsAdminOnProject(currentUser) && !projectOptions.removeProjectFromCollection;
+  const isAnon = !currentUserIsLoggedIn(currentUser);
+  const shouldShowAnonView = isAnon && (showLeaveProject || showDeleteProject);
+
   if (isAnon && !shouldShowAnonView) {
-    return null
+    return null;
   }
-    
+
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"

@@ -91,7 +91,7 @@ FeaturedProject.defaultProps = {
   hideNote: () => {},
   updateNote: () => {},
   addProjectToCollection: null,
-  featureProject: null,
+  featuredProject: null,
   unfeatureProject: null,
 };
 
