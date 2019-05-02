@@ -86,6 +86,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
   const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
+  const showAddProjectToCollection = props.currentUserIsAnon
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -93,7 +94,24 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
   
-  console.log(props.addProjectToCollection)
+  // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer) and render different components rather than rely on what methods are passed to it
+  if (props.showAnonymousView) {
+    return (
+      <dialog className="pop-over project-options-pop">
+        {showLeaveProject && (
+          <section className="pop-over-actions collaborator-actions">
+            <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
+          </section>
+        )}
+        {showDeleteProject && (
+          <section className="pop-over-actions danger-zone last-section">
+            <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
+          </section>
+        )}
+      </dialog>
+    );
+  }
+  
   return (
     <dialog className="pop-over project-options-pop">
       {showPinOrFeatureSection && (
@@ -215,7 +233,11 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
-  console.log(projectOptions)
+
+  function currentUserIsLoggedIn(user) {
+    return (user && user.login)
+  }
+
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
@@ -230,6 +252,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
+          currentUserIsLoggedIn={currentUserIsLoggedIn(currentUser)}
           togglePopover={togglePopover}
         />
       )}
