@@ -40,7 +40,7 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
 
               {currentUser.login ? (
                 <ProjectsList
-                  layout="grid"
+                  layout="gridCompact"
                   projects={projects}
                   projectOptions={{
                     addProjectToCollection,
@@ -48,7 +48,7 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
                 />
               ) : (
                 <ProjectsList
-                  layout="grid"
+                  layout="gridCompact"
                   projects={projects}
                 />
               )}

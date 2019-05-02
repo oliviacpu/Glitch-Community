@@ -16,10 +16,16 @@ import Row from 'Components/containers/row';
 
 import styles from './projects-list.styl';
 
+const containers = {
+  row: (props) => <Row className={styles.projectsRow} {...props} />,
+  grid: (props) => <Grid className={styles.projectsGrid} {...props} />,
+  gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
+};
+
 const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions }) => {
-  const Container = layout === 'row' ? Row : Grid;
+  const Container = containers[layout];
   return (
-    <Container items={projects} className={styles.projectsList}>
+    <Container items={projects}>
       {(project) => (
         <>
           {collection && (
@@ -172,7 +178,7 @@ function ProjectsList({
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
-  layout: PropTypes.oneOf(['row', 'grid']).isRequired,
+  layout: PropTypes.oneOf(['row', 'grid', 'gridCompact']).isRequired,
   title: PropTypes.node,
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
