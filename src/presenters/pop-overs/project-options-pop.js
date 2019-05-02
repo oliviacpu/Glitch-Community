@@ -86,7 +86,6 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
   const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
-  const showAddProjectToCollection = props.currentUserIsAnon
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -94,7 +93,8 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
   
-  // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer) and render different components rather than rely on what methods are passed to it
+  // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer) 
+  // and render different components rather than determine what shows by what functions we have
   if (props.showAnonymousView) {
     return (
       <dialog className="pop-over project-options-pop">
@@ -238,6 +238,12 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     return user && user.login;
   }
   
+  function showAnonymousView(props) {
+  }
+  
+  const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
+  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
+
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
