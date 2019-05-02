@@ -3,6 +3,7 @@ import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 import Button from 'Components/buttons/button';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
@@ -78,6 +79,11 @@ storiesOf('Button', module)
         Support <Emoji name="ambulance" />
       </Button>
     </div>
+  ))
+  .add(`checkbox`, () => (
+    <CheckboxButton>
+      Click to toggle!
+    </CheckboxButton>
   ));
 
 storiesOf('Emoji', module)
