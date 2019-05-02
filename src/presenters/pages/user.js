@@ -101,7 +101,6 @@ const UserPage = ({
   // filter featuredProject out of both pinned & recent projects
   const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
-  const currentUserIsLoggedIn = !!(maybeCurrentUser && maybeCurrentUser.login);
 
   return (
     <main className={styles.container}>
@@ -139,7 +138,7 @@ const UserPage = ({
           featuredProject={featuredProject}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
-          addProjectToCollection={currentUserIsLoggedIn ? addProjectToCollection : undefined}
+          addProjectToCollection={addProjectToCollection}
           currentUser={maybeCurrentUser}
         />
       )}
@@ -147,6 +146,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
+          className={styles.projectContainer}
           title={
             <>
               Pinned Projects <Emoji inTitle name="pushpin" />
@@ -158,7 +158,7 @@ const UserPage = ({
             featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
-            addProjectToCollection: currentUserIsLoggedIn ? addProjectToCollection : undefined,
+            addProjectToCollection,
           }}
         />
       )}
@@ -178,6 +178,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
+          className={styles.projectContainer}
           title="Recent Projects"
           projects={recentProjects}
           enablePagination
@@ -187,7 +188,7 @@ const UserPage = ({
             featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
-            addProjectToCollection: currentUserIsLoggedIn ? addProjectToCollection : undefined,
+            addProjectToCollection,
           }}
         />
       )}
