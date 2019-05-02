@@ -29,8 +29,8 @@ story.add('Articles', () => (
 ));
 
 story.add('Update Pup', () => (
-  <>
-    <p><NewStuffPup /></p>
-    <p><NewStuffPupButton onClick={() => alert('neat')} /></p>
-  </>
+  <div style={{ marginTop: '40px' }}>
+    <NewStuffPup />
+    <NewStuffPupButton onClick={() => alert('neat')} />
+  </div>
 ));
