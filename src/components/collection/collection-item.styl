@@ -28,7 +28,7 @@
     color: primary
         
 .linkBody
-  flex: 1 1 130px
+  flex: 0 1 130px
   display: flex
   padding: 12px
   border-top-right-radius: 5px
@@ -63,7 +63,6 @@
         border-radius: 5px
 .projectsContainer
   flex: 1 0 auto
-  // height: 150px
   padding: 10px
   background-color: secondary-background
   &.empty
@@ -78,7 +77,6 @@
 .footerLink
   flex: 0 0 auto
   display: block
-  // min-height: 33px
   padding: 0 12px 12px
   font-weight: 600
   font-size: 13px
@@ -130,6 +128,8 @@
   p
     margin-bottom: 0
     word-break: break-word
+    &:empty
+      margin-top: 0
     a
       color: inherit
   

@@ -81,7 +81,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </Button>
         </div>
         <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
-          <Markdown length={100}>{(collection.description || ' ').trim()}</Markdown>
+          <Markdown length={100}>{collection.description || ' '}</Markdown>
         </div>
       </div>
     </CollectionLink>
