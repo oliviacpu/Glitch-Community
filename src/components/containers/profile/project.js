@@ -7,28 +7,6 @@ import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
 
-const TrackedButton = ({ label, onClick }) => {
-  const trackedOnClick = useTrackedFunc(onClick, label);
-  return (
-    <Button size="small" type="tertiary" onClick={trackedOnClick}>
-      {label}
-    </Button>
-  );
-};
-
-const TrackedButtonGroup = ({ items }) => {
-  if (!items) return null;
-  return (
-    <>
-      {Object.entries(items)
-        .filter(([, onClick]) => onClick)
-        .map(([label, onClick]) => (
-          <TrackedButton key={label} label={label} onClick={onClick} />
-        ))}
-    </>
-  );
-};
-
 const ProjectProfileContainer = ({ item, children, avatarActions }) => {
   let avatarStyle;
   if (item.suspendedReason && avatarActions === undefined) {
@@ -41,7 +19,15 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
       <div className={styles.avatarContainer}>
         <div className={classnames(styles.avatar, styles.project)} style={avatarStyle} />
         <div className={styles.avatarButtons}>
-          <TrackedButtonGroup items={avatarActions} />
+          {avatarActions &&
+            Object.entries(avatarActions)
+              .filter(([, onClick]) => onClick)
+              .map(([label, onClick]) => (
+                <Button key={label} size="small" type="tertiary" onClick={useTrackedFunc(onClick, label)}>
+                  {label}
+                </Button>
+              ))}
+          }
         </div>
       </div>
       <div className={styles.profileInfo}>{children}</div>
