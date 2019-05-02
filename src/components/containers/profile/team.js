@@ -9,38 +9,23 @@ import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
 
-const TrackedButton = ({ label, onClick }) => {
-  const trackedOnClick = useTrackedFunc(onClick, label);
-  return (
-    <Button size="small" type="tertiary" onClick={trackedOnClick}>
-      {label}
-    </Button>
-  );
-};
-
-const TrackedButtonGroup = ({ items }) => {
-  if (!items) return null;
-  return (
-    <>
-      {Object.entries(items)
-        .filter(([, onClick]) => onClick)
-        .map(([label, onClick]) => (
-          <TrackedButton key={label} label={label} onClick={onClick} />
-        ))}
-    </>
-  );
-};
-
 const TeamProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
-  const hasTeams = !!(teams && teams.length);
   return (
-    <CoverContainer type='team' item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
-      <div className={classnames(styles.profileWrap, hasTeams && styles.hasTeams)}>
+    <CoverContainer type="team" item={item} coverActions={coverActions}>
+      <div className={classnames(styles.profileWrap)}>
         <div className={styles.avatarContainer}>
+          // eslint-disable-next-line no-underscore-dangle
           <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle({ ...item, cache: item._cacheAvatar })} />
-          // eslint-disable-line no-underscore-dangle
           <div className={styles.avatarButtons}>
-            <TrackedButtonGroup items={avatarActions} />
+            {avatarActions &&
+              Object.entries(avatarActions)
+                .filter(([, onClick]) => onClick)
+                .map(([label, onClick]) => (
+                  <Button key={label} size="small" type="tertiary" onClick={useTrackedFunc(onClick, label)}>
+                    {label}
+                  </Button>
+                ))}
+            }
           </div>
         </div>
         <div className={styles.profileInfo}>{children}</div>
