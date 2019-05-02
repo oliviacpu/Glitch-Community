@@ -237,7 +237,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
 
   const showLeaveProject = projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject(currentUser);
   const showDeleteProject = currentUserIsAdminOnProject(currentUser) && !projectOptions.removeProjectFromCollection;
-  const isAnon = currentUser && currentUser.login;
+  const isAnon = !(currentUser && currentUser.login);
   const shouldShowAnonView = isAnon && (showLeaveProject || showDeleteProject);
 
   if (isAnon && !shouldShowAnonView) {
