@@ -2,7 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import NewStuffArticle from './new-stuff-article';
-import { NewStuffPup, NewStuffPupButton } from './new-stuff-pup';
+import NewStuffPrompt from './new-stuff-prompt';
+import NewStuffPup from './new-stuff-pup';
 
 const story = storiesOf('New Stuff', module);
 
@@ -29,8 +30,8 @@ story.add('Many Articles', () => (
 ));
 
 story.add('Update Pup', () => (
-  <div style={{ marginTop: '40px' }}>
+  <>
     <NewStuffPup />
-    <NewStuffPupButton onClick={() => alert('neat')} />
-  </div>
+    <NewStuffPrompt onClick={() => alert('neat')} />
+  </>
 ));

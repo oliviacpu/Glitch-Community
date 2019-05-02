@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
-import { NewStuffPup, NewStuffPupButton } from 'Components/new-stuff/new-stuff-pup';
+import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
+import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
@@ -53,7 +54,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, setVisible }) => {
-    const dogVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
+    const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
 
     const show = () => {
       track();
@@ -66,7 +67,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
     return (
       <>
         {children(show)}
-        {dogVisible && <NewStuffPupButton onClick={show} />}
+        {pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <div className="overlay-background" role="presentation" />}
       </>
     );
