@@ -5,6 +5,7 @@ import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import CollectionItem from 'Components/collection/collection-item';
+import Grid from 'Components/containers/grid';
 import Button from 'Components/buttons/button';
 import { getLink, createCollection } from 'Models/collection';
 
@@ -102,13 +103,11 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}
-      <ul className={styles.collectionsContainer}>
-        {orderedCollections.map((collection) => (
-          <li key={collection.id}>
-            <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} showCurator={showCurator} />
-          </li>
-        ))}
-      </ul>
+      <Grid items={orderedCollections}>
+        {(collection) => (
+          <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} showCurator={showCurator} />
+        )}
+      </Grid>
     </article>
   );
 }

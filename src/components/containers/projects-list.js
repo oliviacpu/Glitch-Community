@@ -11,6 +11,7 @@ import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
 import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
+import Grid from 'Components/containers/grid';
 
 import styles from './projects-list.styl';
 
@@ -154,9 +155,9 @@ PaginatedProjects.defaultProps = {
 };
 
 const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, className, ...props }) => (
-  <ul className={classNames(styles.projectsList, className)}>
-    {projects.map((project) => (
-      <li key={project.id}>
+  <Grid items={projects}>
+    {((project) => (
+      <>
         {collection && (
           <div className="projects-container-note">
             <Note
@@ -169,7 +170,7 @@ const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions
           </div>
         )}
         <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
-      </li>
+      </>
     ))}
   </ul>
 );
