@@ -11,19 +11,14 @@ import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
 
-
-const getStyle = {
-  user: getUserAvatarStyle,
-  team: (team) => 
-};
-
-const ProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
+const TeamProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
   const hasTeams = !!(teams && teams.length);
   return (
-    <CoverContainer type={type} item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
+    <CoverContainer type='team' item={item} buttons={<TrackedButtonGroup items={coverActions} />}>
       <div className={classnames(styles.profileWrap, hasTeams && styles.hasTeams)}>
         <div className={styles.avatarContainer}>
-          <div className={classnames(styles.avatar, styles[type])} style={getTeamAvatarStyle({ ...item, cache: item._cacheAvatar }), // eslint-disable-line no-underscore-dangle} />
+          <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle({ ...item, cache: item._cacheAvatar })} />
+          // eslint-disable-line no-underscore-dangle
           <div className={styles.avatarButtons}>
             <TrackedButtonGroup items={avatarActions} />
           </div>
@@ -34,16 +29,16 @@ const ProfileContainer = ({ item, children, avatarActions, coverActions, teams }
   );
 };
 
-ProfileContainer.propTypes = {
+TeamProfileContainer.propTypes = {
   item: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   avatarActions: PropTypes.object,
   coverActions: PropTypes.object,
 };
 
-ProfileContainer.defaultProps = {
+TeamProfileContainer.defaultProps = {
   avatarActions: {},
   coverActions: {},
 };
 
-export default ProfileContainer;
+export default TeamProfileContainer;
