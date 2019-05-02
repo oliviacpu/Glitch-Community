@@ -9,6 +9,7 @@ import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
+import Grid from 'Components/containers/grid';
 import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
@@ -43,13 +44,11 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
 
   return (
-    <ul className={styles.deletedProjectsContainer}>
-      {deletedProjects.map(({ id, domain }) => (
-        <li key={id} className={styles.deletedProjectItemWrap}>
-          <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />
-        </li>
+    <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
+      {(({ id, domain }) => (
+        <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />
       ))}
-    </ul>
+    </Grid>
   );
 };
 DeletedProjectsList.propTypes = {

@@ -29,15 +29,15 @@ Grid.propTypes = {
   gap: PropTypes.oneOfType([
     PropTypes.shape({ row: PropTypes.node.isRequired, column: PropTypes.node.isRequired }).isRequired,
     PropTypes.node.isRequired,
-  ]).isRequired,
+  ]),
   minWidth: PropTypes.node,
 };
 
 Grid.defaultProps = {
   className: '',
   style: {},
-  gap: '10px',
-  minWidth: '350px',
+  gap: undefined,
+  minWidth: undefined,
 };
 
 export default Grid;

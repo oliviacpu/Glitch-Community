@@ -155,8 +155,6 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-const ProjectRow = ({)
-
 const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, row, ...props }) => {
   const Container = row ? Row : Grid;
 
