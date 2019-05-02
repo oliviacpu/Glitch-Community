@@ -23,7 +23,7 @@ const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions 
       {(project) => (
         <>
           {collection && (
-            <div className="projects-container-note">
+            <div className={styles.projectsContainerNote}>
               <Note
                 project={project}
                 collection={collection}
@@ -79,7 +79,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   );
 };
 
-const FilterContainer = ({ enabled, placeholder, projects, children }) => {
+const FilterController = ({ enabled, placeholder, projects, children }) => {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -131,7 +131,18 @@ const FilterContainer = ({ enabled, placeholder, projects, children }) => {
   });
 };
 
-function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, projectsPerPage, ...props }) {
+function ProjectsList({
+  projects,
+  layout,
+  title,
+  placeholder,
+  enableFiltering,
+  enablePagination,
+  projectsPerPage,
+  collection,
+  noteOptions,
+  projectOptions,
+}) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
@@ -142,7 +153,15 @@ function ProjectsList({ title, placeholder, enableFiltering, enablePagination, p
           </div>
           {renderProjects((filteredProjects) => (
             <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
-              {(paginatedProjects) => <ProjectsUL projects={paginatedProjects} />};
+              {(paginatedProjects) => (
+                <ProjectsUL
+                  projects={paginatedProjects}
+                  collection={collection}
+                  noteOptions={noteOptions}
+                  layout={layout}
+                  projectOptions={projectOptions}
+                />
+              )}
             </PaginationController>
           ))}
         </article>
@@ -153,12 +172,12 @@ function ProjectsList({ title, placeholder, enableFiltering, enablePagination, p
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
+  layout: PropTypes.oneOf(['row', 'grid']).isRequired,
   title: PropTypes.node,
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
-  projects: PropTypes.array.isRequired,
-  layout: PropTypes.oneOf(['row', 'grid']).isRequired,
+  projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
   projectOptions: PropTypes.object,
@@ -169,7 +188,8 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
-    collection: null,
+  projectsPerPage: 6,
+  collection: null,
   noteOptions: {},
   projectOptions: {},
 };
