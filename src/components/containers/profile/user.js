@@ -9,6 +9,28 @@ import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
 
+const TrackedButton = ({ label, onClick }) => {
+  const trackedOnClick = useTrackedFunc(onClick, label);
+  return (
+    <Button size="small" type="tertiary" onClick={trackedOnClick}>
+      {label}
+    </Button>
+  );
+};
+
+const TrackedButtonGroup = ({ items }) => {
+  if (!items) return null;
+  return (
+    <>
+      {Object.entries(items)
+        .filter(([, onClick]) => onClick)
+        .map(([label, onClick]) => (
+          <TrackedButton key={label} label={label} onClick={onClick} />
+        ))}
+    </>
+  );
+};
+
 const UserProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => {
   const hasTeams = !!(teams && teams.length);
   return (

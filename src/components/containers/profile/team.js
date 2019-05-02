@@ -5,11 +5,31 @@ import classnames from 'classnames';
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
 import Button from 'Components/buttons/button';
-import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
 import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
-import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './styles.styl';
+
+const TrackedButton = ({ label, onClick }) => {
+  const trackedOnClick = useTrackedFunc(onClick, label);
+  return (
+    <Button size="small" type="tertiary" onClick={trackedOnClick}>
+      {label}
+    </Button>
+  );
+};
+
+const TrackedButtonGroup = ({ items }) => {
+  if (!items) return null;
+  return (
+    <>
+      {Object.entries(items)
+        .filter(([, onClick]) => onClick)
+        .map(([label, onClick]) => (
+          <TrackedButton key={label} label={label} onClick={onClick} />
+        ))}
+    </>
+  );
+};
 
 const TeamProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
   const hasTeams = !!(teams && teams.length);
