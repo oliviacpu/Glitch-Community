@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Image from '../images/image';
 import TooltipContainer from '../tooltips/tooltip-container';
 
+import styles from './new-stuff-pup.styl';
+
 const src = 'https://cdn.glitch.com/180b5e22-4649-4c71-9a21-2482eb557c8c%2Fnew-stuff-doggo-2.svg?1521578888312';
 
 export const NewStuffPup = () => (
@@ -15,7 +17,7 @@ export const NewStuffPupButton = ({ onClick }) => (
     align={['top']}
     id="new-stuff-tooltip"
     persistent
-    target={<button onClick={onClick} className="button-unstyled"><NewStuffPup /></button>}
+    target={<button onClick={onClick} className={styles.invisibleButton}><NewStuffPup /></button>}
     tooltip="New"
     type="info"
   />

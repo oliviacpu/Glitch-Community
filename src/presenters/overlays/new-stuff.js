@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
+import { NewStuffPup, NewStuffPupButton } from 'Components/new-stuff/new-stuff-pup';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
@@ -15,7 +15,7 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
   <dialog className="pop-over overlay new-stuff-overlay" open>
     <section className="pop-over-info">
-      <figure className="new-stuff-avatar" />
+      <div className="new-stuff-avatar"><NewStuffPup /></div>
       <div className="overlay-title">New Stuff</div>
       <div>
         <label className="button button-small" htmlFor="showNewStuff">
@@ -68,18 +68,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
         {children(show)}
         {dogVisible && (
           <div className="new-stuff-footer">
-            <TooltipContainer
-              id="new-stuff-tooltip"
-              type="info"
-              target={
-                <button className="button-unstyled new-stuff" onClick={show}>
-                  <figure className="new-stuff-avatar" alt="New Stuff" />
-                </button>
-              }
-              tooltip="New"
-              persistent
-              align={['top']}
-            />
+            <NewStuffPupButton onClick={show} />
           </div>
         )}
         {visible && <div className="overlay-background" role="presentation" />}
