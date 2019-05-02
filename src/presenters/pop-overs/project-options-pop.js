@@ -95,7 +95,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
   return (
     <dialog className="pop-over project-options-pop">
-      { showPinOrFeatureSection && (
+      {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {!!props.featureProject && !props.project.private && (
             <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />
@@ -114,7 +114,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
         </section>
       )}
 
-      {!!props.addProjectToCollection && (
+      {!!props.addProjectToCollection && !props.currentUserIsAnon && (
         <section className="pop-over-actions">
           <PopoverButton onClick={addToCollectionPopover} {...props} text="Add to Collection " emoji="framed-picture" />
         </section>
@@ -198,6 +198,7 @@ ProjectOptionsPop.defaultProps = {
 // create as stateful react component
 export default function ProjectOptions({ projectOptions, project }, { ...props }) {
   const { currentUser } = useCurrentUser();
+  console.log("currentUser", currentUser)
   if (Object.keys(projectOptions).length === 0) {
     return null;
   }
@@ -214,6 +215,10 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
+  
+  function currentUserIsAnon(user) {
+    return !(currentUser && currentUser.login)
+  }
 
   return (
     <PopoverWithButton
@@ -229,6 +234,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
+          currentUserIsAnon={currentUserIsAnon(currentUser)}
           togglePopover={togglePopover}
         />
       )}
