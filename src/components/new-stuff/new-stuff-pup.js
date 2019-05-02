@@ -13,6 +13,7 @@ export const NewStuffPup = () => (
 export const NewStuffPupButton = ({ onClick }) => (
   <TooltipContainer
     align={['top']}
+    id="new-stuff-tooltip"
     persistent
     target={<NewStuffPup />}
     tooltip="New"
