@@ -12,6 +12,7 @@ import Image from 'Components/images/image';
 import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
+import Row from 'Components/containers/row';
 
 import styles from './projects-list.styl';
 
@@ -154,34 +155,37 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, className, ...props }) => (
-  <Grid items={projects}>
-    {((project) => (
-      <>
-        {collection && (
-          <div className="projects-container-note">
-            <Note
-              project={project}
-              collection={collection}
-              isAuthorized={noteOptions.isAuthorized}
-              hideNote={noteOptions.hideNote}
-              updateNote={noteOptions.updateNote}
-            />
-          </div>
-        )}
-        <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
-      </>
-    ))}
-  </ul>
-);
+const ProjectRow = ({)
 
+const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, row, ...props }) => {
+  const Container = row ? Row : Grid;
+
+  return (
+    <Container items={projects} className={styles.projectsList}>
+      {(project) => (
+        <>
+          {collection && (
+            <div className="projects-container-note">
+              <Note
+                project={project}
+                collection={collection}
+                isAuthorized={noteOptions.isAuthorized}
+                hideNote={noteOptions.hideNote}
+                updateNote={noteOptions.updateNote}
+              />
+            </div>
+          )}
+          <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
+        </>
+      )}
+    </Container>
+  );
+};
 ProjectsUL.propTypes = {
   projects: PropTypes.array.isRequired,
   collection: PropTypes.object,
   showProjectDescriptions: PropTypes.bool,
   noteOptions: PropTypes.object,
-  // className _must_ be provided to manage the grid layout
-  className: PropTypes.string.isRequired,
 };
 
 ProjectsUL.defaultProps = {

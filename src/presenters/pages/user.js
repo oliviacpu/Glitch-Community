@@ -146,7 +146,6 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
-          className={styles.projectContainer}
           title={
             <>
               Pinned Projects <Emoji inTitle name="pushpin" />
@@ -178,7 +177,6 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
-          className={styles.projectContainer}
           title="Recent Projects"
           projects={recentProjects}
           enablePagination

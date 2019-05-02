@@ -40,7 +40,6 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
 
               {currentUser.login ? (
                 <ProjectsList
-                  className="collection-page__projects-grid"
                   {...{
                     projects,
                     currentUser,
@@ -53,7 +52,6 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
                 />
               ) : (
                 <ProjectsList
-                  className="collection-page__projects-grid"
                   {...{
                     projects,
                     currentUser,
