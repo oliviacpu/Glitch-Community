@@ -62,6 +62,7 @@ ProjectsPreview.propTypes = {
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <div className={classNames(styles.collectionItem, { [styles.authorized]: isAuthorized })}>
+    <div className={}></div>
     {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
 
     {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
