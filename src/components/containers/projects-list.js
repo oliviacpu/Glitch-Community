@@ -14,9 +14,7 @@ import Note from 'Components/collection/note';
 
 import styles from './projects-list.styl';
 
-const cx = classNames.bind(styles);
-
-function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enablePagination, projects, ...props }) {
+function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -57,9 +55,9 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
   );
 
   return (
-    <article className={`projects ${extraClasses}`}>
+    <article className={classNames(styles.projectsContainer)}>
       <div className={styles.header}>
-        <Heading tagName="h2">{title}</Heading>
+        {title && <Heading tagName="h2">{title}</Heading>}
         {enableFiltering ? (
           <TextInput
             className={styles.headerSearch}
@@ -80,16 +78,15 @@ function ProjectsList({ title, placeholder, extraClasses, enableFiltering, enabl
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
-  title: PropTypes.node.isRequired,
+  title: PropTypes.node,
   placeholder: PropTypes.node,
-  extraClasses: PropTypes.string,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
 };
 
 ProjectsList.defaultProps = {
+  title: null,
   placeholder: null,
-  extraClasses: '',
   enableFiltering: false,
   enablePagination: false,
 };
@@ -124,7 +121,7 @@ function PaginatedProjects(props) {
       <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
         <Image
           alt=""
-          className={cx({ paginationArrow: true, next: true })}
+          className={classNames(styles.paginationArrow, styles.next)}
           src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
         />
       </Button>
@@ -156,8 +153,8 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-export const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, ...props }) => (
-  <ul className="projects-container">
+const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, className, ...props }) => (
+  <ul className={classNames(styles.projectsList, className)}>
     {projects.map((project) => (
       <li key={project.id}>
         {collection && (
@@ -182,6 +179,8 @@ ProjectsUL.propTypes = {
   collection: PropTypes.object,
   showProjectDescriptions: PropTypes.bool,
   noteOptions: PropTypes.object,
+  // className _must_ be provided to manage the grid layout
+  className: PropTypes.string.isRequired,
 };
 
 ProjectsUL.defaultProps = {

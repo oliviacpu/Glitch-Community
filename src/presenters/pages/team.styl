@@ -1,26 +1,17 @@
 @import  "../../components/constants"
 
+.projectContainer
+  margin-bottom: 1rem
+  row-gap: 1.5rem	
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr))
+
 .container :global
-  // projects-list
-  .projects
-    padding: 0
-    margin-bottom: 1rem
-    display: inline-block
-  .projects-container
-    margin-bottom: 1rem
   // collections-list
   .collections
     padding: 0
-  // permit a 2-column layout on user and team pages	
-  // in-between mediumViewport and largeViewport	
-  .projects-container,	
   .collections-container	
     row-gap: 1.5rem	
-    @media (min-width: mediumViewport)	
-      grid-template-columns: 1fr 1fr	
-
-     @media (min-width: largeViewport)	
-      grid-template-columns: 1fr 1fr 1fr	
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr))
 
   // add-team-project
   .add-project-container

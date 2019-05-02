@@ -1,15 +1,8 @@
-.projects-container,
-.collections-container
-.teams-container
-.users-container
-  display: grid
-  grid-template-columns: 1fr
-  grid-gap: 10px
-  align-items: start
-  list-style-type: none
-  padding: 0
+// TODO: componentize this grid layout
 
-.projects-container
+.collection-contents__grid,
+.related-projects__grid,
+.recent-projects__grid
   align-items: end
 
   @media (min-width: mediumViewport)
@@ -22,5 +15,7 @@
     min-width: 100%
 
 .projects-container-note
-  margin-bottom: -30px
+  margin-bottom: -1rem
   width: 95%
+  &:empty
+    margin-bottom: 0

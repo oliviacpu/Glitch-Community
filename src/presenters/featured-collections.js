@@ -4,7 +4,7 @@ import Pluralize from 'react-pluralize';
 import { sampleSize, flatMap, uniq } from 'lodash';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionLink } from 'Components/link';
 import DataLoader from 'Components/data-loader';
@@ -39,7 +39,8 @@ const CollectionWide = ({ collection }) => {
         </div>
       </header>
       <div className="collection-contents">
-        <ProjectsUL
+        <ProjectsList
+          className="collection-contents__grid"
           projects={featuredProjects}
           collection={collection}
           hideProjectDescriptions={featuredProjectsHaveAtLeastOneNote}
