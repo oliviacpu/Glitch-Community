@@ -215,7 +215,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
-
+  console.log(projectOptions)
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
