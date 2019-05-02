@@ -235,9 +235,9 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
   }
 
   function currentUserIsLoggedIn(user) {
-    return (user && user.login)
+    return user && user.login;
   }
-
+  
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
