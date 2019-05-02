@@ -1,10 +1,10 @@
 import Button from 'Components/buttons/button';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 
-const TrackedButton = ({ label, onClick }) => {
+const TrackedButton = ({ label, onClick, ...props }) => {
   const trackedOnClick = useTrackedFunc(onClick, label);
   return (
-    <Button size="small" type="tertiary" onClick={trackedOnClick}>
+    <Button props={props} onClick={trackedOnClick}>
       {label}
     </Button>
   );
