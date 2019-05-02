@@ -102,11 +102,10 @@ const ProjectPage = ({
     <main className="project-page">
       <section id="info">
         <ProjectProfileContainer
-          type="project"
           item={project}
-          avatarActions={isAuthorized ? {
-            'Upload Avatar': uploadAvatar,
-          } : undefined}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
         >
           <Heading tagName="h1">
             {isAuthorized ? (
