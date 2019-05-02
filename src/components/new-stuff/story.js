@@ -20,7 +20,7 @@ story.add('Article with link', () => (
   </div>
 ));
 
-story.add('Articles', () => (
+story.add('Many Articles', () => (
   <div style={{ maxWidth: '450px' }}>
     <NewStuffArticle title="Article Title 1" body={'markdown _body_ __here__'} link="#" />
     <NewStuffArticle title="Article Title 2" body={'markdown _body_ here\n\nall over again'} />
