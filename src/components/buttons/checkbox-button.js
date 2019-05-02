@@ -14,7 +14,7 @@ const CheckboxButton = ({ children, onChange, value }) => {
     <label className={className} htmlFor={id}>
       <input
         id={id}
-        className={styles.input}
+        className={checkboxStyles.input}
         type="checkbox"
         checked={value}
         onChange={(evt) => onChange(evt.target.checked)}
