@@ -40,29 +40,9 @@ const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions 
   );
 };
 
-const PaginationControls = ({ page, setPage, numPages }) => (
-  <div className={styles.paginationControls}>
-    <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
-      <Image
-        alt=""
-        className={styles.paginationArrow}
-        src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
-      />
-    </Button>
-    <div className={styles.pageNumbers}>
-      {page} / {numPages}
-    </div>
-    <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
-      <Image
-        alt=""
-        className={classNames(styles.paginationArrow, styles.next)}
-        src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
-      />
-    </Button>
-  </div>
-);
+const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
-function PaginatedProjects({ projects, collection, noteOptions, layout, projectOptions, projectsPerPage }) {
+const PaginationController = ({ projects, projectsPerPage, children }) => {
   const [page, setPage] = useState(1);
   const [expanded, setExpanded] = useState(false);
 
@@ -74,14 +54,22 @@ function PaginatedProjects({ projects, collection, noteOptions, layout, projectO
     const startIdx = (page - 1) * projectsPerPage;
     projects = projects.slice(startIdx, startIdx + projectsPerPage);
   }
-
   return (
     <>
-      <ProjectsUL collection={collection} projects={projects} noteOptions={noteOptions} layout={layout} projectOptions={projectOptions} />
-
+      {children({ projects })}
       {canPaginate ? (
         <div className={styles.viewControls}>
-          <PaginationControls page={page} setPage={setPage} numPages={numPages} />
+          <div className={styles.paginationControls}>
+            <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+              <Image alt="" className={styles.paginationArrow} src={arrowSrc} />
+            </Button>
+            <div className={styles.pageNumbers}>
+              {page} / {numPages}
+            </div>
+            <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+              <Image alt="" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
+            </Button>
+          </div>
           <Button type="tertiary" onClick={() => setExpanded(true)}>
             Show all<Badge>{numProjects}</Badge>
           </Button>
@@ -89,9 +77,11 @@ function PaginatedProjects({ projects, collection, noteOptions, layout, projectO
       ) : null}
     </>
   );
-}
+};
 
-function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, ...props }) {
+
+
+function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, projectsPerPage, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -115,12 +105,13 @@ function ProjectsList({ title, placeholder, enableFiltering, enablePagination, p
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
 
-  let projectsEl;
-  if (enablePagination) {
-    projectsEl = <PaginatedProjects {...props} projects={displayedProjects} />;
-  } else {
-    projectsEl = <ProjectsUL {...props} projects={displayedProjects} />;
-  }
+  const projectsEl = enablePagination ? (
+    <PaginationController projects={displayedProjects} projectsPerPage={projectsPerPage}>
+      {({ projects: paginatedProjects }) => <ProjectsUL {...props} projects={paginatedProjects} />};
+    </PaginationController>
+  ) : (
+    <ProjectsUL {...props} projects={displayedProjects} />
+  );
 
   const placeholderEl = filtering ? (
     <div className={styles.filterResultsPlaceholder}>
