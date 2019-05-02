@@ -37,8 +37,8 @@ Row.defaultProps = {
   className: '',
   style: {},
   count: 3,
-  gap: '10px',
-  minWidth: '250px',
+  gap: undefined,
+  minWidth: undefined,
 };
 
 export default Row;

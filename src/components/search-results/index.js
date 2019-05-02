@@ -11,6 +11,7 @@ import TeamItem from 'Components/team/team-item';
 import ProjectItem from 'Components/project/project-item';
 import CollectionItemSmall from 'Components/collection/collection-item-small';
 import StarterKitItem from 'Components/search/starter-kit-result';
+import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
 
@@ -201,33 +202,21 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>
-          <ul className={classnames(styles.resultsContainer, styles.starterKitResultsContainer)}>
-            {searchResults.starterKit.map((result) => (
-              <li key={result.id} className={styles.resultItem}>
-                <StarterKitItem result={result} />
-              </li>
-            ))}
-          </ul>
-          <ul className={styles.resultsContainer}>
-            {searchResults.topResults.map((result) => (
-              <li key={result.id} className={styles.resultItem}>
-                <ResultComponent result={result} />
-              </li>
-            ))}
-          </ul>
+          <Grid items={searchResults.starterKit} className={classnames(styles.resultsContainer, styles.starterKitResultsContainer)}>
+            {(result) => <StarterKitItem result={result} />}
+          </Grid>
+          <Grid items={searchResults.topResults} className={styles.resultsContainer}>
+            {(result) => <ResultComponent result={result} />}
+          </Grid>
         </article>
       )}
       {ready &&
         renderedGroups.map(({ id, label, results, canShowMoreResults }) => (
           <article key={id} className={styles.groupContainer}>
             <Heading tagName="h2">{label}</Heading>
-            <ul className={styles.resultsContainer}>
-              {results.map((result) => (
-                <li key={result.id} className={styles.resultItem}>
-                  <ResultComponent result={result} />
-                </li>
-              ))}
-            </ul>
+            <Grid items={results} className={styles.resultsContainer}>
+              {(result) => <ResultComponent result={result} />}
+            </Grid>
             {canShowMoreResults && <ShowAllButton label={label} onClick={() => setActiveFilter(id)} />}
           </article>
         ))}
