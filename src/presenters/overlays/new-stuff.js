@@ -66,11 +66,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
     return (
       <>
         {children(show)}
-        {dogVisible && (
-          <div className="new-stuff-footer">
-            <NewStuffPupButton onClick={show} />
-          </div>
-        )}
+        {dogVisible && <NewStuffPupButton onClick={show} />}
         {visible && <div className="overlay-background" role="presentation" />}
       </>
     );
