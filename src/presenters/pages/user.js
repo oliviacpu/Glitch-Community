@@ -101,7 +101,9 @@ const UserPage = ({
   // filter featuredProject out of both pinned & recent projects
   const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
-  const userIs
+  const userIsLoggedIn = !!(user && user.login);
+  console.log(userIsLoggedIn)
+  
   return (
     <main className={styles.container}>
       <section>
@@ -138,7 +140,7 @@ const UserPage = ({
           featuredProject={featuredProject}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
-          addProjectToCollection={addProjectToCollection}
+          addProjectToCollection={userIsLoggedIn ? addProjectToCollection : undefined}
           currentUser={maybeCurrentUser}
         />
       )}
@@ -157,7 +159,7 @@ const UserPage = ({
             featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
-            addProjectToCollection,
+            addProjectToCollection: userIsLoggedIn ? addProjectToCollection : undefined,
           }}
         />
       )}
@@ -186,7 +188,7 @@ const UserPage = ({
             featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
-            addProjectToCollection,
+            addProjectToCollection: userIsLoggedIn ? addProjectToCollection : undefined,
           }}
         />
       )}

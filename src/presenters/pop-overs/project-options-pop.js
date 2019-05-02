@@ -86,13 +86,14 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
   const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
-  const showAddProjectToCollection = props.currentUserIsAnon
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
   const onClickLeaveTeamProject = useTrackedFunc(leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
+  
+  console.log(props.addProjectToCollection)
   return (
     <dialog className="pop-over project-options-pop">
       {showPinOrFeatureSection && (
