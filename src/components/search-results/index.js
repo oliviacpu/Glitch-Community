@@ -202,7 +202,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>
-          <Grid items={searchResults.starterKit} className={classnames(styles.resultsContainer, styles.starterKitResultsContainer)}>
+          <Grid items={searchResults.starterKit} className={styles.starterKitResultsContainer}>
             {(result) => <StarterKitItem result={result} />}
           </Grid>
           <Grid items={searchResults.topResults} className={styles.resultsContainer}>
