@@ -19,8 +19,8 @@ const collectionColorStyles = (collection) => ({
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
-const CollectionLink = ({ collection, children, ...props }) => (
-  <a href={`/@${collection.fullUrl}`} {...props}>
+const CollectionLink = ({ collection, children }) => (
+  <a href={`/@${collection.fullUrl}`} className={styles.smallCollectionLink}>
     {children}
   </a>
 );
@@ -32,12 +32,11 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
         <ProfileItem user={collection.user} team={collection.team} />
       </div>
     )}
-    <CollectionLink
-      collection={collection}
-      className={classnames(styles.bubbleContainer, showCurator && styles.showCurator)}
-      style={collectionColorStyles(collection)}
-    >
-      <div className={styles.smallNameDescriptionArea}>
+    <CollectionLink collection={collection}>
+      <div
+        className={classnames(styles.bubbleContainer, styles.smallNameDescriptionArea, showCurator && styles.showCurator)}
+        style={collectionColorStyles(collection)}
+      >
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
             <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
