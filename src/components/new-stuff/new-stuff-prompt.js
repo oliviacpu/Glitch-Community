@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TooltipContainer from '../tooltips/tooltip-container';
+import TransparentButton from '../buttons/transparent-button';
 
 import NewStuffPup from './new-stuff-pup';
 
@@ -13,7 +14,7 @@ const NewStuffPrompt = ({ onClick }) => (
       align={['top']}
       id="new-stuff-tooltip"
       persistent
-      target={<button onClick={onClick} className={styles.invisibleButton}><NewStuffPup /></button>}
+      target={<TransparentButton onClick={onClick}><NewStuffPup /></TransparentButton>}
       tooltip="New"
       type="info"
     />
