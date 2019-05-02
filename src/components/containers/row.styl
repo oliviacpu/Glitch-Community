@@ -13,9 +13,10 @@
 .item,
 .filler
   flex-grow: 1
-  flex-basis: calc(var(--modifier) * 9999)
+  flex-basis: calc(var(--modifier) * 999)
   
 .item
   flex-shrink: 0
   margin: calc(var(--gap) * 0.5)
-  // min-width (
+  min-width: calc(var(--min-width) - var(--gap))
+  max-width: calc(100% - var(--gap))
