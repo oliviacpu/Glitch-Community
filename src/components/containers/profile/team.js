@@ -12,7 +12,7 @@ const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) =
   <CoverContainer type="team" item={item} coverActions={coverActions}>
     <div className={classnames(styles.profileWrap)}>
       <div className={styles.avatarContainer}>
-        // eslint-disable-next-line no-underscore-dangle
+        {/* eslint-disable-next-line no-underscore-dangle */}
         <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle({ ...item, cache: item._cacheAvatar })} />
         <div className={styles.avatarButtons}>
           {avatarActions &&
@@ -23,7 +23,6 @@ const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) =
                   {label}
                 </Button>
               ))}
-          }
         </div>
       </div>
       <div className={styles.profileInfo}>{children}</div>

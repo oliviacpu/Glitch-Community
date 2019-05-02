@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from 'Components/buttons/button';
 
 import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
 import { getProfileStyle as getUserProfileStyle } from 'Models/user';
