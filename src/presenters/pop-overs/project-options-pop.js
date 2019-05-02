@@ -95,7 +95,8 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   
   // TODO I think this component could be refactored to take a user type (anon/admin/collaborator/loggedinViewer) 
   // and render different components rather than determine what shows by what functions we have
-  if (props.showAnonymousView) {
+  // arguably this kind of determination on the type of user should happen in the user model and/or available
+  if (props.shouldShowAnonView) {
     return (
       <dialog className="pop-over project-options-pop">
         {showLeaveProject && (
@@ -238,12 +239,15 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     return user && user.login;
   }
   
-  function showAnonymousView(props) {
-  }
+  const showLeaveProject = props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject(currentUser);
+  const showDeleteProject = currentUserIsAdminOnProject(currentUser) && !props.projectOptions.removeProjectFromCollection;
+  const isAnon = !currentUserIsLoggedIn(currentUser)
+  const shouldShowAnonView = isAnon && (showLeaveProject || showDeleteProject)
   
-  const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
-  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
-
+  if (isAnon && !shouldShowAnonView) {
+    return null
+  }
+    
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
@@ -259,6 +263,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           currentUserIsLoggedIn={currentUserIsLoggedIn(currentUser)}
+          shouldShowAnonView={shouldShowAnonView}
           togglePopover={togglePopover}
         />
       )}
