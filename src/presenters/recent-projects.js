@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink } from 'Components/link';
@@ -55,7 +55,7 @@ const RecentProjectsContainer = ({ children, user, clearUser }) => (
           </UserLink>
         </div>
       </div>
-      <article className="projects">{children}</article>
+      <article className="recent-projects__projects-wrap">{children}</article>
       {!user.login && <ClearSession clearUser={clearUser} />}
     </CoverContainer>
   </section>
@@ -78,7 +78,7 @@ const RecentProjects = () => {
   return (
     <RecentProjectsContainer user={user} clearUser={clear}>
       {fetched ? (
-        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsUL projects={projects} />}</ProjectsLoader>
+        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsList className="recent-projects__grid" projects={projects} />}</ProjectsLoader>
       ) : (
         <Loader />
       )}
