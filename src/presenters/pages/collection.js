@@ -14,7 +14,7 @@ import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 
@@ -112,9 +112,7 @@ const CollectionPageContents = ({
             </div>
 
             <h1 className="collection-name">
-              {currentUserIsAuthor ? (
-                <CollectionNameInput name={collection.name} onChange={onNameChange} />
-              ) : collection.name}
+              {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
             </h1>
 
             <div className="collection-owner">
@@ -131,7 +129,9 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text><Pluralize count={collection.projects.length} singular="Project" /></Text>
+              <Text>
+                <Pluralize count={collection.projects.length} singular="Project" />
+              </Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
@@ -165,7 +165,8 @@ const CollectionPageContents = ({
                   />
                 )}
                 {currentUserIsAuthor && (
-                  <ProjectsUL
+                  <ProjectsList
+                    className="collection-page__projects-grid"
                     {...props}
                     projects={projects}
                     collection={collection}
@@ -183,7 +184,8 @@ const CollectionPageContents = ({
                   />
                 )}
                 {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsUL
+                  <ProjectsList
+                    className="collection-page__projects-grid"
                     {...props}
                     projects={collection.projects}
                     collection={collection}
@@ -194,7 +196,13 @@ const CollectionPageContents = ({
                   />
                 )}
                 {!currentUserIsAuthor && !userIsLoggedIn && (
-                  <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} noteOptions={{ isAuthorized: false }} />
+                  <ProjectsList
+                    className="collection-page__projects-grid"
+                    projects={collection.projects}
+                    collection={collection}
+                    projectOptions={{}}
+                    noteOptions={{ isAuthorized: false }}
+                  />
                 )}
               </div>
             </>
