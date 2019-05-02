@@ -92,7 +92,6 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickLeaveTeamProject = useTrackedFunc(leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
-
   return (
     <dialog className="pop-over project-options-pop">
       {showPinOrFeatureSection && (
@@ -114,7 +113,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
         </section>
       )}
 
-      {!!props.addProjectToCollection && !props.currentUserIsAnon && (
+      {!!props.addProjectToCollection && (
         <section className="pop-over-actions">
           <PopoverButton onClick={addToCollectionPopover} {...props} text="Add to Collection " emoji="framed-picture" />
         </section>
@@ -198,7 +197,6 @@ ProjectOptionsPop.defaultProps = {
 // create as stateful react component
 export default function ProjectOptions({ projectOptions, project }, { ...props }) {
   const { currentUser } = useCurrentUser();
-  console.log("currentUser", currentUser)
   if (Object.keys(projectOptions).length === 0) {
     return null;
   }
@@ -215,10 +213,9 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
-  
-  function currentUserIsAnon(user) {
-    return !(currentUser && currentUser.login)
-  }
+
+  // anonymous users can't take actions on projects
+  if (!(currentUser && currentUser.login)) return null;
 
   return (
     <PopoverWithButton
@@ -234,7 +231,6 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
-          currentUserIsAnon={currentUserIsAnon(currentUser)}
           togglePopover={togglePopover}
         />
       )}
