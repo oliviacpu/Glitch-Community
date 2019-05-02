@@ -61,11 +61,11 @@ ProjectsPreview.propTypes = {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <div className={classNames(styles.collectionItem, { [styles.authorized]: isAuthorized })}>
-    <div className={}></div>
-    {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
-
-    {showCurator && <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>}
+  <div className={styles.collectionItem}>
+    <div className={styles.header}>
+      <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
+      {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
+    </div>
     <CollectionLink
       collection={collection}
       className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
@@ -81,7 +81,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </Button>
         </div>
         <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
-          <Markdown length={100}>{collection.description || ' '}</Markdown>
+          <Markdown length={100}>{(collection.description || ' ').trim()}</Markdown>
         </div>
       </div>
     </CollectionLink>

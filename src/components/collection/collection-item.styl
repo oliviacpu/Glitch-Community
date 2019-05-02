@@ -1,5 +1,14 @@
 @require '../constants'
 
+.header
+  flex: 0 0 32px
+  display: flex
+  margin-bottom: 0.5rem
+  align-items: center
+  
+.curator
+  flex: 1 0 auto
+  
 .collectionItem
   display: flex
   flex-direction: column
@@ -14,14 +23,12 @@
     display: block
     position: inherit
 
-  &.authorized
-    margin-top: 30px
   a
     text-decoration: none
     color: primary
         
 .linkBody
-  flex: 1 1 122px
+  flex: 1 1 130px
   display: flex
   padding: 12px
   border-top-right-radius: 5px
@@ -142,8 +149,4 @@
   
 a:hover .smallProjectCount
   text-decoration: underline
-
-.curator
-  height: 32px
-  margin-bottom: 0.5rem
   
