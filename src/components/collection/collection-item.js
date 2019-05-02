@@ -10,6 +10,7 @@ import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
 import Loader from 'Components/loader/';
 import { CollectionLink } from 'Components/link';
+import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 
 import { isDarkColor } from '../../models/collection';
@@ -34,15 +35,13 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
   }
   if (collection.projects.length > 0) {
     return (
-      <>
-        <ul className={styles.projectsContainer}>
-          {collection.projects.slice(0, 3).map((project) => (
-            <li key={project.id} className={styles.projectItem}>
-              <ProjectItemSmall project={project} />
-            </li>
+      <div className={styles.projectsContainer}>
+        <Row className={styles.projectsList} items={collection.projects} count={3}>
+          {((project) => (
+            <ProjectItemSmall project={project} />
           ))}
-        </ul>
-      </>
+        </Row>
+      </div>
     );
   }
 

@@ -21,9 +21,8 @@
     color: primary
         
 .linkBody
-  flex: 1 0 130px
+  flex: 0 1 130px
   display: flex
-  // height: 130px
   padding: 12px
   border-top-right-radius: 5px
   border-top-left-radius: 5px
@@ -56,20 +55,21 @@
         box-shadow: 2px 2px 0 primary
         border-radius: 5px
 .projectsContainer
-  flex: 2 0 auto
+  flex: 1 0 auto
   // height: 150px
-  margin: 0
-  list-style-type: none
-  padding: 1rem 0
+  padding: 10px
   background-color: secondary-background
-  .projectItem
-    margin: 0 10px -5px
   &.empty
     padding: 18px 18px 0
     border-bottom-right-radius: 5px
     border-bottom-left-radius: 5px
     p
       margin: 0
+.projectsList
+  --min-width: 100px
+  a
+    margin: 0
+    
 
 .footerLink
   flex: 0 0 auto
