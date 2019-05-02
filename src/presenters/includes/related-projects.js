@@ -15,7 +15,7 @@ const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
     <CoverContainer type={type} item={item}>
       <div className="related-projects__projects-wrap">
-        <ProjectsList row projects={projects} />
+        <ProjectsList layout="row" projects={projects} />
       </div>
     </CoverContainer>
   ) : null;

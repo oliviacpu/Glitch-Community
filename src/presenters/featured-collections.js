@@ -40,7 +40,7 @@ const CollectionWide = ({ collection }) => {
       </header>
       <div className="collection-contents">
         <ProjectsList
-          row
+          layout="row"
           projects={featuredProjects}
           collection={collection}
           hideProjectDescriptions={featuredProjectsHaveAtLeastOneNote}

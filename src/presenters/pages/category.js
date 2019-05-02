@@ -40,25 +40,16 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
 
               {currentUser.login ? (
                 <ProjectsList
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
+                  layout="grid"
+                  projects={projects}
                   projectOptions={{
                     addProjectToCollection,
                   }}
-                  {...props}
                 />
               ) : (
                 <ProjectsList
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
-                  projectOptions={{}}
-                  {...props}
+                  layout="grid"
+                  projects={projects}
                 />
               )}
             </div>

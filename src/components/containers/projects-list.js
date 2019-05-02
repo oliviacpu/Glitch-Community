@@ -16,6 +16,81 @@ import Row from 'Components/containers/row';
 
 import styles from './projects-list.styl';
 
+const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions }) => {
+  const Container = layout === 'row' ? Row : Grid;
+  return (
+    <Container items={projects} className={styles.projectsList}>
+      {(project) => (
+        <>
+          {collection && (
+            <div className="projects-container-note">
+              <Note
+                project={project}
+                collection={collection}
+                isAuthorized={noteOptions.isAuthorized}
+                hideNote={noteOptions.hideNote}
+                updateNote={noteOptions.updateNote}
+              />
+            </div>
+          )}
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
+        </>
+      )}
+    </Container>
+  );
+};
+
+const PaginationControls = ({ page, setPage, numPages }) => (
+  <div className={styles.paginationControls}>
+    <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <Image
+        alt=""
+        className={styles.paginationArrow}
+        src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
+      />
+    </Button>
+    <div className={styles.pageNumbers}>
+      {page} / {numPages}
+    </div>
+    <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+      <Image
+        alt=""
+        className={classNames(styles.paginationArrow, styles.next)}
+        src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
+      />
+    </Button>
+  </div>
+);
+
+function PaginatedProjects({ projects, collection, noteOptions, layout, projectOptions, projectsPerPage }) {
+  const [page, setPage] = useState(1);
+  const [expanded, setExpanded] = useState(false);
+
+  const numProjects = projects.length;
+  const numPages = Math.ceil(projects.length / projectsPerPage);
+  const canPaginate = !expanded && projectsPerPage < numProjects;
+
+  if (!expanded && canPaginate) {
+    const startIdx = (page - 1) * projectsPerPage;
+    projects = projects.slice(startIdx, startIdx + projectsPerPage);
+  }
+
+  return (
+    <>
+      <ProjectsUL collection={collection} projects={projects} noteOptions={noteOptions} layout={layout} projectOptions={projectOptions} />
+
+      {canPaginate ? (
+        <div className={styles.viewControls}>
+          <PaginationControls page={page} setPage={setPage} numPages={numPages} />
+          <Button type="tertiary" onClick={() => setExpanded(true)}>
+            Show all<Badge>{numProjects}</Badge>
+          </Button>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 function ProjectsList({ title, placeholder, enableFiltering, enablePagination, projects, ...props }) {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -93,59 +168,6 @@ ProjectsList.defaultProps = {
   enablePagination: false,
 };
 
-function PaginatedProjects(props) {
-  const [page, setPage] = useState(1);
-  const [expanded, setExpanded] = useState(false);
-
-  let { projects, projectsPerPage } = props; // eslint-disable-line prefer-const
-
-  const numProjects = projects.length;
-  const numPages = Math.ceil(projects.length / projectsPerPage);
-  const canPaginate = !expanded && projectsPerPage < numProjects;
-
-  if (!expanded && canPaginate) {
-    const startIdx = (page - 1) * projectsPerPage;
-    projects = projects.slice(startIdx, startIdx + projectsPerPage);
-  }
-
-  const PaginationControls = () => (
-    <div className={styles.paginationControls}>
-      <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
-        <Image
-          alt=""
-          className={styles.paginationArrow}
-          src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
-        />
-      </Button>
-      <div className={styles.pageNumbers}>
-        {page} / {numPages}
-      </div>
-      <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
-        <Image
-          alt=""
-          className={classNames(styles.paginationArrow, styles.next)}
-          src="https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269"
-        />
-      </Button>
-    </div>
-  );
-
-  return (
-    <>
-      <ProjectsUL {...props} projects={projects} />
-
-      {canPaginate ? (
-        <div className={styles.viewControls}>
-          <PaginationControls />
-          <Button type="tertiary" onClick={() => setExpanded(true)}>
-            Show all<Badge>{numProjects}</Badge>
-          </Button>
-        </div>
-      ) : null}
-    </>
-  );
-}
-
 PaginatedProjects.propTypes = {
   projects: PropTypes.array.isRequired,
   projectsPerPage: PropTypes.number,
@@ -155,41 +177,18 @@ PaginatedProjects.defaultProps = {
   projectsPerPage: 6,
 };
 
-const ProjectsUL = ({ showProjectDescriptions, collection, projects, noteOptions, row, ...props }) => {
-  const Container = row ? Row : Grid;
-
-  return (
-    <Container items={projects} className={styles.projectsList}>
-      {(project) => (
-        <>
-          {collection && (
-            <div className="projects-container-note">
-              <Note
-                project={project}
-                collection={collection}
-                isAuthorized={noteOptions.isAuthorized}
-                hideNote={noteOptions.hideNote}
-                updateNote={noteOptions.updateNote}
-              />
-            </div>
-          )}
-          <ProjectItem key={project.id} project={project} showProjectDescriptions={showProjectDescriptions} {...props} />
-        </>
-      )}
-    </Container>
-  );
-};
 ProjectsUL.propTypes = {
   projects: PropTypes.array.isRequired,
+  layout: PropTypes.oneOf(['row', 'grid']).isRequired,
   collection: PropTypes.object,
-  showProjectDescriptions: PropTypes.bool,
   noteOptions: PropTypes.object,
+  projectOptions: PropTypes.object,
 };
 
 ProjectsUL.defaultProps = {
   collection: null,
-  showProjectDescriptions: true,
   noteOptions: {},
+  projectOptions: {},
 };
 
 export default ProjectsList;
