@@ -8,8 +8,8 @@ const Grid = ({ items, children, gap, minWidth, className, style }) => (
     className={classnames(styles.grid, className)}
     style={{
       ...style,
-      '--row-gap': gap && gap.row || gap,
-      '--column-gap': gap && gap.column || gap,
+      '--row-gap': (gap && gap.row) || gap,
+      '--column-gap': (gap && gap.column) || gap,
       '--min-width': minWidth,
     }}
   >
