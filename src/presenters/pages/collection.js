@@ -166,6 +166,7 @@ const CollectionPageContents = ({
                 )}
                 {currentUserIsAuthor && (
                   <ProjectsList
+                    layout="grid"
                     {...props}
                     projects={projects}
                     collection={collection}
@@ -184,6 +185,7 @@ const CollectionPageContents = ({
                 )}
                 {!currentUserIsAuthor && userIsLoggedIn && (
                   <ProjectsList
+                    layout="grid"
                     {...props}
                     projects={collection.projects}
                     collection={collection}
@@ -195,6 +197,7 @@ const CollectionPageContents = ({
                 )}
                 {!currentUserIsAuthor && !userIsLoggedIn && (
                   <ProjectsList
+                    layout="grid"
                     projects={collection.projects}
                     collection={collection}
                     projectOptions={{}}
