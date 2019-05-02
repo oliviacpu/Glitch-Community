@@ -7,6 +7,8 @@
   border-radius: 5px
   min-width: 100%
   transition: 0.1s all
+  display: flex
+  flex-direction: column
   :global .collection-options-pop-btn
     display: block
     position: inherit
@@ -16,68 +18,68 @@
   a
     text-decoration: none
     color: primary
-  .linkBody
-    display: flex
-    height: 130px
-    padding: 12px
-    border-top-right-radius: 5px
-    border-top-left-radius: 5px
-    word-break: break-word
-    text-decoration: none
-    &.showCurator:after
-      top: 27px
-      left: 8.5px
-      border: solid transparent
-      content: " "
-      height: 0
-      width: 0
-      position: absolute
-      pointer-events: none
-      border-bottom-color: inherit
-      border-width: 7px
-    .avatarContainer
-      flex: 0 0 55px
-      margin-right: 1rem
-      svg
-        width: 100%
-        height: auto
+.linkBody
+  display: flex
+  // height: 130px
+  padding: 12px
+  border-top-right-radius: 5px
+  border-top-left-radius: 5px
+  word-break: break-word
+  text-decoration: none
+  &.showCurator:after
+    top: 27px
+    left: 8.5px
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+    border-bottom-color: inherit
+    border-width: 7px
+  .avatarContainer
+    flex: 0 0 55px
+    margin-right: 1rem
+    svg
+      width: 100%
+      height: auto
+  .nameDescriptionContainer
+    overflow: hidden
+  &:hover
     .nameDescriptionContainer
-      overflow: hidden
-    &:hover
-      .nameDescriptionContainer
-        .itemButtonWrap
-          width: fit-content
-          height: fit-content
-          box-shadow: 2px 2px 0 primary
-          border-radius: 5px
-  .projectsContainer
-    width: 100%
-    height: 150px
-    margin: 0
-    list-style-type: none
-    padding: 0
-    padding-top: 1em
-    background-color: secondary-background
-    .projectItem
-      margin: 0 10px -5px
-    &.empty
-      padding: 18px 18px 0
-      border-bottom-right-radius: 5px
-      border-bottom-left-radius: 5px
-      p
-        margin: 0
-
-  .footerLink
-    display: block
-    min-height: 33px
-    padding: 3px 12px 12px
-    font-weight: 600
-    font-size: 13px
-    background-color: secondary-background
+      .itemButtonWrap
+        width: fit-content
+        height: fit-content
+        box-shadow: 2px 2px 0 primary
+        border-radius: 5px
+.projectsContainer
+  width: 100%
+  // height: 150px
+  margin: 0
+  list-style-type: none
+  padding: 0
+  padding-top: 1em
+  background-color: secondary-background
+  .projectItem
+    margin: 0 10px -5px
+  &.empty
+    padding: 18px 18px 0
     border-bottom-right-radius: 5px
     border-bottom-left-radius: 5px
-    &:hover
-      text-decoration: underline
+    p
+      margin: 0
+
+.footerLink
+  display: block
+  min-height: 33px
+  padding: 3px 12px 12px
+  font-weight: 600
+  font-size: 13px
+  background-color: secondary-background
+  border-bottom-right-radius: 5px
+  border-bottom-left-radius: 5px
+  &:hover
+    text-decoration: underline
 
 .bubbleContainer
   display: block
