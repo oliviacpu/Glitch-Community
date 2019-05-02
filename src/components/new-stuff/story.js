@@ -32,6 +32,6 @@ story.add('Many Articles', () => (
 story.add('Update Pup', () => (
   <>
     <NewStuffPup />
-    <NewStuffPrompt onClick={() => alert('neat')} />
+    <NewStuffPrompt onClick={() => alert('woof')} />
   </>
 ));
