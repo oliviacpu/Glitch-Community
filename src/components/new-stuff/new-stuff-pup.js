@@ -15,7 +15,7 @@ export const NewStuffPupButton = ({ onClick }) => (
     align={['top']}
     id="new-stuff-tooltip"
     persistent
-    target={<NewStuffPup />}
+    target={<button onClick={onClick} className="button-unstyled"><NewStuffPup /></button>}
     tooltip="New"
     type="info"
   />
