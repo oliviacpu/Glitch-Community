@@ -80,11 +80,11 @@ storiesOf('Button', module)
       </Button>
     </div>
   ))
-  .add(`checkbox`, () => (
-    <CheckboxButton>
+  .add(`checkbox`, withState(false, ({ state, setState }) => (
+    <CheckboxButton value={state} onChange={setState}>
       Click to toggle!
     </CheckboxButton>
-  ));
+  )));
 
 storiesOf('Emoji', module)
   .add('standard', () => <Emoji name="herb" />)
