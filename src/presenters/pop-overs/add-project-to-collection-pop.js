@@ -54,8 +54,11 @@ const AddProjectToCollectionPopContents = ({
   togglePopover,
 }) => {
   const [query, setQuery] = React.useState('');
-  const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 250);
-  const filteredCollections = collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery));
+  const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
+  const filteredCollections = React.useMemo(
+    () => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)),
+    [debouncedQuery, collections],
+  );
   return (
     <dialog className="pop-over add-project-to-collection-pop wide-pop">
       {/* Only show this nested popover title from project-options */}
