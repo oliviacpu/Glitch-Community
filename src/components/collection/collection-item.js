@@ -62,10 +62,10 @@ ProjectsPreview.propTypes = {
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <div className={styles.collectionItem}>
-    <div className={styles.header}>
+    {(showCurator || isAuthorized) && <div className={styles.header}>
       <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
       {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
-    </div>
+    </div>}
     <CollectionLink
       collection={collection}
       className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
