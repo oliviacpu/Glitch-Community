@@ -177,7 +177,14 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 //   );
 // };
 
-const ProjectOptionsContent = ({ projectOptions }) => {
+
+const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
+  function animate(event, className, func) {
+    const projectContainer = event.target.closest('li');
+    projectContainer.addEventListener('animationend', func, { once: true });
+    projectContainer.classList.add(className);
+    togglePopover();
+  }
   const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
 
   return (
@@ -185,13 +192,13 @@ const ProjectOptionsContent = ({ projectOptions }) => {
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {projectOptions.featureProject && (
-            <PopoverButton onClick={projectOptions.featureProject} text="Feature" emoji="clapper" />
+            <PopoverButton onClick={(e) => animate(event, 'slide-up', projectOptions.featureProject)} text="Feature" emoji="clapper" />
           )}
           {projectOptions.addPin && (
-            <PopoverButton onClick={projectOptions.addPin} text="Pin " emoji="pushpin" />
+            <PopoverButton onClick={(e) => animate(event, 'slide-up', projectOptions.addPin)} text="Pin " emoji="pushpin" />
           )}
           {projectOptions.removePin && (
-            <PopoverButton onClick={projectOptions.removePin} text="Un-Pin " emoji="pushpin" />
+            <PopoverButton onClick={(e) => animate(event, 'slide-down', projectOptions.removePin)} text="Un-Pin " emoji="pushpin" />
           )}
         </section>
       )}
@@ -236,10 +243,11 @@ ProjectOptionsPop.defaultProps = {
   displayNewNote: null,
 };
 
-const determineProjectOptions = (props) => {
-  
+const determineProjectOptions = (props, currentUser) => {
+  const isAnon = !(currentUser && currentUser.login);
+
   return {
-    featureProject: null,
+    featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.featureProject(props.project.id) : null,
     addPin: null,
     removePin: null,
     addNote: null,
@@ -254,9 +262,12 @@ const determineProjectOptions = (props) => {
 }
 
 export default function ProjectOptions(props) {
-  const projectOptions = determineProjectOptions(props);
-  
-  if (Object.values(projectOptions).every(option => !option)) {
+  const { currentUser } = useCurrentUser();
+
+  const projectOptions = determineProjectOptions(props, currentUser);
+  console.log(projectOptions)
+  const noProjectOptions = Object.values(projectOptions).every(option => !option);
+  if (noProjectOptions) {
     return null;
   }
   
@@ -269,7 +280,7 @@ export default function ProjectOptions(props) {
       {({ togglePopover }) => (
         <ProjectOptionsPop
           projectOptions={projectOptions}
-          
+          togglePopover={togglePopover}
         />
       )}
     </PopoverWithButton>
