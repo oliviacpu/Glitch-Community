@@ -190,7 +190,7 @@ const ProjectOptionsContent = (props) => {
     cb();
   }
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
-  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
+  // const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
 
   return (
     <dialog className="pop-over project-options-pop">
@@ -221,7 +221,7 @@ const ProjectOptionsContent = (props) => {
         </section>
       )}
 
-      {props.joinTeamProject && (
+      {/*props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
