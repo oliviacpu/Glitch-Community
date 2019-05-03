@@ -81,9 +81,17 @@ storiesOf('Button', module)
     </div>
   ))
   .add(`checkbox`, withState(false, ({ state, setState }) => (
-    <CheckboxButton value={state} onChange={setState}>
-      Click to toggle!
-    </CheckboxButton>
+    <>
+      <CheckboxButton value={state} onChange={setState}>
+        Click to toggle!
+      </CheckboxButton>
+      <p>
+        <label>
+          <input type="checkbox" checked={state} onChange={(evt) => setState(evt.target.checked)} />
+          ← linked state
+        </label>
+      </p>
+    </>
   )));
 
 storiesOf('Emoji', module)
