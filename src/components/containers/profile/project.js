@@ -6,15 +6,17 @@ import TrackedButton from 'Components/buttons/tracked-button';
 import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import styles from './styles.styl';
 
+const suspendedAvatarUrl = 'https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930';
+
 const ProjectProfileContainer = ({ item, children, avatarActions }) => {
-  let avatarStyle = { backgroundImage: `url('${getProjectAvatarUrl(item.id)}?${item._avatarCache}')` }; // eslint-disable-line no-underscore-dangle
-  if (item.suspendedReason && avatarActions === undefined) {
-    avatarStyle = { backgroundImage: 'url(https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930)' }; // eslint-disable-line no-underscore-dangle
-  }
+  const hideAvatar = item.suspendedReason && avatarActions === undefined;
   return (
     <div className={styles.profileWrap}>
       <div className={styles.avatarContainer}>
-        <div className={classnames(styles.avatar, styles.project)} style={avatarStyle} />
+        <div
+          className={classnames(styles.avatar, styles.project)}
+          style={{ backgroundImage: `url('${hideAvatar ? suspendedAvatarUrl : getProjectAvatarUrl(item.id)}?${item._avatarCache}')` }} // eslint-disable-line no-underscore-dangle
+        />
         <div className={styles.avatarButtons}>
           {avatarActions &&
             Object.entries(avatarActions)
@@ -32,6 +34,7 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
 };
 
 ProjectProfileContainer.propTypes = {
+  
   item: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   avatarActions: PropTypes.object,
