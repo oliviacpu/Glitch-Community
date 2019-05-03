@@ -214,6 +214,16 @@ ProjectOptionsPop.defaultProps = {
   displayNewNote: null,
 };
 
+const determineProjectOptions = (props) => {
+  return {
+    featureProject: false,
+    addPin: false,
+    removePin: false,
+    addNote: false,
+    addProjectToCollection: false,
+  }
+}
+
 // Project Options Container
 // create as stateful react component
 export default function ProjectOptions({ projectOptions, project }, { ...props }) {
