@@ -55,7 +55,7 @@ const AddProjectToCollectionPopContents = ({
   const [query, setQuery] = React.useState('');
   const filteredCollections = React.useMemo(
     () => collections.filter((collection) => collection.name.toLowerCase().includes(query.toLowerCase().trim())),
-    [query, collections],
+    [collections, query],
   );
   return (
     <dialog className="pop-over add-project-to-collection-pop wide-pop">
