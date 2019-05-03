@@ -225,7 +225,7 @@ const ProjectOptionsContent = (props) => {
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
-      )}
+      )*/}
 
       {/*props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
@@ -283,8 +283,8 @@ const determineProjectOptions = (props, currentUser) => {
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
-    addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection: null, 
-    joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
+    addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, 
+    // joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
     // leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
     leaveProject: null,
     removeProjectFromTeam: null,
@@ -311,9 +311,9 @@ export default function ProjectOptions(props) {
     >
       {({ togglePopover }) => (
         <ProjectOptionsPop
+          {...props}
           {...projectOptions}
           togglePopover={togglePopover}
-          project={props.project}
         />
       )}
     </PopoverWithButton>
