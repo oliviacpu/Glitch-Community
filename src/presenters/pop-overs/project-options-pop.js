@@ -190,7 +190,7 @@ const ProjectOptionsContent = (props) => {
     cb();
   }
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
-  // const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
+  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
 
   return (
     <dialog className="pop-over project-options-pop">
@@ -221,17 +221,17 @@ const ProjectOptionsContent = (props) => {
         </section>
       )}
 
-      {/*props.joinTeamProject && (
+      {props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
-      )*/}
+      )}
 
-      {/*props.leaveTeamProject && (
+      {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
         </section>
-      )*/}
+      )}
 
     </dialog>
   );
@@ -284,8 +284,8 @@ const determineProjectOptions = (props, currentUser) => {
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
     addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, 
-    // joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? () => props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
-    // leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? () => props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
+    joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? () => props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
+    leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? () => props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
     leaveProject: null,
     removeProjectFromTeam: null,
     deleteProject: null,
