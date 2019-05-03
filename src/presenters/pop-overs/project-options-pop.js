@@ -178,47 +178,54 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 // };
 
 
-const ProjectOptionsContent = ({ projectOptions, togglePopover, addToCollectionPopover }) => {
+const ProjectOptionsContent = (props) => {
   function animate(event, className, func) {
     const projectContainer = event.target.closest('li');
     projectContainer.addEventListener('animationend', func, { once: true });
     projectContainer.classList.add(className);
-    togglePopover();
+    props.togglePopover();
   }
   function toggleAndCB(cb) {
-    togglePopover();
+    props.togglePopover();
     cb();
   }
-  const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
+  const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
 
   return (
     <dialog className="pop-over project-options-pop">
       
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {projectOptions.featureProject && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-up', projectOptions.featureProject)} text="Feature" emoji="clapper" />
+          {props.featureProject && (
+            <PopoverButton onClick={(e) => animate(event, 'slide-up', props.featureProject)} text="Feature" emoji="clapper" />
           )}
-          {projectOptions.addPin && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-up', projectOptions.addPin)} text="Pin " emoji="pushpin" />
+          {props.addPin && (
+            <PopoverButton onClick={(e) => animate(event, 'slide-up', props.addPin)} text="Pin " emoji="pushpin" />
           )}
-          {projectOptions.removePin && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-down', projectOptions.removePin)} text="Un-Pin " emoji="pushpin" />
+          {props.removePin && (
+            <PopoverButton onClick={(e) => animate(event, 'slide-down', props.removePin)} text="Un-Pin " emoji="pushpin" />
           )}
         </section>
       )}
       
-      {projectOptions.addNote && (
+      {props.addNote && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={() => toggleAndCB(projectOptions.addNote)} text="Add Note" emoji="spiral_note_pad" />
+          <PopoverButton onClick={() => toggleAndCB(props.addNote)} text="Add Note" emoji="spiral_note_pad" />
         </section>
       )}
       
-      {projectOptions.addProjectToCollection && (
+      {props.addProjectToCollection && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
         </section>
       )}
+      
+      {props.joinTeamProject && (
+        <section className="pop-over-actions collaborator-actions">
+          <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
+        </section>
+      )}
+
     </dialog>
   );
 };
@@ -262,14 +269,15 @@ ProjectOptionsPop.defaultProps = {
 
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
-  console.log(props.projectOptions.addProjectToCollection)
+  const currentUserIsOnProject = currentUser && props.project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
+  
   return {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
     addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection: null, 
-    joinTeamProject: null,
+    joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null;
     leaveTeamProject: null,
     leaveProject: null,
     removeProjectFromTeam: null,
@@ -296,7 +304,7 @@ export default function ProjectOptions(props) {
     >
       {({ togglePopover }) => (
         <ProjectOptionsPop
-          projectOptions={projectOptions}
+          {...projectOptions}
           togglePopover={togglePopover}
           project={props.project}
         />
