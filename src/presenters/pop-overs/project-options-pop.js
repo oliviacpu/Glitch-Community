@@ -193,6 +193,7 @@ const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
 
   return (
     <dialog className="pop-over project-options-pop">
+      
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {projectOptions.featureProject && (
@@ -206,9 +207,16 @@ const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
           )}
         </section>
       )}
+      
       {projectOptions.addNote && (
         <section className="pop-over-actions">
           <PopoverButton onClick={() => toggleAndCB(projectOptions.addNote)} text="Add Note" emoji="spiral_note_pad" />
+        </section>
+      )}
+      
+      {projectOptions.addProjectToCollection && (
+        <section className="pop-over-actions">
+          <PopoverButton onClick={projectOptions.addProjectToCollection} text="Add to Collection " emoji="framed-picture" />
         </section>
       )}
     </dialog>
@@ -259,8 +267,8 @@ const determineProjectOptions = (props, currentUser) => {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
-    addNote: (props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote,
-    addProjectToCollection: null,
+    addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
+    addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, // why doesn't this need the project id?, should this always be how it works?
     joinTeamProject: null,
     leaveTeamProject: null,
     leaveProject: null,
