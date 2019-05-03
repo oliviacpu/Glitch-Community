@@ -138,18 +138,22 @@ AddProjectToCollectionPopContents.defaultProps = {
 };
 
 const AddProjectToCollectionPop = (props) => {
+  const { fromProject, project, togglePopover } = props;
+
+  const api = useAPI();
+  const { currentUser } = useCurrentUser();
   const [maybeCollections, setMaybeCollections] = React.useState(null);
 
   const loadCollections = async () => {
     try {
-      const { data: allCollections } = await this.props.api.get(`collections/?userId=${this.props.currentUser.id}&includeTeams=true`);
+      const { data: allCollections } = await api.get(`collections/?userId=${currentUser.id}&includeTeams=true`);
       const deletedCollectionIds = []; // collections from deleted teams
       // add user / team to each collection
       allCollections.forEach((collection) => {
         if (collection.teamId === -1) {
-          collection.user = this.props.currentUser;
+          collection.user = currentUser;
         } else {
-          collection.team = this.props.currentUser.teams.find((userTeam) => userTeam.id === collection.teamId);
+          collection.team = currentUser.teams.find((userTeam) => userTeam.id === collection.teamId);
           if (!collection.team) {
             deletedCollectionIds.push(collection.id);
           }
@@ -161,18 +165,20 @@ const AddProjectToCollectionPop = (props) => {
 
       const orderedCollections = orderBy(allCollections, (collection) => collection.updatedAt, ['desc']);
 
-      if (!this.unmounted) {
-        this.setState({ maybeCollections: orderedCollections });
-      }
+      setMaybeCollections(orderedCollections);
     } catch (error) {
       captureException(error);
     }
   };
 
+  React.useEffect(() => {
+    loadCollections();
+  }, [currentUser.id]);
+
   return (
     <NestedPopover
       alternateContent={() => (
-        <CreateCollectionPop {...this.props} collections={this.state.maybeCollections} togglePopover={this.props.togglePopover} />
+        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} />
       )}
       startAlternateVisible={false}
     >
@@ -188,7 +194,7 @@ const AddProjectToCollectionPop = (props) => {
           );
         }
         return (
-          <AddProjectToCollectionPopContents {...this.props} collections={maybeCollections} createCollectionPopover={createCollectionPopover} />
+          <AddProjectToCollectionPopContents {...props} collections={maybeCollections} createCollectionPopover={createCollectionPopover} />
         );
       }}
     </NestedPopover>
@@ -196,14 +202,14 @@ const AddProjectToCollectionPop = (props) => {
 };
 
 AddProjectToCollectionPop.propTypes = {
-  api: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
+  fromProject: PropTypes.bool,
+  project: PropTypes.object.isRequired,
+  togglePopover: PropTypes.func,
 };
 
-const AddProjectToCollectionPopWrap = (props) => {
-  const { currentUser } = useCurrentUser();
-  const api = useAPI();
-  return <AddProjectToCollectionPop {...props} currentUser={currentUser} api={api} />;
+AddProjectToCollectionPop.defaultProps = {
+  fromProject: false,
+  togglePopover: null,
 };
 
-export default AddProjectToCollectionPopWrap;
+export default AddProjectToCollectionPop;
