@@ -190,45 +190,46 @@ const ProjectOptionsContent = (props) => {
     cb();
   }
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
+  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
 
   return (
     <dialog className="pop-over project-options-pop">
-      
+
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {props.featureProject && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-up', props.featureProject)} text="Feature" emoji="clapper" />
+            <PopoverButton onClick={(e) => animate(e, 'slide-up', props.featureProject)} text="Feature" emoji="clapper" />
           )}
           {props.addPin && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-up', props.addPin)} text="Pin " emoji="pushpin" />
+            <PopoverButton onClick={(e) => animate(e, 'slide-up', props.addPin)} text="Pin " emoji="pushpin" />
           )}
           {props.removePin && (
-            <PopoverButton onClick={(e) => animate(event, 'slide-down', props.removePin)} text="Un-Pin " emoji="pushpin" />
+            <PopoverButton onClick={(e) => animate(e, 'slide-down', props.removePin)} text="Un-Pin " emoji="pushpin" />
           )}
         </section>
       )}
-      
+
       {props.addNote && (
         <section className="pop-over-actions">
           <PopoverButton onClick={() => toggleAndCB(props.addNote)} text="Add Note" emoji="spiral_note_pad" />
         </section>
       )}
-      
+
       {props.addProjectToCollection && (
         <section className="pop-over-actions">
           <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
         </section>
       )}
-      
+
       {props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
       )}
-      
+
       {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked')} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
         </section>
       )}
 
