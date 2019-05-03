@@ -38,7 +38,7 @@ CoverContainer.propTypes = {
 };
 
 CoverContainer.defaultProps = {
-  coverActions: undefined,
+  coverActions: {},
 };
 
 export default CoverContainer;

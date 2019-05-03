@@ -13,7 +13,6 @@ import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import { TeamProfileContainer } from 'Components/containers/profile';
 
-
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
