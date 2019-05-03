@@ -43,67 +43,59 @@ const AddProjectToCollectionResultItem = ({ onClick, collection, ...props }) => 
   );
 };
 
-class AddProjectToCollectionPopContents extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: '', // value of filter input field
-      filteredCollections: this.props.collections, // collections filtered from search query
-    };
-    this.updateFilter = this.updateFilter.bind(this);
-    this.renderCollection = this.renderCollection.bind(this);
-  }
+const AddProjectToCollectionPopContents = ({
+  addProjectToCollection,
+  collections,
+  createCollectionPopover,
+  currentUser,
+  fromProject,
+  project,
+  togglePopover,
+}) => {
+  const [query, setQuery] = React.useState('');
+  const filteredCollections = React.useMemo(
+    () => collections.filter((collection) => collection.name.toLowerCase().includes(query.toLowerCase().trim())),
+    [query, collections],
+  );
+  return (
+    <dialog className="pop-over add-project-to-collection-pop wide-pop">
+      {/* Only show this nested popover title from project-options */}
+      {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-  updateFilter(query) {
-    const filteredCollections = this.props.collections.filter((collection) => collection.name.toLowerCase().includes(query.toLowerCase().trim()));
-    this.setState({ filteredCollections, query });
-  }
-
-  // filter out collections that already contain the selected project
-  renderCollection(collection) {
-    return (
-      <li key={collection.id}>
-        <AddProjectToCollectionResultItem
-          onClick={this.props.addProjectToCollection}
-          project={this.props.project}
-          collection={collection}
-          togglePopover={this.props.togglePopover}
-          currentUser={this.props.currentUser}
-        />
-      </li>
-    );
-  }
-
-  render() {
-    const { filteredCollections, query } = this.state;
-    return (
-      <dialog className="pop-over add-project-to-collection-pop wide-pop">
-        {/* Only show this nested popover title from project-options */}
-        {!this.props.fromProject && <AddProjectPopoverTitle project={this.props.project} />}
-
-        {this.props.collections.length > 3 && (
-          <section className="pop-over-info">
-            <TextInput value={query} onChange={this.updateFilter} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
-          </section>
-        )}
-
-        {filteredCollections.length ? (
-          <section className="pop-over-actions results-list">
-            <ul className="results">{filteredCollections.map(this.renderCollection)}</ul>
-          </section>
-        ) : (
-          <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
-        )}
-
-        <section className="pop-over-actions">
-          <button className="create-new-collection button-small button-tertiary" onClick={this.props.createCollectionPopover}>
-            Add to a new collection
-          </button>
+      {collections.length > 3 && (
+        <section className="pop-over-info">
+          <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
         </section>
-      </dialog>
-    );
-  }
-}
+      )}
+
+      {filteredCollections.length ? (
+        <section className="pop-over-actions results-list">
+          <ul className="results">
+            {filteredCollections.map((collection) => (
+              <li key={collection.id}>
+                <AddProjectToCollectionResultItem
+                  onClick={addProjectToCollection}
+                  project={project}
+                  collection={collection}
+                  togglePopover={togglePopover}
+                  currentUser={currentUser}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
+      )}
+
+      <section className="pop-over-actions">
+        <button className="create-new-collection button-small button-tertiary" onClick={createCollectionPopover}>
+          Add to a new collection
+        </button>
+      </section>
+    </dialog>
+  );
+};
 
 AddProjectToCollectionPopContents.propTypes = {
   addProjectToCollection: PropTypes.func,
