@@ -1,13 +1,9 @@
-.projects-container,
-.collections-container
-.teams-container
-.users-container
-  display: grid
-  grid-template-columns: 1fr
-  grid-gap: 10px
-  align-items: start
-  list-style-type: none
-  padding: 0
+// TODO: componentize this grid layout
+
+.collection-contents__grid,
+.related-projects__grid,
+.recent-projects__grid
+  align-items: end
 
   @media (min-width: mediumViewport)
     grid-template-columns: 1fr 1fr 1fr
@@ -17,3 +13,9 @@
   > li
     margin-top: 2px
     min-width: 100%
+
+.projects-container-note
+  margin-bottom: -1rem
+  width: 95%
+  &:empty
+    margin-bottom: 0

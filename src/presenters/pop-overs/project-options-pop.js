@@ -211,7 +211,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
   }
 
   function currentUserIsAdminOnProject(user) {
-    const projectPermissions = project.permissions.find((p) => p.userId === user.id);
+    const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
 

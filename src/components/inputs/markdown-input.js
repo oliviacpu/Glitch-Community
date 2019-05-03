@@ -9,9 +9,9 @@ import styles from './markdown-input.styl';
 const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, placeholder, value }) => {
   const [focused, setFocused] = React.useState(false);
   const onFocus = () => setFocused(true);
-  const onBlur = () => {
+  const onBlur = (event) => {
     setFocused(false);
-    outerOnBlur();
+    outerOnBlur(event);
   };
   if (error || focused || !value) {
     return (

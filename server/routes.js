@@ -4,6 +4,7 @@ const enforce = require('express-sslify');
 const fs = require('fs');
 const util = require('util');
 const dayjs = require('dayjs');
+const punycode = require('punycode');
 
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
@@ -102,7 +103,7 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
-    const project = await getProject(domain);
+    const project = await getProject(punycode.toASCII(domain));
     if (!project) {
       await render(res, domain, `We couldn't find ~${domain}`);
       return;
@@ -115,7 +116,8 @@ module.exports = function(external) {
 
   app.get('/@:name', async (req, res) => {
     const { name } = req.params;
-    const team = await getTeam(name);
+    const nameEncoded = punycode.toASCII(name);
+    const team = await getTeam(nameEncoded);
     if (team) {
       const description = team.description ? cheerio.load(md.render(team.description)).text() : '';
       const args = [res, team.name, description];
@@ -127,7 +129,7 @@ module.exports = function(external) {
       await render(...args);
       return;
     }
-    const user = await getUser(name);
+    const user = await getUser(nameEncoded);
     if (user) {
       const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
@@ -138,7 +140,7 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
-    const collectionObj = await getCollection(`${name}/${collection}`);
+    const collectionObj = await getCollection(`${punycode.toASCII(name)}/${encodeURIComponent(collection)}`);
     const author = name;
 
     if (collectionObj) {
@@ -151,7 +153,7 @@ module.exports = function(external) {
       await render(res, name, description);
       return;
     }
-    await render(res, `${collection}`, `We couldn't find @${name}/${collection}`);
+    await render(res, collection, `We couldn't find @${name}/${collection}`);
   });
 
   app.get('/auth/:domain', async (req, res) => {
