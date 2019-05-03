@@ -106,7 +106,6 @@ const UserPage = ({
     <main className={styles.container}>
       <section>
         <UserProfileContainer
-          type="user"
           item={user}
           coverActions={{
             'Upload Cover': isAuthorized && user.login ? uploadCover : null,
