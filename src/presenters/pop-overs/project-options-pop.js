@@ -190,7 +190,7 @@ const ProjectOptionsContent = (props) => {
     cb();
   }
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
-  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
+  const onClickLeaveTeamProject = useTrackedFunc(() =, 'Leave Project clicked');
 
   return (
     <dialog className="pop-over project-options-pop">
