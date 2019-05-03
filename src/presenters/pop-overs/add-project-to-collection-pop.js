@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { flatten, orderBy } from 'lodash';
 import Loader from 'Components/loader';
+import TextInput from 'Components/inputs/text-input';
 import { getAllPages } from 'Shared/api';
 import { captureException } from '../../utils/sentry';
 
@@ -54,8 +55,7 @@ class AddProjectToCollectionPopContents extends React.Component {
   }
 
   updateFilter(query) {
-    query = query.toLowerCase().trim();
-    const filteredCollections = this.props.collections.filter((collection) => collection.name.toLowerCase().includes(query));
+    const filteredCollections = this.props.collections.filter((collection) => collection.name.toLowerCase().includes(query.toLowerCase().trim()));
     this.setState({ filteredCollections, query });
   }
 
@@ -83,14 +83,7 @@ class AddProjectToCollectionPopContents extends React.Component {
 
         {this.props.collections.length > 3 && (
           <section className="pop-over-info">
-            <input
-              className="pop-over-input search-input pop-over-search"
-              onChange={(evt) => {
-                this.updateFilter(evt.target.value);
-              }}
-              placeholder="Filter collections"
-              aria-label="Filter collections"
-            />
+            <TextInput value={query} onChange={this.updateFilter} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
           </section>
         )}
 
@@ -137,6 +130,8 @@ const AddProjectToCollectionPop = (props) => {
   const [maybeCollections, setMaybeCollections] = React.useState(null);
 
   React.useEffect(() => {
+    let canceled = false;
+
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
     const loadUserCollections = async (user) => {
       const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
@@ -159,10 +154,15 @@ const AddProjectToCollectionPop = (props) => {
 
       const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
-      setMaybeCollections(orderedCollections);
+      if (!canceled) {
+        setMaybeCollections(orderedCollections);
+      }
     };
 
     loadCollections().catch(captureException);
+    return () => {
+      canceled = true;
+    };
   }, [project.id, currentUser.id]);
 
   return (
