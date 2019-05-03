@@ -15,9 +15,9 @@ import CollectionResultItem from '../includes/collection-result-item';
 
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
 
-const NoSearchResultsPlaceholder = <p className="info-description">No matching collections found – add to a new one?</p>;
+const NoSearchResultsPlaceholder = () => <p className="info-description">No matching collections found – add to a new one?</p>;
 
-const NoCollectionPlaceholder = <p className="info-description">Create collections to organize your favorite projects.</p>;
+const NoCollectionPlaceholder = () => <p className="info-description">Create collections to organize your favorite projects.</p>;
 
 const AddProjectPopoverTitle = ({ project }) => (
   <NestedPopoverTitle>
@@ -107,7 +107,7 @@ class AddProjectToCollectionPopContents extends React.Component {
             <ul className="results">{filteredCollections.map(this.renderCollectionsThatDontHaveProject)}</ul>
           </section>
         ) : (
-          <section className="pop-over-info">{query ? NoSearchResultsPlaceholder : NoCollectionPlaceholder}</section>
+          <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
         )}
 
         <section className="pop-over-actions">
