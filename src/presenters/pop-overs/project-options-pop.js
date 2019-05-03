@@ -225,6 +225,12 @@ const ProjectOptionsContent = (props) => {
           <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
       )}
+      
+      {props.leaveTeamProject && (
+        <section className="pop-over-actions collaborator-actions">
+          <PopoverButton onClick={useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked')} text="Leave Project " emoji="wave" />
+        </section>
+      )}
 
     </dialog>
   );
@@ -277,8 +283,8 @@ const determineProjectOptions = (props, currentUser) => {
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
     addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection: null, 
-    joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null;
-    leaveTeamProject: null,
+    joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
+    leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
     leaveProject: null,
     removeProjectFromTeam: null,
     deleteProject: null,
@@ -290,7 +296,7 @@ export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
 
   const projectOptions = determineProjectOptions(props, currentUser);
-  console.log(projectOptions)
+
   const noProjectOptions = Object.values(projectOptions).every(option => !option);
   if (noProjectOptions) {
     return null;
