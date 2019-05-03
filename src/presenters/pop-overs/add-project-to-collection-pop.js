@@ -136,17 +136,17 @@ const AddProjectToCollectionPop = (props) => {
   const { currentUser } = useCurrentUser();
   const [maybeCollections, setMaybeCollections] = React.useState(null);
 
-  const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
-  const loadUserCollections = async (user) => {
-    const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
-    return collections.map((collection) => ({ ...collection, user }));
-  };
-  const loadTeamCollections = async (team) => {
-    const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
-    return collections.map((collection) => ({ ...collection, team }));
-  };
-  const loadCollections = async () => {
-    try {
+  React.useEffect(() => {
+    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
+    const loadUserCollections = async (user) => {
+      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, user }));
+    };
+    const loadTeamCollections = async (team) => {
+      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, team }));
+    };
+    const loadCollections = async () => {
       const requests = [
         getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`),
         loadUserCollections(currentUser),
@@ -160,14 +160,10 @@ const AddProjectToCollectionPop = (props) => {
       const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
       setMaybeCollections(orderedCollections);
-    } catch (error) {
-      captureException(error);
-    }
-  };
+    };
 
-  React.useEffect(() => {
-    loadCollections();
-  }, [currentUser.id]);
+    loadCollections().catch(captureException);
+  }, [project.id, currentUser.id]);
 
   return (
     <NestedPopover
