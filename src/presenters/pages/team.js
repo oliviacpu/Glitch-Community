@@ -11,7 +11,8 @@ import FeaturedProject from 'Components/project/featured-project';
 import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
-import ProfileContainer from 'Components/profile-container';
+import { TeamProfileContainer } from 'Components/containers/profile';
+
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -157,7 +158,7 @@ class TeamPage extends React.Component {
       <main className={styles.container}>
         <section>
           <Beta />
-          <ProfileContainer
+          <TeamProfileContainer
             item={team}
             type="team"
             coverActions={{
@@ -205,7 +206,7 @@ class TeamPage extends React.Component {
               update={this.props.updateDescription}
               placeholder="Tell us about your team"
             />
-          </ProfileContainer>
+          </TeamProfileContainer>
         </section>
 
         <ErrorBoundary>

@@ -10,7 +10,7 @@ import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProjectsList from 'Components/containers/projects-list';
-import ProfileContainer from 'Components/profile-container';
+import { UserProfileContainer } from 'Components/containers/profile';
 
 import { getLink } from '../../models/user';
 
@@ -105,7 +105,7 @@ const UserPage = ({
   return (
     <main className={styles.container}>
       <section>
-        <ProfileContainer
+        <UserProfileContainer
           type="user"
           item={user}
           coverActions={{
@@ -130,7 +130,7 @@ const UserPage = ({
             update={updateDescription}
             placeholder="Tell us about yourself"
           />
-        </ProfileContainer>
+        </UserProfileContainer>
       </section>
 
       {featuredProject && (
