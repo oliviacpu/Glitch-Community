@@ -227,11 +227,11 @@ const ProjectOptionsContent = (props) => {
         </section>
       )}
 
-      {props.leaveTeamProject && (
+      {/*props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
         </section>
-      )}
+      )*/}
 
     </dialog>
   );
@@ -285,7 +285,7 @@ const determineProjectOptions = (props, currentUser) => {
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
     addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, 
     joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
-    leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
+    // leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
     leaveProject: null,
     removeProjectFromTeam: null,
     deleteProject: null,
