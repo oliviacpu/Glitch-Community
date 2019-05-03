@@ -185,6 +185,10 @@ const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
     projectContainer.classList.add(className);
     togglePopover();
   }
+  function toggleAndCB(cb) {
+    togglePopover();
+    cb();
+  }
   const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
 
   return (
@@ -202,6 +206,11 @@ const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
           )}
         </section>
       )}
+      {projectOptions.addNote && (
+        <section className="pop-over-actions">
+          <PopoverButton onClick={() => toggleAndCB(projectOptions.addNote)} text="Add Note" emoji="spiral_note_pad" />
+        </section>
+      )}
     </dialog>
   );
 };
@@ -214,43 +223,43 @@ const ProjectOptionsPop = ({ ...props }) => (
 );
 
 ProjectOptionsPop.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  project: PropTypes.shape({
-    users: PropTypes.array.isRequired,
-  }).isRequired,
-  togglePopover: PropTypes.func.isRequired,
-  addPin: PropTypes.func,
-  removePin: PropTypes.func,
-  deleteProject: PropTypes.func,
-  leaveProject: PropTypes.func,
-  removeProjectFromTeam: PropTypes.func,
-  joinTeamProject: PropTypes.func,
-  leaveTeamProject: PropTypes.func,
-  featureProject: PropTypes.func,
-  currentUserIsOnProject: PropTypes.bool,
-  displayNewNote: PropTypes.func,
+  // currentUser: PropTypes.object.isRequired,
+  // project: PropTypes.shape({
+  //   users: PropTypes.array.isRequired,
+  // }).isRequired,
+  // togglePopover: PropTypes.func.isRequired,
+  // addPin: PropTypes.func,
+  // removePin: PropTypes.func,
+  // deleteProject: PropTypes.func,
+  // leaveProject: PropTypes.func,
+  // removeProjectFromTeam: PropTypes.func,
+  // joinTeamProject: PropTypes.func,
+  // leaveTeamProject: PropTypes.func,
+  // featureProject: PropTypes.func,
+  // currentUserIsOnProject: PropTypes.bool,
+  // displayNewNote: PropTypes.func,
 };
 ProjectOptionsPop.defaultProps = {
-  currentUserIsOnProject: false,
-  addPin: null,
-  removePin: null,
-  deleteProject: null,
-  leaveProject: null,
-  removeProjectFromTeam: null,
-  joinTeamProject: null,
-  leaveTeamProject: null,
-  featureProject: null,
-  displayNewNote: null,
+  // currentUserIsOnProject: false,
+  // addPin: null,
+  // removePin: null,
+  // deleteProject: null,
+  // leaveProject: null,
+  // removeProjectFromTeam: null,
+  // joinTeamProject: null,
+  // leaveTeamProject: null,
+  // featureProject: null,
+  // displayNewNote: null,
 };
 
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
 
   return {
-    featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.featureProject(props.project.id) : null,
-    addPin: null,
-    removePin: null,
-    addNote: null,
+    featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
+    addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
+    removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
+    addNote: (props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote,
     addProjectToCollection: null,
     joinTeamProject: null,
     leaveTeamProject: null,
