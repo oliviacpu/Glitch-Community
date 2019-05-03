@@ -1,8 +1,9 @@
 // add-project-to-collection-pop -> Add a project to a collection via a project item's menu
 import React from 'react';
 import PropTypes from 'prop-types';
-import { orderBy, remove } from 'lodash';
+import { flatten, orderBy } from 'lodash';
 import Loader from 'Components/loader';
+import { getAllPages } from 'Shared/api';
 import { captureException } from '../../utils/sentry';
 
 import { useTrackedFunc } from '../segment-analytics';
@@ -49,7 +50,7 @@ class AddProjectToCollectionPopContents extends React.Component {
       filteredCollections: this.props.collections, // collections filtered from search query
     };
     this.updateFilter = this.updateFilter.bind(this);
-    this.renderCollectionsThatDontHaveProject = this.renderCollectionsThatDontHaveProject.bind(this);
+    this.renderCollection = this.renderCollection.bind(this);
   }
 
   updateFilter(query) {
@@ -59,16 +60,7 @@ class AddProjectToCollectionPopContents extends React.Component {
   }
 
   // filter out collections that already contain the selected project
-  renderCollectionsThatDontHaveProject(collection) {
-    if (!collection.projects) {
-      return null;
-    }
-    const currentProjectNotIncluded = collection.projects.every((project) => project.id !== this.props.project.id);
-
-    if (!currentProjectNotIncluded) {
-      return null;
-    }
-
+  renderCollection(collection) {
     return (
       <li key={collection.id}>
         <AddProjectToCollectionResultItem
@@ -104,7 +96,7 @@ class AddProjectToCollectionPopContents extends React.Component {
 
         {filteredCollections.length ? (
           <section className="pop-over-actions results-list">
-            <ul className="results">{filteredCollections.map(this.renderCollectionsThatDontHaveProject)}</ul>
+            <ul className="results">{filteredCollections.map(this.renderCollection)}</ul>
           </section>
         ) : (
           <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
@@ -144,26 +136,28 @@ const AddProjectToCollectionPop = (props) => {
   const { currentUser } = useCurrentUser();
   const [maybeCollections, setMaybeCollections] = React.useState(null);
 
+  const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
+  const loadUserCollections = async (user) => {
+    const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
+    return collections.map((collection) => ({ ...collection, user }));
+  };
+  const loadTeamCollections = async (team) => {
+    const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
+    return collections.map((collection) => ({ ...collection, team }));
+  };
   const loadCollections = async () => {
     try {
-      const { data: allCollections } = await api.get(`collections/?userId=${currentUser.id}&includeTeams=true`);
-      const deletedCollectionIds = []; // collections from deleted teams
-      // add user / team to each collection
-      allCollections.forEach((collection) => {
-        if (collection.teamId === -1) {
-          collection.user = currentUser;
-        } else {
-          collection.team = currentUser.teams.find((userTeam) => userTeam.id === collection.teamId);
-          if (!collection.team) {
-            deletedCollectionIds.push(collection.id);
-          }
-        }
-      });
+      const requests = [
+        getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`),
+        loadUserCollections(currentUser),
+        ...currentUser.teams.map((team) => loadTeamCollections(team)),
+      ];
+      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
 
-      // remove deleted collections
-      remove(allCollections, (collection) => deletedCollectionIds.includes(collection.id));
+      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
+      const collections = flatten(collectionArrays).filter((c) => !alreadyInCollectionIds.has(c.id));
 
-      const orderedCollections = orderBy(allCollections, (collection) => collection.updatedAt, ['desc']);
+      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
       setMaybeCollections(orderedCollections);
     } catch (error) {
