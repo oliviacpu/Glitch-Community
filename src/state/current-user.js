@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
-import { configureScope, captureException, captureMessage, addBreadcrumb } from '../utils/sentry';
+import { sortProjectsByLastAccess } from 'Models/project';
+import { configureScope, captureException, captureMessage, addBreadcrumb } from 'Utils/sentry';
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api';
 
@@ -157,11 +158,11 @@ class CurrentUserManager extends React.Component {
       } = await allByKeys({
         baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
         emails: getAllPages(api, makeUrl('emails')),
-        projects: getAllPages(api, makeOrderedUrl('projects', 'userLastAccess', 'DESC')),
+        projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
         teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
         collections: getAllPages(api, makeUrl('collections')),
       });
-      const user = { ...baseUser, emails, projects, teams, collections };
+      const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
       if (!usersMatch(sharedUser, user)) {
         return 'error';
       }

@@ -12,7 +12,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import { TeamProfileContainer } from 'Components/containers/profile';
-
+import Emoji from 'Components/images/emoji';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -225,9 +225,10 @@ class TeamPage extends React.Component {
         {/* Pinned Projects */}
         {pinnedProjects.length > 0 && (
           <ProjectsList
+            className={styles.projectContainer}
             title={
               <>
-                Pinned Projects <span className="emoji pushpin emoji-in-title" />
+                Pinned Projects <Emoji inTitle name="pushpin" />
               </>
             }
             projects={pinnedProjects}
@@ -243,6 +244,7 @@ class TeamPage extends React.Component {
         {/* Recent Projects */}
         {recentProjects.length > 0 && (
           <ProjectsList
+            className={styles.projectContainer}
             title="Recent Projects"
             projects={recentProjects}
             isAuthorized={this.props.currentUserIsOnTeam}
