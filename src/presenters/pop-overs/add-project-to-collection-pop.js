@@ -137,23 +137,10 @@ AddProjectToCollectionPopContents.defaultProps = {
   fromProject: false,
 };
 
-class AddProjectToCollectionPop extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      maybeCollections: null, // null means still loading
-    };
-  }
+const AddProjectToCollectionPop = (props) => {
+  const [maybeCollections, setMaybeCollections] = React.useState(null);
 
-  async componentDidMount() {
-    this.loadCollections();
-  }
-
-  componentWillUnmount() {
-    this.unmounted = true;
-  }
-
-  async loadCollections() {
+  const loadCollections = async () => {
     try {
       const { data: allCollections } = await this.props.api.get(`collections/?userId=${this.props.currentUser.id}&includeTeams=true`);
       const deletedCollectionIds = []; // collections from deleted teams
@@ -180,36 +167,33 @@ class AddProjectToCollectionPop extends React.Component {
     } catch (error) {
       captureException(error);
     }
-  }
+  };
 
-  render() {
-    const { maybeCollections } = this.state;
-    return (
-      <NestedPopover
-        alternateContent={() => (
-          <CreateCollectionPop {...this.props} collections={this.state.maybeCollections} togglePopover={this.props.togglePopover} />
-        )}
-        startAlternateVisible={false}
-      >
-        {(createCollectionPopover) => {
-          if (maybeCollections) {
-            return (
-              <AddProjectToCollectionPopContents {...this.props} collections={maybeCollections} createCollectionPopover={createCollectionPopover} />
-            );
-          }
+  return (
+    <NestedPopover
+      alternateContent={() => (
+        <CreateCollectionPop {...this.props} collections={this.state.maybeCollections} togglePopover={this.props.togglePopover} />
+      )}
+      startAlternateVisible={false}
+    >
+      {(createCollectionPopover) => {
+        if (!maybeCollections) {
           return (
             <dialog className="pop-over add-project-to-collection-pop wide-pop">
-              {!this.props.fromProject && <AddProjectPopoverTitle project={this.props.project} />}
+              {!fromProject && <AddProjectPopoverTitle project={project} />}
               <div className="loader-container">
                 <Loader />
               </div>
             </dialog>
           );
-        }}
-      </NestedPopover>
-    );
-  }
-}
+        }
+        return (
+          <AddProjectToCollectionPopContents {...this.props} collections={maybeCollections} createCollectionPopover={createCollectionPopover} />
+        );
+      }}
+    </NestedPopover>
+  );
+};
 
 AddProjectToCollectionPop.propTypes = {
   api: PropTypes.func.isRequired,
