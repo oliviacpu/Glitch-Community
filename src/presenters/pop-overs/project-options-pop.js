@@ -178,7 +178,7 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 // };
 
 
-const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
+const ProjectOptionsContent = ({ projectOptions, togglePopover, addToCollectionPopover }) => {
   function animate(event, className, func) {
     const projectContainer = event.target.closest('li');
     projectContainer.addEventListener('animationend', func, { once: true });
@@ -216,7 +216,7 @@ const ProjectOptionsContent = ({ projectOptions, togglePopover }) => {
       
       {projectOptions.addProjectToCollection && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={projectOptions.addProjectToCollection} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
         </section>
       )}
     </dialog>
@@ -262,13 +262,13 @@ ProjectOptionsPop.defaultProps = {
 
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
-
+  console.log(props.projectOptions.addProjectToCollection)
   return {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
     removePin: props.projectOptions.removePin && !isAnon ? () => props.projectOptions.removePin(props.project.id) : null,
     addNote: !(props.project.note || props.project.isAddingANewNote) && props.projectOptions.displayNewNote && !isAnon ? () => props.projectOptions.displayNewNote(props.project.id) : null,
-    addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, // why doesn't this need the project id?, should this always be how it works?
+    addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection: null, 
     joinTeamProject: null,
     leaveTeamProject: null,
     leaveProject: null,
@@ -298,6 +298,7 @@ export default function ProjectOptions(props) {
         <ProjectOptionsPop
           projectOptions={projectOptions}
           togglePopover={togglePopover}
+          project={props.project}
         />
       )}
     </PopoverWithButton>
