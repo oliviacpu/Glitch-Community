@@ -160,7 +160,6 @@ class TeamPage extends React.Component {
           <Beta />
           <TeamProfileContainer
             item={team}
-            type="team"
             coverActions={{
               'Upload Cover': this.props.currentUserIsTeamAdmin ? this.props.uploadCover : null,
               'Clear Cover': this.props.currentUserIsTeamAdmin && team.hasCoverImage ? this.props.clearCover : null,
