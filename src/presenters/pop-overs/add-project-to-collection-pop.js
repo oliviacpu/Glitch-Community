@@ -6,6 +6,7 @@ import Loader from 'Components/loader';
 import TextInput from 'Components/inputs/text-input';
 import { getAllPages } from 'Shared/api';
 import { captureException } from '../../utils/sentry';
+import useDebouncedValue from '../../hooks/use-debounced-value';
 
 import { useTrackedFunc } from '../segment-analytics';
 import { getAvatarUrl } from '../../models/project';
@@ -30,7 +31,7 @@ AddProjectPopoverTitle.propTypes = {
   project: PropTypes.object.isRequired,
 };
 
-const AddProjectToCollectionResultItem = ({ onClick, collection, ...props }) => {
+const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...props }) => {
   const onClickTracked = useTrackedFunc(onClick, 'Project Added to Collection', {}, {
     groupId: collection.team ? collection.team.id : 0,
   });
@@ -41,7 +42,7 @@ const AddProjectToCollectionResultItem = ({ onClick, collection, ...props }) => 
       {...props}
     />
   );
-};
+});
 
 const AddProjectToCollectionPopContents = ({
   addProjectToCollection,
@@ -53,10 +54,8 @@ const AddProjectToCollectionPopContents = ({
   togglePopover,
 }) => {
   const [query, setQuery] = React.useState('');
-  const filteredCollections = React.useMemo(
-    () => collections.filter((collection) => collection.name.toLowerCase().includes(query.toLowerCase().trim())),
-    [collections, query],
-  );
+  const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 250);
+  const filteredCollections = collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery));
   return (
     <dialog className="pop-over add-project-to-collection-pop wide-pop">
       {/* Only show this nested popover title from project-options */}
