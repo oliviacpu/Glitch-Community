@@ -1,9 +1,3 @@
-import ProjectProfileContainer from './project';
-import TeamProfileContainer from './team';
-import UserProfileContainer from './user';
-
-export default {
-  ProjectProfileContainer,
-  TeamProfileContainer,
-  UserProfileContainer,
-};
+export * from './project';
+export { default as TeamProfileContainer } from './team';
+export { default as UserProfileContainer } from './user';

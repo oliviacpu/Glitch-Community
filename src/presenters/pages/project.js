@@ -9,7 +9,7 @@ import NotFound from 'Components/errors/not-found';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
-import ProjectProfileContainer from 'Components/containers/profile/project';
+import ProjectProfileContainer from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
@@ -103,6 +103,7 @@ const ProjectPage = ({
       <section id="info">
         <ProjectProfileContainer
           item={project}
+          isAuthorized={isAuthorized}
           avatarActions={{
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}

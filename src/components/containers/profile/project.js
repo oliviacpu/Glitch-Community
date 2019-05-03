@@ -8,8 +8,8 @@ import styles from './styles.styl';
 
 const suspendedAvatarUrl = 'https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930';
 
-const ProjectProfileContainer = ({ item, children, avatarActions }) => {
-  const hideAvatar = item.suspendedReason && avatarActions === undefined;
+const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }) => {
+  const hideAvatar = item.suspendedReason && !isAuthorized;
   return (
     <div className={styles.profileWrap}>
       <div className={styles.avatarContainer}>
@@ -34,7 +34,7 @@ const ProjectProfileContainer = ({ item, children, avatarActions }) => {
 };
 
 ProjectProfileContainer.propTypes = {
-  
+  isAuthorized: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   avatarActions: PropTypes.object,
