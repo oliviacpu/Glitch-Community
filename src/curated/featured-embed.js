@@ -1,13 +1,13 @@
 const body =
-  '<p>Apps that help limit the clutter and distractions of a social media experience.</p>';
+  '<p>Build a Material theme allows you to style and remix themeable components, so you can create your own custom version of Material Design.</p><p>Define your theme, see it in action, and get the code.</p>';
 
 // make sure image urls use https
 export default {
-  image: 'https://glitch.com/culture/content/images/2019/02/Glitch_Illo_SocialMedia-Article-Larger-1.png',
+  image: 'https://culture-zine.glitch.me/culture/content/images/2019/04/Glitch_Illo_MaterialApps-Headline-v1--1--4.png',
   mask: 'mask-4',
-  title: 'Taking Back Social Media',
-  appDomain: 'tokimeki-unfollow',
-  blogUrl: '/taking-back-social-media/',
+  title: 'Build your own Material Theme',
+  appDomain: 'material-theme-builder',
+  blogUrl: '/build-material-design-themes-on-glitch/',
   body,
   color: '#f5f5f5'
 };
