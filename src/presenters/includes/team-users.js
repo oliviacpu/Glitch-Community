@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { uniqBy } from 'lodash';
 
@@ -22,31 +22,26 @@ const adminStatusDisplay = (adminIds, user) => {
   return '';
 };
 
-export const TeamUsers = (props) => (
+export const TeamUsers = ({ users, team, removeUserFromTeam, updateUserPermissions }) => (
   <ul className="users">
-    {props.users.map((user) => {
-      const userIsTeamAdmin = props.adminIds.includes(user.id);
-
-      return (
-        <li key={user.id}>
-          <PopoverWithButton
-            buttonClass="user button-unstyled tooltip-container-button"
-            buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(props.adminIds, user)} withinButton />}
-          >
-            {({ togglePopover }) => (
-              <TeamUserInfoPop
-                userIsTeamAdmin={userIsTeamAdmin}
-                userIsTheOnlyAdmin={userIsTeamAdmin && props.adminIds.length === 1}
-                userIsTheOnlyMember={props.users.length === 1}
-                user={user}
-                togglePopover={togglePopover}
-                {...props}
-              />
-            )}
-          </PopoverWithButton>
-        </li>
-      );
-    })}
+    {users.map((user) => (
+      <li key={user.id}>
+        <PopoverWithButton
+          buttonClass="user button-unstyled tooltip-container-button"
+          buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
+        >
+          {({ togglePopover }) => (
+            <TeamUserInfoPop
+              team={team}
+              removeUserFromTeam={removeUserFromTeam}
+              user={user}
+              updateUserPermissions={updateUserPermissions}
+              togglePopover={togglePopover}
+            />
+          )}
+        </PopoverWithButton>
+      </li>
+    ))}
   </ul>
 );
 
@@ -61,9 +56,7 @@ TeamUsers.propTypes = {
   currentUserIsOnTeam: PropTypes.bool.isRequired,
   removeUserFromTeam: PropTypes.func.isRequired,
   updateUserPermissions: PropTypes.func.isRequired,
-  teamId: PropTypes.number.isRequired,
   currentUserIsTeamAdmin: PropTypes.bool.isRequired,
-  adminIds: PropTypes.array.isRequired,
   team: PropTypes.object.isRequired,
   /* eslint-enable */
 };
@@ -117,11 +110,11 @@ WhitelistedDomain.defaultProps = {
 
 // Add Team User
 
-export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...props }) => {
-  const [invitee, setInvitee] = React.useState('');
-  const [newlyInvited, setNewlyInvited] = React.useState([]);
+export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
+  const [invitee, setInvitee] = useState('');
+  const [newlyInvited, setNewlyInvited] = useState([]);
 
-  const alreadyInvitedAndNewInvited = uniqBy(props.invitedMembers.concat(newlyInvited), (user) => user.id);
+  const alreadyInvitedAndNewInvited = uniqBy(invitedMembers.concat(newlyInvited), (user) => user.id);
   const track = useTracker('Add to Team clicked');
 
   const onSetWhitelistedDomain = async (togglePopover, domain) => {
@@ -170,7 +163,8 @@ export const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, ...
         <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
           {({ togglePopover }) => (
             <AddTeamUserPop
-              {...props}
+              members={members}
+              whitelistedDomain={whitelistedDomain}
               setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
               inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
               inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}

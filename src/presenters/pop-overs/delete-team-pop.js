@@ -38,7 +38,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
         </div>
       </section>
       <section className="pop-over-actions danger-zone">
-        <button type="button" className="button-small has-emoji" onClick={this.deleteTeam}>
+        <button type="button" className="button-small has-emoji" onClick={deleteTeam}>
           Delete {team.name}&nbsp;
           <span className="emoji bomb" role="img" aria-label="bomb emoji" />
           {teamIsDeleting && <Loader />}
