@@ -198,11 +198,11 @@ ProjectOptionsContent.defaultProps = {
   removeProjectFromTeam: null,
 };
 
-export default function ProjectOptions(props) {
+export default function ProjectOptionsPop(props) {
   const { currentUser } = useCurrentUser();
   const projectOptions = determineProjectOptionsFunctions({ currentUser, project: props.project, projectOptions: props.projectOptions });
-
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
+
   if (noProjectOptions) {
     return null;
   }
@@ -229,11 +229,11 @@ export default function ProjectOptions(props) {
   );
 }
 
-ProjectOptions.propTypes = {
+ProjectOptionsPop.propTypes = {
   project: PropTypes.object.isRequired,
   projectOptions: PropTypes.object,
 };
 
-ProjectOptions.defaultProps = {
+ProjectOptionsPop.defaultProps = {
   projectOptions: {},
 };
