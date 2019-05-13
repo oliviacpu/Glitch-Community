@@ -12,17 +12,16 @@ const getAvatarUrl = (isAuthorized, item) => {
   if (item.suspendedReason && !isAuthorized) {
     return suspendedAvatarUrl;
   }
-  return getProjectAvatarUrl(item.id)
+  return getProjectAvatarUrl(item.id).concat('?', item._avatarCache); // eslint-disable-line no-underscore-dangle
 }
 
 const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }) => {
-  const hideAvatar = item.suspendedReason && !isAuthorized;
   return (
     <div className={styles.profileWrap}>
       <div className={styles.avatarContainer}>
         <div
           className={classnames(styles.avatar, styles.project)}
-          style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, item)}?${item._avatarCache}')` }} // eslint-disable-line no-underscore-dangle
+          style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, item)}')` }}
         />
         <div className={styles.avatarButtons}>
           {avatarActions &&
