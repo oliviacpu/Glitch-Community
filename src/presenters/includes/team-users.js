@@ -22,9 +22,9 @@ const adminStatusDisplay = (adminIds, user) => {
   return '';
 };
 
-export const TeamUsers = ({ users, team, removeUserFromTeam, updateUserPermissions }) => (
+export const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
   <ul className="users">
-    {users.map((user) => (
+    {team.users.map((user) => (
       <li key={user.id}>
         <PopoverWithButton
           buttonClass="user button-unstyled tooltip-container-button"
@@ -51,14 +51,9 @@ TeamUsers.propTypes = {
       id: PropTypes.number.isRequired,
     }),
   ).isRequired,
-  // these are all used by a spread. why doesn't eslint understand?
-  /* eslint-disable react/no-unused-prop-types */
-  currentUserIsOnTeam: PropTypes.bool.isRequired,
+  team: PropTypes.object.isRequired,
   removeUserFromTeam: PropTypes.func.isRequired,
   updateUserPermissions: PropTypes.func.isRequired,
-  currentUserIsTeamAdmin: PropTypes.bool.isRequired,
-  team: PropTypes.object.isRequired,
-  /* eslint-enable */
 };
 
 // Whitelisted domain icon
@@ -198,3 +193,26 @@ export const JoinTeam = ({ onClick }) => (
     Join Team
   </button>
 );
+
+const TeamUserContainer = () => (
+  <TeamUsers
+                team={team} removeUserFromTeam={this.props.removeUserFromTeam} updateUserPermissions={this.props.updateUserPermissions}
+              />
+              {!!team.whitelistedDomain && (
+                <WhitelistedDomain
+                  domain={team.whitelistedDomain}
+                  setDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
+                />
+              )}
+              {this.props.currentUserIsOnTeam && (
+                <AddTeamUser
+                  inviteEmail={this.props.inviteEmail}
+                  inviteUser={this.props.inviteUser}
+                  setWhitelistedDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
+                  members={team.users.map(({ id }) => id)}
+                  invitedMembers={this.state.invitees}
+                  whitelistedDomain={team.whitelistedDomain}
+                />
+              )}
+              {this.userCanJoinTeam() && <JoinTeam onClick={this.props.joinTeam} />}
+)

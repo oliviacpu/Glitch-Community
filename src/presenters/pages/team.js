@@ -179,7 +179,9 @@ class TeamPage extends React.Component {
               </>
             )}
             <div className={styles.usersInformation}>
-              <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
+              <TeamUsers
+                team={team} removeUserFromTeam={this.props.removeUserFromTeam} updateUserPermissions={this.props.updateUserPermissions}
+              />
               {!!team.whitelistedDomain && (
                 <WhitelistedDomain
                   domain={team.whitelistedDomain}
