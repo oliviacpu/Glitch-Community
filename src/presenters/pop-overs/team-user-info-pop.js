@@ -149,11 +149,22 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
     removeUserFromTeam(user.id, Array.from(selectedProjects));
   }
 
-  const propsWithUserRemoval = { user, team, updateUserPermissions, removeUser, userTeamProjects };
-  
   return (
-    <NestedPopover alternateContent={() => <TeamUserRemovePop {...propsWithUserRemoval} />}>
-      {(showRemove) => <TeamUserInfo {...propsWithUserRemoval} showRemove={showRemove} />}
+    <NestedPopover
+      alternateContent={(togglePopover) => (
+        <TeamUserRemovePop user={user} removeUser={removeUser} userTeamProjects={userTeamProjects} togglePopover={togglePopover} />
+      )}
+    >
+      {(showRemove) => (
+        <TeamUserInfo
+          user={user}
+          team={team}
+          updateUserPermissions={updateUserPermissions}
+          removeUser={removeUser}
+          userTeamProjects={userTeamProjects}
+          showRemove={showRemove}
+        />
+      )}
     </NestedPopover>
   );
 };

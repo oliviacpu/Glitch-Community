@@ -1,6 +1,4 @@
-/* global Set */
-
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
@@ -9,36 +7,29 @@ import { NestedPopoverTitle } from './popover-nested';
 import { getAvatarThumbnailUrl, getDisplayName } from '../../models/user';
 import { getAvatarUrl as getProjectAvatarUrl } from '../../models/project';
 
-const TeamUserRemoveButton = ({ userAvatar, userLogin, userStyle, removeUser }) => {
-  const onClick = useTrackedFunc(removeUser, 'Remove from Team submitted');
+const TeamUserRemoveButton = ({ user, removeUser }) => {
   return (
-    <button className="button-small has-emoji" onClick={onClick} type="button">
-      Remove <img className="emoji avatar" src={userAvatar} alt={userLogin} style={userStyle} />
+    <button className="button-small has-emoji" onClick={r} type="button">
+      Remove <img className="emoji avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={{ backgroundColor: user.color }} />
     </button>
   );
 };
-TeamUserRemoveButton.propTypes = {
-  userAvatar: PropTypes.string.isRequired,
-  userLogin: PropTypes.string.isRequired,
-  userStyle: PropTypes.object.isRequired,
-  removeUser: PropTypes.func.isRequired,
-};
 
-function TeamUserRemovePop ({ user, team, updateUserPermissions, removeUser, userTeamProjects }) {
-  const [selectedProejcts, setSelectedProjects] = useState(new Set())
+function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover }) {
+  const [selectedProjects, setSelectedProjects] = useState(new Set());
 
-  function onRemoveUser() {
+  const onRemoveUser = useTrackedFunc(() => {
     togglePopover();
     removeUser(Array.from(selectedProjects));
-  }
+  }, 'Remove from Team submitted');
 
   function selectAllProjects() {
     const userTeamProjects = userTeamProjects.data || [];
-    setSelectedProjects(new Set(userTeamProjects.map((p) => p.id)))
+    setSelectedProjects(new Set(userTeamProjects.map((p) => p.id)));
   }
 
   function unselectAllProjects() {
-    setSelectedProjects(new Set())
+    setSelectedProjects(new Set());
   }
 
   function handleCheckboxChange({ target: { checked, value } }) {
@@ -53,13 +44,11 @@ function TeamUserRemovePop ({ user, team, updateUserPermissions, removeUser, use
     });
   }
 
-  
-  const userTeamProjects = this.props.userTeamProjects.data || [];
-  const allProjectsSelected = userTeamProjects.every((p) => this.state.selectedProjects.has(p.id));
-  const userAvatarStyle = { backgroundColor: this.props.user.color };
+  const userTeamProjects = userTeamProjectsResponse.data || [];
+  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.has(p.id));
 
   let projects = null;
-  if (this.props.userTeamProjects.status === 'loading') {
+  if (userTeamProjectsResponse.status === 'loading') {
     projects = <Loader />;
   } else if (userTeamProjects.length > 0) {
     projects = (
@@ -82,7 +71,7 @@ function TeamUserRemovePop ({ user, team, updateUserPermissions, removeUser, use
           ))}
         </div>
         {userTeamProjects.length > 1 && (
-          <button className="button-small" type="button" onClick={allProjectsSelected ? this.unselectAllProjects : this.selectAllProjects}>
+          <button className="button-small" type="button" onClick={allProjectsSelected ? unselectAllProjects : selectAllProjects}>
             {allProjectsSelected ? 'Unselect All' : 'Select All'}
           </button>
         )}
@@ -92,7 +81,7 @@ function TeamUserRemovePop ({ user, team, updateUserPermissions, removeUser, use
 
   return (
     <dialog className="pop-over team-user-info-pop team-user-remove-pop">
-      <NestedPopoverTitle>Remove {getDisplayName(this.props.user)}</NestedPopoverTitle>
+      <NestedPopoverTitle>Remove {getDisplayName(user)}</NestedPopoverTitle>
 
       {projects && (
         <section className="pop-over-actions" id="user-team-projects">
@@ -101,12 +90,7 @@ function TeamUserRemovePop ({ user, team, updateUserPermissions, removeUser, use
       )}
 
       <section className="pop-over-actions danger-zone">
-        <TeamUserRemoveButton
-          userAvatar={getAvatarThumbnailUrl(this.props.user)}
-          userLogin={this.props.user.login}
-          userStyle={userAvatarStyle}
-          removeUser={this.removeUser}
-        />
+        <TeamUserRemoveButton user={user} removeUser={onRemoveUser} />
       </section>
     </dialog>
   );
@@ -123,10 +107,8 @@ TeamUserRemovePop.propTypes = {
     status: PropTypes.string.isRequired,
     data: PropTypes.array,
   }).isRequired,
-  team: PropTypes.shape({
-    projects: PropTypes.array.isRequired,
-  }).isRequired,
   removeUser: PropTypes.func.isRequired,
+  togglePopover: PropTypes.func.isRequired,
 };
 
 export default TeamUserRemovePop;
