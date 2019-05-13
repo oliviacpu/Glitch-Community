@@ -16,26 +16,25 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 );
 
 const ProjectOptionsContent = (props) => {
-  
   function animate(event, className, func) {
     const projectContainer = event.target.closest('li');
     projectContainer.addEventListener('animationend', func, { once: true });
     projectContainer.classList.add(className);
     props.togglePopover();
   }
-  
+
   function toggleAndCB(cb) {
     props.togglePopover();
     cb();
   }
-  
+
   const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc((e) => animate(e, 'slide-down', props.deleteProject), 'Delete Project clicked');
 
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
   const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
-  
+
   return (
     <dialog className="pop-over project-options-pop">
 
@@ -76,19 +75,19 @@ const ProjectOptionsContent = (props) => {
           <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
         </section>
       )}
-      
+
       {props.leaveProject && (
         <section className="pop-over-actions collaborator-actions">
-         <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
         </section>
       )}
-      
+
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
           {props.removeProjectFromTeam && (
             <PopoverButton onClick={(e) => animate(e, 'slide-down', props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
           )}
-          
+
           {props.deleteProject && (
             <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
           )}
