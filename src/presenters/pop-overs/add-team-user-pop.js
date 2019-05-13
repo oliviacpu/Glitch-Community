@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { debounce } from 'lodash';
@@ -27,21 +27,16 @@ const WhitelistEmailDomain = ({ domain, onClick }) => (
 
 const UserResultItem = ({ user, action }) => {
   const name = getDisplayName(user);
-  const { login, thanksCount } = user;
-
-  const handleClick = (event) => {
-    action(event);
-  };
 
   return (
-    <button onClick={handleClick} className="button-unstyled result result-user">
+    <button onClick={action} className="button-unstyled result result-user">
       <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
       <div className="result-info">
         <div className="result-name" title={name}>
           {name}
         </div>
-        {!!user.name && <div className="result-description">@{login}</div>}
-        <Thanks short count={thanksCount} />
+        {!!user.name && <div className="result-description">@{user.login}</div>}
+        <Thanks short count={user.thanksCount} />
       </div>
     </button>
   );
@@ -57,27 +52,15 @@ UserResultItem.propTypes = {
   action: PropTypes.func.isRequired,
 };
 
-const InviteByEmail = () => {
-  const colorRef = useRef(randomColor({ luminosity: 'light' }));
-  const style = { bsc
-}
-
-class InviteByEmail extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { color:  };
-  }
-
-  render() {
-    const style = { backgroundColor: this.state.color };
-    return (
-      <button onClick={this.props.onClick} className="button-unstyled result">
-        <img className="avatar" src={ANON_AVATAR_URL} style={style} alt="" />
-        <div className="result-name">Invite {this.props.email}</div>
-      </button>
-    );
-  }
-}
+const InviteByEmail = ({ email, onClick }) => {
+  const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
+  return (
+    <button onClick={onClick} className="button-unstyled result">
+      <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
+      <div className="result-name">Invite {email}</div>
+    </button>
+  );
+};
 
 InviteByEmail.propTypes = {
   email: PropTypes.string.isRequired,
