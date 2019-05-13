@@ -7,6 +7,7 @@ import randomColor from 'randomcolor';
 
 import Thanks from 'Components/thanks';
 import Loader from 'Components/loader';
+import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { captureException } from '../../utils/sentry';
@@ -15,21 +16,21 @@ import useDevToggle from '../includes/dev-toggles';
 import { useAPI } from '../../state/api';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
-  <button onClick={onClick} className="button-unstyled result">
+  <TransparentButton onClick={onClick} className="result">
     <div className="add-team-user-pop__whitelist-email-domain">
       <div className="add-team-user-pop__whitelist-email-image">
         <WhitelistedDomainIcon domain={domain} />
       </div>
       <div>Allow anyone with an @{domain} email to join</div>
     </div>
-  </button>
+  </TransparentButton>
 );
 
 const UserResultItem = ({ user, action }) => {
   const name = getDisplayName(user);
 
   return (
-    <button onClick={action} className="button-unstyled result result-user">
+    <TransparentButton onClick={action} className="result result-user">
       <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
       <div className="result-info">
         <div className="result-name" title={name}>
@@ -38,7 +39,7 @@ const UserResultItem = ({ user, action }) => {
         {!!user.name && <div className="result-description">@{user.login}</div>}
         <Thanks short count={user.thanksCount} />
       </div>
-    </button>
+    </TransparentButton>
   );
 };
 
@@ -55,10 +56,10 @@ UserResultItem.propTypes = {
 const InviteByEmail = ({ email, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
   return (
-    <button onClick={onClick} className="button-unstyled result">
+    <TransparentButton onClick={onClick} className="result">
       <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
       <div className="result-name">Invite {email}</div>
-    </button>
+    </TransparentButton>
   );
 };
 

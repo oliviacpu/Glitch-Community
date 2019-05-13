@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import Image from 'Components/images/image';
 import styles from './styles.styl';
 
 const WhitelistedDomainIcon = ({ domain }) => {
@@ -10,7 +9,7 @@ const WhitelistedDomainIcon = ({ domain }) => {
     setSrc(`https://favicon-fetcher.glitch.me/img/${domain}`);
   }, [domain]);
   if (src) {
-    return <Image className={styles.whitelistedDomainIcon} alt={domain} src={src} onError={() => setSrc(null)} />;
+    return <img className={styles.whitelistedDomainIcon} alt={domain} src={src} onError={() => setSrc(null)} />;
   }
   return (
     <div className={styles.whitelistedDomainLabel} aria-label={domain}>
