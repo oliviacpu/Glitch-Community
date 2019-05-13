@@ -30,11 +30,7 @@ import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-
-import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
-
-
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {

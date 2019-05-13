@@ -262,7 +262,7 @@ class TeamPage extends React.Component {
         {/* TEAM COLLECTIONS */}
         <ErrorBoundary>
           <DataLoader
-            get={() => this.props.api.get(`collections?teamId=${team.id}`)}
+            get={(api) => api.get(`collections?teamId=${team.id}`)}
             renderLoader={() => <TeamPageCollections {...this.props} collections={team.collections} />}
           >
             {({ data }) => <TeamPageCollections {...this.props} collections={data} />}
