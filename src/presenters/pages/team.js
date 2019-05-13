@@ -209,7 +209,7 @@ class TeamPage extends React.Component {
         </section>
 
         <ErrorBoundary>
-          <AddTeamProject {...this.props} teamProjects={team.projects} />
+          {this.props.currentUserIsOnTeam && <AddTeamProject addProject={this.props.addProject} teamProjects={team.projects} />}
         </ErrorBoundary>
 
         {featuredProject && (
@@ -281,7 +281,7 @@ class TeamPage extends React.Component {
           </ErrorBoundary>
         )}
 
-        {this.props.currentUserIsTeamAdmin && <DeleteTeam teamId={team.id} teamName={team.name} teamAdmins={this.teamAdmins()} users={team.users} />}
+        {this.props.currentUserIsTeamAdmin && <DeleteTeam team={team} />}
 
         {!this.props.currentUserIsOnTeam && (
           <>

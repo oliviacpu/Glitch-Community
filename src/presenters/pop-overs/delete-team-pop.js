@@ -5,6 +5,8 @@ import Loader from 'Components/loader';
 import { useNotifications } from '../notifications';
 import { useAPI } from '../../state/api';
 
+const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
+
 class DeleteTeamPopBase extends React.Component {
   constructor(props) {
     super(props);
@@ -35,24 +37,25 @@ class DeleteTeamPopBase extends React.Component {
   }
 
   render() {
-    const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
+    const { team } = this.props;
+    const { teamIsDeleting } = this.state;
     return (
       <dialog className="pop-over delete-team-pop" open>
         <section className="pop-over-info">
-          <div className="pop-title">Delete {this.props.teamName}</div>
+          <div className="pop-title">Delete {team.name}</div>
         </section>
         <section className="pop-over-actions">
           <img className="illustration" src={illustration} aria-label="illustration" alt="" />
           <div className="action-description">
-            Deleting {this.props.teamName} will remove this team page. No projects will be deleted, but only current project members will be able to
+            Deleting {team.name} will remove this team page. No projects will be deleted, but only current project members will be able to
             edit them.
           </div>
         </section>
         <section className="pop-over-actions danger-zone">
           <button type="button" className="button-small has-emoji" onClick={this.deleteTeam}>
-            Delete {this.props.teamName}&nbsp;
+            Delete {team.name}&nbsp;
             <span className="emoji bomb" role="img" aria-label="bomb emoji" />
-            {this.state.teamIsDeleting && <Loader />}
+            {teamIsDeleting && <Loader />}
           </button>
         </section>
 
@@ -74,10 +77,7 @@ const DeleteTeamPop = withRouter((props) => {
 });
 
 DeleteTeamPop.propTypes = {
-  teamId: PropTypes.number.isRequired,
-  teamName: PropTypes.string.isRequired,
-  users: PropTypes.array.isRequired,
-  teamAdmins: PropTypes.array.isRequired,
+  team: PropTypes.object,
   togglePopover: PropTypes.func, // required but added dynamically
 };
 
