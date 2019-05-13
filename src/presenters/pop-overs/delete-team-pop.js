@@ -17,7 +17,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
     if (teamIsDeleting) return;
     setTeamIsDeleting(true);
     try {
-      await api.delete(`teams/${this.props.teamId}`);
+      await api.delete(`teams/${team.id}`);
       history.push('/');
     } catch (error) {
       console.error('deleteTeam', error, error.response);
