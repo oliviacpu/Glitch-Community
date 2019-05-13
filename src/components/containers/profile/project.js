@@ -8,6 +8,13 @@ import styles from './styles.styl';
 
 const suspendedAvatarUrl = 'https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930';
 
+const getAvatarUrl = (isAuthorized, item) => {
+  if (item.suspendedReason && !isAuthorized) {
+    return suspendedAvatarUrl;
+  }
+  return getProjectAvatarUrl(item.id)
+}
+
 const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }) => {
   const hideAvatar = item.suspendedReason && !isAuthorized;
   return (
@@ -15,7 +22,7 @@ const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }
       <div className={styles.avatarContainer}>
         <div
           className={classnames(styles.avatar, styles.project)}
-          style={{ backgroundImage: `url('${hideAvatar ? suspendedAvatarUrl : getProjectAvatarUrl(item.id)}?${item._avatarCache}')` }} // eslint-disable-line no-underscore-dangle
+          style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, item)}?${item._avatarCache}')` }} // eslint-disable-line no-underscore-dangle
         />
         <div className={styles.avatarButtons}>
           {avatarActions &&
