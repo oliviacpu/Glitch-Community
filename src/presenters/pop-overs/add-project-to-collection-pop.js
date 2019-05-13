@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { flatten, orderBy } from 'lodash';
 import Loader from 'Components/loader';
-
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { getAllPages } from 'Shared/api';
@@ -19,7 +18,6 @@ import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
 
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
-
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -48,52 +46,14 @@ const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...p
   return <CollectionResultItem onClick={onClickTracked} collection={collection} {...props} />;
 });
 
-const AddProjectToCollectionPopContents = ({
-  addProjectToCollection,
-  collections,
-  createCollectionPopover,
-  currentUser,
-  fromProject,
-  project,
-  togglePopover,
-  collectionType,
-  setCollectionType,
-}) => {
-  if (!collections) {
-    return (
-      <dialog className="pop-over add-project-to-collection-pop wide-pop">
-        {/* Only show this nested popover title from project-options */}
-        {!fromProject && <AddProjectPopoverTitle project={project} />}
-
-        {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
-
-        <div className="loader-container">
-          <Loader />
-        </div>
-      </dialog>
-    );
-  }
-
-  const [query, setQuery] = React.useState('');
+const AddProjectToCollectionResults = ({ addProjectToCollection, collections, currentUser, project, togglePopover, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
   const filteredCollections = React.useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
     debouncedQuery,
     collections,
   ]);
-
   return (
-    <dialog className="pop-over add-project-to-collection-pop wide-pop">
-      {/* Only show this nested popover title from project-options */}
-      {!fromProject && <AddProjectPopoverTitle project={project} />}
-
-      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
-
-      {collections.length > 3 && (
-        <section className="pop-over-info">
-          <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
-        </section>
-      )}
-
+    <>
       {filteredCollections.length ? (
         <section className="pop-over-actions results-list">
           <ul className="results">
@@ -112,6 +72,58 @@ const AddProjectToCollectionPopContents = ({
         </section>
       ) : (
         <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
+      )}
+    </>
+  );
+};
+
+AddProjectToCollectionResults.propTypes = {
+  addProjectToCollection: PropTypes.func,
+  collections: PropTypes.array.isRequired,
+  currentUser: PropTypes.object,
+  togglePopover: PropTypes.func, // required but added dynamically
+  project: PropTypes.object.isRequired,
+  query: PropTypes.string,
+};
+
+AddProjectToCollectionResults.defaultProps = {
+  addProjectToCollection: null,
+  currentUser: null,
+  togglePopover: null,
+  query: '',
+};
+
+const AddProjectToCollectionPopContents = ({
+  addProjectToCollection,
+  collections,
+  createCollectionPopover,
+  currentUser,
+  fromProject,
+  project,
+  togglePopover,
+  collectionType,
+  setCollectionType,
+}) => {
+  const [query, setQuery] = React.useState('');
+  return (
+    <dialog className="pop-over add-project-to-collection-pop wide-pop">
+      {/* Only show this nested popover title from project-options */}
+      {!fromProject && <AddProjectPopoverTitle project={project} />}
+
+      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
+
+      {collections && collections.length > 3 && (
+        <section className="pop-over-info">
+          <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
+        </section>
+      )}
+
+      {!collections ? (
+        <section className="pop-over-actions">
+          <Loader />
+        </section>
+      ) : (
+        <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
       )}
 
       <section className="pop-over-actions">
@@ -166,7 +178,6 @@ const AddProjectToCollectionPop = (props) => {
 
   React.useEffect(() => {
     let canceled = false;
-
     setMaybeCollections(null); // reset maybCollections on reload to show loader
 
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
