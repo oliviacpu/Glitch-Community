@@ -170,7 +170,6 @@ class TeamPage extends React.Component {
                 removeUserFromTeam={this.props.removeUserFromTeam}
                 updateUserPermissions={this.props.updateUserPermissions}
                 updateWhitelistedDomain={this.props.updateWhitelistedDomain}
-                updateUserPermissions={this.props.updateUserPermissions}
                 inviteEmail={this.props.inviteEmail}
                 inviteUser={this.props.inviteUser}
                 joinTeam={this.props.joinTeam}

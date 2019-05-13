@@ -48,11 +48,6 @@ const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
 );
 
 TeamUsers.propTypes = {
-  users: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
   team: PropTypes.object.isRequired,
   removeUserFromTeam: PropTypes.func.isRequired,
   updateUserPermissions: PropTypes.func.isRequired,
@@ -199,9 +194,8 @@ const JoinTeam = ({ onClick }) => (
 const TeamUserContainer = ({
   team,
   removeUserFromTeam,
-  updateUserPermssions,
-  updateWhitelistedDomain,
   updateUserPermissions,
+  updateWhitelistedDomain,
   inviteEmail,
   inviteUser,
   invitees,
