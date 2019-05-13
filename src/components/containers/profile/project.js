@@ -15,26 +15,24 @@ const getAvatarUrl = (isAuthorized, item) => {
   return getProjectAvatarUrl(item.id).concat('?', item._avatarCache); // eslint-disable-line no-underscore-dangle
 };
 
-const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }) => {
-  return (
-    <div className={styles.profileWrap}>
-      <div className={styles.avatarContainer}>
-        <div className={classnames(styles.avatar, styles.project)} style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, item)}')` }} />
-        <div className={styles.avatarButtons}>
-          {avatarActions &&
-            Object.entries(avatarActions)
-              .filter(([, onClick]) => onClick)
-              .map(([label, onClick]) => (
-                <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
-                  {label}
-                </TrackedButton>
-              ))}
-        </div>
+const ProjectProfileContainer = ({ item, children, avatarActions, isAuthorized }) => (
+  <div className={styles.profileWrap}>
+    <div className={styles.avatarContainer}>
+      <div className={classnames(styles.avatar, styles.project)} style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, item)}')` }} />
+      <div className={styles.avatarButtons}>
+        {avatarActions &&
+          Object.entries(avatarActions)
+            .filter(([, onClick]) => onClick)
+            .map(([label, onClick]) => (
+              <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
+                {label}
+              </TrackedButton>
+            ))}
       </div>
-      <div className={styles.profileInfo}>{children}</div>
     </div>
-  );
-};
+    <div className={styles.profileInfo}>{children}</div>
+  </div>
+);
 
 ProjectProfileContainer.propTypes = {
   isAuthorized: PropTypes.bool.isRequired,
