@@ -15,7 +15,7 @@ const isTeamProject = ({ currentUser, project }) => {
     }
   }
   return false;
-}
+};
 
 const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
   if (isTeamProject({ currentUser, project })) {
@@ -29,19 +29,19 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   if (window.confirm(prompt)) {
     leaveProject(project.id, event);
   }
-}
+};
 
 const determineProjectOptions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
   const currentUserIsOnProject = currentUser && project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
-  const currentUserPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id)
+  const currentUserPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserPermissions && currentUserPermissions.accessLevel === 30;
 
   return {
     featureProject: projectOptions.featureProject && !project.private && !isAnon ? () => projectOptions.featureProject(project.id) : null,
     addPin: projectOptions.addPin && !isAnon ? () => projectOptions.addPin(project.id) : null,
     removePin: projectOptions.removePin && !isAnon ? () => projectOptions.removePin(project.id) : null,
-    addNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon ? () => projectOptions.displayNewNote(project.id) : null,
+    displayNewNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon ? () => projectOptions.displayNewNote(project.id) : null,
     addProjectToCollection: projectOptions.addProjectToCollection && !isAnon ? projectOptions.addProjectToCollection : null, 
     joinTeamProject: projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? () => projectOptions.joinTeamProject(project.id, currentUser.id) : null,
     leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? () => projectOptions.leaveTeamProject(project.id, currentUser.id) : null,
@@ -69,11 +69,11 @@ const ProjectOptionsContent = (props) => {
     const projectContainer = event.target.closest('li');
     projectContainer.addEventListener('animationend', func, { once: true });
     projectContainer.classList.add(className);
-    props.togglePopover();
+    props.togglePopover && props.togglePopover();
   }
 
   function toggleAndCB(cb) {
-    props.togglePopover();
+    props.togglePopover && props.togglePopover();
     cb();
   }
 
@@ -101,9 +101,9 @@ const ProjectOptionsContent = (props) => {
         </section>
       )}
 
-      {props.addNote && (
+      {props.displayNewNote && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={() => toggleAndCB(props.addNote)} text="Add Note" emoji="spiral_note_pad" />
+          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiral_note_pad" />
         </section>
       )}
 
@@ -150,35 +150,32 @@ const ProjectOptionsContent = (props) => {
     </dialog>
   );
 };
-// ProjectOptionsPop.propTypes = {
-//   // currentUser: PropTypes.object.isRequired,
-//   // project: PropTypes.shape({
-//   //   users: PropTypes.array.isRequired,
-//   // }).isRequired,
-//   // togglePopover: PropTypes.func.isRequired,
-//   // addPin: PropTypes.func,
-//   // removePin: PropTypes.func,
-//   // deleteProject: PropTypes.func,
-//   // leaveProject: PropTypes.func,
-//   // removeProjectFromTeam: PropTypes.func,
-//   // joinTeamProject: PropTypes.func,
-//   // leaveTeamProject: PropTypes.func,
-//   // featureProject: PropTypes.func,
-//   // currentUserIsOnProject: PropTypes.bool,
-//   // displayNewNote: PropTypes.func,
-// };
-// ProjectOptionsPop.defaultProps = {
-//   // currentUserIsOnProject: false,
-//   // addPin: null,
-//   // removePin: null,
-//   // deleteProject: null,
-//   // leaveProject: null,
-//   // removeProjectFromTeam: null,
-//   // joinTeamProject: null,
-//   // leaveTeamProject: null,
-//   // featureProject: null,
-//   // displayNewNote: null,
-// };
+ProjectOptionsContent.propTypes = {
+  addPin: PropTypes.func,
+  addProjectToCollection: PropTypes.func,
+  deleteProject: PropTypes.func,
+  displayNewNote: PropTypes.func,
+  featureProject: PropTypes.func,
+  joinTeamProject: PropTypes.func,
+  leaveProject: PropTypes.func,
+  leaveTeamProject: PropTypes.func,
+  removePin: PropTypes.func,
+  removeProjectFromTeam: PropTypes.func,
+  togglePopover: PropTypes.func,
+};
+ProjectOptionsContent.defaultProps = {
+  addPin: null,
+  addProjectToCollection: null,
+  deleteProject: null,
+  displayNewNote: null,
+  featureProject: null,
+  joinTeamProject: null,
+  leaveProject: null,
+  leaveTeamProject: null,
+  removePin: null,
+  removeProjectFromTeam: null,
+  togglePopover: null,
+};
 
 export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
