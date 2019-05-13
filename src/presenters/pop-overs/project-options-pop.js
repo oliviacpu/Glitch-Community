@@ -31,31 +31,48 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
-const determineProjectOptions = ({ currentUser, project, projectOptions }) => {
+const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
   const currentUserIsOnProject = currentUser && project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
   const currentUserPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserPermissions && currentUserPermissions.accessLevel === 30;
 
   return {
-    featureProject: projectOptions.featureProject && !project.private && !isAnon ? () => projectOptions.featureProject(project.id) : null,
-    addPin: projectOptions.addPin && !isAnon ? () => projectOptions.addPin(project.id) : null,
-    removePin: projectOptions.removePin && !isAnon ? () => projectOptions.removePin(project.id) : null,
-    displayNewNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon ? () => projectOptions.displayNewNote(project.id) : null,
-    addProjectToCollection: projectOptions.addProjectToCollection && !isAnon ? projectOptions.addProjectToCollection : null, 
-    joinTeamProject: projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? () => projectOptions.joinTeamProject(project.id, currentUser.id) : null,
-    leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? () => projectOptions.leaveTeamProject(project.id, currentUser.id) : null,
-    leaveProject: projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject ? (event) => promptThenLeaveProject({ 
-      event,
-      project: project, 
-      leaveProject: projectOptions.leaveProject, 
-      currentUser,
-    }) : null,
-    removeProjectFromTeam: projectOptions.removeProjectFromTeam && !projectOptions.removeProjectFromCollection && !isAnon ? () => projectOptions.removeProjectFromTeam(project.id) : null,
-    deleteProject: currentUserIsAdminOnProject && !projectOptions.removeProjectFromCollection && projectOptions.deleteProject ? () => projectOptions.deleteProject(project.id) : null,
-    removeProjectFromCollection: projectOptions.removeProjectFromCollection && !isAnon ? () => projectOptions.removeProjectFromCollection(project) : null,
-  }
-}
+    featureProject: projectOptions.featureProject && !project.private && !isAnon
+      ? () => projectOptions.featureProject(project.id)
+      : null,
+    addPin: projectOptions.addPin && !isAnon
+      ? () => projectOptions.addPin(project.id)
+      : null,
+    removePin: projectOptions.removePin && !isAnon
+      ? () => projectOptions.removePin(project.id)
+      : null,
+    displayNewNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon
+      ? () => projectOptions.displayNewNote(project.id)
+      : null,
+    addProjectToCollection: projectOptions.addProjectToCollection && !isAnon
+      ? projectOptions.addProjectToCollection
+      : null,
+    joinTeamProject: projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon
+      ? () => projectOptions.joinTeamProject(project.id, currentUser.id)
+      : null,
+    leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon
+      ? () => projectOptions.leaveTeamProject(project.id, currentUser.id)
+      : null,
+    leaveProject: projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject
+      ? (event) => promptThenLeaveProject({ event, project, leaveProject: projectOptions.leaveProject, currentUser })
+      : null,
+    removeProjectFromTeam: projectOptions.removeProjectFromTeam && !projectOptions.removeProjectFromCollection && !isAnon
+      ? () => projectOptions.removeProjectFromTeam(project.id)
+      : null,
+    deleteProject: currentUserIsAdminOnProject && !projectOptions.removeProjectFromCollection && projectOptions.deleteProject
+      ? () => projectOptions.deleteProject(project.id)
+      : null,
+    removeProjectFromCollection: projectOptions.removeProjectFromCollection && !isAnon
+      ? () => projectOptions.removeProjectFromCollection(project)
+      : null,
+  };
+};
 
 const PopoverButton = ({ onClick, text, emoji }) => (
   <button className="button-small has-emoji button-tertiary" onClick={onClick} type="button">
@@ -63,17 +80,22 @@ const PopoverButton = ({ onClick, text, emoji }) => (
     <span className={`emoji ${emoji}`} />
   </button>
 );
+PopoverButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  emoji: PropTypes.string.isRequired,
+};
 
 const ProjectOptionsContent = (props) => {
   function animate(event, className, func) {
     const projectContainer = event.target.closest('li');
     projectContainer.addEventListener('animationend', func, { once: true });
     projectContainer.classList.add(className);
-    props.togglePopover && props.togglePopover();
+    props.togglePopover();
   }
 
   function toggleAndCB(cb) {
-    props.togglePopover && props.togglePopover();
+    props.togglePopover();
     cb();
   }
 
@@ -161,7 +183,7 @@ ProjectOptionsContent.propTypes = {
   leaveTeamProject: PropTypes.func,
   removePin: PropTypes.func,
   removeProjectFromTeam: PropTypes.func,
-  togglePopover: PropTypes.func,
+  togglePopover: PropTypes.func.isRequired,
 };
 ProjectOptionsContent.defaultProps = {
   addPin: null,
@@ -174,18 +196,17 @@ ProjectOptionsContent.defaultProps = {
   leaveTeamProject: null,
   removePin: null,
   removeProjectFromTeam: null,
-  togglePopover: null,
 };
 
 export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
-  const projectOptions = determineProjectOptions({ currentUser, project: props.project, projectOptions: props.projectOptions });
+  const projectOptions = determineProjectOptionsFunctions({ currentUser, project: props.project, projectOptions: props.projectOptions });
 
-  const noProjectOptions = Object.values(projectOptions).every(option => !option);
+  const noProjectOptions = Object.values(projectOptions).every((option) => !option);
   if (noProjectOptions) {
     return null;
   }
-  
+
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
@@ -195,11 +216,11 @@ export default function ProjectOptions(props) {
       {({ togglePopover }) => (
         <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={togglePopover} />}>
           {(addToCollectionPopover) => (
-            <ProjectOptionsContent 
-              {...props} 
+            <ProjectOptionsContent
+              {...props}
               {...projectOptions}
               addToCollectionPopover={addToCollectionPopover}
-              togglePopover={togglePopover} 
+              togglePopover={togglePopover}
             />
           )}
         </NestedPopover>
