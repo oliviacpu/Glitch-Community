@@ -15,7 +15,6 @@ const TeamUserRemoveButton = ({ user, removeUser }) => (
 
 const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelectedProjects }) => {
   function selectAllProjects() {
-    const userTeamProjects = userTeamProjectsResponse.data || [];
     setSelectedProjects(new Set(userTeamProjects.map((p) => p.id)));
   }
 
@@ -34,6 +33,8 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
       return nextSelectedProjects;
     });
   }
+  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.has(p.id));
+
   return (
     <>
       <p className="action-description">Also remove them from these projects</p>
@@ -44,9 +45,9 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
               className="checkbox-project"
               type="checkbox"
               id={`remove-user-project-${project.id}`}
-              checked={this.state.selectedProjects.has(project.id)}
+              checked={selectedProjects.has(project.id)}
               value={project.id}
-              onChange={this.handleCheckboxChange}
+              onChange={handleCheckboxChange}
             />
             <img className="avatar" src={getProjectAvatarUrl(project.id)} alt="" />
             {project.domain}
@@ -70,19 +71,13 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
   }, 'Remove from Team submitted');
 
   const userTeamProjects = userTeamProjectsResponse.data || [];
-  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.has(p.id));
 
   let projects = null;
   if (userTeamProjectsResponse.status === 'loading') {
     projects = <Loader />;
   } else if (userTeamProjects.length > 0) {
     projects = (
-      <TeamUserProjectsToggle
-        userTeamProjects={userTeamProjects}
-        allProjectsSelected={allProjectsSelected}
-        unselectAllProjects={unselectAllProjects}
-        selectAllProjects={selectAllProjects}
-      />
+      <TeamUserProjectsToggle userTeamProjects={userTeamProjects} selectedProjects={selectedProjects} setSelectedProjects={setSelectedProjects} />
     );
   }
 
