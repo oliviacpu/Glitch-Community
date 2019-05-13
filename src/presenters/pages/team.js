@@ -169,16 +169,7 @@ class TeamPage extends React.Component {
               'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
             }}
           >
-            {this.props.currentUserIsTeamAdmin ? (
-              <TeamNameUrlFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
-            ) : (
-              <>
-                <Heading tagName="h1">
-                  {team.name} {team.isVerified && <VerifiedBadge />}
-                </Heading>
-                <p className={styles.teamUrl}>@{team.url}</p>
-              </>
-            )}
+            <TeamProfile team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
             <div className={styles.usersInformation}>
               <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
               {!!team.whitelistedDomain && (
