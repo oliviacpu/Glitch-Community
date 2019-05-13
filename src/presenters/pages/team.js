@@ -11,7 +11,7 @@ import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 import Emoji from 'Components/images/emoji';
-import TeamProfile from 'Components/team-profile';
+import TeamFields from 'Components/fields/team-fields';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -152,7 +152,7 @@ class TeamPage extends React.Component {
               'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
             }}
           >
-            <TeamProfile team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
+            <TeamFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
             <div className={styles.usersInformation}>
               <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
               {!!team.whitelistedDomain && (

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { debounce } from 'lodash';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
 
@@ -19,13 +18,6 @@ export const TeamMarketing = () => {
       </Link>
     </section>
   );
-};
-
-export const VerifiedBadge = () => {
-  const image = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fverified.svg?1501783108220';
-  const tooltip = 'Verified to be supportive, helpful people';
-
-  return <TooltipContainer id="verified-team-tooltip" type="info" tooltip={tooltip} target={<img className="verified" src={image} alt="✓" />} />;
 };
 
 export class WhitelistedDomainIcon extends React.Component {

@@ -7,7 +7,7 @@ import VerifiedBadge from 'Components/verified-badge';
 import { getLink, userIsTeamAdmin } from 'Models/team';
 import { useCurrentUser } from '../../state/current-user';
 
-import styles from './styles.styl';
+import styles from './team-fields.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
