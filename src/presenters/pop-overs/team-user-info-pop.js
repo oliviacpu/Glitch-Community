@@ -63,11 +63,12 @@ AdminActions.propTypes = {
 
 // Thanks 💖
 
-const ThanksCount = ({ count }) => (
-  <section className="pop-over-info">
-    <Thanks count={count} />
-  </section>
-);
+const ThanksCount = ({ count }) =>
+  count > 0 ? (
+    <section className="pop-over-info">
+      <Thanks count={count} />
+    </section>
+  ) : null;
 
 // Team User Info 😍
 
