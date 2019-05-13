@@ -22,7 +22,7 @@ const StarterKitResult = ({ value: starterKit }) => (
 const TeamResult = ({ value: team }) => (
   <TeamLink team={team} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
-      <TeamAvatar hideTooltip team={{ ...team, hasAvatarImage: true }} />
+      <TeamAvatar hideTooltip team={{ ...team }} />
     </div>
     <div className={styles.infoContainer}>
       <div className={styles.infoPrimary}>{team.name}</div>
