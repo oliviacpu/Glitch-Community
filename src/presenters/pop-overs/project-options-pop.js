@@ -58,7 +58,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
       ? () => projectOptions.joinTeamProject(project.id, currentUser.id)
       : null,
     leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon && !currentUserIsAdminOnProject
-      // ? () => projectOptions.leaveTeamProject(project.id, currentUser.id)
+      ? () => projectOptions.leaveTeamProject(project.id, currentUser.id)
       : null,
     leaveProject: projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject && !currentUserIsAdminOnProject
       ? (event) => promptThenLeaveProject({ event, project, leaveProject: projectOptions.leaveProject, currentUser })
