@@ -70,6 +70,7 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
     removeUser(Array.from(selectedProjects));
   }, 'Remove from Team submitted');
 
+  
   const userTeamProjects = userTeamProjectsResponse.data || [];
 
   let projects = null;
