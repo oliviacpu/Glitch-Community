@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Thanks from 'Components/thanks';
@@ -17,11 +18,11 @@ const ADMIN_ACCESS_LEVEL = 30;
 
 // Remove from Team 👋
 
-const RemoveFromTeam = ({ onClick, ...props }) => {
+const RemoveFromTeam = ({ onClick }) => {
   const onClickTracked = useTrackedFunc(onClick, 'Remove from Team clicked');
   return (
     <section className="pop-over-actions danger-zone">
-      <button className="button-small has-emoji button-tertiary button-on-secondary-background" onClick={onClickTracked} {...props}>
+      <button className="button-small has-emoji button-tertiary button-on-secondary-background" onClick={onClickTracked}>
         Remove from Team <span className="emoji wave" role="img" aria-label="" />
       </button>
     </section>
@@ -30,14 +31,15 @@ const RemoveFromTeam = ({ onClick, ...props }) => {
 
 // Admin Actions Section ⏫⏬
 
-const AdminActions = ({ user, userIsTeamAdmin, updateUserPermissions, canChangeUserAdminStatus }) => {
+const AdminActions = ({ user, team, updateUserPermissions }) => {
   const onClickRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
   const onClickMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
-  if (!canChangeUserAdminStatus) return null;
+  if (userIsOnlyTeamAdmin({ user, team })) return null;
+
   return (
     <section className="pop-over-actions admin-actions">
       <p className="action-description">Admins can update team info, billing, and remove users</p>
-      {userIsTeamAdmin ? (
+      {userIsTeamAdmin({ user, team }) ? (
         <button className="button-small button-tertiary has-emoji" onClick={onClickRemoveAdmin}>
           Remove Admin Status <span className="emoji fast-down" />
         </button>
@@ -54,9 +56,8 @@ AdminActions.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number.isRequired,
   }).isRequired,
-  userIsTeamAdmin: PropTypes.bool.isRequired,
+  team: PropTypes.object.isRequired,
   updateUserPermissions: PropTypes.func.isRequired,
-  canChangeUserAdminStatus: PropTypes.bool.isRequired,
 };
 
 // Thanks 💖
@@ -69,12 +70,20 @@ const ThanksCount = ({ count }) => (
 
 // Team User Info 😍
 
-const TeamUserInfo = ({ currentUser, currentUserIsTeamAdmin, showRemove, userTeamProjects, removeUser, ...props }) => {
-  const userAvatarStyle = { backgroundColor: props.user.color };
+const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUser, userTeamProjects }) => {
+  const { currentUser } = useCurrentUser();
+  const userAvatarStyle = { backgroundColor: user.color };
 
   const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || (currentUser && currentUser.id === props.user.id);
+  const currentUserIsTeamAdmin = userIsTeamAdmin({ user: currentUser, team });
   const canRemoveUser = !(props.userIsTheOnlyMember || props.userIsTheOnlyAdmin);
+  const selectedUserIsTeamAdmin = userIsTeamAdmin({ user, team });
   const canCurrentUserRemoveUser = canRemoveUser && currentUserHasRemovePriveleges;
+  const selectedUserIsOnlyAdmin = userIsOnlyTeamAdmin({ user, team });
+  const teamHasOnlyOneMember = team.users.length === 1;
+
+  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || (currentUser && currentUser.id === user.id);
+  const canCurrentUserRemoveUser = currentUserHasRemovePriveleges && !teamHasOnlyOneMember && !selectedUserIsOnlyAdmin;
 
   // if user is a member of no projects, skip the confirm step
   function onRemove() {
