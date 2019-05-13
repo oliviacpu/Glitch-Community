@@ -110,3 +110,4 @@ RelatedProjects.defaultProps = {
   users: [],
 };
 
+export default RelatedProjects;

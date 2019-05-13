@@ -75,7 +75,7 @@ function useAsyncEffectState(initialState, handler, asyncFuncArgs) {
   return state;
 }
 
-export const createAPIHook = (asyncFunction) => (...args) => {
+export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
   const api = useAPI();
   const loading = { status: 'loading' };
   const result = useAsyncEffectState(
@@ -85,8 +85,15 @@ export const createAPIHook = (asyncFunction) => (...args) => {
       if (version > 0) {
         setResult(loading);
       }
-      const value = await asyncFunction(api, ...args).catch(captureException);
-      setResult({ status: 'ready', value });
+      try {
+        const value = await asyncFunction(api, ...args);
+        setResult({ status: 'ready', value });
+      } catch (error) {
+        setResult({ status: 'error', value: error });
+        if (options.captureException) {
+          captureException(error);
+        }
+      }
     },
     args,
   );

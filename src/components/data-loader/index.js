@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import { useAPI } from '../../state/api';
-import { captureException } from '../utils/sentry';
+import { captureException } from '../../utils/sentry';
 
-const DataLoader = ({ children, get, renderError, renderLoader }) => {
+const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException }) => {
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });
   const api = useAPI();
   useEffect(() => {
@@ -15,7 +15,9 @@ const DataLoader = ({ children, get, renderError, renderLoader }) => {
       (error) => {
         console.error(error);
         setState({ status: 'error', value: error });
-        return capture
+        if (shouldCaptureException) {
+          captureException(error);
+        }
       },
     );
   }, [api]);
