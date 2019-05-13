@@ -192,6 +192,8 @@ const ProjectOptionsContent = (props) => {
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
   const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
+  const onClickDeleteProject = useTrackedFunc((e) => animate(e, 'slide-down', props.deleteProject), 'Delete Project clicked');
+
   const showDangerZone = props.removeProjectFromTeam;
   
   return (
@@ -243,8 +245,13 @@ const ProjectOptionsContent = (props) => {
       
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
+          
           {props.removeProjectFromTeam && (
             <PopoverButton onClick={(e) => animate(e, 'slide-down', props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+          )}
+          
+          {props.deleteProject && (
+            <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
           )}
         </section>
       )}
@@ -316,7 +323,9 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
   const currentUserIsOnProject = currentUser && props.project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
-  const currentUserIsAdminOnProject = props.project.users.map((projectUser) => projectUser.id)
+  const currentUserPermissions = currentUser && props.project && props.project.permissions && props.project.permissions.find((p) => p.userId === currentUser.id)
+  const currentUserIsAdminOnProject = currentUserPermissions && currentUserPermissions.accessLevel === 30;
+  
   return {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
@@ -332,7 +341,7 @@ const determineProjectOptions = (props, currentUser) => {
       currentUser,
     }) : null,
     removeProjectFromTeam: props.projectOptions.removeProjectFromTeam && !props.projectOptions.removeProjectFromCollection && !isAnon ? () => props.projectOptions.removeProjectFromTeam(props.project.id) : null,
-    deleteProject: currentUserIsAdminOnProject && !props.projectOptions.removeProjectFromCollection ? () => {} : null,
+    deleteProject: currentUserIsAdminOnProject && !props.projectOptions.removeProjectFromCollection  && props.projectOptions.deleteProject ? () => props.projectOptions.deleteProject(props.project.id) : null,
     removeProjectFromCollection: null,
   }
 }
