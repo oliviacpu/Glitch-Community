@@ -35,6 +35,7 @@ import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
 import 'Components/profile-container/story';
+import 'Components/collections-list/story';
 import 'Components/questions/story';
 import 'Components/deleted-projects/story';
 import { users, teams, projects, collections } from './data';
