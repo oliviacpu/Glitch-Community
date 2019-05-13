@@ -27,7 +27,7 @@ const TeamUrlInput = ({ url, onChange }) => (
   <OptimisticTextInput labelText="Team URL" prefix="@" value={url} onChange={onChange} placeholder="Short url?" />
 );
 
-const TeamProfile = ({ team, updateName, updateUrl }) => {
+const TeamFields = ({ team, updateName, updateUrl }) => {
   const { currentUser } = useCurrentUser();
   const isTeamAdmin = userIsTeamAdmin({ user: currentUser, team });
   return isTeamAdmin ? (
@@ -49,7 +49,7 @@ const TeamProfile = ({ team, updateName, updateUrl }) => {
   );
 };
 
-TeamProfile.propTypes = {
+TeamFields.propTypes = {
   team: PropTypes.shape({
     name: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -59,4 +59,4 @@ TeamProfile.propTypes = {
   updateUrl: PropTypes.func.isRequired,
 };
 
-export default TeamProfile;
+export default TeamFields;
