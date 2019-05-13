@@ -23,7 +23,7 @@ Webpack builds the `src/components` directory as CSS Modules, and treats the `st
 To add a new component, or convert an existing piece of our code into a CSS Module-enabled component, here's what you should do:
 1. Create a new folder in `src/components/`. Use your best judgement for how it should be organized.
     * Only export one component per `.js` file. The component you're exporting should have the same name as the folder it's contained in (e.g. `TextArea` is exported from `text-area/` via `index.js` and styles should be in `styles.styl`). 
-  * Classnames should be camelcased to make them easier to refer to in Javascript (e.g. `markdownContent` not `markdown-content`).
+    * Classnames should be camelcased to make them easier to refer to in Javascript (e.g. `markdownContent` not `markdown-content`).
 1. In general don't add margins, absolute positioning or fixed width/heights into the component - leave that to the parent components.
 2. Where possible, we'd like to avoid passing styles into the components via props and instead rely on named props that cover the use cases of the different modes of the component (e.g. `Button` accepts a `type` prop like `"tertiary"` or `"dangerZone"`) that can be passed into the component. The named props then define the styles that apply - the classnames npm package can be used to combine these in more readable ways (see [Button.js](https://glitch.com/edit/#!/community?path=src/components/buttons/button.js:15:0) for an example)
   * Sometimes you'll need additional styles from parent components. Here's the preferred order of options to use here - ideally use the first one that works for your use case:

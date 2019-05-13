@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
 import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
@@ -19,16 +20,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
       <div className="new-stuff-avatar"><NewStuffPup /></div>
       <div className="overlay-title">New Stuff</div>
       <div>
-        <label className="button button-small" htmlFor="showNewStuff">
-          <input
-            id="showNewStuff"
-            className="button-checkbox"
-            type="checkbox"
-            checked={showNewStuff}
-            onChange={(evt) => setShowNewStuff(evt.target.checked)}
-          />
-          Keep showing me these
-        </label>
+        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
       </div>
     </section>
     <section className="pop-over-actions">
