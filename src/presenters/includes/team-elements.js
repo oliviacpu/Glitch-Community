@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { debounce } from 'lodash';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
