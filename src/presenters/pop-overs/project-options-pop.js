@@ -194,7 +194,7 @@ const ProjectOptionsContent = (props) => {
   const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc((e) => animate(e, 'slide-down', props.deleteProject), 'Delete Project clicked');
 
-  const showDangerZone = props.removeProjectFromTeam;
+  const showDangerZone = props.removeProjectFromTeam || props.deleteProject;
   
   return (
     <dialog className="pop-over project-options-pop">
@@ -325,7 +325,7 @@ const determineProjectOptions = (props, currentUser) => {
   const currentUserIsOnProject = currentUser && props.project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
   const currentUserPermissions = currentUser && props.project && props.project.permissions && props.project.permissions.find((p) => p.userId === currentUser.id)
   const currentUserIsAdminOnProject = currentUserPermissions && currentUserPermissions.accessLevel === 30;
-  
+  console.log(currentUserIsAdminOnProject, !props.projectOptions.removeProjectFromCollection , props.projectOptions.deleteProject, props.project)
   return {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
@@ -341,7 +341,7 @@ const determineProjectOptions = (props, currentUser) => {
       currentUser,
     }) : null,
     removeProjectFromTeam: props.projectOptions.removeProjectFromTeam && !props.projectOptions.removeProjectFromCollection && !isAnon ? () => props.projectOptions.removeProjectFromTeam(props.project.id) : null,
-    deleteProject: currentUserIsAdminOnProject && !props.projectOptions.removeProjectFromCollection  && props.projectOptions.deleteProject ? () => props.projectOptions.deleteProject(props.project.id) : null,
+    deleteProject: currentUserIsAdminOnProject && !props.projectOptions.removeProjectFromCollection && props.projectOptions.deleteProject ? () => props.projectOptions.deleteProject(props.project.id) : null,
     removeProjectFromCollection: null,
   }
 }
