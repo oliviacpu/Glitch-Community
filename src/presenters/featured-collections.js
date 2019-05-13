@@ -16,8 +16,6 @@ import { isDarkColor } from '../models/collection';
 import { getSingleItem, getFromApi, joinIdsToQueryString } from '../../shared/api';
 import CollectionAvatar from './includes/collection-avatar';
 
-import { useAPI } from '../state/api';
-
 const CollectionWide = ({ collection }) => {
   const dark = isDarkColor(collection.coverColor) ? 'dark' : '';
   const featuredProjects = sampleSize(collection.projects, 3);
@@ -97,12 +95,10 @@ const loadAllCollections = async (api, infos) => {
   return Promise.all(promises);
 };
 
-export const FeaturedCollections = () => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => loadAllCollections(api, featuredCollections)}>
-      {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionWide collection={collection} key={collection.id} />)}
-    </DataLoader>
-  );
-};
+export const FeaturedCollections = () => (
+  <DataLoader get={(api) => loadAllCollections(api, featuredCollections)}>
+    {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionWide collection={collection} key={collection.id} />)}
+  </DataLoader>
+);
+
 export default FeaturedCollections;

@@ -10,7 +10,6 @@ import Row from 'Components/containers/row';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 
-import { useAPI } from '../../state/api';
 import { getSingleItem } from '../../../shared/api';
 import styles from './styles.styl';
 
@@ -73,14 +72,11 @@ MoreCollections.propTypes = {
   collections: PropTypes.array.isRequired,
 };
 
-const MoreCollectionsContainer = ({ collection }) => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => loadMoreCollectionsFromAuthor({ api, collection })}>
-      {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
-    </DataLoader>
-  );
-};
+const MoreCollectionsContainer = ({ collection }) => (
+  <DataLoader get={(api) => loadMoreCollectionsFromAuthor({ api, collection })}>
+    {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
+  </DataLoader>
+);
 MoreCollectionsContainer.propTypes = {
   collection: PropTypes.object.isRequired,
 };

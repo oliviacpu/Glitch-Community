@@ -69,7 +69,6 @@ DeleteCollectionBtn.propTypes = {
 };
 
 const CollectionPageContents = ({
-  api,
   collection,
   currentUser,
   deleteCollection,
@@ -275,11 +274,10 @@ async function loadCollection(api, ownerName, collectionName) {
 }
 
 const CollectionPage = ({ ownerName, name, ...props }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <DataLoader get={() => loadCollection(api, ownerName, name)}>
+      <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
@@ -291,7 +289,6 @@ const CollectionPage = ({ ownerName, name, ...props }) => {
               <CollectionEditor initialCollection={collection}>
                 {(collectionFromEditor, funcs, currentUserIsAuthor) => (
                   <CollectionPageContents
-                    api={api}
                     collection={collectionFromEditor}
                     currentUser={currentUser}
                     currentUserIsAuthor={currentUserIsAuthor}

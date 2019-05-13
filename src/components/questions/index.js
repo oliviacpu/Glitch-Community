@@ -10,7 +10,8 @@ import Grid from 'Components/containers/grid';
 import QuestionItem from './item';
 
 import ErrorBoundary from '../../presenters/includes/error-boundary';
-import { useAPI, createAPIHook } from '../../state/api';
+import { captureException } from '../../utils/sentry';
+import { useAPI } from '../../state/api';
 import styles from './questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
@@ -30,22 +31,27 @@ QuestionTimer.propTypes = {
   callback: PropTypes.func.isRequired,
 };
 
-
-const useQuestions = async (api, max) => {
+async function load(api, max) {
   const kaomoji = sample(kaomojis);
-  const { data } = await api.get('projects/questions');
-  const questions = data
-    .map((q) => JSON.parse(q.details))
-    .filter((q) => !!q)
-    .slice(0, max)
-    .map((question) => {
-      const [colorInner, colorOuter] = randomColor({
-        luminosity: 'light',
-        count: 2,
+  try {
+    const { data } = await api.get('projects/questions');
+    const questions = data
+      .map((q) => JSON.parse(q.details))
+      .filter((q) => !!q)
+      .slice(0, max)
+      .map((question) => {
+        const [colorInner, colorOuter] = randomColor({
+          luminosity: 'light',
+          count: 2,
+        });
+        return { colorInner, colorOuter, id: question.questionId, ...question };
       });
-      return { colorInner, colorOuter, id: question.questionId, ...question };
-    });
-  return { kaomoji, questions };
+    return { kaomoji, questions, loading: false };
+  } catch (error) {
+    console.error(error);
+    captureException(error);
+    return { kaomoji, questions: [], loading: false };
+  }
 }
 
 function useRepeatingEffect(effectHandler, dependencies) {
@@ -56,10 +62,7 @@ function useRepeatingEffect(effectHandler, dependencies) {
 }
 
 function Questions({ max }) {
-  const { value, status } = useQuestions(max);
-  const loading = status == "loading"
-  const questions
-  
+  const api = useAPI();
   const [{ kaomoji, loading, questions }, setState] = useState({
     kaomoji: '',
     loading: true,
