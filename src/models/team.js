@@ -46,3 +46,7 @@ export const getProfileStyle = ({ id, hasCoverImage, coverColor, cache, size }) 
     backgroundImage: `url('${image}')`,
   };
 };
+
+export function userIsTeamAdmin({ user, team }) {
+  return !!user && team.adminIds.includes(user.id);
+}

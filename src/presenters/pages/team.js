@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
-import TeamNameInput from 'Components/fields/team-name-input';
-import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
@@ -13,12 +11,12 @@ import Thanks from 'Components/thanks';
 import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 import Emoji from 'Components/images/emoji';
+import TeamProfile from 'Components/team-profile';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import TeamEditor from '../team-editor';
-import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 import { captureException } from '../../utils/sentry';
@@ -32,24 +30,9 @@ import { AddTeamUser, TeamUsers, WhitelistedDomain, JoinTeam } from '../includes
 
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
-import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
+import { TeamMarketing } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
-
-function syncPageToUrl(team) {
-  history.replaceState(null, null, getLink(team));
-}
-
-const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
-  <>
-    <Heading tagName="h1">
-      <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
-    </Heading>
-    <p className={styles.teamUrl}>
-      <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
-    </p>
-  </>
-);
 
 const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
   <CollectionsList
