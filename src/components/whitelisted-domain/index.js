@@ -4,18 +4,20 @@ import PropTypes from 'prop-types';
 import styles from './styles.styl';
 
 const WhitelistedDomainIcon = ({ domain }) => {
-  const [src, setSrc] = useState(null);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    setSrc(`https://favicon-fetcher.glitch.me/img/${domain}`);
+    setError(null);
   }, [domain]);
-  if (src) {
-    return <img className={styles.whitelistedDomainIcon} alt={domain} src={src} onError={() => setSrc(null)} />;
+  if (error) {
+    return (
+      <div className={styles.whitelistedDomainLabel} aria-label={domain}>
+        {domain[0].toUpperCase()}
+      </div>
+    );
   }
-  return (
-    <div className={styles.whitelistedDomainLabel} aria-label={domain}>
-      {domain[0].toUpperCase()}
-    </div>
-  );
+
+  const src = `https://favicon-fetcher.glitch.me/img/${domain}`;
+  return <img className={styles.whitelistedDomainIcon} alt={domain} src={src} onError={setError} />;
 };
 
 WhitelistedDomainIcon.propTypes = {
