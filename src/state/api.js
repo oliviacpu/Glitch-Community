@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext, useRef, createContext } from 'r
 import axios from 'axios';
 import { memoize } from 'lodash';
 import { useCurrentUser } from './current-user';
+import { captureException } from '../utils/sentry';
 
 export const Context = createContext();
 
@@ -84,7 +85,7 @@ export const createAPIHook = (asyncFunction) => (...args) => {
       if (version > 0) {
         setResult(loading);
       }
-      const value = await asyncFunction(api, ...args);
+      const value = await asyncFunction(api, ...args).catch(captureException);
       setResult({ status: 'ready', value });
     },
     args,
