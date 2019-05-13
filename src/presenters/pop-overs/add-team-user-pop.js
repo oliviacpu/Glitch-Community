@@ -3,13 +3,81 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
+import randomColor from 'randomcolor';
 
+import Thanks from 'Components/thanks';
 import Loader from 'Components/loader';
+import WhitelistedDomainIcon from 'Components/whitelisted-domain';
+import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { captureException } from '../../utils/sentry';
 import useDevToggle from '../includes/dev-toggles';
-import UserResultItem, { InviteByEmail, WhitelistEmailDomain } from '../includes/user-result-item';
 
 import { useAPI } from '../../state/api';
+
+const WhitelistEmailDomain = ({ domain, onClick }) => (
+  <button onClick={onClick} className="button-unstyled result">
+    <div className="add-team-user-pop__whitelist-email-domain">
+      <div className="add-team-user-pop__whitelist-email-image">
+        <WhitelistedDomainIcon domain={domain} />
+      </div>
+      <div>Allow anyone with an @{domain} email to join</div>
+    </div>
+  </button>
+);
+
+const UserResultItem = ({ user, action }) => {
+  const name = getDisplayName(user);
+  const { login, thanksCount } = user;
+
+  const handleClick = (event) => {
+    action(event);
+  };
+
+  return (
+    <button onClick={handleClick} className="button-unstyled result result-user">
+      <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
+      <div className="result-info">
+        <div className="result-name" title={name}>
+          {name}
+        </div>
+        {!!user.name && <div className="result-description">@{login}</div>}
+        <Thanks short count={thanksCount} />
+      </div>
+    </button>
+  );
+};
+
+UserResultItem.propTypes = {
+  user: PropTypes.shape({
+    avatarThumbnailUrl: PropTypes.string,
+    name: PropTypes.string,
+    login: PropTypes.string.isRequired,
+    thanksCount: PropTypes.number.isRequired,
+  }).isRequired,
+  action: PropTypes.func.isRequired,
+};
+
+class InviteByEmail extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { color: randomColor({ luminosity: 'light' }) };
+  }
+
+  render() {
+    const style = { backgroundColor: this.state.color };
+    return (
+      <button onClick={this.props.onClick} className="button-unstyled result">
+        <img className="avatar" src={ANON_AVATAR_URL} style={style} alt="" />
+        <div className="result-name">Invite {this.props.email}</div>
+      </button>
+    );
+  }
+}
+
+InviteByEmail.propTypes = {
+  email: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 const getDomain = (query) => {
   const email = parseOneAddress(query.replace('@', 'test@'));
