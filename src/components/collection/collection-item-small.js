@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
+import classnames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
@@ -18,19 +19,24 @@ const collectionColorStyles = (collection) => ({
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
-const CollectionLink = ({ collection, children, ...props }) => (
-  <a href={`/@${collection.fullUrl}`} {...props}>
+const CollectionLink = ({ collection, children }) => (
+  <a href={`/@${collection.fullUrl}`} className={styles.smallCollectionLink}>
     {children}
   </a>
 );
 
-const CollectionItemSmall = ({ collection }) => (
+const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
-    <div className={styles.curator}>
-      <ProfileItem user={collection.user} team={collection.team} />
-    </div>
-    <CollectionLink collection={collection} className={styles.bubbleContainer} style={collectionColorStyles(collection)}>
-      <div className={styles.smallNameDescriptionArea}>
+    {showCurator && (
+      <div className={styles.curator}>
+        <ProfileItem user={collection.user} team={collection.team} />
+      </div>
+    )}
+    <CollectionLink collection={collection}>
+      <div
+        className={classnames(styles.bubbleContainer, styles.smallNameDescriptionArea, showCurator && styles.showCurator)}
+        style={collectionColorStyles(collection)}
+      >
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
             <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
@@ -50,7 +56,7 @@ const CollectionItemSmall = ({ collection }) => (
             color: isDarkColor(collection.coverColor) ? 'white' : '',
           }}
         >
-          <Markdown>{collection.description || ' '}</Markdown>
+          <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>
       <div className={styles.smallProjectCount}>
@@ -64,11 +70,16 @@ CollectionItemSmall.propTypes = {
   collection: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     coverColor: PropTypes.string.isRequired,
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
+  showCurator: PropTypes.bool,
+};
+
+CollectionItemSmall.defaultProps = {
+  showCurator: false,
 };
 
 export default CollectionItemSmall;

@@ -17,6 +17,7 @@ import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
+import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 
 import Layout from '../layout';
 
@@ -33,7 +34,6 @@ import CollectionAvatar from '../includes/collection-avatar';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
-import MoreCollectionsContainer from '../more-collections';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
@@ -166,7 +166,7 @@ const CollectionPageContents = ({
                 )}
                 {currentUserIsAuthor && (
                   <ProjectsList
-                    className="collection-page__projects-grid"
+                    layout="gridCompact"
                     {...props}
                     projects={projects}
                     collection={collection}
@@ -185,7 +185,7 @@ const CollectionPageContents = ({
                 )}
                 {!currentUserIsAuthor && userIsLoggedIn && (
                   <ProjectsList
-                    className="collection-page__projects-grid"
+                    layout="gridCompact"
                     {...props}
                     projects={collection.projects}
                     collection={collection}
@@ -197,7 +197,7 @@ const CollectionPageContents = ({
                 )}
                 {!currentUserIsAuthor && !userIsLoggedIn && (
                   <ProjectsList
-                    className="collection-page__projects-grid"
+                    layout="gridCompact"
                     projects={collection.projects}
                     collection={collection}
                     projectOptions={{}}
@@ -211,7 +211,7 @@ const CollectionPageContents = ({
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
       {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={deleteCollection} />}
-      <MoreCollectionsContainer api={api} collection={collection} />
+      <MoreCollectionsContainer collection={collection} />
     </>
   );
 };
