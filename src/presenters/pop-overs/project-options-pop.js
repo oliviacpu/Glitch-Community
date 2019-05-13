@@ -215,7 +215,7 @@ export default function ProjectOptionsPop(props) {
       containerClass="project-options-pop-btn"
     >
       {({ togglePopover }) => (
-        <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={togglePopover} />}>
+        <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} {...projectOptions} togglePopover={togglePopover} />}>
           {(addToCollectionPopover) => (
             <ProjectOptionsContent
               {...props}
