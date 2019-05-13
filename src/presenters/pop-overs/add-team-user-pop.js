@@ -56,9 +56,11 @@ UserResultItem.propTypes = {
 const InviteByEmail = ({ email, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
   return (
-    <TransparentButton onClick={onClick} className="result">
+    <TransparentButton onClick={onClick} className="result result-user">
       <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
-      <div className="result-name">Invite {email}</div>
+      <div className="result-info">
+        <div className="result-name">Invite {email}</div>
+      </div>
     </TransparentButton>
   );
 };
