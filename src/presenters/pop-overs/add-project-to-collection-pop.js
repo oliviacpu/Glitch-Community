@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { flatten, orderBy } from 'lodash';
 import Loader from 'Components/loader';
+
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { getAllPages } from 'Shared/api';
@@ -18,6 +19,7 @@ import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
 
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
+
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -92,12 +94,6 @@ const AddProjectToCollectionPopContents = ({
         </section>
       )}
 
-      {!collections && (
-        <div className="loader-container">
-          <Loader />
-        </div>
-      )}
-
       {filteredCollections.length ? (
         <section className="pop-over-actions results-list">
           <ul className="results">
@@ -170,6 +166,7 @@ const AddProjectToCollectionPop = (props) => {
 
   React.useEffect(() => {
     let canceled = false;
+
     setMaybeCollections(null); // reset maybCollections on reload to show loader
 
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
