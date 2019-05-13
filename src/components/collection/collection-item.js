@@ -37,9 +37,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
     return (
       <div className={styles.projectsContainer}>
         <Row className={styles.projectsList} items={collection.projects} count={3}>
-          {((project) => (
-            <ProjectItemSmall project={project} />
-          ))}
+          {(project) => <ProjectItemSmall project={project} />}
         </Row>
       </div>
     );
@@ -62,10 +60,12 @@ ProjectsPreview.propTypes = {
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <div className={styles.collectionItem}>
-    {(showCurator || isAuthorized) && <div className={styles.header}>
-      <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
-      {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
-    </div>}
+    {(showCurator || isAuthorized) && (
+      <div className={styles.header}>
+        <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
+        {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
+      </div>
+    )}
     <CollectionLink
       collection={collection}
       className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
