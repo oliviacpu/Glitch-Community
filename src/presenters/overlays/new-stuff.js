@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Markdown from 'Components/text/markdown';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
 import { useTracker } from '../segment-analytics';
@@ -20,16 +21,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
       <figure className="new-stuff-avatar" />
       <div className="overlay-title">New Stuff</div>
       <div>
-        <label className="button button-small" htmlFor="showNewStuff">
-          <input
-            id="showNewStuff"
-            className="button-checkbox"
-            type="checkbox"
-            checked={showNewStuff}
-            onChange={(evt) => setShowNewStuff(evt.target.checked)}
-          />
-          Keep showing me these
-        </label>
+        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
       </div>
     </section>
     <section className="pop-over-actions">
