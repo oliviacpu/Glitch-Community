@@ -277,7 +277,7 @@ ProjectOptionsPop.defaultProps = {
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
   const currentUserIsOnProject = currentUser && props.project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
-  
+   
   return {
     featureProject: props.projectOptions.featureProject && !props.project.private && !isAnon ? () => props.projectOptions.featureProject(props.project.id) : null,
     addPin: props.projectOptions.addPin && !isAnon ? () => props.projectOptions.addPin(props.project.id) : null,
@@ -292,7 +292,7 @@ const determineProjectOptions = (props, currentUser) => {
     removeProjectFromCollection: null,
   }
 }
-
+// props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject ? () => props.projectOptions.leaveProject(
 export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
 
