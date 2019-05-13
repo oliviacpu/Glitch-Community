@@ -274,6 +274,29 @@ ProjectOptionsPop.defaultProps = {
   // displayNewNote: null,
 };
 
+const isTeamProject = ({ currentUser, project }) => {
+  for (const team of currentUser.teams) {
+    if (project.teamIds.includes(team.id)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
+  if (isTeamProject({ currentUser, project })) {
+    leaveProject(project.id, event);
+    return;
+  }
+
+  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
+    project.domain
+  }?`;
+  if (window.confirm(prompt)) {
+    leaveProject(project.id, event);
+  }
+}
+
 const determineProjectOptions = (props, currentUser) => {
   const isAnon = !(currentUser && currentUser.login);
   const currentUserIsOnProject = currentUser && props.project.users.map((projectUser) => projectUser.id).includes(currentUser.id);
@@ -292,7 +315,7 @@ const determineProjectOptions = (props, currentUser) => {
     removeProjectFromCollection: null,
   }
 }
-// props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject ? () => props.projectOptions.leaveProject(
+// props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
 export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
 
