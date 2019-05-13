@@ -191,7 +191,8 @@ const ProjectOptionsContent = (props) => {
   }
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
   const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
-
+  const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
+  
   return (
     <dialog className="pop-over project-options-pop">
 
@@ -230,6 +231,12 @@ const ProjectOptionsContent = (props) => {
       {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
+        </section>
+      )}
+      
+      {props.leaveProject && (
+        <section className="pop-over-actions collaborator-actions">
+         <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
         </section>
       )}
 
@@ -309,13 +316,18 @@ const determineProjectOptions = (props, currentUser) => {
     addProjectToCollection: props.projectOptions.addProjectToCollection && !isAnon ? props.projectOptions.addProjectToCollection : null, 
     joinTeamProject: props.projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon ? () => props.projectOptions.joinTeamProject(props.project.id, currentUser.id) : null,
     leaveTeamProject: props.projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon ? () => props.projectOptions.leaveTeamProject(props.project.id, currentUser.id) : null,
-    leaveProject: null,
+    leaveProject: props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject ? (event) => promptThenLeaveProject({ 
+      event,
+      project: props.project, 
+      leaveProject: props.projectOptions.leaveProject, 
+      currentUser,
+    }) : null,
     removeProjectFromTeam: null,
     deleteProject: null,
     removeProjectFromCollection: null,
   }
 }
-// props.projectOptions.leaveProject && props.project.users.length > 1 && currentUserIsOnProject ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
+
 export default function ProjectOptions(props) {
   const { currentUser } = useCurrentUser();
 
