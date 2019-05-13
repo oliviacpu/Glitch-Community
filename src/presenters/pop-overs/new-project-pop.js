@@ -31,8 +31,8 @@ const NewProjectResultItem = ({ id, domain, description }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects }) => (
-  <div className="pop-over new-project-pop">
+const NewProjectPop = ({ projects, opensFromRight }) => (
+  <div className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`}>
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
@@ -68,6 +68,7 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  opensFromRight: PropTypes.bool.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
@@ -85,13 +86,13 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return data;
 });
 
-function NewProjectPopButton() {
+function NewProjectPopButton({ opensFromRight }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {() => <NewProjectPop projects={projects} />}
+      {() => <NewProjectPop projects={projects} opensFromRight={opensFromRight} />}
     </PopoverWithButton>
   );
 }

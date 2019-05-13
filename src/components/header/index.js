@@ -33,7 +33,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         </div>
         <ul className={styles.buttons}>
           <li className={styles.buttonWrap}>
-            <NewProjectPop />
+            <NewProjectPop opensFromRight={!(currentUser && currentUser.login)} />
           </li>
           {!!currentUser && !!currentUser.projects.length && (
             <li className={styles.buttonWrap}>

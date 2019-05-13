@@ -3,6 +3,7 @@ import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 import Button from 'Components/buttons/button';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
@@ -35,6 +36,7 @@ import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
 import 'Components/profile-container/story';
+import 'Components/collections-list/story';
 import 'Components/questions/story';
 import 'Components/deleted-projects/story';
 import { users, teams, projects, collections } from './data';
@@ -78,7 +80,20 @@ storiesOf('Button', module)
         Support <Emoji name="ambulance" />
       </Button>
     </div>
-  ));
+  ))
+  .add(`checkbox`, withState(false, ({ state, setState }) => (
+    <>
+      <CheckboxButton value={state} onChange={setState}>
+        Click to toggle!
+      </CheckboxButton>
+      <p>
+        <label>
+          <input type="checkbox" checked={state} onChange={(evt) => setState(evt.target.checked)} />
+          ← linked state
+        </label>
+      </p>
+    </>
+  )));
 
 storiesOf('Emoji', module)
   .add('standard', () => <Emoji name="herb" />)
