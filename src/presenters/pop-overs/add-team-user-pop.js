@@ -57,10 +57,15 @@ UserResultItem.propTypes = {
   action: PropTypes.func.isRequired,
 };
 
+const InviteByEmail = () => {
+  const colorRef = useRef(randomColor({ luminosity: 'light' }));
+  const style = { bsc
+}
+
 class InviteByEmail extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { color: randomColor({ luminosity: 'light' }) };
+    this.state = { color:  };
   }
 
   render() {
