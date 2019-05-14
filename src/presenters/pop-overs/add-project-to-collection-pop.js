@@ -109,27 +109,15 @@ const AddProjectToCollectionPopContents = ({
   setCollectionType,
 }) => {
   const [query, setQuery] = React.useState('');
-<<<<<<< HEAD
-  const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
-  const filteredCollections = React.useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
-    debouncedQuery,
-    collections,
-  ]);
 
-=======
->>>>>>> 03364399e99fb534c36a3333ffd88eabb4873479
   return (
     <dialog className="pop-over add-project-to-collection-pop wide-pop">
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-<<<<<<< HEAD
-      {collections.length > 2 && (
-=======
       {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
 
       {collections && collections.length > 3 && (
->>>>>>> 03364399e99fb534c36a3333ffd88eabb4873479
         <section className="pop-over-info">
           <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
         </section>
@@ -215,34 +203,38 @@ const AddProjectToCollectionPop = (props) => {
   const [collectionType, setCollectionType] = React.useState(filterTypes[0]);
 
   const [maybeCollections, setMaybeCollections] = React.useState(null);
-<<<<<<< HEAD
   const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
 
   React.useEffect(
     () => {
       let canceled = false;
+      setMaybeCollections(null); // reset maybCollections on reload to show loader
 
       const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
+
       const loadUserCollections = async (user) => {
         const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
         return collections.map((collection) => ({ ...collection, user }));
       };
+
       const loadTeamCollections = async (team) => {
         const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
         return collections.map((collection) => ({ ...collection, team }));
       };
+
       const loadCollections = async () => {
-        const requests = [
-          getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`),
-          loadUserCollections(currentUser),
-          ...currentUser.teams.map((team) => loadTeamCollections(team)),
-        ];
+        const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
+        const userCollectionsRequest = loadUserCollections(currentUser);
+
+        const requests =
+          collectionType === filterTypes[0]
+            ? [projectCollectionsRequest, userCollectionsRequest]
+            : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
+
         const [projectCollections, ...collectionArrays] = await Promise.all(requests);
 
         const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-        console.log(alreadyInCollectionIds);
         const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
-        console.log(_collectionsWithProject);
 
         const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
@@ -257,91 +249,24 @@ const AddProjectToCollectionPop = (props) => {
         canceled = true;
       };
     },
-    [project.id, currentUser.id],
+    [project.id, currentUser.id, collectionType],
   );
-=======
-
-  React.useEffect(() => {
-    let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
-
-    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
-
-    const loadUserCollections = async (user) => {
-      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, user }));
-    };
-
-    const loadTeamCollections = async (team) => {
-      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, team }));
-    };
-
-    const loadCollections = async () => {
-      const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
-      const userCollectionsRequest = loadUserCollections(currentUser);
-
-      const requests =
-        collectionType === filterTypes[0]
-          ? [projectCollectionsRequest, userCollectionsRequest]
-          : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
-
-      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
-
-      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-      const collections = flatten(collectionArrays).filter((c) => !alreadyInCollectionIds.has(c.id));
-
-      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
-      if (!canceled) {
-        setMaybeCollections(orderedCollections);
-      }
-    };
-
-    loadCollections().catch(captureException);
-    return () => {
-      canceled = true;
-    };
-  }, [project.id, currentUser.id, collectionType]);
->>>>>>> 03364399e99fb534c36a3333ffd88eabb4873479
 
   return (
     <NestedPopover
       alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} />}
       startAlternateVisible={false}
     >
-<<<<<<< HEAD
-      {(createCollectionPopover) => {
-        if (!maybeCollections) {
-          return (
-            <dialog className="pop-over add-project-to-collection-pop wide-pop">
-              {!fromProject && <AddProjectPopoverTitle project={project} />}
-              <div className="loader-container">
-                <Loader />
-              </div>
-            </dialog>
-          );
-        }
-        return (
-          <AddProjectToCollectionPopContents
-            {...props}
-            collections={maybeCollections}
-            collectionsWithProject={collectionsWithProject}
-            createCollectionPopover={createCollectionPopover}
-          />
-        );
-      }}
-=======
       {(createCollectionPopover) => (
         <AddProjectToCollectionPopContents
           {...props}
           collections={maybeCollections}
+          collectionsWithProject={collectionsWithProject}
           createCollectionPopover={createCollectionPopover}
           collectionType={collectionType}
           setCollectionType={setCollectionType}
         />
       )}
->>>>>>> 03364399e99fb534c36a3333ffd88eabb4873479
     </NestedPopover>
   );
 };
