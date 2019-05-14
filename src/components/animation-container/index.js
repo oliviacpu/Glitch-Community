@@ -5,6 +5,13 @@ import styles from './animations.styl';
 
 const types = ['slideDown', 'slideUp'];
 
+/* Usage:
+<AnimationContainer type="slideDown" onAnimationEnd={(id) => deleteProject(id)}>
+  {(animateOutAndDeleteProject) => (
+    <Button onClick={() => animateOutAndDeleteProject(id)}>Delete Project</Button>
+  )}
+</AnimationContainer>
+*/
 const AnimationContainer = ({ type, children, className, onAnimationEnd }) => {
   const [state, setState] = useState({ active: false, handlerArgs: [] });
   const ref = useRef();

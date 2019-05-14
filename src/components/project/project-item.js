@@ -24,7 +24,7 @@ const getLinkBodyStyles = (project) =>
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProjectItem = ({ project, projectOptions }) => {
-  const dispatch = (type, ...args) => projectOptions[type](...args);
+  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
 
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
