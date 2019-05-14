@@ -156,7 +156,7 @@ const UserPage = ({
           projectOptions={{
             removePin: isAuthorized ? removePin : undefined,
             featureProject: isAuthorized ? featureProject : undefined,
-            leaveProject: isAuthorized ? leaveProject: undefined,
+            leaveProject: isAuthorized ? leaveProject : undefined,
             deleteProject,
             addProjectToCollection,
           }}
@@ -186,7 +186,7 @@ const UserPage = ({
           projectOptions={{
             addPin: isAuthorized ? addPin : undefined,
             featureProject: isAuthorized ? featureProject : undefined,
-            leaveProject: isAuthorized ? leaveProject: undefined,
+            leaveProject: isAuthorized ? leaveProject : undefined,
             deleteProject,
             addProjectToCollection,
           }}
