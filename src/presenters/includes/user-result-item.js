@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import randomColor from 'randomcolor';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
 
 import { WhitelistedDomainIcon } from './team-elements';
 

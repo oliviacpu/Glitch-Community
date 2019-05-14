@@ -67,6 +67,10 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     animate(event, 'slide-down', () => props.deleteProject(props.project.id));
   }
 
+  function animateThenRemoveProjectFromTeam(event) {
+    animate(event, 'slide-down', () => props.removeProjectFromTeam(props.project.id));
+  }
+
   function featureProject(event) {
     animate(event, 'slide-up', () => props.featureProject(props.project.id));
   }
@@ -79,6 +83,9 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
   const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
   const showPinOrFeatureSection = (props.addPin || props.removePin || (props.featureProject && !props.project.private));
+  const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
+  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
+  const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
 
   const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
   const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
@@ -131,19 +138,16 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
         </section>
       )}
 
-      {(props.currentUserIsOnProject || !!props.removeProjectFromTeam) && !props.removeProjectFromCollection && (
+      {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
-          {!!props.removeProjectFromTeam && (
-            <PopoverButton onClick={() => props.removeProjectFromTeam(props.project.id)} text="Remove Project " emoji="thumbs_down" />
+          {showRemoveProjectFromTeam && (
+            <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />
           )}
 
-          {props.currentUserIsOnProject && !props.removeProjectFromCollection && (
+          {showDeleteProject && (
             <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
           )}
-        </section>
-      )}
-      {props.removeProjectFromCollection && (
-        <section className="pop-over-actions danger-zone last-section">
+
           {props.removeProjectFromCollection && (
             <PopoverButton onClick={() => props.removeProjectFromCollection(props.project)} text="Remove from Collection" emoji="thumbs_down" />
           )}
@@ -206,6 +210,11 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
     return false;
   }
 
+  function currentUserIsAdminOnProject(user) {
+    const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
+    return projectPermissions && projectPermissions.accessLevel === 30;
+  }
+
   return (
     <PopoverWithButton
       buttonClass="project-options button-borderless button-small"
@@ -219,6 +228,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           project={project}
           currentUser={currentUser}
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
+          currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           togglePopover={togglePopover}
         />
       )}

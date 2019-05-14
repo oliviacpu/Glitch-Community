@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
-import { Link } from '../includes/link';
+import Link from 'Components/link';
 import useLocalStorage from '../../state/local-storage';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
@@ -267,7 +267,7 @@ SignInCodeSection.propTypes = {
 };
 
 const TermsAndPrivacySection = () => (
-  <aside className="pop-over-info last-section">
+  <aside className="pop-over-info">
     By signing into Glitch, you agree to our {' '}
     <Link to="/legal/#tos">Terms of Services</Link>
     {' '} and {' '}
@@ -298,6 +298,7 @@ const SignInPopWithoutRouter = (props) => {
             <div className="pop-over sign-in-pop">
               {header}
               <NewUserInfoSection />
+              <TermsAndPrivacySection />
               <section className="pop-over-actions">
                 {prompt}
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
@@ -317,7 +318,6 @@ const SignInPopWithoutRouter = (props) => {
                   showCodeLogin(api);
                 }}
               />
-              <TermsAndPrivacySection />
             </div>
           )}
         </NestedPopover>

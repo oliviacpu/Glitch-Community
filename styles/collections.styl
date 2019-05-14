@@ -1,206 +1,6 @@
 collection-avatar-size = 55px
 collection-padding = 12px 
 
-.collections
-  clear: both
-  display: inline-block
-  width: 100%
-  vertical-align: top
-  border-radius: 5px
-  padding: 16px
-  
-  a
-    color: primary
-    text-decoration: none
-    &:hover
-      text-decoration: underline
-
-  header
-    float: left
-    width: 22%
-    @media (max-width: hugeViewport)
-      width: 21%
-
-  .placeholder
-    margin-top: 12px
-    .psst
-      width: 50px
-      display: inline-block
-      vertical-align: middle
-      margin-right: .5rem
-    p
-      display: inline-block
-      vertical-align: bottom
-
-.collections .collections-container
-  margin: 10px 0px
-  padding: 0
-  overflow: hidden
-
-  .collection-options-pop-btn
-    display: block
-    position: inherit
-
-  > li
-    position: relative
-    @media (max-width: mediumViewport)
-      width: 100%
-
-  .down-arrow
-    margin: 0
-
-  .user-avatar
-    border-radius: 50%;
-
-  .team-avatar
-    display: block
-
-  .collection-curator a
-    display: flex
-    
-.collections .collection
-  margin-top: 0px
-  margin-bottom: 1em
-  font-size: 0.9rem
-  border-radius: 5px
-  width: 100%
-  padding-bottom: 1.5rem
-  height: 315px
-  position: relative
-  transition: 0.1s all
-  overflow: visible
-  background-color: secondary-background
-  &.authorized
-    margin-top: 30px
-  &.show-curator
-    margin-top: 10px
-
-  a
-    color: primary
-
-  .collection-container
-    overflow: hidden
-    height: calc(100% + 45px)
-
-  .collection-info
-    display: flex
-    height: 130px
-    padding: 12px
-    overflow: hidden
-    border-top-right-radius: 5px
-    border-top-left-radius: 5px
-    text-decoration: none;
-    .avatar
-      display: block
-      margin-top: 6px
-      width: collection-avatar-size 
-      height: collection-avatar-size
-      border-radius: 5px
-      svg
-        width: 100%
-        height: 100%
-    a
-      color: inherit
-
-  &.show-curator .collection-info:after
-    top: -13px
-    left: 8.5px
-    border: solid transparent
-    content: " "
-    height: 0
-    width: 0
-    position: absolute
-    pointer-events: none
-    border-bottom-color: inherit
-    border-width: 7px
-
-  .avatar
-    border-radius: 5px
-    margin-right: 7px
-    vertical-align: top
-    display: inline-block
-
-  .collection-name-description
-    /** subtract collection avatar width and collection padding from the total width **/
-    width: "calc(100% - %s - %s - 12px)" % (collection-avatar-size collection-padding)
-    margin-left: 12px  
-      
-  .button
-    max-width: "calc(100% - 11px)" % collection-avatar-size
-    vertical-align: -13px
-
-  .description
-    display: block
-    margin-top: 10px
-
-  .overflow-mask
-    position: absolute
-    width: 100%
-    bottom: 0
-    left: 0
-    height: 12px
-    opacity: .6
-    border-bottom-left-radius: 5px
-    border-bottom-right-radius: 5px
-
-  .private-project-badge
-    display: none
-
-  &.private-project
-    background-color: private
-    border-bottom-color: private
-    .overflow-mask
-      background-color: private
-    .private-project-badge
-      display: inline-block
-
-  .projects-preview
-    height: 145px
-    padding: 0
-    padding-top: 15px
-    .project-container
-      display: block
-      margin: 0px 10px 5px
-      border-radius: 5px
-      background-color: section-line
-      .avatar
-        width: 25px
-        height: 25px
-      .project-name
-        margin-top: 5px
-        margin-left: 5px
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
-      .private-project-badge
-        display: none
-        background-image: url("https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fprivate.svg?1496253541539")
-        float: right
-      &.private
-        background-color: private
-        .private-project-badge
-          display: inline-block
-      &:hover
-      &:focus
-        background-color: secondary-hover-on-color
-    .project-link
-      display: flex
-      flex-direction: row
-      padding: 7px 15px
-  .projects-preview.empty
-    height: 100%
-    padding: 10px
-    margin: 0px 10px 5px
-    border-radius: 5px
-    height: auto
-    a
-      color: tertiary
-  .collection-link
-    display: block
-    padding: 12px
-    font-weight: 600
-    font-size: 13px
-
 .project-badge
   display: inline-block
   width: 22px
@@ -216,16 +16,7 @@ collection-padding = 12px
   &.public-project-badge
     opacity: 0.7
     background-image: url('https://cdn.glitch.com/26aa7be9-76e2-4f1c-a3e4-6a41ddcec98f%2Fpublic.svg?1528830915543')
-.create-first-collection
-    margin-top: 20px
-    float: left
-    width: calc(33.3% - 10px)
-    img
-      margin-right: 15px
-      float: left
-      margin-bottom: 10px
-    .placeholder
-      margin: 0px
+    
 .user-page,
 .team-page,
 .category-page
@@ -234,9 +25,6 @@ collection-padding = 12px
     width: initial
 
 .collection-options
-  position: absolute
-  right: 0px
-  top: 4px
   padding: 10px
   padding-bottom: 8px
   background-color: white
@@ -265,10 +53,8 @@ article.collection-wide
     padding-left: 20px
     display: flex
     flex-flow: column
-    .projects-container
-      margin: 0
-      flex-grow: 2
     .collection-view-all
+      margin-top: 1rem
       display: block
       clear: both
       flex-grow: 1

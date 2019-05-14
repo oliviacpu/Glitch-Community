@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { debounce } from 'lodash';
 
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { useTrackedFunc } from '../segment-analytics';
 import ProjectResultItem from '../includes/project-result-item';
 import ProjectsLoader from '../projects-loader';

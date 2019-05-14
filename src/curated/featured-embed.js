@@ -1,13 +1,13 @@
 const body =
-  '<p>A starter app and tutorial that guides you through making your own web map using Leaflet.</p>';
+  '<p>Style and remix themeable components, so you can create your own custom version of Material Design.</p><p>Define your theme, see it in action, and get the code.</p>';
 
 // make sure image urls use https
 export default {
-  image: 'https://glitch.com/culture/content/images/2019/03/leaflet.png',
+  image: 'https://culture-zine.glitch.me/culture/content/images/2019/04/Glitch_Illo_MaterialApps-Headline-v1--1--4.png',
   mask: 'mask-4',
-  title: 'Make Web Maps with Leaflet',
-  appDomain: 'starter-leaflet',
-  blogUrl: '/make-a-web-map-with-leaflet/',
+  title: 'Build Your Own Material Theme',
+  appDomain: 'material-theme-builder',
+  blogUrl: '/build-material-design-themes-on-glitch/',
   body,
   color: '#f5f5f5'
 };

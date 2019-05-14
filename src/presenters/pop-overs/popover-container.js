@@ -23,8 +23,12 @@ class UnmonitoredComponent extends React.Component {
 
 const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
-const PopoverContainer = ({ children, outer, startOpen }) => {
-  const [visible, setVisible] = React.useState(startOpen);
+const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
+  const [visible, setVisibleState] = React.useState(startOpen);
+  const setVisible = (newVisible) => {
+    if (!visible && newVisible && onOpen) onOpen();
+    setVisibleState(newVisible);
+  };
   const togglePopover = () => setVisible(!visible);
 
   React.useEffect(() => {
@@ -58,10 +62,12 @@ const PopoverContainer = ({ children, outer, startOpen }) => {
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
   outer: PropTypes.func,
   startOpen: PropTypes.bool,
 };
 PopoverContainer.defaultProps = {
+  onOpen: null,
   outer: null,
   startOpen: false,
 };
