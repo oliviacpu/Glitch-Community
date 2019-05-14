@@ -5,7 +5,7 @@ import { useTrackedFunc } from '../../presenters/segment-analytics';
 const TrackedButton = ({ label, onClick, ...props }) => {
   const trackedOnClick = useTrackedFunc(onClick, label);
   return (
-    <Button props={props} onClick={trackedOnClick}>
+    <Button {...props} onClick={trackedOnClick}>
       {label}
     </Button>
   );
