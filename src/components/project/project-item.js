@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { pickBy } from 'lodash';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
@@ -23,22 +24,27 @@ const getLinkBodyStyles = (project) =>
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProjectItem = ({ project, projectOptions }) => {
-  const dispatch = (type, ...args) => projectOptions[type](...args);Ω
-  
+  const dispatch = (type, ...args) => {
+    if (!projectOptions[type]) {
+      console.warn(projectOptions, type, args);
+    }
+    projectOptions[type](...args);
+  }
+
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
         <AnimationContainer type="slideUp" onAnimationEnd={dispatch}>
           {(slideUp) => {
-            const animatedProjectOptions = {
+            const animatedProjectOptions = pickBy({
               ...projectOptions,
               addPin: (id) => slideUp('addPin', id),
               removePin: (id) => slideDown('removePin', id),
               deleteProject: (id) => slideDown('deleteProject', id),
               removeProjectFromTeam: (id) => slideDown('removeProjectFromTeam', id),
               featureProject: (id) => slideUp('featureProject', id),
-            }
-            
+            }, (_, key) => projectOptions[key]);
+
             return (
               <div className={styles.container}>
                 <header className={styles.header}>
