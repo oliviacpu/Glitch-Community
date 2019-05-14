@@ -156,9 +156,9 @@ const AddProjectToCollectionPop = (props) => {
           ...currentUser.teams.map((team) => loadTeamCollections(team)),
         ];
         const [projectCollections, ...collectionArrays] = await Promise.all(requests);
-
+        
         const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-        const collections = flatten(collectionArrays).filter((c) => !alreadyInCollectionIds.has(c.id));
+        const [collections, collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
 
         const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
