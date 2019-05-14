@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { flatten, orderBy, partition } from 'lodash';
 import Loader from 'Components/loader';
+import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
 import { getAllPages } from 'Shared/api';
@@ -97,6 +98,7 @@ const AddProjectToCollectionPopContents = ({
         <section className="pop-over-info">
           <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
           {collectionsWithProject
+            .slice(0, 3)
             .map((collection) => (
               <CollectionLink key={collection.id} collection={collection}>
                 {collection.name}
@@ -105,7 +107,8 @@ const AddProjectToCollectionPopContents = ({
             .reduce((prev, curr) => [prev, ', ', curr])}
           {collectionsWithProject.length > 3 && (
             <>
-              &nbsp;, and <Pluralize count={collectionsWithProject.length - 3} singular="other" />
+              , and <Badge>{collectionsWithProject.length - 3}</Badge>{' '}
+              <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
             </>
           )}
         </section>
