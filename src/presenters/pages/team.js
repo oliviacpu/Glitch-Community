@@ -84,15 +84,7 @@ const ProjectPals = () => (
 class TeamPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      invitees: [],
-    };
     this.addProjectToCollection = this.addProjectToCollection.bind(this);
-  }
-
-  async componentDidMount() {
-    const invitees = await this.getInvitees();
-    this.setState({ invitees });
   }
 
   getProjectOptions() {
@@ -108,22 +100,6 @@ class TeamPage extends React.Component {
     }
 
     return projectOptions;
-  }
-
-  async getInvitees() {
-    if (this.props.currentUserIsOnTeam) {
-      try {
-        const data = await Promise.all(this.props.team.tokens.map(({ userId }) => this.props.api.get(`users/${userId}`)));
-        const invitees = data.map((user) => user.data).filter((user) => !!user);
-        return invitees;
-      } catch (error) {
-        if (error && error.response && error.response.status === 404) {
-          return null;
-        }
-        captureException(error);
-      }
-    }
-    return [];
   }
 
   async addProjectToCollection(project, collection) {
@@ -173,7 +149,6 @@ class TeamPage extends React.Component {
                 inviteEmail={this.props.inviteEmail}
                 inviteUser={this.props.inviteUser}
                 joinTeam={this.props.joinTeam}
-                invitees={this.state.invitees}
               />
             </div>
             <Thanks count={team.users.reduce((total, { thanksCount }) => total + thanksCount, 0)} />
