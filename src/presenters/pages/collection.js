@@ -87,7 +87,6 @@ const CollectionPageContents = ({
   ...props
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
-  const userIsLoggedIn = currentUser && currentUser.login;
   let featuredProject = null;
   let { projects } = collection;
   if (collection.featuredProjectId) {
@@ -164,46 +163,25 @@ const CollectionPageContents = ({
                     hideNote={hideNote}
                   />
                 )}
-                {currentUserIsAuthor && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    {...props}
-                    projects={projects}
-                    collection={collection}
-                    noteOptions={{
-                      hideNote,
-                      updateNote,
-                      isAuthorized: true,
-                    }}
-                    projectOptions={{
-                      removeProjectFromCollection,
-                      addProjectToCollection,
-                      displayNewNote,
-                      featureProject,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    {...props}
-                    projects={collection.projects}
-                    collection={collection}
-                    noteOptions={{ isAuthorized: false }}
-                    projectOptions={{
-                      addProjectToCollection,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && !userIsLoggedIn && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    projects={collection.projects}
-                    collection={collection}
-                    projectOptions={{}}
-                    noteOptions={{ isAuthorized: false }}
-                  />
-                )}
+                <ProjectsList
+                  layout="gridCompact"
+                  {...props}
+                  projects={projects}
+                  collection={collection}
+                  noteOptions={{
+                    hideNote,
+                    updateNote,
+                    isAuthorized: currentUserIsAuthor,
+                  }}
+                  projectOptions={{
+                    removeProjectFromCollection,
+                    addProjectToCollection,
+                    displayNewNote,
+                    featureProject,
+                    currentPageItem: collection,
+                    currentPageType: "collection"
+                  }}
+                />
               </div>
             </>
           )}

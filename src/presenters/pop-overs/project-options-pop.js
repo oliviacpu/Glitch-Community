@@ -31,14 +31,17 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
-const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
+const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions, currentPageItem, currentPageType }) => {
   const isAnon = !(currentUser && currentUser.login);
   const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
   
-  const currentUserIsOnProject = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
+  const currentUserIsMemberOfProject = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
 
+  // TODO tomorrow: look at currentPageItme/currentPageType and determine what if any other authorization checks are needed.
+  // example probs shouldn't be able to remove yourself from a project from someone else's user page
+  
   return {
     featureProject: projectOptions.featureProject && !project.private && !isAnon
       ? () => projectOptions.featureProject(project.id)
@@ -55,13 +58,13 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
     addProjectToCollection: projectOptions.addProjectToCollection && !isAnon
       ? projectOptions.addProjectToCollection
       : null,
-    joinTeamProject: projectOptions.joinTeamProject && !currentUserIsOnProject && !isAnon
+    joinTeamProject: projectOptions.joinTeamProject && !currentUserIsMemberOfProject && !isAnon
       ? () => projectOptions.joinTeamProject(project.id, currentUser.id)
       : null,
-    leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsOnProject && !isAnon && !currentUserIsAdminOnProject
+    leaveTeamProject: projectOptions.leaveTeamProject && currentUserIsMemberOfProject && !isAnon && !currentUserIsAdminOnProject
       ? () => projectOptions.leaveTeamProject(project.id, currentUser.id)
       : null,
-    leaveProject: projectOptions.leaveProject && project.users.length > 1 && currentUserIsOnProject && !currentUserIsAdminOnProject
+    leaveProject: projectOptions.leaveProject && project.users.length > 1 && currentUserIsMemberOfProject && !currentUserIsAdminOnProject
       ? (event) => promptThenLeaveProject({ event, project, leaveProject: projectOptions.leaveProject, currentUser })
       : null,
     removeProjectFromTeam: projectOptions.removeProjectFromTeam && !projectOptions.removeProjectFromCollection && !isAnon
@@ -202,7 +205,7 @@ ProjectOptionsContent.defaultProps = {
 
 export default function ProjectOptionsPop(props) {
   const { currentUser } = useCurrentUser();
-  const projectOptions = determineProjectOptionsFunctions({ currentUser, project: props.project, projectOptions: props.projectOptions, item: props.item, type: props.type });
+  const projectOptions = determineProjectOptionsFunctions({ currentUser, ...props });
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
   
   if (noProjectOptions) {
