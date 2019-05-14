@@ -101,7 +101,7 @@ const UserPage = ({
   // filter featuredProject out of both pinned & recent projects
   const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
-
+  const getProjectOptions = isAuthorized ? 
   return (
     <main className={styles.container}>
       <section>
@@ -154,11 +154,13 @@ const UserPage = ({
           }
           projects={pinnedProjects}
           projectOptions={{
-            removePin: isAuthorized ? removePin : undefined,
-            featureProject: isAuthorized ? featureProject : undefined,
-            leaveProject: isAuthorized ? leaveProject : undefined,
+            removePin,
+            featureProject,
+            leaveProject,
             deleteProject,
             addProjectToCollection,
+            currentPageItem: user,
+            
           }}
         />
       )}
@@ -184,9 +186,9 @@ const UserPage = ({
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
-            addPin: isAuthorized ? addPin : undefined,
-            featureProject: isAuthorized ? featureProject : undefined,
-            leaveProject: isAuthorized ? leaveProject : undefined,
+            addPin,
+            featureProject,
+            leaveProject,
             deleteProject,
             addProjectToCollection,
           }}

@@ -34,6 +34,7 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
   const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
+  
   const currentUserIsOnProject = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
@@ -201,9 +202,9 @@ ProjectOptionsContent.defaultProps = {
 
 export default function ProjectOptionsPop(props) {
   const { currentUser } = useCurrentUser();
-  const projectOptions = determineProjectOptionsFunctions({ currentUser, project: props.project, projectOptions: props.projectOptions });
+  const projectOptions = determineProjectOptionsFunctions({ currentUser, project: props.project, projectOptions: props.projectOptions, item: props.item, type: props.type });
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
-
+  
   if (noProjectOptions) {
     return null;
   }
