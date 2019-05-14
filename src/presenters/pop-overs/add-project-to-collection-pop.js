@@ -107,7 +107,10 @@ const AddProjectToCollectionPopContents = ({
             .reduce((prev, curr) => [prev, ', ', curr])}
           {collectionsWithProject.length > 3 && (
             <>
-              , and <Badge>{collectionsWithProject.length - 3}</Badge>{' '}
+              , and{' '}
+              <div className="more-collections-badge">
+                <Badge>{collectionsWithProject.length - 3}</Badge>
+              </div>{' '}
               <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
             </>
           )}
