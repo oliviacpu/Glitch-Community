@@ -67,7 +67,7 @@ const AddProjectToCollectionPopContents = ({
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-      {collections.length > 3 && (
+      {collections.length > 2 && (
         <section className="pop-over-info">
           <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
         </section>
@@ -103,6 +103,11 @@ const AddProjectToCollectionPopContents = ({
               </CollectionLink>
             ))
             .reduce((prev, curr) => [prev, ', ', curr])}
+          {collectionsWithProject.length > 3 && (
+            <>
+              &nbsp;, and <Pluralize count={collectionsWithProject.length - 3} singular="other" />
+            </>
+          )}
         </section>
       ) : null}
 
