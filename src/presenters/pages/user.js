@@ -12,6 +12,7 @@ import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProjectsList from 'Components/containers/projects-list';
 import ProfileContainer from 'Components/profile-container';
+import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 
 import { getLink } from '../../models/user';
@@ -21,7 +22,6 @@ import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
-import CollectionsList from '../collections-list';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './user.styl';
@@ -146,7 +146,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
-          className={styles.projectContainer}
+          layout="grid"
           title={
             <>
               Pinned Projects <Emoji inTitle name="pushpin" />
@@ -178,7 +178,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
-          className={styles.projectContainer}
+          layout="grid"
           title="Recent Projects"
           projects={recentProjects}
           enablePagination

@@ -6,6 +6,7 @@ import { sample } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import Link from 'Components/link';
+import Grid from 'Components/containers/grid';
 import QuestionItem from './item';
 
 import ErrorBoundary from '../../presenters/includes/error-boundary';
@@ -43,7 +44,7 @@ async function load(api, max) {
           luminosity: 'light',
           count: 2,
         });
-        return { colorInner, colorOuter, ...question };
+        return { colorInner, colorOuter, id: question.questionId, ...question };
       });
     return { kaomoji, questions, loading: false };
   } catch (error) {
@@ -80,13 +81,7 @@ function Questions({ max }) {
       <div>
         {questions.length ? (
           <ErrorBoundary>
-            <ul className={styles.questionsContainer}>
-              {questions.map((question) => (
-                <li key={question.questionId}>
-                  <QuestionItem {...question} />
-                </li>
-              ))}
-            </ul>
+            <Grid items={questions}>{(question) => <QuestionItem {...question} />}</Grid>
           </ErrorBoundary>
         ) : (
           <>

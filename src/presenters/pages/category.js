@@ -17,7 +17,7 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 
-const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...props }) => (
+const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => (
   <>
     <Helmet title={category.name} />
     <main className="collection-page">
@@ -40,27 +40,16 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
 
               {currentUser.login ? (
                 <ProjectsList
-                  className="collection-page__projects-grid"
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
+                  layout="gridCompact"
+                  projects={projects}
                   projectOptions={{
                     addProjectToCollection,
                   }}
-                  {...props}
                 />
               ) : (
                 <ProjectsList
-                  className="collection-page__projects-grid"
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
-                  projectOptions={{}}
-                  {...props}
+                  layout="gridCompact"
+                  projects={projects}
                 />
               )}
             </div>
@@ -88,7 +77,7 @@ async function loadCategory(api, id) {
   return data;
 }
 
-const CategoryPage = ({ category, ...props }) => {
+const CategoryPage = ({ category }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
@@ -98,7 +87,7 @@ const CategoryPage = ({ category, ...props }) => {
           {(loadedCategory) => (
             <CollectionEditor initialCollection={loadedCategory}>
               {(categoryFromEditor, funcs) => (
-                <CategoryPageWrap category={categoryFromEditor} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
+                <CategoryPageWrap category={categoryFromEditor} userIsAuthor={false} currentUser={currentUser} {...funcs} />
               )}
             </CollectionEditor>
           )}
