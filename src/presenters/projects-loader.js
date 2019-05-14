@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { chunk, flatten, keyBy, flatMap, uniq } from 'lodash';
+import { chunk, keyBy, flatMap, uniq } from 'lodash';
 
 import { getFromApi, joinIdsToQueryString } from '../../shared/api';
 import { useAPI } from '../state/api';
@@ -41,7 +41,7 @@ class ProjectsLoader extends React.Component {
     const allUserBatches = await Promise.all(
       uniqueUserIdChunks.map((uniqueUserIds) => getFromApi(this.props.api, `v1/users/by/id?${joinIdsToQueryString(uniqueUserIds)}`)),
     );
-    const allUsers = allUserBatches[0];
+    const allUsers = Object.assign({}, ...allUserBatches);
 
     // Go back over the projects and pick users out of the array by ID based on permissions
     projects = projects.map((project) => ({
