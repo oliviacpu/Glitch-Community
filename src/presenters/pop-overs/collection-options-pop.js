@@ -5,24 +5,18 @@ import PopoverButton from './popover-button';
 import { useCurrentUser } from '../../state/current-user';
 
 // Collection Options Pop
-const CollectionOptionsPop = ({ deleteCollection }) => {
-//   function animate(event, className, func) {
-//     const collectionContainer = event.target.closest('li');
-//     collectionContainer.addEventListener('animationend', func, { once: true });
-//     collectionContainer.classList.add(className);
-//   }
-
-//   function animateThenDeleteCollection(event) {
-//     if (!window.confirm('Are you sure you want to delete your collection?')) {
-//       return;
-//     }
-//     animate(event, 'slide-down', () => props.deleteCollection(props.collection.id));
-//   }
+const CollectionOptionsPop = ({ deleteCollection, collection }) => {
+  function confirmThenDelete() {
+    if (!window.confirm('Are you sure you want to delete your collection?')) {
+      return;
+    }
+    deleteCollection(collection.id);
+  }
 
   return (
     <dialog className="pop-over collection-options-pop">
       <section className="pop-over-actions danger-zone last-section">
-        {deleteCollection && <PopoverButton onClick={deleteCollection} text="Delete Collection " emoji="bomb" />}
+        {deleteCollection && <PopoverButton onClick={confirmThenDelete} text="Delete Collection " emoji="bomb" />}
       </section>
     </dialog>
   );

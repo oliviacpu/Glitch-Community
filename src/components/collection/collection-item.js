@@ -12,6 +12,7 @@ import Loader from 'Components/loader/';
 import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
+import AnimationContainer from 'Components/animation-container';
 
 import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
@@ -57,6 +58,7 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
 ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
+
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
