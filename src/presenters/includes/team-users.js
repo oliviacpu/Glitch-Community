@@ -197,8 +197,9 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
   if (!currentUserIsOnTeam) return [];
 
   try {
-    const data = await Promise.all(team.tokens.map(({ userId }) => api.get(`users/${userId}`)));
-    const invitees = data.map((user) => user.data).filter((user) => !!user);
+    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join(',');
+    const { data } = await api.get(`v1/users/by/id?${idString}`);
+    const invitees = Object.values(data);
     return invitees;
   } catch (error) {
     if (!error.response || error.response.status !== 404) {
