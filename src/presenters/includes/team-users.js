@@ -14,7 +14,7 @@ import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
 import { useCurrentUser } from '../../state/current-user';
-import { createAPIHook } from '../../state/current-user';
+import { createAPIHook } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
 // Team Users list (in profile container)
@@ -195,7 +195,7 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
   if (!currentUserIsOnTeam) return [];
-  
+
   try {
     const data = await Promise.all(team.tokens.map(({ userId }) => api.get(`users/${userId}`)));
     const invitees = data.map((user) => user.data).filter((user) => !!user);

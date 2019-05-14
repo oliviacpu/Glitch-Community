@@ -22,7 +22,6 @@ import TeamEditor from '../team-editor';
 import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
-import { captureException } from '../../utils/sentry';
 
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
