@@ -6,6 +6,7 @@ dependencies:
   '@babel/preset-env': 7.4.2
   '@babel/preset-react': 7.0.0
   '@sentry/browser': 4.6.6
+  '@sentry/minimal': 4.6.5
   '@sentry/node': 4.6.6
   '@storybook/addon-info': 5.0.5
   '@storybook/react': 5.0.5
@@ -12761,6 +12762,7 @@ specifiers:
   '@babel/preset-env': ^7.2.3
   '@babel/preset-react': ^7.0.0
   '@sentry/browser': ^4.5.3
+  '@sentry/minimal': ^4.3.2
   '@sentry/node': ^4.4.1
   '@storybook/addon-info': ^5.0.0
   '@storybook/react': ^5.0.0

@@ -9,24 +9,7 @@
 .team-avatar
   border-radius: 5px
 
-.profile-page
-  .projects
-    padding: 0
-    margin-bottom: 1rem
-    display: inline-block
-    .projects-container
-      margin-bottom: 15px
-      width: 100%
-      .users
-        >li
-          &:first-child img
-            border-radius: 50%
-
-    .project-options
-      display: block
-    
 .recent-projects
-
   .profile-avatar
     display: inline-block
     width: 18%
@@ -40,17 +23,6 @@
       height: 0
       padding-bottom: 100%
       border-radius: 50%
-  
-  .projects
-    display: inline-block
-    margin: 0
-    padding: 0
-    width: 78%
-    @media(max-width: 800px)
-      width: 100%
-  
-  .projects-container
-    overflow: hidden
     
   .project
     &:hover,
@@ -91,3 +63,12 @@
   position: absolute
   top: 16px
   right: 16px
+  
+.recent-projects__projects-wrap
+  display: inline-block
+  margin: 0
+  padding: 0
+  width: 78%
+  vertical-align: top
+  @media(max-width: 800px)
+    width: 100%
