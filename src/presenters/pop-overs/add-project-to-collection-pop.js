@@ -93,7 +93,7 @@ const AddProjectToCollectionPopContents = ({
         <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
       )}
 
-      {collectionsWithProject.length && (
+      {collectionsWithProject.length ? (
         <section className="pop-over-info">
           <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
           {collectionsWithProject
@@ -104,7 +104,7 @@ const AddProjectToCollectionPopContents = ({
             ))
             .reduce((prev, curr) => [prev, ', ', curr])}
         </section>
-      )}
+      ) : null}
 
       <section className="pop-over-actions">
         <button className="create-new-collection button-small button-tertiary" onClick={createCollectionPopover}>
@@ -138,7 +138,7 @@ const AddProjectToCollectionPop = (props) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const [maybeCollections, setMaybeCollections] = React.useState(null);
-  const [collectionsWithProject, setCollectionsWithProject] = React.useState(null);
+  const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
 
   React.useEffect(
     () => {
@@ -162,12 +162,13 @@ const AddProjectToCollectionPop = (props) => {
         const [projectCollections, ...collectionArrays] = await Promise.all(requests);
 
         const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-        const [collections, collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
+        const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
 
         const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
         if (!canceled) {
           setMaybeCollections(orderedCollections);
+          setCollectionsWithProject(_collectionsWithProject);
         }
       };
 
