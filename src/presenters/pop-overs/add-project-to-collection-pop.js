@@ -131,7 +131,7 @@ const AddProjectToCollectionPopContents = ({
         <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
       )}
 
-      {collectionsWithProject.length ? (
+      {collections && collectionsWithProject.length ? (
         <section className="pop-over-info">
           <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
           {collectionsWithProject
