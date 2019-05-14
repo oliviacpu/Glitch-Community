@@ -170,6 +170,7 @@ const ProjectPage = ({
     <main className="project-page">
       <section id="info">
         <ProjectProfileContainer
+          currentUser={currentUser}
           project={project}
           isAuthorized={isAuthorized}
           avatarActions={{
@@ -185,7 +186,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
+                {!currentUser.isSupport && suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
@@ -196,7 +197,7 @@ const ProjectPage = ({
           )}
           <AuthDescription
             authorized={isAuthorized}
-            description={!isAuthorized && suspendedReason ? ('suspended project') : project.description}
+            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? ('suspended project') : project.description}
             update={updateDescription}
             placeholder="Tell us about your app"
           />

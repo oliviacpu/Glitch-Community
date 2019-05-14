@@ -8,17 +8,17 @@ import styles from './styles.styl';
 
 const suspendedAvatarUrl = 'https://cdn.glitch.com/2b785d6f-8e71-423f-b484-ec2383060a9b%2Fno-entry.png?1556733100930';
 
-const getAvatarUrl = (isAuthorized, project) => {
-  if (project.suspendedReason && !isAuthorized) {
+const getAvatarUrl = (currentUser, isAuthorized, project) => {
+  if (project.suspendedReason && !isAuthorized && !currentUser.isSupport) {
     return suspendedAvatarUrl;
   }
   return getProjectAvatarUrl(project.id).concat('?', project._avatarCache); // eslint-disable-line no-underscore-dangle
 };
 
-const ProjectProfileContainer = ({ project, children, avatarActions, isAuthorized }) => (
+const ProjectProfileContainer = ({ currentUser, project, children, avatarActions, isAuthorized }) => (
   <div className={styles.profileWrap}>
     <div className={styles.avatarContainer}>
-      <div className={classnames(styles.avatar, styles.project)} style={{ backgroundImage: `url('${getAvatarUrl(isAuthorized, project)}')` }} />
+      <div className={classnames(styles.avatar, styles.project)} style={{ backgroundImage: `url('${getAvatarUrl(currentUser, isAuthorized, project)}')` }} />
       <div className={styles.avatarButtons}>
         {avatarActions &&
           Object.entries(avatarActions)
@@ -37,6 +37,7 @@ const ProjectProfileContainer = ({ project, children, avatarActions, isAuthorize
 ProjectProfileContainer.propTypes = {
   isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.object.isRequired,
+  currentUser: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   avatarActions: PropTypes.object,
 };
