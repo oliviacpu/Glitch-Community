@@ -56,11 +56,11 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   }
 
   function animateThenAddPin(event) {
-    animate(event, 'slide-up', () => props.addPin(props.project.id));
+    props.addPin(props.project.id);
   }
 
   function animateThenRemovePin(event) {
-    animate(event, 'slide-down', () => props.removePin(props.project.id));
+    props.removePin(props.project.id));
   }
 
   function animateThenDeleteProject(event) {
