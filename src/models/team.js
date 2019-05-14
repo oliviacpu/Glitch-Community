@@ -46,3 +46,24 @@ export const getProfileStyle = ({ id, hasCoverImage, coverColor, cache, size }) 
     backgroundImage: `url('${image}')`,
   };
 };
+
+export function teamAdmins({ team }) {
+  return team.users.filter((user) => team.adminIds.includes(user.id));
+}
+
+export function userIsOnTeam({ user, team }) {
+  return !!user && team.users.some(({ id }) => user.id === id);
+}
+
+export function userCanJoinTeam({ user, team }) {
+  if (!user || !user.emails || !team.whitelistedDomain || userIsOnTeam({ user, team })) return false;
+  return user.emails.some(({ email, verified }) => verified && email.endsWith(`@${team.whitelistedDomain}`));
+}
+
+export function userIsTeamAdmin({ user, team }) {
+  return !!user && team.adminIds.includes(user.id);
+}
+
+export function userIsOnlyTeamAdmin({ user, team }) {
+  return userIsTeamAdmin({ user, team }) && team.adminIds.length === 1;
+}
