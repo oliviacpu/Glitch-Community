@@ -24,26 +24,24 @@ const getLinkBodyStyles = (project) =>
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProjectItem = ({ project, projectOptions }) => {
-  const dispatch = (type, ...args) => {
-    if (!projectOptions[type]) {
-      console.warn(projectOptions, type, args);
-    }
-    projectOptions[type](...args);
-  }
+  const dispatch = (type, ...args) => projectOptions[type](...args);
 
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
         <AnimationContainer type="slideUp" onAnimationEnd={dispatch}>
           {(slideUp) => {
-            const animatedProjectOptions = pickBy({
-              ...projectOptions,
-              addPin: (id) => slideUp('addPin', id),
-              removePin: (id) => slideDown('removePin', id),
-              deleteProject: (id) => slideDown('deleteProject', id),
-              removeProjectFromTeam: (id) => slideDown('removeProjectFromTeam', id),
-              featureProject: (id) => slideUp('featureProject', id),
-            }, (_, key) => projectOptions[key]);
+            const animatedProjectOptions = pickBy(
+              {
+                ...projectOptions,
+                addPin: (id) => slideUp('addPin', id),
+                removePin: (id) => slideDown('removePin', id),
+                deleteProject: (id) => slideDown('deleteProject', id),
+                removeProjectFromTeam: (id) => slideDown('removeProjectFromTeam', id),
+                featureProject: (id) => slideUp('featureProject', id),
+              },
+              (_, key) => projectOptions[key],
+            );
 
             return (
               <div className={styles.container}>
