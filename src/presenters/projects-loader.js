@@ -41,7 +41,7 @@ class ProjectsLoader extends React.Component {
     const allUserBatches = await Promise.all(
       uniqueUserIdChunks.map((uniqueUserIds) => getFromApi(this.props.api, `v1/users/by/id?${joinIdsToQueryString(uniqueUserIds)}`)),
     );
-    const allUsers = flatten(allUserBatches);
+    const allUsers = allUserBatches[0];
 
     // Go back over the projects and pick users out of the array by ID based on permissions
     projects = projects.map((project) => ({
