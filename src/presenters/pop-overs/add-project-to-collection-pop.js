@@ -142,7 +142,7 @@ class AddProjectToCollectionPopContents extends React.Component {
           </section>
         )}
 
-        {filteredCollections && filteredCollections.length ? (
+        {filteredCollections.length ? (
           <section className="pop-over-actions results-list">
             <ul className="results">{filteredCollections.map(this.renderCollectionsThatDontHaveProject)}</ul>
           </section>
