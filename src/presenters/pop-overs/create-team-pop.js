@@ -124,7 +124,7 @@ class CreateTeamPopBase extends React.Component {
   render() {
     const placeholder = 'Your Team Name';
     return (
-      <dialog className="pop-over create-team-pop" tabIndex="0" ref={this.props.focusFirstElement}>
+      <dialog className="pop-over create-team-pop" ref={this.props.focusFirstElement}>
         <NestedPopoverTitle>
           Create Team <span className="emoji herb" />
         </NestedPopoverTitle>
@@ -157,12 +157,8 @@ class CreateTeamPopBase extends React.Component {
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func,
+  focusFirstElement: PropTypes.func.isRequired,
 };
-
-CreateTeamPopBase.defaultProps = {
-  focusFirstElement: null,
-}
 
 const CreateTeamPop = withRouter(CreateTeamPopBase);
 

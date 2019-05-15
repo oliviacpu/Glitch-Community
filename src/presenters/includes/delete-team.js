@@ -16,7 +16,7 @@ const DeleteTeam = ({ team }) => (
         </>
       }
     >
-      {({ togglePopover }) => <DeleteTeamPop team={team} togglePopover={togglePopover} />}
+      {({ togglePopover, focusFirstElement }) => <DeleteTeamPop team={team} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />}
     </PopoverWithButton>
   </section>
 );

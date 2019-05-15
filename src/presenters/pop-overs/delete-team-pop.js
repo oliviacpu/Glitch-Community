@@ -8,7 +8,7 @@ import { useAPI } from '../../state/api';
 
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
-const DeleteTeamPop = withRouter(({ history, team }) => {
+const DeleteTeamPop = withRouter(({ history, team, focusFirstElement }) => {
   const api = useAPI();
   const { createErrorNotification } = useNotifications();
   const [teamIsDeleting, setTeamIsDeleting] = useState(false);
@@ -27,7 +27,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
   }
 
   return (
-    <dialog className="pop-over delete-team-pop" open>
+    <dialog className="pop-over delete-team-pop" open ref={focusFirstElement} tabIndex="0">
       <section className="pop-over-info">
         <div className="pop-title">Delete {team.name}</div>
       </section>
@@ -57,6 +57,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
 
 DeleteTeamPop.propTypes = {
   team: PropTypes.object.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 export default DeleteTeamPop;

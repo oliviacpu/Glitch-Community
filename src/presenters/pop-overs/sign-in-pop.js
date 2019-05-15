@@ -117,7 +117,7 @@ class EmailHandler extends React.Component {
     return (
       <NestedPopover alternateContent={() => <SignInWithConsumer {...this.props} />} startAlternateVisible={false}>
         {(showCodeLogin) => (
-          <dialog className="pop-over sign-in-pop">
+          <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
             <NestedPopoverTitle>
               Email Sign In <span className="emoji email" />
             </NestedPopoverTitle>
@@ -198,7 +198,7 @@ class SignInCodeHandler extends React.Component {
   render() {
     const isEnabled = this.state.code.length > 0;
     return (
-      <dialog className="pop-over sign-in-pop">
+      <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
         <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
         <section className="pop-over-actions first-section">
           {!this.state.done && (
@@ -273,7 +273,7 @@ const TermsAndPrivacySection = () => (
 );
 
 const SignInPopWithoutRouter = (props) => {
-  const { header, prompt, api, location, hash, focusDialog } = props;
+  const { header, prompt, api, location, hash, focusFirstElement } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -292,7 +292,7 @@ const SignInPopWithoutRouter = (props) => {
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
-            <dialog className="pop-over sign-in-pop" tabIndex="0" ref={focusDialog}>
+            <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
               {header}
               <NewUserInfoSection />
               <TermsAndPrivacySection />
@@ -315,7 +315,6 @@ const SignInPopWithoutRouter = (props) => {
                   showCodeLogin(api);
                 }}
               />
-              )}
             </dialog>
           )}
         </NestedPopover>
@@ -330,13 +329,16 @@ SignInPopBase.propTypes = {
   header: PropTypes.node,
   prompt: PropTypes.node,
   hash: PropTypes.string,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const SignInPopContainer = (props) => {
   const api = useAPI();
   return (
     <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-      {({ togglePopover, focusDialog }) => <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusDialog={focusDialog} />}
+      {({ togglePopover, focusFirstElement }) => (
+        <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      )}
     </PopoverWithButton>
   );
 };

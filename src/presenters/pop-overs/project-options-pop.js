@@ -92,7 +92,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
 
   return (
-    <dialog className="pop-over project-options-pop" tabIndex="0" ref={props.focusFirstElement}>
+    <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {!!props.featureProject && !props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
@@ -148,9 +148,11 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 // Project Options Pop
 const ProjectOptionsPop = ({ ...props }) => (
   <NestedPopover
-    alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusDialog={props.focusDialog} />}
+    alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
   >
-    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusDialog={props.focusDialog} />}
+    {(addToCollectionPopover) => (
+      <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusFirstElementg={props.focusFirstElementg} />
+    )}
   </NestedPopover>
 );
 
@@ -212,7 +214,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
       buttonText={<div className="down-arrow" aria-label="options" />}
       containerClass="project-options-pop-btn"
     >
-      {({ togglePopover, focusDialog }) => (
+      {({ togglePopover, focusFirstElement }) => (
         <ProjectOptionsPop
           {...props}
           {...projectOptions}
@@ -221,7 +223,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           togglePopover={togglePopover}
-          focusDialog={focusDialog}
+          focusFirstElement={focusFirstElement}
         />
       )}
     </PopoverWithButton>
