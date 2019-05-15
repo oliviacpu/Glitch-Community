@@ -97,9 +97,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       <Heading tagName="h2">{title}</Heading>
       {canMakeCollections && (
         <>
-          <div className={styles.createCollectionButtonWrap}>
-            <CreateCollectionButton maybeTeam={maybeTeam} />
-          </div>
+          <CreateCollectionButton maybeTeam={maybeTeam} />
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}

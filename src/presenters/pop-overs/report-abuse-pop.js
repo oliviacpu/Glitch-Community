@@ -181,9 +181,11 @@ class ReportAbusePop extends React.Component {
           {this.state.loading ? (
             <Loader />
           ) : (
-            <button className="button button-small" onClick={this.submitReport} type="button">
-              Submit Report
-            </button>
+            <div className="report-abuse-wrap">
+              <button className="button button-small" onClick={this.submitReport} type="button">
+                Submit Report
+              </button>
+            </div>
           )}
         </section>
       </>
