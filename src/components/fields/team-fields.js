@@ -4,14 +4,10 @@ import PropTypes from 'prop-types';
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import Heading from 'Components/text/heading';
 import VerifiedBadge from 'Components/verified-badge';
-import { getLink, userIsTeamAdmin } from 'Models/team';
+import { userIsTeamAdmin } from 'Models/team';
 import { useCurrentUser } from '../../state/current-user';
 
 import styles from './team-fields.styl';
-
-function syncPageToUrl(team) {
-  history.replaceState(null, null, getLink(team));
-}
 
 const TeamNameInput = ({ name, onChange, verified }) => (
   <OptimisticTextInput
@@ -36,7 +32,7 @@ const TeamFields = ({ team, updateName, updateUrl }) => {
         <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
       </Heading>
       <p className={styles.teamUrl}>
-        <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
+        <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url)} />
       </p>
     </>
   ) : (

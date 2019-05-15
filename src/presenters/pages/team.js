@@ -12,6 +12,7 @@ import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
+import { getLink } from 'Models/team';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
@@ -33,6 +34,10 @@ import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
+
+function syncPageToUrl(team) {
+  history.replaceState(null, null, getLink(team));
+}
 
 const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
   <CollectionsList
@@ -137,6 +142,8 @@ class TeamPage extends React.Component {
     );
     const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
+    const updateUrl = (url) => this.props.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
+
     return (
       <main className={styles.container}>
         <section>
@@ -152,7 +159,7 @@ class TeamPage extends React.Component {
               'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
             }}
           >
-            <TeamFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
+            <TeamFields team={team} updateName={this.props.updateName} updateUrl={updateUrl} />
             <div className={styles.usersInformation}>
               <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
               {!!team.whitelistedDomain && (
