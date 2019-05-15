@@ -8,10 +8,10 @@ const SuperUserBanner = () => {
   const { currentUser, persistentToken } = useCurrentUser();
   const api = useAPI();
   const [showSupportBanner, setShowSupportBanner] = useLocalStorage('showSupportBanner', false);
-  const isSupporter = currentUser && currentUser.projects && currentUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0;
+  const canBecomeSuperUser = currentUser && currentUser.projects && currentUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0;
+  const superUser = currentUser.features && currentUser.features.find((feature) => feature.name === 'super_user');
 
-  if (isSupporter && persistentToken) {
-    const superUser = currentUser.features && currentUser.features.find((feature) => feature.name === 'super_user');
+  if (persistentToken && (superUser || canBecomeSuperUser)) {
     const expirationDate = superUser && new Date(superUser.expiresAt).toUTCString();
     const displayText = `SUPER USER MODE ${superUser ? `ENABLED UNTIL: ${expirationDate}` : 'DISABLED'} `;
     const toggleSuperUser = async () => {

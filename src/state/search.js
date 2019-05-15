@@ -95,6 +95,7 @@ const formatByType = {
   }),
   team: (team) => ({
     isVerified: false,
+    hasAvatarImage: false,
     ...team,
     id: Number(team.objectID.replace('team-', '')),
   }),

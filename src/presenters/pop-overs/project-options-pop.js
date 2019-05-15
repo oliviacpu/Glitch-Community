@@ -16,13 +16,6 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 );
 
 const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
-  function animate(event, className, func) {
-    const projectContainer = event.target.closest('li');
-    projectContainer.addEventListener('animationend', func, { once: true });
-    projectContainer.classList.add(className);
-    props.togglePopover();
-  }
-
   function isTeamProject() {
     const { currentUser, project } = props;
     for (const team of currentUser.teams) {
@@ -55,24 +48,29 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
     props.joinTeamProject(props.project.id, props.currentUser);
   }
 
-  function animateThenAddPin(event) {
-    animate(event, 'slide-up', () => props.addPin(props.project.id));
+  function animateThenAddPin() {
+    props.addPin(props.project.id);
+    props.togglePopover();
   }
 
-  function animateThenRemovePin(event) {
-    animate(event, 'slide-down', () => props.removePin(props.project.id));
+  function animateThenRemovePin() {
+    props.removePin(props.project.id);
+    props.togglePopover();
   }
 
-  function animateThenDeleteProject(event) {
-    animate(event, 'slide-down', () => props.deleteProject(props.project.id));
+  function animateThenDeleteProject() {
+    props.deleteProject(props.project.id);
+    props.togglePopover();
   }
 
-  function animateThenRemoveProjectFromTeam(event) {
-    animate(event, 'slide-down', () => props.removeProjectFromTeam(props.project.id));
+  function animateThenRemoveProjectFromTeam() {
+    props.removeProjectFromTeam(props.project.id);
+    props.togglePopover();
   }
 
-  function featureProject(event) {
-    animate(event, 'slide-up', () => props.featureProject(props.project.id));
+  function featureProject() {
+    props.featureProject(props.project.id);
+    props.togglePopover();
   }
 
   function toggleAndDisplayNote() {
@@ -94,7 +92,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
 
   return (
-    <dialog className="pop-over project-options-pop" tabIndex="0" ref={props.focusDialog}>
+    <dialog className="pop-over project-options-pop" tabIndex="0" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {!!props.featureProject && !props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
@@ -162,7 +160,7 @@ ProjectOptionsPop.propTypes = {
     users: PropTypes.array.isRequired,
   }).isRequired,
   togglePopover: PropTypes.func.isRequired,
-  focusDialog: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
   addPin: PropTypes.func,
   removePin: PropTypes.func,
   deleteProject: PropTypes.func,
@@ -204,7 +202,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
   }
 
   function currentUserIsAdminOnProject(user) {
-    const projectPermissions = project.permissions.find((p) => p.userId === user.id);
+    const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
     return projectPermissions && projectPermissions.accessLevel === 30;
   }
 

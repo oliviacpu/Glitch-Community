@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Image from 'Components/images/image';
 import Heading from 'Components/text/heading';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
 import Layout from '../layout';
@@ -17,7 +17,7 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 
-const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...props }) => (
+const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => (
   <>
     <Helmet title={category.name} />
     <main className="collection-page">
@@ -39,28 +39,17 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser, ...pr
               </div>
 
               {currentUser.login ? (
-                <ProjectsUL
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
-                  category
+                <ProjectsList
+                  layout="gridCompact"
+                  projects={projects}
                   projectOptions={{
                     addProjectToCollection,
                   }}
-                  {...props}
                 />
               ) : (
-                <ProjectsUL
-                  {...{
-                    projects,
-                    currentUser,
-                    addProjectToCollection,
-                  }}
-                  category
-                  projectOptions={{}}
-                  {...props}
+                <ProjectsList
+                  layout="gridCompact"
+                  projects={projects}
                 />
               )}
             </div>
@@ -88,7 +77,7 @@ async function loadCategory(api, id) {
   return data;
 }
 
-const CategoryPage = ({ category, ...props }) => {
+const CategoryPage = ({ category }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
@@ -98,7 +87,7 @@ const CategoryPage = ({ category, ...props }) => {
           {(loadedCategory) => (
             <CollectionEditor initialCollection={loadedCategory}>
               {(categoryFromEditor, funcs) => (
-                <CategoryPageWrap category={categoryFromEditor} userIsAuthor={false} currentUser={currentUser} {...funcs} {...props} />
+                <CategoryPageWrap category={categoryFromEditor} userIsAuthor={false} currentUser={currentUser} {...funcs} />
               )}
             </CollectionEditor>
           )}

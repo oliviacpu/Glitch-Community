@@ -21,13 +21,13 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, displayNew
 
   return (
     <PopoverContainer>
-      {({ togglePopover, visible, focusDialog }) => (
+      {({ togglePopover, visible, focusFirstElement }) => (
         <div>
-          <button className="project-options button-borderless featured-project-options-pop" onClick={togglePopover}>
+          <button className="project-options button-borderless featured-project-options-pop-btn" onClick={togglePopover}>
             <div className="down-arrow" />
           </button>
           {visible && (
-            <dialog className="pop-over project-options-pop" tabIndex="0" ref={focusDialog}>
+            <dialog className="pop-over project-options-pop featured-project-options-pop" ref={focusFirstElement}>
               <section className="pop-over-actions">
                 {!hasNote && canAddNote && (
                   <PopoverButton onClick={() => toggleAndDisplayNewNote(togglePopover)} text="Add note" emoji="spiral_note_pad" />

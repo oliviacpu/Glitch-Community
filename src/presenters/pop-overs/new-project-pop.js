@@ -31,8 +31,8 @@ const NewProjectResultItem = ({ id, domain, description }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, focusDialog }) => (
-  <dialog className="pop-over new-project-pop" ref={focusDialog} tabIndex="0">
+const NewProjectPop = ({ projects, focusFirstELement, opensFromRight }) => (
+  <div className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}` ref={focusFirstElement} tabIndex="0">
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
@@ -68,7 +68,8 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  focusDialog: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
+  opensFromRight: PropTypes.bool.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
@@ -86,13 +87,13 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return data;
 });
 
-function NewProjectPopButton() {
+function NewProjectPopButton({ opensFromRight }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {({ focusDialog }) => <NewProjectPop projects={projects} focusDialog={focusDialog} />}
+      {({ focusFirstElement }) => <NewProjectPop projects={projects} focusFirstElement={focusFirstElement} opensFromRight={opensFromRight}/>}
     </PopoverWithButton>
   );
 }

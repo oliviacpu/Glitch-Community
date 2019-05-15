@@ -267,11 +267,8 @@ SignInCodeSection.propTypes = {
 };
 
 const TermsAndPrivacySection = () => (
-  <aside className="pop-over-info last-section">
-    By signing into Glitch, you agree to our {' '}
-    <Link to="/legal/#tos">Terms of Services</Link>
-    {' '} and {' '}
-    <Link to="/legal/#privacy">Privacy Statement</Link>
+  <aside className="pop-over-info">
+    By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
   </aside>
 );
 
@@ -298,12 +295,13 @@ const SignInPopWithoutRouter = (props) => {
             <dialog className="pop-over sign-in-pop" tabIndex="0" ref={focusDialog}>
               {header}
               <NewUserInfoSection />
+              <TermsAndPrivacySection />
               <section className="pop-over-actions">
                 {prompt}
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
                 <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
                 <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} /> }
+                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
                 <EmailSignInButton
                   onClick={() => {
                     onClick();
@@ -317,7 +315,7 @@ const SignInPopWithoutRouter = (props) => {
                   showCodeLogin(api);
                 }}
               />
-              <TermsAndPrivacySection />
+              )}
             </dialog>
           )}
         </NestedPopover>

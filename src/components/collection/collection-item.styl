@@ -1,95 +1,123 @@
 @require '../constants'
 
+.header
+  flex: 0 0 32px
+  display: flex
+  margin-bottom: 0.5rem
+  align-items: center
+  
+.curator
+  flex: 1 0 auto
+  
 .collectionItem
+  display: flex
+  flex-direction: column
+  height: 100%
   position: relative
   margin-top: 0px
   font-size: 0.9rem
   border-radius: 5px
   min-width: 100%
   transition: 0.1s all
-  &.authorized
-    margin-top: 30px
+  :global .collection-options-pop-btn
+    display: block
+    position: inherit
+  :global .down-arrow
+    margin-left: 0
+
   a
     text-decoration: none
     color: primary
-  .linkBody
-    display: flex
-    height: 130px
-    padding: 12px
-    border-top-right-radius: 5px
-    border-top-left-radius: 5px
-    word-break: break-word
-    text-decoration: none
-    &.showCurator:after
-      top: 27px
-      left: 8.5px
-      border: solid transparent
-      content: " "
-      height: 0
-      width: 0
-      position: absolute
-      pointer-events: none
-      border-bottom-color: inherit
-      border-width: 7px
-    .avatarContainer
-      flex: 0 0 55px
-      margin-right: 1rem
-      svg
-        width: 100%
-        height: auto
+        
+.linkBody
+  flex: 0 1 130px
+  display: flex
+  padding: 12px
+  border-top-right-radius: 5px
+  border-top-left-radius: 5px
+  word-break: break-word
+  text-decoration: none
+  &.showCurator:after
+    top: 27px
+    left: 8.5px
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+    border-bottom-color: inherit
+    border-width: 7px
+  .avatarContainer
+    flex: 0 0 55px
+    margin-right: 1rem
+    svg
+      width: 100%
+      height: auto
+  .nameDescriptionContainer
+    overflow: hidden
+  &:hover
     .nameDescriptionContainer
-      overflow: hidden
-    &:hover
-      .nameDescriptionContainer
-        .itemButtonWrap
-          width: fit-content
-          height: fit-content
-          box-shadow: 2px 2px 0 primary
-          border-radius: 5px
-  .projectsContainer
-    width: 100%
-    height: 150px
-    margin: 0
-    list-style-type: none
-    padding: 0
-    padding-top: 1em
-    background-color: secondary-background
-    .projectItem
-      margin: 0 10px -5px
-    &.empty
-      padding: 18px 18px 0
-      border-bottom-right-radius: 5px
-      border-bottom-left-radius: 5px
-      p
-        margin: 0
-
-  .footerLink
-    display: block
-    min-height: 33px
-    padding: 3px 12px 12px
-    font-weight: 600
-    font-size: 13px
-    background-color: secondary-background
+      .itemButtonWrap
+        width: fit-content
+        height: fit-content
+        box-shadow: 2px 2px 0 primary
+        border-radius: 5px
+.projectsContainer
+  flex: 1 0 auto
+  padding: 10px
+  background-color: secondary-background
+  &.empty
+    padding: 18px 18px 0
     border-bottom-right-radius: 5px
     border-bottom-left-radius: 5px
-    &:hover
-      text-decoration: underline
+    p
+      margin: 0
+.projectsList
+  --min-width: 180px    
 
-.bubbleContainer
+.footerLink
+  flex: 0 0 auto
   display: block
-  position: relative
+  padding: 0 12px 12px
+  font-weight: 600
+  font-size: 13px
+  background-color: secondary-background
+  border-bottom-right-radius: 5px
+  border-bottom-left-radius: 5px
+  &:hover
+    text-decoration: underline
+
+.smallContainer
+  display: flex
+  flex-direction: column
+  height: 100%
+  .curator
+    margin-bottom: 10px
+    
+.smallCollectionLink
+  display: block
   color: inherit
   text-decoration: none
-  border-radius: 5px
-  word-break: break-word
+  display: flex
+  flex-direction: column
+  height: 100%
   &:hover
     text-decoration: none
+    
+.bubbleContainer
+  flex: 1 0 auto
+  position: relative
+  border-radius: 5px 5px 0 0
+  word-break: break-word
+  padding: 1rem 1rem  
+  &:hover
     .itemButtonWrap
       width: fit-content
       height: fit-content
       box-shadow: 2px 2px 0 primary
       border-radius: 5px
-  &:after
+  &.showCurator:after
     content: ""
     position: absolute
     width: 0
@@ -102,9 +130,6 @@
     border-left: 6px solid transparent
     border-right: 6px solid transparent
   
-.smallNameDescriptionArea
-  padding: 1rem 1rem 0
-  
 .nameArea
   display: flex
   align-items: flex-start
@@ -114,10 +139,11 @@
   
 .description
   font-size: 14px
-  padding-bottom: 8px
   p
     margin-bottom: 0
     word-break: break-word
+    &:empty
+      margin-top: 0
     a
       color: inherit
   
@@ -129,6 +155,7 @@
     height: auto
     
 .smallProjectCount
+  flex: 0 0 auto
   background-color: secondary-background
   padding: 0.5rem
   font-size: 14px
@@ -137,8 +164,3 @@
   
 a:hover .smallProjectCount
   text-decoration: underline
-
-.curator
-  height: 32px
-  margin-bottom: 0.5rem
-  

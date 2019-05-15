@@ -1,0 +1,126 @@
+@import '../constants.styl'
+
+.container
+  margin: 0
+  padding: 0
+  a
+    text-decoration: none
+    color: primary
+
+.link
+  color: link !important
+
+  
+// question-item
+.helpIcon
+  vertical-align: middle
+  width: 28px
+  height: auto
+  margin-left: 6px
+
+.question
+  display: block
+  background-color: secondary-background-active
+  padding: 8px
+  border-radius: 5px
+    
+.questionAsker
+  display: flex
+  flex-direction: row
+  align-items: center
+  
+.questionInner
+  padding: 8px
+  background-color: secondary-background
+  border-radius: 3px  
+  
+.avatar
+  border-radius: 50%
+  width: 32px
+  margin-right: 4px
+  
+.questionText
+  margin: 8px 0
+  font-size: 14px
+  
+.questionTags
+  margin-bottom: -6px
+  font-size: 14px
+  
+.tag
+  background-color: help-tag
+  border-radius: 5px
+  padding: 3px 5px
+  margin-right: 5px
+  display: inline-block
+  margin-bottom: 6px
+
+        
+// question timer        
+
+pie-duration = 10s
+pie-size = 20px
+count = infinite
+
+.loaderPie
+  position: relative
+  width: pie-size
+  height: pie-size
+  border-radius: 100%
+  overflow: hidden
+  background-color: secondary-background
+  display: inline-block
+  vertical-align: top
+  transform: rotate(180deg)
+
+.slice,
+.leftSide,
+.rightSide
+  overflow: hidden
+  position: absolute
+  width: 50%
+  height:100%
+
+.slice
+  background-color: line-on-secondary-background
+  position: absolute
+  left:100%
+  top:0
+  width:100%
+  height:100%
+  border-radius: 100%
+
+.leftSide
+  left: 0
+  .slice
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+    transform-origin: 0 50% 0
+    &.animated
+      animation: pie-left pie-duration linear
+
+.rightSide
+  left: 50%
+  .slice
+    left:-100%;
+    border-bottom-right-radius: 0
+    border-top-right-radius: 0	
+    transform-origin: 100% 50% 0
+    &.animated
+      animation: pie-right pie-duration linear
+
+@keyframes pie-left
+  0%
+    transform:rotate(0deg)
+  50%
+    transform:rotate(180deg)
+  100%
+    transform:rotate(180deg)
+
+@keyframes pie-right
+  0%
+    transform:rotate(0deg)
+  50%
+    transform:rotate(0deg)
+  100%
+    transform:rotate(180deg)

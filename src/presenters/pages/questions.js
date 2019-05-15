@@ -2,13 +2,13 @@ import React from 'react';
 
 import Helmet from 'react-helmet';
 import MoreIdeas from 'Components/more-ideas';
+import Questions from 'Components/questions';
 import Layout from '../layout';
-import Questions from '../questions';
 
 const QuestionsPage = () => (
   <Layout>
     <Helmet title="Questions" />
-    <main className="questions-page">
+    <main>
       <Questions max={12} />
       <MoreIdeas />
     </main>

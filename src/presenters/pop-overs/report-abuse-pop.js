@@ -214,7 +214,7 @@ class ReportAbusePop extends React.Component {
       </section>
       <section className="pop-over-info">
         <p className="info-description">
-          But you can still send us your message by emailing the details below to
+          But you can still send us your message by emailing the details below to{' '}
           <b>support@glitch.com</b>
         </p>
       </section>

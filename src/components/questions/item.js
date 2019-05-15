@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Image from 'Components/images/image';
+import Button from 'Components/buttons/button';
 import { getEditorUrl } from 'Models/project';
 import Link from 'Components/link';
+import styles from './questions.styl';
 
 const iconHelp = 'https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fask-for-help.svg?1494954687906';
 
@@ -22,22 +24,29 @@ function truncateTag(tag) {
 
 const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvatar, userColor, userLogin, path, line, character }) => (
   <>
-    <Image className="help-icon" src={iconHelp} alt="Help icon" />
-    <Link to={getEditorUrl(domain, path, line, character)} data-track="question" data-track-label={domain}>
-      <div className="project" style={{ backgroundColor: colorOuter }}>
-        <div className="project-container" style={{ backgroundColor: colorInner }}>
-          <Image className="avatar" src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
-          <div className="button">Help {userLogin}</div>
-          <div className="description question" title={question}>
-            {truncateQuestion(question)}
-          </div>
-          <div className="description tags">
-            {tags.map((tag) => (
-              <div key={tag} className="tag" title={tag}>
-                {truncateTag(tag)}
-              </div>
-            ))}
-          </div>
+    <Image className={styles.helpIcon} src={iconHelp} alt="Help icon" />
+    <Link
+      to={getEditorUrl(domain, path, line, character)}
+      data-track="question"
+      data-track-label={domain}
+      className={styles.question}
+      style={{ backgroundColor: colorOuter }}
+    >
+      <div className={styles.questionInner} style={{ backgroundColor: colorInner }}>
+        <div className={styles.questionAsker}>
+          <Image className={styles.avatar} src={userAvatar} style={{ backgroundColor: userColor }} alt="" />
+          <Button decorative>Help {userLogin}</Button>
+        </div>
+
+        <div className={styles.questionText} title={question}>
+          {truncateQuestion(question)}
+        </div>
+        <div className={styles.questionTags}>
+          {tags.map((tag) => (
+            <div key={tag} className={styles.tag} title={tag}>
+              {truncateTag(tag)}
+            </div>
+          ))}
         </div>
       </div>
     </Link>
