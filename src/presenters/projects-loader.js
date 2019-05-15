@@ -35,10 +35,13 @@ class ProjectsLoader extends React.Component {
     projects = Object.values(projects);
 
     // Gather unique user IDs for all of the projects being loaded, based on permissions
-    const uniqueUserIds = uniq(flatMap(projects, ({ permissions }) => permissions.map(({ userId }) => userId)));
+    const uniqueUserIdChunks = chunk(uniq(flatMap(projects, ({ permissions }) => permissions.map(({ userId }) => userId))), 100);
 
     // Load all of the users for this set of projects
-    const allUsers = await getFromApi(this.props.api, `v1/users/by/id?${joinIdsToQueryString(uniqueUserIds)}`);
+    const allUserBatches = await Promise.all(
+      uniqueUserIdChunks.map((uniqueUserIds) => getFromApi(this.props.api, `v1/users/by/id?${joinIdsToQueryString(uniqueUserIds)}`)),
+    );
+    const allUsers = Object.assign({}, ...allUserBatches);
 
     // Go back over the projects and pick users out of the array by ID based on permissions
     projects = projects.map((project) => ({

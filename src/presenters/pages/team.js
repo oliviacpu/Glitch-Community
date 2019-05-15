@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
-import TeamNameInput from 'Components/fields/team-name-input';
-import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
@@ -14,41 +12,30 @@ import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
+import TeamFields from 'Components/fields/team-fields';
+import { getLink } from 'Models/team';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import TeamEditor from '../team-editor';
-import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
-import { captureException } from '../../utils/sentry';
 
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
 import DeleteTeam from '../includes/delete-team';
-import { AddTeamUser, TeamUsers, WhitelistedDomain, JoinTeam } from '../includes/team-users';
+import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
-import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
+import { TeamMarketing } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
-
-const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
-  <>
-    <Heading tagName="h1">
-      <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
-    </Heading>
-    <p className={styles.teamUrl}>
-      <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
-    </p>
-  </>
-);
 
 const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
   <CollectionsList
@@ -84,17 +71,7 @@ const ProjectPals = () => (
 class TeamPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      invitees: [],
-    };
-    this.teamAdmins = this.teamAdmins.bind(this);
-    this.getInvitees = this.getInvitees.bind(this);
     this.addProjectToCollection = this.addProjectToCollection.bind(this);
-  }
-
-  async componentDidMount() {
-    const invitees = await this.getInvitees();
-    this.setState({ invitees });
   }
 
   getProjectOptions() {
@@ -112,34 +89,6 @@ class TeamPage extends React.Component {
     return projectOptions;
   }
 
-  async getInvitees() {
-    if (this.props.currentUserIsOnTeam) {
-      try {
-        const data = await Promise.all(this.props.team.tokens.map(({ userId }) => this.props.api.get(`users/${userId}`)));
-        const invitees = data.map((user) => user.data).filter((user) => !!user);
-        return invitees;
-      } catch (error) {
-        if (error && error.response && error.response.status === 404) {
-          return null;
-        }
-        captureException(error);
-      }
-    }
-    return [];
-  }
-
-  userCanJoinTeam() {
-    const { currentUser, team } = this.props;
-    if (!this.props.currentUserIsOnTeam && team.whitelistedDomain && currentUser && currentUser.emails) {
-      return currentUser.emails.some(({ email, verified }) => verified && email.endsWith(`@${team.whitelistedDomain}`));
-    }
-    return false;
-  }
-
-  teamAdmins() {
-    return this.props.team.users.filter((user) => this.props.team.adminIds.includes(user.id));
-  }
-
   async addProjectToCollection(project, collection) {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
@@ -152,6 +101,8 @@ class TeamPage extends React.Component {
       pinnedSet.has(id),
     );
     const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
+
+    const updateUrl = (url) => this.props.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
 
     return (
       <main className={styles.container}>
@@ -168,35 +119,17 @@ class TeamPage extends React.Component {
               'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
             }}
           >
-            {this.props.currentUserIsTeamAdmin ? (
-              <TeamNameUrlFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
-            ) : (
-              <>
-                <Heading tagName="h1">
-                  {team.name} {team.isVerified && <VerifiedBadge />}
-                </Heading>
-                <p className={styles.teamUrl}>@{team.url}</p>
-              </>
-            )}
+            <TeamFields team={team} updateName={this.props.updateName} updateUrl={updateUrl} />
             <div className={styles.usersInformation}>
-              <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
-              {!!team.whitelistedDomain && (
-                <WhitelistedDomain
-                  domain={team.whitelistedDomain}
-                  setDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
-                />
-              )}
-              {this.props.currentUserIsOnTeam && (
-                <AddTeamUser
-                  inviteEmail={this.props.inviteEmail}
-                  inviteUser={this.props.inviteUser}
-                  setWhitelistedDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
-                  members={team.users.map(({ id }) => id)}
-                  invitedMembers={this.state.invitees}
-                  whitelistedDomain={team.whitelistedDomain}
-                />
-              )}
-              {this.userCanJoinTeam() && <JoinTeam onClick={this.props.joinTeam} />}
+              <TeamUsers
+                team={team}
+                removeUserFromTeam={this.props.removeUserFromTeam}
+                updateUserPermissions={this.props.updateUserPermissions}
+                updateWhitelistedDomain={this.props.updateWhitelistedDomain}
+                inviteEmail={this.props.inviteEmail}
+                inviteUser={this.props.inviteUser}
+                joinTeam={this.props.joinTeam}
+              />
             </div>
             <Thanks count={team.users.reduce((total, { thanksCount }) => total + thanksCount, 0)} />
             <AuthDescription
@@ -209,7 +142,7 @@ class TeamPage extends React.Component {
         </section>
 
         <ErrorBoundary>
-          <AddTeamProject {...this.props} teamProjects={team.projects} />
+          {this.props.currentUserIsOnTeam && <AddTeamProject addProject={this.props.addProject} teamProjects={team.projects} />}
         </ErrorBoundary>
 
         {featuredProject && (
@@ -281,7 +214,7 @@ class TeamPage extends React.Component {
           </ErrorBoundary>
         )}
 
-        {this.props.currentUserIsTeamAdmin && <DeleteTeam teamId={team.id} teamName={team.name} teamAdmins={this.teamAdmins()} users={team.users} />}
+        {this.props.currentUserIsTeamAdmin && <DeleteTeam team={team} />}
 
         {!this.props.currentUserIsOnTeam && (
           <>

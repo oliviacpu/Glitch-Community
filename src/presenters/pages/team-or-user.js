@@ -26,12 +26,13 @@ const getUserById = async (api, id) => {
 };
 
 const getUserByLogin = async (api, name) => {
+  const encoded = encodeURIComponent(name);
   const data = await allByKeys({
-    user: getSingleItem(api, `v1/users/by/login?login=${name}`, name),
-    pins: getAllPages(api, `v1/users/by/login/pinnedProjects?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    projects: getAllPages(api, `v1/users/by/login/projects?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    teams: getAllPages(api, `v1/users/by/login/teams?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    collections: getAllPages(api, `v1/users/by/login/collections?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    user: getSingleItem(api, `v1/users/by/login?login=${encoded}`, name),
+    pins: getAllPages(api, `v1/users/by/login/pinnedProjects?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    projects: getAllPages(api, `v1/users/by/login/projects?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    teams: getAllPages(api, `v1/users/by/login/teams?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    collections: getAllPages(api, `v1/users/by/login/collections?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
   });
   return mergeUserData(data);
 };
@@ -44,7 +45,7 @@ const parseTeam = (team) => {
 };
 
 const getTeam = async (api, name) => {
-  const team = await getSingleItem(api, `v1/teams/by/url?url=${name}`, name);
+  const team = await getSingleItem(api, `v1/teams/by/url?url=${encodeURIComponent(name)}`, name);
   if (team) {
     const [users, pinnedProjects, projects, collections] = await Promise.all([
       // load all users, need to handle pagination
@@ -62,8 +63,10 @@ const getTeam = async (api, name) => {
   return team && parseTeam(team);
 };
 
-const TeamPageLoader = ({ id, name, ...props }) => (
-  <DataLoader get={(api) => getTeam(api, name)}>{(team) => (team ? <TeamPage team={team} {...props} /> : <NotFound name={name} />)}</DataLoader>
+const TeamPageLoader = ({ name, ...props }) => (
+  <DataLoader get={(api) => getTeam(api, name)} renderError={() => <NotFound name={name} />}>
+    {(team) => <TeamPage team={team} {...props} />}
+  </DataLoader>
 );
 TeamPageLoader.propTypes = {
   id: PropTypes.number.isRequired,
@@ -71,7 +74,9 @@ TeamPageLoader.propTypes = {
 };
 
 const UserPageLoader = ({ id, name, ...props }) => (
-  <DataLoader get={(api) => getUserById(api, id)}>{(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}</DataLoader>
+  <DataLoader get={(api) => getUserById(api, id)} renderError={() => <NotFound name={name} />}>
+    {(user) => <UserPage user={user} {...props} />}
+  </DataLoader>
 );
 
 UserPageLoader.propTypes = {
@@ -85,8 +90,8 @@ const TeamOrUserPageLoader = ({ name, ...props }) => (
       team ? (
         <TeamPage team={team} {...props} />
       ) : (
-        <DataLoader get={(api) => getUserByLogin(api, name)}>
-          {(user) => (user ? <UserPage user={user} {...props} /> : <NotFound name={name} />)}
+        <DataLoader get={(api) => getUserByLogin(api, name)} renderError={() => <NotFound name={`@${name}`} />}>
+          {(user) => <UserPage user={user} {...props} />}
         </DataLoader>
       )
     }
