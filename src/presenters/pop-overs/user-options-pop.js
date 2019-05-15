@@ -172,7 +172,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
-          {({ togglePopover, visible, focusDialog }) => {
+          {({ togglePopover, visible, focusFirstElement }) => {
             const userOptionsButton = (
               <button className="user" onClick={togglePopover} disabled={!props.user.id} type="button">
                 <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
@@ -190,8 +190,8 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                 align={['right']}
               >
                 {visible && (
-                  <NestedPopover alternateContent={() => <CreateTeamPop {...props} {...{ focusDialog }} />} startAlternateVisible={createTeamOpen}>
-                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusDialog }} />}
+                  <NestedPopover alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />} startAlternateVisible={createTeamOpen}>
+                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
                   </NestedPopover>
                 )}
               </TooltipContainer>

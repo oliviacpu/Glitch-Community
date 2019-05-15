@@ -39,7 +39,6 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
         'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
       const focusableDialogElements = dialog.querySelectorAll(focusableElements);
       if (focusableDialogElements) {
-        console.log(focusableDialogElements[0]);
         focusableDialogElements[0].focus();
       }
     }
