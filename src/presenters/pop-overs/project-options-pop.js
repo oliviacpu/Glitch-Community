@@ -38,7 +38,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   const currentUserIsMemberOfProject = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
-
+  const isOnAnotherPersonsUserPage = currentPageType === "user" && currentPageItem.id !== currentUser.id;
   // TODO tomorrow: look at currentPageItme/currentPageType and determine what if any other authorization checks are needed.
   // example probs shouldn't be able to remove yourself from a project from someone else's user page
   
