@@ -183,9 +183,11 @@ export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChi
   <PopoverContainer onOpen={onOpen}>
     {({ visible, togglePopover }) => (
       <div>
-        <Button {...buttonProps} onClick={togglePopover}>
-          {buttonText}
-        </Button>
+        <div className={styles.buttonWrap}>
+          <Button {...buttonProps} onClick={togglePopover}>
+            {buttonText}
+          </Button>
+        </div>
         {visible && renderChildren({ togglePopover })}
       </div>
     )}
