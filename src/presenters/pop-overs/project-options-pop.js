@@ -31,6 +31,15 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
+const isAuthorOfCurrentPage = ({ currentPageItem, currentPageType, currentUser }) => {
+  if (currentPageType === "user") {
+    return currentPageItem.id !== currentUser.id;
+  }
+  if (currentPageType === "team") {
+  }
+  return false;
+}
+
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions, currentPageItem, currentPageType }) => {
   const isAnon = !(currentUser && currentUser.login);
   const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
@@ -38,17 +47,17 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   const currentUserIsMemberOfProject = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const currentUserIsAdminOnProject = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
-  // const isOnAnotherPersonsUserPage = currentPageType === "user" && currentPageItem.id !== currentUser.id;
+  const isAuthor = isAuthorOfCurrentPage({ currentPageItem, currentPageType, currentUser });
   // TODO tomorrow: look at currentPageItme/currentPageType and determine what if any other authorization checks are needed.
   // example probs shouldn't be able to remove yourself from a project from someone else's user page
   return {
-    featureProject: projectOptions.featureProject && !project.private && !isAnon
+    featureProject: projectOptions.featureProject && !project.private && !isAnon && isAuthor
       ? () => projectOptions.featureProject(project.id)
       : null,
-    addPin: projectOptions.addPin && !isAnon
+    addPin: projectOptions.addPin && !isAnon && isAuthor
       ? () => projectOptions.addPin(project.id)
       : null,
-    removePin: projectOptions.removePin && !isAnon
+    removePin: projectOptions.removePin && !isAnon && isAuthor
       ? () => projectOptions.removePin(project.id)
       : null,
     displayNewNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon
