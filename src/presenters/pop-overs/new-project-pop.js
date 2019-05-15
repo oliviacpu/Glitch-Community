@@ -31,8 +31,8 @@ const NewProjectResultItem = ({ id, domain, description }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, focusFirstELement, opensFromRight }) => (
-  <div className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}` ref={focusFirstElement} tabIndex="0">
+const NewProjectPop = ({ projects, focusFirstElement, opensFromRight }) => (
+  <dialog className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`} ref={focusFirstElement} tabIndex="0">
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
