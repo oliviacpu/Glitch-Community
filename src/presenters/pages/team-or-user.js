@@ -94,7 +94,7 @@ const TeamOrUserPageLoader = ({ name, ...props }) => {
         team ? (
           <TeamPage team={team} {...props} />
         ) : (
-          <DataLoader get={() => getUserByLogin(api, name)} renderError={() => <NotFound name={'@' + name} />}>
+          <DataLoader get={() => getUserByLogin(api, name)} renderError={() => <NotFound name={`@${name}`} />}>
             {(user) => <UserPage user={user} {...props} />}
           </DataLoader>
         )
