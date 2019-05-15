@@ -179,7 +179,7 @@ const CollectionPageContents = ({
                     displayNewNote,
                     featureProject,
                     currentPageItem: collection,
-                    currentPageType: "collection"
+                    currentPageType: 'collection',
                   }}
                 />
               </div>

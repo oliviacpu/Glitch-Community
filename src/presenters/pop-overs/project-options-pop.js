@@ -31,9 +31,11 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
-const isAuthorOfCurrentPage = ({ currentPageItem, currentPageType, currentUser }) => {
+const isAuthorOfCurrentPage = ({ projectOptions, currentUser }) => {
+  const { currentPageType, currentPageItem } = projectOptions;
+
   if (currentPageType === 'user') {
-    return currentPageItem.id !== currentUser.id;
+    return currentPageItem.id === currentUser.id;
   }
   if (currentPageType === 'team') {
     return currentPageItem.users && currentPageItem.users.some(({ id }) => currentUser.id === id);
@@ -46,17 +48,18 @@ const isAuthorOfCurrentPage = ({ currentPageItem, currentPageType, currentUser }
       return currentUser.id === currentPageItem.userId;
     }
   }
+  
   return false;
 };
 
-const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions, currentPageItem, currentPageType }) => {
+const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
   const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
 
   const isProjectMember = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
-  const isAuthor = isAuthorOfCurrentPage({ currentPageItem, currentPageType, currentUser });
+  const isAuthor = isAuthorOfCurrentPage({ projectOptions, currentUser });
 
   return {
     featureProject: projectOptions.featureProject && !project.private && !isAnon && isAuthor

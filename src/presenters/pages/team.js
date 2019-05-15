@@ -106,7 +106,7 @@ class TeamPage extends React.Component {
       joinTeamProject: this.props.joinTeamProject,
       featureProject: this.props.featureProject,
       currentPageItem: this.props.team,
-      currentPageType: "team"
+      currentPageType: 'team',
     };
 
     return projectOptions;
