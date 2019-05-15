@@ -254,7 +254,7 @@ const AddProjectToCollectionPop = (props) => {
 
   return (
     <NestedPopover
-      alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} />}
+      alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement}/>}
       startAlternateVisible={false}
     >
       {(createCollectionPopover) => (
@@ -275,11 +275,13 @@ AddProjectToCollectionPop.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
+  focusFirstElement: PropTypes.func,
 };
 
 AddProjectToCollectionPop.defaultProps = {
   fromProject: false,
   togglePopover: null,
+  focusFirstElement: null,
 };
 
 export default AddProjectToCollectionPop;
