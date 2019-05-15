@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
+import ResultsList from 'Components/containers/results-list';
 import { getRemixUrl } from 'Models/project';
 import { useTracker, TrackedExternalLink } from '../segment-analytics';
 import ProjectAvatar from '../includes/project-avatar';
@@ -33,8 +34,11 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 );
 
 const NewProjectPop = ({ projects }) => (
-  <PopoverDialog className="new-project-pop" align="right">
-    <PopoverSection className="results-list">
+  <PopoverDialog align="right">
+    {projects.length ? (
+    
+    )}
+    
       <div className="results">
         {projects.length ? (
           projects.map((project) => (

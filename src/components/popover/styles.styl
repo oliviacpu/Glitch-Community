@@ -27,12 +27,9 @@
   z-index: 10
 
 .popoverSection
-  border-top: 1px solid secondary
   margin: 0
   button
     margin-bottom: 0 !important
-  &:first-child
-    border-top: none
   &.primary
     color: primary
     background-color: primary-background
@@ -42,6 +39,9 @@
   &.dangerZone
     color: primary
     background-color: warning-background
+    
+.popoverSection + .popoverSection
+  border-top: 1px solid secondary
     
 .popoverActions
   padding: 14px 12px
