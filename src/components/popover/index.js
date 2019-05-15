@@ -38,7 +38,7 @@ const usePositionAdjustment = ({ margin }) => {
 };
 
 const alignTypes = ['left', 'right'];
-export const PopoverDialog = ({ children, align,  wide, className }) => {
+export const PopoverDialog = ({ children, align, wide, className }) => {
   const { ref, offset } = usePositionAdjustment({ margin: 12 });
   return (
     <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
@@ -54,33 +54,27 @@ PopoverDialog.propTypes = {
   align: PropTypes.oneOf(alignTypes).isRequired,
   wide: PropTypes.bool,
   className: PropTypes.string,
-}
+};
 PopoverDialog.defaultProps = {
   wide: false,
   className: '',
-}
+};
 
-
-const sectionTypes = ['primary', 'secondary', 'dangerZone']
+const sectionTypes = ['primary', 'secondary', 'dangerZone'];
 export const PopoverSection = ({ className, children, type }) => (
-  <section className={classnames(styles.popoverSection, styles[type], className)}>
-    {children}
-  </section>
-)
+  <section className={classnames(styles.popoverSection, styles[type], className)}>{children}</section>
+);
 
 PopoverSection.propTypes = {
   type: PropTypes.oneOf(sectionTypes),
   children: PropTypes.node.isRequired,
-}
+};
 
 PopoverSection.defaultProps = {
   type: 'primary',
-}
+};
 
-export const PopoverActions = ({ ...props }) => (
-  <PopoverSection {...props} className={styles.popoverActions}/>
-)
-
+export const PopoverActions = ({ ...props }) => <PopoverSection {...props} className={styles.popoverActions} />;
 
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverTitle = styled('div', styles.popoverTitle);
@@ -173,11 +167,11 @@ export const NestedPopoverTitle = ({ children }) => {
   const toggle = useContext(NestedPopoverContext);
   return (
     <TransparentButton onClick={toggle} aria-label="go back">
-      <PopoverInfo>
+      <PopoverSection type="secondary">
         <div className="left-arrow icon" />
         &nbsp;
         <PopoverTitle>{children}</PopoverTitle>
-      </PopoverInfo>
+      </PopoverSection>
     </TransparentButton>
   );
 };
@@ -207,7 +201,5 @@ PopoverWithButton.propTypes = {
 
 PopoverWithButton.defaultProps = {
   buttonProps: {},
-  containerClass: '',
-  dataTrack: '',
   onOpen: null,
 };

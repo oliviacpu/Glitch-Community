@@ -1,11 +1,26 @@
 @import "../constants.styl"
 
+.scrollContainer
+  overflow: scroll
+  max-height: 357px
+
 .resultsList
   margin: 0
-  padding: 0
+  padding: 6px
+  list-style-type: none
   
 .resultItem
   display: block
+  a
+    color: inherit
+    text-decoration: none
+  &:hover,
+  &:focus,
+  &.active
+    background-color: general-link
+    color: primary-background
+    a
+      color: primary-background
   
 .resultItem + .resultItem
   border-top: section-line
