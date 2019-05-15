@@ -25,10 +25,14 @@ const usePositionAdjustment = ({ margin }) => {
       const rect = ref.current.getBoundingClientRect();
       if (rect.left < margin) {
         setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
+      } else if (rect.right > window.innerWidth - margin) {
+        setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
       } else {
         setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
       }
     };
+    const observer = 
+    
     const debounced = debounce(setPosition, 300);
     window.addEventListener('resize', debounced);
     setPosition();
@@ -180,18 +184,20 @@ NestedPopoverTitle.propTypes = {
 };
 
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
-  <PopoverContainer onOpen={onOpen}>
-    {({ visible, togglePopover }) => (
-      <div>
-        <div className={styles.buttonWrap}>
-          <Button {...buttonProps} onClick={togglePopover}>
-            {buttonText}
-          </Button>
+  <div className={styles.popoverWithButtonWrap}>
+    <PopoverContainer onOpen={onOpen}>
+      {({ visible, togglePopover }) => (
+        <div>
+          <div className={styles.buttonWrap}>
+            <Button {...buttonProps} onClick={togglePopover}>
+              {buttonText}
+            </Button>
+          </div>
+          {visible && renderChildren({ togglePopover })}
         </div>
-        {visible && renderChildren({ togglePopover })}
-      </div>
-    )}
-  </PopoverContainer>
+      )}
+    </PopoverContainer>
+  </div>
 );
 
 PopoverWithButton.propTypes = {
