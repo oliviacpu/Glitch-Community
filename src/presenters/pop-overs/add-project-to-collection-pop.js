@@ -119,7 +119,15 @@ const AddProjectToCollectionPopContents = ({
 
       {collections && collections.length > 3 && (
         <section className="pop-over-info">
-          <TextInput autoFocus value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
+          <TextInput
+            autoFocus
+            value={query}
+            onChange={setQuery}
+            placeholder="Filter collections"
+            labelText="Filter collections"
+            opaque
+            type="search"
+          />
         </section>
       )}
 
@@ -195,7 +203,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
 };
 
 const AddProjectToCollectionPop = (props) => {
-  const { project, togglePopover } = props;
+  const { project, togglePopover, focusFirstElement } = props;
 
   const api = useAPI();
   const { currentUser } = useCurrentUser();
@@ -205,56 +213,55 @@ const AddProjectToCollectionPop = (props) => {
   const [maybeCollections, setMaybeCollections] = React.useState(null);
   const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
 
-  React.useEffect(
-    () => {
-      let canceled = false;
-      setMaybeCollections(null); // reset maybCollections on reload to show loader
+  React.useEffect(() => {
+    let canceled = false;
+    setMaybeCollections(null); // reset maybCollections on reload to show loader
 
-      const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
+    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
 
-      const loadUserCollections = async (user) => {
-        const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
-        return collections.map((collection) => ({ ...collection, user }));
-      };
+    const loadUserCollections = async (user) => {
+      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, user }));
+    };
 
-      const loadTeamCollections = async (team) => {
-        const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
-        return collections.map((collection) => ({ ...collection, team }));
-      };
+    const loadTeamCollections = async (team) => {
+      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, team }));
+    };
 
-      const loadCollections = async () => {
-        const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
-        const userCollectionsRequest = loadUserCollections(currentUser);
+    const loadCollections = async () => {
+      const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
+      const userCollectionsRequest = loadUserCollections(currentUser);
 
-        const requests =
-          collectionType === filterTypes[0]
-            ? [projectCollectionsRequest, userCollectionsRequest]
-            : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
+      const requests =
+        collectionType === filterTypes[0]
+          ? [projectCollectionsRequest, userCollectionsRequest]
+          : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
 
-        const [projectCollections, ...collectionArrays] = await Promise.all(requests);
+      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
 
-        const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-        const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
+      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
+      const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
 
-        const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
-        if (!canceled) {
-          setMaybeCollections(orderedCollections);
-          setCollectionsWithProject(_collectionsWithProject);
-        }
-      };
+      if (!canceled) {
+        setMaybeCollections(orderedCollections);
+        setCollectionsWithProject(_collectionsWithProject);
+      }
+    };
 
-      loadCollections().catch(captureException);
-      return () => {
-        canceled = true;
-      };
-    },
-    [project.id, currentUser.id, collectionType],
-  );
+    loadCollections().catch(captureException);
+    return () => {
+      canceled = true;
+    };
+  }, [project.id, currentUser.id, collectionType]);
 
   return (
     <NestedPopover
-      alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} />}
+      alternateContent={() => (
+        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      )}
       startAlternateVisible={false}
     >
       {(createCollectionPopover) => (
@@ -275,11 +282,13 @@ AddProjectToCollectionPop.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
+  focusFirstElement: PropTypes.func,
 };
 
 AddProjectToCollectionPop.defaultProps = {
   fromProject: false,
   togglePopover: null,
+  focusFirstElement: null,
 };
 
 export default AddProjectToCollectionPop;
