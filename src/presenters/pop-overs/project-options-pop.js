@@ -41,7 +41,6 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   // const isOnAnotherPersonsUserPage = currentPageType === "user" && currentPageItem.id !== currentUser.id;
   // TODO tomorrow: look at currentPageItme/currentPageType and determine what if any other authorization checks are needed.
   // example probs shouldn't be able to remove yourself from a project from someone else's user page
-  
   return {
     featureProject: projectOptions.featureProject && !project.private && !isAnon
       ? () => projectOptions.featureProject(project.id)
