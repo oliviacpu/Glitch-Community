@@ -16,13 +16,13 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
     const currentUrl = new URL(window.location.href);
     const targetUrl = new URL(to, currentUrl);
 
-//     if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
-//       return (
-//         <a href={to} {...props} ref={ref}>
-//           {children}
-//         </a>
-//       );
-//     }
+    //     if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
+    //       return (
+    //         <a href={to} {...props} ref={ref}>
+    //           {children}
+    //         </a>
+    //       );
+    //     }
 
     to = {
       pathname: targetUrl.pathname,
