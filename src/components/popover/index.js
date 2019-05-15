@@ -49,16 +49,23 @@ export const PopoverDialog = ({ children, wide, className }) => {
 };
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone']
-export const PopoverSection = ({ children, type }) => (
-  <section className={classnames(styles.popoverSection, styles[type])}>
-  
+export const PopoverSection = ({ className, children, type }) => (
+  <section className={classnames(styles.popoverSection, styles[type], className)}>
+    {children}
   </section>
 )
 
+PopoverSection.propTypes = {
+  type: PropTypes.oneOf(sectionTypes),
+  children: PropTypes.node.isRequired,
+}
+
+PopoverSection.defaultProps = {
+  type: 'primary',
+}
+
 
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
-export const PopoverInfo = styled('section', styles.popoverInfo);
-export const PopoverActions = styled('section', styles.popoverActions);
 export const PopoverTitle = styled('div', styles.popoverTitle);
 export const InfoDescription = styled('p', styles.infoDescription);
 

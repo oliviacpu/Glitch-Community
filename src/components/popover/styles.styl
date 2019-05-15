@@ -22,16 +22,18 @@
   box-shadow: pop-shadow
   z-index: 10
 
-.popoverInfo,
-.popoverActions,
-.popoverTitle,
-.infoDescription
-  display: block
-  margin: 0
-  padding: 0
-  
-.popoverInfo,
-.popoverActions
+.popoverSection
   border-top: 1px solid secondary
-  &:last-child
+  &:first-child
     border-top: none
+  &.primary
+    color: primary
+    background-color: primary-background
+  &.secondary
+    color: primary
+    background-color: secondary-background
+  &.dangerZone
+    color: primary
+    background-color: warning-background
+    
+    

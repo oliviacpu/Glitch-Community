@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
-import { PopoverWithButton, PopoverDialog, PopoverActions } from 'Components/popover';
+import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/popover';
 import { getRemixUrl } from 'Models/project';
 import { useTracker, TrackedExternalLink } from '../segment-analytics';
 import ProjectAvatar from '../includes/project-avatar';
@@ -34,7 +34,7 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 
 const NewProjectPop = ({ projects }) => (
   <PopoverDialog className="new-project-pop">
-    <PopoverActions className="results-list">
+    <PopoverSection className="results-list">
       <div className="results">
         {projects.length ? (
           projects.map((project) => (
@@ -54,12 +54,12 @@ const NewProjectPop = ({ projects }) => (
           <Loader />
         )}
       </div>
-    </PopoverActions>
-    <PopoverActions>
+    </PopoverSection>
+    <PopoverSection type="secondary">
       <Button size="small" tertiary onClick={importGitRepo}>
         Clone from Git Repo
       </Button>
-    </PopoverActions>
+    </PopoverSection>
   </PopoverDialog>
 );
 NewProjectPop.propTypes = {
