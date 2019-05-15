@@ -6,7 +6,7 @@ import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
 
 import TransparentButton from 'Components/buttons/transparent-button';
-import button from 'Components/buttons/button';
+import Button from 'Components/buttons/button';
 import styles from './styles.styl';
 
 /*
