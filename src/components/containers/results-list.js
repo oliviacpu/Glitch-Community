@@ -18,3 +18,5 @@ ResultsList.propTypes = {
   children: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
+
+export default ResultsList;

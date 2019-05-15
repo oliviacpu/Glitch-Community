@@ -21,7 +21,7 @@ const importGitRepo = () => {
   window.location.href = `/edit/#!/import/git?url=${repoUrl}`;
 };
 
-const NewProjectResultItem = ({ id, domain, description }) => (
+const NewProjectResultItem = ({ project: { id, domain, description } }) => (
   <div className="result result-project">
     <ProjectAvatar domain={domain} id={id} />
     <div className="results-info">
@@ -35,13 +35,10 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 
 const NewProjectPop = ({ projects }) => (
   <PopoverDialog align="right">
-    {projects.length ? (
-    
-    )}
-    
-      <div className="results">
-        {projects.length ? (
-          projects.map((project) => (
+    <PopoverSection>
+      {projects.length ? (
+        <ResultsList items={projects}>
+          {(project) => (
             <TrackedExternalLink
               key={project.id}
               to={getRemixUrl(project.domain)}
@@ -51,13 +48,13 @@ const NewProjectPop = ({ projects }) => (
                 origin: 'community new project pop',
               }}
             >
-              <NewProjectResultItem {...project} />
+              <NewProjectResultItem project={project} />
             </TrackedExternalLink>
-          ))
-        ) : (
-          <Loader />
-        )}
-      </div>
+          )}
+        </ResultsList>
+      ) : (
+        <Loader />
+      )}
     </PopoverSection>
     <PopoverActions type="secondary">
       <Button size="small" type="tertiary" onClick={importGitRepo} matchBackground>
@@ -81,13 +78,14 @@ const useNewProjectAPI = createAPIHook(async (api) => {
     'cb519589-591c-474f-8986-a513f22dbf88', // 'hello-sqlite'
     '929980a8-32fc-4ae7-a66f-dddb3ae4912c', // 'hello-webpage'
   ];
+  const idString = projectIds.map((id) => `id=${id}`).join('&');
   // always request against the production API, with no token
-  const { data } = await api.get(`https://api.glitch.com/projects/byIds?ids=${projectIds.join(',')}`, {
+  const { data } = await api.get(`/v1/projects/by/id?${idString}`, {
     headers: {
       Authorization: '',
     },
   });
-  return data;
+  return Object.values(data);
 });
 
 function NewProjectPopButton() {
