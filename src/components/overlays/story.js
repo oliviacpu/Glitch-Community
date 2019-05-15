@@ -26,7 +26,7 @@ story.add('generic', () => (
 story.add('search bar', () => (
   <Overlay>
     <OverlaySection type="info">
-      <TextInput opaque type="search" />
+      <TextInput opaque type="search" placeholder="Filter stuff" />
     </OverlaySection>
     <OverlaySection type="actions">
       Content Section 2
