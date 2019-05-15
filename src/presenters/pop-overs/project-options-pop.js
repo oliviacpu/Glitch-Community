@@ -89,7 +89,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
     removeProjectFromTeam: projectOptions.removeProjectFromTeam && !projectOptions.removeProjectFromCollection && !isAnon && isAuthor
       ? () => projectOptions.removeProjectFromTeam(project.id)
       : null,
-    deleteProject: !projectOptions.removeProjectFromCollection && projectOptions.deleteProject && isAuthor && isProjectAdmin
+    deleteProject: !projectOptions.removeProjectFromCollection && projectOptions.deleteProject && isProjectAdmin
       ? () => projectOptions.deleteProject(project.id)
       : null,
     removeProjectFromCollection: projectOptions.removeProjectFromCollection && !isAnon && isAuthor
