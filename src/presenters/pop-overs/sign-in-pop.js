@@ -336,7 +336,9 @@ const SignInPopContainer = (props) => {
   const api = useAPI();
   return (
     <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-      {({ togglePopover, focusFirstElement }) => <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />}
+      {({ togglePopover, focusFirstElement }) => (
+        <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      )}
     </PopoverWithButton>
   );
 };

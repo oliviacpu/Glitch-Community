@@ -150,7 +150,9 @@ const ProjectOptionsPop = ({ ...props }) => (
   <NestedPopover
     alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
   >
-    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusFirstElementg={props.focusFirstElementg} />}
+    {(addToCollectionPopover) => (
+      <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusFirstElementg={props.focusFirstElementg} />
+    )}
   </NestedPopover>
 );
 

@@ -7,7 +7,13 @@ import PopoverWithButton from '../pop-overs/popover-with-button';
 const EditCollectionColor = ({ update, initialColor, ...props }) => (
   <PopoverWithButton containerClass="edit-collection-color-btn" buttonClass="add-project" buttonText="Color">
     {({ togglePopover, focusFirstElement }) => (
-      <EditCollectionColorPop {...props} updateColor={update} initialColor={initialColor} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      <EditCollectionColorPop
+        {...props}
+        updateColor={update}
+        initialColor={initialColor}
+        togglePopover={togglePopover}
+        focusFirstElement={focusFirstElement}
+      />
     )}
   </PopoverWithButton>
 );

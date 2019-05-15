@@ -32,7 +32,7 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 );
 
 const NewProjectPop = ({ projects, focusFirstElement, opensFromRight }) => (
-  <dialog className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`} ref={focusFirstElement} tabIndex="0">
+  <dialog className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`} ref={focusFirstElement}>
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
@@ -93,7 +93,7 @@ function NewProjectPopButton({ opensFromRight }) {
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {({ focusFirstElement }) => <NewProjectPop projects={projects} focusFirstElement={focusFirstElement} opensFromRight={opensFromRight}/>}
+      {({ focusFirstElement }) => <NewProjectPop projects={projects} focusFirstElement={focusFirstElement} opensFromRight={opensFromRight} />}
     </PopoverWithButton>
   );
 }

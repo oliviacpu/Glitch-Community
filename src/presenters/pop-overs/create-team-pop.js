@@ -157,12 +157,8 @@ class CreateTeamPopBase extends React.Component {
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func,
+  focusFirstElement: PropTypes.func.isRequired,
 };
-
-CreateTeamPopBase.defaultProps = {
-  focusFirstElement: null,
-}
 
 const CreateTeamPop = withRouter(CreateTeamPopBase);
 

@@ -46,7 +46,12 @@ export default function CollectionOptions({ deleteCollection, collection }) {
       buttonClass="collection-options button-borderless"
     >
       {({ focusFirstElement }) => (
-        <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} currentUser={currentUser} focusFirstElement={focusFirstElement} />
+        <CollectionOptionsPop
+          collection={collection}
+          deleteCollection={deleteCollection}
+          currentUser={currentUser}
+          focusFirstElement={focusFirstElement}
+        />
       )}
     </PopoverWithButton>
   );
