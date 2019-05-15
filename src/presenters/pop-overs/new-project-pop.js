@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
-import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/popover';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import { getRemixUrl } from 'Models/project';
 import { useTracker, TrackedExternalLink } from '../segment-analytics';
 import ProjectAvatar from '../includes/project-avatar';
@@ -55,11 +55,11 @@ const NewProjectPop = ({ projects }) => (
         )}
       </div>
     </PopoverSection>
-    <PopoverSection type="secondary">
-      <Button size="small" tertiary onClick={importGitRepo}>
+    <PopoverActions type="secondary">
+      <Button size="small" type="tertiary" onClick={importGitRepo} matchBackground>
         Clone from Git Repo
       </Button>
-    </PopoverSection>
+    </PopoverActions>
   </PopoverDialog>
 );
 NewProjectPop.propTypes = {
