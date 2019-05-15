@@ -1,0 +1,31 @@
+@import '../constants.styl'
+
+.moreByLinkWrap a
+  color: primary
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
+.createCollectionButtonWrap
+  margin-bottom: 1rem
+    
+.createFirstCollection
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  width: 100%
+  // align with grids
+  @media (min-width: mediumViewport)
+    width: 50%
+    padding-right: 10px
+  @media (min-width: largeViewport)
+    width: 33%
+
+.createFirstCollectionText
+  padding-left: 15px
+  margin: 0
+    
+
+
+
+  

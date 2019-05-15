@@ -116,8 +116,7 @@ module.exports = function(external) {
 
   app.get('/@:name', async (req, res) => {
     const { name } = req.params;
-    const nameEncoded = punycode.toASCII(name);
-    const team = await getTeam(nameEncoded);
+    const team = await getTeam(name);
     if (team) {
       const description = team.description ? cheerio.load(md.render(team.description)).text() : '';
       const args = [res, team.name, description];
@@ -129,7 +128,7 @@ module.exports = function(external) {
       await render(...args);
       return;
     }
-    const user = await getUser(nameEncoded);
+    const user = await getUser(name);
     if (user) {
       const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
@@ -140,7 +139,7 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
-    const collectionObj = await getCollection(`${punycode.toASCII(name)}/${encodeURIComponent(collection)}`);
+    const collectionObj = await getCollection(name, collection);
     const author = name;
 
     if (collectionObj) {

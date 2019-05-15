@@ -128,10 +128,12 @@ popover-secondary-background()
     .tall-text
       min-height: 150px
     .label
-     font-weight: bold
-     font-size: 12px
-     margin-bottom: 10px
-     display: block
+      font-weight: bold
+      font-size: 12px
+      margin-bottom: 10px
+      display: block      
+    strong
+      font-weight: 600
     input.content-editable, textarea.content-editable
       background-color: white
       border: 1px solid #ccc
@@ -295,9 +297,17 @@ popover-secondary-background()
     left: 0
 .add-project-to-collection-pop, .create-collection-pop
   .pop-over-info
+    color: text-on-secondary-background
     img
       width: 15px
       border-radius: 3px
+  .more-collections-badge
+    margin: 2px 1px 0 1px
+    display: inline-block
+    vertical-align: middle
+    // remove margin on Badge component, ideally the Badge component would not specify margin
+    > *
+      margin: 0
   .loader-container
     margin: 0.5em
   form
@@ -370,6 +380,11 @@ popover-secondary-background()
   @media(max-width: mediumViewport)
     left: initial
     right: -100%
+    
+.add-team-user-pop__whitelist-email-image
+  float: left
+  padding: 0 8px 8px
+  margin-right: 16px
 
 .add-team-project-pop
   left: 2px
