@@ -124,7 +124,7 @@ class AddProjectToCollectionPopContents extends React.Component {
   render() {
     const { filteredCollections, query } = this.state;
     return (
-      <dialog className="pop-over add-project-to-collection-pop wide-pop" tabIndex="0" ref={this.props.focusDialog}>
+      <dialog className="pop-over add-project-to-collection-pop wide-pop" ref={this.props.focusFirstElement}>
         {/* Only show this nested popover title from project-options */}
         {!this.props.fromProject && <AddProjectPopoverTitle project={this.props.project} />}
 
@@ -142,7 +142,7 @@ class AddProjectToCollectionPopContents extends React.Component {
           </section>
         )}
 
-        {filteredCollections.length ? (
+        {filteredCollections && filteredCollections.length ? (
           <section className="pop-over-actions results-list">
             <ul className="results">{filteredCollections.map(this.renderCollectionsThatDontHaveProject)}</ul>
           </section>
