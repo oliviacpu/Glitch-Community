@@ -15,16 +15,7 @@ const UserProfileContainer = ({ item, type, children, avatarActions, coverAction
       <div className={classnames(styles.profileWrap, hasTeams && styles.hasTeams)}>
         <div className={styles.avatarContainer}>
           <div className={classnames(styles.avatar, styles.user)} style={getUserAvatarStyle(item)} />
-          <div className={styles.avatarButtons}>
-            {avatarActions &&
-              Object.entries(avatarActions)
-                .filter(([, onClick]) => onClick)
-                .map(([label, onClick]) => (
-                  <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
-                    {label}
-                  </TrackedButton>
-                ))}
-          </div>
+          <div className={styles.avatarButtons}>{avatarActions && <TrackedButtonGroup actions={avatarActions} />}</div>
         </div>
         <div className={styles.profileInfo}>{children}</div>
       </div>

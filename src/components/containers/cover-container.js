@@ -16,16 +16,7 @@ const CoverContainer = ({ coverActions, children, type, item }) => {
   return (
     <div className={styles.coverContainer} style={getProfileStyles[type]({ ...item, cache })}>
       {children}
-      <div className={styles.buttonWrap}>
-        {coverActions &&
-          Object.entries(coverActions)
-            .filter(([, onClick]) => onClick)
-            .map(([label, onClick]) => (
-              <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
-                {label}
-              </TrackedButton>
-            ))}
-      </div>
+      <div className={styles.buttonWrap}>{coverActions && <TrackedButtonGroup actions={coverActions} />}</div>
     </div>
   );
 };

@@ -1,14 +1,20 @@
 import React from 'react';
-import Button from 'Components/buttons/button';
+import PropTypes from 'prop-types';
+import TrackedButton from 'Components/buttons/tracked-button';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 
-const TrackedButtonGroup = ({ children, label, onClick, ...props }) => {
-  const trackedOnClick = useTrackedFunc(onClick, label);
-  return (
-    <Button {...props} onClick={trackedOnClick}>
-      {children}
-    </Button>
-  );
+const TrackedButtonGroup = ({ actions }) => {
+  return Object.entries(actions)
+    .filter(([, onClick]) => onClick)
+    .map(([label, onClick]) => (
+      <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
+        {label}
+      </TrackedButton>
+    ));
+};
+
+TrackedButtonGroup.propTypes = {
+  actions: PropTypes.object.isRequired,
 };
 
 export default TrackedButtonGroup;
