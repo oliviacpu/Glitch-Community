@@ -76,9 +76,9 @@ NewProjectPop.propTypes = {
 
 const useNewProjectAPI = createAPIHook(async (api) => {
   const projectIds = [
+    '929980a8-32fc-4ae7-a66f-dddb3ae4912c', // 'hello-webpage'
     'a0fcd798-9ddf-42e5-8205-17158d4bf5bb', // 'hello-express'
     'cb519589-591c-474f-8986-a513f22dbf88', // 'hello-sqlite'
-    '929980a8-32fc-4ae7-a66f-dddb3ae4912c', // 'hello-webpage'
   ];
   const idString = projectIds.map((id) => `id=${id}`).join('&');
   // always request against the production API, with no token
@@ -87,7 +87,7 @@ const useNewProjectAPI = createAPIHook(async (api) => {
       Authorization: '',
     },
   });
-  return Object.values(data);
+  return projectIds.map((id) => data[id]);
 });
 
 function NewProjectPopButton({ align }) {

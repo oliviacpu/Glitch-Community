@@ -31,8 +31,6 @@ const usePositionAdjustment = ({ margin }) => {
         setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
       }
     };
-    const observer = 
-    
     const debounced = debounce(setPosition, 300);
     window.addEventListener('resize', debounced);
     setPosition();
