@@ -15,7 +15,9 @@ import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" to={EDITOR_URL}>
-    <Button type="cta" size="small" decorative>Resume Coding</Button>
+    <Button type="cta" size="small" decorative>
+      Resume Coding
+    </Button>
   </TrackedExternalLink>
 );
 
@@ -33,7 +35,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         </div>
         <ul className={styles.buttons}>
           <li className={styles.buttonWrap}>
-            <NewProjectPop align={(currentUser && currentUser.login) ? "left" : "right"} />
+            <NewProjectPop align={currentUser && currentUser.login ? 'left' : 'right'} />
           </li>
           {!!currentUser && !!currentUser.projects.length && (
             <li className={styles.buttonWrap}>
