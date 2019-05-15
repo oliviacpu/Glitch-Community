@@ -47,7 +47,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
 
   const togglePopover = (event) => {
     setVisible(!visible);
-    if (event.detail === 0) {
+    if (event && event.detail === 0) {
       // opened from keyboard
       setOpenedFromKeyboard(true);
     } else {
