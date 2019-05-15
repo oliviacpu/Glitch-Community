@@ -78,7 +78,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusDialog }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement }) => {
   const trackLogout = useTracker('Logout');
 
   const clickNewStuff = (event) => {
@@ -107,7 +107,7 @@ Are you sure you want to sign out?`)
   const userAvatarStyle = { backgroundColor: user.color };
 
   return (
-    <dialog className="pop-over user-options-pop" ref={focusDialog} tabIndex="0">
+    <dialog className="pop-over user-options-pop" ref={focusFirstElement} tabIndex="0">
       <UserLink user={user} className="user-info">
         <section className="pop-over-actions user-info">
           <img className="avatar" src={getUserAvatarUrl(user)} alt="Your avatar" style={userAvatarStyle} />
@@ -141,7 +141,7 @@ Are you sure you want to sign out?`)
 
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
-  focusDialog: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,

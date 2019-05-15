@@ -25,19 +25,35 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [visible, setVisibleState] = React.useState(startOpen);
+  const [openedFromKeyboard, setOpenedFromKeyboard] = React.useState(false);
+  
   const setVisible = (newVisible) => {
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
   };
-  const togglePopover = (event) => {
-    setVisible(!visible);
-    if (event.detail === 0) {
-      // opened on keyboard press - should focus on first tabbable element in pop-over here
+  
+  const focusFirstElement = (dialog) => {
+    // only focus to next selectable element in dialog if popover is triggered from keyboard
+    if (dialog && openedFromKeyboard) {
+      const focusableElements =
+        'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+      if (focusableDialogElements) {
+        console.log(focusableDialogElements[0]);
+        focusableDialogElements[0].focus();
+      }
     }
   };
 
-  const focusDialog = (element) => {
-    if (element) element.focus();
+  const togglePopover = (event) => {
+    setVisible(!visible);
+    if (event.detail === 0) {
+      // opened from keyboard
+      setOpenedFromKeyboard(true);
+    } else {
+      // opened from mouseclick
+      setOpenedFromKeyboard(false);
+    }
   };
 
   React.useEffect(() => {
@@ -52,7 +68,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [visible]);
 
-  const props = { visible, setVisible, togglePopover, focusDialog };
+  const props = { visible, setVisible, togglePopover, focusFirstElement };
 
   const inner = children(props);
   if (isFragment(inner)) {
