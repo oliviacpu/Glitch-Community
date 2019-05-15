@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
-import TeamNameInput from 'Components/fields/team-name-input';
-import TeamUrlInput from 'Components/fields/team-url-input';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
@@ -14,12 +12,13 @@ import DataLoader from 'Components/data-loader';
 import ProfileContainer from 'Components/profile-container';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
+import TeamFields from 'Components/fields/team-fields';
+import { getLink } from 'Models/team';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import TeamEditor from '../team-editor';
-import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
@@ -30,24 +29,13 @@ import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
-import { TeamMarketing, VerifiedBadge } from '../includes/team-elements';
+import { TeamMarketing } from '../includes/team-elements';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
-
-const TeamNameUrlFields = ({ team, updateName, updateUrl }) => (
-  <>
-    <Heading tagName="h1">
-      <TeamNameInput name={team.name} onChange={updateName} verified={team.isVerified} />
-    </Heading>
-    <p className={styles.teamUrl}>
-      <TeamUrlInput url={team.url} onChange={(url) => updateUrl(url).then(() => syncPageToUrl({ ...team, url }))} />
-    </p>
-  </>
-);
 
 const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
   <CollectionsList
@@ -114,6 +102,8 @@ class TeamPage extends React.Component {
     );
     const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
+    const updateUrl = (url) => this.props.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
+
     return (
       <main className={styles.container}>
         <section>
@@ -129,16 +119,7 @@ class TeamPage extends React.Component {
               'Upload Avatar': this.props.currentUserIsTeamAdmin ? this.props.uploadAvatar : null,
             }}
           >
-            {this.props.currentUserIsTeamAdmin ? (
-              <TeamNameUrlFields team={team} updateName={this.props.updateName} updateUrl={this.props.updateUrl} />
-            ) : (
-              <>
-                <Heading tagName="h1">
-                  {team.name} {team.isVerified && <VerifiedBadge />}
-                </Heading>
-                <p className={styles.teamUrl}>@{team.url}</p>
-              </>
-            )}
+            <TeamFields team={team} updateName={this.props.updateName} updateUrl={updateUrl} />
             <div className={styles.usersInformation}>
               <TeamUsers
                 team={team}
