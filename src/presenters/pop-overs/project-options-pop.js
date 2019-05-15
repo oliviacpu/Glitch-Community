@@ -119,8 +119,7 @@ const ProjectOptionsContent = (props) => {
   const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(props.deleteProject), 'Delete Project clicked');
-  const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
-  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
+
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
   const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
 
