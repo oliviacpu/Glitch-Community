@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
+import Link from 'Components/link';
+import MoreIdeas from 'Components/more-ideas';
+import Questions from 'Components/questions';
 import Layout from '../layout';
 
 import { getEditorUrl } from '../../models/project';
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
-import { Link } from '../includes/link';
 
 import Featured from '../featured';
-import MoreIdeas from '../more-ideas';
 import OverlayVideo from '../overlays/overlay-video';
-import Questions from '../questions';
 import RecentProjects from '../recent-projects';
 import ReportButton from '../pop-overs/report-abuse-pop';
 

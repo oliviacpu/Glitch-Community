@@ -5,24 +5,26 @@ import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
+import Emoji from 'Components/images/emoji';
 import FeaturedProject from 'Components/project/featured-project';
-import Thanks from 'Components/blocks/thanks';
+import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
+import ProjectsList from 'Components/containers/projects-list';
+import ProfileContainer from 'Components/profile-container';
+import CollectionsList from 'Components/collections-list';
+import DeletedProjects from 'Components/deleted-projects';
 
-import { getAvatarStyle, getLink } from '../../models/user';
+import { getLink } from '../../models/user';
 
 import { AnalyticsContext } from '../segment-analytics';
 import { useCurrentUser } from '../../state/current-user';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 
-import DeletedProjects from '../deleted-projects';
-import EntityPageProjects from '../entity-page-projects';
-import CollectionsList from '../collections-list';
-import { ProfileContainer, ImageButtons } from '../includes/profile';
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
+import styles from './user.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -105,17 +107,18 @@ const UserPage = ({
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
   console.log('got to render');
   return (
-    <main className="profile-page user-page">
+    <main className={styles.container}>
       <section>
         <ProfileContainer
-          avatarStyle={getAvatarStyle(user)}
           type="user"
           item={user}
-          coverButtons={
-            isAuthorized &&
-            !!user.login && <ImageButtons name="Cover" uploadImage={uploadCover} clearImage={user.hasCoverImage ? clearCover : null} />
-          }
-          avatarButtons={isAuthorized && !!user.login && <ImageButtons name="Avatar" uploadImage={uploadAvatar} />}
+          coverActions={{
+            'Upload Cover': isAuthorized && user.login ? uploadCover : null,
+            'Clear Cover': isAuthorized && user.hasCoverImage ? clearCover : null,
+          }}
+          avatarActions={{
+            'Upload Avatar': isAuthorized && user.login ? uploadAvatar : null,
+          }}
           teams={user.teams}
         >
           <NameAndLogin
@@ -145,18 +148,24 @@ const UserPage = ({
       )}
 
       {/* Pinned Projects */}
-      <EntityPageProjects
-        projects={pinnedProjects}
-        isAuthorized={isAuthorized}
-        removePin={removePin}
-        featureProject={featureProject}
-        projectOptions={{
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-      />
+      {pinnedProjects.length > 0 && (
+        <ProjectsList
+          layout="grid"
+          title={
+            <>
+              Pinned Projects <Emoji inTitle name="pushpin" />
+            </>
+          }
+          projects={pinnedProjects}
+          projectOptions={{
+            removePin: isAuthorized ? removePin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
+            leaveProject,
+            deleteProject,
+            addProjectToCollection,
+          }}
+        />
+      )}
 
       {!!user.login && (
         <CollectionsList
@@ -171,21 +180,31 @@ const UserPage = ({
       )}
 
       {/* Recent Projects */}
-      <EntityPageProjects
-        projects={recentProjects}
-        isAuthorized={isAuthorized}
-        addPin={addPin}
-        featureProject={featureProject}
-        projectOptions={{
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-        enableFiltering={recentProjects.length > 6}
-        enablePagination
-      />
-      {isAuthorized && <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />}
+      {recentProjects.length > 0 && (
+        <ProjectsList
+          layout="grid"
+          title="Recent Projects"
+          projects={recentProjects}
+          enablePagination
+          enableFiltering={recentProjects.length > 6}
+          projectOptions={{
+            addPin: isAuthorized ? addPin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
+            leaveProject,
+            deleteProject,
+            addProjectToCollection,
+          }}
+        />
+      )}
+      {isAuthorized && (
+        <article>
+          <Heading tagName="h2">
+            Deleted Projects
+            <Emoji inTitle name="bomb" />
+          </Heading>
+          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+        </article>
+      )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>
   );

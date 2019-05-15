@@ -4,7 +4,7 @@ import { parseOneAddress } from 'email-addresses';
 import _ from 'lodash';
 import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
@@ -214,7 +214,7 @@ class ReportAbusePop extends React.Component {
       </section>
       <section className="pop-over-info">
         <p className="info-description">
-          But you can still send us your message by emailing the details below to
+          But you can still send us your message by emailing the details below to{' '}
           <b>support@glitch.com</b>
         </p>
       </section>

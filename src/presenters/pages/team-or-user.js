@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import NotFound from 'Components/errors/not-found';
+import DataLoader from 'Components/data-loader';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import { useAPI } from '../../state/api';
-import { DataLoader } from '../includes/loader';
 
 import Layout from '../layout';
 import TeamPage from './team';

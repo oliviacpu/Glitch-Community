@@ -8,7 +8,7 @@ import useUniqueId from '../../hooks/use-unique-id';
 
 import styles from './text-area.styl';
 
-const TextArea = ({ autoFocus, disabled, error, name, onChange, placeholder, value }) => {
+const TextArea = ({ autoFocus, disabled, error, name, onBlur, onChange, onFocus, placeholder, value }) => {
   const uniqueId = useUniqueId();
   return (
     <label className={styles.inputWrap} htmlFor={uniqueId}>
@@ -19,7 +19,9 @@ const TextArea = ({ autoFocus, disabled, error, name, onChange, placeholder, val
           disabled={disabled}
           id={uniqueId}
           name={name}
+          onBlur={onBlur}
           onChange={(evt) => onChange(evt.target.value)}
+          onFocus={onFocus}
           placeholder={placeholder}
           value={value}
         />
@@ -35,7 +37,9 @@ TextArea.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.node,
   name: PropTypes.string,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
+  onFocus: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
 };
@@ -45,6 +49,8 @@ TextArea.defaultProps = {
   disabled: false,
   error: null,
   name: undefined,
+  onBlur: null,
+  onFocus: null,
   placeholder: undefined,
 };
 

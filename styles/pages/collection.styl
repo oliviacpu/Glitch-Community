@@ -5,6 +5,8 @@
   width: 100%
   margin-right: initial
   padding: 0px
+  a
+    color: primary
 
   .collection-owner
     margin: 12px 0
@@ -56,8 +58,6 @@
       border-color: secondary
   .collection-name
     margin-bottom: 0px
-    .description 
-      margin-bottom: 5px
   .collection-description 
     p
       margin: 0
@@ -77,7 +77,7 @@
     color: text-on-secondary-background 
   .collection-contents 
     width: 75%
-    padding: 20px 12px
+    padding: 20px
     background-color: secondary-background
     border-top-right-radius: 5px
     border-bottom-right-radius: 5px
@@ -91,22 +91,9 @@
       border-bottom-right-radius: 5px
       border-top-right-radius: 0px
   .collection-project-container-header
-    margin: 0px 10px
-  .projects-container
-    margin: 10px
-    grid-gap: 15px
-      
-    @media (max-width: mediumViewport)
-      grid-template-columns: 1fr
-      
-  .projects-container > li
-    width: auto
-    min-width: calc(33.3% - 10px)
-    align-self: end
-    margin-bottom: 20px
-    
-    .project-options-pop
-      width: 200px
+    margin-bottom: 1rem    
+  .project-options-pop
+    width: 200px
   .empty-collection-hint
     border-radius: 4px
     margin: 25px 16px
@@ -131,3 +118,6 @@ a.collection-view-all
 a.collection-view-all:hover
   text-decoration: underline !important  
   
+.collection-page__projects-grid
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
+  align-items: end

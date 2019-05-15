@@ -12,7 +12,9 @@ import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children }) => <span className={styles.inputPart}>{children}</span>;
+const InputPart = ({ children, className }) => (
+  <span className={classNames(styles.inputPart, className)}>{children}</span>
+);
 
 const TextInput = ({
   autoFocus,
@@ -22,7 +24,6 @@ const TextInput = ({
   labelText,
   maxLength,
   name,
-  onBlur,
   onChange,
   opaque,
   placeholder,
@@ -55,14 +56,13 @@ const TextInput = ({
           id={uniqueId}
           maxLength={maxLength}
           name={name}
-          onBlur={onBlur ? () => onBlur() : null}
           onChange={(evt) => onChange(evt.target.value)}
           placeholder={placeholder}
           type={type}
           value={value}
         />
         {!!error && (
-          <InputPart>
+          <InputPart className={styles.errorIcon}>
             <InputErrorIcon />
           </InputPart>
         )}
@@ -81,7 +81,6 @@ TextInput.propTypes = {
   labelText: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
   name: PropTypes.string,
-  onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   opaque: PropTypes.bool,
   placeholder: PropTypes.string,
@@ -98,7 +97,6 @@ TextInput.defaultProps = {
   error: null,
   maxLength: undefined,
   name: undefined,
-  onBlur: null,
   opaque: false,
   placeholder: undefined,
   postfix: null,

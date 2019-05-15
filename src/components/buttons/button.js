@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Emoji from 'Components/images/emoji';
+import Link from 'Components/link';
 import styles from './button.styl';
-import { Link } from '../../presenters/includes/link';
 
 const cx = classNames.bind(styles);
 
@@ -38,11 +38,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   if (decorative) {
-    return (
-      <button className={className} disabled={disabled} tabIndex={-1}>
-        {children}
-      </button>
-    );
+    return <span className={className}>{children}</span>;
   }
 
   return (

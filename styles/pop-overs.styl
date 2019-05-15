@@ -26,7 +26,6 @@ popover-secondary-background()
   cursor: initial
   display: block
   position: absolute
-  top: 55px
   left: initial
   border-radius: 3px
   border: 1px solid secondary
@@ -129,10 +128,12 @@ popover-secondary-background()
     .tall-text
       min-height: 150px
     .label
-     font-weight: bold
-     font-size: 12px
-     margin-bottom: 10px
-     display: block
+      font-weight: bold
+      font-size: 12px
+      margin-bottom: 10px
+      display: block      
+    strong
+      font-weight: 600
     input.content-editable, textarea.content-editable
       background-color: white
       border: 1px solid #ccc
@@ -197,12 +198,6 @@ popover-secondary-background()
     border-radius: 5px
     margin-bottom: 5px
     color: white
-    
-.report-abuse-pop
-  input ~ .editable-field-error-icon
-    top: 3px
-  .editable-field-error-icon
-    padding-right: 2px
 
 .user-options-pop
   right: 0
@@ -235,8 +230,10 @@ popover-secondary-background()
 
 .project-options-pop, .collection-options-pop
   right: 0
-  top: 22px
   width: 185px
+
+.collection-options-pop
+  top: -5px
 
 .cta-pop
   left: 2px
@@ -300,9 +297,17 @@ popover-secondary-background()
     left: 0
 .add-project-to-collection-pop, .create-collection-pop
   .pop-over-info
+    color: text-on-secondary-background
     img
       width: 15px
       border-radius: 3px
+  .more-collections-badge
+    margin: 2px 1px 0 1px
+    display: inline-block
+    vertical-align: middle
+    // remove margin on Badge component, ideally the Badge component would not specify margin
+    > *
+      margin: 0
   .loader-container
     margin: 0.5em
   form
@@ -350,22 +355,12 @@ popover-secondary-background()
   button.active
     border-color: black
   .custom-color-input
-    width: 82%
-    #color-picker-hex
-      width: 90%
-      margin-left: 5px
-      height: 23px
-    #color-picker-hex.active
-      border-color: black
-    .editable-field-error-message
-      width: 90%
-      display: none
-      float: right
-      margin-right: 5px
-      margin-top: -3px
+    width: 0
+    flex-grow: 1
+    margin-left: 5px
   .color-picker
     width: 24px
-    height: 22px
+    height: 24px
     padding: 0px    
     border: 1px solid input-border
     &:hover
@@ -448,10 +443,7 @@ popover-secondary-background()
         height: project-result-avatar-size      
       
 .new-project-pop
-  top: 26px
-  right: 0
   @media(max-width: smallViewport)
-    right: 0px
     max-width: 200px
   .view-result-link
     display: none
@@ -461,17 +453,24 @@ popover-secondary-background()
     margin-right: 10px
   .results-info
     width: 100% !important
+  &.opens-right
+    right: 0
 
-.delete-team-pop
-  top: 22px
-  left: 8px
+
+.delete-team-pop, .delete-project-pop
+  top: 25px
+  left: 0px
   margin-bottom: side-padding
   .users 
     margin: 0
   .info-description
     margin-top: 10px
   .illustration
-    width: 110px
+    width: 110px  
+.delete-project-pop .pop-over-actions:first-of-type
+  &:focus
+    outline: none
+  
 
 .upgrade-team-pop
   top: 26px
@@ -518,6 +517,9 @@ popover-secondary-background()
           width: 20px
           height: 20px
 
-.featured-project-options-pop
+.featured-project-options-pop-btn
   display: block
   padding-left: 5px
+
+.featured-project-options-pop
+  top: 25px

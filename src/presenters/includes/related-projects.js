@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize, difference } from 'lodash';
 
-import { ProjectsUL } from 'Components/containers/projects-list';
+import ProjectsList from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
-
+import DataLoader from 'Components/data-loader';
+import { TeamLink, UserLink } from 'Components/link';
 import { getDisplayName } from '../../models/user';
-
-import { DataLoader } from './loader';
-import { TeamLink, UserLink } from './link';
 import { useAPI } from '../../state/api';
 
 const PROJECT_COUNT = 3;
@@ -16,8 +14,8 @@ const PROJECT_COUNT = 3;
 const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
     <CoverContainer type={type} item={item}>
-      <div className="projects">
-        <ProjectsUL projects={projects} />
+      <div className="related-projects__projects-wrap">
+        <ProjectsList layout="row" projects={projects} />
       </div>
     </CoverContainer>
   ) : null;

@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import Pluralize from 'react-pluralize';
 import { Redirect } from 'react-router-dom';
-import { partition } from 'lodash';
+import { kebabCase, partition } from 'lodash';
 
+import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
+
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-import { ProfileItem } from 'Components/profile/profile-list';
-import { ProjectsUL } from 'Components/containers/projects-list';
+import { ProfileItem } from 'Components/profile-list';
+import ProjectsList from 'Components/containers/projects-list';
+import CollectionNameInput from 'Components/fields/collection-name-input';
+import DataLoader from 'Components/data-loader';
+import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 
 import Layout from '../layout';
-import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
 
 import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
-import { AuthDescription } from '../includes/description-field';
+import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
-import EditCollectionNameAndUrl from '../includes/edit-collection-name-and-url';
 import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
@@ -29,13 +34,8 @@ import CollectionAvatar from '../includes/collection-avatar';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
-import MoreCollectionsContainer from '../more-collections';
 
 import { getSingleItem, getAllPages } from '../../../shared/api';
-
-function syncPageToUrl(collection, url) {
-  history.replaceState(null, null, getLink({ ...collection, url }));
-}
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -43,8 +43,9 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     return <Redirect to={getOwnerLink(collection)} />;
   }
   return (
-    <button
-      className="button delete-collection button-tertiary"
+    <Button
+      type="dangerZone"
+      size="small"
       onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
@@ -53,8 +54,8 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
         setDone(true);
       }}
     >
-      Delete Collection
-    </button>
+      Delete Collection <Emoji name="bomb" />
+    </Button>
   );
 }
 
@@ -93,6 +94,13 @@ const CollectionPageContents = ({
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
 
+  const onNameChange = async (name) => {
+    const url = kebabCase(name);
+    const result = await updateNameAndUrl({ name, url });
+    history.replaceState(null, null, getLink({ ...collection, url }));
+    return result;
+  };
+
   return (
     <>
       <Helmet title={collection.name} />
@@ -103,12 +111,9 @@ const CollectionPageContents = ({
               <CollectionAvatar color={collection.coverColor} />
             </div>
 
-            <EditCollectionNameAndUrl
-              isAuthorized={currentUserIsAuthor}
-              name={collection.name}
-              url={collection.url}
-              update={(data) => updateNameAndUrl(data).then(() => syncPageToUrl(collection, data.url))}
-            />
+            <h1 className="collection-name">
+              {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
+            </h1>
 
             <div className="collection-owner">
               <ProfileItem hasLink team={collection.team} user={collection.user} />
@@ -124,7 +129,9 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
+              <Text>
+                <Pluralize count={collection.projects.length} singular="Project" />
+              </Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
@@ -158,7 +165,8 @@ const CollectionPageContents = ({
                   />
                 )}
                 {currentUserIsAuthor && (
-                  <ProjectsUL
+                  <ProjectsList
+                    layout="gridCompact"
                     {...props}
                     projects={projects}
                     collection={collection}
@@ -176,7 +184,8 @@ const CollectionPageContents = ({
                   />
                 )}
                 {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsUL
+                  <ProjectsList
+                    layout="gridCompact"
                     {...props}
                     projects={collection.projects}
                     collection={collection}
@@ -187,7 +196,13 @@ const CollectionPageContents = ({
                   />
                 )}
                 {!currentUserIsAuthor && !userIsLoggedIn && (
-                  <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} noteOptions={{ isAuthorized: false }} />
+                  <ProjectsList
+                    layout="gridCompact"
+                    projects={collection.projects}
+                    collection={collection}
+                    projectOptions={{}}
+                    noteOptions={{ isAuthorized: false }}
+                  />
                 )}
               </div>
             </>
@@ -196,7 +211,7 @@ const CollectionPageContents = ({
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
       {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={deleteCollection} />}
-      <MoreCollectionsContainer api={api} collection={collection} />
+      <MoreCollectionsContainer collection={collection} />
     </>
   );
 };

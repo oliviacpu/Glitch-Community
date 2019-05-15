@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Heading from 'Components/text/heading';
 import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
-import { Link } from './includes/link';
+import Link from 'Components/link';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">

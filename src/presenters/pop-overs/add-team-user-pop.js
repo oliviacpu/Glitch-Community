@@ -4,7 +4,7 @@ import axios from 'axios';
 import { debounce } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 import { captureException } from '../../utils/sentry';
 import useDevToggle from '../includes/dev-toggles';
 import UserResultItem, { InviteByEmail, WhitelistEmailDomain } from '../includes/user-result-item';

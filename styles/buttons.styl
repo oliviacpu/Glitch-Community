@@ -14,7 +14,8 @@ button
   position: relative
   vertical-align: middle
   &.danger-zone
-    background-color: warning-background
+    &:hover, &:focus
+      background-color: warning-background
   &:hover
     background-color: secondary-background
     text-decoration: none
@@ -117,14 +118,6 @@ button.button-unstyled
 
 button.link
   vertical-align: unset
-
-.button-checkbox
-  width: auto
-  margin-top: 2px
-  margin-right: 5px
-  margin-left: 0px
-  vertical-align: middle
-  display: inline-block
 
 .button-area
   &:hover
