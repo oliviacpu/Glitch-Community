@@ -4,14 +4,14 @@ import classnames from 'classnames';
 
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
-import TrackedButton from 'Components/buttons/tracked-button';
+import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
 import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
 import styles from './styles.styl';
 
-const UserProfileContainer = ({ item, type, children, avatarActions, coverActions, teams }) => {
+const UserProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {
   const hasTeams = !!(teams && teams.length);
   return (
-    <CoverContainer type={type} item={item} coverActions={coverActions}>
+    <CoverContainer type="user" item={item} coverActions={coverActions}>
       <div className={classnames(styles.profileWrap, hasTeams && styles.hasTeams)}>
         <div className={styles.avatarContainer}>
           <div className={classnames(styles.avatar, styles.user)} style={getUserAvatarStyle(item)} />

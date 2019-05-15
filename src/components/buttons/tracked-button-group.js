@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TrackedButton from 'Components/buttons/tracked-button';
-import { useTrackedFunc } from '../../presenters/segment-analytics';
 
-const TrackedButtonGroup = ({ actions }) => {
-  return Object.entries(actions)
+const TrackedButtonGroup = ({ actions }) =>
+  Object.entries(actions)
     .filter(([, onClick]) => onClick)
     .map(([label, onClick]) => (
       <TrackedButton key={label} size="small" type="tertiary" label={label} onClick={onClick}>
         {label}
       </TrackedButton>
     ));
-};
 
 TrackedButtonGroup.propTypes = {
   actions: PropTypes.object.isRequired,

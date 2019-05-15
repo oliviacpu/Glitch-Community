@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TrackedButton from 'Components/buttons/tracked-button';
+import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
 
 import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
 import { getProfileStyle as getUserProfileStyle } from 'Models/user';
