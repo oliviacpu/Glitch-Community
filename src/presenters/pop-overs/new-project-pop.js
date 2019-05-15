@@ -8,8 +8,8 @@ import ResultsList from 'Components/containers/results-list';
 import { getRemixUrl } from 'Models/project';
 import { useTracker, TrackedExternalLink } from '../segment-analytics';
 import ProjectAvatar from '../includes/project-avatar';
-
 import { createAPIHook } from '../../state/api';
+import styles from './new-project-pop.styl';
 
 const importGitRepo = () => {
   /* eslint-disable no-alert */
@@ -22,13 +22,15 @@ const importGitRepo = () => {
 };
 
 const NewProjectResultItem = ({ project: { id, domain, description } }) => (
-  <div className="result result-project">
-    <ProjectAvatar domain={domain} id={id} />
-    <div className="results-info">
-      <div className="result-name" title={domain}>
+  <div className={styles.project}>
+    <div className={styles.projectAvatar}>
+      <ProjectAvatar domain={domain} id={id} />
+    </div>
+    <div className={styles.projectInfo}>
+      <div className={styles.projectDomain} title={domain}>
         {domain}
       </div>
-      {description.length > 0 && <div className="result-description">{description}</div>}
+      {description.length > 0 && <div className={styles.projectDescription}>{description}</div>}
     </div>
   </div>
 );
