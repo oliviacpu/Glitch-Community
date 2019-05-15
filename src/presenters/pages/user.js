@@ -160,7 +160,7 @@ const UserPage = ({
             deleteProject,
             addProjectToCollection,
             currentPageItem: user,
-            currentPageType: "user"
+            currentPageType: ',user',
           }}
         />
       )}
@@ -192,7 +192,7 @@ const UserPage = ({
             deleteProject,
             addProjectToCollection,
             currentPageItem: user,
-            currentPageType: "user"
+            currentPageType: 'user',
           }}
         />
       )}
