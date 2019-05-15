@@ -4,6 +4,7 @@ const enforce = require('express-sslify');
 const fs = require('fs');
 const util = require('util');
 const dayjs = require('dayjs');
+const punycode = require('punycode');	
 
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
@@ -102,7 +103,7 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
-    const project = await getProject(domain);
+    const project = await getProject(punycode.toASCII(domain));
     if (!project) {
       await render(res, domain, `We couldn't find ~${domain}`);
       return;

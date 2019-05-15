@@ -15,7 +15,7 @@ const api = axios.create({
 });
 
 function getProjectFromApi(domain) {
-  return getSingleItem(api, `v1/projects/by/domain?domain=${punycode.toASCII(domain)}`, domain);
+  return getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
 }
 
 function getTeamFromApi(url) {
