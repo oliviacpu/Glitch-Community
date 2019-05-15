@@ -6,6 +6,7 @@ import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
 
 import TransparentButton from 'Components/buttons/transparent-button';
+import button from 'Components/buttons/button';
 import styles from './styles.styl';
 
 /*
@@ -150,4 +151,31 @@ export const NestedPopoverTitle = ({ children }) => {
 };
 NestedPopoverTitle.propTypes = {
   children: PropTypes.node.isRequired,
+};
+
+export const PopoverWithButton = ({ dataTrack, containerClass, buttonProps, buttonText, children: renderChildren, onOpen }) => (
+  <PopoverContainer onOpen={onOpen}>
+    {({ visible, togglePopover }) => (
+      <div>
+        <Button {...buttonProps} onClick={togglePopover}>
+          {buttonText}
+        </Button>
+        {visible && renderChildren({ togglePopover })}
+      </div>
+    )}
+  </PopoverContainer>
+);
+
+PopoverWithButton.propTypes = {
+  buttonProps: PropTypes.object,
+  buttonText: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
+};
+
+PopoverWithButton.defaultProps = {
+  buttonProps: {},
+  containerClass: '',
+  dataTrack: '',
+  onOpen: null,
 };
