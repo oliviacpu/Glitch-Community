@@ -48,6 +48,14 @@ export const PopoverDialog = ({ children, wide, className }) => {
   );
 };
 
+const sectionTypes = ['primary', 'secondary', 'dangerZone']
+export const PopoverSection = ({ children, type }) => (
+  <section className={classnames(styles.popoverSection, styles[type])}>
+  
+  </section>
+)
+
+
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverInfo = styled('section', styles.popoverInfo);
 export const PopoverActions = styled('section', styles.popoverActions);
@@ -153,7 +161,7 @@ NestedPopoverTitle.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const PopoverWithButton = ({ dataTrack, containerClass, buttonProps, buttonText, children: renderChildren, onOpen }) => (
+export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
   <PopoverContainer onOpen={onOpen}>
     {({ visible, togglePopover }) => (
       <div>
