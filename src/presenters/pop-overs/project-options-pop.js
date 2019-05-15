@@ -38,6 +38,7 @@ const isAuthorOfCurrentPage = ({ projectOptions, currentUser }) => {
     return currentPageItem.id === currentUser.id;
   }
   if (currentPageType === 'team') {
+    console.log(currentPageItem.users && currentPageItem.users.some(({ id }) => currentUser.id === id))
     return currentPageItem.users && currentPageItem.users.some(({ id }) => currentUser.id === id);
   }
   if (currentPageType === 'collection') {
@@ -60,7 +61,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
   const isAuthor = isAuthorOfCurrentPage({ projectOptions, currentUser });
-
+  console.log(projectOptions.addPin,!isAnon,isAuthor)
   return {
     featureProject: projectOptions.featureProject && !project.private && !isAnon && isAuthor
       ? () => projectOptions.featureProject(project.id)

@@ -233,8 +233,8 @@ class TeamPage extends React.Component {
             }
             projects={pinnedProjects}
             isAuthorized={this.props.currentUserIsOnTeam}
-            removePin={this.props.removePin}
             projectOptions={{
+              removePin: this.props.removePin,
               ...this.getProjectOptions(),
             }}
           />
@@ -250,6 +250,7 @@ class TeamPage extends React.Component {
             enablePagination
             enableFiltering={recentProjects.length > 6}
             projectOptions={{
+              addPin: this.props.addPin,
               ...this.getProjectOptions(),
             }}
           />
