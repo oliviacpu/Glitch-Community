@@ -82,7 +82,7 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
   }
 
   return (
-    <dialog className="pop-over team-user-info-pop team-user-remove-pop">
+    <dialog className="pop-over team-user-info-pop team-user-remove-pop" ref={focusFirstElement}>
       <NestedPopoverTitle>Remove {getDisplayName(user)}</NestedPopoverTitle>
 
       {projects && (
@@ -111,7 +111,7 @@ TeamUserRemovePop.propTypes = {
   }).isRequired,
   removeUser: PropTypes.func.isRequired,
   togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.Required,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 export default TeamUserRemovePop;

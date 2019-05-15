@@ -78,7 +78,7 @@ class EditCollectionColorPop extends React.Component {
 
   render() {
     return (
-      <dialog className="pop-over edit-collection-color-pop" tabIndex="0" ref={this.props.focusFirstElement}>
+      <dialog className="pop-over edit-collection-color-pop" ref={this.props.focusFirstElement}>
         <section className="pop-over-info">
           <input
             className="color-picker"

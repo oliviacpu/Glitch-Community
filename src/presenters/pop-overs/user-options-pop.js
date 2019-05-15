@@ -107,7 +107,7 @@ Are you sure you want to sign out?`)
   const userAvatarStyle = { backgroundColor: user.color };
 
   return (
-    <dialog className="pop-over user-options-pop" ref={focusFirstElement} tabIndex="0">
+    <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
       <UserLink user={user} className="user-info">
         <section className="pop-over-actions user-info">
           <img className="avatar" src={getUserAvatarUrl(user)} alt="Your avatar" style={userAvatarStyle} />

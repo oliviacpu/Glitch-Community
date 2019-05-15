@@ -94,7 +94,7 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
   }
 
   return (
-    <dialog className="pop-over team-user-info-pop" ref={focusFirstElement} tabIndex="0">
+    <dialog className="pop-over team-user-info-pop" ref={focusFirstElement}>
       <section className="pop-over-info user-info">
         <UserLink user={user}>
           <img className="avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={userAvatarStyle} />

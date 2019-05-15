@@ -36,11 +36,16 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     console.log('focusFirstElement');
     // only focus to next selectable element in dialog if popover is triggered from keyboard
     if (dialog && openedFromKeyboard) {
-      const focusableElements =
-        'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
-      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-      if (focusableDialogElements) {
-        focusableDialogElements[0].focus();
+      // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on
+      if (dialog.tabIndex === 0) {
+        dialog.focus();
+      } else {
+        const focusableElements =
+          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled])';
+        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+        if (focusableDialogElements) {
+          focusableDialogElements[0].focus();
+        }
       }
     }
   };
