@@ -9,18 +9,17 @@ import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
+import Grid from 'Components/containers/grid';
 import { getAvatarUrl } from 'Models/project';
 
 import { useAPI } from '../../state/api';
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
-const DeletedProject = ({ id, domain, onClick }) => {
-  const [exiting, setExiting] = useState(false);
-
-  return (
-    <AnimationContainer type="slideUp" active={exiting} onAnimationEnd={onClick}>
-      <TransparentButton onClick={() => setExiting(true)} className={styles.deletedProject}>
+const DeletedProject = ({ id, domain, onClick }) => (
+  <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
+    {(animateAndDeleteProject) => (
+      <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
         <div className={styles.buttonWrap}>
@@ -29,9 +28,9 @@ const DeletedProject = ({ id, domain, onClick }) => {
           </Button>
         </div>
       </TransparentButton>
-    </AnimationContainer>
-  );
-};
+    )}
+  </AnimationContainer>
+);
 
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
@@ -43,13 +42,9 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
 
   return (
-    <ul className={styles.deletedProjectsContainer}>
-      {deletedProjects.map(({ id, domain }) => (
-        <li key={id} className={styles.deletedProjectItemWrap}>
-          <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />
-        </li>
-      ))}
-    </ul>
+    <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
+      {({ id, domain }) => <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />}
+    </Grid>
   );
 };
 DeletedProjectsList.propTypes = {
