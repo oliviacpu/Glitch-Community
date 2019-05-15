@@ -111,13 +111,6 @@ PopoverButton.propTypes = {
 };
 
 const ProjectOptionsContent = (props) => {
-  function animate(event, className, func) {
-    const projectContainer = event.target.closest('li');
-    projectContainer.addEventListener('animationend', func, { once: true });
-    projectContainer.classList.add(className);
-    props.togglePopover();
-  }
-
   function toggleAndCB(cb) {
     props.togglePopover();
     cb();
@@ -125,24 +118,24 @@ const ProjectOptionsContent = (props) => {
 
   const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc((e) => animate(e, 'slide-down', props.deleteProject), 'Delete Project clicked');
-
+  const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(props.deleteProject), 'Delete Project clicked');
+  const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
+  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
   const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
   const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
 
   return (
     <dialog className="pop-over project-options-pop">
-
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {props.featureProject && (
-            <PopoverButton onClick={(e) => animate(e, 'slide-up', props.featureProject)} text="Feature" emoji="clapper" />
+            <PopoverButton onClick={() => toggleAndCB(props.featureProject)} text="Feature" emoji="clapper" />
           )}
           {props.addPin && (
-            <PopoverButton onClick={(e) => animate(e, 'slide-up', props.addPin)} text="Pin " emoji="pushpin" />
+            <PopoverButton onClick={() => toggleAndCB(props.addPin)} text="Pin " emoji="pushpin" />
           )}
           {props.removePin && (
-            <PopoverButton onClick={(e) => animate(e, 'slide-down', props.removePin)} text="Un-Pin " emoji="pushpin" />
+            <PopoverButton onClick={() => toggleAndCB(props.removePin)} text="Un-Pin " emoji="pushpin" />
           )}
         </section>
       )}
@@ -180,7 +173,7 @@ const ProjectOptionsContent = (props) => {
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
           {props.removeProjectFromTeam && (
-            <PopoverButton onClick={(e) => animate(e, 'slide-down', props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
           )}
 
           {props.deleteProject && (

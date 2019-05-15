@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Markdown from 'Components/text/markdown';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
+import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
+import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
+import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import Text from 'Components/text/text';
-import Link from 'Components/link';
 import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
@@ -18,28 +17,14 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
   <dialog className="pop-over overlay new-stuff-overlay" open>
     <section className="pop-over-info">
-      <figure className="new-stuff-avatar" />
+      <div className="new-stuff-avatar"><NewStuffPup /></div>
       <div className="overlay-title">New Stuff</div>
       <div>
         <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
       </div>
     </section>
     <section className="pop-over-actions">
-      {newStuff.map(({ id, title, body, link }) => (
-        <article key={id}>
-          <div className="title">{title}</div>
-          <div className="body">
-            <Markdown>{body}</Markdown>
-          </div>
-          {!!link && (
-            <Text>
-              <Link className="link" to={link}>
-                Read the blog post →
-              </Link>
-            </Text>
-          )}
-        </article>
-      ))}
+      {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
     </section>
   </dialog>
 );
@@ -61,7 +46,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, setVisible }) => {
-    const dogVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
+    const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
 
     const show = () => {
       track();
@@ -74,22 +59,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
     return (
       <>
         {children(show)}
-        {dogVisible && (
-          <div className="new-stuff-footer">
-            <TooltipContainer
-              id="new-stuff-tooltip"
-              type="info"
-              target={
-                <button className="button-unstyled new-stuff" onClick={show}>
-                  <figure className="new-stuff-avatar" alt="New Stuff" />
-                </button>
-              }
-              tooltip="New"
-              persistent
-              align={['top']}
-            />
-          </div>
-        )}
+        {pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <div className="overlay-background" role="presentation" />}
       </>
     );

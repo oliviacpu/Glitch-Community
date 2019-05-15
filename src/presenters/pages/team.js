@@ -22,12 +22,11 @@ import TeamEditor from '../team-editor';
 import { getLink } from '../../models/team';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
-import { captureException } from '../../utils/sentry';
 
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../includes/add-team-project';
 import DeleteTeam from '../includes/delete-team';
-import { AddTeamUser, TeamUsers, WhitelistedDomain, JoinTeam } from '../includes/team-users';
+import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
@@ -84,17 +83,7 @@ const ProjectPals = () => (
 class TeamPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      invitees: [],
-    };
-    this.teamAdmins = this.teamAdmins.bind(this);
-    this.getInvitees = this.getInvitees.bind(this);
     this.addProjectToCollection = this.addProjectToCollection.bind(this);
-  }
-
-  async componentDidMount() {
-    const invitees = await this.getInvitees();
-    this.setState({ invitees });
   }
 
   getProjectOptions() {
@@ -110,34 +99,6 @@ class TeamPage extends React.Component {
     };
 
     return projectOptions;
-  }
-
-  async getInvitees() {
-    if (this.props.currentUserIsOnTeam) {
-      try {
-        const data = await Promise.all(this.props.team.tokens.map(({ userId }) => this.props.api.get(`users/${userId}`)));
-        const invitees = data.map((user) => user.data).filter((user) => !!user);
-        return invitees;
-      } catch (error) {
-        if (error && error.response && error.response.status === 404) {
-          return null;
-        }
-        captureException(error);
-      }
-    }
-    return [];
-  }
-
-  userCanJoinTeam() {
-    const { currentUser, team } = this.props;
-    if (!this.props.currentUserIsOnTeam && team.whitelistedDomain && currentUser && currentUser.emails) {
-      return currentUser.emails.some(({ email, verified }) => verified && email.endsWith(`@${team.whitelistedDomain}`));
-    }
-    return false;
-  }
-
-  teamAdmins() {
-    return this.props.team.users.filter((user) => this.props.team.adminIds.includes(user.id));
   }
 
   async addProjectToCollection(project, collection) {
@@ -179,24 +140,15 @@ class TeamPage extends React.Component {
               </>
             )}
             <div className={styles.usersInformation}>
-              <TeamUsers {...this.props} users={team.users} teamId={team.id} adminIds={team.adminIds} />
-              {!!team.whitelistedDomain && (
-                <WhitelistedDomain
-                  domain={team.whitelistedDomain}
-                  setDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
-                />
-              )}
-              {this.props.currentUserIsOnTeam && (
-                <AddTeamUser
-                  inviteEmail={this.props.inviteEmail}
-                  inviteUser={this.props.inviteUser}
-                  setWhitelistedDomain={this.props.currentUserIsTeamAdmin ? this.props.updateWhitelistedDomain : null}
-                  members={team.users.map(({ id }) => id)}
-                  invitedMembers={this.state.invitees}
-                  whitelistedDomain={team.whitelistedDomain}
-                />
-              )}
-              {this.userCanJoinTeam() && <JoinTeam onClick={this.props.joinTeam} />}
+              <TeamUsers
+                team={team}
+                removeUserFromTeam={this.props.removeUserFromTeam}
+                updateUserPermissions={this.props.updateUserPermissions}
+                updateWhitelistedDomain={this.props.updateWhitelistedDomain}
+                inviteEmail={this.props.inviteEmail}
+                inviteUser={this.props.inviteUser}
+                joinTeam={this.props.joinTeam}
+              />
             </div>
             <Thanks count={team.users.reduce((total, { thanksCount }) => total + thanksCount, 0)} />
             <AuthDescription
@@ -209,7 +161,7 @@ class TeamPage extends React.Component {
         </section>
 
         <ErrorBoundary>
-          <AddTeamProject {...this.props} teamProjects={team.projects} />
+          {this.props.currentUserIsOnTeam && <AddTeamProject addProject={this.props.addProject} teamProjects={team.projects} />}
         </ErrorBoundary>
 
         {featuredProject && (
@@ -280,7 +232,7 @@ class TeamPage extends React.Component {
           </ErrorBoundary>
         )}
 
-        {this.props.currentUserIsTeamAdmin && <DeleteTeam teamId={team.id} teamName={team.name} teamAdmins={this.teamAdmins()} users={team.users} />}
+        {this.props.currentUserIsTeamAdmin && <DeleteTeam team={team} />}
 
         {!this.props.currentUserIsOnTeam && (
           <>

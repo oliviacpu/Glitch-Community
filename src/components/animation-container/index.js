@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from './animations.styl';
 
 const types = ['slideDown', 'slideUp'];
 
-const AnimationContainer = ({ type, active, children, className, ...props }) => (
-  <div className={classnames(className, active && styles[type])} {...props}>
-    {children}
-  </div>
-);
+/* Usage:
+<AnimationContainer type="slideDown" onAnimationEnd={(id) => deleteProject(id)}>
+  {(animateOutAndDeleteProject) => (
+    <Button onClick={() => animateOutAndDeleteProject(id)}>Delete Project</Button>
+  )}
+</AnimationContainer>
+*/
+const AnimationContainer = ({ type, children, className, onAnimationEnd }) => {
+  const [state, setState] = useState({ active: false, handlerArgs: [] });
+  const ref = useRef();
 
+  return (
+    <div
+      ref={ref}
+      className={classnames(className, state.active && styles[type])}
+      onAnimationEnd={(event) => {
+        if (event.target === ref.current) {
+          onAnimationEnd(...state.handlerArgs);
+        }
+      }}
+    >
+      {children((...handlerArgs) => setState({ active: true, handlerArgs }))}
+    </div>
+  );
+};
 AnimationContainer.propTypes = {
   type: PropTypes.oneOf(types).isRequired,
-  active: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
+  onAnimationEnd: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
 

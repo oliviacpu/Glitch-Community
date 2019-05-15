@@ -12,6 +12,7 @@ import Loader from 'Components/loader/';
 import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
+import AnimationContainer from 'Components/animation-container';
 
 import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
@@ -58,48 +59,53 @@ ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
 
+
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <div className={styles.collectionItem}>
-    {(showCurator || isAuthorized) && (
-      <div className={styles.header}>
-        <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
-        {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={deleteCollection} />}
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
+    {(animateAndDeleteCollection) => (
+      <div className={styles.collectionItem}>
+        {(showCurator || isAuthorized) && (
+          <div className={styles.header}>
+            <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
+            {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={animateAndDeleteCollection} />}
+          </div>
+        )}
+        <CollectionLink
+          collection={collection}
+          className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
+          style={collectionColorStyles(collection)}
+        >
+          <div className={styles.avatarContainer}>
+            <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+          </div>
+          <div className={styles.nameDescriptionContainer}>
+            <div className={styles.itemButtonWrap}>
+              <Button decorative>
+                <div className={styles.name}>{collection.name}</div>
+              </Button>
+            </div>
+            <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
+              <Markdown length={100}>{collection.description || ' '}</Markdown>
+            </div>
+          </div>
+        </CollectionLink>
+
+        <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
+
+        <CollectionLink collection={collection} className={styles.footerLink}>
+          <>
+            {collection.projects && collection.projects.length > 0 && (
+              <>
+                {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
+                <Pluralize count={collection.projects.length} singular="project" />
+                <span aria-hidden="true"> →</span>
+              </>
+            )}
+          </>
+        </CollectionLink>
       </div>
     )}
-    <CollectionLink
-      collection={collection}
-      className={classNames(styles.linkBody, { [styles.showCurator]: showCurator })}
-      style={collectionColorStyles(collection)}
-    >
-      <div className={styles.avatarContainer}>
-        <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
-      </div>
-      <div className={styles.nameDescriptionContainer}>
-        <div className={styles.itemButtonWrap}>
-          <Button decorative>
-            <div className={styles.name}>{collection.name}</div>
-          </Button>
-        </div>
-        <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
-          <Markdown length={100}>{collection.description || ' '}</Markdown>
-        </div>
-      </div>
-    </CollectionLink>
-
-    <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
-
-    <CollectionLink collection={collection} className={styles.footerLink}>
-      <>
-        {collection.projects && collection.projects.length > 0 && (
-          <>
-            {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-            <Pluralize count={collection.projects.length} singular="project" />
-            <span aria-hidden="true"> →</span>
-          </>
-        )}
-      </>
-    </CollectionLink>
-  </div>
+  </AnimationContainer>
 );
 
 CollectionItem.propTypes = {
