@@ -242,10 +242,10 @@ CollectionPageContents.defaultProps = {
 
 async function loadCollection(api, ownerName, collectionName) {
   try {
-    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${ownerName}/${collectionName}`, `${ownerName}/${collectionName}`);
+    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
     const collectionProjects = await getAllPages(
       api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${ownerName}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
+      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
