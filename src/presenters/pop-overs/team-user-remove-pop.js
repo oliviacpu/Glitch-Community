@@ -62,7 +62,7 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
     </>
   );
 };
-function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover }) {
+function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover, focusFirstElement }) {
   const [selectedProjects, setSelectedProjects] = useState(new Set());
 
   const onRemoveUser = useTrackedFunc(() => {
@@ -111,6 +111,7 @@ TeamUserRemovePop.propTypes = {
   }).isRequired,
   removeUser: PropTypes.func.isRequired,
   togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.Required,
 };
 
 export default TeamUserRemovePop;

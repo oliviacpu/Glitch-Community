@@ -41,6 +41,7 @@ const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
               user={user}
               updateUserPermissions={updateUserPermissions}
               togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
             />
           )}
         </PopoverWithButton>

@@ -33,6 +33,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   };
 
   const focusFirstElement = (dialog) => {
+    console.log('focusFirstElement');
     // only focus to next selectable element in dialog if popover is triggered from keyboard
     if (dialog && openedFromKeyboard) {
       const focusableElements =

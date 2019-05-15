@@ -152,8 +152,8 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
 
   return (
     <NestedPopover
-      alternateContent={(togglePopover) => (
-        <TeamUserRemovePop user={user} removeUser={removeUser} userTeamProjects={userTeamProjects} togglePopover={togglePopover} />
+      alternateContent={(togglePopover, focusFirstElement) => (
+        <TeamUserRemovePop user={user} removeUser={removeUser} userTeamProjects={userTeamProjects} togglePopover={togglePopover} focusFirstElement={focusFirstElement}/>
       )}
     >
       {(showRemove) => (
