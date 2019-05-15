@@ -33,7 +33,7 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 );
 
 const NewProjectPop = ({ projects }) => (
-  <PopoverDialog className="new-project-pop">
+  <PopoverDialog className="new-project-pop" align="right">
     <PopoverSection className="results-list">
       <div className="results">
         {projects.length ? (

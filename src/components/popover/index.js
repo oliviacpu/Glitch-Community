@@ -37,16 +37,29 @@ const usePositionAdjustment = ({ margin }) => {
   return { ref, offset };
 };
 
-export const PopoverDialog = ({ children, wide, className }) => {
+const alignTypes = ['left', 'right'];
+export const PopoverDialog = ({ children, align,  wide, className }) => {
   const { ref, offset } = usePositionAdjustment({ margin: 12 });
   return (
-    <div className={classnames(styles.popoverWrap, wide && styles.wide, className)}>
+    <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
       <dialog ref={ref} className={styles.popover} style={offset}>
         {children}
       </dialog>
     </div>
   );
 };
+
+PopoverDialog.propTypes = {
+  children: PropTypes.node.isRequired,
+  align: PropTypes.oneOf(alignTypes).isRequired,
+  wide: PropTypes.bool,
+  className: PropTypes.string,
+}
+PopoverDialog.defaultProps = {
+  wide: false,
+  className: '',
+}
+
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone']
 export const PopoverSection = ({ className, children, type }) => (

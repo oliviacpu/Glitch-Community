@@ -3,7 +3,11 @@
 .popoverWrap
   position: absolute
   width: 255px
-  right: 0
+  &.right
+    right: 0
+  &.left
+    left: 0
+  
   &.wide
     width: 350px
   
@@ -24,6 +28,8 @@
 
 .popoverSection
   border-top: 1px solid secondary
+  margin: 0
+  padding: 0
   &:first-child
     border-top: none
   &.primary
