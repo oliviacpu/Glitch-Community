@@ -36,6 +36,10 @@ const isAuthorOfCurrentPage = ({ currentPageItem, currentPageType, currentUser }
     return currentPageItem.id !== currentUser.id;
   }
   if (currentPageType === "team") {
+    return currentPageItem.users && currentPageItem.users.some(({ id }) => currentUser.id === id);
+  }
+  if (currentPageType === "collection") {
+    
   }
   return false;
 }
