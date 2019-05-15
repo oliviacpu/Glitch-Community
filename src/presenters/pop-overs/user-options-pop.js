@@ -190,7 +190,10 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                 align={['right']}
               >
                 {visible && (
-                  <NestedPopover alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />} startAlternateVisible={createTeamOpen}>
+                  <NestedPopover
+                    alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />}
+                    startAlternateVisible={createTeamOpen}
+                  >
                     {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
                   </NestedPopover>
                 )}
