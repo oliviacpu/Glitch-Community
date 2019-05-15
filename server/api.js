@@ -18,11 +18,11 @@ async function getProjectFromApi(domain) {
 }
 
 async function getTeamFromApi(url) {
-  return await getSingleItem(api, `v1/teams/by/url?url=${url}`, url);
+  return await getSingleItem(api, `v1/teams/by/url?url=${encodeURIComponent(url)}`, url);
 }
 
 async function getUserFromApi(login) {
-  return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
+  return await getSingleItem(api, `v1/users/by/login?login=${encodeURIComponent(login)}`, login);
 }
 
 async function getCollectionFromApi(url) {

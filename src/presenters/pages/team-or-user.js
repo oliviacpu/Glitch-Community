@@ -27,12 +27,13 @@ const getUserById = async (api, id) => {
 };
 
 const getUserByLogin = async (api, name) => {
+  const encoded = encodeURIComponent(name);
   const data = await allByKeys({
-    user: getSingleItem(api, `v1/users/by/login?login=${name}`, name),
-    pins: getAllPages(api, `v1/users/by/login/pinnedProjects?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    projects: getAllPages(api, `v1/users/by/login/projects?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    teams: getAllPages(api, `v1/users/by/login/teams?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    collections: getAllPages(api, `v1/users/by/login/collections?login=${name}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    user: getSingleItem(api, `v1/users/by/login?login=${encoded}`, name),
+    pins: getAllPages(api, `v1/users/by/login/pinnedProjects?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    projects: getAllPages(api, `v1/users/by/login/projects?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    teams: getAllPages(api, `v1/users/by/login/teams?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    collections: getAllPages(api, `v1/users/by/login/collections?login=${encoded}&limit=100&orderKey=createdAt&orderDirection=DESC`),
   });
   return mergeUserData(data);
 };
@@ -45,7 +46,7 @@ const parseTeam = (team) => {
 };
 
 const getTeam = async (api, name) => {
-  const team = await getSingleItem(api, `v1/teams/by/url?url=${name}`, name);
+  const team = await getSingleItem(api, `v1/teams/by/url?url=${encodeURIComponent(name)}`, name);
   if (team) {
     const [users, pinnedProjects, projects, collections] = await Promise.all([
       // load all users, need to handle pagination
