@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
-import { PopoverWithButton, PopoverDialog } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import { PopoverWithButton, PopoverDialog, PopoverActions } from 'Components/popover';
 import { getRemixUrl } from 'Models/project';
 import { useTracker, TrackedExternalLink } from '../segment-analytics';
 import ProjectAvatar from '../includes/project-avatar';
@@ -33,7 +34,7 @@ const NewProjectResultItem = ({ id, domain, description }) => (
 
 const NewProjectPop = ({ projects }) => (
   <PopoverDialog className="new-project-pop">
-    <section className="pop-over-actions results-list">
+    <PopoverActions className="results-list">
       <div className="results">
         {projects.length ? (
           projects.map((project) => (
@@ -53,12 +54,12 @@ const NewProjectPop = ({ projects }) => (
           <Loader />
         )}
       </div>
-    </section>
-    <section className="pop-over-actions last-section pop-over-info">
-      <button className="button-small button-tertiary button-on-secondary-background" onClick={importGitRepo} type="button">
-        <span>Clone from Git Repo</span>
-      </button>
-    </section>
+    </PopoverActions>
+    <PopoverActions>
+      <Button size="small" tertiary onClick={importGitRepo}>
+        Clone from Git Repo
+      </Button>
+    </PopoverActions>
   </PopoverDialog>
 );
 NewProjectPop.propTypes = {
@@ -91,7 +92,7 @@ function NewProjectPopButton() {
   const onOpen = useTracker('open new-project pop');
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{ position: 'relative' }}>
       <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText="New Project">
         {() => <NewProjectPop projects={projects} />}
       </PopoverWithButton>
