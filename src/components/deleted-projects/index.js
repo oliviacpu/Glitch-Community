@@ -52,14 +52,16 @@ DeletedProjectsList.propTypes = {
   undelete: PropTypes.func.isRequired,
 };
 
-function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
+function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
   // states: hidden | loading | ready
   const [state, setState] = useState('hidden');
   const clickShow = async () => {
     setState('loading');
     try {
+      console.log(user)
       const { data } = await api.get('user/deleted-projects');
+      // const { data } = await api.get('v1/users/deletedProjects')
       setDeletedProjects(data);
       setState('ready');
     } catch (e) {

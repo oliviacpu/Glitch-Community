@@ -198,7 +198,7 @@ const UserPage = ({
             Deleted Projects
             <Emoji inTitle name="bomb" />
           </Heading>
-          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} user={user} />
         </article>
       )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
