@@ -159,8 +159,7 @@ const UserPage = ({
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            currentPageItem: user,
-            currentPageType: 'user',
+            isAuthorized,
           }}
         />
       )}
@@ -191,8 +190,7 @@ const UserPage = ({
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            currentPageItem: user,
-            currentPageType: 'user',
+            isAuthorized,
           }}
         />
       )}

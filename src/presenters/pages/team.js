@@ -94,8 +94,7 @@ class TeamPage extends React.Component {
       removeProjectFromTeam: this.props.removeProject,
       joinTeamProject: this.props.joinTeamProject,
       featureProject: this.props.featureProject,
-      currentPageItem: this.props.team,
-      currentPageType: 'team',
+      isAuthorizes: this.props.currentUserIsOnTeam,
     };
 
     return projectOptions;
