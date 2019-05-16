@@ -72,7 +72,7 @@ const ThanksCount = ({ count }) =>
 
 // Team User Info 😍
 
-const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUser, userTeamProjects }) => {
+const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUser, userTeamProjects, focusFirstElement }) => {
   const { currentUser } = useCurrentUser();
   const userAvatarStyle = { backgroundColor: user.color };
 
@@ -94,7 +94,7 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
   }
 
   return (
-    <dialog className="pop-over team-user-info-pop">
+    <dialog className="pop-over team-user-info-pop" ref={focusFirstElement}>
       <section className="pop-over-info user-info">
         <UserLink user={user}>
           <img className="avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={userAvatarStyle} />
@@ -132,7 +132,7 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
 // Team User Info or Remove
 // uses removeTeamUserVisible state to toggle between showing user info and remove views
 
-const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPermissions }) => {
+const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPermissions, togglePopover, focusFirstElement }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [userTeamProjects, setUserTeamProjects] = useState({ status: 'loading', data: null });
@@ -152,8 +152,14 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
 
   return (
     <NestedPopover
-      alternateContent={(togglePopover) => (
-        <TeamUserRemovePop user={user} removeUser={removeUser} userTeamProjects={userTeamProjects} togglePopover={togglePopover} />
+      alternateContent={() => (
+        <TeamUserRemovePop
+          user={user}
+          removeUser={removeUser}
+          userTeamProjects={userTeamProjects}
+          togglePopover={togglePopover}
+          focusFirstElement={focusFirstElement}
+        />
       )}
     >
       {(showRemove) => (
@@ -164,6 +170,7 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
           removeUser={removeUser}
           userTeamProjects={userTeamProjects}
           showRemove={showRemove}
+          focusFirstElement={focusFirstElement}
         />
       )}
     </NestedPopover>
@@ -182,6 +189,8 @@ TeamUserInfoAndRemovePop.propTypes = {
   team: PropTypes.shape({
     projects: PropTypes.array.isRequired,
   }).isRequired,
+  togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 export default TeamUserInfoAndRemovePop;

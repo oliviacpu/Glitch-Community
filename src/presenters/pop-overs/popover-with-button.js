@@ -4,12 +4,12 @@ import PopoverContainer from './popover-container';
 
 const PopoverWithButton = ({ dataTrack, containerClass, buttonClass, buttonText, children: renderChildren, onOpen }) => (
   <PopoverContainer onOpen={onOpen}>
-    {({ visible, togglePopover }) => (
+    {({ visible, togglePopover, focusFirstElement }) => (
       <div className={`button-wrap ${containerClass}`}>
         <button className={buttonClass} data-track={dataTrack} onClick={togglePopover} type="button">
           {buttonText}
         </button>
-        {visible && renderChildren({ togglePopover })}
+        {visible && renderChildren({ togglePopover, focusFirstElement })}
       </div>
     )}
   </PopoverContainer>

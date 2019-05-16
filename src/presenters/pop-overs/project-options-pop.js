@@ -92,7 +92,7 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
 
   return (
-    <dialog className="pop-over project-options-pop">
+    <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {!!props.featureProject && !props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
@@ -147,8 +147,12 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
 // Project Options Pop
 const ProjectOptionsPop = ({ ...props }) => (
-  <NestedPopover alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} />}>
-    {(addToCollectionPopover) => <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} />}
+  <NestedPopover
+    alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
+  >
+    {(addToCollectionPopover) => (
+      <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusFirstElementg={props.focusFirstElementg} />
+    )}
   </NestedPopover>
 );
 
@@ -158,6 +162,7 @@ ProjectOptionsPop.propTypes = {
     users: PropTypes.array.isRequired,
   }).isRequired,
   togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
   addPin: PropTypes.func,
   removePin: PropTypes.func,
   deleteProject: PropTypes.func,
@@ -209,7 +214,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
       buttonText={<div className="down-arrow" aria-label="options" />}
       containerClass="project-options-pop-btn"
     >
-      {({ togglePopover }) => (
+      {({ togglePopover, focusFirstElement }) => (
         <ProjectOptionsPop
           {...props}
           {...projectOptions}
@@ -218,6 +223,7 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
           currentUserIsOnProject={currentUserIsOnProject(currentUser)}
           currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
           togglePopover={togglePopover}
+          focusFirstElement={focusFirstElement}
         />
       )}
     </PopoverWithButton>

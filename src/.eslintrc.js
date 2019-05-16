@@ -33,6 +33,12 @@ module.exports = {
     'object-curly-newline': OFF,
     'no-confusing-arrow': OFF,
     'function-paren-newline': OFF,
+    // allow for focusing on pop-overs
+    'jsx-a11y/no-noninteractive-tabindex': [
+      'error', {
+        tags: ['dialog'],
+      },
+    ],
     // Overrides of react/recommended:
     'react/no-unescaped-entities': ['error', { forbid: [`"`, '>', '}'] }], // permit ' in jsx html,
     'react/prop-types': [OFF], // disabled so we can use composed prop-types
