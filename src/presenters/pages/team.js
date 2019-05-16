@@ -79,12 +79,11 @@ class TeamPage extends React.Component {
       addProjectToCollection: this.addProjectToCollection,
       deleteProject: this.props.deleteProject,
       leaveTeamProject: this.props.leaveTeamProject,
+      removeProjectFromTeam: this.props.removeProject,
+      joinTeamProject: this.props.joinTeamProject,
+      featureProject: this.props.featureProject,
+      isAuthorized: this.props.currentUserIsOnTeam,
     };
-    if (this.props.currentUserIsOnTeam) {
-      projectOptions.removeProjectFromTeam = this.props.removeProject;
-      projectOptions.joinTeamProject = this.props.joinTeamProject;
-      projectOptions.featureProject = this.props.featureProject;
-    }
 
     return projectOptions;
   }
@@ -165,9 +164,8 @@ class TeamPage extends React.Component {
             }
             projects={pinnedProjects}
             isAuthorized={this.props.currentUserIsOnTeam}
-            removePin={this.props.removePin}
             projectOptions={{
-              removePin: this.props.currentUserIsOnTeam ? this.props.removePin : undefined,
+              removePin: this.props.removePin,
               ...this.getProjectOptions(),
             }}
           />
@@ -183,7 +181,7 @@ class TeamPage extends React.Component {
             enablePagination
             enableFiltering={recentProjects.length > 6}
             projectOptions={{
-              addPin: this.props.currentUserIsOnTeam ? this.props.addPin : undefined,
+              addPin: this.props.addPin,
               ...this.getProjectOptions(),
             }}
           />
