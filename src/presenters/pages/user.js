@@ -153,12 +153,11 @@ const UserPage = ({
           }
           projects={pinnedProjects}
           projectOptions={{
-            removePin,
-            featureProject,
+            removePin: isAuthorized ? removePin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            isAuthorized,
           }}
         />
       )}
@@ -184,12 +183,11 @@ const UserPage = ({
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
-            addPin,
-            featureProject,
+            addPin: isAuthorized ? addPin : undefined,
+            featureProject: isAuthorized ? featureProject : undefined,
             leaveProject,
             deleteProject,
             addProjectToCollection,
-            isAuthorized,
           }}
         />
       )}
