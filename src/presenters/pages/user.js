@@ -203,6 +203,7 @@ const UserPage = ({
             setDeletedProjects={setDeletedProjects}
             deletedProjects={_deletedProjects}
             undelete={isAuthorized ? undeleteProject : null}
+            
           />
         </article>
       )}
