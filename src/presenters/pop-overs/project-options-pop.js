@@ -31,26 +31,6 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
-const isAuthorOfCurrentPage = ({ projectOptions, currentUser }) => {
-  const { currentPageType, currentPageItem } = projectOptions;
-
-  if (currentPageType === 'user') {
-    return currentPageItem.id === currentUser.id;
-  }
-  if (currentPageType === 'team') {
-    return currentPageItem.users && currentPageItem.users.some(({ id }) => currentUser.id === id);
-  }
-  if (currentPageType === 'collection') {
-    if (currentPageItem.teamId > 0) {
-      return currentUser.teams.some((team) => team.id === currentPageItem.teamId);
-    }
-    if (currentPageItem.userId > 0) {
-      return currentUser.id === currentPageItem.userId;
-    }
-  }
-
-  return false;
-};
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
@@ -59,41 +39,54 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   const isProjectMember = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
-  const isAuthor = isAuthorOfCurrentPage({ projectOptions, currentUser });
+  const {
+    isAuthorized,
+    featureProject,
+    addPin,
+    removePin,
+    displayNewNote,
+    addProjectToCollection,
+    joinTeamProject,
+    leaveTeamProject,
+    leaveProject,
+    removeProjectFromTeam,
+    deleteProject,
+    removeProjectFromCollection,
+  } = projectOptions;
 
   return {
-    featureProject: projectOptions.featureProject && !project.private && !isAnon && isAuthor
-      ? () => projectOptions.featureProject(project.id)
+    featureProject: featureProject && !project.private && !isAnon && isAuthorized
+      ? () => featureProject(project.id)
       : null,
-    addPin: projectOptions.addPin && !isAnon && isAuthor
-      ? () => projectOptions.addPin(project.id)
+    addPin: addPin && !isAnon && isAuthorized
+      ? () => addPin(project.id)
       : null,
-    removePin: projectOptions.removePin && !isAnon && isAuthor
-      ? () => projectOptions.removePin(project.id)
+    removePin: removePin && !isAnon && isAuthorized
+      ? () => removePin(project.id)
       : null,
-    displayNewNote: !(project.note || project.isAddingANewNote) && projectOptions.displayNewNote && !isAnon && isAuthor
-      ? () => projectOptions.displayNewNote(project.id)
+    displayNewNote: !(project.note || project.isAddingANewNote) && displayNewNote && !isAnon && isAuthorized
+      ? () => displayNewNote(project.id)
       : null,
-    addProjectToCollection: projectOptions.addProjectToCollection && !isAnon
-      ? projectOptions.addProjectToCollection
+    addProjectToCollection: addProjectToCollection && !isAnon
+      ? addProjectToCollection
       : null,
-    joinTeamProject: projectOptions.joinTeamProject && !isProjectMember && !isAnon && isAuthor
-      ? () => projectOptions.joinTeamProject(project.id, currentUser.id)
+    joinTeamProject: joinTeamProject && !isProjectMember && !isAnon && isAuthorized
+      ? () => joinTeamProject(project.id, currentUser.id)
       : null,
-    leaveTeamProject: projectOptions.leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthor
-      ? () => projectOptions.leaveTeamProject(project.id, currentUser.id)
+    leaveTeamProject: leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized
+      ? () => leaveTeamProject(project.id, currentUser.id)
       : null,
-    leaveProject: projectOptions.leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthor
-      ? (event) => promptThenLeaveProject({ event, project, leaveProject: projectOptions.leaveProject, currentUser })
+    leaveProject: leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
+      ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
       : null,
-    removeProjectFromTeam: projectOptions.removeProjectFromTeam && !projectOptions.removeProjectFromCollection && !isAnon && isAuthor
-      ? () => projectOptions.removeProjectFromTeam(project.id)
+    removeProjectFromTeam: removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized
+      ? () => removeProjectFromTeam(project.id)
       : null,
-    deleteProject: !projectOptions.removeProjectFromCollection && projectOptions.deleteProject && isProjectAdmin
-      ? () => projectOptions.deleteProject(project.id)
+    deleteProject: !removeProjectFromCollection && deleteProject && isProjectAdmin
+      ? () => deleteProject(project.id)
       : null,
-    removeProjectFromCollection: projectOptions.removeProjectFromCollection && !isAnon && isAuthor
-      ? () => projectOptions.removeProjectFromCollection(project)
+    removeProjectFromCollection: removeProjectFromCollection && !isAnon && isAuthorized
+      ? () => removeProjectFromCollection(project)
       : null,
   };
 };

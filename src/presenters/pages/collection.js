@@ -178,8 +178,7 @@ const CollectionPageContents = ({
                     addProjectToCollection,
                     displayNewNote,
                     featureProject,
-                    currentPageItem: collection,
-                    currentPageType: 'collection',
+                    isAuthorized: currentUserIsAuthor,
                   }}
                 />
               </div>
