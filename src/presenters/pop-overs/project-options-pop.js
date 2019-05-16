@@ -223,9 +223,9 @@ export default function ProjectOptionsPop(props) {
       buttonText={<div className="down-arrow" aria-label="options" />}
       containerClass="project-options-pop-btn"
     >
-      {({ togglePopover }) => (
+      {({ togglePopover, focusFirstElement }) => (
         <NestedPopover
-          alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
+          alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={focusFirstElement} />}
         >
           {(addToCollectionPopover) => (
             <ProjectOptionsContent
@@ -233,7 +233,7 @@ export default function ProjectOptionsPop(props) {
               {...projectOptions}
               addToCollectionPopover={addToCollectionPopover}
               togglePopover={togglePopover}
-              focusFirstElement={props.focusFirstElement}
+              focusFirstElement={focusFirstElement}
             />
           )}
         </NestedPopover>
