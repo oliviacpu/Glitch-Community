@@ -54,7 +54,6 @@ DeletedProjectsList.propTypes = {
   undelete: PropTypes.func.isRequired,
 };
 
-
 const ViewOnlyDeletedProjectsList = ({ deletedProjects }) => (
   <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
     {({ id, domain }) => (
@@ -69,15 +68,15 @@ ViewOnlyDeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
 };
 
-function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
+function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
   // states: hidden | loading | ready
   const [state, setState] = useState('hidden');
   const clickShow = async () => {
     setState('loading');
     try {
-      const { data } = await api.get('user/deleted-projects');
-      setDeletedProjects(data);
+      const { data } = await api.get(`v1/users/${user.id}/deletedProjects`);
+      setDeletedProjects(data.items);
       setState('ready');
     } catch (e) {
       setState('hidden');
