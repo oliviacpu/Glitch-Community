@@ -75,7 +75,7 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   const clickShow = async () => {
     setState('loading');
     try {
-      const { data } = await api.get(`v1/users/${user.id}/deletedProjects`);
+      const { data } = await api.get(`v1/users/${user.id}/deletedProjects?limit=100`);
       setDeletedProjects(data.items);
       setState('ready');
     } catch (e) {
