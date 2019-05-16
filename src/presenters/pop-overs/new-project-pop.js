@@ -31,8 +31,8 @@ const NewProjectResultItem = ({ id, domain, description }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, opensFromRight }) => (
-  <div className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`}>
+const NewProjectPop = ({ projects, focusFirstElement, opensFromRight }) => (
+  <dialog className={`pop-over new-project-pop ${opensFromRight ? 'opens-right' : ''}`} ref={focusFirstElement}>
     <section className="pop-over-actions results-list">
       <div className="results">
         {projects.length ? (
@@ -59,7 +59,7 @@ const NewProjectPop = ({ projects, opensFromRight }) => (
         <span>Clone from Git Repo</span>
       </button>
     </section>
-  </div>
+  </dialog>
 );
 NewProjectPop.propTypes = {
   projects: PropTypes.arrayOf(
@@ -68,6 +68,7 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
   opensFromRight: PropTypes.bool.isRequired,
 };
 
@@ -92,7 +93,7 @@ function NewProjectPopButton({ opensFromRight }) {
 
   return (
     <PopoverWithButton buttonClass="button-small" dataTrack="open new-project pop" buttonText="New Project">
-      {() => <NewProjectPop projects={projects} opensFromRight={opensFromRight} />}
+      {({ focusFirstElement }) => <NewProjectPop projects={projects} focusFirstElement={focusFirstElement} opensFromRight={opensFromRight} />}
     </PopoverWithButton>
   );
 }

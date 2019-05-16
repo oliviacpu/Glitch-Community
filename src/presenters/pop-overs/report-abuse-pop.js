@@ -214,8 +214,7 @@ class ReportAbusePop extends React.Component {
       </section>
       <section className="pop-over-info">
         <p className="info-description">
-          But you can still send us your message by emailing the details below to{' '}
-          <b>support@glitch.com</b>
+          But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
         </p>
       </section>
       <section className="pop-over-actions">
@@ -238,9 +237,11 @@ ReportAbusePop.propTypes = {
 const ReportAbusePopButton = (props) => {
   const { currentUser } = useCurrentUser();
   return (
-    <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
-      {() => <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />}
-    </PopoverWithButton>
+    <div className="report-abuse-button-wrap">
+      <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
+        {() => <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />}
+      </PopoverWithButton>
+    </div>
   );
 };
 ReportAbusePopButton.propTypes = {

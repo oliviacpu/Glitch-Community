@@ -116,7 +116,7 @@ const ProjectOptionsContent = (props) => {
   const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
 
   return (
-    <dialog className="pop-over project-options-pop">
+    <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
           {props.featureProject && (
@@ -180,6 +180,7 @@ const ProjectOptionsContent = (props) => {
     </dialog>
   );
 };
+
 ProjectOptionsContent.propTypes = {
   addPin: PropTypes.func,
   addProjectToCollection: PropTypes.func,
@@ -192,6 +193,7 @@ ProjectOptionsContent.propTypes = {
   removePin: PropTypes.func,
   removeProjectFromTeam: PropTypes.func,
   togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 ProjectOptionsContent.defaultProps = {
   addPin: null,
@@ -223,9 +225,7 @@ export default function ProjectOptionsPop(props) {
     >
       {({ togglePopover }) => (
         <NestedPopover
-          alternateContent={() => (
-            <AddProjectToCollectionPop {...props} {...projectOptions} togglePopover={togglePopover} currentUser={currentUser} />
-          )}
+          alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
         >
           {(addToCollectionPopover) => (
             <ProjectOptionsContent
@@ -233,6 +233,7 @@ export default function ProjectOptionsPop(props) {
               {...projectOptions}
               addToCollectionPopover={addToCollectionPopover}
               togglePopover={togglePopover}
+              focusFirstElement={props.focusFirstElement}
             />
           )}
         </NestedPopover>

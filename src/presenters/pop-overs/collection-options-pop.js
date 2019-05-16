@@ -5,7 +5,7 @@ import PopoverButton from './popover-button';
 import { useCurrentUser } from '../../state/current-user';
 
 // Collection Options Pop
-const CollectionOptionsPop = ({ deleteCollection, collection }) => {
+const CollectionOptionsPop = ({ deleteCollection, collection, focusFirstElement }) => {
   function confirmThenDelete() {
     if (!window.confirm('Are you sure you want to delete your collection?')) {
       return;
@@ -14,7 +14,7 @@ const CollectionOptionsPop = ({ deleteCollection, collection }) => {
   }
 
   return (
-    <dialog className="pop-over collection-options-pop">
+    <dialog className="pop-over collection-options-pop" tabIndex="0" ref={focusFirstElement}>
       <section className="pop-over-actions danger-zone last-section">
         {deleteCollection && <PopoverButton onClick={confirmThenDelete} text="Delete Collection " emoji="bomb" />}
       </section>
@@ -24,6 +24,7 @@ const CollectionOptionsPop = ({ deleteCollection, collection }) => {
 
 CollectionOptionsPop.propTypes = {
   deleteCollection: PropTypes.func,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 CollectionOptionsPop.defaultProps = {
@@ -44,7 +45,14 @@ export default function CollectionOptions({ deleteCollection, collection }) {
       containerClass="collection-options-pop-btn"
       buttonClass="collection-options button-borderless"
     >
-      {() => <CollectionOptionsPop collection={collection} deleteCollection={deleteCollection} currentUser={currentUser} />}
+      {({ focusFirstElement }) => (
+        <CollectionOptionsPop
+          collection={collection}
+          deleteCollection={deleteCollection}
+          currentUser={currentUser}
+          focusFirstElement={focusFirstElement}
+        />
+      )}
     </PopoverWithButton>
   );
 }

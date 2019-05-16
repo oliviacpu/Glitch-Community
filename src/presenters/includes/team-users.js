@@ -34,13 +34,14 @@ const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
           buttonClass="user button-unstyled tooltip-container-button"
           buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
         >
-          {({ togglePopover }) => (
+          {({ togglePopover, focusFirstElement }) => (
             <TeamUserInfoPop
               team={team}
               removeUserFromTeam={removeUserFromTeam}
               user={user}
               updateUserPermissions={updateUserPermissions}
               togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
             />
           )}
         </PopoverWithButton>
