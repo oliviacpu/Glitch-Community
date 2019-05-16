@@ -77,7 +77,7 @@ class UserEditor extends React.Component {
   async leaveProject(id) {
     await this.props.api.delete(`/projects/${id}/authorization`, {
       data: {
-        targetUserId: this.props.currentUser.id,
+        targetUserId: this.state.id,
       },
     });
     this.setState(({ projects }) => ({
