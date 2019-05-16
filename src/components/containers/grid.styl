@@ -1,11 +1,8 @@
 .grid
   display: grid  
-  --row-gap: 10px
-  --column-gap: 10px
-  --min-width: 300px
-  grid-row-gap: var(--row-gap)
-  grid-column-gap: var(--column-gap)
-  grid-template-columns: repeat(auto-fill, minmax(var(--min-width), 1fr))
+  grid-row-gap: var(--row-gap, 10px)
+  grid-column-gap: var(--column-gap, 10px)
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width, 300px), 1fr))
   list-style-type: none
   margin: 0
   padding: 0

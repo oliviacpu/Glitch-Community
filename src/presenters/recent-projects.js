@@ -17,7 +17,6 @@ const SignInNotice = () => (
     <span>
       <SignInPop /> to keep your projects.
     </span>
-    <div className="note">Anonymous projects expire after 2 weeks</div>
   </div>
 );
 

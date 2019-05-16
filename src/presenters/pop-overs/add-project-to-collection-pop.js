@@ -115,7 +115,7 @@ const AddProjectToCollectionPopContents = ({
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
+      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} /> }
 
       {collections && collections.length > 3 && (
         <section className="pop-over-info">
@@ -189,7 +189,9 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   }));
   return (
     <section className="pop-over-actions">
-      <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+      <div className="segmented-button-wrap">
+        <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+      </div>
     </section>
   );
 };
