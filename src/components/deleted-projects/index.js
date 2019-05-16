@@ -32,6 +32,7 @@ const DeletedProject = ({ id, domain, onClick }) => (
   </AnimationContainer>
 );
 
+
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
@@ -47,9 +48,25 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
     </Grid>
   );
 };
+
 DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
   undelete: PropTypes.func.isRequired,
+};
+
+
+const ViewOnlyDeletedProjectsList = ({ deletedProjects }) => (
+  <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
+    {({ id, domain }) => (
+      <div>
+        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+        <div className={styles.projectName}>{domain}</div>
+      </div>
+    )}
+  </Grid>
+);
+ViewOnlyDeletedProjectsList.propTypes = {
+  deletedProjects: PropTypes.array.isRequired,
 };
 
 function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
@@ -85,7 +102,11 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
   }
   return (
     <>
-      <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+      {
+        undelete
+          ? <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+          : <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
+      }
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
@@ -96,11 +117,12 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
 DeletedProjects.propTypes = {
   deletedProjects: PropTypes.array,
   setDeletedProjects: PropTypes.func.isRequired,
-  undelete: PropTypes.func.isRequired,
+  undelete: PropTypes.func,
 };
 
 DeletedProjects.defaultProps = {
   deletedProjects: [],
+  undelete: null,
 };
 
 export default DeletedProjects;
