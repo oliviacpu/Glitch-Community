@@ -225,7 +225,15 @@ export default function ProjectOptionsPop(props) {
     >
       {({ togglePopover, focusFirstElement }) => (
         <NestedPopover
-          alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={focusFirstElement} />}
+          alternateContent={() => (
+            <AddProjectToCollectionPop
+              {...props}
+              {...projectOptions}
+              togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
+              currentUser={currentUser}
+            />
+          )}
         >
           {(addToCollectionPopover) => (
             <ProjectOptionsContent
