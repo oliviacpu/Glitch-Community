@@ -1,58 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { UserAvatar } from 'Components/images/avatar';
-import { UserLink } from 'Components/link';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
-import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
-import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
 import { useCurrentUser } from '../../state/current-user';
 import { createAPIHook } from '../../state/api';
 import { captureException } from '../../utils/sentry';
-
-// Team Users list (in profile container)
-
-const adminStatusDisplay = (adminIds, user) => {
-  if (adminIds.includes(user.id)) {
-    return ' (admin)';
-  }
-  return '';
-};
-
-const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
-  <ul className="users">
-    {team.users.map((user) => (
-      <li key={user.id}>
-        <PopoverWithButton
-          buttonClass="user button-unstyled tooltip-container-button"
-          buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
-        >
-          {({ togglePopover, focusFirstElement }) => (
-            <TeamUserInfoPop
-              team={team}
-              removeUserFromTeam={removeUserFromTeam}
-              user={user}
-              updateUserPermissions={updateUserPermissions}
-              togglePopover={togglePopover}
-              focusFirstElement={focusFirstElement}
-            />
-          )}
-        </PopoverWithButton>
-      </li>
-    ))}
-  </ul>
-);
-
-TeamUsers.propTypes = {
-  team: PropTypes.object.isRequired,
-  removeUserFromTeam: PropTypes.func.isRequired,
-  updateUserPermissions: PropTypes.func.isRequired,
-};
 
 // Whitelisted domain icon
 
@@ -135,12 +92,12 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
   return (
     <>
-      <TeamUsers team={team} removeUserFromTeam={removeUserFromTeam} updateUserPermissions={updateUserPermissions} />
+      <TeamUserInfoPop team={team} removeUserFromTeam={removeUserFromTeam} updateUserPermissions={updateUserPermissions} />
       {!!team.whitelistedDomain && (
         <WhitelistedDomain domain={team.whitelistedDomain} setDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null} />
       )}
       {currentUserIsOnTeam && (
-        <AddTeamUser
+        <AddTeamUserPop
           inviteEmail={inviteEmail}
           inviteUser={inviteUser}
           setWhitelistedDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null}

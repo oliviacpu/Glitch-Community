@@ -21,6 +21,7 @@ import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
 
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
+import PopoverWithButton from './popover-with-button';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -204,7 +205,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   );
 };
 
-const AddProjectToCollectionPop = (props) => {
+export const AddProjectToCollectionPopBase = (props) => {
   const { project, togglePopover, focusFirstElement } = props;
 
   const api = useAPI();
@@ -280,17 +281,37 @@ const AddProjectToCollectionPop = (props) => {
   );
 };
 
-AddProjectToCollectionPop.propTypes = {
+AddProjectToCollectionPopBase.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
   focusFirstElement: PropTypes.func,
 };
 
-AddProjectToCollectionPop.defaultProps = {
+AddProjectToCollectionPopBase.defaultProps = {
   fromProject: false,
   togglePopover: null,
   focusFirstElement: null,
 };
 
-export default AddProjectToCollectionPop;
+const AddProjectToCollection = ({ project, ...props }) => (
+  <PopoverWithButton
+    buttonClass="button-small has-emoji add-project"
+    buttonText={
+      <>
+        Add to Collection <span className="emoji framed-picture" role="presentation" />
+      </>
+    }
+  >
+    {({ togglePopover, focusFirstElement }) => (
+      <AddProjectToCollectionPop {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+    )}
+  </PopoverWithButton>
+);
+
+AddProjectToCollection.propTypes = {
+  addProjectToCollection: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+};
+
+export default AddProjectToCollection;

@@ -7,12 +7,15 @@ import randomColor from 'randomcolor';
 
 import Thanks from 'Components/thanks';
 import Loader from 'Components/loader';
+import { UserAvatar } from 'Components/images/avatar';
+import { UserLink } from 'Components/link';
 import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { captureException } from '../../utils/sentry';
 import useDevToggle from '../includes/dev-toggles';
 import { useTracker } from '../segment-analytics';
+import PopoverWithButton from './popover-with-button';
 
 import { useAPI } from '../../state/api';
 
