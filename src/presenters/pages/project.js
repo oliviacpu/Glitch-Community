@@ -15,7 +15,7 @@ import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import ProjectDomainInput from 'Components/fields/project-domain-input';
-import ProfileContainer from 'Components/profile-container';
+import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 
@@ -150,9 +150,9 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
           </>
         }
       >
-        {({ togglePopover }) => (
+        {({ togglePopover, focusFirstElement }) => (
           <>
-            <dialog className="pop-over delete-project-pop" open>
+            <dialog className="pop-over delete-project-pop" open ref={focusFirstElement} tabIndex="0">
               <section className="pop-over-actions">
                 <div className="action-description">You can always undelete a project from your profile page.</div>
               </section>
@@ -199,13 +199,14 @@ const ProjectPage = ({
   deleteProject,
   uploadAvatar,
 }) => {
-  const { domain, users, teams } = project;
+  const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
       <section id="info">
-        <ProfileContainer
-          type="project"
-          item={project}
+        <ProjectProfileContainer
+          currentUser={currentUser}
+          project={project}
+          isAuthorized={isAuthorized}
           avatarActions={{
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}
@@ -219,7 +220,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {domain} {project.private && <PrivateBadge />}
+                {!currentUser.isSupport && suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
@@ -230,7 +231,7 @@ const ProjectPage = ({
           )}
           <AuthDescription
             authorized={isAuthorized}
-            description={project.description}
+            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? ('suspended project') : project.description}
             update={updateDescription}
             placeholder="Tell us about your app"
           />
@@ -242,7 +243,7 @@ const ProjectPage = ({
               <EditButton name={domain} isMember={isAuthorized} />
             </span>
           </div>
-        </ProfileContainer>
+        </ProjectProfileContainer>
       </section>
       <div className="project-embed-wrap">
         <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />

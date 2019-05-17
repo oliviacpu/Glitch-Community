@@ -11,7 +11,7 @@ import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 import ProjectsList from 'Components/containers/projects-list';
-import ProfileContainer from 'Components/profile-container';
+import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 
@@ -105,8 +105,7 @@ const UserPage = ({
   return (
     <main className={styles.container}>
       <section>
-        <ProfileContainer
-          type="user"
+        <UserProfileContainer
           item={user}
           coverActions={{
             'Upload Cover': isAuthorized && user.login ? uploadCover : null,
@@ -130,7 +129,7 @@ const UserPage = ({
             update={updateDescription}
             placeholder="Tell us about yourself"
           />
-        </ProfileContainer>
+        </UserProfileContainer>
       </section>
 
       {featuredProject && (
@@ -154,11 +153,12 @@ const UserPage = ({
           }
           projects={pinnedProjects}
           projectOptions={{
-            removePin: isAuthorized ? removePin : undefined,
-            featureProject: isAuthorized ? featureProject : undefined,
+            removePin,
+            featureProject,
             leaveProject,
             deleteProject,
             addProjectToCollection,
+            isAuthorized,
           }}
         />
       )}
@@ -184,11 +184,12 @@ const UserPage = ({
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
-            addPin: isAuthorized ? addPin : undefined,
-            featureProject: isAuthorized ? featureProject : undefined,
+            addPin,
+            featureProject,
             leaveProject,
             deleteProject,
             addProjectToCollection,
+            isAuthorized,
           }}
         />
       )}

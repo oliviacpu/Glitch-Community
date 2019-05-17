@@ -31,7 +31,7 @@ const TeamAnalyticsTimePop = (props) => {
   };
 
   return (
-    <dialog className="pop-over analytics-time-pop">
+    <dialog className="pop-over analytics-time-pop" ref={props.focusFirstElement}>
       <section className="pop-over-actions last-section results-list">
         <div className="results">
           {timeFrames.map((timeFrame) => (
@@ -51,14 +51,27 @@ const TeamAnalyticsTimePop = (props) => {
 TeamAnalyticsTimePop.propTypes = {
   updateTimeFrame: PropTypes.func.isRequired,
   currentTimeFrame: PropTypes.string.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => {
   const dropdown = <div className="down-arrow" aria-label="options" />;
   return (
-    <PopoverWithButton buttonClass="button-small button-tertiary button-select" buttonText={<>{currentTimeFrame} {dropdown}</>}>
-      {({ togglePopover }) => (
-        <TeamAnalyticsTimePop updateTimeFrame={updateTimeFrame} currentTimeFrame={currentTimeFrame} togglePopover={togglePopover} />
+    <PopoverWithButton
+      buttonClass="button-small button-tertiary button-select"
+      buttonText={
+        <>
+          {currentTimeFrame} {dropdown}
+        </>
+      }
+    >
+      {({ togglePopover, focusFirstElement }) => (
+        <TeamAnalyticsTimePop
+          updateTimeFrame={updateTimeFrame}
+          currentTimeFrame={currentTimeFrame}
+          togglePopover={togglePopover}
+          focusFirstElement={focusFirstElement}
+        />
       )}
     </PopoverWithButton>
   );

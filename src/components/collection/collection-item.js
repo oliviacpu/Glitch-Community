@@ -61,7 +61,7 @@ ProjectsPreview.propTypes = {
 
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (

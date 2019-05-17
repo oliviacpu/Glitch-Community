@@ -13,4 +13,4 @@ storiesOf('ProfileContainer', module)
     <ProfileContainer item={teams['example-team']} type="team">
       <p>The profile content goes here.</p>
     </ProfileContainer>
-  ))
+  ));
