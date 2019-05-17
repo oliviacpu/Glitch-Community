@@ -32,6 +32,7 @@ PopoverSection.defaultProps = {
 };
 
 export const PopoverActions = ({ ...props }) => <PopoverSection {...props} className={styles.popoverActions} />;
+export const PopoverInfo = ({ ...props }) => <PopoverSection {...props} className={styles.popoverInfo} />;
 
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverTitle = styled('div', styles.popoverTitle);

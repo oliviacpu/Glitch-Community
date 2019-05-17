@@ -8,7 +8,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
-import { PopoverWithButton, NestedPopover, NestedPopoverTitle } from 'Components/popover';
+import { PopoverWithButton, NestedPopover, NestedPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from '../../state/local-storage';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
@@ -232,48 +232,37 @@ const SignInWithConsumer = (props) => {
 };
 
 const EmailSignInButton = ({ onClick }) => (
-  <button
-    className="button button-small button-link has-emoji"
-    type="button"
-    onClick={() => {
-      onClick();
-    }}
-  >
-    Sign in with Email <span className="emoji email" />
-  </button>
+  <Button size="small" onClick={onClick}>
+    Sign in with Email <Emoji name="email" />
+  </Button>
 );
 EmailSignInButton.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
 const NewUserInfoSection = () => (
-  <section className="pop-over-info">
-    <span>
-      <span className="emoji carp_streamer" /> New to Glitch? Create an account by signing in.
-    </span>
-  </section>
+  <PopoverActions>
+      <Emoji name="carp" /> New to Glitch? Create an account by signing in.
+  </PopoverActions>
 );
 
 const SignInCodeSection = ({ onClick }) => (
-  <section className="pop-over-actions pop-over-info">
-    <button className="button-small button-tertiary button-on-secondary-background" onClick={onClick} type="button">
-      <span>Use a sign in code</span>
-    </button>
-  </section>
+  <PopoverActions type="secondary">
+    <Button size="small" type="tertiary" matchBackground onClick={onClick} >
+      Use a sign in code
+    </Button>
+  </PopoverActions>
 );
-SignInCodeSection.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
 
 const TermsAndPrivacySection = () => (
-  <aside className="pop-over-info">
+  <PopoverInfo>
     By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
-  </aside>
+  </PopoverInfo>
 );
 
 const SignInPopBase = withRouter((props) => {
   const api = useAPI();
-  const { header, prompt, location, hash, focusFirstElement } = props;
+  const { hash, header, prompt, location } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -288,15 +277,15 @@ const SignInPopBase = withRouter((props) => {
       },
     });
   return (
-    <NestedPopover alternateContent={() => <EmailHandler {...props} />} startAlternateVisible={false}>
+    <NestedPopover alternateContent={() => <EmailHandler {...props} />}>
       {(showEmailLogin) => (
-        <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
+        <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />}>
           {(showCodeLogin) => (
-            <PopoverDialog className="sign-in-pop" ref={focusFirstElement} focusOnDialog>
+            <PopoverDialog className="sign-in-pop" focusOnDialog>
               {header}
               <NewUserInfoSection />
               <TermsAndPrivacySection />
-              <section className="pop-over-actions">
+              <PopoverActions>
                 {prompt}
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
                 <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
@@ -308,7 +297,7 @@ const SignInPopBase = withRouter((props) => {
                     showEmailLogin(api);
                   }}
                 />
-              </section>
+              </PopoverActions>
               <SignInCodeSection
                 onClick={() => {
                   onClick();
@@ -330,10 +319,8 @@ SignInPopBase.propTypes = {
 };
 
 const SignInPopContainer = () => (
-  <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-    {({ togglePopover }) => (
-      <SignInPopBase togglePopover={togglePopover} />
-    )}
+  <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
+    {() => <SignInPopBase />}
   </PopoverWithButton>
 );
 
