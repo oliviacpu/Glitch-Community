@@ -67,7 +67,9 @@ export const MultiPopoverTitle = ({ children }) => {
     <PopoverSection type="secondary">
       <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
         <PopoverTitle>
-          <div className="left-arrow icon" />
+          <div className={styles.backArrow}>
+            <div className="left-arrow icon" />
+          </div>
           &nbsp;
           {children}
         </PopoverTitle>
