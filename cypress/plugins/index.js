@@ -11,11 +11,11 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = (on, config) => {
   config.env = {
-    GLITCH_TOKEN: process.env.GLITCH_TOKEN
-  }
-  return config
-}
+    GLITCH_TOKEN: process.env.GLITCH_TOKEN,
+  };
+  return config;
+};
