@@ -14,6 +14,7 @@ import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import useDevToggle from '../includes/dev-toggles';
+import styles from './sign-in-pop.styl';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 
@@ -47,6 +48,12 @@ function slackAuthLink() {
   return `${API_URL}/auth/slack?${params}`;
 }
 
+const SignInPopButton = ({ company, emoji, href, onClick }) => (
+  <Button href={href} onClick={onClick} size="small">
+    Sign in with {company} <Emoji name={emoji} />
+  </Button>
+);
+
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
     <Button size="small" type="tertiary" matchBackground onClick={onClick}>
@@ -60,8 +67,8 @@ function useEmail() {
   const [validationError, setValidationError] = useState(null);
   const validate = useMemo(
     () =>
-      debounce((email) => {
-        const isValidEmail = parseOneAddress(email) !== null;
+      debounce((value) => {
+        const isValidEmail = parseOneAddress(value) !== null;
         setValidationError(isValidEmail ? null : 'Enter a valid email address');
       }),
     [],
@@ -105,13 +112,13 @@ const EmailHandler = ({ showView }) => {
   }
 
   return (
-    <PopoverDialog className="sign-in-pop" align="right">
+    <PopoverDialog align="right">
       <MultiPopoverTitle>
         Email Sign In <Emoji name="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
-          <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
+          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             <TextInput
               type="email"
               labelText="Email address"
@@ -120,9 +127,11 @@ const EmailHandler = ({ showView }) => {
               placeholder="new@user.com"
               error={validationError}
             />
-            <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} type="submit">
-              Send Link
-            </Button>
+            <div className={styles.submitWrap}>
+              <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} onClick={onSubmit}>
+                Send Link
+              </Button>
+            </div>
           </form>
         )}
         {status === 'done' && (
@@ -169,16 +178,18 @@ const SignInWithConsumer = () => {
   }
 
   return (
-    <PopoverDialog className="sign-in-pop" align="right">
+    <PopoverDialog align="right">
       <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             Paste your temporary sign in code below
             <PopoverInput value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="cute-unique-cosmos" />
-            <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} type="submit">
-              Sign In
-            </Button>
+            <div className={styles.submitWrap}>
+              <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} onClick={onSubmit}>
+                Sign In
+              </Button>
+            </div>
           </form>
         )}
         {status === 'done' && <div className="notification notifyPersistent notifySuccess">Success!</div>}
@@ -193,8 +204,7 @@ const SignInWithConsumer = () => {
   );
 };
 
-const SignInPopBase = withRouter((props) => {
-  const api = useAPI();
+export const SignInPopBase = withRouter((props) => {
   const { hash, header, prompt, location } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
@@ -223,14 +233,16 @@ const SignInPopBase = withRouter((props) => {
       }}
     >
       {(showView) => (
-        <PopoverDialog className="sign-in-pop" focusOnDialog align="right">
+        <PopoverDialog focusOnDialog align="right">
           {header}
           <PopoverInfo type="secondary">
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
           <PopoverInfo type="secondary">
-            By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
-            <Link to="/legal/#privacy">Privacy Statement</Link>
+            <div className={styles.termsAndConditions}>
+              By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
+              <Link to="/legal/#privacy">Privacy Statement</Link>
+            </div>
           </PopoverInfo>
           <PopoverActions>
             {prompt}

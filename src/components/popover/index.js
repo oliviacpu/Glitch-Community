@@ -45,9 +45,9 @@ const MultiPopoverContext = createContext();
 export const MultiPopover = ({ views, initialView, children }) => {
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
-  const activeViewFunc = activeView ? views[activeView] : children
+  const activeViewFunc = activeView ? views[activeView] : children;
   const showViewMap = mapValues(views, (_, viewName) => () => setActiveView(viewName));
-  
+
   return <MultiPopoverContext.Provider value={multiPopoverState}>{activeViewFunc(showViewMap, multiPopoverState)}</MultiPopoverContext.Provider>;
 };
 
@@ -55,11 +55,11 @@ MultiPopover.propTypes = {
   views: PropTypes.object.isRequired,
   children: PropTypes.func.isRequired,
   initialView: PropTypes.string,
-}
+};
 
 MultiPopover.defaultProps = {
   initialView: null,
-}
+};
 
 export const MultiPopoverTitle = ({ children }) => {
   const { setActiveView, defaultView } = useContext(MultiPopoverContext);
