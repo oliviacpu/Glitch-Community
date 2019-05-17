@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext, createContext } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import PropTypes from 'prop-types';
 import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
 
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
-export const PopoverToggleContext = createContext('closed');
-
 const usePopoverToggle = ({ startOpen, onOpen }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
+
+  const closePopover = () => setStatus('closed');
 
   const togglePopover = (event) => {
     const wasClosed = status === 'closed';
@@ -38,7 +38,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [status]);
 
-  return { status, togglePopover };
+  return { status, closePopover, togglePopover };
 };
 
 class UnmonitoredComponent extends React.Component {
@@ -51,40 +51,14 @@ class UnmonitoredComponent extends React.Component {
   }
 }
 
+export const PopoverToggleContext = createContext(null);
+
 const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
-  const [visible, setVisibleState] = useState(startOpen);
-  const [openedFromKeyboard, setOpenedFromKeyboard] = useState(false);
-  const setVisible = (newVisible) => {
-    if (!visible && newVisible && onOpen) onOpen();
-    setVisibleState(newVisible);
-  };
+  const { status, closePopover, togglePopover } = usePopoverToggle({ startOpen, onOpen });
 
-  const togglePopover = (event) => {
-    setVisible(!visible);
-    if (event && event.detail === 0) {
-      // opened from keyboard
-      setOpenedFromKeyboard(true);
-    } else {
-      // opened from mouseclick
-      setOpenedFromKeyboard(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!visible) return undefined;
-    const keyHandler = (event) => {
-      if (['Escape', 'Esc'].includes(event.key)) {
-        event.preventDefault();
-        setVisible(false);
-      }
-    };
-    window.addEventListener('keyup', keyHandler);
-    return () => window.removeEventListener('keyup', keyHandler);
-  }, [visible]);
-
-  const props = { visible, setVisible, togglePopover };
+  const props = { status, visible: status !== 'closed', closePopover, togglePopover };
 
   const inner = children(props);
   if (isFragment(inner)) {
@@ -93,12 +67,12 @@ export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const before = outer ? outer(props) : null;
 
   return (
-    <OpenedFromKeyboardContext.Provider value={openedFromKeyboard}>
+    <PopoverToggleContext.Provider value={status}>
       {before}
-      <MonitoredComponent excludeScrollbar onClickOutside={() => setVisible(false)}>
+      <MonitoredComponent excludeScrollbar onClickOutside={closePopover}>
         {inner}
       </MonitoredComponent>
-    </OpenedFromKeyboardContext.Provider>
+    </PopoverToggleContext.Provider>
   );
 };
 PopoverContainer.propTypes = {
