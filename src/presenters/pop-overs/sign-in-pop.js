@@ -120,48 +120,56 @@ class _EmailHandler extends React.Component {
   }
 }
 
+function useEmail () {
+  const [email, setEmailValue] = useState('');
+  const [validationError, setValidationError] = useState(null);
+  
+  const setEmail = (value) => {
+    setEmailValue(value)
+  }
+}
+
 const EmailHandler = ({ showView }) => {
   const { api } = useAPI();
-  const isEnabled = this.state.email.length > 0;
-  
-  con
-  
+  const [email, setEmail]= useEmail();
+  const isEnabled = email.length > 0;
+
   return (
-    <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
+    <PopoverDialog className="sign-in-pop" align="right">
       <MultiPopoverTitle>
-        Email Sign In <span className="emoji email" />
+        Email Sign In <Emoji name="email" />
       </MultiPopoverTitle>
-      <section className="pop-over-actions first-section">
-        {!this.state.done && (
+      <PopoverActions>
+        {status === 'ready' && (
           <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
             <TextInput
               type="email"
               labelText="Email address"
-              value={this.state.email}
-              onChange={this.onChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="new@user.com"
-              error={this.state.errorMsg}
+              error={validationError}
             />
-            <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
+            <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} type="submit">
               Send Link
-            </button>
+            </Button>
           </form>
         )}
-        {this.state.done && !this.state.error && (
+        {status === 'done' && (
           <>
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-            <div>Finish signing in from the email sent to {this.state.email}.</div>
+            <div>Finish signing in from the email sent to {email}.</div>
           </>
         )}
-        {this.state.done && this.state.error && (
+        {status === 'error' && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
             <div>{this.state.errorMsg}</div>
           </>
         )}
-      </section>
-      {this.state.done && !this.state.error && <SignInCodeSection onClick={showView.signInCode} />}
-    </dialog>
+      </PopoverActions>
+      {status === 'done' && <SignInCodeSection onClick={showView.signInCode} />}
+    </PopoverDialog>
   );
 };
 
@@ -181,7 +189,7 @@ const SignInWithConsumer = () => {
     try {
       const { data } = await api.post(`/auth/email/${code}`);
       login(data);
-      setStatus('success');
+      setStatus('done');
     } catch (error) {
       if (error && error.response && error.response.status !== 401) {
         captureException(error);
@@ -203,7 +211,7 @@ const SignInWithConsumer = () => {
             </Button>
           </form>
         )}
-        {status === 'success' && <div className="notification notifyPersistent notifySuccess">Success!</div>}
+        {status === 'done' && <div className="notification notifyPersistent notifySuccess">Success!</div>}
         {status === 'error' && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
