@@ -8,7 +8,7 @@ import styles from './styles.styl';
 
 const useOpenedFromKeyboardFocus = (focusOnDialog) => {
   const ref = useRef();
-  const popoverStatus = useContext(PopoverToggleContext);
+  const { status: popoverStatus } = useContext(PopoverToggleContext);
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog || popoverStatus !== 'openedFromKeyboard') return;
@@ -61,7 +61,7 @@ const PopoverDialog = ({ children, align, wide, className, focusOnDialog }) => {
   const focusRef = useOpenedFromKeyboardFocus(focusOnDialog);
   return (
     <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
-      <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset}>
+      <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset} {...(focusOnDialog ? { tabIndex: 0 } : {})}>
         {children}
       </dialog>
     </div>
