@@ -1,7 +1,6 @@
-import React, { useState, useContext, createContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 
 import PopoverContainer from './container';
@@ -37,44 +36,6 @@ export const PopoverActions = ({ ...props }) => <PopoverSection {...props} class
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverTitle = styled('div', styles.popoverTitle);
 export const InfoDescription = styled('p', styles.infoDescription);
-
-const NestedPopoverContext = createContext();
-
-export function NestedPopover({ startAlternateVisible, alternateContent, children }) {
-  const [altVisible, setAltVisible] = useState(startAlternateVisible);
-  const toggle = () => setAltVisible((isVisible) => !isVisible);
-  // Only use the provider on the sub menu
-  // Nested consumers want the back button, not the open menu
-  if (altVisible) {
-    return <NestedPopoverContext.Provider value={toggle}>{alternateContent(toggle)}</NestedPopoverContext.Provider>;
-  }
-  return children(toggle);
-}
-
-NestedPopover.propTypes = {
-  children: PropTypes.func.isRequired,
-  alternateContent: PropTypes.func.isRequired,
-  startAlternateVisible: PropTypes.bool,
-};
-NestedPopover.defaultProps = {
-  startAlternateVisible: false,
-};
-
-export const NestedPopoverTitle = ({ children }) => {
-  const toggle = useContext(NestedPopoverContext);
-  return (
-    <TransparentButton onClick={toggle} aria-label="go back">
-      <PopoverSection type="secondary">
-        <div className="left-arrow icon" />
-        &nbsp;
-        <PopoverTitle>{children}</PopoverTitle>
-      </PopoverSection>
-    </TransparentButton>
-  );
-};
-NestedPopoverTitle.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
   <div className={styles.popoverWithButtonWrap}>
