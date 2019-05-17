@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -55,84 +55,54 @@ const SignInCodeSection = ({ onClick }) => (
   </PopoverActions>
 );
 
-const SignInPopButton = ({ company, emoji, href, onClick }) => (
-  <Button href={href} onClick={onClick} size="small">
-    Sign in with {company} <Emoji name={emoji} />
-  </Button>
-);
-
-class _EmailHandler extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      done: false,
-      error: false,
-      errorMsg: '',
-    };
-    this.debouncedValidate = debounce(this.validate.bind(this), 500);
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  onChange(email) {
-    this.setState({ email });
-    this.debouncedValidate(email);
-  }
-
-  async onSubmit(e) {
-    e.preventDefault();
-    this.setState({ done: true });
-    try {
-      await this.props.api.post('/email/sendLoginEmail', {
-        emailAddress: this.state.email,
-      });
-      this.setState({ error: false });
-    } catch (error) {
-      if (error && error.response) {
-        if (error.response.status === 429) {
-          this.setState({
-            error: true,
-            errorMsg: 'Sign in code sent recently. Please check your email.',
-          });
-        } else if (error.response.status === 400) {
-          this.setState({ error: true, errorMsg: 'Email address is invalid.' });
-        } else {
-          captureException(error);
-          this.setState({
-            error: true,
-            errorMsg: 'Something went wrong, email not sent.',
-          });
-        }
-      } else {
-        captureException(error);
-        this.setState({
-          error: true,
-          errorMsg: 'Something went wrong, email not sent.',
-        });
-      }
-    }
-  }
-
-  validate(email) {
-    const isValidEmail = parseOneAddress(email) !== null;
-    this.setState({ errorMsg: isValidEmail ? undefined : 'Enter a valid email address' });
-  }
-}
-
-function useEmail () {
+function useEmail() {
   const [email, setEmailValue] = useState('');
   const [validationError, setValidationError] = useState(null);
-  
+  const validate = useMemo(
+    () =>
+      debounce((email) => {
+        const isValidEmail = parseOneAddress(email) !== null;
+        setValidationError(isValidEmail ? null : 'Enter a valid email address');
+      }),
+    [],
+  );
+
   const setEmail = (value) => {
-    setEmailValue(value)
-  }
+    setEmailValue(value);
+    validate(value);
+  };
+  return [email, setEmail, validationError];
 }
 
 const EmailHandler = ({ showView }) => {
   const { api } = useAPI();
-  const [email, setEmail]= useEmail();
+  const [email, setEmail, validationError] = useEmail();
+  const [{ status, submitError }, setStatus] = useState({ status: 'ready' });
   const isEnabled = email.length > 0;
+
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    setStatus({ status: 'loading' });
+    try {
+      await api.post('/email/sendLoginEmail', { emailAddress: email });
+      setStatus({ status: 'done' });
+    } catch (error) {
+      if (error && error.response) {
+        if (error.response.status === 429) {
+          setStatus({ status: 'error', submitError: 'Sign in code sent recently. Please check your email.' });
+        } else if (error.response.status === 400) {
+          setStatus({ status: 'error', submitError: 'Email address is invalid.' });
+        } else {
+          captureException(error);
+          setStatus({ status: 'error', submitError: 'Something went wrong, email not sent.' });
+        }
+      } else {
+        captureException(error);
+        setStatus({ status: 'error', submitError: 'Something went wrong, email not sent.' });
+      }
+    }
+  }
 
   return (
     <PopoverDialog className="sign-in-pop" align="right">
@@ -164,7 +134,7 @@ const EmailHandler = ({ showView }) => {
         {status === 'error' && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
-            <div>{this.state.errorMsg}</div>
+            <div>{submitError}</div>
           </>
         )}
       </PopoverActions>
