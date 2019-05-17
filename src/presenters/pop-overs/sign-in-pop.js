@@ -179,7 +179,21 @@ class SignInCodeHandler extends React.Component {
     this.setState({ code: e.target.value });
   }
 
-  async onSubmit(e) {
+  
+
+  render() {}
+}
+
+// TODO
+const PopoverInput = 'input'
+
+const SignInWithConsumer = (props) => {
+  const { login } = useCurrentUser();
+  const { api } = useAPI();
+  const [code, setCode] = useState('');
+  const [status, setStatus] = useState('ready');
+
+  async function onSubmit(e) {
     e.preventDefault();
     this.setState({ done: true });
     try {
@@ -193,42 +207,33 @@ class SignInCodeHandler extends React.Component {
       this.setState({ error: true });
     }
   }
-
-  render() {
-    const isEnabled = this.state.code.length > 0;
-    return (
-      <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
-        <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
-        <section className="pop-over-actions first-section">
-          {!this.state.done && (
-            <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
-              Paste your temporary sign in code below
-              <input value={this.state.code} onChange={this.onChange} className="pop-over-input" type="text" placeholder="cute-unique-cosmos" />
-              <button style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled} type="submit">
-                Sign In
-              </button>
-            </form>
-          )}
-          {this.state.done && !this.state.error && (
-            <>
-              <div className="notification notifyPersistent notifySuccess">Success!</div>
-            </>
-          )}
-          {this.state.done && this.state.error && (
-            <>
-              <div className="notification notifyPersistent notifyError">Error</div>
-              <div>Code not found or already used. Try signing in with email.</div>
-            </>
-          )}
-        </section>
-      </dialog>
-    );
-  }
-}
-
-const SignInWithConsumer = (props) => {
-  const { login } = useCurrentUser();
-  return <SignInCodeHandler setUser={login} {...props} />;
+  
+  const isEnabled = code.length > 0;
+  return (
+    <PopoverDialog className="pop-over sign-in-pop">
+      <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
+      <PopoverActions>
+        {status === 'ready' && (
+          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
+            Paste your temporary sign in code below
+            <PopoverInput value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="cute-unique-cosmos" />
+            <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} type="submit">
+              Sign In
+            </Button>
+          </form>
+        )}
+        {status === 'success' && (
+          <div className="notification notifyPersistent notifySuccess">Success!</div>
+        )}
+        {status === 'error' && (
+          <>
+            <div className="notification notifyPersistent notifyError">Error</div>
+            <div>Code not found or already used. Try signing in with email.</div>
+          </>
+        )}
+      </PopoverActions>
+    </PopoverDialog>
+  );
 };
 
 const EmailSignInButton = ({ onClick }) => (
@@ -242,13 +247,13 @@ EmailSignInButton.propTypes = {
 
 const NewUserInfoSection = () => (
   <PopoverActions>
-      <Emoji name="carp" /> New to Glitch? Create an account by signing in.
+    <Emoji name="carp" /> New to Glitch? Create an account by signing in.
   </PopoverActions>
 );
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
-    <Button size="small" type="tertiary" matchBackground onClick={onClick} >
+    <Button size="small" type="tertiary" matchBackground onClick={onClick}>
       Use a sign in code
     </Button>
   </PopoverActions>
@@ -277,9 +282,9 @@ const SignInPopBase = withRouter((props) => {
       },
     });
   return (
-    <NestedPopover alternateContent={() => <EmailHandler {...props} />}>
+    <NestedPopover alternateContent={() => <EmailHandler />}>
       {(showEmailLogin) => (
-        <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />}>
+        <NestedPopover alternateContent={() => <SignInWithConsumer />}>
           {(showCodeLogin) => (
             <PopoverDialog className="sign-in-pop" focusOnDialog>
               {header}
