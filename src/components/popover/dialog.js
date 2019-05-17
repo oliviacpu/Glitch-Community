@@ -18,13 +18,13 @@ const useOpenedFromKeyboardFocus = (focusOnDialog) => {
     } else {
       const focusableElements =
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-      if (focusableDialogElements) {
-        focusableDialogElements[0].focus();
+      const focusableDialogElement = dialog.querySelector(focusableElements);
+      if (focusableDialogElement) {
+        focusableDialogElement.focus();
       }
     }
   }, [popoverStatus]);
-  return ref;
+  return { ref };
 };
 
 const usePositionAdjustment = ({ margin }) => {
@@ -58,10 +58,11 @@ const mergeRefs = (...refs) => (element) => {
 const alignTypes = ['left', 'right'];
 const PopoverDialog = ({ children, align, wide, className, focusOnDialog }) => {
   const { ref: positionRef, offset } = usePositionAdjustment({ margin: 12 });
-  const focusRef = useOpenedFromKeyboardFocus(focusOnDialog);
+  const { ref: focusRef } = useOpenedFromKeyboardFocus(focusOnDialog);
+  const focusProps = focusOnDialog ? { tabIndex: 0 } : {};
   return (
     <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
-      <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset} {...(focusOnDialog ? { tabIndex: 0 } : {})}>
+      <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset} {...focusProps}>
         {children}
       </dialog>
     </div>

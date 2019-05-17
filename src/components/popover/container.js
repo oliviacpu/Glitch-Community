@@ -11,7 +11,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
 
   const togglePopover = (event) => {
     const wasClosed = status === 'closed';
-    console.log(event && event.detail, status)
+    console.log(event && event.detail, status);
 
     if (wasClosed) {
       if (event && event.detail === 0) {
