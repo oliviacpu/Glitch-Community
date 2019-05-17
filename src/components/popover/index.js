@@ -98,11 +98,37 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [visible, setVisibleState] = useState(startOpen);
+  const [openedFromKeyboard, setOpenedFromKeyboard] = useState(false);
   const setVisible = (newVisible) => {
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
   };
-  const togglePopover = () => setVisible(!visible);
+  const focusFirstElement = (dialog) => {
+    // only focus to next selectable element in dialog if popover is triggered from keyboard
+    if (dialog && openedFromKeyboard) {
+      // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on)
+      if (dialog.tabIndex === 0) {
+        dialog.focus();
+      } else {
+        const focusableElements =
+          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+        if (focusableDialogElements) {
+          focusableDialogElements[0].focus();
+        }
+      }
+    }
+  };
+  const togglePopover = (event) => {
+    setVisible(!visible);
+    if (event && event.detail === 0) {
+      // opened from keyboard
+      setOpenedFromKeyboard(true);
+    } else {
+      // opened from mouseclick
+      setOpenedFromKeyboard(false);
+    }
+  };
 
   useEffect(() => {
     if (!visible) return undefined;
