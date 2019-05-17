@@ -64,15 +64,15 @@ MultiPopover.defaultProps = {
 export const MultiPopoverTitle = ({ children }) => {
   const { setActiveView, defaultView } = useContext(MultiPopoverContext);
   return (
-      <PopoverSection type="secondary">
-    <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
+    <PopoverSection type="secondary">
+      <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
         <PopoverTitle>
           <div className="left-arrow icon" />
           &nbsp;
           {children}
         </PopoverTitle>
-    </TransparentButton>
-      </PopoverSection>
+      </TransparentButton>
+    </PopoverSection>
   );
 };
 MultiPopoverTitle.propTypes = {

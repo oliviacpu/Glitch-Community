@@ -123,12 +123,12 @@ const EmailHandler = ({ showView }) => {
               type="email"
               labelText="Email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={setEmail}
               placeholder="new@user.com"
               error={validationError}
             />
             <div className={styles.submitWrap}>
-              <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} onClick={onSubmit}>
+              <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link
               </Button>
             </div>
@@ -152,10 +152,7 @@ const EmailHandler = ({ showView }) => {
   );
 };
 
-// TODO
-const PopoverInput = 'input';
-
-const SignInWithConsumer = () => {
+const SignInWithCode = () => {
   const { login } = useCurrentUser();
   const { api } = useAPI();
   const [code, setCode] = useState('');
@@ -184,9 +181,9 @@ const SignInWithConsumer = () => {
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             Paste your temporary sign in code below
-            <PopoverInput value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="cute-unique-cosmos" />
+            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" />
             <div className={styles.submitWrap}>
-              <Button style={{ marginTop: 10 }} suze="small" disabled={!isEnabled} onClick={onSubmit}>
+              <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Sign In
               </Button>
             </div>
@@ -204,8 +201,7 @@ const SignInWithConsumer = () => {
   );
 };
 
-export const SignInPopBase = withRouter((props) => {
-  const { hash, header, prompt, location } = props;
+export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -229,7 +225,7 @@ export const SignInPopBase = withRouter((props) => {
     <MultiPopover
       views={{
         email: (showView) => <EmailHandler showView={showView} />,
-        signInCode: () => <SignInWithConsumer />,
+        signInCode: () => <SignInWithCode />,
       }}
     >
       {(showView) => (
