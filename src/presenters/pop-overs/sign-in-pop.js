@@ -8,12 +8,11 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
+import { PopoverWithButton, NestedPopover, NestedPopoverTitle } from 'Components/popover';
 import useLocalStorage from '../../state/local-storage';
-import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
-import { NestedPopover, NestedPopoverTitle } from './popover-nested';
 import useDevToggle from '../includes/dev-toggles';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
@@ -272,8 +271,9 @@ const TermsAndPrivacySection = () => (
   </aside>
 );
 
-const SignInPopWithoutRouter = (props) => {
-  const { header, prompt, api, location, hash, focusFirstElement } = props;
+const SignInPopBase = withRouter((props) => {
+  const api = useAPI();
+  const { header, prompt, location, hash, focusFirstElement } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -292,7 +292,7 @@ const SignInPopWithoutRouter = (props) => {
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
-            <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
+            <PopoverDialog className="sign-in-pop" ref={focusFirstElement} focusOnDialog>
               {header}
               <NewUserInfoSection />
               <TermsAndPrivacySection />
@@ -315,31 +315,26 @@ const SignInPopWithoutRouter = (props) => {
                   showCodeLogin(api);
                 }}
               />
-            </dialog>
+            </PopoverDialog>
           )}
         </NestedPopover>
       )}
     </NestedPopover>
   );
-};
+});
 
-export const SignInPopBase = withRouter(SignInPopWithoutRouter);
 SignInPopBase.propTypes = {
-  api: PropTypes.func.isRequired,
+  hash: PropTypes.string,
   header: PropTypes.node,
   prompt: PropTypes.node,
-  hash: PropTypes.string,
-  focusFirstElement: PropTypes.func.isRequired,
 };
 
-const SignInPopContainer = (props) => {
-  const api = useAPI();
-  return (
-    <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-      {({ togglePopover, focusFirstElement }) => (
-        <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
-      )}
-    </PopoverWithButton>
-  );
-};
+const SignInPopContainer = () => (
+  <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
+    {({ togglePopover }) => (
+      <SignInPopBase togglePopover={togglePopover} />
+    )}
+  </PopoverWithButton>
+);
+
 export default SignInPopContainer;
