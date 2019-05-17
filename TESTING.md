@@ -4,7 +4,7 @@ This document is about how to use our testing tools as a part of your developmen
 
 ### Initial Setup
 
-You need to add a `GLITCH_TOKEN` to your local `.env`. You can get a test account's persistent token from Keybase, or use your own.
+You need to add a `GLITCH_TOKEN` to your local `.env`. You can get a test account's persistent token from Keybase (Files > team > fogcreek > community), or use your own.
 
 Be careful using your account information here! Don't commit it.
 
