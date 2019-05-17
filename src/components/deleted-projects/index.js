@@ -5,14 +5,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { getAllPages } from 'Shared/api';
+
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
 import { getAvatarUrl } from 'Models/project';
+import { useAPI, createAPIHook } from '../../state/api';
+import { createAPIHook } from '../../state/api';
 
-import { useAPI } from '../../state/api';
+
 import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
@@ -68,6 +72,14 @@ ViewOnlyDeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
 };
 
+const getDeletedProjects = createAPIHook(async (api, userId) => {
+  if (userId) {
+    const deletedProjects = await getAllPages(api, `v1/users/${userId}/deletedProjects?limit=100&orderKey=createdAt&orderDirection=DESC`);
+    return deletedProjects;
+  }
+  return null;
+});
+
 function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
   // states: hidden | loading | ready
@@ -75,7 +87,8 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   const clickShow = async () => {
     setState('loading');
     try {
-      const { data } = await api.get(`v1/users/${user.id}/deletedProjects?limit=100&orderKey=createdAt&orderDirection=DESC`);
+      const { data } = await getAllPages(api, `v1/users/${user.id}/deletedProjects?limit=100&orderKey=createdAt&orderDirection=DESC`);
+      console.log("data", data)
       setDeletedProjects(data.items);
       setState('ready');
     } catch (e) {
