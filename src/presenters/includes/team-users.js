@@ -103,6 +103,23 @@ WhitelistedDomain.defaultProps = {
   setDomain: null,
 };
 
+const AddTeamUserPopWrap = ({ members, whitelistedDomain }) => {
+  const track = useTracker('Add to Team clicked');
+  return (
+    <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
+      {({ togglePopover }) => (
+        <AddTeamUserPop
+          members={members}
+          whitelistedDomain={whitelistedDomain}
+          setWhitelistedDomain={setWhitelistedDomain ? (domain) => { togglePopover();  onSetWhitelistedDomain(domain) }: null}
+          inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
+          inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
+        />
+      )}
+    </PopoverWithButton>
+  );
+};
+
 // Add Team User
 
 const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
@@ -110,15 +127,12 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
   const [newlyInvited, setNewlyInvited] = useState([]);
 
   const alreadyInvitedAndNewInvited = uniqBy(invitedMembers.concat(newlyInvited), (user) => user.id);
-  const track = useTracker('Add to Team clicked');
 
-  const onSetWhitelistedDomain = async (togglePopover, domain) => {
-    togglePopover();
+  const onSetWhitelistedDomain = async (domain) => {
     await setWhitelistedDomain(domain);
   };
 
   const onInviteUser = async (togglePopover, user) => {
-    togglePopover();
     setInvitee(getDisplayName(user));
     setNewlyInvited((invited) => [...invited, user]);
     try {
@@ -155,17 +169,6 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
         ))}
       </ul>
       <span className="add-user-wrap">
-        <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
-          {({ togglePopover }) => (
-            <AddTeamUserPop
-              members={members}
-              whitelistedDomain={whitelistedDomain}
-              setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
-              inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
-              inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
-            />
-          )}
-        </PopoverWithButton>
         {!!invitee && (
           <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
             Invited {invitee}
