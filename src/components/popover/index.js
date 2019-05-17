@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { debounce } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 
-import { PopoverContainer, PopoverToggleContext } from './container';
+import PopoverContainer from './container';
+import PopoverDialog from './dialog';
 import styles from './styles.styl';
 
 /*
@@ -16,7 +16,7 @@ popover pans, which have straight-walled sides rather than angled.
 ...also it's a [Bootstrap UI pattern](https://www.w3schools.com/bootstrap/bootstrap_popover.asp)
 */
 
-
+export { PopoverContainer, PopoverDialog };
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone'];
 export const PopoverSection = ({ className, children, type }) => (
@@ -37,8 +37,6 @@ export const PopoverActions = ({ ...props }) => <PopoverSection {...props} class
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverTitle = styled('div', styles.popoverTitle);
 export const InfoDescription = styled('p', styles.infoDescription);
-
-
 
 const NestedPopoverContext = createContext();
 
@@ -81,14 +79,14 @@ NestedPopoverTitle.propTypes = {
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
   <div className={styles.popoverWithButtonWrap}>
     <PopoverContainer onOpen={onOpen}>
-      {({ visible, togglePopover }) => (
+      {(popoverProps) => (
         <div>
           <div className={styles.buttonWrap}>
-            <Button {...buttonProps} onClick={togglePopover}>
+            <Button {...buttonProps} onClick={popoverProps.togglePopover}>
               {buttonText}
             </Button>
           </div>
-          {visible && renderChildren({ togglePopover })}
+          {popoverProps.visible && renderChildren(popoverProps)}
         </div>
       )}
     </PopoverContainer>

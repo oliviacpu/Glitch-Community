@@ -38,12 +38,15 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [status]);
 
-  return useMemo({
-    status, 
-    visible: status !== 'closed',
-    closePopover, 
-    togglePopover 
-  }, [status]);
+  return useMemo(
+    () => ({
+      status,
+      visible: status !== 'closed',
+      closePopover,
+      togglePopover,
+    }),
+    [status],
+  );
 };
 
 class UnmonitoredComponent extends React.Component {
@@ -60,7 +63,7 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 export const PopoverToggleContext = createContext(null);
 
-export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
+const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const toggleState = usePopoverToggle({ startOpen, onOpen });
 
   const inner = children(toggleState);
@@ -89,3 +92,5 @@ PopoverContainer.defaultProps = {
   outer: null,
   startOpen: false,
 };
+
+export default PopoverContainer;

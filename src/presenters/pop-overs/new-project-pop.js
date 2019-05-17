@@ -72,7 +72,7 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  opensFromRight: PropTypes.bool.isRequired,
+  align: PropTypes.string.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
