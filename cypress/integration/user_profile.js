@@ -22,7 +22,7 @@ context('User Profile', () => {
   it('Featuring Projects', () => {
     cy.signIn();
 
-    cy.visitSignedInProfile();
+    cy.v();
 
     cy.get(projectListSelector)
       .should('contain', 'Recent Projects')
@@ -48,7 +48,7 @@ context('User Profile', () => {
     it('Deleting Projects', () => {
       cy.signIn();
 
-      cy.visitSignedInProfile();
+      cy.v();
 
       cy.get(projectListSelector)
         .should('contain', 'Recent Projects')

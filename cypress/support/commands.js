@@ -27,12 +27,6 @@ Cypress.Commands.add('signIn', () => {
   window.localStorage.setItem('cachedUser', JSON.stringify(cachedUser));
 });
 
-Cypress.Commands.add('visitSignedInProfile', () => {
-  cy.signIn();
-  const cachedUser = JSON.parse(window.localStorage.getItem('cachedUser'));
-  cy.visit(`/@${cachedUser.login}`);
-});
-
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //
