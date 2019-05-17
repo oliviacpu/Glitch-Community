@@ -42,7 +42,7 @@ export const InfoDescription = styled('p', styles.infoDescription);
 
 const MultiPopoverContext = createContext();
 
-const MultiPopover = ({ views, initialView, children }) => {
+export const MultiPopover = ({ views, initialView, children }) => {
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
   const activeViewFunc = activeView ? views[activeView] : children

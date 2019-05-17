@@ -47,13 +47,21 @@ function slackAuthLink() {
   return `${API_URL}/auth/slack?${params}`;
 }
 
+const SignInCodeSection = ({ onClick }) => (
+  <PopoverActions type="secondary">
+    <Button size="small" type="tertiary" matchBackground onClick={onClick}>
+      Use a sign in code
+    </Button>
+  </PopoverActions>
+);
+
 const SignInPopButton = ({ company, emoji, href, onClick }) => (
   <Button href={href} onClick={onClick} size="small">
     Sign in with {company} <Emoji name={emoji} />
   </Button>
 );
 
-class EmailHandler extends React.Component {
+class _EmailHandler extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,63 +118,57 @@ class EmailHandler extends React.Component {
     const isValidEmail = parseOneAddress(email) !== null;
     this.setState({ errorMsg: isValidEmail ? undefined : 'Enter a valid email address' });
   }
-
-  render() {
-    const isEnabled = this.state.email.length > 0;
-    return (
-      <NestedPopover alternateContent={() => <SignInWithConsumer {...this.props} />} startAlternateVisible={false}>
-        {(showCodeLogin) => (
-          <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
-            <MultiPopoverTitle>
-              Email Sign In <span className="emoji email" />
-            </MultiPopoverTitle>
-            <section className="pop-over-actions first-section">
-              {!this.state.done && (
-                <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
-                  <TextInput
-                    type="email"
-                    labelText="Email address"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                    placeholder="new@user.com"
-                    error={this.state.errorMsg}
-                  />
-                  <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
-                    Send Link
-                  </button>
-                </form>
-              )}
-              {this.state.done && !this.state.error && (
-                <>
-                  <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-                  <div>Finish signing in from the email sent to {this.state.email}.</div>
-                </>
-              )}
-              {this.state.done && this.state.error && (
-                <>
-                  <div className="notification notifyPersistent notifyError">Error</div>
-                  <div>{this.state.errorMsg}</div>
-                </>
-              )}
-            </section>
-            {this.state.done && !this.state.error && (
-              <SignInCodeSection
-                onClick={() => {
-                  showCodeLogin(this.props.api);
-                }}
-              />
-            )}
-          </dialog>
-        )}
-      </NestedPopover>
-    );
-  }
 }
+
+const EmailHandler = ({ showView }) => {
+  const { api } = useAPI();
+  const isEnabled = this.state.email.length > 0;
+  
+  con
+  
+  return (
+    <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
+      <MultiPopoverTitle>
+        Email Sign In <span className="emoji email" />
+      </MultiPopoverTitle>
+      <section className="pop-over-actions first-section">
+        {!this.state.done && (
+          <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
+            <TextInput
+              type="email"
+              labelText="Email address"
+              value={this.state.email}
+              onChange={this.onChange}
+              placeholder="new@user.com"
+              error={this.state.errorMsg}
+            />
+            <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
+              Send Link
+            </button>
+          </form>
+        )}
+        {this.state.done && !this.state.error && (
+          <>
+            <div className="notification notifyPersistent notifySuccess">Almost Done</div>
+            <div>Finish signing in from the email sent to {this.state.email}.</div>
+          </>
+        )}
+        {this.state.done && this.state.error && (
+          <>
+            <div className="notification notifyPersistent notifyError">Error</div>
+            <div>{this.state.errorMsg}</div>
+          </>
+        )}
+      </section>
+      {this.state.done && !this.state.error && <SignInCodeSection onClick={showView.signInCode} />}
+    </dialog>
+  );
+};
 
 // TODO
 const PopoverInput = 'input';
 
-const SignInWithConsumer = ({ set }) => {
+const SignInWithConsumer = () => {
   const { login } = useCurrentUser();
   const { api } = useAPI();
   const [code, setCode] = useState('');
@@ -189,7 +191,7 @@ const SignInWithConsumer = ({ set }) => {
   }
 
   return (
-    <PopoverDialog className="pop-over sign-in-pop">
+    <PopoverDialog className="sign-in-pop" align="right">
       <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -238,12 +240,12 @@ const SignInPopBase = withRouter((props) => {
   return (
     <MultiPopover
       views={{
-        email: () => <EmailHandler />,
+        email: (showView) => <EmailHandler showView={showView} />,
         signInCode: () => <SignInWithConsumer />,
       }}
     >
       {(showView) => (
-        <PopoverDialog className="sign-in-pop" focusOnDialog>
+        <PopoverDialog className="sign-in-pop" focusOnDialog align="right">
           {header}
           <PopoverInfo type="secondary">
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
@@ -262,11 +264,7 @@ const SignInPopBase = withRouter((props) => {
               Sign in with Email <Emoji name="email" />
             </Button>
           </PopoverActions>
-          <PopoverActions type="secondary">
-            <Button size="small" type="tertiary" matchBackground onClick={setDestinationAnd(showView.signInCode)}>
-              Use a sign in code
-            </Button>
-          </PopoverActions>
+          <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />
         </PopoverDialog>
       )}
     </MultiPopover>
