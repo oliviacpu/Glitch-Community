@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
@@ -201,7 +200,7 @@ const SignInWithCode = () => {
   );
 };
 
-export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => {
+const SignInPopBase = withRouter(({ location }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -212,7 +211,6 @@ export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => 
       to: {
         pathname: location.pathname,
         search: location.search,
-        hash,
       },
     });
 
@@ -230,7 +228,6 @@ export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => 
     >
       {(showView) => (
         <PopoverDialog focusOnDialog align="right">
-          {header}
           <PopoverInfo type="secondary">
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
@@ -241,7 +238,6 @@ export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => 
             </div>
           </PopoverInfo>
           <PopoverActions>
-            {prompt}
             <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
             <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
             <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
@@ -256,12 +252,6 @@ export const SignInPopBase = withRouter(({ hash, header, prompt, location }) => 
     </MultiPopover>
   );
 });
-
-SignInPopBase.propTypes = {
-  hash: PropTypes.string,
-  header: PropTypes.node,
-  prompt: PropTypes.node,
-};
 
 const SignInPopContainer = () => (
   <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">

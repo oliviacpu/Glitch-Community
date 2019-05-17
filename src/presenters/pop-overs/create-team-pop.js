@@ -6,12 +6,10 @@ import { withRouter } from 'react-router-dom';
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
 import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import { getPredicates, getTeamPair } from '../../models/words';
 import { getLink } from '../../models/team';
 import { useTracker } from '../segment-analytics';
 import { NestedPopoverTitle } from './popover-nested';
-import { SignInPopBase } from './sign-in-pop';
 
 // Create Team 🌿
 
@@ -160,19 +158,9 @@ CreateTeamPopBase.propTypes = {
   focusFirstElement: PropTypes.func.isRequired,
 };
 
-const CreateTeamPop = withRouter(CreateTeamPopBase);
-
-const CreateTeamPopOrSignIn = (props) => {
+const CreateTeamPop = withRouter((props) => {
   const api = useAPI();
-  const { currentUser: user } = useCurrentUser();
-  return user && user.login ? (
-    <CreateTeamPop api={api} {...props} />
-  ) : (
-    <SignInPopBase
-      hash="create-team"
-      header={<NestedPopoverTitle>Sign In</NestedPopoverTitle>}
-      prompt={<p className="action-description">You'll need to sign in to create a team</p>}
-    />
-  );
-};
-export default CreateTeamPopOrSignIn;
+  return <CreateTeamPop api={api} {...props} />;
+});
+
+export default CreateTeamPop;
