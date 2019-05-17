@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, { useState, useEffect, useMemo, createContext } from 'react';
 import PropTypes from 'prop-types';
 import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
@@ -38,7 +38,12 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [status]);
 
-  return { status, closePopover, togglePopover };
+  return useMemo({
+    status, 
+    visible: status !== 'closed',
+    closePopover, 
+    togglePopover 
+  }, [status]);
 };
 
 class UnmonitoredComponent extends React.Component {
@@ -51,25 +56,23 @@ class UnmonitoredComponent extends React.Component {
   }
 }
 
-export const PopoverToggleContext = createContext(null);
-
 const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
+export const PopoverToggleContext = createContext(null);
+
 export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
-  const { status, closePopover, togglePopover } = usePopoverToggle({ startOpen, onOpen });
+  const toggleState = usePopoverToggle({ startOpen, onOpen });
 
-  const props = { status, visible: status !== 'closed', closePopover, togglePopover };
-
-  const inner = children(props);
+  const inner = children(toggleState);
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
-  const before = outer ? outer(props) : null;
+  const before = outer ? outer(toggleState) : null;
 
   return (
-    <PopoverToggleContext.Provider value={status}>
+    <PopoverToggleContext.Provider value={toggleState}>
       {before}
-      <MonitoredComponent excludeScrollbar onClickOutside={closePopover}>
+      <MonitoredComponent excludeScrollbar onClickOutside={toggleState.closePopover}>
         {inner}
       </MonitoredComponent>
     </PopoverToggleContext.Provider>
