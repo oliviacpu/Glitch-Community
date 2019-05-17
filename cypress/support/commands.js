@@ -1,0 +1,42 @@
+// ***********************************************
+// This example commands.js shows you how to
+// create various custom commands and overwrite
+// existing commands.
+//
+// For more comprehensive examples of custom
+// commands please read more here:
+// https://on.cypress.io/custom-commands
+// ***********************************************
+//
+//
+// -- This is a parent command --
+
+Cypress.Commands.add("createFixture", (name, url) => cy.request({ url, headers: { Authorization: Cypress.env('GLITCH_TOKEN') } }).then((response) => cy.writeFile(`cypress/fixtures/${name}.json`, response.body)))
+
+Cypress.Commands.add("createFixtures", (fixtures) => Object.entries(fixtures).forEach(entry => cy.createFixture(entry[0], entry[1])))
+
+Cypress.Commands.add("signIn", () => {
+    const GLITCH_TOKEN = Cypress.env('GLITCH_TOKEN')
+    const cachedUser = {
+        persistentToken: GLITCH_TOKEN,
+    }
+    window.localStorage.setItem('cachedUser', JSON.stringify(cachedUser))
+})
+
+Cypress.Commands.add("visitSignedInProfile", () => {
+    cy.signIn()
+    const cachedUser = JSON.parse(window.localStorage.getItem('cachedUser'))
+    console.log(cachedUser)
+    cy.visit(`/@olivia`)
+})
+
+// -- This is a child command --
+// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+//
+//
+// -- This is a dual command --
+// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
+//
+//
+// -- This is will overwrite an existing command --
+// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
