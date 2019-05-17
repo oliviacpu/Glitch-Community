@@ -23,7 +23,7 @@ import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
-import AddTeamProject from '../includes/add-team-project';
+import AddTeamProject from '../pop-overs/add-team-project';
 import DeleteTeam from '../includes/delete-team';
 import TeamUsers from '../includes/team-users';
 

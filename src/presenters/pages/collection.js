@@ -26,7 +26,7 @@ import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
-import AddCollectionProject from '../includes/add-collection-project';
+import AddCollectionProject from '../pop-overs/add-collection-project-pop';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
