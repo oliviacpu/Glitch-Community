@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext, useMemo, createContext } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Button from 'Components/buttons/button';
@@ -37,6 +37,30 @@ export const PopoverInfo = ({ ...props }) => <PopoverSection {...props} classNam
 const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
 export const PopoverTitle = styled('div', styles.popoverTitle);
 export const InfoDescription = styled('p', styles.infoDescription);
+
+const MultiPopoverContext = createContext();
+
+const MultiPopover = ({ views, defaultView, initialView }) => {
+  const [activeView, setActiveView] = useState(initialView || defaultView);
+  const multiPopoverState = useMemo(() => ({ activeView, setActiveView, defaultView }), [activeView, defaultView]);
+  return <MultiPopoverContext.Provider value={multiPopoverState}>{views[activeView](multiPopoverState)}</MultiPopoverContext.Provider>;
+};
+
+export const MultiPopoverTitle = ({ children }) => {
+  const { setActiveView, defaultView } = useContext(MultiPopoverContext);
+  return (
+    <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
+      <PopoverSection type="secondary">
+        <div className="left-arrow icon" />
+        &nbsp;
+        <PopoverTitle>{children}</PopoverTitle>
+      </PopoverSection>
+    </TransparentButton>
+  );
+};
+MultiPopoverTitle.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
   <div className={styles.popoverWithButtonWrap}>

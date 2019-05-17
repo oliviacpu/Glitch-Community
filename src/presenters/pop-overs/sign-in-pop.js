@@ -8,7 +8,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
-import { PopoverWithButton, NestedPopover, NestedPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
+import { PopoverWithButton, MultiPopover, MultPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from '../../state/local-storage';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
@@ -213,10 +213,6 @@ const SignInWithConsumer = ({ set }) => {
   );
 };
 
-const EmailSignInButton = ({ onClick }) => (
-  
-);
-
 const SignInPopBase = withRouter((props) => {
   const api = useAPI();
   const { hash, header, prompt, location } = props;
@@ -259,9 +255,10 @@ const SignInPopBase = withRouter((props) => {
                 <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
                 <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
                 {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-                <Button size="small" onClick={onClick}>
-    Sign in with Email <Emoji name="email" />
-  </Button>
+
+                <Button size="small" onClick={toggleAndSetDestination(showEmailLogin)}>
+                  Sign in with Email <Emoji name="email" />
+                </Button>
               </PopoverActions>
               <PopoverActions type="secondary">
                 <Button size="small" type="tertiary" matchBackground onClick={toggleAndSetDestination(showCodeLogin)}>
