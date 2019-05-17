@@ -1,6 +1,8 @@
 import React, { useState, useContext, useMemo, createContext } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { mapValues } from 'lodash';
+import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 
 import PopoverContainer from './container';
@@ -40,11 +42,24 @@ export const InfoDescription = styled('p', styles.infoDescription);
 
 const MultiPopoverContext = createContext();
 
-const MultiPopover = ({ views, defaultView, initialView }) => {
-  const [activeView, setActiveView] = useState(initialView || defaultView);
-  const multiPopoverState = useMemo(() => ({ activeView, setActiveView, defaultView }), [activeView, defaultView]);
-  return <MultiPopoverContext.Provider value={multiPopoverState}>{views[activeView](multiPopoverState)}</MultiPopoverContext.Provider>;
+const MultiPopover = ({ views, initialView, children }) => {
+  const [activeView, setActiveView] = useState(initialView);
+  const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
+  const activeViewFunc = activeView ? views[activeView] : children
+  const showViewMap = mapValues(views, (_, viewName) => setActiveView(viewName));
+  
+  return <MultiPopoverContext.Provider value={multiPopoverState}>{activeViewFunc(showViewMap)}</MultiPopoverContext.Provider>;
 };
+
+MultiPopover.propTypes = {
+  views: PropTypes.object.isRequired,
+  children: PropTypes.func.isRequired,
+  initialView: PropTypes.string,
+}
+
+MultiPopover.defaultProps = {
+  initialView: null,
+}
 
 export const MultiPopoverTitle = ({ children }) => {
   const { setActiveView, defaultView } = useContext(MultiPopoverContext);

@@ -8,7 +8,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
-import { PopoverWithButton, MultiPopover, MultPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
+import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from '../../state/local-storage';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
@@ -117,9 +117,9 @@ class EmailHandler extends React.Component {
       <NestedPopover alternateContent={() => <SignInWithConsumer {...this.props} />} startAlternateVisible={false}>
         {(showCodeLogin) => (
           <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
-            <NestedPopoverTitle>
+            <MultiPopoverTitle>
               Email Sign In <span className="emoji email" />
-            </NestedPopoverTitle>
+            </MultiPopoverTitle>
             <section className="pop-over-actions first-section">
               {!this.state.done && (
                 <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
@@ -190,7 +190,7 @@ const SignInWithConsumer = ({ set }) => {
 
   return (
     <PopoverDialog className="pop-over sign-in-pop">
-      <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
+      <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
@@ -230,46 +230,46 @@ const SignInPopBase = withRouter((props) => {
       },
     });
 
-  const toggleAndSetDestination = (toggleAlternateContent) => () => {
+  const setDestinationAnd = (next) => () => {
     onClick();
-    toggleAlternateContent();
+    next();
   };
 
   return (
-    <NestedPopover alternateContent={() => <EmailHandler />}>
-      {(showEmailLogin) => (
-        <NestedPopover alternateContent={() => <SignInWithConsumer />}>
-          {(showCodeLogin) => (
-            <PopoverDialog className="sign-in-pop" focusOnDialog>
-              {header}
-              <PopoverInfo type="secondary">
-                <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
-              </PopoverInfo>
-              <PopoverInfo type="secondary">
-                By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
-                <Link to="/legal/#privacy">Privacy Statement</Link>
-              </PopoverInfo>
-              <PopoverActions>
-                {prompt}
-                <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-                <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-                <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-
-                <Button size="small" onClick={toggleAndSetDestination(showEmailLogin)}>
-                  Sign in with Email <Emoji name="email" />
-                </Button>
-              </PopoverActions>
-              <PopoverActions type="secondary">
-                <Button size="small" type="tertiary" matchBackground onClick={toggleAndSetDestination(showCodeLogin)}>
-                  Use a sign in code
-                </Button>
-              </PopoverActions>
-            </PopoverDialog>
-          )}
-        </NestedPopover>
+    <MultiPopover
+      views={{
+        email: () => <EmailHandler />,
+        signInCode: () => <SignInWithConsumer />,
+      }}
+    >
+      {(goTo) => (
+        <PopoverDialog className="sign-in-pop" focusOnDialog>
+          {header}
+          <PopoverInfo type="secondary">
+            <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
+          </PopoverInfo>
+          <PopoverInfo type="secondary">
+            By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
+            <Link to="/legal/#privacy">Privacy Statement</Link>
+          </PopoverInfo>
+          <PopoverActions>
+            {prompt}
+            <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
+            <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
+            <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+            {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+            <Button size="small" onClick={setDestinationAnd(goTo.email)}>
+              Sign in with Email <Emoji name="email" />
+            </Button>
+          </PopoverActions>
+          <PopoverActions type="secondary">
+            <Button size="small" type="tertiary" matchBackground onClick={setDestinationAnd(goTo.signInCode)}>
+              Use a sign in code
+            </Button>
+          </PopoverActions>
+        </PopoverDialog>
       )}
-    </NestedPopover>
+    </MultiPopover>
   );
 });
 
