@@ -24,7 +24,7 @@ import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../pop-overs/add-team-project-pop';
-import DeleteTeam from '../includes/delete-team';
+import DeleteTeam from '../pop-overs/delete-team-pop';
 import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';

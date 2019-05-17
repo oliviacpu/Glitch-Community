@@ -25,7 +25,7 @@ import { AnalyticsContext } from '../segment-analytics';
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
-import EditCollectionColor from '../includes/edit-collection-color';
+import EditCollectionColor from '../pop-overs/edit-collection-color-pop';
 import AddCollectionProject from '../pop-overs/add-collection-project-pop';
 import ReportButton from '../pop-overs/report-abuse-pop';
 

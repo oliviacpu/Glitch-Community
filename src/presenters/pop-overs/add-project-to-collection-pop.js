@@ -205,7 +205,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   );
 };
 
-export const AddProjectToCollectionPopBase = (props) => {
+export const AddProjectToCollectionBase = (props) => {
   const { project, togglePopover, focusFirstElement } = props;
 
   const api = useAPI();
@@ -281,14 +281,14 @@ export const AddProjectToCollectionPopBase = (props) => {
   );
 };
 
-AddProjectToCollectionPopBase.propTypes = {
+AddProjectToCollectionBase.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
   focusFirstElement: PropTypes.func,
 };
 
-AddProjectToCollectionPopBase.defaultProps = {
+AddProjectToCollectionBase.defaultProps = {
   fromProject: false,
   togglePopover: null,
   focusFirstElement: null,
@@ -304,7 +304,7 @@ const AddProjectToCollection = ({ project, ...props }) => (
     }
   >
     {({ togglePopover, focusFirstElement }) => (
-      <AddProjectToCollectionPop {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
     )}
   </PopoverWithButton>
 );
