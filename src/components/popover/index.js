@@ -46,9 +46,9 @@ const MultiPopover = ({ views, initialView, children }) => {
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
   const activeViewFunc = activeView ? views[activeView] : children
-  const showViewMap = mapValues(views, (_, viewName) => setActiveView(viewName));
+  const showViewMap = mapValues(views, (_, viewName) => () => setActiveView(viewName));
   
-  return <MultiPopoverContext.Provider value={multiPopoverState}>{activeViewFunc(showViewMap)}</MultiPopoverContext.Provider>;
+  return <MultiPopoverContext.Provider value={multiPopoverState}>{activeViewFunc(showViewMap, multiPopoverState)}</MultiPopoverContext.Provider>;
 };
 
 MultiPopover.propTypes = {

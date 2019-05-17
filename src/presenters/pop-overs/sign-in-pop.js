@@ -242,7 +242,7 @@ const SignInPopBase = withRouter((props) => {
         signInCode: () => <SignInWithConsumer />,
       }}
     >
-      {(goTo) => (
+      {(showView) => (
         <PopoverDialog className="sign-in-pop" focusOnDialog>
           {header}
           <PopoverInfo type="secondary">
@@ -258,12 +258,12 @@ const SignInPopBase = withRouter((props) => {
             <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
             <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
             {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-            <Button size="small" onClick={setDestinationAnd(goTo.email)}>
+            <Button size="small" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email <Emoji name="email" />
             </Button>
           </PopoverActions>
           <PopoverActions type="secondary">
-            <Button size="small" type="tertiary" matchBackground onClick={setDestinationAnd(goTo.signInCode)}>
+            <Button size="small" type="tertiary" matchBackground onClick={setDestinationAnd(showView.signInCode)}>
               Use a sign in code
             </Button>
           </PopoverActions>
