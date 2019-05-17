@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -163,52 +163,31 @@ class EmailHandler extends React.Component {
   }
 }
 
-class SignInCodeHandler extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      code: '',
-      done: false,
-      error: false,
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  onChange(e) {
-    this.setState({ code: e.target.value });
-  }
-
-  
-
-  render() {}
-}
-
 // TODO
-const PopoverInput = 'input'
+const PopoverInput = 'input';
 
-const SignInWithConsumer = (props) => {
+const SignInWithConsumer = ({ set }) => {
   const { login } = useCurrentUser();
   const { api } = useAPI();
   const [code, setCode] = useState('');
   const [status, setStatus] = useState('ready');
+  const isEnabled = code.length > 0;
 
   async function onSubmit(e) {
     e.preventDefault();
-    this.setState({ done: true });
+    setStatus('loading');
     try {
-      const { data } = await this.props.api.post(`/auth/email/${this.state.code}`);
-      this.props.setUser(data);
-      this.setState({ error: false });
+      const { data } = await api.post(`/auth/email/${code}`);
+      login(data);
+      setStatus('success');
     } catch (error) {
       if (error && error.response && error.response.status !== 401) {
         captureException(error);
       }
-      this.setState({ error: true });
+      setStatus('error');
     }
   }
-  
-  const isEnabled = code.length > 0;
+
   return (
     <PopoverDialog className="pop-over sign-in-pop">
       <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
@@ -222,9 +201,7 @@ const SignInWithConsumer = (props) => {
             </Button>
           </form>
         )}
-        {status === 'success' && (
-          <div className="notification notifyPersistent notifySuccess">Success!</div>
-        )}
+        {status === 'success' && <div className="notification notifyPersistent notifySuccess">Success!</div>}
         {status === 'error' && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
@@ -237,32 +214,7 @@ const SignInWithConsumer = (props) => {
 };
 
 const EmailSignInButton = ({ onClick }) => (
-  <Button size="small" onClick={onClick}>
-    Sign in with Email <Emoji name="email" />
-  </Button>
-);
-EmailSignInButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
-
-const NewUserInfoSection = () => (
-  <PopoverActions>
-    <Emoji name="carp" /> New to Glitch? Create an account by signing in.
-  </PopoverActions>
-);
-
-const SignInCodeSection = ({ onClick }) => (
-  <PopoverActions type="secondary">
-    <Button size="small" type="tertiary" matchBackground onClick={onClick}>
-      Use a sign in code
-    </Button>
-  </PopoverActions>
-);
-
-const TermsAndPrivacySection = () => (
-  <PopoverInfo>
-    By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
-  </PopoverInfo>
+  
 );
 
 const SignInPopBase = withRouter((props) => {
@@ -281,6 +233,12 @@ const SignInPopBase = withRouter((props) => {
         hash,
       },
     });
+
+  const toggleAndSetDestination = (toggleAlternateContent) => () => {
+    onClick();
+    toggleAlternateContent();
+  };
+
   return (
     <NestedPopover alternateContent={() => <EmailHandler />}>
       {(showEmailLogin) => (
@@ -288,27 +246,28 @@ const SignInPopBase = withRouter((props) => {
           {(showCodeLogin) => (
             <PopoverDialog className="sign-in-pop" focusOnDialog>
               {header}
-              <NewUserInfoSection />
-              <TermsAndPrivacySection />
+              <PopoverInfo type="secondary">
+                <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
+              </PopoverInfo>
+              <PopoverInfo type="secondary">
+                By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
+                <Link to="/legal/#privacy">Privacy Statement</Link>
+              </PopoverInfo>
               <PopoverActions>
                 {prompt}
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
                 <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
                 <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
                 {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-                <EmailSignInButton
-                  onClick={() => {
-                    onClick();
-                    showEmailLogin(api);
-                  }}
-                />
+                <Button size="small" onClick={onClick}>
+    Sign in with Email <Emoji name="email" />
+  </Button>
               </PopoverActions>
-              <SignInCodeSection
-                onClick={() => {
-                  onClick();
-                  showCodeLogin(api);
-                }}
-              />
+              <PopoverActions type="secondary">
+                <Button size="small" type="tertiary" matchBackground onClick={toggleAndSetDestination(showCodeLogin)}>
+                  Use a sign in code
+                </Button>
+              </PopoverActions>
             </PopoverDialog>
           )}
         </NestedPopover>
