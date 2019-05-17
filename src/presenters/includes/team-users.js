@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { uniqBy } from 'lodash';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
@@ -8,7 +7,6 @@ import { UserLink } from 'Components/link';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
-import { useTracker } from '../segment-analytics';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
@@ -101,92 +99,6 @@ WhitelistedDomain.propTypes = {
 
 WhitelistedDomain.defaultProps = {
   setDomain: null,
-};
-
-const AddTeamUserPopWrap = ({ members, whitelistedDomain }) => {
-  const track = useTracker('Add to Team clicked');
-  return (
-    <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
-      {({ togglePopover }) => (
-        <AddTeamUserPop
-          members={members}
-          whitelistedDomain={whitelistedDomain}
-          setWhitelistedDomain={setWhitelistedDomain ? (domain) => { togglePopover();  onSetWhitelistedDomain(domain) }: null}
-          inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
-          inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
-        />
-      )}
-    </PopoverWithButton>
-  );
-};
-
-// Add Team User
-
-const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
-  const [invitee, setInvitee] = useState('');
-  const [newlyInvited, setNewlyInvited] = useState([]);
-
-  const alreadyInvitedAndNewInvited = uniqBy(invitedMembers.concat(newlyInvited), (user) => user.id);
-
-  const onSetWhitelistedDomain = async (domain) => {
-    await setWhitelistedDomain(domain);
-  };
-
-  const onInviteUser = async (togglePopover, user) => {
-    setInvitee(getDisplayName(user));
-    setNewlyInvited((invited) => [...invited, user]);
-    try {
-      await inviteUser(user);
-    } catch (error) {
-      setInvitee('');
-      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
-    }
-  };
-
-  const onInviteEmail = async (togglePopover, email) => {
-    togglePopover();
-    setInvitee(email);
-    try {
-      await inviteEmail(email);
-    } catch (error) {
-      setInvitee('');
-    }
-  };
-
-  const removeNotifyInvited = () => {
-    setInvitee('');
-  };
-
-  return (
-    <span className="add-user-container">
-      <ul className="users">
-        {alreadyInvitedAndNewInvited.map((user) => (
-          <li key={user.id}>
-            <UserLink user={user} className="user">
-              <UserAvatar user={user} />
-            </UserLink>
-          </li>
-        ))}
-      </ul>
-      <span className="add-user-wrap">
-        {!!invitee && (
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-            Invited {invitee}
-          </div>
-        )}
-      </span>
-    </span>
-  );
-};
-AddTeamUser.propTypes = {
-  inviteEmail: PropTypes.func,
-  inviteUser: PropTypes.func,
-  setWhitelistedDomain: PropTypes.func,
-};
-AddTeamUser.defaultProps = {
-  setWhitelistedDomain: null,
-  inviteUser: null,
-  inviteEmail: null,
 };
 
 // Join Team
