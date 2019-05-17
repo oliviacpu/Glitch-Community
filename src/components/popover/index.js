@@ -17,6 +17,27 @@ popover pans, which have straight-walled sides rather than angled.
 ...also it's a [Bootstrap UI pattern](https://www.w3schools.com/bootstrap/bootstrap_popover.asp)
 */
 
+const OpenedFromKeyboardContext = createContext(false);
+
+const useOpenedFromKeyboardFocus = (focusOnDialog) => {
+  const ref = useRef();
+  const openedFromKeyboard = useContext(OpenedFromKeyboardContext);
+  useEffect(() => {
+    const dialog = ref.current;
+    // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on)
+      if (focusOnDialog) {
+        dialog.focus();
+      } else {
+        const focusableElements =
+          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+        if (focusableDialogElements) {
+          focusableDialogElements[0].focus();
+        }
+      }
+  }, [openedFromKeyboard])
+}
+
 const usePositionAdjustment = ({ margin }) => {
   const [offset, setOffset] = useState({ top: 0, left: 0 });
   const ref = useRef();
@@ -103,22 +124,7 @@ export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
   };
-  const focusFirstElement = (dialog) => {
-    // only focus to next selectable element in dialog if popover is triggered from keyboard
-    if (dialog && openedFromKeyboard) {
-      // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on)
-      if (dialog.tabIndex === 0) {
-        dialog.focus();
-      } else {
-        const focusableElements =
-          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-        if (focusableDialogElements) {
-          focusableDialogElements[0].focus();
-        }
-      }
-    }
-  };
+
   const togglePopover = (event) => {
     setVisible(!visible);
     if (event && event.detail === 0) {
@@ -151,12 +157,12 @@ export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const before = outer ? outer(props) : null;
 
   return (
-    <>
+    <OpenedFromKeyboardContext.Provider value={openedFromKeyboard}>
       {before}
       <MonitoredComponent excludeScrollbar onClickOutside={() => setVisible(false)}>
         {inner}
       </MonitoredComponent>
-    </>
+    </OpenedFromKeyboardContext.Provider>
   );
 };
 PopoverContainer.propTypes = {
