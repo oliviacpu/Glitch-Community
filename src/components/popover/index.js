@@ -17,6 +17,49 @@ popover pans, which have straight-walled sides rather than angled.
 ...also it's a [Bootstrap UI pattern](https://www.w3schools.com/bootstrap/bootstrap_popover.asp)
 */
 
+// statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
+const PopoverToggleContext = createContext('closed');
+
+const usePopoverToggle = ({ startOpen, onOpen }) => {
+  const [visible, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
+  const [openedFromKeyboard, setOpenedFromKeyboard] = useState(false);
+  
+  
+  
+  const setVisible = (newVisible) => {
+    if (!visible && newVisible && onOpen) {
+      onOpen();
+    }
+    setVisibleState(newVisible);
+  };
+
+  const togglePopover = (event) => {
+    setVisible(!visible);
+    if (event && event.detail === 0) {
+      // opened from keyboard
+      setOpenedFromKeyboard(true);
+    } else {
+      // opened from mouseclick
+      setOpenedFromKeyboard(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!visible) return undefined;
+    const keyHandler = (event) => {
+      if (['Escape', 'Esc'].includes(event.key)) {
+        event.preventDefault();
+        setVisible(false);
+      }
+    };
+    window.addEventListener('keyup', keyHandler);
+    return () => window.removeEventListener('keyup', keyHandler);
+  }, [visible]);
+}
+
+
+
+
 const OpenedFromKeyboardContext = createContext(false);
 
 const useOpenedFromKeyboardFocus = (focusOnDialog) => {
@@ -24,19 +67,21 @@ const useOpenedFromKeyboardFocus = (focusOnDialog) => {
   const openedFromKeyboard = useContext(OpenedFromKeyboardContext);
   useEffect(() => {
     const dialog = ref.current;
-    // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on)
-      if (focusOnDialog) {
-        dialog.focus();
-      } else {
-        const focusableElements =
-          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-        if (focusableDialogElements) {
-          focusableDialogElements[0].focus();
-        }
+    if (!dialog || !openedFromKeyboard) return;
+    // focus on the dialog if there is only a destructible item in the popover that shouldn't automatically be focused on
+    if (focusOnDialog) {
+      dialog.focus();
+    } else {
+      const focusableElements =
+        'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+      if (focusableDialogElements) {
+        focusableDialogElements[0].focus();
       }
-  }, [openedFromKeyboard])
-}
+    }
+  }, [openedFromKeyboard]);
+  return ref;
+};
 
 const usePositionAdjustment = ({ margin }) => {
   const [offset, setOffset] = useState({ top: 0, left: 0 });
@@ -60,12 +105,19 @@ const usePositionAdjustment = ({ margin }) => {
   return { ref, offset };
 };
 
+const mergeRefs = (...refs) => (element) => {
+  refs.forEach((ref) => {
+    ref.current = element;
+  });
+};
+
 const alignTypes = ['left', 'right'];
-export const PopoverDialog = ({ children, align, wide, className }) => {
-  const { ref, offset } = usePositionAdjustment({ margin: 12 });
+export const PopoverDialog = ({ children, align, wide, className, focusOnDialog }) => {
+  const { ref: positionRef, offset } = usePositionAdjustment({ margin: 12 });
+  const focusRef = useOpenedFromKeyboardFocus(focusOnDialog);
   return (
     <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
-      <dialog ref={ref} className={styles.popover} style={offset}>
+      <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset}>
         {children}
       </dialog>
     </div>
@@ -77,10 +129,12 @@ PopoverDialog.propTypes = {
   align: PropTypes.oneOf(alignTypes).isRequired,
   wide: PropTypes.bool,
   className: PropTypes.string,
+  focusOnDialog: PropTypes.bool,
 };
 PopoverDialog.defaultProps = {
   wide: false,
   className: '',
+  focusOnDialog: false,
 };
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone'];
@@ -103,8 +157,6 @@ const styled = (Component, baseClassName) => ({ className, ...props }) => <Compo
 export const PopoverTitle = styled('div', styles.popoverTitle);
 export const InfoDescription = styled('p', styles.infoDescription);
 
-const NestedPopoverContext = createContext();
-
 class UnmonitoredComponent extends React.Component {
   handleClickOutside() {
     this.props.onClickOutside();
@@ -116,6 +168,8 @@ class UnmonitoredComponent extends React.Component {
 }
 
 const MonitoredComponent = onClickOutside(UnmonitoredComponent);
+
+
 
 export const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [visible, setVisibleState] = useState(startOpen);
@@ -176,6 +230,8 @@ PopoverContainer.defaultProps = {
   outer: null,
   startOpen: false,
 };
+
+const NestedPopoverContext = createContext();
 
 export function NestedPopover({ startAlternateVisible, alternateContent, children }) {
   const [altVisible, setAltVisible] = useState(startAlternateVisible);
