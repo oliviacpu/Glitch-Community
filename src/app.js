@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { AnalyticsContext } from 'State/segment-analytics';
 import ErrorBoundary from './presenters/includes/error-boundary';
-import { AnalyticsContext } from './presenters/segment-analytics';
 import { CurrentUserProvider } from './state/current-user';
 import { APIContextProvider } from './state/api';
 import { UserPrefsProvider } from './presenters/includes/user-prefs';

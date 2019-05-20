@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
+
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-import { getPredicates, getTeamPair } from '../../models/words';
-import { getLink } from '../../models/team';
-import { useTracker } from '../segment-analytics';
+import { getPredicates, getTeamPair } from 'Models/words';
+import { getLink } from 'Models/team';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { useTracker } from 'State/segment-analytics';
+
 import { NestedPopoverTitle } from './popover-nested';
 import { SignInPopBase } from './sign-in-pop';
 

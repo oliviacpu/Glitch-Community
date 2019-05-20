@@ -14,10 +14,10 @@ import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import { getLink } from 'Models/team';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 
-import { AnalyticsContext } from '../segment-analytics';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import TeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';

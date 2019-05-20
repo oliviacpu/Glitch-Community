@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
 
@@ -14,14 +13,12 @@ import ProjectsList from 'Components/containers/projects-list';
 import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
+import { getLink } from 'Models/user';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
 
-import { getLink } from '../../models/user';
-
-import { AnalyticsContext } from '../segment-analytics';
-import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
-
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './user.styl';

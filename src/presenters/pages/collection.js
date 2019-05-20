@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
-
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -18,10 +17,12 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
 
-import { AnalyticsContext } from '../segment-analytics';
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
@@ -30,8 +31,6 @@ import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-import { useCurrentUser } from '../../state/current-user';
-import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);

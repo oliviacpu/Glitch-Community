@@ -6,17 +6,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { getAllPages } from 'Shared/api';
-
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
 import { getAvatarUrl } from 'Models/project';
+import { useAPI } from 'State/api';
+import { useTrackedFunc } from 'State/segment-analytics';
 
-import { useAPI } from '../../state/api';
-
-import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
 const DeletedProject = ({ id, domain, onClick }) => (
