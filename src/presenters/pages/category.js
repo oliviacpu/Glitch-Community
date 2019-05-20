@@ -7,14 +7,12 @@ import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+
 import Layout from '../layout';
-
-import { AnalyticsContext } from '../segment-analytics';
 import ProjectsLoader from '../projects-loader';
-
 import CollectionEditor from '../collection-editor';
-import { useCurrentUser } from '../../state/current-user';
-
 
 const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => (
   <>
@@ -46,10 +44,7 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
                   }}
                 />
               ) : (
-                <ProjectsList
-                  layout="gridCompact"
-                  projects={projects}
-                />
+                <ProjectsList layout="gridCompact" projects={projects} />
               )}
             </div>
           )}
