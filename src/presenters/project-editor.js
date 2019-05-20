@@ -29,7 +29,7 @@ class ProjectEditor extends React.Component {
 
   async updateDomain(domain) {
     await this.updateFields({ domain });
-    await this.props.api.post(`project/domainChanged?projectId=${this.state.id}`);
+    this.props.api.post(`project/domainChanged?projectId=${this.state.id}&authorization=${this.props.currentUser.persistentToken}`);
   }
 
   async addProjectToCollection(project, collection) {
@@ -51,7 +51,7 @@ class ProjectEditor extends React.Component {
     const funcs = {
       addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
       deleteProject: () => this.deleteProject().catch(handleError),
-      updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
+      updateDomain: (domain) => this.updateDomain(domain).catch(handleErrorForInput),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),
       uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
