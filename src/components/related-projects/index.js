@@ -47,9 +47,10 @@ function useSample(items, count) {
   return sample;
 }
 
-function RelatedProjects({ teams: allTeams, users: allUsers, ignoreProjectId }) {
-  const teams = useSample(allTeams, 1);
-  const users = useSample(allUsers, 2 - teams.length);
+function RelatedProjects({ project }) {
+  const teams = useSample(project.teams || [], 1);
+  const users = useSample(project.users || [], 2 - teams.length);
+  const ignoreProjectId = project.id;
 
   if (!teams.length && !users.length) {
     return null;
@@ -92,14 +93,11 @@ function RelatedProjects({ teams: allTeams, users: allUsers, ignoreProjectId }) 
   );
 }
 RelatedProjects.propTypes = {
-  ignoreProjectId: PropTypes.string.isRequired,
-  teams: PropTypes.array,
-  users: PropTypes.array,
-};
-
-RelatedProjects.defaultProps = {
-  teams: [],
-  users: [],
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    teams: PropTypes.array,
+    users: PropTypes.array,
+  }),
 };
 
 export default RelatedProjects;

@@ -252,7 +252,7 @@ const ProjectPage = ({
         <IncludedInCollections projectId={project.id} />
       </section>
       <section id="related">
-        <RelatedProjects ignoreProjectId={project.id} {...{ teams, users }} />
+        <RelatedProjects project={project} />
       </section>
     </main>
   );
