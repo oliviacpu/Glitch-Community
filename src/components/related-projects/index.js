@@ -6,14 +6,15 @@ import ProjectsList from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
 import { TeamLink, UserLink } from 'Components/link';
-import { getDisplayName } from '../../models/user';
+import { getDisplayName } from 'Models/user';
+import styles from './styles.styl';
 
 const PROJECT_COUNT = 3;
 
 const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
     <CoverContainer type={type} item={item}>
-      <div className="related-projects__projects-wrap">
+      <div className={styles.projectsWrap}>
         <ProjectsList layout="row" projects={projects} fetchMembers />
       </div>
     </CoverContainer>
@@ -30,12 +31,12 @@ async function getProjects(api, { type, id, ignoreProjectId }) {
   ]);
 
   pins = pins.filter((project) => project.id !== ignoreProjectId);
-  recents = recents.filter((project) => project.id !== ignoreProjectId);
-  
-  const sampledPins = 
-  
-  const allProjects = pins.concat(recents)
-  return sampleSize(allProjects, PROJECT_COUNT);
+  const sampledPins = sampleSize(pins, PROJECT_COUNT);
+  const sampledPinIDs = sampledPins.map((project) => project.id);
+
+  recents = recents.filter((project) => project.id !== ignoreProjectId && !sampledPinIDs.includes(project.id));
+  const sampledRecents = sampleSize(recents, PROJECT_COUNT - sampledPins.length);
+  return [...sampledPins, ...sampledRecents];
 }
 
 function useSample(items, count) {
@@ -54,7 +55,7 @@ function RelatedProjects({ teams: allTeams, users: allUsers, ignoreProjectId }) 
     return null;
   }
   return (
-    <ul className="related-projects">
+    <ul className={styles.container}>
       {teams.map((team) => (
         <li key={team.id}>
           <DataLoader get={(api) => getProjects(api, { type: 'team', id: team.id, ignoreProjectId })}>
