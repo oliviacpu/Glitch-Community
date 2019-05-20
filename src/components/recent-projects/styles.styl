@@ -32,7 +32,7 @@
 .avatarWrap
   display: none
   @media(min-width: 800px)
-    padding-right: 1rem
+    margin-right: 1rem
     display: block
     flex: 0 0 18%
   
@@ -40,7 +40,10 @@
   height: 0
   padding-bottom: 100%
   border-radius: 50%
+  background-size: cover
   
 .projectsWrap
-  margin: 0
-  padding: 0
+  flex: 1 1 auto
+  max-width: 100%
+  & > article
+    margin: 0

@@ -60,7 +60,7 @@ const RecentProjects = () => {
               <div className={styles.userAvatar} style={getAvatarStyle(currentUser)} />
             </UserLink>
           </div>
-          <article className={styles.projectsWrap}>
+          <div className={styles.projectsWrap}>
             {fetched ? (
               <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
                 {(projects) => <ProjectsList layout="row" projects={projects} />}
@@ -68,7 +68,7 @@ const RecentProjects = () => {
             ) : (
               <Loader />
             )}
-          </article>
+          </div>
         </div>
         {isAnonymousUser && <ClearSession clearUser={clear} />}
       </CoverContainer>
