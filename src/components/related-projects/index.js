@@ -97,7 +97,7 @@ RelatedProjects.propTypes = {
     id: PropTypes.string.isRequired,
     teams: PropTypes.array,
     users: PropTypes.array,
-  }),
+  }).isRequired,
 };
 
 export default RelatedProjects;
