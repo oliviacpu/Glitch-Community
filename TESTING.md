@@ -43,6 +43,8 @@ There are helpers that you can use to create fixtures as you're writing new test
 
 `cy.createFixtures(object)` takes an object where the keys are the fixture name, and the value is the URL to save and then maps that to `cy.createFixture`
 
+You can use these in a `before` block in your tests to build up fixtures as you write the test and remove them once the fixtures are created.
+
 Be careful not to commit a user fixture or something with sensitive data!
 
 ### Workflow with Cypress
