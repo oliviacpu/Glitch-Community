@@ -28,7 +28,7 @@ import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-import RelatedProjects from '../includes/related-projects';
+import RelatedProjects from 'Components/related-projects';
 import { addBreadcrumb } from '../../utils/sentry';
 
 import { useCurrentUser } from '../../state/current-user';

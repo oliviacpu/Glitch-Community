@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sampleSize, difference } from 'lodash';
+import { sampleSize } from 'lodash';
 
 import ProjectsList from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
@@ -14,7 +14,7 @@ const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
     <CoverContainer type={type} item={item}>
       <div className="related-projects__projects-wrap">
-        <ProjectsList layout="row" projects={projects} />
+        <ProjectsList layout="row" projects={projects} fetchMembers />
       </div>
     </CoverContainer>
   ) : null;
@@ -23,47 +23,14 @@ RelatedProjectsBody.propTypes = {
   projects: PropTypes.array.isRequired,
 };
 
-
-const getProjects = {
-  team: {
-    pinned: (id) => `/v1/teams/by/id/pinnedProjects
-  }
-}
-
-const getTeam = (api, id) => api.get(`teams/${id}`).then(({ data }) => data);
-const getTeamPins = (api, id) => api.get(`teams/${id}/pinned-projects`).then(({ data }) => data);
-const getUser = (api, id) => api.get(`users/${id}`).then(({ data }) => data);
-const getUserPins = (api, id) => api.get(`users/${id}/pinned-projects`).then(({ data }) => data);
-
 async function getProjects(api, { type, id, ignoreProjectId }) {
-  const getPins = type === 'team' ? getTeamPins : getUserPins;
-  const getAllProjects = type === 'team' ? getTeam : getUser;
-
   const [pins, recents] = await Promise.all([
-    api.get(`/v1/${type}s/by/id/pinnedProjects?id=${id}`).then(res => res.data.items),
-    api.get(`/v1/${type}s/by/id/projects?id=${id}`).then(res => res.data.items),
-  ])
-  
-  const allProjects = pins.concat(recents).filter(project => project.id !== ignoreProjectId)
-  const sample = sampleSize(allProjects,
-  
-  const pinIds = pins.map((pin) => pin.projectId);
-  let ids = sampleSize(difference(pinIds, [ignoreProjectId]), PROJECT_COUNT);
+    api.get(`/v1/${type}s/by/id/pinnedProjects?id=${id}`).then((res) => res.data.items),
+    api.get(`/v1/${type}s/by/id/projects?id=${id}`).then((res) => res.data.items),
+  ]);
 
-  if (ids.length < PROJECT_COUNT) {
-    const { projects } = await getAllProjects(api, id);
-
-    const allIds = projects.map((project) => project.id);
-    const remainingIds = difference(allIds, [ignoreProjectId, ...ids]);
-    ids = [...ids, ...sampleSize(remainingIds, PROJECT_COUNT - ids.length)];
-  }
-
-  if (ids.length) {
-    const { data } = await api.get(`projects/byIds?ids=${ids.join(',')}`);
-
-    return data.length ? data : null;
-  }
-  return null;
+  const allProjects = pins.concat(recents).filter((project) => project.id !== ignoreProjectId);
+  return sampleSize(allProjects, PROJECT_COUNT);
 }
 
 function useSample(items, count) {

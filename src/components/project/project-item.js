@@ -10,6 +10,7 @@ import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
+import { createAPIHook } from '../../state/api';
 import styles from './project-item.styl';
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
@@ -22,6 +23,26 @@ const getLinkBodyStyles = (project) =>
   });
 
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
+
+const useUsers = createAPIHook(async (api, userIDs) => {
+  if (!userIDs.length) {
+    return undefined;
+  }
+  const idString = userIDs.map((id) => `id=${id}`).join('&');
+
+  const { data } = await api.get(`/v1/users/by/id/?${idString}`);
+  return Object.values(data);
+});
+
+const useTeams = createAPIHook(async (api, teamIDs) => {
+  if (!teamIDs.length) {
+    return undefined;
+  }
+  const idString = teamIDs.map((id) => `id=${id}`).join('&');
+
+  const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
+  return Object.values(data);
+});
 
 const ProjectItem = ({ project, projectOptions }) => {
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
@@ -95,4 +116,11 @@ ProjectItem.defaultProps = {
   projectOptions: {},
 };
 
-export default ProjectItem;
+function ProjectWithDataLoading({ project, ...props }) {
+  const { value: users } = useUsers(project.userIDs);
+  const { value: teams } = useTeams(project.teamIDs);
+  const projectWithData = { ...project, users, teams };
+  return <ProjectItem project={projectWithData} {...props} />;
+}
+
+export default ({ fetchMembers, ...props }) => (fetchMembers ? <ProjectWithDataLoading {...props} /> : <ProjectItem {...props} />);
