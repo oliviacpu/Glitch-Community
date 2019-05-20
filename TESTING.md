@@ -8,7 +8,11 @@ You need to add a `GLITCH_TOKEN` to your local `.env`. You can get a test accoun
 
 Be careful using your account information here! Don't commit it.
 
+You also probably need to run `npm install`.
+
 ### Running Tests
+
+Wake up your remix (or the one you're testing) if it isn't active. The test runner will try to wait, but sometimes it doesn't always work.
 
 To use `./sh/cypress.sh` give it a remix name `./sh/cypress.sh my-remix` or run tests against production with `./sh/cypress.sh community`.
 

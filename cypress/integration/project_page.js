@@ -12,7 +12,7 @@ context('Project Page', () => {
   });
 
   describe('Suspended Projects', () => {
-    it.only('Does not show details for suspended projects', () => {
+    it('Does not show details for suspended projects', () => {
       cy.visit('/~a-bad-project');
     });
   });
