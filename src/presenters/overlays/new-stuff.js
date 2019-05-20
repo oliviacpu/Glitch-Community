@@ -5,10 +5,10 @@ import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
 import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import { useTracker } from '../segment-analytics';
+import { useTracker } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
-import { useCurrentUser } from '../../state/current-user';
 
 import newStuffLog from '../../curated/new-stuff-log';
 

@@ -6,9 +6,9 @@ import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import ResultsList from 'Components/containers/results-list';
 import { getRemixUrl } from 'Models/project';
-import { useTracker, TrackedExternalLink } from '../../presenters/segment-analytics';
+import { useTracker, TrackedExternalLink } from 'State/segment-analytics';
+import { createAPIHook } from 'State/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
-import { createAPIHook } from '../../state/api';
 import styles from './new-project-pop.styl';
 
 const importGitRepo = () => {

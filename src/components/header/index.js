@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
-import Link from 'Components/link';
-import { TrackedExternalLink } from '../../presenters/segment-analytics';
+import Link, { TrackedExternalLink } from 'Components/link';
 import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
 import SignInPop from '../../presenters/pop-overs/sign-in-pop';
 import NewProjectPop from './new-project-pop';

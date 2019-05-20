@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
 import { NestedPopoverTitle } from './popover-nested';
 
 const TeamUserRemoveButton = ({ user, removeUser }) => (

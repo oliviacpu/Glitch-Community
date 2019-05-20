@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Shout Out Your Peoples',
-    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fglitch_shoutout.jpg?1552302001451',
-    link: 'https://glitch.com/~shout-out'
+    title: 'Create Shareable Audio Clips',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FGlitchfinal5TsjisseTalsma.jpg?1546519621503',
+    link: 'https://glitch.com/~audiogram'
   },  
   {
-    title: 'Create a Custom Oreo',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fglitch03_oreoreo.png?1548074745705',
-    link: 'https://glitch.com/~oreoreo'
+    title: 'An App with a View',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fblue-ridge.png?1539601709907',
+    link: 'https://glitch.com/~blueridge'
   },
   {
-    title: 'How Many Pencils from A to B?',
-    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fpencil-distance.gif?1549879571534',
-    link: 'https://glitch.com/~pencil-distance'  
+    title: 'Your Next Must-have Subscription?',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsubscribe2me.png?1535971898937',
+    link: 'https://glitch.com/~subscribe2me'  
   }
 ];
