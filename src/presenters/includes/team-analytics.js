@@ -6,7 +6,7 @@ import sampleAnalytics, { sampleAnalyticsTime } from 'Curated/sample-analytics';
 
 import Text from 'Components/text/text';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
-import Loader from 'Components/loaders/loader';
+import Loader from 'Components/loader';
 
 import TeamAnalyticsTimePop from '../pop-overs/team-analytics-time-pop';
 import TeamAnalyticsProjectPop from '../pop-overs/team-analytics-project-pop';
@@ -178,7 +178,9 @@ class TeamAnalytics extends React.Component {
 
         {!!this.props.projects.length && (
           <section className="controls">
-            <SegmentedButtons value={this.state.activeFilter} buttons={buttons} onChange={this.setFilter.bind(this)} />
+            <div className="segmented-buttons-wrap">
+              <SegmentedButtons value={this.state.activeFilter} buttons={buttons} onChange={this.setFilter.bind(this)} />
+            </div>
             <div className="options">
               <TeamAnalyticsProjectPop
                 updateProjectDomain={this.updateProjectDomain.bind(this)}

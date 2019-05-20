@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-
 import { Route, Switch, withRouter } from 'react-router-dom';
+import punycode from 'punycode';
 
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
@@ -70,51 +70,57 @@ const Router = () => (
         path="/login/facebook"
         exact
         render={({ location }) => (
-          <FacebookLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />
+          <FacebookLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
         )}
       />
       <Route
         path="/login/github"
         exact
-        render={({ location }) => <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => (
+          <GitHubLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
+        )}
       />
       <Route
         path="/login/google"
         exact
-        render={({ location }) => <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => (
+          <GoogleLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />
+        )}
       />
       <Route
         path="/login/slack"
         exact
-        render={({ location }) => <SlackLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} hash={parse(location.search, 'hash')} />}
+        render={({ location }) => <SlackLoginPage key={location.key} code={parse(location.search, 'code')} error={parse(location.search, 'error')} />}
       />
       <Route
         path="/login/email"
         exact
-        render={({ location }) => (
-          <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} hash={parse(location.search, 'hash')} />
-        )}
+        render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
       />
 
-      <Route
-        path="/join/@:teamUrl/:joinToken"
-        exact
-        render={({ match }) => (
-          <JoinTeamPage key={location.key} {...match.params} /> // eslint-disable-line no-restricted-globals
-        )}
-      />
+      <Route path="/join/@:teamUrl/:joinToken" exact render={({ match }) => <JoinTeamPage key={location.key} {...match.params} />} />
 
       <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
-      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={match.params.name} />} />
-      <Route path="/~:name/404" exact render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={match.params.name} />} />
+      <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
+      <Route
+        path="/~:name/404"
+        exact
+        render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
+      />
 
-      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
+      <Route
+        path="/@:name"
+        exact
+        render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />}
+      />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
+        render={({ location, match }) => (
+          <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />
+        )}
       />
 
       <Route
@@ -124,7 +130,7 @@ const Router = () => (
       />
 
       {Object.keys(rootTeams).map((name) => (
-        <Route key={name} path={`/${name}`} exact render={({ location }) => <TeamPage key={location.key} id={rootTeams[name]} name={name} />} />
+        <Route key={name} path={`/${name}`} exact render={({ location }) => <TeamPage key={location.key} name={name} />} />
       ))}
 
       <Route

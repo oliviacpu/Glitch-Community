@@ -4,8 +4,8 @@ import { parseOneAddress } from 'email-addresses';
 import _ from 'lodash';
 import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
-import Loader from 'Components/loaders/loader';
-import { PureEditableField } from '../includes/editable-field';
+import Loader from 'Components/loader';
+import InputText from 'Components/inputs/text-input';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from '../../utils/abuse-reporting';
@@ -61,13 +61,13 @@ class ReportAbusePop extends React.Component {
     }
     return (
       <section className="pop-over-info">
-        <PureEditableField
+        <InputText
           value={this.state.email}
-          update={this.emailOnChange}
-          blur={() => this.debouncedValidateEmail()}
+          onChange={this.emailOnChange}
+          onBlur={() => this.debouncedValidateEmail()}
           placeholder="your@email.com"
           error={this.state.emailError}
-          inputType="email"
+          type="email"
         />
       </section>
     );
@@ -214,8 +214,7 @@ class ReportAbusePop extends React.Component {
       </section>
       <section className="pop-over-info">
         <p className="info-description">
-          But you can still send us your message by emailing the details below to
-          <b>support@glitch.com</b>
+          But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
         </p>
       </section>
       <section className="pop-over-actions">
@@ -238,9 +237,11 @@ ReportAbusePop.propTypes = {
 const ReportAbusePopButton = (props) => {
   const { currentUser } = useCurrentUser();
   return (
-    <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
-      {() => <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />}
-    </PopoverWithButton>
+    <div className="report-abuse-button-wrap">
+      <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
+        {() => <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />}
+      </PopoverWithButton>
+    </div>
   );
 };
 ReportAbusePopButton.propTypes = {

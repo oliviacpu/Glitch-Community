@@ -1,14 +1,57 @@
+@require '../constants'
+
 .container
   font-size: 14px
+
+.projectItemSmall
+  .linkBodySmall
+    display: block
+    position: relative
+    background-color: section-line
+    border-radius: 5px
+    padding: 7px 15px
+    display: flex
+    -webkit-box-orient: horizontal
+    -webkit-box-direction: normal
+    flex-direction: row
+    word-break: break-word
+    overflow: hidden
+    &.private
+      background-color: private
+  .avatarWrap
+    img
+      display: block
+      width: 25px
+      height: 25px
+      margin-right: 12px
+      
+  .projectHeader
+    overflow: hidden
+  p
+    margin-top: 2px
+    margin-bottom: 0
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+  a
+    color: primary
+    text-decoration: none
+  &:hover
+    .linkBodySmall
+      background-color: secondary-hover-on-color
+      text-decoration: underline
+      a
+        text-decoration: underline
   
 .header
-  margin-top: 1rem
+  margin-top: 0
   margin-bottom: 0.5rem
   position: relative
-  z-index: 1
   
 .userListContainer
   max-width: 100%
+  position: relative
+  z-index: 1
   &.spaceForOptions
     max-width: calc(100% - 30px)
 
@@ -23,19 +66,25 @@
     position: relative
     top: auto
     right: auto
-    
+  
 .linkBody
   display: block
   position: relative
   color: inherit
-  background-color: #e5e5e5
-  border-color: #e5e5e5
+  background-color: section-line
+  border-color: section-line
   border-radius: 5px
   padding: 1rem 1rem 0.5rem
   min-height: 150px
   text-decoration: none
+  word-break: break-word
   &:hover
     text-decoration: none
+    .itemButtonWrap
+      width: fit-content
+      height: fit-content
+      box-shadow: 2px 2px 0 primary
+      border-radius: 5px
   &:after
     content: ""
     top: -13px
@@ -48,8 +97,8 @@
     border-bottom-color: inherit
     border-width: 7px
   &.private
-    background-color: #fcf3b0
-    border-color: #fcf3b0
+    background-color: private
+    border-color: private
 
 .projectHeader
   display: flex

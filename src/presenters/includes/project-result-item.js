@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ProfileList from 'Components/profile/profile-list';
-import { ProjectLink } from './link';
+import ProfileList from 'Components/profile-list';
+import Markdown from 'Components/text/markdown';
+import { ProjectLink } from 'Components/link';
 import ProjectAvatar from './project-avatar';
 
 const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
@@ -19,7 +20,11 @@ const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
           <div className="result-name" title={domain}>
             {domain}
           </div>
-          {description.length > 0 && <div className="result-description">{description}</div>}
+          {description.length > 0 && (
+            <div className="result-description">
+              <Markdown renderAsPlaintext>{description}</Markdown>
+            </div>
+          )}
           {!!users && users.length > 0 && <ProfileList users={users} layout="row" />}
         </div>
       </button>

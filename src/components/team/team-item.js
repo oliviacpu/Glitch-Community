@@ -4,12 +4,12 @@ import { sumBy } from 'lodash';
 
 import Button from 'Components/buttons/button';
 import Markdown from 'Components/text/markdown';
-import Cover from 'Components/blocks/search-result-cover-bar';
+import Cover from 'Components/search-result-cover-bar';
 import Image from 'Components/images/image';
-import Thanks from 'Components/blocks/thanks';
-import ProfileList from 'Components/profile/profile-list';
+import Thanks from 'Components/thanks';
+import VerifiedBadge from 'Components/verified-badge';
+import ProfileList from 'Components/profile-list';
 import { getLink, getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
-import { VerifiedBadge } from '../../presenters/includes/team-elements';
 import WrappingLink from '../../presenters/includes/wrapping-link';
 
 import styles from './team-item.styl';
@@ -26,7 +26,7 @@ const TeamItem = ({ team }) => (
         <ProfileAvatar team={team} />
       </div>
       <div className={styles.body}>
-        <div>
+        <div className={styles.itemButtonWrap}>
           <Button href={getLink(team)}>{team.name}</Button>
           {!!team.isVerified && <VerifiedBadge />}
         </div>

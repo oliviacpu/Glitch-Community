@@ -43,19 +43,15 @@ const RedirectToDestination = () => {
   return <Redirect to="/" />;
 };
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      done: false,
-      error: false,
-      errorMessage: null,
-    };
-  }
+const LoginPage = ({ provider, url }) => {
+  const api = useAPI();
+  const { login } = useCurrentUser();
 
-  async componentDidMount() {
-    const { api, provider, url } = this.props;
+  const [state, setState] = React.useState({ status: 'active' });
+  const setDone = () => setState({ status: 'done' });
+  const setError = (title, message) => setState({ status: 'error', title, message });
 
+  const perform = async () => {
     try {
       const { data } = await api.post(url);
       if (data.id <= 0) {
@@ -63,82 +59,92 @@ class LoginPage extends React.Component {
       }
 
       console.log('LOGGED IN', data.id);
-      this.props.setUser(data);
+      login(data);
 
-      this.setState({ done: true });
+      setDone();
       analytics.track('Signed In', { provider });
       notifyParent({ success: true, details: { provider } });
     } catch (error) {
-      this.setState({ error: true });
-
       const errorData = error && error.response && error.response.data;
-      if (errorData && errorData.message) {
-        this.setState({ errorMessage: errorData.message });
-      }
+      setError(undefined, errorData && errorData.message);
 
-      if (error && error.response && error.response.status !== 401) {
-        console.error('Login error.', errorData);
-        captureException(error);
+      if (error && error.response) {
+        if (error.response.status === 403) {
+          // Our API returns a 403 when the login provider didn't return an email address
+          // We can suggest using email for login and avoid capturing this error in Sentry
+          const title = 'Missing Email Address';
+          const message = `${provider} didn't return an email address for your account.  Try using "Sign in with Email" instead to create an account on Glitch.`;
+          setError(title, message);
+        } else if (error.response.status !== 401) {
+          console.error('Login error.', errorData);
+          captureException(error);
+        }
       }
       const details = { provider, error: errorData };
       notifyParent({ success: false, details });
     }
-  }
+  };
+  React.useEffect(() => {
+    perform();
+  }, [provider, url]);
 
-  render() {
-    if (this.state.done) {
-      return <RedirectToDestination />;
-    }
-    if (this.state.error) {
-      const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
-      if (this.props.provider === 'Email') {
-        return <EmailErrorPage title={`${this.props.provider} Login Problem`} description={this.state.errorMessage || genericDescription} />;
-      }
-      return <OauthErrorPage title={`${this.props.provider} Login Problem`} description={this.state.errorMessage || genericDescription} />;
-    }
-    return <div className="content" />;
+  if (state.status === 'done') {
+    return <RedirectToDestination />;
   }
-}
+  if (state.status === 'error') {
+    const genericTitle = `${provider} Login Problem`;
+    const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
+    const errorTitle = state.title || genericTitle;
+    const errorMessage = state.message || genericDescription;
+    if (provider === 'Email') {
+      return <EmailErrorPage title={errorTitle} description={errorMessage} />;
+    }
+    return <OauthErrorPage title={errorTitle} description={errorMessage} />;
+  }
+  return <div className="content" />;
+};
 LoginPage.propTypes = {
-  api: PropTypes.any.isRequired,
-  url: PropTypes.string.isRequired,
   provider: PropTypes.string.isRequired,
-  setUser: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
-const LoginPageContainer = (props) => {
-  const api = useAPI();
-  const { login } = useCurrentUser();
-  return <LoginPage setUser={login} api={api} {...props} />;
-};
-
-export const FacebookLoginPage = ({ code, ...props }) => {
-  const callbackUrl = `${APP_URL}/login/facebook`;
-  const url = `/auth/facebook/${code}?callbackURL=${encodeURIComponent(callbackUrl)}`;
-  return <LoginPageContainer {...props} provider="Facebook" url={url} />;
-};
-
-export const GitHubLoginPage = ({ code, ...props }) => {
-  const url = `/auth/github/${code}`;
-  return <LoginPageContainer {...props} provider="GitHub" url={url} />;
-};
-
-export const GoogleLoginPage = ({ code, ...props }) => {
-  const callbackUrl = `${APP_URL}/login/google`;
-  const url = `/auth/google/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
-  return <LoginPageContainer {...props} provider="Google" url={url} />;
-};
-
-export const SlackLoginPage = ({ code, error, ...props }) => {
+const OAuthLoginPage = ({ error, provider, url }) => {
   if (error === 'access_denied') {
     return <RedirectToDestination />;
   }
-  const callbackUrl = `${APP_URL}/login/slack`;
-  const url = `/auth/slack/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
-  return <LoginPageContainer {...props} provider="Slack" url={url} />;
+  return <LoginPage provider={provider} url={url} />;
+};
+OAuthLoginPage.propTypes = {
+  error: PropTypes.string,
+};
+OAuthLoginPage.defaultProps = {
+  error: null,
 };
 
-export const EmailTokenLoginPage = ({ token, ...props }) => {
+export const FacebookLoginPage = ({ code, error }) => {
+  const callbackUrl = `${APP_URL}/login/facebook`;
+  const url = `/auth/facebook/${code}?callbackURL=${encodeURIComponent(callbackUrl)}`;
+  return <OAuthLoginPage error={error} provider="Facebook" url={url} />;
+};
+
+export const GitHubLoginPage = ({ code, error }) => {
+  const url = `/auth/github/${code}`;
+  return <OAuthLoginPage error={error} provider="GitHub" url={url} />;
+};
+
+export const GoogleLoginPage = ({ code, error }) => {
+  const callbackUrl = `${APP_URL}/login/google`;
+  const url = `/auth/google/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
+  return <OAuthLoginPage error={error} provider="Google" url={url} />;
+};
+
+export const SlackLoginPage = ({ code, error }) => {
+  const callbackUrl = `${APP_URL}/login/slack`;
+  const url = `/auth/slack/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
+  return <OAuthLoginPage error={error} provider="Slack" url={url} />;
+};
+
+export const EmailTokenLoginPage = ({ token }) => {
   const url = `/auth/email/${token}`;
-  return <LoginPageContainer {...props} provider="Email" url={url} />;
+  return <LoginPage provider="Email" url={url} />;
 };

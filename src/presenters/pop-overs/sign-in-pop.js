@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
-import { Link } from '../includes/link';
+import Link from 'Components/link';
 import useLocalStorage from '../../state/local-storage';
 import PopoverWithButton from './popover-with-button';
 import { captureException } from '../../utils/sentry';
@@ -187,7 +187,7 @@ class EmailHandler extends React.Component {
     return (
       <NestedPopover alternateContent={() => <SignInWithConsumer {...this.props} />} startAlternateVisible={false}>
         {(showCodeLogin) => (
-          <dialog className="pop-over sign-in-pop">
+          <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
             <NestedPopoverTitle>
               Email Sign In <span className="emoji email" />
             </NestedPopoverTitle>
@@ -268,7 +268,7 @@ class SignInCodeHandler extends React.Component {
   render() {
     const isEnabled = this.state.code.length > 0;
     return (
-      <dialog className="pop-over sign-in-pop">
+      <dialog className="pop-over sign-in-pop" ref={this.props.focusFirstElement}>
         <NestedPopoverTitle>Use a sign in code</NestedPopoverTitle>
         <section className="pop-over-actions first-section">
           {!this.state.done && (
@@ -329,7 +329,7 @@ SignInCodeSection.propTypes = {
 };
 
 const TermsAndPrivacySection = () => (
-  <aside className="pop-over-info last-section">
+  <aside className="pop-over-info">
     By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
   </aside>
 );
@@ -364,7 +364,7 @@ class LoginSection extends React.Component {
 }
 
 const SignInPopWithoutRouter = (props) => {
-  const { header, prompt, api, location, hash } = props;
+  const { header, prompt, api, location, hash, focusFirstElement } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -383,37 +383,30 @@ const SignInPopWithoutRouter = (props) => {
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
           {(showCodeLogin) => (
-            <NestedPopover alternateContent={() => <ForgotPasswordHandler {...props} />} startAlternateVisible={false}>
-              {(showForgotPassword) => (
-                <div className="pop-over sign-in-pop">
-                  {header}
-                  <section className="pop-over-info">
-                    <div className="pop-title">Sign In or Sign Up</div>
-                  </section>
-                  <LoginSection showForgotPassword={showForgotPassword} {...props} />
-                  <section className="pop-over-actions login-services">
-                    {prompt}
-                    <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-                    <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-                    <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-                    {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-                    <EmailSignInButton
-                      onClick={() => {
-                        onClick();
-                        showEmailLogin(api);
-                      }}
-                    />
-                  </section>
-                  <SignInCodeSection
-                    onClick={() => {
-                      onClick();
-                      showCodeLogin(api);
-                    }}
-                  />
-                  <TermsAndPrivacySection />
-                </div>
-              )}
-            </NestedPopover>
+            <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
+              {header}
+              <NewUserInfoSection />
+              <TermsAndPrivacySection />
+              <section className="pop-over-actions">
+                {prompt}
+                <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
+                <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
+                <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+                <EmailSignInButton
+                  onClick={() => {
+                    onClick();
+                    showEmailLogin(api);
+                  }}
+                />
+              </section>
+              <SignInCodeSection
+                onClick={() => {
+                  onClick();
+                  showCodeLogin(api);
+                }}
+              />
+            </dialog>
           )}
         </NestedPopover>
       )}
@@ -427,13 +420,16 @@ SignInPopBase.propTypes = {
   header: PropTypes.node,
   prompt: PropTypes.node,
   hash: PropTypes.string,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const SignInPopContainer = (props) => {
   const api = useAPI();
   return (
     <PopoverWithButton buttonClass="button button-small" buttonText="Sign in">
-      {({ togglePopover }) => <SignInPopBase {...props} api={api} togglePopover={togglePopover} />}
+      {({ togglePopover, focusFirstElement }) => (
+        <SignInPopBase {...props} api={api} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      )}
     </PopoverWithButton>
   );
 };

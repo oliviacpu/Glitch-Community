@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { pickBy } from 'lodash';
 
 import InputErrorMessage from './input-error-message';
 import InputErrorIcon from './input-error-icon';
 import useUniqueId from '../../hooks/use-unique-id';
 
 import styles from './text-input.styl';
+import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children }) => <span className={styles.inputPart}>{children}</span>;
+const InputPart = ({ children, className }) => (
+  <span className={classNames(styles.inputPart, className)}>{children}</span>
+);
 
 const TextInput = ({
   autoFocus,
@@ -27,6 +31,7 @@ const TextInput = ({
   prefix,
   type,
   value,
+  ...props
 }) => {
   const uniqueId = useUniqueId();
   const outerClassName = classNames(className, styles.outer);
@@ -37,12 +42,14 @@ const TextInput = ({
   const inputClassName = classNames(styles.inputPart, styles.input, {
     [styles.search]: type === 'search',
   });
+  const eventProps = pickBy(props, (_, key) => key.startsWith('on'));
   return (
     <label className={outerClassName} htmlFor={uniqueId}>
-      <span className="visually-hidden">{labelText}</span>
+      <span className={visuallyHidden}>{labelText}</span>
       <span className={borderClassName}>
         {!!prefix && <InputPart>{prefix}</InputPart>}
         <input
+          {...eventProps}
           autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
           className={inputClassName}
           disabled={disabled}
@@ -55,7 +62,7 @@ const TextInput = ({
           value={value}
         />
         {!!error && (
-          <InputPart>
+          <InputPart className={styles.errorIcon}>
             <InputErrorIcon />
           </InputPart>
         )}

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
-import { ProjectsUL } from 'Components/containers/projects-list';
-import Loader from 'Components/loaders/loader';
-import { getAvatarStyle, getProfileStyle } from '../models/user';
-import { useCurrentUser } from '../state/current-user';
-import { UserLink } from './includes/link';
+import ProjectsList from 'Components/containers/projects-list';
+import Loader from 'Components/loader';
+import CoverContainer from 'Components/containers/cover-container';
+import { UserLink } from 'Components/link';
+import { getAvatarStyle } from 'Models/user';
 
-import { CoverContainer } from './includes/profile';
+import { useCurrentUser } from '../state/current-user';
 import ProjectsLoader from './projects-loader';
 import SignInPop from './pop-overs/sign-in-pop';
 
@@ -17,7 +17,6 @@ const SignInNotice = () => (
     <span>
       <SignInPop /> to keep your projects.
     </span>
-    <div className="note">Anonymous projects expire after 2 weeks</div>
   </div>
 );
 
@@ -47,7 +46,7 @@ const RecentProjectsContainer = ({ children, user, clearUser }) => (
       <UserLink user={user}>Your Projects →</UserLink>
     </Heading>
     {!user.login && <SignInNotice />}
-    <CoverContainer style={getProfileStyle(user)}>
+    <CoverContainer type="user" item={user}>
       <div className="profile-avatar">
         <div className="user-avatar-container">
           <UserLink user={user}>
@@ -55,7 +54,7 @@ const RecentProjectsContainer = ({ children, user, clearUser }) => (
           </UserLink>
         </div>
       </div>
-      <article className="projects">{children}</article>
+      <article className="recent-projects__projects-wrap">{children}</article>
       {!user.login && <ClearSession clearUser={clearUser} />}
     </CoverContainer>
   </section>
@@ -78,7 +77,7 @@ const RecentProjects = () => {
   return (
     <RecentProjectsContainer user={user} clearUser={clear}>
       {fetched ? (
-        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsUL projects={projects} />}</ProjectsLoader>
+        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsList layout="row" projects={projects} />}</ProjectsLoader>
       ) : (
         <Loader />
       )}

@@ -4,6 +4,7 @@ const enforce = require('express-sslify');
 const fs = require('fs');
 const util = require('util');
 const dayjs = require('dayjs');
+const punycode = require('punycode');
 
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
@@ -21,10 +22,7 @@ module.exports = function(external) {
   // CORS - Allow pages from any domain to make requests to our API
   app.use(function(request, response, next) {
     response.header('Access-Control-Allow-Origin', '*');
-    response.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
-    );
+    response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     // security headers added by jenn to get mozilla observatory score up
     response.header('X-XSS-Protection', '1; mode=block');
@@ -66,9 +64,7 @@ module.exports = function(external) {
         }
       });
     } catch (error) {
-      console.error(
-        "Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.",
-      );
+      console.error("Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.");
       built = false;
     }
 
@@ -99,7 +95,7 @@ module.exports = function(external) {
       },
     }),
   );
-  
+
   app.use(function(req, res, next) {
     res.header('Cache-Control', 'public, max-age=1');
     return next();
@@ -107,7 +103,7 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
-    const project = await getProject(domain);
+    const project = await getProject(punycode.toASCII(domain));
     if (!project) {
       await render(res, domain, `We couldn't find ~${domain}`);
       return;
@@ -143,7 +139,7 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
-    const collectionObj = await getCollection(`${name}/${collection}`);
+    const collectionObj = await getCollection(name, collection);
     const author = name;
 
     if (collectionObj) {
@@ -156,7 +152,7 @@ module.exports = function(external) {
       await render(res, name, description);
       return;
     }
-    await render(res, `${collection}`, `We couldn't find @${name}/${collection}`);
+    await render(res, collection, `We couldn't find @${name}/${collection}`);
   });
 
   app.get('/auth/:domain', async (req, res) => {

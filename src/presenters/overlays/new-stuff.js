@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Markdown from 'Components/text/markdown';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Text from 'Components/text/text';
-import { useTracker } from '../segment-analytics';
-import { Link } from '../includes/link';
+import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
+import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
+import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
+import CheckboxButton from 'Components/buttons/checkbox-button';
+import { useTracker } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
 import PopoverContainer from '../pop-overs/popover-container';
 import useUserPref from '../includes/user-prefs';
 
@@ -14,41 +16,18 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
-  <dialog className="pop-over overlay new-stuff-overlay overlay-narrow" open>
-    <section className="pop-over-info">
-      <figure className="new-stuff-avatar" />
-      <div className="overlay-title">New Stuff</div>
-      <div>
-        <label className="button button-small" htmlFor="showNewStuff">
-          <input
-            id="showNewStuff"
-            className="button-checkbox"
-            type="checkbox"
-            checked={showNewStuff}
-            onChange={(evt) => setShowNewStuff(evt.target.checked)}
-          />
-          Keep showing me these
-        </label>
+  <Overlay className="new-stuff-overlay">
+    <OverlaySection type="info">
+      <div className="new-stuff-avatar"><NewStuffPup /></div>
+      <OverlayTitle>New Stuff</OverlayTitle>
+      <div className="new-stuff-toggle">
+        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
       </div>
-    </section>
-    <section className="pop-over-actions">
-      {newStuff.map(({ id, title, body, link }) => (
-        <article key={id}>
-          <div className="title">{title}</div>
-          <div className="body">
-            <Markdown>{body}</Markdown>
-          </div>
-          {!!link && (
-            <Text>
-              <Link className="link" to={link}>
-                Read the blog post →
-              </Link>
-            </Text>
-          )}
-        </article>
-      ))}
-    </section>
-  </dialog>
+    </OverlaySection>
+    <OverlaySection type="actions">
+      {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
+    </OverlaySection>
+  </Overlay>
 );
 NewStuffOverlay.propTypes = {
   setShowNewStuff: PropTypes.func.isRequired,
@@ -63,12 +42,16 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuffReadId, setNewStuffReadId }) => {
+const NewStuff = ({ children }) => {
+  const { currentUser } = useCurrentUser();
+  const isSignedIn = !!currentUser && !!currentUser.login;
+  const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
+  const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = React.useState(newStuffLog);
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, setVisible }) => {
-    const dogVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
+    const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
 
     const show = () => {
       track();
@@ -81,22 +64,7 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
     return (
       <>
         {children(show)}
-        {dogVisible && (
-          <div className="new-stuff-footer">
-            <TooltipContainer
-              id="new-stuff-tooltip"
-              type="info"
-              target={
-                <button className="button-unstyled new-stuff" onClick={show}>
-                  <figure className="new-stuff-avatar" alt="New Stuff" />
-                </button>
-              }
-              tooltip="New"
-              persistent
-              align={['top']}
-            />
-          </div>
-        )}
+        {pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <div className="overlay-background" role="presentation" />}
       </>
     );
@@ -110,32 +78,6 @@ const NewStuff = ({ children, isSignedIn, showNewStuff, setShowNewStuff, newStuf
 };
 NewStuff.propTypes = {
   children: PropTypes.func.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
-  showNewStuff: PropTypes.bool.isRequired,
-  newStuffReadId: PropTypes.number.isRequired,
-  setNewStuffReadId: PropTypes.func.isRequired,
 };
 
-const NewStuffContainer = ({ children, isSignedIn }) => {
-  const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
-  const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
-  return (
-    <NewStuff
-      {...{
-        isSignedIn,
-        showNewStuff,
-        newStuffReadId,
-        setShowNewStuff,
-        setNewStuffReadId,
-      }}
-    >
-      {children}
-    </NewStuff>
-  );
-};
-NewStuffContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-  isSignedIn: PropTypes.bool.isRequired,
-};
-
-export default NewStuffContainer;
+export default NewStuff;

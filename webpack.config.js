@@ -5,12 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AutoprefixerStylus = require('autoprefixer-stylus');
 const StatsPlugin = require('stats-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const aliases = require('./shared/aliases');
 
 const BUILD = path.resolve(__dirname, 'build');
 const SRC = path.resolve(__dirname, 'src');
 const SHARED = path.resolve(__dirname, 'shared');
-const CSS_MODULES = path.resolve(__dirname, 'src/components');
 const STYLES = path.resolve(__dirname, 'styles');
 const NODE_MODULES = path.resolve(__dirname, 'node_modules');
 const STYLE_BUNDLE_NAME = 'styles';
@@ -31,7 +31,7 @@ module.exports = smp.wrap({
     [STYLE_BUNDLE_NAME]: `${STYLES}/styles.styl`,
   },
   output: {
-    filename: '[name].js?[contenthash]',
+    filename: '[name].[chunkhash:8].js',
     path: BUILD,
     publicPath: '/',
   },
@@ -59,6 +59,9 @@ module.exports = smp.wrap({
     },
     minimizer: [new TerserPlugin({ terserOptions: { safari10: true }, sourceMap: true })],
     noEmitOnErrors: true,
+    runtimeChunk: {
+      name: "manifest"
+    }
   },
   context: path.resolve(__dirname),
   resolve: {
@@ -93,7 +96,7 @@ module.exports = smp.wrap({
           },
           {
             test: /\.styl/,
-            include: CSS_MODULES,
+            include: SRC,
             use: [
               MiniCssExtractPlugin.loader,
               {
@@ -139,13 +142,14 @@ module.exports = smp.wrap({
   },
   plugins: [
     new LodashModuleReplacementPlugin({ shorthands: true }), // adding shorthands fixes https://github.com/lodash/lodash/issues/3101
-    new MiniCssExtractPlugin({ filename: '[name].css?[contenthash]' }),
+    new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
     new StatsPlugin('stats.json', {
       all: false,
       entrypoints: true,
       hash: true,
       publicPath: true,
     }),
+    new CleanWebpackPlugin({ dry: false, cleanStaleWebpackAssets: true, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/*', '!stats.json']}),
   ],
   watchOptions: {
     ignored: /node_modules/,

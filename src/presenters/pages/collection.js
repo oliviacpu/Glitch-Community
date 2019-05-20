@@ -1,56 +1,36 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { Redirect } from 'react-router-dom';
-
 import Helmet from 'react-helmet';
-import Text from 'Components/text/text';
-import ProjectItem from 'Components/project/project-item';
-import Image from 'Components/images/image';
-import NotFound from 'Components/errors/not-found';
-import { ProfileItem } from 'Components/profile/profile-list';
-import Layout from '../layout';
-import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
+import Pluralize from 'react-pluralize';
+import { Redirect } from 'react-router-dom';
+import { kebabCase, partition } from 'lodash';
 
-import { AnalyticsContext } from '../segment-analytics';
-import { DataLoader } from '../includes/loader';
-import { AuthDescription } from '../includes/description-field';
+import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
+import Text from 'Components/text/text';
+import Image from 'Components/images/image';
+import FeaturedProject from 'Components/project/featured-project';
+import NotFound from 'Components/errors/not-found';
+import { ProfileItem } from 'Components/profile-list';
+import ProjectsList from 'Components/containers/projects-list';
+import CollectionNameInput from 'Components/fields/collection-name-input';
+import DataLoader from 'Components/data-loader';
+import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { getSingleItem, getAllPages } from 'Shared/api';
+
+import Layout from '../layout';
+
+import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
-import EditCollectionNameAndUrl from '../includes/edit-collection-name-and-url';
 import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-
-import MoreCollectionsContainer from '../more-collections';
-import Note from '../note';
-
-import { getSingleItem, getAllPages } from '../../../shared/api';
-
-function syncPageToUrl(collection, url) {
-  history.replaceState(null, null, getLink({ ...collection, url }));
-}
-
-const ProjectsUL = ({ projects, collection, ...props }) => (
-  <ul className="projects-container">
-    {projects.map((project) => (
-      <li key={project.id}>
-        <Note
-          collection={collection}
-          project={project}
-          update={props.projectOptions.updateOrAddNote ? (note) => props.projectOptions.updateOrAddNote({ note, projectId: project.id }) : null}
-          hideNote={props.hideNote}
-        />
-        <ProjectItem project={project} {...props} />
-      </li>
-    ))}
-  </ul>
-);
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -58,8 +38,9 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     return <Redirect to={getOwnerLink(collection)} />;
   }
   return (
-    <button
-      className="button delete-collection button-tertiary"
+    <Button
+      type="dangerZone"
+      size="small"
       onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
@@ -68,8 +49,8 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
         setDone(true);
       }}
     >
-      Delete Collection
-    </button>
+      Delete Collection <Emoji name="bomb" />
+    </Button>
   );
 }
 
@@ -83,7 +64,6 @@ DeleteCollectionBtn.propTypes = {
 };
 
 const CollectionPageContents = ({
-  api,
   collection,
   currentUser,
   deleteCollection,
@@ -93,13 +73,26 @@ const CollectionPageContents = ({
   addProjectToCollection,
   removeProjectFromCollection,
   updateColor,
-  updateOrAddNote,
   displayNewNote,
+  updateNote,
   hideNote,
+  featureProject,
+  unfeatureProject,
   ...props
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
-  const userIsLoggedIn = currentUser && currentUser.login;
+  let featuredProject = null;
+  let { projects } = collection;
+  if (collection.featuredProjectId) {
+    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+  }
+
+  const onNameChange = async (name) => {
+    const url = kebabCase(name);
+    const result = await updateNameAndUrl({ name, url });
+    history.replaceState(null, null, getLink({ ...collection, url }));
+    return result;
+  };
 
   return (
     <>
@@ -111,12 +104,9 @@ const CollectionPageContents = ({
               <CollectionAvatar color={collection.coverColor} />
             </div>
 
-            <EditCollectionNameAndUrl
-              isAuthorized={currentUserIsAuthor}
-              name={collection.name}
-              url={collection.url}
-              update={(data) => updateNameAndUrl(data).then(() => syncPageToUrl(collection, data.url))}
-            />
+            <h1 className="collection-name">
+              {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
+            </h1>
 
             <div className="collection-owner">
               <ProfileItem hasLink team={collection.team} user={collection.user} />
@@ -132,7 +122,9 @@ const CollectionPageContents = ({
             </div>
 
             <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
+              <Text>
+                <Pluralize count={collection.projects.length} singular="Project" />
+              </Text>
             </div>
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
@@ -152,31 +144,37 @@ const CollectionPageContents = ({
                 <div className="collection-project-container-header">
                   {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
                 </div>
-                {currentUserIsAuthor && (
-                  <ProjectsUL
-                    {...props}
-                    projects={collection.projects}
+                {featuredProject && (
+                  <FeaturedProject
+                    isAuthorized={currentUserIsAuthor}
+                    currentUser={currentUser}
+                    featuredProject={featuredProject}
+                    unfeatureProject={unfeatureProject}
+                    addProjectToCollection={addProjectToCollection}
                     collection={collection}
+                    displayNewNote={displayNewNote}
+                    updateNote={updateNote}
                     hideNote={hideNote}
-                    projectOptions={{
-                      removeProjectFromCollection,
-                      addProjectToCollection,
-                      updateOrAddNote,
-                      displayNewNote,
-                    }}
                   />
                 )}
-                {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsUL
-                    {...props}
-                    projects={collection.projects}
-                    collection={collection}
-                    projectOptions={{
-                      addProjectToCollection,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && !userIsLoggedIn && <ProjectsUL projects={collection.projects} collection={collection} projectOptions={{}} />}
+                <ProjectsList
+                  layout="gridCompact"
+                  {...props}
+                  projects={projects}
+                  collection={collection}
+                  noteOptions={{
+                    hideNote,
+                    updateNote,
+                    isAuthorized: currentUserIsAuthor,
+                  }}
+                  projectOptions={{
+                    removeProjectFromCollection,
+                    addProjectToCollection,
+                    displayNewNote,
+                    featureProject,
+                    isAuthorized: currentUserIsAuthor,
+                  }}
+                />
               </div>
             </>
           )}
@@ -184,7 +182,7 @@ const CollectionPageContents = ({
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
       {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={deleteCollection} />}
-      <MoreCollectionsContainer api={api} collection={collection} />
+      <MoreCollectionsContainer collection={collection} />
     </>
   );
 };
@@ -202,23 +200,23 @@ CollectionPageContents.propTypes = {
   deleteCollection: PropTypes.func.isRequired,
   currentUserIsAuthor: PropTypes.bool.isRequired,
   removeProjectFromCollection: PropTypes.func.isRequired,
-  updateOrAddNote: PropTypes.func,
   displayNewNote: PropTypes.func,
+  updateNote: PropTypes.func,
   hideNote: PropTypes.func,
 };
 
 CollectionPageContents.defaultProps = {
-  updateOrAddNote: null,
   displayNewNote: null,
+  updateNote: null,
   hideNote: null,
 };
 
 async function loadCollection(api, ownerName, collectionName) {
   try {
-    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${ownerName}/${collectionName}`, `${ownerName}/${collectionName}`);
+    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
     const collectionProjects = await getAllPages(
       api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${ownerName}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
+      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
@@ -237,6 +235,7 @@ async function loadCollection(api, ownerName, collectionName) {
       );
       collection.projects = projectsWithUsers;
     }
+
     return collection;
   } catch (error) {
     if (error && error.response && error.response.status === 404) {
@@ -247,11 +246,10 @@ async function loadCollection(api, ownerName, collectionName) {
 }
 
 const CollectionPage = ({ ownerName, name, ...props }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <DataLoader get={() => loadCollection(api, ownerName, name)}>
+      <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
@@ -263,7 +261,6 @@ const CollectionPage = ({ ownerName, name, ...props }) => {
               <CollectionEditor initialCollection={collection}>
                 {(collectionFromEditor, funcs, currentUserIsAuthor) => (
                   <CollectionPageContents
-                    api={api}
                     collection={collectionFromEditor}
                     currentUser={currentUser}
                     currentUserIsAuthor={currentUserIsAuthor}

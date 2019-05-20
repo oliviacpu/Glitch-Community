@@ -52,8 +52,7 @@
       
   &.small
     font-size: 12px
-    padding: 3px 8px
-    padding-top: 5px
+    padding: 5px 8px 3px
     margin-bottom: 10px
     &.hasEmoji
       padding-top: 3px;
@@ -66,19 +65,30 @@
     &:hover
       color: primary
       border-color: line-on-secondary-background
-      
-  &.unstyled
-    padding: 0
-    border-radius: 0
-    border: none
-    background: none
-    font-weight: normal
-    &:hover
-      opacity: 1;
-      background-color: #eaeaea;
-      border-radius: 5px;
-      border: none;
+  
+  &.unstyled:hover
+    opacity: 1;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    border: none;
 
+.transparentButton
+  cursor: pointer
+  display: block
+  text-align: inherit
+  width: 100%
+  
+button.transparentButton:hover
+  background: none
+  
+.btn.unstyled,
+.transparentButton
+  padding: 0
+  border-radius: 0
+  border: none
+  background: none
+  font-weight: normal
+    
 // apply hover effects if decorative button is inside a link/button that's being hovered
 a:hover .btn.decorative,
 button:hover .btn.decorative

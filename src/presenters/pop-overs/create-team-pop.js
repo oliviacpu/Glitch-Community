@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
+
 import TextInput from 'Components/inputs/text-input';
-import Loader from 'Components/loaders/loader';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-import { getPredicates, getTeamPair } from '../../models/words';
-import { getLink } from '../../models/team';
-import { useTracker } from '../segment-analytics';
+import Loader from 'Components/loader';
+import { getPredicates, getTeamPair } from 'Models/words';
+import { getLink } from 'Models/team';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { useTracker } from 'State/segment-analytics';
+
 import { NestedPopoverTitle } from './popover-nested';
 import { SignInPopBase } from './sign-in-pop';
 
@@ -124,7 +125,7 @@ class CreateTeamPopBase extends React.Component {
   render() {
     const placeholder = 'Your Team Name';
     return (
-      <dialog className="pop-over create-team-pop">
+      <dialog className="pop-over create-team-pop" ref={this.props.focusFirstElement}>
         <NestedPopoverTitle>
           Create Team <span className="emoji herb" />
         </NestedPopoverTitle>
@@ -157,15 +158,16 @@ class CreateTeamPopBase extends React.Component {
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const CreateTeamPop = withRouter(CreateTeamPopBase);
 
-const CreateTeamPopOrSignIn = () => {
+const CreateTeamPopOrSignIn = (props) => {
   const api = useAPI();
   const { currentUser: user } = useCurrentUser();
   return user && user.login ? (
-    <CreateTeamPop api={api} />
+    <CreateTeamPop api={api} {...props} />
   ) : (
     <SignInPopBase
       hash="create-team"

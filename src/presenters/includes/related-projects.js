@@ -2,22 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize, difference } from 'lodash';
 
-import { ProjectsUL } from 'Components/containers/projects-list';
-
-import { getProfileStyle as getTeamProfileStyle } from '../../models/team';
-import { getDisplayName, getProfileStyle as getUserProfileStyle } from '../../models/user';
-
-import { DataLoader } from './loader';
-import { CoverContainer } from './profile';
-import { TeamLink, UserLink } from './link';
-import { useAPI } from '../../state/api';
+import ProjectsList from 'Components/containers/projects-list';
+import CoverContainer from 'Components/containers/cover-container';
+import DataLoader from 'Components/data-loader';
+import { TeamLink, UserLink } from 'Components/link';
+import { getDisplayName } from '../../models/user';
 
 const PROJECT_COUNT = 3;
 
-const RelatedProjectsBody = ({ projects, coverStyle }) =>
+const RelatedProjectsBody = ({ projects, type, item }) =>
   projects.length > 0 ? (
-    <CoverContainer style={coverStyle} className="projects">
-      <ProjectsUL projects={projects} />
+    <CoverContainer type={type} item={item}>
+      <div className="related-projects__projects-wrap">
+        <ProjectsList layout="row" projects={projects} />
+      </div>
     </CoverContainer>
   ) : null;
 
@@ -33,13 +31,13 @@ class RelatedProjects extends React.Component {
     this.state = { teams, users };
   }
 
-  async getProjects(id, getPins, getAllProjects) {
-    const pins = await getPins(id);
+  async getProjects(api, id, getPins, getAllProjects) {
+    const pins = await getPins(api, id);
     const pinIds = pins.map((pin) => pin.projectId);
     let ids = sampleSize(difference(pinIds, [this.props.ignoreProjectId]), PROJECT_COUNT);
 
     if (ids.length < PROJECT_COUNT) {
-      const { projects } = await getAllProjects(id);
+      const { projects } = await getAllProjects(api, id);
 
       const allIds = projects.map((project) => project.id);
       const remainingIds = difference(allIds, [this.props.ignoreProjectId, ...ids]);
@@ -47,7 +45,7 @@ class RelatedProjects extends React.Component {
     }
 
     if (ids.length) {
-      const { data } = await this.props.api.get(`projects/byIds?ids=${ids.join(',')}`);
+      const { data } = await api.get(`projects/byIds?ids=${ids.join(',')}`);
 
       return data.length ? data : null;
     }
@@ -55,11 +53,10 @@ class RelatedProjects extends React.Component {
   }
 
   render() {
-    const { api } = this.props;
-    const getTeam = (id) => api.get(`teams/${id}`).then(({ data }) => data);
-    const getTeamPins = (id) => api.get(`teams/${id}/pinned-projects`).then(({ data }) => data);
-    const getUser = (id) => api.get(`users/${id}`).then(({ data }) => data);
-    const getUserPins = (id) => api.get(`users/${id}/pinned-projects`).then(({ data }) => data);
+    const getTeam = (api, id) => api.get(`teams/${id}`).then(({ data }) => data);
+    const getTeamPins = (api, id) => api.get(`teams/${id}/pinned-projects`).then(({ data }) => data);
+    const getUser = (api, id) => api.get(`users/${id}`).then(({ data }) => data);
+    const getUserPins = (api, id) => api.get(`users/${id}/pinned-projects`).then(({ data }) => data);
     const { teams, users } = this.state;
     if (!teams.length && !users.length) {
       return null;
@@ -68,14 +65,14 @@ class RelatedProjects extends React.Component {
       <ul className="related-projects">
         {teams.map((team) => (
           <li key={team.id}>
-            <DataLoader get={() => this.getProjects(team.id, getTeamPins, getTeam)}>
+            <DataLoader get={(api) => this.getProjects(api, team.id, getTeamPins, getTeam)}>
               {(projects) =>
                 projects && (
                   <>
                     <h2>
                       <TeamLink team={team}>More by {team.name} →</TeamLink>
                     </h2>
-                    <RelatedProjectsBody projects={projects} coverStyle={getTeamProfileStyle(team)} />
+                    <RelatedProjectsBody projects={projects} type="team" item={team} />
                   </>
                 )
               }
@@ -84,14 +81,14 @@ class RelatedProjects extends React.Component {
         ))}
         {users.map((user) => (
           <li key={user.id}>
-            <DataLoader get={() => this.getProjects(user.id, getUserPins, getUser)}>
+            <DataLoader get={(api) => this.getProjects(api, user.id, getUserPins, getUser)}>
               {(projects) =>
                 projects && (
                   <>
                     <h2>
                       <UserLink user={user}>More by {getDisplayName(user)} →</UserLink>
                     </h2>
-                    <RelatedProjectsBody projects={projects} coverStyle={getUserProfileStyle(user)} />
+                    <RelatedProjectsBody projects={projects} type="user" item={user} />
                   </>
                 )
               }
@@ -103,7 +100,6 @@ class RelatedProjects extends React.Component {
   }
 }
 RelatedProjects.propTypes = {
-  api: PropTypes.func.isRequired,
   ignoreProjectId: PropTypes.string.isRequired,
   teams: PropTypes.array,
   users: PropTypes.array,
@@ -114,7 +110,4 @@ RelatedProjects.defaultProps = {
   users: [],
 };
 
-export default (props) => {
-  const api = useAPI();
-  return <RelatedProjects {...props} api={api} />;
-};
+export default RelatedProjects;

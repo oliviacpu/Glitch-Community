@@ -1,15 +1,74 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
+import randomColor from 'randomcolor';
 
-import Loader from 'Components/loaders/loader';
+import Thanks from 'Components/thanks';
+import Loader from 'Components/loader';
+import TransparentButton from 'Components/buttons/transparent-button';
+import WhitelistedDomainIcon from 'Components/whitelisted-domain';
+import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { captureException } from '../../utils/sentry';
 import useDevToggle from '../includes/dev-toggles';
-import UserResultItem, { InviteByEmail, WhitelistEmailDomain } from '../includes/user-result-item';
 
 import { useAPI } from '../../state/api';
+
+const WhitelistEmailDomain = ({ domain, onClick }) => (
+  <TransparentButton onClick={onClick} className="result">
+    <div className="add-team-user-pop__whitelist-email-domain">
+      <div className="add-team-user-pop__whitelist-email-image">
+        <WhitelistedDomainIcon domain={domain} />
+      </div>
+      <div>Allow anyone with an @{domain} email to join</div>
+    </div>
+  </TransparentButton>
+);
+
+const UserResultItem = ({ user, action }) => {
+  const name = getDisplayName(user);
+
+  return (
+    <TransparentButton onClick={action} className="result result-user">
+      <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
+      <div className="result-info">
+        <div className="result-name" title={name}>
+          {name}
+        </div>
+        {!!user.name && <div className="result-description">@{user.login}</div>}
+        <Thanks short count={user.thanksCount} />
+      </div>
+    </TransparentButton>
+  );
+};
+
+UserResultItem.propTypes = {
+  user: PropTypes.shape({
+    avatarThumbnailUrl: PropTypes.string,
+    name: PropTypes.string,
+    login: PropTypes.string.isRequired,
+    thanksCount: PropTypes.number.isRequired,
+  }).isRequired,
+  action: PropTypes.func.isRequired,
+};
+
+const InviteByEmail = ({ email, onClick }) => {
+  const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
+  return (
+    <TransparentButton onClick={onClick} className="result result-user">
+      <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
+      <div className="result-info">
+        <div className="result-name">Invite {email}</div>
+      </div>
+    </TransparentButton>
+  );
+};
+
+InviteByEmail.propTypes = {
+  email: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 const getDomain = (query) => {
   const email = parseOneAddress(query.replace('@', 'test@'));

@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
-import { Link } from './includes/link';
-import Embed from './includes/embed';
-
+import Embed from 'Components/project/embed';
+import MaskImage from 'Components/images/mask-image';
+import Link from 'Components/link';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">
     <div className="mask-container">
       <Link to={`culture${blogUrl}`}>
-        <img className={`mask ${mask}`} src={image} alt="" />
+        <MaskImage maskClass={mask} src={image} />
       </Link>
     </div>
 
@@ -25,7 +25,9 @@ const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) 
           <button className="button-small">Learn More →</button>
         </Link>
       </div>
-      <Embed domain={appDomain} />
+      <div className="glitch-embed-wrap">
+        <Embed domain={appDomain} />
+      </div>
     </div>
   </div>
 );
