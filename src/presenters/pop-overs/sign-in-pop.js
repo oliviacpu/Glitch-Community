@@ -50,7 +50,7 @@ function slackAuthLink() {
 
 const SignInPopButton = ({ company, emoji, href, onClick }) => (
   <Button href={href} onClick={onClick} size="small">
-    {company} <Emoji name={emoji} />
+    Sign in with {company} <Emoji name={emoji} />
   </Button>
 );
 
@@ -343,6 +343,11 @@ const NewUserInfoSection = () => (
 );
 
 class LoginSection extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {email: '', password: ''}
+  }
+  
   async handleSubmit(event) {
     event.preventDefault();
     // TODO actually log the user in...
@@ -352,9 +357,9 @@ class LoginSection extends React.Component {
     return (
       <section className="pop-over-actions first-section login-section">
         <form onSubmit={this.handleSubmit}>
-          <TextInput placeholder="your@email.com" labelText="email" />
-          <TextInput placeholder="password" type="password" labelText="password" />
-          <Button size="small">Sign in</Button>
+          <TextInput placeholder="your@email.com" labelText="email" value={this.state.email} onChange={() => {}}/>
+          <TextInput placeholder="password" type="password" labelText="password" value={this.state.password} onChange={() => {}}/>
+          <Button size="small" decorative>Sign in</Button>
         </form>
 
         <Button
@@ -391,32 +396,36 @@ const SignInPopWithoutRouter = (props) => {
     <NestedPopover alternateContent={() => <EmailHandler {...props} />} startAlternateVisible={false}>
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
-          {(showCodeLogin, showForgotPassword) => (
-            <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
-              {header}
-              <NewUserInfoSection />
-              <TermsAndPrivacySection />
-              {userPasswordEnabled && <LoginSection showForgotPassword={showForgotPassword} {...props} />}
-              <section className="pop-over-actions">
-                {prompt}
-                <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-                <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-                <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-                {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-                <EmailSignInButton
-                  onClick={() => {
-                    onClick();
-                    showEmailLogin(api);
-                  }}
-                />
-              </section>
-              <SignInCodeSection
-                onClick={() => {
-                  onClick();
-                  showCodeLogin(api);
-                }}
-              />
-            </dialog>
+          {(showCodeLogin) => (
+            <NestedPopover alternateContent={() => <ForgotPasswordHandler {...props} />} startAlternateVisible={false}>
+              {(showForgotPassword) => (
+                <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
+                  {header}
+                  <NewUserInfoSection />
+                  <TermsAndPrivacySection />
+                  {userPasswordEnabled && <LoginSection showForgotPassword={showForgotPassword} {...props} />}
+                  <section className="pop-over-actions">
+                    {prompt}
+                    <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
+                    <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
+                    <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+                    {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+                    <EmailSignInButton
+                      onClick={() => {
+                        onClick();
+                        showEmailLogin(api);
+                      }}
+                    />
+                  </section>
+                  <SignInCodeSection
+                    onClick={() => {
+                      onClick();
+                      showCodeLogin(api);
+                    }}
+                  />
+                </dialog>
+              )}
+            </NestedPopover>
           )}
         </NestedPopover>
       )}
