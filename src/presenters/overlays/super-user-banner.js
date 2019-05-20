@@ -20,12 +20,12 @@ const SuperUserBanner = () => {
     };
 
     if (superUser || showSupportBanner) {
-      const styles = { 
-        backgroundImage: `${superUser ? 'linear-gradient(to right, red, white)' : 'linear-gradient(to right, lightblue, white)'}`, 
-        padding: '10px', 
-        textAlign: 'center', 
-        fontWeight: 'bold' 
-      }
+      const styles = {
+        backgroundImage: `${superUser ? 'linear-gradient(to right, red, white)' : 'linear-gradient(to right, lightblue, white)'}`,
+        padding: '10px',
+        textAlign: 'center',
+        fontWeight: 'bold',
+      };
       return (
         <div style={styles}>
           {displayText}
