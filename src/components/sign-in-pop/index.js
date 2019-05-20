@@ -216,9 +216,8 @@ const SignInPopBase = withRouter(({ location }) => {
   return (
     <MultiPopover
       views={{
-        // email: (showView) => <EmailHandler showView={showView} />,
-        // signInCode: () => <SignInWithCode />,
-        signInCode: () => <div>test</div>
+        email: (showView) => <EmailHandler showView={showView} />,
+        signInCode: () => <SignInWithCode />,
       }}
     >
       {(showView) => (

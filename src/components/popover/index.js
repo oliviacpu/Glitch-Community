@@ -46,7 +46,7 @@ export const MultiPopover = ({ views, initialView, children }) => {
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
   const activeViewFunc = activeView ? views[activeView] : children;
-  const showViewMap = mapValues(views, (_, viewName) => setActiveView(viewName));
+  const showViewMap = mapValues(views, (_, viewName) => () => setActiveView(viewName));
 
   return <MultiPopoverContext.Provider value={multiPopoverState}>{activeViewFunc(showViewMap)}</MultiPopoverContext.Provider>;
 };
@@ -66,9 +66,13 @@ export const MultiPopoverTitle = ({ children }) => {
   return (
     <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
       <PopoverSection type="secondary">
-        <div className="left-arrow icon" />
-        &nbsp;
-        <PopoverTitle>{children}</PopoverTitle>
+        <PopoverTitle>
+          <div className={styles.backArrow}>
+            <div className="left-arrow icon" />
+          </div>
+          &nbsp;
+          {children}
+        </PopoverTitle>
       </PopoverSection>
     </TransparentButton>
   );
