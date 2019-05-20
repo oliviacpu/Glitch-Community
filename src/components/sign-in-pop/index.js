@@ -250,12 +250,12 @@ const SignInPopBase = withRouter(({ location, align }) => {
 
 const SignInPopContainer = ({ align }) => (
   <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
-    {() => <SignInPopBase align={align}/>}
+    {() => <SignInPopBase align={align} />}
   </PopoverWithButton>
 );
 
 SignInPopContainer.propTypes = {
   align: PropTypes.string.isRequired,
-}
+};
 
 export default SignInPopContainer;
