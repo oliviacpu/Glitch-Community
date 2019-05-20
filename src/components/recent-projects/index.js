@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
@@ -44,7 +43,7 @@ const ClearSession = ({ clearUser }) => {
 };
 
 const RecentProjects = () => {
-  const { currentUser, fetched, clear } = useCurrentUser();
+  const { currentUser, clear } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
 
   return (
@@ -61,7 +60,7 @@ const RecentProjects = () => {
             </UserLink>
           </div>
           <div className={styles.projectsWrap}>
-            {fetched ? (
+            {currentUser.projects ? (
               <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
                 {(projects) => <ProjectsList layout="row" projects={projects} />}
               </ProjectsLoader>
