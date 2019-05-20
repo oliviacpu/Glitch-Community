@@ -5,16 +5,16 @@ import { uniqBy } from 'lodash';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
+import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
-import { useTracker } from '../segment-analytics';
-import { WhitelistedDomainIcon } from './team-elements';
+import { useTracker } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { createAPIHook } from 'State/api';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
-import { useCurrentUser } from '../../state/current-user';
-import { createAPIHook } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
 // Team Users list (in profile container)
@@ -34,13 +34,14 @@ const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
           buttonClass="user button-unstyled tooltip-container-button"
           buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
         >
-          {({ togglePopover }) => (
+          {({ togglePopover, focusFirstElement }) => (
             <TeamUserInfoPop
               team={team}
               removeUserFromTeam={removeUserFromTeam}
               user={user}
               updateUserPermissions={updateUserPermissions}
               togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
             />
           )}
         </PopoverWithButton>

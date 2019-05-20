@@ -8,11 +8,10 @@ import CollectionItem from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import Button from 'Components/buttons/button';
 import { getLink, createCollection } from 'Models/collection';
-
-import { useTrackedFunc } from '../../presenters/segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from '../../presenters/notifications';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import styles from './styles.styl';
 
 const CreateFirstCollection = () => (
@@ -97,9 +96,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       <Heading tagName="h2">{title}</Heading>
       {canMakeCollections && (
         <>
-          <div className={styles.createCollectionButtonWrap}>
-            <CreateCollectionButton maybeTeam={maybeTeam} />
-          </div>
+          <CreateCollectionButton maybeTeam={maybeTeam} />
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}

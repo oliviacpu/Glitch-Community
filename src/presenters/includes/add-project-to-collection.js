@@ -13,7 +13,9 @@ const AddProjectToCollection = ({ project, ...props }) => (
       </>
     }
   >
-    {({ togglePopover }) => <AddProjectToCollectionPop {...props} project={project} togglePopover={togglePopover} />}
+    {({ togglePopover, focusFirstElement }) => (
+      <AddProjectToCollectionPop {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+    )}
   </PopoverWithButton>
 );
 

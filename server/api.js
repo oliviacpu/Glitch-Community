@@ -13,20 +13,22 @@ const api = axios.create({
   timeout: 5000,
 });
 
-async function getProjectFromApi(domain) {
-  return await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
+function getProjectFromApi(domain) {
+  return getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
 }
 
-async function getTeamFromApi(url) {
-  return await getSingleItem(api, `v1/teams/by/url?url=${url}`, url);
+function getTeamFromApi(url) {
+  return getSingleItem(api, `v1/teams/by/url?url=${encodeURIComponent(url)}`, url);
 }
 
-async function getUserFromApi(login) {
-  return await getSingleItem(api, `v1/users/by/login?login=${login}`, login);
+function getUserFromApi(login) {
+  return getSingleItem(api, `v1/users/by/login?login=${encodeURIComponent(login)}`, login);
 }
 
-async function getCollectionFromApi(url) {
-  return await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${url}`, url);
+function getCollectionFromApi(login, collection) {
+  const url = `${login}/${collection}`;
+  const encodedUrl = `${encodeURIComponent(login)}/${encodeURIComponent(collection)}`;
+  return getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodedUrl}`, url);
 }
 
 async function getCultureZinePosts() {
@@ -64,6 +66,6 @@ module.exports = {
   getProject: (domain) => getFromCacheOrApi(`project ${domain}`, getProjectFromApi, domain),
   getTeam: (url) => getFromCacheOrApi(`team ${url}`, getTeamFromApi, url),
   getUser: (login) => getFromCacheOrApi(`user ${login}`, getUserFromApi, login),
-  getCollection: (url) => getFromCacheOrApi(`collection ${url}`, getCollectionFromApi, url),
+  getCollection: (login, collection) => getFromCacheOrApi(`collection ${login}/${collection}`, getCollectionFromApi, login, collection),
   getZine: () => getFromCacheOrApi('culture zine', getCultureZinePosts),
 };

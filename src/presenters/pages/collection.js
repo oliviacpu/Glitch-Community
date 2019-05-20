@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
-
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -18,10 +17,12 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
 
-import { AnalyticsContext } from '../segment-analytics';
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 
@@ -30,12 +31,6 @@ import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-
-
-import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -69,7 +64,6 @@ DeleteCollectionBtn.propTypes = {
 };
 
 const CollectionPageContents = ({
-  api,
   collection,
   currentUser,
   deleteCollection,
@@ -87,7 +81,6 @@ const CollectionPageContents = ({
   ...props
 }) => {
   const collectionHasProjects = !!collection && !!collection.projects;
-  const userIsLoggedIn = currentUser && currentUser.login;
   let featuredProject = null;
   let { projects } = collection;
   if (collection.featuredProjectId) {
@@ -164,46 +157,24 @@ const CollectionPageContents = ({
                     hideNote={hideNote}
                   />
                 )}
-                {currentUserIsAuthor && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    {...props}
-                    projects={projects}
-                    collection={collection}
-                    noteOptions={{
-                      hideNote,
-                      updateNote,
-                      isAuthorized: true,
-                    }}
-                    projectOptions={{
-                      removeProjectFromCollection,
-                      addProjectToCollection,
-                      displayNewNote,
-                      featureProject,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    {...props}
-                    projects={collection.projects}
-                    collection={collection}
-                    noteOptions={{ isAuthorized: false }}
-                    projectOptions={{
-                      addProjectToCollection,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && !userIsLoggedIn && (
-                  <ProjectsList
-                    layout="gridCompact"
-                    projects={collection.projects}
-                    collection={collection}
-                    projectOptions={{}}
-                    noteOptions={{ isAuthorized: false }}
-                  />
-                )}
+                <ProjectsList
+                  layout="gridCompact"
+                  {...props}
+                  projects={projects}
+                  collection={collection}
+                  noteOptions={{
+                    hideNote,
+                    updateNote,
+                    isAuthorized: currentUserIsAuthor,
+                  }}
+                  projectOptions={{
+                    removeProjectFromCollection,
+                    addProjectToCollection,
+                    displayNewNote,
+                    featureProject,
+                    isAuthorized: currentUserIsAuthor,
+                  }}
+                />
               </div>
             </>
           )}
@@ -242,10 +213,10 @@ CollectionPageContents.defaultProps = {
 
 async function loadCollection(api, ownerName, collectionName) {
   try {
-    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${ownerName}/${collectionName}`, `${ownerName}/${collectionName}`);
+    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
     const collectionProjects = await getAllPages(
       api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${ownerName}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
+      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
@@ -275,11 +246,10 @@ async function loadCollection(api, ownerName, collectionName) {
 }
 
 const CollectionPage = ({ ownerName, name, ...props }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <DataLoader get={() => loadCollection(api, ownerName, name)}>
+      <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
@@ -291,7 +261,6 @@ const CollectionPage = ({ ownerName, name, ...props }) => {
               <CollectionEditor initialCollection={collection}>
                 {(collectionFromEditor, funcs, currentUserIsAuthor) => (
                   <CollectionPageContents
-                    api={api}
                     collection={collectionFromEditor}
                     currentUser={currentUser}
                     currentUserIsAuthor={currentUserIsAuthor}

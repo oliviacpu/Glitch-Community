@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getProfileStyle as getTeamProfileStyle } from '../../models/team';
-import { getProfileStyle as getUserProfileStyle } from '../../models/user';
+import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
+
+import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
+import { getProfileStyle as getUserProfileStyle } from 'Models/user';
 import styles from './cover-container.styl';
 
 const getProfileStyles = {
@@ -9,27 +11,25 @@ const getProfileStyles = {
   user: getUserProfileStyle,
 };
 
-const CoverContainer = ({ buttons, children, type, item }) => {
+const CoverContainer = ({ coverActions, children, type, item }) => {
   const cache = item._cacheCover; // eslint-disable-line no-underscore-dangle
   return (
     <div className={styles.coverContainer} style={getProfileStyles[type]({ ...item, cache })}>
       {children}
-      <div className={styles.buttonWrap}>
-        {buttons}
-      </div>
+      <div className={styles.buttonWrap}>{coverActions && <TrackedButtonGroup actions={coverActions} />}</div>
     </div>
   );
 };
 
 CoverContainer.propTypes = {
-  buttons: PropTypes.node,
+  coverActions: PropTypes.object,
   children: PropTypes.node.isRequired,
   type: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
 };
 
 CoverContainer.defaultProps = {
-  buttons: null,
+  coverActions: {},
 };
 
 export default CoverContainer;

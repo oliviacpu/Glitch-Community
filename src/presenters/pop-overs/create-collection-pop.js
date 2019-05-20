@@ -2,14 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-
 import { kebabCase, orderBy } from 'lodash';
+
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
-import { useTracker } from '../segment-analytics';
-import { getLink, createCollection } from '../../models/collection';
-import { useAPI } from '../../state/api';
+import { getLink, createCollection } from 'Models/collection';
+import { useTracker } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
 
 import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
 import { NestedPopoverTitle } from './popover-nested';
@@ -134,7 +134,7 @@ class CreateCollectionPop extends React.Component {
 
   render() {
     const { error, query } = this.state;
-    const { collections, createNotification } = this.props;
+    const { collections, createNotification, focusFirstElement } = this.props;
     const { teams } = this.props.currentUser;
     let queryError; // if user already has a collection with the specified name
 
@@ -154,7 +154,7 @@ class CreateCollectionPop extends React.Component {
     }
 
     return (
-      <dialog className="pop-over create-collection-pop wide-pop">
+      <dialog className="pop-over create-collection-pop wide-pop" ref={focusFirstElement}>
         <NestedPopoverTitle>{`Add ${this.props.project.domain} to a new collection`}</NestedPopoverTitle>
 
         <section className="pop-over-actions">
@@ -193,6 +193,7 @@ CreateCollectionPop.propTypes = {
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
   createNotification: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 CreateCollectionPop.defaultProps = {

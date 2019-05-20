@@ -7,12 +7,11 @@ import Heading from 'Components/text/heading';
 import Link from 'Components/link';
 import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
+import { getEditorUrl } from 'Models/project';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+
 import Layout from '../layout';
-
-import { getEditorUrl } from '../../models/project';
-import { AnalyticsContext } from '../segment-analytics';
-import { useCurrentUser } from '../../state/current-user';
-
 import Featured from '../featured';
 import OverlayVideo from '../overlays/overlay-video';
 import RecentProjects from '../recent-projects';

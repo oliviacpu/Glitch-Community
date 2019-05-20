@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { orderBy } from 'lodash';
+
 import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Link, { TeamLink, UserLink } from 'Components/link';
-import { useTrackedFunc, useTracker } from '../segment-analytics';
+import { useTrackedFunc, useTracker } from 'State/segment-analytics';
+
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';
@@ -78,7 +79,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement }) => {
   const trackLogout = useTracker('Logout');
 
   const clickNewStuff = (event) => {
@@ -107,7 +108,7 @@ Are you sure you want to sign out?`)
   const userAvatarStyle = { backgroundColor: user.color };
 
   return (
-    <dialog className="pop-over user-options-pop">
+    <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
       <UserLink user={user} className="user-info">
         <section className="pop-over-actions user-info">
           <img className="avatar" src={getUserAvatarUrl(user)} alt="Your avatar" style={userAvatarStyle} />
@@ -141,6 +142,7 @@ Are you sure you want to sign out?`)
 
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
@@ -171,11 +173,13 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
-          {({ togglePopover, visible }) => {
+          {({ togglePopover, visible, focusFirstElement }) => {
             const userOptionsButton = (
               <button className="user" onClick={togglePopover} disabled={!props.user.id} type="button">
                 <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
-                <span className="down-arrow icon" />
+                <div className="user-options-dropdown-wrap">
+                  <span className="down-arrow icon" />
+                </div>
               </button>
             );
 
@@ -189,8 +193,11 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                 align={['right']}
               >
                 {visible && (
-                  <NestedPopover alternateContent={() => <CreateTeamPop {...props} />} startAlternateVisible={createTeamOpen}>
-                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam }} />}
+                  <NestedPopover
+                    alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />}
+                    startAlternateVisible={createTeamOpen}
+                  >
+                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
                   </NestedPopover>
                 )}
               </TooltipContainer>

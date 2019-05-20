@@ -1,27 +1,28 @@
 // add-project-to-collection-pop -> Add a project to a collection via a project item's menu
 import React from 'react';
 import PropTypes from 'prop-types';
-import { flatten, orderBy } from 'lodash';
+import Pluralize from 'react-pluralize';
+import { flatten, orderBy, partition } from 'lodash';
 import Loader from 'Components/loader';
+import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
+import { CollectionLink } from 'Components/link';
+import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
-import { captureException } from '../../utils/sentry';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { captureException } from 'Utils/sentry';
 import useDebouncedValue from '../../hooks/use-debounced-value';
-
-import { useTrackedFunc } from '../segment-analytics';
-import { getAvatarUrl } from '../../models/project';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
-
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
-const NoSearchResultsPlaceholder = () => <p className="info-description">No matching collections found – add to a new one?</p>;
+const NoSearchResultsPlaceholder = () => <p className="info-description">No matching collections found – add to a new one?</p>;
 
 const NoCollectionPlaceholder = () => <p className="info-description">Create collections to organize your favorite projects.</p>;
 
@@ -96,6 +97,7 @@ AddProjectToCollectionResults.defaultProps = {
 const AddProjectToCollectionPopContents = ({
   addProjectToCollection,
   collections,
+  collectionsWithProject,
   createCollectionPopover,
   currentUser,
   fromProject,
@@ -105,6 +107,7 @@ const AddProjectToCollectionPopContents = ({
   setCollectionType,
 }) => {
   const [query, setQuery] = React.useState('');
+
   return (
     <dialog className="pop-over add-project-to-collection-pop wide-pop">
       {/* Only show this nested popover title from project-options */}
@@ -114,7 +117,15 @@ const AddProjectToCollectionPopContents = ({
 
       {collections && collections.length > 3 && (
         <section className="pop-over-info">
-          <TextInput value={query} onChange={setQuery} placeholder="Filter collections" labelText="Filter collections" opaque type="search" />
+          <TextInput
+            autoFocus
+            value={query}
+            onChange={setQuery}
+            placeholder="Filter collections"
+            labelText="Filter collections"
+            opaque
+            type="search"
+          />
         </section>
       )}
 
@@ -125,6 +136,29 @@ const AddProjectToCollectionPopContents = ({
       ) : (
         <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
       )}
+
+      {collections && collectionsWithProject.length ? (
+        <section className="pop-over-info">
+          <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
+          {collectionsWithProject
+            .slice(0, 3)
+            .map((collection) => (
+              <CollectionLink key={collection.id} collection={collection}>
+                {collection.name}
+              </CollectionLink>
+            ))
+            .reduce((prev, curr) => [prev, ', ', curr])}
+          {collectionsWithProject.length > 3 && (
+            <>
+              , and{' '}
+              <div className="more-collections-badge">
+                <Badge>{collectionsWithProject.length - 3}</Badge>
+              </div>{' '}
+              <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
+            </>
+          )}
+        </section>
+      ) : null}
 
       <section className="pop-over-actions">
         <button className="create-new-collection button-small button-tertiary" onClick={createCollectionPopover}>
@@ -161,13 +195,15 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   }));
   return (
     <section className="pop-over-actions">
-      <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+      <div className="segmented-button-wrap">
+        <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+      </div>
     </section>
   );
 };
 
 const AddProjectToCollectionPop = (props) => {
-  const { project, togglePopover } = props;
+  const { project, togglePopover, focusFirstElement } = props;
 
   const api = useAPI();
   const { currentUser } = useCurrentUser();
@@ -175,6 +211,7 @@ const AddProjectToCollectionPop = (props) => {
   const [collectionType, setCollectionType] = React.useState(filterTypes[0]);
 
   const [maybeCollections, setMaybeCollections] = React.useState(null);
+  const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
 
   React.useEffect(() => {
     let canceled = false;
@@ -204,12 +241,13 @@ const AddProjectToCollectionPop = (props) => {
       const [projectCollections, ...collectionArrays] = await Promise.all(requests);
 
       const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-      const collections = flatten(collectionArrays).filter((c) => !alreadyInCollectionIds.has(c.id));
+      const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
 
       const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
       if (!canceled) {
         setMaybeCollections(orderedCollections);
+        setCollectionsWithProject(_collectionsWithProject);
       }
     };
 
@@ -221,13 +259,16 @@ const AddProjectToCollectionPop = (props) => {
 
   return (
     <NestedPopover
-      alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} />}
+      alternateContent={() => (
+        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+      )}
       startAlternateVisible={false}
     >
       {(createCollectionPopover) => (
         <AddProjectToCollectionPopContents
           {...props}
           collections={maybeCollections}
+          collectionsWithProject={collectionsWithProject}
           createCollectionPopover={createCollectionPopover}
           collectionType={collectionType}
           setCollectionType={setCollectionType}
@@ -241,11 +282,13 @@ AddProjectToCollectionPop.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
+  focusFirstElement: PropTypes.func,
 };
 
 AddProjectToCollectionPop.defaultProps = {
   fromProject: false,
   togglePopover: null,
+  focusFirstElement: null,
 };
 
 export default AddProjectToCollectionPop;

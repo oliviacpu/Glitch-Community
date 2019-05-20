@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
 import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
 import { NestedPopoverTitle } from './popover-nested';
 
 const TeamUserRemoveButton = ({ user, removeUser }) => (
@@ -62,7 +62,7 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
     </>
   );
 };
-function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover }) {
+function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover, focusFirstElement }) {
   const [selectedProjects, setSelectedProjects] = useState(new Set());
 
   const onRemoveUser = useTrackedFunc(() => {
@@ -82,7 +82,7 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
   }
 
   return (
-    <dialog className="pop-over team-user-info-pop team-user-remove-pop">
+    <dialog className="pop-over team-user-info-pop team-user-remove-pop" ref={focusFirstElement}>
       <NestedPopoverTitle>Remove {getDisplayName(user)}</NestedPopoverTitle>
 
       {projects && (
@@ -111,6 +111,7 @@ TeamUserRemovePop.propTypes = {
   }).isRequired,
   removeUser: PropTypes.func.isRequired,
   togglePopover: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes.func.isRequired,
 };
 
 export default TeamUserRemovePop;

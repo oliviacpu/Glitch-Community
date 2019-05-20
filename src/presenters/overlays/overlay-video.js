@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection } from 'Components/overlays';
+import { useTracker } from 'State/segment-analytics';
 
-import { useTracker } from '../segment-analytics';
 import PopoverContainer from '../pop-overs/popover-container';
 
 const loadedScripts = new Set();
