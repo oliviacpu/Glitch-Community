@@ -7,14 +7,16 @@ import Button from 'Components/buttons/button';
 import Link, { TrackedExternalLink } from 'Components/link';
 import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
 import SignInPop from '../../presenters/pop-overs/sign-in-pop';
-import NewProjectPop from '../../presenters/pop-overs/new-project-pop';
+import NewProjectPop from './new-project-pop';
 import { useCurrentUser } from '../../state/current-user';
 import Logo from './logo';
 import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" to={EDITOR_URL}>
-    <Button type="cta" size="small" decorative>Resume Coding</Button>
+    <Button type="cta" size="small" decorative>
+      Resume Coding
+    </Button>
   </TrackedExternalLink>
 );
 
@@ -32,7 +34,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         </div>
         <ul className={styles.buttons}>
           <li className={styles.buttonWrap}>
-            <NewProjectPop opensFromRight={!(currentUser && currentUser.login)} />
+            <NewProjectPop />
           </li>
           {!!currentUser && !!currentUser.projects.length && (
             <li className={styles.buttonWrap}>
