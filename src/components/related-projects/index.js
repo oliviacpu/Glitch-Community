@@ -24,12 +24,17 @@ RelatedProjectsBody.propTypes = {
 };
 
 async function getProjects(api, { type, id, ignoreProjectId }) {
-  const [pins, recents] = await Promise.all([
+  let [pins, recents] = await Promise.all([
     api.get(`/v1/${type}s/by/id/pinnedProjects?id=${id}`).then((res) => res.data.items),
     api.get(`/v1/${type}s/by/id/projects?id=${id}`).then((res) => res.data.items),
   ]);
 
-  const allProjects = pins.concat(recents).filter((project) => project.id !== ignoreProjectId);
+  pins = pins.filter((project) => project.id !== ignoreProjectId);
+  recents = recents.filter((project) => project.id !== ignoreProjectId);
+  
+  const sampledPins = 
+  
+  const allProjects = pins.concat(recents)
   return sampleSize(allProjects, PROJECT_COUNT);
 }
 
