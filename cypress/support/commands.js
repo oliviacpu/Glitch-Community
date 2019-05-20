@@ -10,7 +10,6 @@
 //
 //
 // -- This is a parent command --
-
 Cypress.Commands.add('createFixture', (name, url) =>
   cy
     .request({ url, headers: { Authorization: Cypress.env('GLITCH_TOKEN') } })

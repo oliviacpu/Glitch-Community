@@ -8,8 +8,6 @@ context('User Profile', () => {
 
   beforeEach(() => {
     cy.server();
-    cy.route('GET', 'https://api.glitch.com/v1/users/by/login/projects?login*', 'fixture:userByLoginProjects');
-    cy.route('GET', 'https://api.glitch.com/v1/projects/by/id*', 'fixture:projectsByIds');
     cy.route('PATCH', 'https://api.glitch.com/users/3803619', { featuredProjectId: 'a122f2b2-8a43-41b7-a1db-35237223a45e' });
     cy.route({
       method: 'DELETE',
