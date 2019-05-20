@@ -23,7 +23,41 @@ RelatedProjectsBody.propTypes = {
   projects: PropTypes.array.isRequired,
 };
 
-class RelatedProjects extends React.Component {
+const getTeam = (api, id) => api.get(`teams/${id}`).then(({ data }) => data);
+const getTeamPins = (api, id) => api.get(`teams/${id}/pinned-projects`).then(({ data }) => data);
+const getUser = (api, id) => api.get(`users/${id}`).then(({ data }) => data);
+const getUserPins = (api, id) => api.get(`users/${id}/pinned-projects`).then(({ data }) => data);
+
+async function getProjects(api, { type, id, ignoreProjectId }) {
+  const getPins = type === 'team' ? getTeamPins : getUserPins
+  const getAllProjects = type === 'team' ? getTeam : getUser
+
+  const pins = await getPins(api, id);
+  const pinIds = pins.map((pin) => pin.projectId);
+  let ids = sampleSize(difference(pinIds, [ignoreProjectId]), PROJECT_COUNT);
+
+  if (ids.length < PROJECT_COUNT) {
+    const { projects } = await getAllProjects(api, id);
+
+    const allIds = projects.map((project) => project.id);
+    const remainingIds = difference(allIds, [ignoreProjectId, ...ids]);
+    ids = [...ids, ...sampleSize(remainingIds, PROJECT_COUNT - ids.length)];
+  }
+
+  if (ids.length) {
+    const { data } = await api.get(`projects/byIds?ids=${ids.join(',')}`);
+
+    return data.length ? data : null;
+  }
+  return null;
+}
+
+function useSample (items, count) {
+  const [sample, setSample] = useState(sampleSize
+}
+
+
+function RelatedProjects ({ teams, users, ignoreProjectId }) {
   constructor(props) {
     super(props);
     const teams = sampleSize(props.teams, 1);
@@ -31,32 +65,11 @@ class RelatedProjects extends React.Component {
     this.state = { teams, users };
   }
 
-  async getProjects(api, id, getPins, getAllProjects) {
-    const pins = await getPins(api, id);
-    const pinIds = pins.map((pin) => pin.projectId);
-    let ids = sampleSize(difference(pinIds, [this.props.ignoreProjectId]), PROJECT_COUNT);
-
-    if (ids.length < PROJECT_COUNT) {
-      const { projects } = await getAllProjects(api, id);
-
-      const allIds = projects.map((project) => project.id);
-      const remainingIds = difference(allIds, [this.props.ignoreProjectId, ...ids]);
-      ids = [...ids, ...sampleSize(remainingIds, PROJECT_COUNT - ids.length)];
-    }
-
-    if (ids.length) {
-      const { data } = await api.get(`projects/byIds?ids=${ids.join(',')}`);
-
-      return data.length ? data : null;
-    }
-    return null;
-  }
-
   render() {
-    const getTeam = (api, id) => api.get(`teams/${id}`).then(({ data }) => data);
-    const getTeamPins = (api, id) => api.get(`teams/${id}/pinned-projects`).then(({ data }) => data);
-    const getUser = (api, id) => api.get(`users/${id}`).then(({ data }) => data);
-    const getUserPins = (api, id) => api.get(`users/${id}/pinned-projects`).then(({ data }) => data);
+    const sampledTeams = useSample(teams, 1);
+    const sampledUsers = useSample(users, 2 - teams.length);
+    
+    
     const { teams, users } = this.state;
     if (!teams.length && !users.length) {
       return null;
