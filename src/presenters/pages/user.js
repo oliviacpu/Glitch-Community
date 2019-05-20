@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
 
@@ -14,14 +13,12 @@ import ProjectsList from 'Components/containers/projects-list';
 import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
+import { getLink } from 'Models/user';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
 
-import { getLink } from '../../models/user';
-
-import { AnalyticsContext } from '../segment-analytics';
-import { useCurrentUser } from '../../state/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
-
 import ProjectsLoader from '../projects-loader';
 import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './user.styl';
@@ -80,6 +77,7 @@ const UserPage = ({
     ...user
   },
   isAuthorized,
+  isSupport,
   maybeCurrentUser,
   updateDescription,
   updateName,
@@ -193,13 +191,18 @@ const UserPage = ({
           }}
         />
       )}
-      {isAuthorized && (
+      {(isAuthorized || isSupport) && (
         <article>
           <Heading tagName="h2">
             Deleted Projects
             <Emoji inTitle name="bomb" />
           </Heading>
-          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+          <DeletedProjects
+            setDeletedProjects={setDeletedProjects}
+            deletedProjects={_deletedProjects}
+            undelete={isAuthorized ? undeleteProject : null}
+            user={user}
+          />
         </article>
       )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
@@ -238,6 +241,8 @@ UserPage.propTypes = {
 
 const UserPageContainer = ({ user }) => {
   const { currentUser: maybeCurrentUser } = useCurrentUser();
+  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+
   return (
     <AnalyticsContext properties={{ origin: 'user' }}>
       <UserEditor initialUser={user}>
@@ -245,7 +250,7 @@ const UserPageContainer = ({ user }) => {
           <>
             <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
             <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser }} user={{ ...userFromEditor, projects }} {...funcs} />}
+              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser, isSupport }} user={{ ...userFromEditor, projects }} {...funcs} />}
             </ProjectsLoader>
           </>
         )}

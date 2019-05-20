@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
-import { useAPI } from '../../state/api';
 
 import Layout from '../layout';
 import TeamPage from './team';
@@ -64,45 +63,40 @@ const getTeam = async (api, name) => {
   return team && parseTeam(team);
 };
 
-const TeamPageLoader = ({ id, name, ...props }) => {
-  const api = useAPI();
-
-  return <DataLoader get={() => getTeam(api, name)}>{(team) => <TeamPage team={team} {...props} />}</DataLoader>;
-};
+const TeamPageLoader = ({ name, ...props }) => (
+  <DataLoader get={(api) => getTeam(api, name)} renderError={() => <NotFound name={name} />}>
+    {(team) => <TeamPage team={team} {...props} />}
+  </DataLoader>
+);
 TeamPageLoader.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 };
 
-const UserPageLoader = ({ id, name, ...props }) => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => getUserById(api, id)} renderError={() => <NotFound name={name} />}>
-      {(user) => <UserPage user={user} {...props} />}
-    </DataLoader>
-  );
-};
+const UserPageLoader = ({ id, name, ...props }) => (
+  <DataLoader get={(api) => getUserById(api, id)} renderError={() => <NotFound name={name} />}>
+    {(user) => <UserPage user={user} {...props} />}
+  </DataLoader>
+);
+
 UserPageLoader.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 };
 
-const TeamOrUserPageLoader = ({ name, ...props }) => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => getTeam(api, name)}>
-      {(team) =>
-        team ? (
-          <TeamPage team={team} {...props} />
-        ) : (
-          <DataLoader get={() => getUserByLogin(api, name)} renderError={() => <NotFound name={`@${name}`} />}>
-            {(user) => <UserPage user={user} {...props} />}
-          </DataLoader>
-        )
-      }
-    </DataLoader>
-  );
-};
+const TeamOrUserPageLoader = ({ name, ...props }) => (
+  <DataLoader get={(api) => getTeam(api, name)}>
+    {(team) =>
+      team ? (
+        <TeamPage team={team} {...props} />
+      ) : (
+        <DataLoader get={(api) => getUserByLogin(api, name)} renderError={() => <NotFound name={`@${name}`} />}>
+          {(user) => <UserPage user={user} {...props} />}
+        </DataLoader>
+      )
+    }
+  </DataLoader>
+);
 TeamOrUserPageLoader.propTypes = {
   name: PropTypes.string.isRequired,
 };
