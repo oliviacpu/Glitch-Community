@@ -10,8 +10,8 @@ import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
+import { createAPIHook } from 'State/api';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
-import { createAPIHook } from '../../state/api';
 import styles from './project-item.styl';
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
