@@ -10,10 +10,9 @@ import Loader from 'Components/loader';
 import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { captureException } from '../../utils/sentry';
-import useDevToggle from '../includes/dev-toggles';
-
-import { useAPI } from '../../state/api';
+import { captureException } from 'Utils/sentry';
+import useDevToggle from 'State/dev-toggles';
+import { useAPI } from 'State/api';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">

@@ -8,13 +8,13 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
-import useLocalStorage from '../../state/local-storage';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
+import { captureException } from 'Utils/sentry';
 import PopoverWithButton from './popover-with-button';
-import { captureException } from '../../utils/sentry';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
-import useDevToggle from '../includes/dev-toggles';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 

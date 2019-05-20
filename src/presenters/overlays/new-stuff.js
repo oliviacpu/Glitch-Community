@@ -7,8 +7,8 @@ import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import useUserPref from 'State/user-prefs';
 import PopoverContainer from '../pop-overs/popover-container';
-import useUserPref from '../includes/user-prefs';
 
 import newStuffLog from '../../curated/new-stuff-log';
 
