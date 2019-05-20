@@ -30,11 +30,7 @@ import AddCollectionProject from '../includes/add-collection-project';
 import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
-
-import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
-
-
 import { getSingleItem, getAllPages } from '../../../shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
@@ -69,7 +65,6 @@ DeleteCollectionBtn.propTypes = {
 };
 
 const CollectionPageContents = ({
-  api,
   collection,
   currentUser,
   deleteCollection,
@@ -252,11 +247,10 @@ async function loadCollection(api, ownerName, collectionName) {
 }
 
 const CollectionPage = ({ ownerName, name, ...props }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <DataLoader get={() => loadCollection(api, ownerName, name)}>
+      <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
@@ -268,7 +262,6 @@ const CollectionPage = ({ ownerName, name, ...props }) => {
               <CollectionEditor initialCollection={collection}>
                 {(collectionFromEditor, funcs, currentUserIsAuthor) => (
                   <CollectionPageContents
-                    api={api}
                     collection={collectionFromEditor}
                     currentUser={currentUser}
                     currentUserIsAuthor={currentUserIsAuthor}
