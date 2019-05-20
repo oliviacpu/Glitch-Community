@@ -66,8 +66,7 @@ export class Notifications extends React.Component {
       createPersistentNotification: this.createPersistent.bind(this),
       createErrorNotification: this.createError.bind(this),
     };
-    // const { notifications } = this.state;
-    const notifications = [{ id: 123, className:"notifyError", content: "boop"}];
+    const { notifications } = this.state;
     return (
       <>
         <Provider value={funcs}>{this.props.children}</Provider>
