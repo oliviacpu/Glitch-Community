@@ -21,7 +21,7 @@ const SuperUserBanner = () => {
 
     if (superUser || showSupportBanner) {
       return (
-        <div style={{ backgroundColor: `${superUser ? 'red' : 'aliceblue'}`, padding: '10px', textAlign: 'center', fontWeight: 'bold' }}>
+        <div style={{ backgroundImage: `${superUser ? 'linear-gradient(to right, red, white)' : 'linear-gradient(to right, lightblue, white)'}`, padding: '10px', textAlign: 'center', fontWeight: 'bold' }}>
           {displayText}
           <button onClick={toggleSuperUser}>Click to {superUser ? 'disable' : 'enable'}</button>
           {!superUser && <button onClick={() => setShowSupportBanner(false)}>Hide</button>}
