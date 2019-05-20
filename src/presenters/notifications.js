@@ -55,9 +55,9 @@ export class Notifications extends React.Component {
   }
 
   remove(id) {
-    // this.setState(({ notifications }) => ({
-    //   notifications: notifications.filter((n) => n.id !== id),
-    // }));
+    this.setState(({ notifications }) => ({
+      notifications: notifications.filter((n) => n.id !== id),
+    }));
   }
 
   render() {
@@ -67,7 +67,7 @@ export class Notifications extends React.Component {
       createErrorNotification: this.createError.bind(this),
     };
     // const { notifications } = this.state;
-    const notifications = [{ className: "notifyError", content: "hi", id: "123"}] 
+    const notifications = [{ className: "notifyError", content: "o no something went wrong!", id: "123"}] 
     return (
       <>
         <Provider value={funcs}>{this.props.children}</Provider>
