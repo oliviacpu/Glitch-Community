@@ -5,10 +5,11 @@ import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import ResultsList from 'Components/containers/results-list';
+import { TrackedExternalLink } from 'Components/link';
 import { getRemixUrl } from 'Models/project';
-import { useTracker, TrackedExternalLink } from '../../presenters/segment-analytics';
+import { useTracker } from 'State/segment-analytics';
+import { createAPIHook } from 'State/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
-import { createAPIHook } from '../../state/api';
 import styles from './new-project-pop.styl';
 
 const importGitRepo = () => {
@@ -35,8 +36,8 @@ const NewProjectResultItem = ({ project: { id, domain, description } }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, align }) => (
-  <PopoverDialog align={align}>
+const NewProjectPop = ({ projects }) => (
+  <PopoverDialog align="right">
     <PopoverSection>
       {projects.length ? (
         <ResultsList items={projects}>
@@ -72,7 +73,6 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  align: PropTypes.string.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
@@ -91,14 +91,14 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return projectIds.map((id) => data[id]);
 });
 
-function NewProjectPopButton({ align }) {
+function NewProjectPopButton() {
   const { value } = useNewProjectAPI();
   const projects = value || [];
   const onOpen = useTracker('open new-project pop');
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText="New Project">
-      {() => <NewProjectPop projects={projects} align={align} />}
+      {() => <NewProjectPop projects={projects} />}
     </PopoverWithButton>
   );
 }

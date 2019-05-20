@@ -5,10 +5,10 @@ import Pluralize from 'react-pluralize';
 import { debounce } from 'lodash';
 
 import Loader from 'Components/loader';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
 import ProjectResultItem from '../includes/project-result-item';
 import ProjectsLoader from '../projects-loader';
-import { useAPI } from '../../state/api';
 
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
 
@@ -187,7 +187,7 @@ class AddCollectionProjectPop extends React.Component {
     let nonCollectionResults = [];
     if (searchByUrl) {
       // get the single result that matches the URL exactly - check with https://community.glitch.me/
-      nonCollectionResults = results.filter((result) => result.domain === query);
+      nonCollectionResults = results.filter((result) => result && result.domain === query);
 
       // check if the project is already in the collection
       if (nonCollectionResults.length > 0 && collectionProjectIds.includes(nonCollectionResults[0].id)) {

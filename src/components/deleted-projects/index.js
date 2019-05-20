@@ -5,15 +5,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
 import { getAvatarUrl } from 'Models/project';
+import { useAPI } from 'State/api';
+import { useTrackedFunc } from 'State/segment-analytics';
 
-import { useAPI } from '../../state/api';
-import { useTrackedFunc } from '../../presenters/segment-analytics';
 import styles from './deleted-projects.styl';
 
 const DeletedProject = ({ id, domain, onClick }) => (
@@ -32,6 +33,7 @@ const DeletedProject = ({ id, domain, onClick }) => (
   </AnimationContainer>
 );
 
+
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
@@ -47,20 +49,35 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
     </Grid>
   );
 };
+
 DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
   undelete: PropTypes.func.isRequired,
 };
 
-function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
+const ViewOnlyDeletedProjectsList = ({ deletedProjects }) => (
+  <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
+    {({ id, domain }) => (
+      <div>
+        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+        <div className={styles.projectName}>{domain}</div>
+      </div>
+    )}
+  </Grid>
+);
+ViewOnlyDeletedProjectsList.propTypes = {
+  deletedProjects: PropTypes.array.isRequired,
+};
+
+function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
   // states: hidden | loading | ready
   const [state, setState] = useState('hidden');
   const clickShow = async () => {
     setState('loading');
     try {
-      const { data } = await api.get('user/deleted-projects');
-      setDeletedProjects(data);
+      const items = await getAllPages(api, `v1/users/${user.id}/deletedProjects?limit=100&orderKey=updatedAt&orderDirection=DESC`);
+      setDeletedProjects(items);
       setState('ready');
     } catch (e) {
       setState('hidden');
@@ -85,7 +102,11 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
   }
   return (
     <>
-      <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+      {
+        undelete
+          ? <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+          : <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
+      }
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
@@ -96,11 +117,12 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete }) {
 DeletedProjects.propTypes = {
   deletedProjects: PropTypes.array,
   setDeletedProjects: PropTypes.func.isRequired,
-  undelete: PropTypes.func.isRequired,
+  undelete: PropTypes.func,
 };
 
 DeletedProjects.defaultProps = {
   deletedProjects: [],
+  undelete: null,
 };
 
 export default DeletedProjects;

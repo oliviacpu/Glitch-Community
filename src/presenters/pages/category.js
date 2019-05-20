@@ -7,15 +7,12 @@ import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+
 import Layout from '../layout';
-
-import { AnalyticsContext } from '../segment-analytics';
 import ProjectsLoader from '../projects-loader';
-
 import CollectionEditor from '../collection-editor';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-
 
 const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => (
   <>
@@ -47,10 +44,7 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
                   }}
                 />
               ) : (
-                <ProjectsList
-                  layout="gridCompact"
-                  projects={projects}
-                />
+                <ProjectsList layout="gridCompact" projects={projects} />
               )}
             </div>
           )}
@@ -78,12 +72,11 @@ async function loadCategory(api, id) {
 }
 
 const CategoryPage = ({ category }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'category' }}>
-        <DataLoader get={() => loadCategory(api, category.id)}>
+        <DataLoader get={(api) => loadCategory(api, category.id)}>
           {(loadedCategory) => (
             <CollectionEditor initialCollection={loadedCategory}>
               {(categoryFromEditor, funcs) => (
