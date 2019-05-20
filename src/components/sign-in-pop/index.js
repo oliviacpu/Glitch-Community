@@ -2,16 +2,17 @@ import React, { useState, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
+
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
-import useLocalStorage from '../../state/local-storage';
-import { captureException } from '../../utils/sentry';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { captureException } from 'Utils/sentry';
 import useDevToggle from '../../presenters/includes/dev-toggles';
 import styles from './styles.styl';
 
@@ -118,14 +119,7 @@ const EmailHandler = ({ showView }) => {
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
-            <TextInput
-              type="email"
-              labelText="Email address"
-              value={email}
-              onChange={setEmail}
-              placeholder="new@user.com"
-              error={validationError}
-            />
+            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link
@@ -222,8 +216,9 @@ const SignInPopBase = withRouter(({ location }) => {
   return (
     <MultiPopover
       views={{
-        email: (showView) => <EmailHandler showView={showView} />,
-        signInCode: () => <SignInWithCode />,
+        // email: (showView) => <EmailHandler showView={showView} />,
+        // signInCode: () => <SignInWithCode />,
+        signInCode: () => <div>test</div>
       }}
     >
       {(showView) => (
