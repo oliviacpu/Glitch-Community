@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
@@ -194,7 +195,7 @@ const SignInWithCode = () => {
   );
 };
 
-const SignInPopBase = withRouter(({ location }) => {
+const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -221,7 +222,7 @@ const SignInPopBase = withRouter(({ location }) => {
       }}
     >
       {(showView) => (
-        <PopoverDialog focusOnDialog align="right">
+        <PopoverDialog focusOnDialog align={align}>
           <PopoverInfo type="secondary">
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
@@ -247,10 +248,14 @@ const SignInPopBase = withRouter(({ location }) => {
   );
 });
 
-const SignInPopContainer = () => (
+const SignInPopContainer = ({ align }) => (
   <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
-    {() => <SignInPopBase />}
+    {() => <SignInPopBase align={align}/>}
   </PopoverWithButton>
 );
+
+SignInPopContainer.propTypes = {
+  align: PropTypes.string.isRequired,
+}
 
 export default SignInPopContainer;

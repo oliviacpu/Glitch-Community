@@ -14,9 +14,8 @@ import ProjectsLoader from './projects-loader';
 
 const SignInNotice = () => (
   <div className="anon-user-sign-up">
-    <span>
-      <SignInPop /> to keep your projects.
-    </span>
+    <SignInPop align="left" />
+    &nbsp;to keep your projects.
   </div>
 );
 

@@ -43,7 +43,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           )}
           {!(currentUser && currentUser.login) && (
             <li className={styles.buttonWrap}>
-              <SignInPop />
+              <SignInPop align="right" />
             </li>
           )}
           {!!currentUser && currentUser.login && (
