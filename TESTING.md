@@ -30,6 +30,21 @@ Stubbed endpoints can return a [fixture](https://docs.cypress.io/guides/guides/n
 
 You can write tests locally and sync the changes to your remix, or write tests on your remix and pull the changes before you run. You have to run tests locally though.
 
+
+### Creating "Fixtures"
+
+Fixtures are stored data that you can use to set up specific test scenarios. You can save a response from an API request and reuse it later or define your own.
+
+Not all API requests need a fixture but some do need to be stubbed to avoid actually deleting a project, for example.
+
+There are helpers that you can use to create fixtures as you're writing new tests. 
+
+`cy.createFixture(name, url)` takes a name ("projectsByIds") and a URL (which will return the response you want to save) and saves it as `cypress/fixtures/${name}.json`
+
+`cy.createFixtures(object)` takes an object where the keys are the fixture name, and the value is the URL to save and then maps that to `cy.createFixture`
+
+Be careful not to commit a user fixture or something with sensitive data!
+
 ### Workflow with Cypress
 
 1. Remix and setup your local branch.
