@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { captureException } from 'Utils/sentry';
 import { useTrackedLink } from 'State/segment-analytics';
 
 // this uses segment's trackLink, which stalls the page load until the analytics request is done

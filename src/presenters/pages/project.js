@@ -18,23 +18,18 @@ import ProjectDomainInput from 'Components/fields/project-domain-input';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { getLink as getUserLink } from 'Models/user';
+import { addBreadcrumb } from 'Utils/sentry';
 
 import PopoverWithButton from '../pop-overs/popover-with-button';
-
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
-
-import { AnalyticsContext } from '../segment-analytics';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
 import RelatedProjects from '../includes/related-projects';
-import { addBreadcrumb } from '../../utils/sentry';
-
-import { useCurrentUser } from '../../state/current-user';
-
-import { getLink as getUserLink } from '../../models/user';
-
 import Layout from '../layout';
 
 function syncPageToDomain(domain) {
@@ -214,7 +209,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {!currentUser.isSupport && suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
+                {!currentUser.isSupport && suspendedReason ? 'suspended project' : domain} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
@@ -225,7 +220,7 @@ const ProjectPage = ({
           )}
           <AuthDescription
             authorized={isAuthorized}
-            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? ('suspended project') : project.description}
+            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? 'suspended project' : project.description}
             update={updateDescription}
             placeholder="Tell us about your app"
           />
