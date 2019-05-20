@@ -80,6 +80,7 @@ const UserPage = ({
     ...user
   },
   isAuthorized,
+  isSupport,
   maybeCurrentUser,
   updateDescription,
   updateName,
@@ -193,13 +194,18 @@ const UserPage = ({
           }}
         />
       )}
-      {isAuthorized && (
+      {(isAuthorized || isSupport) && (
         <article>
           <Heading tagName="h2">
             Deleted Projects
             <Emoji inTitle name="bomb" />
           </Heading>
-          <DeletedProjects setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+          <DeletedProjects
+            setDeletedProjects={setDeletedProjects}
+            deletedProjects={_deletedProjects}
+            undelete={isAuthorized ? undeleteProject : null}
+            user={user}
+          />
         </article>
       )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
@@ -238,6 +244,8 @@ UserPage.propTypes = {
 
 const UserPageContainer = ({ user }) => {
   const { currentUser: maybeCurrentUser } = useCurrentUser();
+  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+
   return (
     <AnalyticsContext properties={{ origin: 'user' }}>
       <UserEditor initialUser={user}>
@@ -245,7 +253,7 @@ const UserPageContainer = ({ user }) => {
           <>
             <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
             <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser }} user={{ ...userFromEditor, projects }} {...funcs} />}
+              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser, isSupport }} user={{ ...userFromEditor, projects }} {...funcs} />}
             </ProjectsLoader>
           </>
         )}
