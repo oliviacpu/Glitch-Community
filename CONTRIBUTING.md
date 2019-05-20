@@ -51,7 +51,7 @@ _Remember to [set up Git SSH](https://help.github.com/articles/connecting-to-git
 
   # 2. Inside of your new repo, add a remote endpoint for our live site:
   cd Glitch-Community
-  git remote add live https://api.glitch.com/community/git
+  git remote add live https://api.glitch.com/git/community
   ```
     
 #### Creating a Pull Request
@@ -63,7 +63,7 @@ We're going to add a branch named after your remix, and set up a remote endpoint
 In your local repository,
 ```
   # 1. Add your remix as remote source
-  git remote add my-remix https://api.glitch.com/my-remix/git
+  git remote add my-remix https://api.glitch.com/git/my-remix
 
   # 2. Fetch your remix into a new branch of the same name
   git fetch my-remix master:my-remix

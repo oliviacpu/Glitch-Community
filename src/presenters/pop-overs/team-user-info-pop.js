@@ -6,13 +6,13 @@ import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Thanks from 'Components/thanks';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 
-import { useTrackedFunc } from '../segment-analytics';
 import { NestedPopover } from './popover-nested';
 import { useNotifications } from '../notifications';
 import TeamUserRemovePop from './team-user-remove-pop';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
