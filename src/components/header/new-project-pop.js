@@ -6,8 +6,8 @@ import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import ResultsList from 'Components/containers/results-list';
 import { getRemixUrl } from 'Models/project';
-import { useTracker, TrackedExternalLink } from '../segment-analytics';
-import ProjectAvatar from '../includes/project-avatar';
+import { useTracker, TrackedExternalLink } from '../../presenters/segment-analytics';
+import ProjectAvatar from '../../presenters/includes/project-avatar';
 import { createAPIHook } from '../../state/api';
 import styles from './new-project-pop.styl';
 
