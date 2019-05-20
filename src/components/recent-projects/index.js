@@ -6,14 +6,17 @@ import ProjectsList from 'Components/containers/projects-list';
 import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink } from 'Components/link';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import { getAvatarStyle } from 'Models/user';
 
-import { useCurrentUser } from '../state/current-user';
-import ProjectsLoader from './projects-loader';
-import SignInPop from './pop-overs/sign-in-pop';
+import { useCurrentUser } from '../../state/current-user';
+import ProjectsLoader from '../../presenters/projects-loader';
+import SignInPop from '../../presenters/pop-overs/sign-in-pop';
+import styles from './styles.styl';
 
 const SignInNotice = () => (
-  <div className="anon-user-sign-up">
+  <div className={styles.anonUserSignUp}>
     <span>
       <SignInPop /> to keep your projects.
     </span>
@@ -32,56 +35,44 @@ const ClearSession = ({ clearUser }) => {
   }
 
   return (
-    <div className="clear-session">
-      <button type="button" onClick={clickClearSession} className="button-small has-emoji button-tertiary button-on-secondary-background">
-        Clear Session <span className="emoji balloon" />
-      </button>
+    <div className={styles.clearSession}>
+      <Button onClick={clickClearSession} size="small" type="tertiary" matchBackground>
+        Clear Session <Emoji name="balloon" />
+      </Button>
     </div>
   );
 };
 
-const RecentProjectsContainer = ({ children, user, clearUser }) => (
-  <section className="profile recent-projects">
-    <Heading tagName="h2">
-      <UserLink user={user}>Your Projects →</UserLink>
-    </Heading>
-    {!user.login && <SignInNotice />}
-    <CoverContainer type="user" item={user}>
-      <div className="profile-avatar">
-        <div className="user-avatar-container">
-          <UserLink user={user}>
-            <div className={`user-avatar ${!user.login ? 'anon-user-avatar' : ''}`} style={getAvatarStyle(user)} alt="" />
-          </UserLink>
-        </div>
-      </div>
-      <article className="recent-projects__projects-wrap">{children}</article>
-      {!user.login && <ClearSession clearUser={clearUser} />}
-    </CoverContainer>
-  </section>
-);
-RecentProjectsContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  user: PropTypes.shape({
-    avatarUrl: PropTypes.string,
-    color: PropTypes.string.isRequired,
-    coverColor: PropTypes.string,
-    hasCoverImage: PropTypes.bool.isRequired,
-    id: PropTypes.number.isRequired,
-    login: PropTypes.string,
-  }).isRequired,
-  clearUser: PropTypes.func.isRequired,
-};
-
 const RecentProjects = () => {
-  const { currentUser: user, fetched, clear } = useCurrentUser();
+  const { currentUser, fetched, clear } = useCurrentUser();
+  const isAnonymousUser = !currentUser.login;
+
   return (
-    <RecentProjectsContainer user={user} clearUser={clear}>
-      {fetched ? (
-        <ProjectsLoader projects={user.projects.slice(0, 3)}>{(projects) => <ProjectsList layout="row" projects={projects} />}</ProjectsLoader>
-      ) : (
-        <Loader />
-      )}
-    </RecentProjectsContainer>
+    <section className="profile recent-projects">
+      <Heading tagName="h2">
+        <UserLink user={currentUser}>Your Projects →</UserLink>
+      </Heading>
+      {isAnonymousUser && <SignInNotice />}
+      <CoverContainer type="user" item={currentUser}>
+        <div className="profile-avatar">
+          <div className="user-avatar-container">
+            <UserLink user={currentUser}>
+              <div className={`user-avatar ${isAnonymousUser ? 'anon-user-avatar' : ''}`} style={getAvatarStyle(currentUser)} alt="" />
+            </UserLink>
+          </div>
+        </div>
+        <article className={styles.projectsWrap}>
+          {fetched ? (
+            <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
+              {(projects) => <ProjectsList layout="row" projects={projects} />}
+            </ProjectsLoader>
+          ) : (
+            <Loader />
+          )}
+        </article>
+        {isAnonymousUser && <ClearSession clearUser={clear} />}
+      </CoverContainer>
+    </section>
   );
 };
 
