@@ -115,9 +115,12 @@ class PasswordSettings extends React.Component {
       <>
         <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
         <form onSubmit={this.handleSubmit}>
-          {userHasPassword && !userRequestedPWreset && <TextInput type="password" labelText="current password" placeholder="current password" />}
+          {userHasPassword && !userRequestedPWreset && (
+            <TextInput type="password" labelText="current password" placeholder="current password" value={this.state.password} />
+          )}
 
           <TextInput
+            value={this.state.password}
             type="password"
             labelText="password"
             placeholder="new password"
@@ -129,21 +132,21 @@ class PasswordSettings extends React.Component {
             <div className="pw-strength">
               <progress value={Math.max(passwordStrength, 1)} max="3" className={`pw-strength score-${passwordStrength}`} />
               <span className="pw-strength-word">
-                { passwordStrength === 0 &&
-                <>
-                  <Emoji name="faceExpressionless" /> weak
-                </>
-                } 
-                { (passwordStrength === 1 || passwordStrength === 2) &&
-                <>
-                  <Emoji name="faceSlightlySmiling" /> okay
-                </>
-                } 
-                { passwordStrength === 3 &&
-                <>
-                  <Emoji name="bicep" /> strong
-                </>
-                }
+                {passwordStrength === 0 && (
+                  <>
+                    <Emoji name="faceExpressionless" /> weak
+                  </>
+                )}
+                {(passwordStrength === 1 || passwordStrength === 2) && (
+                  <>
+                    <Emoji name="faceSlightlySmiling" /> okay
+                  </>
+                )}
+                {passwordStrength === 3 && (
+                  <>
+                    <Emoji name="bicep" /> strong
+                  </>
+                )}
               </span>
             </div>
           ) : (
@@ -155,6 +158,7 @@ class PasswordSettings extends React.Component {
           )}
 
           <TextInput
+            value={this.state.passwordConfirm}
             type="password"
             labelText="confirm new password"
             placeholder="confirm new password"

@@ -310,7 +310,7 @@ const EmailSignInButton = ({ onClick }) => (
       onClick();
     }}
   >
-    Email <span className="emoji email" />
+    Sign in with Email <span className="emoji email" />
   </button>
 );
 EmailSignInButton.propTypes = {
