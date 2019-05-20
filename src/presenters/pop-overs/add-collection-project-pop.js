@@ -5,10 +5,10 @@ import Pluralize from 'react-pluralize';
 import { debounce } from 'lodash';
 
 import Loader from 'Components/loader';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
 import ProjectResultItem from '../includes/project-result-item';
 import ProjectsLoader from '../projects-loader';
-import { useAPI } from '../../state/api';
 
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
 
