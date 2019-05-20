@@ -3,6 +3,10 @@ import React from 'react';
 import { useCurrentUser } from '../../state/current-user';
 import useLocalStorage from '../../state/local-storage';
 import { useAPI } from '../../state/api';
+import classNames from 'classnames/bind';
+
+import styles from './super-user.styl';
+const cx = classNames.bind(styles);
 
 const SuperUserBanner = () => {
   const { currentUser, persistentToken } = useCurrentUser();
@@ -20,14 +24,9 @@ const SuperUserBanner = () => {
     };
 
     if (superUser || showSupportBanner) {
-      const styles = {
-        backgroundImage: `${superUser ? 'linear-gradient(to right, red, white)' : 'linear-gradient(to right, lightblue, white)'}`,
-        padding: '10px',
-        textAlign: 'center',
-        fontWeight: 'bold',
-      };
+
       return (
-        <div style={styles}>
+        <div style={cx({ container: true, isDisabled: !superUser })}>
           {displayText}
           <button onClick={toggleSuperUser}>Click to {superUser ? 'disable' : 'enable'}</button>
           {!superUser && <button onClick={() => setShowSupportBanner(false)}>Hide</button>}
