@@ -35,8 +35,8 @@ const NewProjectResultItem = ({ project: { id, domain, description } }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, align }) => (
-  <PopoverDialog align={align}>
+const NewProjectPop = ({ projects }) => (
+  <PopoverDialog align="right">
     <PopoverSection>
       {projects.length ? (
         <ResultsList items={projects}>
@@ -91,14 +91,14 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return projectIds.map((id) => data[id]);
 });
 
-function NewProjectPopButton({ align }) {
+function NewProjectPopButton() {
   const { value } = useNewProjectAPI();
   const projects = value || [];
   const onOpen = useTracker('open new-project pop');
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText="New Project">
-      {() => <NewProjectPop projects={projects} align={align} />}
+      {() => <NewProjectPop projects={projects} />}
     </PopoverWithButton>
   );
 }
