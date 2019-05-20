@@ -334,6 +334,14 @@ const TermsAndPrivacySection = () => (
   </aside>
 );
 
+const NewUserInfoSection = () => (
+  <section className="pop-over-info">
+    <span>
+      <span className="emoji carp_streamer" /> New to Glitch? Create an account by signing in.
+    </span>
+  </section>
+);
+
 class LoginSection extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
@@ -366,6 +374,7 @@ class LoginSection extends React.Component {
 const SignInPopWithoutRouter = (props) => {
   const { header, prompt, api, location, hash, focusFirstElement } = props;
   const slackAuthEnabled = useDevToggle('Slack Auth');
+  const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
     setDestination({
@@ -382,11 +391,12 @@ const SignInPopWithoutRouter = (props) => {
     <NestedPopover alternateContent={() => <EmailHandler {...props} />} startAlternateVisible={false}>
       {(showEmailLogin) => (
         <NestedPopover alternateContent={() => <SignInWithConsumer {...props} />} startAlternateVisible={false}>
-          {(showCodeLogin) => (
+          {(showCodeLogin, showForgotPassword) => (
             <dialog className="pop-over sign-in-pop" ref={focusFirstElement} tabIndex="0">
               {header}
               <NewUserInfoSection />
               <TermsAndPrivacySection />
+              {userPasswordEnabled && <LoginSection showForgotPassword={showForgotPassword} {...props} />}
               <section className="pop-over-actions">
                 {prompt}
                 <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />

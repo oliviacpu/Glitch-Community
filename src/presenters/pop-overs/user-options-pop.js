@@ -111,7 +111,7 @@ Are you sure you want to sign out?`)
   const userName = user.name || 'Anonymous';
   const userAvatarStyle = { backgroundColor: user.color };
 
-  const userPasswordFlag = useDevToggle('User Passwords');
+  const userPasswordEnabled = useDevToggle('User Passwords');
 
   return (
     <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
@@ -139,7 +139,7 @@ Are you sure you want to sign out?`)
           Support <span className="emoji ambulance" />
         </Link>
 
-        {userPasswordFlag && (
+        {userPasswordEnabled && (
           <AccountSettingsOverlay user={user}>
             <button type="button" className="button-small has-emoji button-tertiary button-on-secondary-background">
               Account Settings <Emoji name="key" />
