@@ -48,28 +48,28 @@ const RecentProjects = () => {
   const isAnonymousUser = !currentUser.login;
 
   return (
-    <section className="profile recent-projects">
+    <section>
       <Heading tagName="h2">
         <UserLink user={currentUser}>Your Projects →</UserLink>
       </Heading>
       {isAnonymousUser && <SignInNotice />}
       <CoverContainer type="user" item={currentUser}>
-        <div className="profile-avatar">
-          <div className="user-avatar-container">
+        <div className={styles.coverWrap}>
+          <div className={styles.avatarWrap}>
             <UserLink user={currentUser}>
-              <div className={`user-avatar ${isAnonymousUser ? 'anon-user-avatar' : ''}`} style={getAvatarStyle(currentUser)} alt="" />
+              <div className={styles.userAvatar} style={getAvatarStyle(currentUser)} />
             </UserLink>
           </div>
+          <article className={styles.projectsWrap}>
+            {fetched ? (
+              <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
+                {(projects) => <ProjectsList layout="row" projects={projects} />}
+              </ProjectsLoader>
+            ) : (
+              <Loader />
+            )}
+          </article>
         </div>
-        <article className={styles.projectsWrap}>
-          {fetched ? (
-            <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
-              {(projects) => <ProjectsList layout="row" projects={projects} />}
-            </ProjectsLoader>
-          ) : (
-            <Loader />
-          )}
-        </article>
         {isAnonymousUser && <ClearSession clearUser={clear} />}
       </CoverContainer>
     </section>
