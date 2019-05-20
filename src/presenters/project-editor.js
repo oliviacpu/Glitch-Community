@@ -27,6 +27,11 @@ class ProjectEditor extends React.Component {
     this.setState(changes);
   }
 
+  async updateDomain(domain) {
+    await this.updateFields({ domain });
+    await this.props.api.post(`project/domainChanged?projectId=${this.state.id}`);
+  }
+
   async addProjectToCollection(project, collection) {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
