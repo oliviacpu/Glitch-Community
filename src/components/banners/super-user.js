@@ -28,7 +28,7 @@ const SuperUserBanner = () => {
       const className = cx({ container: true, isDisabled: !superUser });
       return (
         <div className={className}>
-          <p>{displayText}</p>
+          {displayText}
           <button onClick={toggleSuperUser}>Click to {superUser ? 'disable' : 'enable'}</button>
           {!superUser && <button onClick={() => setShowSupportBanner(false)}>Hide</button>}
         </div>
