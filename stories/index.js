@@ -542,4 +542,8 @@ storiesOf('Footer', module).add('footer', () => <Footer />);
 
 storiesOf('Recent Projects', module)
   .add('anonymous user', provideContext({ currentUser: { color: 'pink', projects: Object.values(projects) } }, () => <RecentProjects />))
+  .add(
+    'logged-in user loading',
+    provideContext({ currentUser: { ...users.modernserf, projects: [] }, currentUserFetched: false }, () => <RecentProjects />),
+  )
   .add('logged-in user', provideContext({ currentUser: { ...users.modernserf, projects: Object.values(projects) } }, () => <RecentProjects />));

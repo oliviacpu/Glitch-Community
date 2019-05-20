@@ -35,7 +35,7 @@ const ClearSession = ({ clearUser }) => {
 
   return (
     <div className={styles.clearSession}>
-      <Button onClick={clickClearSession} size="small" type="tertiary" matchBackground>
+      <Button onClick={clickClearSession} size="small" type="dangerZone">
         Clear Session <Emoji name="balloon" />
       </Button>
     </div>
@@ -43,7 +43,7 @@ const ClearSession = ({ clearUser }) => {
 };
 
 const RecentProjects = () => {
-  const { currentUser, clear } = useCurrentUser();
+  const { currentUser, fetched, clear } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
 
   return (
@@ -60,7 +60,7 @@ const RecentProjects = () => {
             </UserLink>
           </div>
           <div className={styles.projectsWrap}>
-            {currentUser.projects ? (
+            {fetched ? (
               <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
                 {(projects) => <ProjectsList layout="row" projects={projects} />}
               </ProjectsLoader>
