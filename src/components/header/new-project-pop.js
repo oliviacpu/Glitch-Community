@@ -5,8 +5,9 @@ import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import ResultsList from 'Components/containers/results-list';
+import { TrackedExternalLink } from 'Components/link';
 import { getRemixUrl } from 'Models/project';
-import { useTracker, TrackedExternalLink } from 'State/segment-analytics';
+import { useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './new-project-pop.styl';
@@ -72,7 +73,6 @@ NewProjectPop.propTypes = {
       domain: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  align: PropTypes.string.isRequired,
 };
 
 const useNewProjectAPI = createAPIHook(async (api) => {
