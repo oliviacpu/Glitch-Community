@@ -8,7 +8,7 @@ import Link from 'Components/link';
 import { TrackedExternalLink } from '../../presenters/segment-analytics';
 import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
 import SignInPop from '../../presenters/pop-overs/sign-in-pop';
-import NewProjectPop from '../../presenters/pop-overs/new-project-pop';
+import NewProjectPop from './new-project-pop';
 import { useCurrentUser } from '../../state/current-user';
 import Logo from './logo';
 import styles from './header.styl';
