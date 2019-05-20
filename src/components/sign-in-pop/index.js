@@ -12,8 +12,8 @@ import useLocalStorage from '../../state/local-storage';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
-import useDevToggle from '../includes/dev-toggles';
-import styles from './sign-in-pop.styl';
+import useDevToggle from '../../presenters/includes/dev-toggles';
+import styles from './styles.styl';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 
