@@ -24,9 +24,8 @@ const toggleData = [
     description: 'Sign in with your Slack account!',
   },
   {
-    name: 'Algolia Search',
-    description: 'Use the new Algolia-powered search API.',
-    enabledByDefault: true,
+    name: 'User Passwords',
+    description: 'Enable users to set a password for their account',
   },
 ].slice(0, 3); // <-- Yeah really, only 3.  If you need more, clean up one first.
 

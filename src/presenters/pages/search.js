@@ -8,8 +8,7 @@ import NotFound from 'Components/errors/not-found';
 import MoreIdeas from 'Components/more-ideas';
 import Layout from '../layout';
 
-import { useAlgoliaSearch, useLegacySearch } from '../../state/search';
-import useDevToggle from '../includes/dev-toggles';
+import { useAlgoliaSearch } from '../../state/search';
 
 // Hooks can't be _used_ conditionally, but components can be _rendered_ conditionally
 const AlgoliaSearchWrapper = (props) => {
@@ -17,14 +16,7 @@ const AlgoliaSearchWrapper = (props) => {
   return <SearchResults {...props} searchResults={searchResults} />;
 };
 
-const LegacySearchWrapper = (props) => {
-  const searchResults = useLegacySearch(props.query);
-  return <SearchResults {...props} searchResults={searchResults} />;
-};
-
 const SearchPage = withRouter(({ query, activeFilter, history }) => {
-  const algoliaFlag = useDevToggle('Algolia Search');
-  const SearchWrapper = algoliaFlag ? AlgoliaSearchWrapper : LegacySearchWrapper;
   const setActiveFilter = (filter) => {
     history.push(`/search?q=${query}&activeFilter=${filter}`);
   };
@@ -32,7 +24,7 @@ const SearchPage = withRouter(({ query, activeFilter, history }) => {
   return (
     <Layout searchQuery={query}>
       {!!query && <Helmet title={`Search for ${query}`} />}
-      {query ? <SearchWrapper query={query} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} /> : <NotFound name="anything" />}
+      {query ? <AlgoliaSearchWrapper query={query} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} /> : <NotFound name="anything" />}
       <MoreIdeas />
     </Layout>
   );
