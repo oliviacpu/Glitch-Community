@@ -12,7 +12,7 @@ import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';
-import AccountSettingsOverlay from '../overlays/account-settings';
+import AccountSettings from '../overlays/account-settings';
 
 import useDevToggle from '../includes/dev-toggles';
 
@@ -140,11 +140,11 @@ Are you sure you want to sign out?`)
         </Link>
 
         {userPasswordEnabled && (
-          <AccountSettingsOverlay user={user}>
+          <AccountSettings user={user}>
             <button type="button" className="button-small has-emoji button-tertiary button-on-secondary-background">
               Account Settings <Emoji name="key" />
             </button>
-          </AccountSettingsOverlay>
+          </AccountSettings>
         )}
 
         <button type="button" onClick={clickSignout} className="button-small has-emoji button-tertiary button-on-secondary-background">

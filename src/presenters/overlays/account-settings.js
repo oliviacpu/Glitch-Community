@@ -196,32 +196,6 @@ const AccountSettingsOverlay = ({ children, user }) => (
       </Text>
     </OverlaySection>
   </Overlay>
-  
-  
-  {/*
-  <PopoverContainer>
-    {({ visible, setVisible }) => (
-      <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
-        <summary>{children}</summary>
-        <dialog className="overlay account-settings-overlay">
-          <section className="pop-over-info overlay-title">
-            Account Settings <Emoji name="key" />
-          </section>
-          <section className="pop-over-actions pop-over-main">
-            <div className="nav-content">
-              <PasswordSettings user={user} />
-            </div>
-          </section>
-          <section className="pop-over-info">
-            <Text>a
-              Email notifications are sent to <b>{user.email}</b>
-            </Text>
-          </section>
-        </dialog>
-      </details>
-    )}
-  </PopoverContainer>
-  */}
 );
 
 AccountSettingsOverlay.propTypes = {
@@ -229,4 +203,11 @@ AccountSettingsOverlay.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-export default AccountSettingsOverlay;
+export AccountSettingsOverlay;
+
+export default AccountSettings = () => (
+  <PopoverContainer>
+    {({ visible }) => ( visible ? <AccountSettingsOverlay /> : null )}
+  </PopoverContainer>        
+);
+
