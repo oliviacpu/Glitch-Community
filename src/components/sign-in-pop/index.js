@@ -83,6 +83,7 @@ function useEmail() {
 }
 
 const ForgotPasswordHandler = () => {
+  const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
   const [{ status, error }, setState] = useState({ status: 'active', error: null });
 
@@ -90,9 +91,13 @@ const ForgotPasswordHandler = () => {
     event.preventDefault();
     setState({ status: 'working', error: null });
 
-    // TODO - actually send link to reset password
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setState({ status: 'done', error: null });
+    try {
+      await api.post('email/sendResetPasswordEmail', { emailAddress: email });
+      setState({ status: 'done', error: null });
+    } catch (err) {
+      const message = err && err.response && err.response.data && err.response.data.message;
+      setState({ status: 'done', error: message || 'Something went wrong' });
+    }
   };
 
   const isWorking = status === 'working';
