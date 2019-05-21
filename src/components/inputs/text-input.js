@@ -60,6 +60,7 @@ const TextInput = ({
           placeholder={placeholder}
           type={type}
           value={value}
+          autoCapitalize="none"
         />
         {!!error && (
           <InputPart className={styles.errorIcon}>
