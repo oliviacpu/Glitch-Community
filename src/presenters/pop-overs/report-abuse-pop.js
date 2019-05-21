@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
-import _ from 'lodash';
+import { debounce, trimStart } from 'lodash';
 import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
@@ -11,6 +11,39 @@ import { captureException } from '../../utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from '../../utils/abuse-reporting';
 
 import { useCurrentUser } from '../../state/current-user';
+
+const Success = () => (
+  <>
+    <section className="pop-over-info">
+      <h1 className="pop-title">Report Abuse</h1>
+    </section>
+    <section className="pop-over-actions">
+      <div className="notification notifySuccess">Report Sent</div>
+      <p className="pop-description tight-line">
+        Thanks for helping to keep Glitch a safe, friendly community <span className="emoji park" role="img" aria-label="" />
+      </p>
+    </section>
+  </>
+);
+
+const Failure = ({ value }) => (
+  <>
+    <section className="pop-over-info">
+      <h1 className="pop-title">
+        {'Failed to Send '}
+        <span className="emoji sick" role="img" aria-label="" />
+      </h1>
+    </section>
+    <section className="pop-over-info">
+      <p className="info-description">
+        But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
+      </p>
+    </section>
+    <section className="pop-over-actions">
+      <textarea className="content-editable tall-text traditional" value={value} readOnly />
+    </section>
+  </>
+);
 
 class ReportAbusePop extends React.Component {
   constructor(props) {
@@ -40,13 +73,9 @@ class ReportAbusePop extends React.Component {
     this.validateNotEmpty = this.validateNotEmpty.bind(this);
     this.validateReason = this.validateReason.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
-    this.renderForm = this.renderForm.bind(this);
-    this.renderSuccess = this.renderSuccess.bind(this);
-    this.renderFailure = this.renderFailure.bind(this);
-    this.pickFormBody = this.pickFormBody.bind(this);
 
-    this.debouncedValidateEmail = _.debounce(() => this.validateEmail(), 200);
-    this.debouncedValidateReason = _.debounce(() => this.validateReason(), 200);
+    this.debouncedValidateEmail = debounce(() => this.validateEmail(), 200);
+    this.debouncedValidateReason = debounce(() => this.validateReason(), 200);
   }
 
   getUserInfoSection() {
@@ -151,17 +180,15 @@ class ReportAbusePop extends React.Component {
     this.debouncedValidateEmail();
   }
 
-  pickFormBody() {
+  render() {
+    let content;
     if (this.state.submitted) {
       if (!this.state.submitSuccess) {
-        return this.renderFailure();
+        return <Failure value={trimStart(this.formatRaw())} />;
       }
-      return this.renderSuccess();
+      return <Success />;
     }
-    return this.renderForm();
-  }
 
-  renderForm() {
     return (
       <>
         <section className="pop-over-info">
@@ -189,43 +216,6 @@ class ReportAbusePop extends React.Component {
       </>
     );
   }
-
-  renderSuccess = () => (
-    <>
-      <section className="pop-over-info">
-        <h1 className="pop-title">Report Abuse</h1>
-      </section>
-      <section className="pop-over-actions">
-        <div className="notification notifySuccess">Report Sent</div>
-        <p className="pop-description tight-line">
-          Thanks for helping to keep Glitch a safe, friendly community <span className="emoji park" role="img" aria-label="" />
-        </p>
-      </section>
-    </>
-  );
-
-  renderFailure = () => (
-    <>
-      <section className="pop-over-info">
-        <h1 className="pop-title">
-          {'Failed to Send '}
-          <span className="emoji sick" role="img" aria-label="" />
-        </h1>
-      </section>
-      <section className="pop-over-info">
-        <p className="info-description">
-          But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
-        </p>
-      </section>
-      <section className="pop-over-actions">
-        <textarea className="content-editable tall-text traditional" value={_.trimStart(this.formatRaw())} readOnly />
-      </section>
-    </>
-  );
-
-  render() {
-    return <dialog className="pop-over wide-pop top-right report-abuse-pop">{this.pickFormBody()}</dialog>;
-  }
 }
 
 ReportAbusePop.propTypes = {
@@ -239,7 +229,11 @@ const ReportAbusePopButton = (props) => {
   return (
     <div className="report-abuse-button-wrap">
       <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
-        {() => <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />}
+        {() => (
+          <dialog className="pop-over wide-pop top-right report-abuse-pop">
+            <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />
+          </dialog>
+        )}
       </PopoverWithButton>
     </div>
   );
