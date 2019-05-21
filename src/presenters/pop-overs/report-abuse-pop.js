@@ -7,7 +7,7 @@ import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
-import { useCurrentUser } from 'State/current-user';
+import { PopoverWithButton } from 'Components/pop-over' mport { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
 
@@ -79,8 +79,10 @@ function validateEmail(email, currentUser) {
   return '';
 }
 
-function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
+function ReportAbusePop({ reportedType, reportedModel }) {
+  const { currentUser } = useCurrentUser();
   const [status, setStatus] = useState('ready'); // ready -> loading -> success | error
+
   const [reason, setReason] = useState(getDefaultReason(reportedType));
   const [reasonError, setReasonError] = useDebouncedValue('', 200);
   const reasonOnChange = (value) => {
@@ -161,20 +163,18 @@ function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
   );
 }
 
-const ReportAbusePopButton = (props) => {
-  const { currentUser } = useCurrentUser();
-  return (
-    <div className="report-abuse-button-wrap">
-      <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
-        {() => (
-          <dialog className="pop-over wide-pop top-right report-abuse-pop">
-            <ReportAbusePop currentUser={currentUser} reportedType={props.reportedType} reportedModel={props.reportedModel} />
-          </dialog>
-        )}
-      </PopoverWithButton>
-    </div>
-  );
-};
+const ReportAbusePopButton = ({ reportedType, reportedModel }) => (
+  <div className="report-abuse-button-wrap">
+    <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
+      {() => (
+        <dialog className="pop-over wide-pop top-right report-abuse-pop">
+          <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
+        </dialog>
+      )}
+    </PopoverWithButton>
+  </div>
+);
+
 ReportAbusePopButton.propTypes = {
   reportedType: PropTypes.oneOf(['project', 'collection', 'user', 'team', 'home']).isRequired,
   reportedModel: PropTypes.object, // the actual model, or null if no model (like for the home page)
@@ -185,3 +185,4 @@ ReportAbusePopButton.defaultProps = {
 };
 
 export default ReportAbusePopButton;
+W
