@@ -103,6 +103,7 @@ class PasswordSettings extends React.Component {
   handleSubmit(evt) {
     evt.preventDefault();
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
+    console.log(this.props.user);
   }
 
   render() {
