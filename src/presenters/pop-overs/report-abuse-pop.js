@@ -45,6 +45,16 @@ const Failure = ({ value }) => (
   </>
 );
 
+function validateNotEmpty(value, errorField, fieldDescription) {
+    let errorObj;
+    if (value === '') {
+      errorObj = { [errorField]: `${fieldDescription} is required` };
+    } else {
+      errorObj = { [errorField]: '' };
+    }
+    return errorObj;
+  }
+
 class ReportAbusePop extends React.Component {
   constructor(props) {
     super(props);
@@ -70,36 +80,11 @@ class ReportAbusePop extends React.Component {
     this.formatRaw = this.formatRaw.bind(this);
     this.getUserInfoSection = this.getUserInfoSection.bind(this);
     this.emailOnChange = this.emailOnChange.bind(this);
-    this.validateNotEmpty = this.validateNotEmpty.bind(this);
     this.validateReason = this.validateReason.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
 
     this.debouncedValidateEmail = debounce(() => this.validateEmail(), 200);
     this.debouncedValidateReason = debounce(() => this.validateReason(), 200);
-  }
-
-  getUserInfoSection() {
-    if (this.props.currentUser.login) {
-      return (
-        <section className="pop-over-info">
-          <p className="info-description right">
-            from <strong>{this.props.currentUser.login}</strong>
-          </p>
-        </section>
-      );
-    }
-    return (
-      <section className="pop-over-info">
-        <InputText
-          value={this.state.email}
-          onChange={this.emailOnChange}
-          onBlur={() => this.debouncedValidateEmail()}
-          placeholder="your@email.com"
-          error={this.state.emailError}
-          type="email"
-        />
-      </section>
-    );
   }
 
   formatRaw() {
@@ -126,19 +111,9 @@ class ReportAbusePop extends React.Component {
     }
   }
 
-  validateNotEmpty(stateField, errorField, fieldDescription) {
-    let errorObj;
-    if (this.state[stateField] === '') {
-      errorObj = { [errorField]: `${fieldDescription} is required` };
-    } else {
-      errorObj = { [errorField]: '' };
-    }
-    this.setState(errorObj);
-    return errorObj;
-  }
-
   validateReason() {
-    let errorObj = this.validateNotEmpty('reason', 'reasonError', 'A description of the issue');
+    let errorObj = validateNotEmpty(this.state.reason, 'reasonError', 'A description of the issue');
+    this.setState(errorObj)
     if (errorObj.reasonError === '' && this.state.reason === this.defaultReason) {
       errorObj = { reasonError: 'Reason is required' };
       this.setState(errorObj);
@@ -151,7 +126,8 @@ class ReportAbusePop extends React.Component {
       return { emailError: '' };
     }
 
-    let errors = this.validateNotEmpty('email', 'emailError', 'Email');
+    let errors = validateNotEmpty(this.state.email, 'emailError', 'Email');
+    this.setState(errors)
     if (errors.emailError !== '') {
       return errors;
     }
@@ -203,7 +179,24 @@ class ReportAbusePop extends React.Component {
             error={this.state.reasonError}
           />
         </section>
-        {this.getUserInfoSection()}
+        {this.props.currentUser.login ? (
+          <section className="pop-over-info">
+            <p className="info-description right">
+              from <strong>{this.props.currentUser.login}</strong>
+            </p>
+          </section>
+        ) : (
+          <section className="pop-over-info">
+            <InputText
+              value={this.state.email}
+              onChange={this.emailOnChange}
+              onBlur={() => this.debouncedValidateEmail()}
+              placeholder="your@email.com"
+              error={this.state.emailError}
+              type="email"
+            />
+          </section>
+        )}
         <section className="pop-over-actions">
           {this.state.loading ? (
             <Loader />
@@ -217,12 +210,6 @@ class ReportAbusePop extends React.Component {
     );
   }
 }
-
-ReportAbusePop.propTypes = {
-  reportedType: PropTypes.string.isRequired, // 'project', 'collection', 'user', 'team'
-  reportedModel: PropTypes.object.isRequired, // the actual model
-  currentUser: PropTypes.object.isRequired,
-};
 
 const ReportAbusePopButton = (props) => {
   const { currentUser } = useCurrentUser();
@@ -239,7 +226,7 @@ const ReportAbusePopButton = (props) => {
   );
 };
 ReportAbusePopButton.propTypes = {
-  reportedType: PropTypes.string.isRequired, // 'project', 'collection', 'user', 'team'
+  reportedType: PropTypes.oneOf(['project', 'collection', 'user', 'team', 'home']),
   reportedModel: PropTypes.object, // the actual model, or null if no model (like for the home page)
 };
 
