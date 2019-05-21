@@ -9,6 +9,7 @@ import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
+import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
@@ -181,7 +182,23 @@ PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const OverlayAccountSettings = ({ children, user }) => (
+const AccountSettingsOverlay = ({ children, user }) => (
+  <Overlay className="account-settings-overlay">
+    <OverlaySection type="info">
+      <OverlayTitle>Account Settings <Emoji name="key" /></OverlayTitle>
+    </OverlaySection>
+    <OverlaySection type="actions">
+      <PasswordSettings user={user} />
+    </OverlaySection>
+    <OverlaySection type="info">
+     <Text>
+        Email notifications are sent to <b>{user.email}</b>
+      </Text>
+    </OverlaySection>
+  </Overlay>
+  
+  
+  {/*
   <PopoverContainer>
     {({ visible, setVisible }) => (
       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
@@ -196,7 +213,7 @@ const OverlayAccountSettings = ({ children, user }) => (
             </div>
           </section>
           <section className="pop-over-info">
-            <Text>
+            <Text>a
               Email notifications are sent to <b>{user.email}</b>
             </Text>
           </section>
@@ -204,11 +221,12 @@ const OverlayAccountSettings = ({ children, user }) => (
       </details>
     )}
   </PopoverContainer>
+  */}
 );
 
-OverlayAccountSettings.propTypes = {
+AccountSettingsOverlay.propTypes = {
   children: PropTypes.node.isRequired,
   user: PropTypes.object.isRequired,
 };
 
-export default OverlayAccountSettings;
+export default AccountSettingsOverlay;
