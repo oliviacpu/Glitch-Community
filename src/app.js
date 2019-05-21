@@ -6,10 +6,10 @@ import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
 import { UserPrefsProvider } from 'State/user-prefs';
 import { DevTogglesProvider } from 'State/dev-toggles';
+import SuperUserBanner from 'Components/banners/super-user';
+
 import ErrorBoundary from './presenters/includes/error-boundary';
 import { Notifications } from './presenters/notifications';
-import SuperUserBanner from './presenters/overlays/super-user-banner';
-
 import Router from './presenters/pages/router';
 
 const App = () => (
