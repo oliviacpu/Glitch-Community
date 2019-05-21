@@ -112,6 +112,7 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
   return children({
     filterInput: enabled && (
       <TextInput
+        data-cy="projects-filter"
         className={styles.headerSearch}
         name="filter"
         onChange={setFilter}
@@ -154,7 +155,7 @@ function ProjectsList({
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article className={classNames(styles.projectsContainer)}>
+        <article {...props} className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
