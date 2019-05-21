@@ -343,22 +343,23 @@ const NewUserInfoSection = () => (
 );
 
 class LoginSection extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {email: '', password: ''}
+    this.state = { email: '', password: '' };
   }
-  
+
   async handleSubmit(event) {
     event.preventDefault();
     // TODO actually log the user in...
+    console.log(this.state);
   }
 
   render() {
     return (
       <section className="pop-over-actions first-section login-section">
         <form onSubmit={this.handleSubmit}>
-          <TextInput placeholder="your@email.com" labelText="email" value={this.state.email} onChange={() => {}}/>
-          <TextInput placeholder="password" type="password" labelText="password" value={this.state.password} onChange={() => {}}/>
+          <TextInput placeholder="your@email.com" labelText="email" value={this.state.email} onChange={() => {}} />
+          <TextInput placeholder="password" type="password" labelText="password" value={this.state.password} onChange={() => {}} />
           <Button size="small" decorative>Sign in</Button>
         </form>
 
