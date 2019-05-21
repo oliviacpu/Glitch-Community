@@ -65,18 +65,18 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       {children(projects)}
       {canPaginate && (
         <div className={styles.viewControls}>
-          <div className={styles.paginationControls}>
-            <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+          <div data-cy="pagination-controls" className={styles.paginationControls}>
+            <Button data-cy="previous-page" aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <Image alt="" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             <div className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
-            <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+            <Button data-cy="next-page" aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
               <Image alt="" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button type="tertiary" onClick={() => setExpanded(true)}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => setExpanded(true)}>
             Show all<Badge>{numProjects}</Badge>
           </Button>
         </div>
@@ -85,7 +85,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   );
 };
 
-const FilterController = ({ enabled, placeholder, projects, children, ...props }) => {
+const FilterController = ({ enabled, placeholder, projects, children }) => {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -108,7 +108,7 @@ const FilterController = ({ enabled, placeholder, projects, children, ...props }
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
-  console.log(props);
+
   return children({
     filterInput: enabled && (
       <TextInput
@@ -127,7 +127,7 @@ const FilterController = ({ enabled, placeholder, projects, children, ...props }
 
       if (filtering) {
         return (
-          <div className={styles.filterResultsPlaceholder} {...props}>
+          <div className={styles.filterResultsPlaceholder}>
             <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
             <Text>No projects found</Text>
           </div>
@@ -152,7 +152,7 @@ function ProjectsList({
   ...props
 }) {
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects} {...props}>
+    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
         <article className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>

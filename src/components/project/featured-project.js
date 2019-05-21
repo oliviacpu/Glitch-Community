@@ -17,13 +17,7 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
       </Heading>
       {collection && (
         <div className={styles.note}>
-          <Note
-            project={featuredProject}
-            collection={collection}
-            updateNote={updateNote}
-            hideNote={hideNote}
-            isAuthorized={isAuthorized}
-          />
+          <Note project={featuredProject} collection={collection} updateNote={updateNote} hideNote={hideNote} isAuthorized={isAuthorized} />
         </div>
       )}
     </div>
@@ -45,25 +39,26 @@ const FeaturedProject = ({
   isAuthorized,
   updateNote,
   unfeatureProject,
-  ...props
 }) => {
   const featuredProjectRef = useRef();
 
   return (
-    <div ref={featuredProjectRef} {...props}>
+    <div ref={featuredProjectRef}>
       <ProjectEmbed
-        top={<Top
-          featuredProject={featuredProject}
-          collection={collection}
-          hideNote={hideNote}
-          updateNote={updateNote}
-          isAuthorized={isAuthorized}
-          unfeatureProject={unfeatureProject}
-          displayNewNote={() => displayNewNote(featuredProject.id)}
-          hasNote={!!featuredProject.note}
-          featuredProjectRef={featuredProjectRef}
-          canAddNote={!!collection}
-        />}
+        top={
+          <Top
+            featuredProject={featuredProject}
+            collection={collection}
+            hideNote={hideNote}
+            updateNote={updateNote}
+            isAuthorized={isAuthorized}
+            unfeatureProject={unfeatureProject}
+            displayNewNote={() => displayNewNote(featuredProject.id)}
+            hasNote={!!featuredProject.note}
+            featuredProjectRef={featuredProjectRef}
+            canAddNote={!!collection}
+          />
+        }
         project={featuredProject}
         isAuthorized={isAuthorized}
         currentUser={currentUser}
@@ -72,7 +67,6 @@ const FeaturedProject = ({
     </div>
   );
 };
-
 
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,

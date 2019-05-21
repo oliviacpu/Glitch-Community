@@ -133,14 +133,15 @@ const UserPage = ({
       </section>
 
       {featuredProject && (
-        <FeaturedProject
-          data-cy="featured-project"
-          featuredProject={featuredProject}
-          isAuthorized={isAuthorized}
-          unfeatureProject={unfeatureProject}
-          addProjectToCollection={addProjectToCollection}
-          currentUser={maybeCurrentUser}
-        />
+        <div data-cy="featured-project">
+          <FeaturedProject
+            featuredProject={featuredProject}
+            isAuthorized={isAuthorized}
+            unfeatureProject={unfeatureProject}
+            addProjectToCollection={addProjectToCollection}
+            currentUser={maybeCurrentUser}
+          />
+        </div>
       )}
 
       {/* Pinned Projects */}
