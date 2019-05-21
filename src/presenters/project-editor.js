@@ -47,7 +47,7 @@ class ProjectEditor extends React.Component {
       addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
       deleteProject: () => this.deleteProject().catch(handleError),
       updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleError),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),
       uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
     };
