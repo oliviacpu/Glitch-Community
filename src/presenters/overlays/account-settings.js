@@ -182,7 +182,7 @@ PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const AccountSettingsOverlay = ({ children, user }) => (
+const AccountSettingsOverlay = ({ user }) => (
   <Overlay className="account-settings-overlay">
     <OverlaySection type="info">
       <OverlayTitle>Account Settings <Emoji name="key" /></OverlayTitle>
@@ -199,15 +199,17 @@ const AccountSettingsOverlay = ({ children, user }) => (
 );
 
 AccountSettingsOverlay.propTypes = {
-  children: PropTypes.node.isRequired,
   user: PropTypes.object.isRequired,
 };
 
-export AccountSettingsOverlay;
-
-export default AccountSettings = () => (
+const AccountSettings = ({user}) => (
   <PopoverContainer>
-    {({ visible }) => ( visible ? <AccountSettingsOverlay /> : null )}
-  </PopoverContainer>        
+       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
+         <AccountSettingsOverlay user={user}/> 
+    </details>
+    
+  </PopoverContainer>
 );
+
+export default AccountSettings;
 
