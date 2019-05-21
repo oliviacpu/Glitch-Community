@@ -119,23 +119,22 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
 
   const onInviteUser = async (togglePopover, user) => {
     togglePopover();
-    setInvitee(getDisplayName(user));
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
+      setInvitee(getDisplayName(user));
     } catch (error) {
-      setInvitee('');
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
     }
   };
 
   const onInviteEmail = async (togglePopover, email) => {
     togglePopover();
-    setInvitee(email);
     try {
       await inviteEmail(email);
+      setInvitee(email);
     } catch (error) {
-      setInvitee('');
+      // nothing to do here
     }
   };
 
