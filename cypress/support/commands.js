@@ -10,11 +10,24 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('createFixture', (name, url) =>
-  cy
+const omitBy = require('lodash/omitBy')
+const keys = require('lodash/keys')
+const isObject = require('lodash/isObject')
+const isArray = require('lodash/isArray')
+
+const filterTokens = (value) => {
+    if (isArray(value)) {
+        value = value.map(filterTokens)
+    } else if (isObject(value)) {
+        keys(value).map((key) => { value[key] = filterTokens(value[key]) })
+        value = omitBy(value, (_, key) => key.match('\\w+Token|password|email'))
+    }
+    return value
+}
+
+Cypress.Commands.add('createFixture', (name, url) => cy
     .request({ url, headers: { Authorization: Cypress.env('GLITCH_TOKEN') } })
-    .then((response) => cy.writeFile(`cypress/fixtures/${name}.json`, response.body)),
-);
+    .then((response) => cy.writeFile(`cypress/fixtures/${name}.json`, filterTokens(response.body))));
 
 Cypress.Commands.add('createFixtures', (fixtures) => Object.entries(fixtures).forEach((entry) => cy.createFixture(entry[0], entry[1])));
 
