@@ -12,12 +12,12 @@ import { UserLink } from 'Components/link';
 import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { captureException } from '../../utils/sentry';
+import { useAPI } from 'State/api';
+import { useTracker } from 'State/segment-analytics';
+import { captureException } from 'Utils/sentry';
 import useDevToggle from '../includes/dev-toggles';
-import { useTracker } from '../segment-analytics';
 import PopoverWithButton from './popover-with-button';
 
-import { useAPI } from '../../state/api';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">
