@@ -7,12 +7,11 @@ function handleError(notify, error) {
 }
 
 function handleErrorForInput(notify, error) {
-  if (error && error.response && error.response.data) {
-    return Promise.reject(error.response.data.message);
+  if (!(error && error.response && error.response.data)) {
+    console.error(error);
+    notify();
   }
-  console.error(error);
-  notify();
-  return Promise.reject();
+  return Promise.reject(error);
 }
 
 function handleCustomError(notify, error) {
