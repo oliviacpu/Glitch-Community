@@ -25,65 +25,6 @@ details.overlay-container[open] > summary::after
     z-index: 10
     cursor: default
 
-dialog.overlay
-  -webkit-tap-highlight-color: rgba(0,0,0,0)
-  background-color: primary-background
-  color: primary
-  border: 2px primary solid
-  border-radius: 5px
-  max-width: 640px
-  width: 94%
-  max-height: 85%
-  height: initial
-  overflow-y: auto
-  display: block
-  position: fixed
-  left: 50%
-  transform: translateX(-50%)
-  top: 6.5%
-  padding: 0
-  margin: 0
-  box-shadow: pop-shadow
-  z-index: 15
-  &:focus
-    outline: transparent
-  // .user-names
-  //   display: none
-  .users,
-  .project-users
-    margin-top: 0
-
-  section
-    padding: 12px
-    padding-top: 14px
-    padding-bottom: 14px
-  .pop-over-actions
-    margin: 0
-    border-bottom: 1px solid secondary
-    position: relative
-  .avatar
-    vertical-align: middle
-    margin-right: 5px
-  .overlay-title
-    font-weight: bold
-    display: inline-block
-  a
-    color: general-link
-    // &:hover
-    //   text-decoration: none
-  .has-buttons
-    padding-bottom: 0
-    button,
-    .button
-      margin-bottom: 14px
-      margin-right: 0.5rem
-  
-  &.overlay-narrow
-    max-width: 460px
-    left: 0px
-    margin: 0 auto
-    transform: initial
-
 // wistia embed styling
 .video-overlay
   .wistia_responsive_padding
@@ -117,36 +58,35 @@ dialog.overlay
     .nav-selection
       border-right: 1px solid section-line
       
-    .nav-content
-      margin-bottom: 1.5em
-      h2
-        margin-top: 0
-      label
-        width: 250px
-        margin-bottom: 10px  
-        margin-bottom: 10px   
-      .pw-strength
-        display: block
-        margin-top: -5px
-        margin-bottom: 5px
-        .note
-          color: tertiary
-      progress
-        &.pw-strength
-          width: 75%
-          display: inline-block
-          vertical-align: -webkit-baseline-middle
-        &.score-0, &.score-1, &.score-2, &.score-3, &.score-4
-          background: secondary-background
-        &.score-0::-webkit-progress-value
-          background-color: warning
-        &.score-1::-webkit-progress-value, &.score-2::-webkit-progress-value
-          background-color: notification
-        &.score-3::-webkit-progress-value
-          background-color: success
-      .pw-strength-word
-        float: right
-        margin-top: -4px
-      .info-description
-        margin-bottom: 0.5rem
+    h2
+      margin-top: 0
+    label
+      width: 250px
+      margin-bottom: 10px  
+      margin-bottom: 10px   
+    
+    .pw-strength
+      display: block
+      margin-top: -5px
+      margin-bottom: 5px
+      .note
         color: tertiary
+    progress
+      &.pw-strength
+        width: 75%
+        display: inline-block
+        vertical-align: -webkit-baseline-middle
+      &.score-0, &.score-1, &.score-2, &.score-3, &.score-4
+        background: secondary-background
+      &.score-0::-webkit-progress-value
+        background-color: warning
+      &.score-1::-webkit-progress-value, &.score-2::-webkit-progress-value
+        background-color: notification
+      &.score-3::-webkit-progress-value
+        background-color: success
+    .pw-strength-word
+      float: right
+      margin-top: -4px
+    .info-description
+      margin-bottom: 0.5rem
+      color: tertiary

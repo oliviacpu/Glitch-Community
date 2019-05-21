@@ -185,13 +185,15 @@ PasswordSettings.propTypes = {
 const AccountSettingsOverlay = ({ user }) => (
   <Overlay className="account-settings-overlay">
     <OverlaySection type="info">
-      <OverlayTitle>Account Settings <Emoji name="key" /></OverlayTitle>
+      <OverlayTitle>
+        Account Settings <Emoji name="key" />
+      </OverlayTitle>
     </OverlaySection>
     <OverlaySection type="actions">
       <PasswordSettings user={user} />
     </OverlaySection>
     <OverlaySection type="info">
-     <Text>
+      <Text>
         Email notifications are sent to <b>{user.email}</b>
       </Text>
     </OverlaySection>
@@ -202,14 +204,15 @@ AccountSettingsOverlay.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const AccountSettings = ({user}) => (
+const AccountSettings = ({ user, children }) => (
   <PopoverContainer>
-       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
-         <AccountSettingsOverlay user={user}/> 
-    </details>
-    
+    {({ visible, setVisible }) => (
+      <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
+        <summary>{children}</summary>
+        <AccountSettingsOverlay user={user} />
+      </details>
+    )}
   </PopoverContainer>
 );
 
 export default AccountSettings;
-
