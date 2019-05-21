@@ -223,10 +223,10 @@ const SignInPopBase = withRouter(({ location, align }) => {
     >
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <div className={styles.termsAndConditions}>
               By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
               <Link to="/legal/#privacy">Privacy Statement</Link>

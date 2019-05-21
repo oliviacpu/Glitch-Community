@@ -7,7 +7,7 @@ import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
-import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover'; 
+import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover'; 
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
@@ -48,9 +48,9 @@ function validateEmail(email, currentUser) {
 
 const Success = () => (
   <>
-    <PopoverInfo>
-      <h1 className="pop-title">Report Abuse</h1>
-    </PopoverInfo>
+    <PopoverTitle>
+      Report Abuse
+    </PopoverTitle>
     <PopoverActions>
       <div className="notification notifySuccess">Report Sent</div>
       <p className="pop-description tight-line">
@@ -62,16 +62,14 @@ const Success = () => (
 
 const Failure = ({ value }) => (
   <>
-    <PopoverInfo>
-      <h1 className="pop-title">
+    <PopoverTitle>
         {'Failed to Send '}
         <span className="emoji sick" role="img" aria-label="" />
-      </h1>
-    </PopoverInfo>
+    </PopoverTitle>
     <PopoverInfo>
-      <p className="info-description">
-        But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
-      </p>
+      <InfoDescription>
+        But you can still send us your message by emailing the details below to <strong>support@glitch.com</strong>
+      </InfoDescription>
     </PopoverInfo>
     <PopoverActions>
       <textarea className="content-editable tall-text traditional" value={value} readOnly />
@@ -128,9 +126,9 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
   return (
     <form onSubmit={submitReport}>
-      <PopoverInfo>
-        <h1 className="pop-title">Report Abuse</h1>
-      </PopoverInfo>
+      <PopoverTitle>
+        Report Abuse
+      </PopoverTitle>
       <PopoverActions>
         <TextArea
           value={reason}
@@ -141,9 +139,11 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       </PopoverActions>
       {currentUser.login ? (
         <PopoverInfo type="secondary">
-          <p className="info-description right">
+          <div style={{ textAlign: 'right' }}>
+          <InfoDescription>
             from <strong>{currentUser.login}</strong>
-          </p>
+          </InfoDescription>
+          </div>
         </PopoverInfo>
       ) : (
         <PopoverInfo>
@@ -154,9 +154,9 @@ function ReportAbusePop({ reportedType, reportedModel }) {
         {status === 'loading' ? (
           <Loader />
         ) : (
-          <button className="button button-small" onClick={submitReport} type="button">
+          <Button size="small">
             Submit Report
-          </button>
+          </Button>
         )}
       </PopoverActions>
     </form>
@@ -167,7 +167,7 @@ const ReportAbusePopButton = ({ reportedType, reportedModel }) => (
   <div className="report-abuse-button-wrap">
     <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Report Abuse">
       {() => (
-        <PopoverDialog align="left" wide>
+        <PopoverDialog align="topLeft" wide>
           <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
         </PopoverDialog>
       )}
