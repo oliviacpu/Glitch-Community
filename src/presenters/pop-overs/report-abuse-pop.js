@@ -7,45 +7,12 @@ import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
-import { PopoverWithButton } from 'Components/pop-over' mport { useCurrentUser } from 'State/current-user';
+import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover'; 
+import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
 
-import PopoverWithButton from './popover-with-button';
 import useDebouncedValue from '../../hooks/use-debounced-value';
-
-const Success = () => (
-  <>
-    <section className="pop-over-info">
-      <h1 className="pop-title">Report Abuse</h1>
-    </section>
-    <section className="pop-over-actions">
-      <div className="notification notifySuccess">Report Sent</div>
-      <p className="pop-description tight-line">
-        Thanks for helping to keep Glitch a safe, friendly community <span className="emoji park" role="img" aria-label="" />
-      </p>
-    </section>
-  </>
-);
-
-const Failure = ({ value }) => (
-  <>
-    <section className="pop-over-info">
-      <h1 className="pop-title">
-        {'Failed to Send '}
-        <span className="emoji sick" role="img" aria-label="" />
-      </h1>
-    </section>
-    <section className="pop-over-info">
-      <p className="info-description">
-        But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
-      </p>
-    </section>
-    <section className="pop-over-actions">
-      <textarea className="content-editable tall-text traditional" value={value} readOnly />
-    </section>
-  </>
-);
 
 function getDefaultReason(reportedType) {
   if (reportedType === 'user') {
@@ -78,6 +45,39 @@ function validateEmail(email, currentUser) {
   if (!parseOneAddress(email)) return 'Please enter a valid email';
   return '';
 }
+
+const Success = () => (
+  <>
+    <PopoverInfo>
+      <h1 className="pop-title">Report Abuse</h1>
+    </PopoverInfo>
+    <PopoverActions>
+      <div className="notification notifySuccess">Report Sent</div>
+      <p className="pop-description tight-line">
+        Thanks for helping to keep Glitch a safe, friendly community <span className="emoji park" role="img" aria-label="" />
+      </p>
+    </PopoverActions>
+  </>
+);
+
+const Failure = ({ value }) => (
+  <>
+    <PopoverInfo>
+      <h1 className="pop-title">
+        {'Failed to Send '}
+        <span className="emoji sick" role="img" aria-label="" />
+      </h1>
+    </PopoverInfo>
+    <PopoverInfo>
+      <p className="info-description">
+        But you can still send us your message by emailing the details below to <b>support@glitch.com</b>
+      </p>
+    </PopoverInfo>
+    <PopoverActions>
+      <textarea className="content-editable tall-text traditional" value={value} readOnly />
+    </PopoverActions>
+  </>
+);
 
 function ReportAbusePop({ reportedType, reportedModel }) {
   const { currentUser } = useCurrentUser();
@@ -128,29 +128,29 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
   return (
     <form onSubmit={submitReport}>
-      <section className="pop-over-info">
+      <PopoverInfo>
         <h1 className="pop-title">Report Abuse</h1>
-      </section>
-      <section className="pop-over-actions">
+      </PopoverInfo>
+      <PopoverActions>
         <TextArea
           value={reason}
           onChange={reasonOnChange}
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           error={reasonError}
         />
-      </section>
+      </PopoverActions>
       {currentUser.login ? (
-        <section className="pop-over-info">
+        <PopoverInfo type="secondary">
           <p className="info-description right">
             from <strong>{currentUser.login}</strong>
           </p>
-        </section>
+        </PopoverInfo>
       ) : (
-        <section className="pop-over-info">
+        <PopoverInfo>
           <InputText value={email} onChange={emailOnChange} placeholder="your@email.com" error={emailError} type="email" />
-        </section>
+        </PopoverInfo>
       )}
-      <section className="pop-over-actions">
+      <PopoverActions>
         {status === 'loading' ? (
           <Loader />
         ) : (
@@ -158,18 +158,18 @@ function ReportAbusePop({ reportedType, reportedModel }) {
             Submit Report
           </button>
         )}
-      </section>
+      </PopoverActions>
     </form>
   );
 }
 
 const ReportAbusePopButton = ({ reportedType, reportedModel }) => (
   <div className="report-abuse-button-wrap">
-    <PopoverWithButton buttonClass="button-small button-tertiary margin" buttonText="Report Abuse">
+    <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Report Abuse">
       {() => (
-        <dialog className="pop-over wide-pop top-right report-abuse-pop">
+        <PopoverDialog align="left" wide>
           <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
-        </dialog>
+        </PopoverDialog>
       )}
     </PopoverWithButton>
   </div>
@@ -185,4 +185,3 @@ ReportAbusePopButton.defaultProps = {
 };
 
 export default ReportAbusePopButton;
-W
