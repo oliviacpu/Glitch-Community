@@ -84,22 +84,24 @@ function useEmail() {
 
 const ForgotPasswordHandler = () => {
   const [email, setEmail, validationError] = useEmail();
-  const [state, setState] = useState({ status: 'active', error: null });
+  const [{ status, error }, setState] = useState({ status: 'active', error: null });
 
   const onSubmit = async () => {
     setState({ status: 'working', error: null });
 
     // TODO - actually send link to reset password
-    await new Promise(resolve => setTimeout(resolve, 1000);
-    setState({ status: 'done'})
-  }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setState({ status: 'done', error: null });
+  };
 
+  const isWorking = status === 'working';
+  const isDone = status === 'done';
   const isEnabled = email.length > 0;
   return (
     <PopoverDialog align="right">
       <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
       <PopoverActions>
-        {!this.state.done && (
+        {!isDone && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             <TextInput
               type="email"
@@ -108,22 +110,23 @@ const ForgotPasswordHandler = () => {
               onChange={setEmail}
               placeholder="your@email.com"
               error={validationError}
+              disabled={isWorking}
             />
-            <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
+            <Button size="small" disabled={!isEnabled && !isWorking} decorative>
               Send Reset Password Link
-            </button>
+            </Button>
           </form>
         )}
-        {this.state.done && !error && (
+        {isDone && !error && (
           <>
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-            <div>Reset your password by clicking the link sent to {this.state.email}.</div>
+            <div>Reset your password by clicking the link sent to {email}.</div>
           </>
         )}
-        {this.state.done && this.state.error && (
+        {isDone && error && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
-            <div>{this.state.errorMsg}</div>
+            <div>{error}</div>
           </>
         )}
       </PopoverActions>
