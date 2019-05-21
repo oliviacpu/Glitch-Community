@@ -199,7 +199,7 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
   if (!team.tokens.length) return [];
 
   try {
-    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join(',');
+    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join('&');
     const { data } = await api.get(`v1/users/by/id?${idString}`);
     const invitees = Object.values(data);
     return invitees;
