@@ -29,6 +29,7 @@ class ProjectEditor extends React.Component {
 
   async updateDomain(domain) {
     await this.updateFields({ domain });
+    // don't await this because the project domain has changed at this point
     this.props.api.post(`project/domainChanged?projectId=${this.state.id}&authorization=${this.props.currentUser.persistentToken}`);
   }
 
