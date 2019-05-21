@@ -13,6 +13,7 @@ import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverT
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
+import styles from './styles.styl';
 
 function getDefaultReason(reportedType) {
   if (reportedType === 'user') {
@@ -75,7 +76,7 @@ const Failure = ({ value }) => (
       </InfoDescription>
     </PopoverInfo>
     <PopoverActions>
-      <textarea className="content-editable tall-text traditional" value={value} readOnly />
+      <textarea className={`content-editable ${styles.textArea}`} value={value} readOnly />
     </PopoverActions>
   </>
 );
@@ -147,7 +148,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       </PopoverActions>
       {currentUser.login ? (
         <PopoverInfo type="secondary">
-          <div style={{ textAlign: 'right' }}>
+          <div className={styles.right}>
             <InfoDescription>
               from <strong>{currentUser.login}</strong>
             </InfoDescription>
