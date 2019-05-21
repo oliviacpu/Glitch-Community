@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
 import axios from 'axios';
+
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
-import PopoverWithButton from './popover-with-button';
-import { captureException } from '../../utils/sentry';
-import { getAbuseReportTitle, getAbuseReportBody } from '../../utils/abuse-reporting';
+import { useCurrentUser } from 'State/current-user';
+import { captureException } from 'Utils/sentry';
+import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
 
-import { useCurrentUser } from '../../state/current-user';
+import PopoverWithButton from './popover-with-button';
+import { useDebouncedState }
 
 const Success = () => (
   <>
@@ -77,114 +79,88 @@ function validateEmail(email, currentUser) {
   return '';
 }
 
-class ReportAbusePop extends React.Component {
-  constructor(props) {
-    super(props);
+function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
+  const [status, setStatus] = useState('ready'); // ready -> loading -> success | error
+  const [reason, setReason] = useState(getDefaultReason(reportedType));
+  const [reasonError, setReasonError] = useDebouncedState('', 200);
+  const reasonOnChange = (value) => {
+    setReason(value);
+    setReasonError(validateReason(value, reportedType));
+  };
 
-    this.state = {
-      reason: getDefaultReason(props.reportedType),
-      email: '',
-      emailError: '',
-      reasonError: '',
-      status: 'ready', // ready -> loading -> success | error
-    };
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useDebouncedState('', 200);
+  const emailOnChange = (value) => {
+    setEmail(value);
+    setEmailError(validateEmail(value, currentUser));
+  };
 
-    this.debouncedValidateEmail = debounce(
-      () => this.setState(({ email }) => ({ emailError: validateEmail(email, this.props.currentUser)})), 200);
-    this.debouncedValidateReason = debounce(
-      () => this.setState(({ reason }) => ({ reasonError: validateReason(reason, this.props.reportedType) })),
-      200,
-    );
-  }
+  const formatRaw = () => getAbuseReportBody(currentUser, email, reportedType, reportedModel, reason);
 
-  render() {
-    const { currentUser, reportedType, reportedModel } = this.props;
-    const { email, emailError, reason, reasonError, status } = this.state;
+  const submitReport = async (e) => {
+    e.preventDefault();
+    try {
+      if (!validateEmail(email, currentUser) || !validateReason(reason, reportedType)) return;
 
-    const formatRaw = () => getAbuseReportBody(currentUser, email, reportedType, reportedModel, reason);
+      setStatus({ status: 'loading' });
 
-    const reasonOnChange = (value) => {
-      this.setState({
-        reason: value,
+      await axios.post('https://support-poster.glitch.me/post', {
+        raw: formatRaw(),
+        title: getAbuseReportTitle(reportedModel, reportedType),
       });
-      this.debouncedValidateReason();
-    };
+      setStatus({ status: 'success' });
+    } catch (error) {
+      captureException(error);
+      setStatus({ status: 'error' });
+    }
+  };
 
-    const emailOnChange = (value) => {
-      this.setState({
-        email: value,
-      });
-      this.debouncedValidateEmail();
-    };
+  if (status === 'success') return <Success />;
+  if (status === 'error') return <Failure value={trimStart(formatRaw())} />;
 
-    const submitReport = async (e) => {
-      e.preventDefault();
-      try {
-        const emailErrors = validateEmail(email, currentUser);
-        const reasonErrors = validateReason(reason, reportedType);
-        if (emailErrors.emailError !== '' || reasonErrors !== '') {
-          return;
-        }
-        this.setState({ status: 'loading' });
-
-        await axios.post('https://support-poster.glitch.me/post', {
-          raw: formatRaw(),
-          title: getAbuseReportTitle(reportedModel, reportedType),
-        });
-        this.setState({ status: 'success' });
-      } catch (error) {
-        captureException(error);
-        this.setState({ status: 'error' });
-      }
-    };
-
-    if (status === 'success') return <Success />;
-    if (status === 'error') return <Failure value={trimStart(formatRaw())} />;
-
-    return (
-      <form onSubmit={submitReport}>
+  return (
+    <form onSubmit={submitReport}>
+      <section className="pop-over-info">
+        <h1 className="pop-title">Report Abuse</h1>
+      </section>
+      <section className="pop-over-actions">
+        <TextArea
+          value={reason}
+          onChange={reasonOnChange}
+          onBlur={this.debouncedValidateReason}
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          error={reasonError}
+        />
+      </section>
+      {currentUser.login ? (
         <section className="pop-over-info">
-          <h1 className="pop-title">Report Abuse</h1>
+          <p className="info-description right">
+            from <strong>{currentUser.login}</strong>
+          </p>
         </section>
-        <section className="pop-over-actions">
-          <TextArea
-            value={reason}
-            onChange={reasonOnChange}
-            onBlur={this.debouncedValidateReason}
-            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-            error={reasonError}
+      ) : (
+        <section className="pop-over-info">
+          <InputText
+            value={email}
+            onChange={emailOnChange}
+            onBlur={this.debouncedValidateEmail}
+            placeholder="your@email.com"
+            error={emailError}
+            type="email"
           />
         </section>
-        {currentUser.login ? (
-          <section className="pop-over-info">
-            <p className="info-description right">
-              from <strong>{currentUser.login}</strong>
-            </p>
-          </section>
+      )}
+      <section className="pop-over-actions">
+        {status === 'loading' ? (
+          <Loader />
         ) : (
-          <section className="pop-over-info">
-            <InputText
-              value={email}
-              onChange={emailOnChange}
-              onBlur={this.debouncedValidateEmail}
-              placeholder="your@email.com"
-              error={emailError}
-              type="email"
-            />
-          </section>
+          <button className="button button-small" onClick={submitReport} type="button">
+            Submit Report
+          </button>
         )}
-        <section className="pop-over-actions">
-          {status === 'loading' ? (
-            <Loader />
-          ) : (
-            <button className="button button-small" onClick={submitReport} type="button">
-              Submit Report
-            </button>
-          )}
-        </section>
-      </form>
-    );
-  }
+      </section>
+    </form>
+  );
 }
 
 const ReportAbusePopButton = (props) => {
