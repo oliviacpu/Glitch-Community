@@ -27,7 +27,6 @@ const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, classNa
       alt={alt}
       className={className || undefined}
       height={height || undefined}
-      role={role}
       sizes={sizes}
       src={src}
       srcSet={srcSet.length > 0 ? srcSet : undefined}
@@ -38,7 +37,6 @@ const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, classNa
   ) : (
     <div
       className={className || undefined}
-      role={role}
       style={{
         backgroundColor,
         backgroundImage: `url(${src})`,
@@ -71,7 +69,6 @@ Image.defaultProps = {
   backgroundRatio: 65,
   className: '',
   height: '100%',
-  role: 'presentation',
   srcSet: [],
   sizes: '',
   width: '100%',
