@@ -86,7 +86,8 @@ const ForgotPasswordHandler = () => {
   const [email, setEmail, validationError] = useEmail();
   const [{ status, error }, setState] = useState({ status: 'active', error: null });
 
-  const onSubmit = async () => {
+  const onSubmit = async (event) => {
+    event.preventDefault();
     setState({ status: 'working', error: null });
 
     // TODO - actually send link to reset password
@@ -102,7 +103,7 @@ const ForgotPasswordHandler = () => {
       <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
       <PopoverActions>
         {!isDone && (
-          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
+          <form onSubmit={onSubmit}>
             <TextInput
               type="email"
               labelText="Email address"
@@ -112,7 +113,7 @@ const ForgotPasswordHandler = () => {
               error={validationError}
               disabled={isWorking}
             />
-            <Button size="small" disabled={!isEnabled && !isWorking} decorative>
+            <Button size="small" disabled={!isEnabled && !isWorking} submit>
               Send Reset Password Link
             </Button>
           </form>
