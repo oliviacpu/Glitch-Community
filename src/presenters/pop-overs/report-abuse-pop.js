@@ -114,16 +114,8 @@ class ReportAbusePop extends React.Component {
   }
 
   render() {
-    const format
-    
-    
-    let content;
-    if (this.state.submitted) {
-      if (!this.state.submitSuccess) {
-        return <Failure value={trimStart(this.formatRaw())} />;
-      }
-      return <Success />;
-    }
+    const formatRaw = () =>
+      getAbuseReportBody(this.props.currentUser, this.state.email, this.props.reportedType, this.props.reportedModel, this.state.reason);
 
     const reasonOnChange = (value) => {
       this.setState({
@@ -159,6 +151,14 @@ class ReportAbusePop extends React.Component {
         this.setState({ submitted: true, submitSuccess: false, loading: false });
       }
     };
+
+    let content;
+    if (this.state.submitted) {
+      if (!this.state.submitSuccess) {
+        return <Failure value={trimStart(this.formatRaw())} />;
+      }
+      return <Success />;
+    }
 
     return (
       <>
