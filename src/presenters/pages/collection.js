@@ -23,13 +23,10 @@ import { useCurrentUser } from 'State/current-user';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
-
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
-
-import EditCollectionColor from '../includes/edit-collection-color';
-import AddCollectionProject from '../includes/add-collection-project';
-
+import EditCollectionColor from '../pop-overs/edit-collection-color-pop';
+import AddCollectionProject from '../pop-overs/add-collection-project-pop';
 import CollectionAvatar from '../includes/collection-avatar';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {

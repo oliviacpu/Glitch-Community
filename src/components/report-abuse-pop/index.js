@@ -13,6 +13,7 @@ import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverT
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
+
 import styles from './styles.styl';
 
 function getDefaultReason(reportedType) {
@@ -25,24 +26,15 @@ function getDefaultReason(reportedType) {
   return `This ${reportedType} doesn't seem appropriate for Glitch because...`;
 }
 
-function validateNotEmpty(value, fieldDescription) {
-  if (value === '') return `${fieldDescription} is required`;
-  return '';
-}
-
 function validateReason(reason, reportedType) {
-  const err = validateNotEmpty(reason, 'A description of the issue');
-  if (err) return err;
+  if (!reason) return 'A description of the issue is required';
   if (reason === getDefaultReason(reportedType)) return 'Reason is required';
   return '';
 }
 
 function validateEmail(email, currentUser) {
   if (currentUser.login) return '';
-
-  const err = validateNotEmpty(email, 'Email');
-  if (err) return err;
-
+  if (!email) return 'Email is required';
   if (!parseOneAddress(email)) return 'Please enter a valid email';
   return '';
 }
@@ -105,7 +97,6 @@ function ReportAbusePop({ reportedType, reportedModel }) {
     e.preventDefault();
     const emailErr = validateEmail(email, currentUser);
     const reasonErr = validateReason(reason, reportedType);
-    console.log(email, reason, emailErr, reasonErr);
     if (emailErr || reasonErr) {
       setEmailError(emailErr);
       setReasonError(reasonErr);
@@ -114,13 +105,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
     setStatus('loading');
     try {
-      // await axios.post('https://support-poster.glitch.me/post', {
-      //   raw: formatRaw(),
-      //   title: getAbuseReportTitle(reportedModel, reportedType),
-      // });
-
-      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
-      console.log({
+      await axios.post('https://support-poster.glitch.me/post', {
         raw: formatRaw(),
         title: getAbuseReportTitle(reportedModel, reportedType),
       });

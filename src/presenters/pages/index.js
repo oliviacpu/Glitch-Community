@@ -8,6 +8,7 @@ import Link from 'Components/link';
 import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
 import ReportButton from 'Components/report-abuse-pop';
+import RecentProjects from 'Components/recent-projects';
 import { getEditorUrl } from 'Models/project';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -15,7 +16,6 @@ import { useCurrentUser } from 'State/current-user';
 import Layout from '../layout';
 import Featured from '../featured';
 import OverlayVideo from '../overlays/overlay-video';
-import RecentProjects from '../recent-projects';
 
 const Callout = ({ classes, imgUrl, title, description }) => (
   <div className={`callout ${classes}`}>
