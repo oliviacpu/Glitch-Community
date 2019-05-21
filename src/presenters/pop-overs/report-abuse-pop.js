@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
@@ -6,15 +6,13 @@ import axios from 'axios';
 
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
-import InputText from 'Components/inputs/text-input';
+import TextInput from 'Components/inputs/text-input';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
-
-import useDebouncedValue from '../../hooks/use-debounced-value';
 
 function getDefaultReason(reportedType) {
   if (reportedType === 'user') {
@@ -46,6 +44,12 @@ function validateEmail(email, currentUser) {
 
   if (!parseOneAddress(email)) return 'Please enter a valid email';
   return '';
+}
+
+function useDebouncedState(initialState, timeout) {
+  const [state, setState] = useState(initialState);
+  const setDebounced = useMemo(() => debounce(setState, timeout));
+  return [state, setDebounced];
 }
 
 const Success = () => (
@@ -81,14 +85,14 @@ function ReportAbusePop({ reportedType, reportedModel }) {
   const [status, setStatus] = useState('ready'); // ready -> loading -> success | error
 
   const [reason, setReason] = useState(getDefaultReason(reportedType));
-  const [reasonError, setReasonError] = useDebouncedValue('', 200);
+  const [reasonError, setReasonError] = useDebouncedState('', 200);
   const reasonOnChange = (value) => {
     setReason(value);
     setReasonError(validateReason(value, reportedType));
   };
 
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useDebouncedValue('', 200);
+  const [emailError, setEmailError] = useDebouncedState('', 200);
   const emailOnChange = (value) => {
     setEmail(value);
     setEmailError(validateEmail(value, currentUser));
@@ -98,23 +102,27 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
   const submitReport = async (e) => {
     e.preventDefault();
+    const emailErr = validateEmail(email, currentUser);
+    const reasonErr = validateReason(reason, reportedType);
+    console.log(email, reason, emailErr, reasonErr);
+    if (emailErr || reasonErr) {
+      setEmailError(emailErr);
+      setReasonError(reasonErr);
+      return;
+    }
+
+    setStatus('loading');
     try {
-      const emailErr = validateEmail(email, currentUser);
-      const reasonErr = validateReason(reason, reportedType);
-      if (emailErr || reasonErr) {
-        setEmailError(emailErr);
-        setReasonError(reasonErr);
-        return;
-      }
-
-      setStatus('loading');
-
       // await axios.post('https://support-poster.glitch.me/post', {
       //   raw: formatRaw(),
       //   title: getAbuseReportTitle(reportedModel, reportedType),
       // });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((_, reject) => setTimeout(reject, 1000));
+      console.log({
+        raw: formatRaw(),
+        title: getAbuseReportTitle(reportedModel, reportedType),
+      });
 
       setStatus('success');
     } catch (error) {
@@ -147,7 +155,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
         </PopoverInfo>
       ) : (
         <PopoverInfo>
-          <InputText value={email} onChange={emailOnChange} placeholder="your@email.com" error={emailError} type="email" />
+          <TextInput value={email} onChange={emailOnChange} placeholder="your@email.com" error={emailError} type="email" labelText="email address" />
         </PopoverInfo>
       )}
       <PopoverActions>
@@ -164,15 +172,13 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 }
 
 const ReportAbusePopButton = ({ reportedType, reportedModel }) => (
-  <div className="report-abuse-button-wrap">
-    <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Report Abuse">
-      {() => (
-        <PopoverDialog align="topLeft" wide>
-          <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
-        </PopoverDialog>
-      )}
-    </PopoverWithButton>
-  </div>
+  <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Report Abuse">
+    {() => (
+      <PopoverDialog align="topLeft" wide>
+        <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
+      </PopoverDialog>
+    )}
+  </PopoverWithButton>
 );
 
 ReportAbusePopButton.propTypes = {
