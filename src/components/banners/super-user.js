@@ -17,6 +17,7 @@ const SuperUserBanner = () => {
   const superUser = currentUser.features && currentUser.features.find((feature) => feature.name === 'super_user');
 
   if (persistentToken && (superUser || canBecomeSuperUser)) {
+    console.log(superUser.expiresAt)
     const expirationDate = superUser && new Date(superUser.expiresAt).toUTCString();
     const displayText = `SUPER USER MODE ${superUser ? `ENABLED UNTIL: ${expirationDate}` : 'DISABLED'} `;
     const toggleSuperUser = async () => {
