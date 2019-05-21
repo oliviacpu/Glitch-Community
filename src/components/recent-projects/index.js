@@ -7,11 +7,11 @@ import CoverContainer from 'Components/containers/cover-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import SignInPop from 'Components/sign-in-pop';
 import { getAvatarStyle } from 'Models/user';
+import { useCurrentUser } from 'State/current-user';
 
-import { useCurrentUser } from '../../state/current-user';
 import ProjectsLoader from '../../presenters/projects-loader';
-import SignInPop from '../../presenters/pop-overs/sign-in-pop';
 import styles from './styles.styl';
 
 const SignInNotice = () => (
