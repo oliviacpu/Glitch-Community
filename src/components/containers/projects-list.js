@@ -69,7 +69,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             <Button data-cy="previous-page" aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <Image alt="" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
-            <div className={styles.pageNumbers}>
+            <div data-cy="page-numbers" className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
             <Button data-cy="next-page" aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
@@ -77,7 +77,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             </Button>
           </div>
           <Button data-cy="show-all" type="tertiary" onClick={() => setExpanded(true)}>
-            Show all<Badge>{numProjects}</Badge>
+            Show all<Badge data-cy="total-projects">{numProjects}</Badge>
           </Button>
         </div>
       )}
