@@ -60,7 +60,7 @@ const TextInput = ({
           placeholder={placeholder}
           type={type}
           value={value}
-          autoCapitalize="none"
+          spellCheck={type !== 'email' && type !== 'password'}
         />
         {!!error && (
           <InputPart className={styles.errorIcon}>
