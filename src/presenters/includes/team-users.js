@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
+import { useCurrentUser } from 'State/current-user';
+import { createAPIHook } from 'State/api';
 import AddTeamUserPop from '../pop-overs/add-team-user-pop';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
-import { useCurrentUser } from '../../state/current-user';
-import { createAPIHook } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
 // Whitelisted domain icon
@@ -68,9 +68,10 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
   if (!currentUserIsOnTeam) return [];
+  if (!team.tokens.length) return [];
 
   try {
-    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join(',');
+    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join('&');
     const { data } = await api.get(`v1/users/by/id?${idString}`);
     const invitees = Object.values(data);
     return invitees;

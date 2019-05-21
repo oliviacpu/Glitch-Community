@@ -4,18 +4,19 @@ import PropTypes from 'prop-types';
 
 import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
-import Link from 'Components/link';
-import { TrackedExternalLink } from '../../presenters/segment-analytics';
+import SignInPop from 'Components/sign-in-pop';
+import Link, { TrackedExternalLink } from 'Components/link';
+import { useCurrentUser } from 'State/current-user';
 import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
-import SignInPop from '../../presenters/pop-overs/sign-in-pop';
-import NewProjectPop from '../../presenters/pop-overs/new-project-pop';
-import { useCurrentUser } from '../../state/current-user';
+import NewProjectPop from './new-project-pop';
 import Logo from './logo';
 import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" to={EDITOR_URL}>
-    <Button type="cta" size="small" decorative>Resume Coding</Button>
+    <Button type="cta" size="small" decorative>
+      Resume Coding
+    </Button>
   </TrackedExternalLink>
 );
 
@@ -33,7 +34,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
         </div>
         <ul className={styles.buttons}>
           <li className={styles.buttonWrap}>
-            <NewProjectPop opensFromRight={!(currentUser && currentUser.login)} />
+            <NewProjectPop />
           </li>
           {!!currentUser && !!currentUser.projects.length && (
             <li className={styles.buttonWrap}>
@@ -42,7 +43,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           )}
           {!(currentUser && currentUser.login) && (
             <li className={styles.buttonWrap}>
-              <SignInPop />
+              <SignInPop align="right" />
             </li>
           )}
           {!!currentUser && currentUser.login && (

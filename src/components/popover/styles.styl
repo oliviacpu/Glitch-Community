@@ -1,0 +1,68 @@
+@import "../constants.styl"
+
+.popoverWrap
+  position: absolute
+  width: 255px
+  &.right
+    right: 0
+  &.left
+    left: 0
+  
+  &.wide
+    width: 350px
+  
+.popover
+  position: relative
+  margin: 0
+  padding: 0
+  display: block
+  width: 100%
+  text-align: left
+  background-color: primary-background
+  font-size: 14px
+  cursor: initial
+  border-radius: 3px
+  border: 1px solid secondary
+  box-shadow: pop-shadow
+  z-index: 10
+
+.popoverSection
+  margin: 0
+  button
+    margin-bottom: 0 !important
+  &.primary
+    color: primary
+    background-color: primary-background
+  &.secondary
+    color: primary
+    background-color: secondary-background
+  &.dangerZone
+    color: primary
+    background-color: warning-background
+    
+.popoverSection + .popoverSection
+  border-top: 1px solid secondary
+    
+.popoverActions,
+.popoverInfo,
+.popoverTitle
+  padding: 14px 12px
+    
+.popoverWithButtonWrap
+  position: relative
+  
+.buttonWrap button
+  margin: 0 !important
+  
+.popoverTitle
+  display: flex
+  align-items: center
+  font-weight: bold
+
+.backArrow
+  margin-top: -3px
+  padding: 1px 3px
+  border-radius: 3px
+  opacity: 0.7
+.popoverTitle:hover .backArrow
+  background-color: section-line

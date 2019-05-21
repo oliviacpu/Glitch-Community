@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+
 import PopoverWithButton from './popover-with-button';
 import { NestedPopover } from './popover-nested';
-import { useCurrentUser } from '../../state/current-user';
-
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
 const isTeamProject = ({ currentUser, project }) => {
@@ -31,7 +31,6 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
   }
 };
 
-
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
   const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
@@ -54,39 +53,23 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   } = projectOptions;
 
   return {
-    featureProject: featureProject && !project.private && !isAnon && isAuthorized
-      ? () => featureProject(project.id)
-      : null,
-    addPin: addPin && !isAnon && isAuthorized
-      ? () => addPin(project.id)
-      : null,
-    removePin: removePin && !isAnon && isAuthorized
-      ? () => removePin(project.id)
-      : null,
-    displayNewNote: !(project.note || project.isAddingANewNote) && displayNewNote && !isAnon && isAuthorized
-      ? () => displayNewNote(project.id)
-      : null,
-    addProjectToCollection: addProjectToCollection && !isAnon
-      ? addProjectToCollection
-      : null,
-    joinTeamProject: joinTeamProject && !isProjectMember && !isAnon && isAuthorized
-      ? () => joinTeamProject(project.id, currentUser.id)
-      : null,
-    leaveTeamProject: leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized
-      ? () => leaveTeamProject(project.id, currentUser.id)
-      : null,
-    leaveProject: leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
-      ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
-      : null,
-    removeProjectFromTeam: removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized
-      ? () => removeProjectFromTeam(project.id)
-      : null,
-    deleteProject: !removeProjectFromCollection && deleteProject && isProjectAdmin
-      ? () => deleteProject(project.id)
-      : null,
-    removeProjectFromCollection: removeProjectFromCollection && !isAnon && isAuthorized
-      ? () => removeProjectFromCollection(project)
-      : null,
+    featureProject: featureProject && !project.private && !isAnon && isAuthorized ? () => featureProject(project.id) : null,
+    addPin: addPin && !isAnon && isAuthorized ? () => addPin(project.id) : null,
+    removePin: removePin && !isAnon && isAuthorized ? () => removePin(project.id) : null,
+    displayNewNote:
+      !(project.note || project.isAddingANewNote) && displayNewNote && !isAnon && isAuthorized ? () => displayNewNote(project.id) : null,
+    addProjectToCollection: addProjectToCollection && !isAnon ? addProjectToCollection : null,
+    joinTeamProject: joinTeamProject && !isProjectMember && !isAnon && isAuthorized ? () => joinTeamProject(project.id, currentUser.id) : null,
+    leaveTeamProject:
+      leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
+    leaveProject:
+      leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
+        ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
+        : null,
+    removeProjectFromTeam:
+      removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
+    deleteProject: !removeProjectFromCollection && deleteProject && isProjectAdmin ? () => deleteProject(project.id) : null,
+    removeProjectFromCollection: removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromCollection(project) : null,
   };
 };
 
@@ -119,15 +102,9 @@ const ProjectOptionsContent = (props) => {
     <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {props.featureProject && (
-            <PopoverButton onClick={() => toggleAndCB(props.featureProject)} text="Feature" emoji="clapper" />
-          )}
-          {props.addPin && (
-            <PopoverButton onClick={() => toggleAndCB(props.addPin)} text="Pin " emoji="pushpin" />
-          )}
-          {props.removePin && (
-            <PopoverButton onClick={() => toggleAndCB(props.removePin)} text="Un-Pin " emoji="pushpin" />
-          )}
+          {props.featureProject && <PopoverButton onClick={() => toggleAndCB(props.featureProject)} text="Feature" emoji="clapper" />}
+          {props.addPin && <PopoverButton onClick={() => toggleAndCB(props.addPin)} text="Pin " emoji="pushpin" />}
+          {props.removePin && <PopoverButton onClick={() => toggleAndCB(props.removePin)} text="Un-Pin " emoji="pushpin" />}
         </section>
       )}
 
@@ -167,16 +144,13 @@ const ProjectOptionsContent = (props) => {
             <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
           )}
 
-          {props.deleteProject && (
-            <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />
-          )}
+          {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
             <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbs_down" />
           )}
         </section>
       )}
-
     </dialog>
   );
 };

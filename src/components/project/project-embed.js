@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import Embed from 'Components/project/embed';
-
+import { useTracker } from 'State/segment-analytics';
 import ReportButton from '../../presenters/pop-overs/report-abuse-pop';
 import { EditButton, RemixButton } from '../../presenters/includes/project-actions';
 import AddProjectToCollection from '../../presenters/pop-overs/add-project-to-collection-pop';
-import { useTracker } from '../../presenters/segment-analytics';
 
 import styles from './project-embed.styl';
 

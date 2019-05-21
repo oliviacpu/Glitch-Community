@@ -6,11 +6,12 @@ import { debounce } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI, createAPIHook } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+
 import ProjectResultItem from '../includes/project-result-item';
 import ProjectsLoader from '../projects-loader';
-import { useAPI, createAPIHook } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
 import PopoverWithButton from './popover-with-button';
 
@@ -189,7 +190,7 @@ class AddCollectionProjectPop extends React.Component {
     let nonCollectionResults = [];
     if (searchByUrl) {
       // get the single result that matches the URL exactly - check with https://community.glitch.me/
-      nonCollectionResults = results.filter((result) => result.domain === query);
+      nonCollectionResults = results.filter((result) => result && result.domain === query);
 
       // check if the project is already in the collection
       if (nonCollectionResults.length > 0 && collectionProjectIds.includes(nonCollectionResults[0].id)) {
