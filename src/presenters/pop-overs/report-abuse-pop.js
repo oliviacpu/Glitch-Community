@@ -45,6 +45,16 @@ const Failure = ({ value }) => (
   </>
 );
 
+function getDefaultReason(reportedType) {
+  if (reportedType === 'user') {
+    return "This user profile doesn't seem appropriate for Glitch because...";
+  }
+  if (reportedType === 'home') {
+    return "[Something here] doesn't seem appropriate for Glitch because...";
+  }
+  return `This ${reportedType} doesn't seem appropriate for Glitch because...`;
+}
+
 function validateNotEmpty(value, errorField, fieldDescription) {
   let errorObj;
   if (value === '') {
@@ -55,7 +65,8 @@ function validateNotEmpty(value, errorField, fieldDescription) {
   return errorObj;
 }
 
-function validateReason(reason, defaultReason) {
+function validateReason(reason, reportedType) {
+  const defaultReason = getDefaultReason(reportedType);
   let errorObj = validateNotEmpty(reason, 'reasonError', 'A description of the issue');
   if (errorObj.reasonError === '' && reason === defaultReason) {
     errorObj = { reasonError: 'Reason is required' };
@@ -82,38 +93,29 @@ function validateEmail(email) {
   return errors;
 }
 
-function getDefaultReason (reportedType) {
-  if (reportedType === 'user') {
-    this.defaultReason = "This user profile doesn't seem appropriate for Glitch because...";
-  } else if (reportedType === 'home') {
-    this.defaultReason = "[Something here] doesn't seem appropriate for Glitch because...";
-  } else {
-    this.defaultReason = `This ${reportedType} doesn't seem appropriate for Glitch because...`;
-  }
-}
-
 class ReportAbusePop extends React.Component {
   constructor(props) {
     super(props);
 
-    this.defaultReason = getDefaultReason(props.reportedType)
-
     this.state = {
-      reason: this.defaultReason,
+      reason: getDefaultReason(props.reportedType),
       email: '',
       emailError: '',
       reasonError: '',
       submitted: false,
       loading: false,
+      status: 'ready', // ready -> loading -> success | error
     };
 
-    this.debouncedValidateEmail = debounce(() => this.setState(validateEmail(this.state.email)), 200);
-    this.debouncedValidateReason = debounce(() => this.setState(validateReason(this.state.reason, this.defaultReason)), 200);
+    this.debouncedValidateEmail = debounce(() => this.setState(({ email }) => validateEmail(email)), 200);
+    this.debouncedValidateReason = debounce(() => this.setState(({ reason }) => validateReason(reason, this.props.reportedType)), 200);
   }
 
   render() {
-    const formatRaw = () =>
-      getAbuseReportBody(this.props.currentUser, this.state.email, this.props.reportedType, this.props.reportedModel, this.state.reason);
+    const { currentUser, reportedType, reportedModel } = this.props;
+    const { email, emailError, reason, reasonError, status } = this.state;
+
+    const formatRaw = () => getAbuseReportBody(currentUser, email, reportedType, reportedModel, reason);
 
     const reasonOnChange = (value) => {
       this.setState({
@@ -132,31 +134,26 @@ class ReportAbusePop extends React.Component {
     const submitReport = async (e) => {
       e.preventDefault();
       try {
-        const emailErrors = validateEmail(this.state.email);
-        const reasonErrors = validateReason(this.state.reason, this.defaultReason);
+        const emailErrors = validateEmail(email);
+        const reasonErrors = validateReason(reason, reportedType);
         if (emailErrors.emailError !== '' || reasonErrors.reasonError !== '') {
           return;
         }
-        this.setState({ loading: true });
+        this.setState({ status: 'loading' });
 
         await axios.post('https://support-poster.glitch.me/post', {
           raw: formatRaw(),
-          title: getAbuseReportTitle(this.props.reportedModel, this.props.reportedType),
+          title: getAbuseReportTitle(reportedModel, reportedType),
         });
-        this.setState({ submitted: true, submitSuccess: true, loading: false });
+        this.setState({ status: 'success' });
       } catch (error) {
         captureException(error);
-        this.setState({ submitted: true, submitSuccess: false, loading: false });
+        this.setState({ status: 'error' });
       }
     };
-
-    let content;
-    if (this.state.submitted) {
-      if (!this.state.submitSuccess) {
-        return <Failure value={trimStart(this.formatRaw())} />;
-      }
-      return <Success />;
-    }
+    
+    if (status === 'success') return <Success />;
+    if (status === 'error') return <Failure value={trimStart(formatRaw())} />;
 
     return (
       <form onSubmit={submitReport}>
@@ -165,33 +162,33 @@ class ReportAbusePop extends React.Component {
         </section>
         <section className="pop-over-actions">
           <TextArea
-            value={this.state.reason}
+            value={reason}
             onChange={reasonOnChange}
             onBlur={this.debouncedValidateReason}
             autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-            error={this.state.reasonError}
+            error={reasonError}
           />
         </section>
-        {this.props.currentUser.login ? (
+        {currentUser.login ? (
           <section className="pop-over-info">
             <p className="info-description right">
-              from <strong>{this.props.currentUser.login}</strong>
+              from <strong>{currentUser.login}</strong>
             </p>
           </section>
         ) : (
           <section className="pop-over-info">
             <InputText
-              value={this.state.email}
+              value={email}
               onChange={emailOnChange}
               onBlur={() => this.debouncedValidateEmail()}
               placeholder="your@email.com"
-              error={this.state.emailError}
+              error={emailError}
               type="email"
             />
           </section>
         )}
         <section className="pop-over-actions">
-          {this.state.loading ? (
+          {status === 'loading' ? (
             <Loader />
           ) : (
             <button className="button button-small" onClick={submitReport} type="button">
@@ -219,7 +216,7 @@ const ReportAbusePopButton = (props) => {
   );
 };
 ReportAbusePopButton.propTypes = {
-  reportedType: PropTypes.oneOf(['project', 'collection', 'user', 'team', 'home']),
+  reportedType: PropTypes.oneOf(['project', 'collection', 'user', 'team', 'home']).isRequired,
   reportedModel: PropTypes.object, // the actual model, or null if no model (like for the home page)
 };
 
