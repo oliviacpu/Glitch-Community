@@ -161,7 +161,7 @@ CreateTeamPopBase.propTypes = {
 
 const CreateTeamPop = withRouter((props) => {
   const api = useAPI();
-  return <CreateTeamPop api={api} {...props} />;
+  return <CreateTeamPopBase api={api} {...props} />;
 });
 
 export default CreateTeamPop;
