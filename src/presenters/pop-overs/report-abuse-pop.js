@@ -7,7 +7,9 @@ import axios from 'axios';
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import InputText from 'Components/inputs/text-input';
-import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover'; 
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
+import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
@@ -48,14 +50,12 @@ function validateEmail(email, currentUser) {
 
 const Success = () => (
   <>
-    <PopoverTitle>
-      Report Abuse
-    </PopoverTitle>
+    <PopoverTitle>Report Abuse</PopoverTitle>
     <PopoverActions>
       <div className="notification notifySuccess">Report Sent</div>
-      <p className="pop-description tight-line">
-        Thanks for helping to keep Glitch a safe, friendly community <span className="emoji park" role="img" aria-label="" />
-      </p>
+      <InfoDescription>
+        Thanks for helping to keep Glitch a safe, friendly community <Emoji name="park" />
+      </InfoDescription>
     </PopoverActions>
   </>
 );
@@ -63,8 +63,7 @@ const Success = () => (
 const Failure = ({ value }) => (
   <>
     <PopoverTitle>
-        {'Failed to Send '}
-        <span className="emoji sick" role="img" aria-label="" />
+      Failed to Send <Emoji name="sick" />
     </PopoverTitle>
     <PopoverInfo>
       <InfoDescription>
@@ -110,10 +109,13 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
       setStatus('loading');
 
-      await axios.post('https://support-poster.glitch.me/post', {
-        raw: formatRaw(),
-        title: getAbuseReportTitle(reportedModel, reportedType),
-      });
+      // await axios.post('https://support-poster.glitch.me/post', {
+      //   raw: formatRaw(),
+      //   title: getAbuseReportTitle(reportedModel, reportedType),
+      // });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       setStatus('success');
     } catch (error) {
       captureException(error);
@@ -126,9 +128,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
   return (
     <form onSubmit={submitReport}>
-      <PopoverTitle>
-        Report Abuse
-      </PopoverTitle>
+      <PopoverTitle>Report Abuse</PopoverTitle>
       <PopoverActions>
         <TextArea
           value={reason}
@@ -140,9 +140,9 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       {currentUser.login ? (
         <PopoverInfo type="secondary">
           <div style={{ textAlign: 'right' }}>
-          <InfoDescription>
-            from <strong>{currentUser.login}</strong>
-          </InfoDescription>
+            <InfoDescription>
+              from <strong>{currentUser.login}</strong>
+            </InfoDescription>
           </div>
         </PopoverInfo>
       ) : (
@@ -154,7 +154,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
         {status === 'loading' ? (
           <Loader />
         ) : (
-          <Button size="small">
+          <Button size="small" onClick={submitReport}>
             Submit Report
           </Button>
         )}

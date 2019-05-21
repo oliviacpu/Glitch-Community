@@ -35,12 +35,7 @@ PopoverSection.defaultProps = {
 
 export const PopoverActions = ({ ...props }) => <PopoverSection {...props} className={styles.popoverActions} />;
 export const PopoverInfo = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverInfo} />;
-
-export const PopoverTitle = ({ children }) => (
-  <PopoverInfo>
-    <div className={styles.popoverTitle}>{children}</div>
-  </PopoverInfo>
-);
+export const PopoverTitle = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverTitle} />;
 export const InfoDescription = ({ children }) => <p className={styles.infoDescription}>{children}</p>;
 
 const MultiPopoverContext = createContext();
