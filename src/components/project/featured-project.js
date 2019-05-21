@@ -45,11 +45,12 @@ const FeaturedProject = ({
   isAuthorized,
   updateNote,
   unfeatureProject,
+  ...props
 }) => {
   const featuredProjectRef = useRef();
 
   return (
-    <div ref={featuredProjectRef} data-cy="featured-project">
+    <div ref={featuredProjectRef} {...props}>
       <ProjectEmbed
         top={<Top
           featuredProject={featuredProject}

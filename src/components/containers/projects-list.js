@@ -148,9 +148,10 @@ function ProjectsList({
   collection,
   noteOptions,
   projectOptions,
+  ...props
 }) {
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
+    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects} {...props}>
       {({ filterInput, renderProjects }) => (
         <article className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>

@@ -134,6 +134,7 @@ const UserPage = ({
 
       {featuredProject && (
         <FeaturedProject
+          data-cy="featured-project"
           featuredProject={featuredProject}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
@@ -145,6 +146,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
+          data-cy="pinned-projects"
           layout="grid"
           title={
             <>
@@ -164,6 +166,7 @@ const UserPage = ({
 
       {!!user.login && (
         <CollectionsList
+          data-cy="collections"
           title="Collections"
           collections={user.collections.map((collection) => ({
             ...collection,
@@ -177,6 +180,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
+          data-cy="recent-projects"
           layout="grid"
           title="Recent Projects"
           projects={recentProjects}
