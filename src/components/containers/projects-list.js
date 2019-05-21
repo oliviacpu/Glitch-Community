@@ -85,7 +85,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   );
 };
 
-const FilterController = ({ enabled, placeholder, projects, children }) => {
+const FilterController = ({ enabled, placeholder, projects, children, ...props }) => {
   const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -108,6 +108,7 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
+  console.log(props);
   return children({
     filterInput: enabled && (
       <TextInput
@@ -126,7 +127,7 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
 
       if (filtering) {
         return (
-          <div className={styles.filterResultsPlaceholder}>
+          <div className={styles.filterResultsPlaceholder} {...props}>
             <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
             <Text>No projects found</Text>
           </div>
