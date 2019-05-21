@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
@@ -12,7 +12,7 @@ import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
 
 import PopoverWithButton from './popover-with-button';
-import { useDebouncedState }
+import useDebouncedValue from '../../hooks/use-debounced-value';
 
 const Success = () => (
   <>
@@ -82,14 +82,14 @@ function validateEmail(email, currentUser) {
 function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
   const [status, setStatus] = useState('ready'); // ready -> loading -> success | error
   const [reason, setReason] = useState(getDefaultReason(reportedType));
-  const [reasonError, setReasonError] = useDebouncedState('', 200);
+  const [reasonError, setReasonError] = useDebouncedValue('', 200);
   const reasonOnChange = (value) => {
     setReason(value);
     setReasonError(validateReason(value, reportedType));
   };
 
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useDebouncedState('', 200);
+  const [emailError, setEmailError] = useDebouncedValue('', 200);
   const emailOnChange = (value) => {
     setEmail(value);
     setEmailError(validateEmail(value, currentUser));
@@ -100,18 +100,24 @@ function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
   const submitReport = async (e) => {
     e.preventDefault();
     try {
-      if (!validateEmail(email, currentUser) || !validateReason(reason, reportedType)) return;
+      const emailErr = validateEmail(email, currentUser);
+      const reasonErr = validateReason(reason, reportedType);
+      if (emailErr || reasonErr) {
+        setEmailError(emailErr);
+        setReasonError(reasonErr);
+        return;
+      }
 
-      setStatus({ status: 'loading' });
+      setStatus('loading');
 
       await axios.post('https://support-poster.glitch.me/post', {
         raw: formatRaw(),
         title: getAbuseReportTitle(reportedModel, reportedType),
       });
-      setStatus({ status: 'success' });
+      setStatus('success');
     } catch (error) {
       captureException(error);
-      setStatus({ status: 'error' });
+      setStatus('error');
     }
   };
 
@@ -127,7 +133,6 @@ function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
         <TextArea
           value={reason}
           onChange={reasonOnChange}
-          onBlur={this.debouncedValidateReason}
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           error={reasonError}
         />
@@ -140,14 +145,7 @@ function ReportAbusePop({ currentUser, reportedType, reportedModel }) {
         </section>
       ) : (
         <section className="pop-over-info">
-          <InputText
-            value={email}
-            onChange={emailOnChange}
-            onBlur={this.debouncedValidateEmail}
-            placeholder="your@email.com"
-            error={emailError}
-            type="email"
-          />
+          <InputText value={email} onChange={emailOnChange} placeholder="your@email.com" error={emailError} type="email" />
         </section>
       )}
       <section className="pop-over-actions">
