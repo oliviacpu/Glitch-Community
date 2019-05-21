@@ -49,7 +49,7 @@ const FeaturedProject = ({
   const featuredProjectRef = useRef();
 
   return (
-    <div ref={featuredProjectRef}>
+    <div ref={featuredProjectRef} data-cy="featured-project">
       <ProjectEmbed
         top={<Top
           featuredProject={featuredProject}
