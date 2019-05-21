@@ -83,7 +83,7 @@ function useEmail() {
 }
 
 const EmailHandler = ({ showView }) => {
-  const { api } = useAPI();
+  const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
   const [{ status, submitError }, setStatus] = useState({ status: 'ready' });
   const isEnabled = email.length > 0;
@@ -148,7 +148,7 @@ const EmailHandler = ({ showView }) => {
 
 const SignInWithCode = () => {
   const { login } = useCurrentUser();
-  const { api } = useAPI();
+  const api = useAPI();
   const [code, setCode] = useState('');
   const [status, setStatus] = useState('ready');
   const isEnabled = code.length > 0;
