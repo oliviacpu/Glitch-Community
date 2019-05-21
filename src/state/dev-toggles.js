@@ -32,7 +32,7 @@ const toggleData = [
 
 // Usage:
 //
-// import useDevToggle from '../includes/dev-toggles`
+// import useDevToggle from 'State/dev-toggles`
 //
 // const NewFeatureIfEnabled = () => {
 //   const showNewFeature = useDevToggle('New Feature');

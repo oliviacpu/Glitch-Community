@@ -6,10 +6,10 @@ import { withRouter } from 'react-router-dom';
 import SearchResults from 'Components/search-results';
 import NotFound from 'Components/errors/not-found';
 import MoreIdeas from 'Components/more-ideas';
-import Layout from '../layout';
+import { useAlgoliaSearch, useLegacySearch } from 'State/search';
+import useDevToggle from 'State/dev-toggles';
 
-import { useAlgoliaSearch, useLegacySearch } from '../../state/search';
-import useDevToggle from '../includes/dev-toggles';
+import Layout from '../layout';
 
 // Hooks can't be _used_ conditionally, but components can be _rendered_ conditionally
 const AlgoliaSearchWrapper = (props) => {
