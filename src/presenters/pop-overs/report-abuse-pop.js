@@ -55,42 +55,26 @@ function getDefaultReason(reportedType) {
   return `This ${reportedType} doesn't seem appropriate for Glitch because...`;
 }
 
-function validateNotEmpty(value, errorField, fieldDescription) {
-  let errorObj;
-  if (value === '') {
-    errorObj = { [errorField]: `${fieldDescription} is required` };
-  } else {
-    errorObj = { [errorField]: '' };
-  }
-  return errorObj;
+function validateNotEmpty(value, fieldDescription) {
+  if (value === '') return `${fieldDescription} is required`;
+  return '';
 }
 
 function validateReason(reason, reportedType) {
-  const defaultReason = getDefaultReason(reportedType);
-  let errorObj = validateNotEmpty(reason, 'reasonError', 'A description of the issue');
-  if (errorObj.reasonError === '' && reason === defaultReason) {
-    errorObj = { reasonError: 'Reason is required' };
-  }
-  return errorObj;
+  const err = validateNotEmpty(reason, 'A description of the issue');
+  if (err) return err;
+  if (reason === getDefaultReason(reportedType)) return 'Reason is required';
+  return '';
 }
 
-function validateEmail(email) {
-  if (this.props.currentUser.login) {
-    return { emailError: '' };
-  }
+function validateEmail(email, currentUser) {
+  if (currentUser.login) return '';
 
-  let errors = validateNotEmpty(email, 'emailError', 'Email');
-  if (errors.emailError !== '') {
-    return errors;
-  }
+  const err = validateNotEmpty(email, 'Email');
+  if (err) return err;
 
-  const parsedEmail = parseOneAddress(email);
-  if (!parsedEmail) {
-    errors = { emailError: 'Please enter a valid email' };
-  } else {
-    errors = { emailError: '' };
-  }
-  return errors;
+  if (!parseOneAddress(email)) return 'Please enter a valid email';
+  return '';
 }
 
 class ReportAbusePop extends React.Component {
@@ -102,13 +86,15 @@ class ReportAbusePop extends React.Component {
       email: '',
       emailError: '',
       reasonError: '',
-      submitted: false,
-      loading: false,
       status: 'ready', // ready -> loading -> success | error
     };
 
-    this.debouncedValidateEmail = debounce(() => this.setState(({ email }) => validateEmail(email)), 200);
-    this.debouncedValidateReason = debounce(() => this.setState(({ reason }) => validateReason(reason, this.props.reportedType)), 200);
+    this.debouncedValidateEmail = debounce(
+      () => this.setState(({ email }) => ({ emailError: validateEmail(email, this.props.currentUser)})), 200);
+    this.debouncedValidateReason = debounce(
+      () => this.setState(({ reason }) => ({ reasonError: validateReason(reason, this.props.reportedType) })),
+      200,
+    );
   }
 
   render() {
@@ -134,9 +120,9 @@ class ReportAbusePop extends React.Component {
     const submitReport = async (e) => {
       e.preventDefault();
       try {
-        const emailErrors = validateEmail(email);
+        const emailErrors = validateEmail(email, currentUser);
         const reasonErrors = validateReason(reason, reportedType);
-        if (emailErrors.emailError !== '' || reasonErrors.reasonError !== '') {
+        if (emailErrors.emailError !== '' || reasonErrors !== '') {
           return;
         }
         this.setState({ status: 'loading' });
@@ -151,7 +137,7 @@ class ReportAbusePop extends React.Component {
         this.setState({ status: 'error' });
       }
     };
-    
+
     if (status === 'success') return <Success />;
     if (status === 'error') return <Failure value={trimStart(formatRaw())} />;
 
@@ -180,7 +166,7 @@ class ReportAbusePop extends React.Component {
             <InputText
               value={email}
               onChange={emailOnChange}
-              onBlur={() => this.debouncedValidateEmail()}
+              onBlur={this.debouncedValidateEmail}
               placeholder="your@email.com"
               error={emailError}
               type="email"
