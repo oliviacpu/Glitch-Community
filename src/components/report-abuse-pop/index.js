@@ -57,7 +57,7 @@ const Success = () => (
   <>
     <PopoverTitle>Report Abuse</PopoverTitle>
     <PopoverActions>
-      <div className="notification notifySuccess">Report Sent</div>
+      <div className={`notification notifySuccess ${styles.successNotification}`}>Report Sent</div>
       <InfoDescription>
         Thanks for helping to keep Glitch a safe, friendly community <Emoji name="park" />
       </InfoDescription>
@@ -119,7 +119,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       //   title: getAbuseReportTitle(reportedModel, reportedType),
       // });
 
-      await new Promise((_, reject) => setTimeout(reject, 1000));
+      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
       console.log({
         raw: formatRaw(),
         title: getAbuseReportTitle(reportedModel, reportedType),

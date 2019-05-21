@@ -17,6 +17,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getSingleItem, getAllPages } from 'Shared/api';
@@ -28,7 +29,6 @@ import CollectionEditor from '../collection-editor';
 
 import EditCollectionColor from '../includes/edit-collection-color';
 import AddCollectionProject from '../includes/add-collection-project';
-import ReportButton from '../pop-overs/report-abuse-pop';
 
 import CollectionAvatar from '../includes/collection-avatar';
 
