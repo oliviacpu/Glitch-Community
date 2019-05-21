@@ -21,7 +21,7 @@ const handleDefaultSrc = (defaultSrc) => (event) => {
   }
 };
 
-const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, role, src, srcSet, sizes, width, defaultSrc }) =>
+const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, src, srcSet, sizes, width, defaultSrc }) =>
   !backgroundImage ? (
     <img
       alt={alt}
@@ -55,7 +55,6 @@ Image.propTypes = {
   backgroundRatio: PropTypes.number,
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  role: PropTypes.string,
   src: PropTypes.string.isRequired,
   srcSet: PropTypes.array,
   sizes: PropTypes.string,
