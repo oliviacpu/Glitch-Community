@@ -97,7 +97,7 @@ const ForgotPasswordHandler = () => {
 
   const isWorking = status === 'working';
   const isDone = status === 'done';
-  const isEnabled = email.length > 0;
+  const isEnabled = email.length > 0 && !isWorking;
   return (
     <PopoverDialog align="right">
       <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
@@ -113,7 +113,7 @@ const ForgotPasswordHandler = () => {
               error={validationError}
               disabled={isWorking}
             />
-            <Button size="small" disabled={!isEnabled && !isWorking} submit>
+            <Button size="small" disabled={!isEnabled} submit>
               Send Reset Password Link
             </Button>
           </form>
