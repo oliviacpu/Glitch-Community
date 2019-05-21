@@ -29,8 +29,14 @@ class ProjectEditor extends React.Component {
 
   async updateDomain(domain) {
     await this.updateFields({ domain });
-    // don't await this because the project domain has changed at this point
-    this.props.api.post(`project/domainChanged?projectId=${this.state.id}&authorization=${this.props.currentUser.persistentToken}`, {}, { headers: { Authorization: '' } });
+    // don't await this because the project domain has already changed and I don't want to delay the url updating
+    this.props.api.post(`project/domainChanged?projectId=${this.state.id}&authorization=${this.props.currentUser.persistentToken}`, {}, {
+      transformRequest: (data, headers) => {
+        // this endpoint doesn't like OPTIONS requests, delete the auth header so axios doesn't send one (case 3328590)
+        delete headers.Authorization;
+        return data;
+      },
+    });
   }
 
   async addProjectToCollection(project, collection) {
