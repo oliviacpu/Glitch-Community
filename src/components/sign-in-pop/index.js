@@ -82,28 +82,12 @@ function useEmail() {
   return [email, setEmail, validationError];
 }
 
-class ForgotPasswordHandler extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      done: false,
-      error: false,
-      errorMsg: '',
-    };
-    this.debouncedValidate = debounce(this.validate.bind(this), 500);
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
+const ForgotPasswordHandler = () => {
+  const [email, setEmail, validationError] = useEmail();
+  const [state, setState] = useState({ status: 'active', error: null });
 
-  onChange(email) {
-    this.setState({ email });
-    this.debouncedValidate(email);
-  }
-
-  async onSubmit() {
-    this.setState({ done: true });
-    this.setState({ error: false });
+  const onSubmit = async () => {
+    setState({ status: 'working', error: null });
 
     // TODO - actually send link to reset password
   }
@@ -113,44 +97,42 @@ class ForgotPasswordHandler extends React.Component {
     this.setState({ errorMsg: isValidEmail ? undefined : 'Enter a valid email address' });
   }
 
-  render() {
-    const isEnabled = this.state.email.length > 0;
-    return (
-      <PopoverDialog align="right">
-        <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
-        <PopoverActions>
-          {!this.state.done && (
-            <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
-              <TextInput
-                type="email"
-                labelText="Email address"
-                value={this.state.email}
-                onChange={this.onChange}
-                placeholder="your@email.com"
-                error={this.state.errorMsg}
-              />
-              <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
-                Send Reset Password Link
-              </button>
-            </form>
-          )}
-          {this.state.done && !this.state.error && (
-            <>
-              <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-              <div>Reset your password by clicking the link sent to {this.state.email}.</div>
-            </>
-          )}
-          {this.state.done && this.state.error && (
-            <>
-              <div className="notification notifyPersistent notifyError">Error</div>
-              <div>{this.state.errorMsg}</div>
-            </>
-          )}
-        </PopoverActions>
-      </PopoverDialog>
-    );
-  }
-}
+  const isEnabled = this.state.email.length > 0;
+  return (
+    <PopoverDialog align="right">
+      <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
+      <PopoverActions>
+        {!this.state.done && (
+          <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
+            <TextInput
+              type="email"
+              labelText="Email address"
+              value={this.state.email}
+              onChange={this.onChange}
+              placeholder="your@email.com"
+              error={this.state.errorMsg}
+            />
+            <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
+              Send Reset Password Link
+            </button>
+          </form>
+        )}
+        {this.state.done && !this.state.error && (
+          <>
+            <div className="notification notifyPersistent notifySuccess">Almost Done</div>
+            <div>Reset your password by clicking the link sent to {this.state.email}.</div>
+          </>
+        )}
+        {this.state.done && this.state.error && (
+          <>
+            <div className="notification notifyPersistent notifyError">Error</div>
+            <div>{this.state.errorMsg}</div>
+          </>
+        )}
+      </PopoverActions>
+    </PopoverDialog>
+  );
+};
 
 const EmailHandler = ({ showView }) => {
   const api = useAPI();
