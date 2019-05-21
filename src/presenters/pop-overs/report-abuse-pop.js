@@ -46,14 +46,14 @@ const Failure = ({ value }) => (
 );
 
 function validateNotEmpty(value, errorField, fieldDescription) {
-    let errorObj;
-    if (value === '') {
-      errorObj = { [errorField]: `${fieldDescription} is required` };
-    } else {
-      errorObj = { [errorField]: '' };
-    }
-    return errorObj;
+  let errorObj;
+  if (value === '') {
+    errorObj = { [errorField]: `${fieldDescription} is required` };
+  } else {
+    errorObj = { [errorField]: '' };
   }
+  return errorObj;
+}
 
 class ReportAbusePop extends React.Component {
   constructor(props) {
@@ -75,11 +75,6 @@ class ReportAbusePop extends React.Component {
       submitted: false,
       loading: false,
     };
-    this.submitReport = this.submitReport.bind(this);
-    this.reasonOnChange = this.reasonOnChange.bind(this);
-    this.formatRaw = this.formatRaw.bind(this);
-    this.getUserInfoSection = this.getUserInfoSection.bind(this);
-    this.emailOnChange = this.emailOnChange.bind(this);
     this.validateReason = this.validateReason.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
 
@@ -87,33 +82,9 @@ class ReportAbusePop extends React.Component {
     this.debouncedValidateReason = debounce(() => this.validateReason(), 200);
   }
 
-  formatRaw() {
-    return getAbuseReportBody(this.props.currentUser, this.state.email, this.props.reportedType, this.props.reportedModel, this.state.reason);
-  }
-
-  async submitReport() {
-    try {
-      const emailErrors = this.validateEmail();
-      const reasonErrors = this.validateReason();
-      if (emailErrors.emailError !== '' || reasonErrors.reasonError !== '') {
-        return;
-      }
-      this.setState({ loading: true });
-
-      await axios.post('https://support-poster.glitch.me/post', {
-        raw: this.formatRaw(),
-        title: getAbuseReportTitle(this.props.reportedModel, this.props.reportedType),
-      });
-      this.setState({ submitted: true, submitSuccess: true, loading: false });
-    } catch (error) {
-      captureException(error);
-      this.setState({ submitted: true, submitSuccess: false, loading: false });
-    }
-  }
-
   validateReason() {
     let errorObj = validateNotEmpty(this.state.reason, 'reasonError', 'A description of the issue');
-    this.setState(errorObj)
+    this.setState(errorObj);
     if (errorObj.reasonError === '' && this.state.reason === this.defaultReason) {
       errorObj = { reasonError: 'Reason is required' };
       this.setState(errorObj);
@@ -127,7 +98,7 @@ class ReportAbusePop extends React.Component {
     }
 
     let errors = validateNotEmpty(this.state.email, 'emailError', 'Email');
-    this.setState(errors)
+    this.setState(errors);
     if (errors.emailError !== '') {
       return errors;
     }
@@ -142,21 +113,10 @@ class ReportAbusePop extends React.Component {
     return errors;
   }
 
-  reasonOnChange(value) {
-    this.setState({
-      reason: value,
-    });
-    this.debouncedValidateReason();
-  }
-
-  emailOnChange(value) {
-    this.setState({
-      email: value,
-    });
-    this.debouncedValidateEmail();
-  }
-
   render() {
+    const format
+    
+    
     let content;
     if (this.state.submitted) {
       if (!this.state.submitSuccess) {
@@ -164,6 +124,41 @@ class ReportAbusePop extends React.Component {
       }
       return <Success />;
     }
+
+    const reasonOnChange = (value) => {
+      this.setState({
+        reason: value,
+      });
+      this.debouncedValidateReason();
+    };
+
+    const emailOnChange = (value) => {
+      this.setState({
+        email: value,
+      });
+      this.debouncedValidateEmail();
+    };
+
+    const submitReport = async (e) => {
+      e.preventDefault();
+      try {
+        const emailErrors = this.validateEmail();
+        const reasonErrors = this.validateReason();
+        if (emailErrors.emailError !== '' || reasonErrors.reasonError !== '') {
+          return;
+        }
+        this.setState({ loading: true });
+
+        await axios.post('https://support-poster.glitch.me/post', {
+          raw: this.formatRaw(),
+          title: getAbuseReportTitle(this.props.reportedModel, this.props.reportedType),
+        });
+        this.setState({ submitted: true, submitSuccess: true, loading: false });
+      } catch (error) {
+        captureException(error);
+        this.setState({ submitted: true, submitSuccess: false, loading: false });
+      }
+    };
 
     return (
       <>
@@ -173,7 +168,7 @@ class ReportAbusePop extends React.Component {
         <section className="pop-over-actions">
           <TextArea
             value={this.state.reason}
-            onChange={this.reasonOnChange}
+            onChange={reasonOnChange}
             onBlur={this.debouncedValidateReason}
             autoFocus // eslint-disable-line jsx-a11y/no-autofocus
             error={this.state.reasonError}
@@ -189,7 +184,7 @@ class ReportAbusePop extends React.Component {
           <section className="pop-over-info">
             <InputText
               value={this.state.email}
-              onChange={this.emailOnChange}
+              onChange={emailOnChange}
               onBlur={() => this.debouncedValidateEmail()}
               placeholder="your@email.com"
               error={this.state.emailError}
@@ -201,7 +196,7 @@ class ReportAbusePop extends React.Component {
           {this.state.loading ? (
             <Loader />
           ) : (
-            <button className="button button-small" onClick={this.submitReport} type="button">
+            <button className="button button-small" onClick={submitReport} type="button">
               Submit Report
             </button>
           )}
