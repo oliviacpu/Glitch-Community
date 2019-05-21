@@ -90,34 +90,31 @@ const ForgotPasswordHandler = () => {
     setState({ status: 'working', error: null });
 
     // TODO - actually send link to reset password
+    await new Promise(resolve => setTimeout(resolve, 1000);
+    setState({ status: 'done'})
   }
 
-  validate(email) {
-    const isValidEmail = parseOneAddress(email) !== null;
-    this.setState({ errorMsg: isValidEmail ? undefined : 'Enter a valid email address' });
-  }
-
-  const isEnabled = this.state.email.length > 0;
+  const isEnabled = email.length > 0;
   return (
     <PopoverDialog align="right">
       <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
       <PopoverActions>
         {!this.state.done && (
-          <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
+          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             <TextInput
               type="email"
               labelText="Email address"
-              value={this.state.email}
-              onChange={this.onChange}
+              value={email}
+              onChange={setEmail}
               placeholder="your@email.com"
-              error={this.state.errorMsg}
+              error={validationError}
             />
             <button type="submit" style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
               Send Reset Password Link
             </button>
           </form>
         )}
-        {this.state.done && !this.state.error && (
+        {this.state.done && !error && (
           <>
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>
             <div>Reset your password by clicking the link sent to {this.state.email}.</div>
