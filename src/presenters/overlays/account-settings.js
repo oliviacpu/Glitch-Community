@@ -10,6 +10,7 @@ import TextInput from 'Components/inputs/text-input';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import PasswordStrength from 'Components/password-strength';
 import useDebouncedValue from 'Hooks/use-debounced-value';
+import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import PopoverContainer from '../pop-overs/popover-container';
@@ -36,6 +37,7 @@ const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
 const PasswordSettings = () => {
+  const api = useAPI();
   const { currentUser } = useCurrentUser();
 
   const [oldPassword, setOldPassword] = useState('');
@@ -66,11 +68,18 @@ const PasswordSettings = () => {
     weakPasswordError = true;
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
     setDone(false);
-    // TODO actually set the password & handle errors if the user has incorrectly entered their current password
-    setTimeout(() => setDone(true), 1000);
+    try {
+      await api.post('user/updatePassword', {
+        oldPassword,
+        newPassword: password,
+      });
+      setDone(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const pwMinCharCount = 8;
