@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import { partition } from 'lodash';
+import { partition, uniqBy } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
@@ -70,7 +70,7 @@ function useActiveIndex(items) {
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
-  const { project: retrievedProjects, status } = useAlgoliaSearch(
+  const { topResults, project: retrievedProjects, status } = useAlgoliaSearch(
     parsedQuery,
     {
       notSafeForKids: false,
@@ -96,7 +96,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     { origin: 'Add Project collection' },
   );
 
-  const projects = parsedQuery.length ? retrievedProjects : initialProjects;
+  const projects = parsedQuery.length ? uniqBy(topResults.concat(retrievedProjects), (p) => p.id) : initialProjects;
   const { activeIndex, onKeyDown } = useActiveIndex(projects);
 
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
