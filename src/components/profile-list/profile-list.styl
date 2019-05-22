@@ -5,7 +5,11 @@
   padding: 0
   // TODO: fix margin in tooltip, remove -5px offset
   margin: 0 0 -5px
+
+.container.large
   min-height: 37px
+.container.small
+  min-height: 27px
   
 .container + .container
   padding-top: 5px
@@ -14,25 +18,27 @@
 .teamItem
   display: inline-block
 
-.large .userItem img,
-.large .teamItem.large img
-  width: 32px
-  height: 32px
+.large 
+  .userItem img,
+  .teamItem img,
+  .placeholder
+    width: 32px
+    height: 32px
+  .userItem
+    margin-right: -7px
+  .teamItem
+    margin-right: 7px
   
-.userItem.small img,
-.teamItem.small img
-  width: 22px
-  height: 22px
-
-.userItem.large
-  margin-right: -7px
-.teamItem.large
-  margin-right: 7px
-  
-.userItem.small
-  margin-right: -5px
-.teamItem.small
-  margin-right: 2px
+.small 
+  .userItem img,
+  .teamItem img,
+  .placeholder
+    width: 22px
+    height: 22px
+  .userItem
+    margin-right: -5px
+  .teamItem
+    margin-right: 2px
   
 .userItem:last-child,
 .teamItem:last-child
@@ -54,13 +60,7 @@
   background-size: 800px 104px;
   animation: loadingGradient 1.8s cubic-bezier(0.4, 0, 1, 1) infinite;
 
-.large.placeholder
-  width: 32px
-  height: 32px
-.small.placeholder
-  width: 22px
-  height: 22px
-  
+
 @keyframes loadingGradient{
   0%{
       background-position: 50% 0

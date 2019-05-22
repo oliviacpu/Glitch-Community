@@ -73,14 +73,14 @@ const RowContainer = ({ size, users, teams }) => {
   const maxUsers = Math.floor((remainingWidth + userOffset) / (avatarWidth + userOffset));
 
   return (
-    <ul ref={ref} className={classnames(styles.container, styles.row)}>
+    <ul ref={ref} className={classnames(styles.container, styles.row, styles[size])}>
       {teams.slice(0, maxTeams).map((team) => (
-        <li key={`team-${team.id}`} className={classnames(styles.teamItem, styles[size])}>
+        <li key={`team-${team.id}`} className={(styles.teamItem)}>
           <TeamItem team={team} />
         </li>
       ))}
       {users.slice(0, maxUsers).map((user) => (
-        <li key={`user-${user.id}`} className={classnames(styles.userItem, styles[size])}>
+        <li key={`user-${user.id}`} className={styles.userItem}>
           <UserItem user={user} />
         </li>
       ))}
@@ -91,18 +91,18 @@ const RowContainer = ({ size, users, teams }) => {
 const BlockContainer = ({ size, users, teams }) => (
   <>
     {teams.length > 0 && (
-      <ul className={styles.container}>
+      <ul className={classnames(styles.container, styles[size])}>
         {teams.map((team) => (
-          <li key={`team-${team.id}`} className={classnames(styles.teamItem, styles[size])}>
+          <li key={`team-${team.id}`} className={(styles.teamItem)}>
             <TeamItem team={team} />
           </li>
         ))}
       </ul>
     )}
     {users.length > 0 && (
-      <ul className={styles.container}>
+      <ul className={classnames(styles.container, styles[size])}>
         {users.map((user) => (
-          <li key={`user-${user.id}`} className={classnames(styles.userItem, styles[size])}>
+          <li key={`user-${user.id}`} className={styles.userItem}>
             <UserItem user={user} />
           </li>
         ))}
@@ -114,16 +114,16 @@ const BlockContainer = ({ size, users, teams }) => (
 const GLITCH_TEAM_AVATAR = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fglitch-team-avatar.svg?1489266029267';
 
 const GlitchTeamList = ({ size }) => (
-  <ul className={styles.container}>
-    <li className={classnames(styles.teamItem, styles[size])}>
+  <ul className={classnames(styles.container, styles[size])}>
+    <li className={(styles.teamItem)}>
       <Avatar name="Glitch Team" src={GLITCH_TEAM_AVATAR} color="#74ecfc" type="team" />
     </li>
   </ul>
 );
 
 const PlaceholderList = ({ size }) => (
-  <ul className={styles.container}>
-    <li className={classnames(styles.userItem, styles[size])}>
+  <ul className={classnames(styles.container, styles[size])}>
+    <li className={styles.userItem}>
       <div className={styles.placeholder} />
     </li>
   </ul>
@@ -137,7 +137,7 @@ export const ProfileItem = ({ user, team, glitchTeam }) => (
 
 const ProfileList = ({ size, users, teams, layout, glitchTeam }) => {
   if (glitchTeam) {
-    return <GlitchTeamList size={size} />;
+    return <GlitchTeamList />;
   }
 
   if (!users.length && !teams.length) {

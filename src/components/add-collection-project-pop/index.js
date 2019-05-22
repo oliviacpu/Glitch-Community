@@ -72,10 +72,13 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       <PopoverInfo>
         <TextInput
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          labelText="Project name or URL"
           value={query}
           onChange={setQuery}
-          labelText="Project name or URL"
+          //onKeyDown={onKeyDown}
+          opaque
           placeholder="Search by project name or URL"
+          type="search"
         />
       </PopoverInfo>
 
