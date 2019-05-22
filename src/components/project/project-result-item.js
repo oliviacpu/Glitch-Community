@@ -21,10 +21,10 @@ const useMembers = createAPIHook(async (api, project) => {
   return { users, teams };
 });
 
-const ProjectResultItem = ({ project, onClick }) => {
+const ProjectResultItem = ({ project, active, onClick }) => {
   const { value: members } = useMembers(project);
   return (
-    <div className={classnames(styles.projectResult, project.isPrivate && styles.private)}>
+    <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
       <TransparentButton onClick={onClick}>
         <div className={styles.resultWrap}>
           <ProjectAvatar {...project} />

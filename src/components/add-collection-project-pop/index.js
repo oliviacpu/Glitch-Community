@@ -40,29 +40,31 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
   return null;
 });
 
-function useActiveIndex (projects) {
+function useActiveIndex(items) {
   const [activeIndex, setActiveIndex] = useState(-1);
   useEffect(() => {
-    setActiveIndex(-1)
-  }, [projects])
+    setActiveIndex(-1);
+  }, [items]);
   const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIndex(prev => {
+      setActiveIndex((prev) => {
         if (prev < 0) {
-          return projects.length - 1
+          return items.length - 1;
         }
-        return prev - 1
-      })
+        return prev - 1;
+      });
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex(prev => {
-        if (prev === projects.length - 1) {
-          re
+      setActiveIndex((prev) => {
+        if (prev === items.length - 1) {
+          return -1;
         }
-      })
+        return prev + 1;
+      });
     }
   };
+  return { activeIndex, onKeyDown };
 }
 
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
@@ -86,10 +88,10 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     'Project Added to Collection',
     { origin: 'Add Project collection' },
   );
-  
+
   const projects = parsedQuery.length ? retrievedProjects : initialProjects;
   const { activeIndex, onKeyDown } = useActiveIndex(projects);
-  
+
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
   const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
@@ -102,7 +104,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           labelText="Project name or URL"
           value={query}
           onChange={setQuery}
-          //onKeyDown={onKeyDown}
+          onKeyDown={onKeyDown}
           opaque
           placeholder="Search by project name or URL"
           type="search"
@@ -124,12 +126,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {newProjectsToAdd.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={newProjectsToAdd.slice(0, 10)}>
-            {(project) => (
-              <ProjectResultItem
-                project={project}
-                onClick={() => onClick(project)}
-              />
-            )}
+            {(project, i) => <ProjectResultItem project={project} active={i === activeIndex} onClick={() => onClick(project)} />}
           </ResultsList>
         </PopoverSection>
       )}

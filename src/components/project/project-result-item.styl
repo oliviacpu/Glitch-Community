@@ -7,16 +7,24 @@
   position: relative
   &.private
     background-color: private
-  &.active
-    background-color: general-link
+  &.active,
+  &:hover,
+  &:focus
     color: white
-  
+    background-color: general-link
+
+.projectResult > button
+  color: inherit
+    
 .resultWrap
   display: flex
 
 .resultInfo
   padding-left: 15px
   width: 100%
+  
+.active .resultName
+  color: inherit
   
 .resultDescription
   color: secondary
@@ -31,6 +39,7 @@
   top: 0
   right: 0
   padding: 12px 6px
+  color: primary
   
 .profileListWrap
   position: relative

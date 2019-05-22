@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from './results-list.styl';
 
-// TODO: ResultsList should be navigable via arrow key, handle its own active status
-
 const ResultsList = ({ scroll, items, className, children }) => (
   <div className={classnames(scroll && styles.scrollContainer, className)}>
     <ul className={styles.resultsList}>
-      {items.map((item) => (
+      {items.map((item, i) => (
         <li key={item.id} className={classnames(styles.resultItem)}>
-          {children(item, { isActive: false })}
+          {children(item, i)}
         </li>
       ))}
     </ul>
