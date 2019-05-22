@@ -1,14 +1,14 @@
-// add-collection-project-pop -> Add a project to a collection via the collection page
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import { debounce } from 'lodash';
+import { debounce, partition } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useAlgoliaSearch } from 'State/search';
 
 import ProjectResultItem from '../includes/project-result-item';
 import ProjectsLoader from '../projects-loader';
