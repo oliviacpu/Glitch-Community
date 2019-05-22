@@ -38,7 +38,7 @@ const weakPWErrorMsg = 'Password is too common';
 
 const PasswordSettings = () => {
   const api = useAPI();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, reload } = useCurrentUser();
 
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
@@ -77,6 +77,7 @@ const PasswordSettings = () => {
         newPassword: password,
       });
       setDone(true);
+      reload();
     } catch (error) {
       console.error(error);
     }
