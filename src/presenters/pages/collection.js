@@ -174,6 +174,7 @@ const CollectionPageContents = ({
                     featureProject,
                     isAuthorized: currentUserIsAuthor,
                   }}
+                  fetchMembers
                 />
               </div>
             </>
@@ -214,7 +215,7 @@ CollectionPageContents.defaultProps = {
 async function loadCollection(api, ownerName, collectionName) {
   try {
     const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
-    const collectionProjects = await getAllPages(
+    collection.projects = await getAllPages(
       api,
       `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
     );
@@ -223,17 +224,6 @@ async function loadCollection(api, ownerName, collectionName) {
       collection.user = await getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id);
     } else {
       collection.team = await getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-    }
-
-    // fetch users for each project
-    if (collectionProjects) {
-      const projectsWithUsers = await Promise.all(
-        collectionProjects.map(async (project) => {
-          project.users = await getAllPages(api, `v1/projects/by/id/users?id=${project.id}&orderKey=createdAt&orderDirection=ASC&limit=100`);
-          return project;
-        }),
-      );
-      collection.projects = projectsWithUsers;
     }
 
     return collection;
