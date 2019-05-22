@@ -48,10 +48,10 @@ const useTeamUsers = createAPIHook(async (api, teamID) => {
 
 function TeamWithDataLoading({ team }) {
   const { value: users } = useTeamUsers(team.id);
-  if (users) {
-    
-  return <TeamItem team={{ ...team, users }} />;
+  if (Array.isArray(users)) {
+    return <TeamItem team={{ ...team, users }} />;
   }
+  return <TeamItem team={team} />;
 }
 
 const TeamResult = ({ result }) => {
