@@ -9,7 +9,7 @@ const SuperUserBanner = () => {
   if (!superUserFeature) {
     return null;
   }
-  
+
   const expirationDate = superUserFeature && new Date(superUserFeature.expiresAt).toLocaleString();
   const displayText = `SUPER USER MODE ENABLED UNTIL: ${expirationDate} `;
   return (
