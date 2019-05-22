@@ -254,28 +254,32 @@ const LoginSection = ({ showForgotPassword }) => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const api = useAPI();
+  const { login } = useCurrentUser();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setWorking(true);
-    
+    setErrorMessage(null);
+
     try {
       const { data } = await api.post('user/login', { emailAddress, password });
-      console.log(data);
-      // leave working true because the sign in pop will go away in a moment
+      // leave working=true because logging in will hide the sign in pop
+      login(data);
     } catch (error) {
       const message = error.response && error.response.data && error.response.data.message;
       setErrorMessage(message || 'Failed to sign in, try again?');
       setWorking(false);
     }
-  }
+  };
 
   return (
     <PopoverActions>
       <form onSubmit={handleSubmit}>
-        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} onChange={setEmail} disabled={working} />
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} />
         <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} />
         <Button size="small" disabled={working} submit>Sign in</Button>
       </form>
+
+      {!!errorMessage && <p>{errorMessage}</p>}
 
       <Button size="small" type="tertiary" onClick={showForgotPassword}>
         Forgot Password
