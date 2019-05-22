@@ -5,7 +5,7 @@ import TextInput from '../inputs/text-input';
 import useOptimisticText from './use-optimistic-text';
 
 const OptimisticTextInput = ({ value, onChange, ...props }) => {
-  const [optimisticValue, optimisticError, optimisticOnChange] = useOptimisticText(value, onChange);
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(value, onChange);
   return <TextInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} />;
 };
 
