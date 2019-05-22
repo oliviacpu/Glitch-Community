@@ -48,7 +48,7 @@ const PasswordSettings = () => {
     setDone(false);
   };
 
-  const passwordsMatch = useDebouncedValue(password === password2, 500);
+  const passwordConfirmError = useDebouncedValue(password && password2 && password !== password2, 500);
 
   // if password is part of weak pw list, show it as weak
   // has capital letter(s) = +1
@@ -66,8 +66,6 @@ const PasswordSettings = () => {
     weakPasswordError = true;
   }
 
-  const passwordConfirmError = password && password2 && !passwordsMatch;
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setDone(false);
@@ -76,7 +74,7 @@ const PasswordSettings = () => {
   };
 
   const pwMinCharCount = 8;
-  const isEnabled = password.length > pwMinCharCount && !weakPasswordError && !passwordConfirmError;
+  const isEnabled = password.length > pwMinCharCount && password2 && !weakPasswordError && !passwordConfirmError;
   const userHasPassword = !!currentUser.password;
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
   return (
