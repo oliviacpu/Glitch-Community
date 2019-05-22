@@ -8,18 +8,24 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });
   const api = useAPI();
   useEffect(() => {
+    let isCurrent = true;
     get(api).then(
       (data) => {
+        if (!isCurrent) return;
         setState({ status: 'ready', value: data });
       },
       (error) => {
         console.error(error);
+        if (!isCurrent) return;
         setState({ status: 'error', value: error });
         if (shouldCaptureException) {
           captureException(error);
         }
       },
     );
+    return () => {
+      isCurrent = false;
+    };
   }, [api]);
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
