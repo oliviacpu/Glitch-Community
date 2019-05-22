@@ -130,7 +130,7 @@ Are you sure you want to sign out?`)
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
       <section className="pop-over-info">
         {canBecomeSuperUser && (
-          <div className="">
+          <div className="user-options-pop-checkbox">
             <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser}>
               Super User
             </CheckboxButton>
