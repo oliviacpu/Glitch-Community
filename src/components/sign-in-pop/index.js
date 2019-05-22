@@ -247,40 +247,29 @@ const SignInWithCode = () => {
   );
 };
 
-class LoginSection extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { email: '', password: '' };
-  }
+const LoginSection = ({ showForgotPassword }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  async handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // TODO actually log the user in...
-    console.log(this.state);
   }
 
-  render() {
-    return (
-      <PopoverActions>
-        <form onSubmit={this.handleSubmit}>
-          <TextInput placeholder="your@email.com" labelText="email" value={this.state.email} onChange={() => {}} />
-          <TextInput placeholder="password" type="password" labelText="password" value={this.state.password} onChange={() => {}} />
-          <Button size="small" decorative>Sign in</Button>
-        </form>
+  return (
+    <PopoverActions>
+      <form onSubmit={handleSubmit}>
+        <TextInput placeholder="your@email.com" labelText="email" value={email} onChange={setEmail} />
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} />
+        <Button size="small" submit>Sign in</Button>
+      </form>
 
-        <Button
-          size="small"
-          type="tertiary"
-          onClick={() => {
-            this.props.showForgotPassword(this.props.api);
-          }}
-        >
-          Forgot Password
-        </Button>
-      </PopoverActions>
-    );
-  }
-}
+      <Button size="small" type="tertiary" onClick={showForgotPassword}>
+        Forgot Password
+      </Button>
+    </PopoverActions>
+  );
+};
 
 const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
