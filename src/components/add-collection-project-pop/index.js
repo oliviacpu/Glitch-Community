@@ -40,7 +40,7 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
   return null;
 });
 
-function useActiveIndex(items) {
+function useActiveIndex(items, onSelect) {
   const [activeIndex, setActiveIndex] = useState(-1);
   useEffect(() => {
     setActiveIndex(-1);
@@ -62,6 +62,9 @@ function useActiveIndex(items) {
         }
         return prev + 1;
       });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      onSelect()
     }
   };
   return { activeIndex, onKeyDown };
