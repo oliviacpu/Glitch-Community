@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash/debounce';
@@ -13,6 +13,7 @@ import TextInput from 'Components/inputs/text-input';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import PasswordStrength from 'Components/password-strength';
 import { useCurrentUser } from 'State/current-user';
+import useDebouncedValue from ''
 
 import PopoverContainer from '../pop-overs/popover-container';
 
@@ -37,7 +38,13 @@ const weakPWs = [
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
-class PasswordSettings extends React.Component {
+const PasswordSettings = () => {
+  const [oldPassword, setOldPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+  
+  const passwordsMatch = useDebouncedValue(password === password2);
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -98,66 +105,64 @@ class PasswordSettings extends React.Component {
     }
   }
 
-  handleSubmit(evt) {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
     console.log(this.props.user);
     this.setState({ done: true });
   }
 
-  render() {
-    const pwMinCharCount = 8;
-    const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
-    const userHasPassword = false; // placeholder fortoggling between set and change password forms. eventually I'm guesing the user objects will have an attribute for whether or not they have a password
-    const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
-    // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
-    const { passwordStrength } = this.state;
-    return (
-      <>
-        <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-        <form onSubmit={this.handleSubmit}>
-          {userHasPassword && !userRequestedPWreset && (
-            <TextInput type="password" labelText="current password" placeholder="current password" value={this.state.password} />
-          )}
+  const pwMinCharCount = 8;
+  const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
+  const userHasPassword = !!this.props.user.password;
+  const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
+  // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
+  const { passwordStrength } = this.state;
+  return (
+    <>
+      <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
+      <form onSubmit={this.handleSubmit}>
+        {userHasPassword && !userRequestedPWreset && (
+          <TextInput type="password" labelText="current password" placeholder="current password" value={this.state.password} />
+        )}
 
-          <TextInput
-            value={this.state.password}
-            type="password"
-            labelText="password"
-            placeholder="new password"
-            onChange={this.onChangePW}
-            error={this.state.weakPasswordErrorMsg}
-          />
+        <TextInput
+          value={this.state.password}
+          type="password"
+          labelText="password"
+          placeholder="new password"
+          onChange={this.onChangePW}
+          error={this.state.weakPasswordErrorMsg}
+        />
 
-          {this.state.password.length >= pwMinCharCount ? (
-            <PasswordStrength strength={passwordStrength} />
-          ) : (
-            this.state.password.length > 0 && (
-              <div className="pw-strength">
-                <span className="note"><Pluralize count={pwMinCharCount - this.state.password.length} singular="character" /> to go....</span>
-              </div>
-            )
-          )}
+        {this.state.password.length >= pwMinCharCount ? (
+          <PasswordStrength strength={passwordStrength} />
+        ) : (
+          this.state.password.length > 0 && (
+            <div className="pw-strength">
+              <span className="note"><Pluralize count={pwMinCharCount - this.state.password.length} singular="character" /> to go....</span>
+            </div>
+          )
+        )}
 
-          <TextInput
-            value={this.state.passwordConfirm}
-            type="password"
-            labelText="confirm new password"
-            placeholder="confirm new password"
-            onChange={this.onChangePWConfirm}
-            error={this.state.passwordConfirmErrorMsg}
-          />
+        <TextInput
+          value={this.state.passwordConfirm}
+          type="password"
+          labelText="confirm new password"
+          placeholder="confirm new password"
+          onChange={this.onChangePWConfirm}
+          error={this.state.passwordConfirmErrorMsg}
+        />
 
-          <Button type="tertiary" size="small" disabled={!isEnabled} submit>
-            Set Password
-          </Button>
+        <Button type="tertiary" size="small" disabled={!isEnabled} submit>
+          Set Password
+        </Button>
 
-          {this.state.done && <Badge type="success">Successfully set new password</Badge>}
-        </form>
-      </>
-    );
-  }
-}
+        {this.state.done && <Badge type="success">Successfully set new password</Badge>}
+      </form>
+    </>
+  );
+};
 
 PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
