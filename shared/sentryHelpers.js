@@ -2,10 +2,10 @@ const productionDomains = ['community', 'community-staging'];
 const onProductionSite = (projectDomain, apiEnvironment) => productionDomains.includes(projectDomain) && apiEnvironment === 'production';
 
 const filterSecrets = function(jsonEvent) {
-  const secrets = ['\\w+Token', 'email'];
+  const secrets = ['\\w+Token', 'email', 'password'];
   secrets.forEach((secret) => {
-    const regexp = new RegExp(`"${secret}":\\s*"[^"]+"`, 'g');
-    jsonEvent = jsonEvent.replace(regexp, `"${secret}":"****"`);
+    const regexp = new RegExp(`("${secret}":\\s*)"[^"]+"`, 'g');
+    jsonEvent = jsonEvent.replace(regexp, '$1"****"');
   });
   return jsonEvent;
 };
