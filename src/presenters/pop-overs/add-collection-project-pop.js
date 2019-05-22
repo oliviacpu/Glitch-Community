@@ -5,7 +5,7 @@ import { partition } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
-import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo } from 'Components/popover';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDescription } from 'Components/popover';
 import TextInput from 'Components/inputs/text-input';
 import ResultsList from 'Components/containers/results-list';
 import Emoji from 'Components/images/emoji';
@@ -32,10 +32,23 @@ function parseQuery(query) {
   }
 }
 
-function AddCollectionProjectPop({ collection, initialProjects, togglePopover, addProjectToCollection }) {
+const useTeamProjects = createAPIHook(async (api, teamId) => {
+  if (teamId > 0) {
+    const projects = await getAllPages(api, `/v1/teams/by/id/projects?limit=100&orderKey=updatedAt&orderDirection=ASC&id=${teamId}`);
+    return projects;
+  }
+  return null;
+});
+
+function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
-  const { projects: retrievedProjects, status } = useAlgoliaSearch(parsedQuery, { types: ['projects'] });
+  const { project: retrievedProjects, status } = useAlgoliaSearch(parsedQuery);
+
+  const { value: teamProjects } = useTeamProjects(collection.teamId);
+  const { currentUser } = useCurrentUser();
+  const initialProjects = teamProjects || currentUser.projects;
+
   const { createNotification } = useNotifications();
 
   const onClick = useTrackedFunc(
@@ -49,18 +62,20 @@ function AddCollectionProjectPop({ collection, initialProjects, togglePopover, a
     { origin: 'Add Project collection' },
   );
 
-  const projects = parsedQuery.lengtth ? initialProjects : retrievedProjects;
+  console.log(retrievedProjects, initialProjects);
+  const projects = parsedQuery.length ? retrievedProjects : initialProjects.slice(0, 20);
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
   const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
 
   return (
-    <PopoverDialog wide align="right">
+    <PopoverDialog wide align="left">
       <PopoverInfo>
         <TextInput
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           value={query}
           onChange={setQuery}
+          labelText="Project name or URL"
           placeholder="Search by project name or URL"
         />
       </PopoverInfo>
@@ -70,9 +85,9 @@ function AddCollectionProjectPop({ collection, initialProjects, togglePopover, a
           <Loader />
         </PopoverInfo>
       )}
-      {status === 'ready' && newProjectsToAdd.length > 0 && (
+      {newProjectsToAdd.length > 0 && (
         <PopoverSection>
-          <ResultsList items={newProjectsToAdd}>
+          <ResultsList scroll items={newProjectsToAdd}>
             {(project) => (
               <ProjectResultItem
                 domain={project.domain}
@@ -97,13 +112,13 @@ function AddCollectionProjectPop({ collection, initialProjects, togglePopover, a
       )}
       {status === 'ready' && newProjectsToAdd.length === 0 && !excludingExactMatch && (
         <PopoverInfo>
-          <p>
+          <InfoDescription>
             nothing found <Emoji name="sparkles" />
-          </p>
+          </InfoDescription>
           {projectsAlreadyInCollection.length > 0 && (
-            <p>
+            <InfoDescription>
               Excluded <Pluralize count={projectsAlreadyInCollection.length} singular="search result" />
-            </p>
+            </InfoDescription>
           )}
         </PopoverInfo>
       )}
@@ -113,43 +128,17 @@ function AddCollectionProjectPop({ collection, initialProjects, togglePopover, a
 
 AddCollectionProjectPop.propTypes = {
   collection: PropTypes.object.isRequired,
-  initialProjects: PropTypes.array.isRequired,
   addProjectToCollection: PropTypes.func.isRequired,
   togglePopover: PropTypes.func.isRequired,
 };
 
-const useTeamProjects = createAPIHook(async (api, teamId) => {
-  if (teamId > 0) {
-    const projects = await getAllPages(api, `/v1/teams/by/id/projects?limit=100&orderKey=updatedAt&orderDirection=ASC&id=${teamId}`);
-    return projects;
-  }
-  return null;
-});
-
-function AddCollectionProject({ collection, addProjectToCollection }) {
-  const teamResponse = useTeamProjects(collection.teamId);
-  const { currentUser } = useCurrentUser();
-
-  let initialProjects = [];
-  if (teamResponse.status === 'ready' && teamResponse.value) {
-    initialProjects = teamResponse.value;
-  } else {
-    initialProjects = currentUser.projects;
-  }
-
-  return (
-    <PopoverWithButton buttonClass="add-project" buttonText="Add Project">
-      {({ togglePopover }) => (
-        <AddCollectionProjectPop
-          collection={collection}
-          initialProjects={initialProjects.slice(0, 20)}
-          addProjectToCollection={addProjectToCollection}
-          togglePopover={togglePopover}
-        />
-      )}
-    </PopoverWithButton>
-  );
-}
+const AddCollectionProject = ({ collection, addProjectToCollection }) => (
+  <PopoverWithButton buttonText="Add Project">
+    {({ togglePopover }) => (
+      <AddCollectionProjectPop collection={collection} addProjectToCollection={addProjectToCollection} togglePopover={togglePopover} />
+    )}
+  </PopoverWithButton>
+);
 
 AddCollectionProject.propTypes = {
   collection: PropTypes.object.isRequired,
