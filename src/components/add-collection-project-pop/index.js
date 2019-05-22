@@ -15,33 +15,40 @@ import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
 
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
+const styles = {}
 
-const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
-  const activeClass = isActive ? 'active' : '';
-  const privateClass = isPrivate ? 'private' : '';
-  const resultClass = `button-unstyled result result-project ${activeClass} ${privateClass}`;
-  const { id, domain, description, users } = project;
+// const useUsers = createAPIHook(async (api, project) => {
+//   const result
+// })
 
+const Foo = () => (
+  <Foo/>
+  
+)
+
+const ProjectResultItem = ({ project, onClick }) => {
+  const { value: users } = useUsers(project)
   return (
-    <>
+    <div className={classnames(styles.projectResult, project.isPrivate && styles.private)}>
       <TransparentButton onClick={onClick}>
-        <ProjectAvatar domain={domain} id={id} />
-        <div className="results-info">
-          <div className="result-name" title={domain}>
-            {domain}
+        <ProjectAvatar {...project}/>
+        <div className={styles.resultInfo}>
+          <div className={styles.resultName}>
+            {project.domain}
           </div>
           {description.length > 0 && (
-            <div className="result-description">
-              <Markdown renderAsPlaintext>{description}</Markdown>
+            
+            <div className={styles.resultDescription}>
+              <Markdown renderAsPlaintext>{project.description}</Markdown>
             </div>
           )}
           {!!users && users.length > 0 && <ProfileList users={users} layout="row" />}
+        </div>
         </TransparentButton>
-      </button>
       <Button size="small" href={getProjectLink(project)}>
         View →
       </Button>
-    </>
+    </div>
   );
 };
 
