@@ -12,19 +12,17 @@ const cx = classNames.bind(styles);
 const SuperUserBanner = () => {
   const { superUserHelpers } = useCurrentUser();
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
-  const [showSupportBanner, setShowSupportBanner] = useLocalStorage('showSupportBanner', false);
 
-  if (superUserFeature || canBecomeSuperUser) {
+  if (superUserFeature) {
     const expirationDate = superUserFeature && new Date(superUserFeature.expiresAt).toLocaleString();
     const displayText = `SUPER USER MODE ${superUserFeature ? `ENABLED UNTIL: ${expirationDate}` : 'DISABLED'} `;
 
-    if (superUserFeature || showSupportBanner) {
+    if (superUserFeature) {
       const className = cx({ container: true, isDisabled: !superUserFeature });
       return (
         <div className={className}>
           {displayText}
           <button onClick={toggleSuperUser}>Click to {superUserFeature ? 'disable' : 'enable'}</button>
-          {!superUserFeature && <button onClick={() => setShowSupportBanner(false)}>Hide</button>}
         </div>
       );
     }

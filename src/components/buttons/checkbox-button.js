@@ -7,7 +7,7 @@ import useUniqueId from '../../hooks/use-unique-id';
 import styles from './button.styl';
 import checkboxStyles from './checkbox-button.styl';
 
-const CheckboxButton = ({ children, onChange, value }) => {
+const CheckboxButton = ({ children, onChange, value, matchBackground }) => {
   const id = useUniqueId();
   const className = classNames(styles.btn, styles.small, checkboxStyles.label);
   return (
@@ -28,6 +28,7 @@ CheckboxButton.propTypes = {
   children: PropTypes.node.isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.bool.isRequired,
+  matchBackground: PropTypes.bool,
 };
 
 export default CheckboxButton;
