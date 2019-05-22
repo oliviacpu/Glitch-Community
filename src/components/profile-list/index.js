@@ -59,18 +59,15 @@ const parametersForSize = {
     teamOffset: 7,
   },
   small: {
-        avatarWidth: 32,
-    userOffset: -7,
-    teamOffset: 7,
-    
-  }
-}
+    avatarWidth: 22,
+    userOffset: -5,
+    teamOffset: 2,
+  },
+};
 
 const RowContainer = ({ size, users, teams }) => {
   const { ref, width } = useResizeObserver();
-  const avatarWidth = 32;
-  const userOffset = -7;
-  const teamOffset = 7;
+  const { avatarWidth, userOffset, teamOffset } = parametersForSize[size];
   const maxTeams = Math.floor(width / (avatarWidth + teamOffset));
   const remainingWidth = width - (avatarWidth + teamOffset) * teams.length - teamOffset;
   const maxUsers = Math.floor((remainingWidth + userOffset) / (avatarWidth + userOffset));
