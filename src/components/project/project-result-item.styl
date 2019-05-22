@@ -1,9 +1,32 @@
 @import '../constants.styl'
 
 .projectResult
+  position: relative
+  padding: 12px 70px 12px 6px
+  color: primary
   background-color: primary-background
   &.private
     background-color: private
+  &.active
+    background-color: general-link
+    color: white
   
 .resultWrap
   display: flex
+
+.resultInfo
+  padding-left: 12px
+  
+.resultDescription
+  color: secondary
+  word-break: break-word
+  font-family: monospace
+  font-size: 12px
+  line-height: 18px
+  padding-top: 6px
+  
+.linkButtonWrap
+  position: absolute
+  top: 0
+  right: 0
+  padding: 12px 6px

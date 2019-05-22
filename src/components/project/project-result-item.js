@@ -35,13 +35,16 @@ const ProjectResultItem = ({ project, onClick }) => {
                 <Markdown renderAsPlaintext>{project.description}</Markdown>
               </div>
             )}
-            <ProfileList {...members} layout="row" />
+            <ProfileList {...members} layout="row" size="small" />
           </div>
         </div>
       </TransparentButton>
-      <Button size="small" href={getLink(project)}>
+      <div className={styles.linkButtonWrap}>
+        <Button size="small" href={getLink(project)}>
         View →
       </Button>
+      </div>
+      
     </div>
   );
 };
