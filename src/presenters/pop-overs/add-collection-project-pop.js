@@ -15,34 +15,6 @@ import ProjectsLoader from '../projects-loader';
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
 import PopoverWithButton from './popover-with-button';
 
-const ProjectResultsUL = ({ projects, collection, onClick }) => {
-  const { createNotification } = useNotifications();
-  const onClickTracked = useTrackedFunc(onClick, 'Project Added to Collection', { origin: 'Add Project collection' });
-  return (
-    <ul className="results">
-      {projects.map((project) => (
-        <li key={project.id}>
-          <ProjectResultItem
-            domain={project.domain}
-            description={project.description}
-            users={project.users}
-            id={project.id}
-            isActive={false}
-            collection={collection}
-            onClick={() => onClickTracked(project, collection, createNotification)}
-            isPrivate={project.private}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-};
-ProjectResultsUL.propTypes = {
-  projects: PropTypes.array.isRequired,
-  collection: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
 const ProjectSearchResults = ({ projects, collection, onClick, projectName, excludedProjectsCount }) => {
   if (projects.length > 0) {
     const collectionProjectIds = collection.projects.map((project) => project.id);
@@ -89,56 +61,57 @@ ProjectSearchResults.defaultProps = {
   excludedProjectsCount: 0,
 };
 
-function isUrl(s) {
-  try {
-    new URL(s); // eslint-disable-line no-new
-    return true;
-  } catch (_) {
-    return false;
-  }
-}
-
-function AddCollectionProjectPop ({ }) {
-  const [query, setQuery] = useState('')
-  const searchResults = useAlgoliaSearch(query);
-
-    return (
-      <PopoverDialog wide align="right">
-        <PopoverInfo>
-          <TextInput
-            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-            value={query}
-            onChange={setQuery}
-            placeholder="Search by project name or URL"
-          />
-        </PopoverInfo>
-        <PopoverSection>
-          
-        </PopoverSection>
-        {showResults && (
-          <section className="pop-over-actions last-section results-list">
-            {isLoading && <Loader />}
-
-            {!!results && (
-              <ProjectsLoader projects={results}>
-                {(projects) => (
-                  <ProjectSearchResults
-                    projects={projects}
-                    onClick={this.onClick}
-                    collection={this.props.collection}
-                    projectName={this.state.projectName}
-                    excludedProjectsCount={this.state.excludedProjectsCount}
-                  />
-                )}
-              </ProjectsLoader>
-            )}
-          </section>
-        )}
-      </dialog>
-    );
+function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
+  const [query, setQuery] = useState('');
+  const { projects, status } = useAlgoliaSearch(query, { types: ['projects'] });
+  const { createNotification } = useNotifications();
   
-}
+  const onClick = useTrackedFunc(async (project) => {
+    togglePopover();
+    // add project to page if successful & show notification
+    await addProjectToCollection(project, collection)
+    createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, 'notifySuccess')
+  }, 'Project Added to Collection', { origin: 'Add Project collection' });
+  
+  const availableProjects = 
+  
+  return (
+    <PopoverDialog wide align="right">
+      <PopoverInfo>
+        <TextInput
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          value={query}
+          onChange={setQuery}
+          placeholder="Search by project name or URL"
+        />
+      </PopoverInfo>
 
+      {status === 'loading' && (
+        <PopoverInfo>
+          <Loader />
+        </PopoverInfo>
+      )}
+      {status === 'ready' && projects.length > 0 && (
+        <PopoverSection>
+          <ResultsList items={projects}>
+            {(project) => (
+              <ProjectResultItem
+                domain={project.domain}
+                description={project.description}
+                users={project.users}
+                id={project.id}
+                isActive={false}
+                collection={collection}
+                onClick={() => onClick(project)}
+                isPrivate={project.private}
+              />
+            )}
+          </ResultsList>
+        </PopoverSection>
+      )}
+    </PopoverDialog>
+  );
+}
 
 class AddCollectionProjectPop extends React.Component {
   constructor(props) {
@@ -158,14 +131,7 @@ class AddCollectionProjectPop extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick(project, collection, createNotification) {
-    this.props.togglePopover();
-
-    // add project to page if successful & show notification
-    this.props
-      .addProjectToCollection(project, collection)
-      .then(() => createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, 'notifySuccess'));
-  }
+  
 
   handleChange(evt) {
     const query = evt.currentTarget.value.trim();
@@ -267,9 +233,7 @@ class AddCollectionProjectPop extends React.Component {
     return null;
   }
 
-  render() {
-    
-  }
+  render() {}
 }
 
 AddCollectionProjectPop.propTypes = {
