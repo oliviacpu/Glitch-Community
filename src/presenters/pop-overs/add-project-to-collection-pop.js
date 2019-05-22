@@ -205,7 +205,6 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
 
 export const AddProjectToCollectionBase = (props) => {
   const { project, togglePopover, focusFirstElement } = props;
-
   const api = useAPI();
   const { currentUser } = useCurrentUser();
 

@@ -125,15 +125,17 @@ Are you sure you want to sign out?`)
               </p>
             )}
           </div>
-          {canBecomeSuperUser && (
-            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser}>
-              Super User
-            </CheckboxButton>
-          )}
         </section>
       </UserLink>
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
       <section className="pop-over-info">
+        {canBecomeSuperUser && (
+          <div className="">
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser}>
+              Super User
+            </CheckboxButton>
+          </div>
+        )}
         <button type="button" onClick={clickNewStuff} className="button-small has-emoji button-tertiary button-on-secondary-background">
           New Stuff <span className="emoji dog-face" />
         </button>
