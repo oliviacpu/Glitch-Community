@@ -33,7 +33,8 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
-  const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
+  console.log(project && project.users, project.users)
+  const projectUserIds = project && !!project.users && project.users.map((projectUser) => projectUser.id);
   const isProjectMember = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
   const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
   const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;

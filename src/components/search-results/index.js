@@ -48,10 +48,7 @@ const useTeamUsers = createAPIHook(async (api, teamID) => {
 
 function TeamWithDataLoading({ team }) {
   const { value: users } = useTeamUsers(team.id);
-  if (Array.isArray(users)) {
-    return <TeamItem team={{ ...team, users }} />;
-  }
-  return <TeamItem team={team} />;
+  return <TeamItem team={{ ...team, users }} />;
 }
 
 const TeamResult = ({ result }) => {
@@ -67,7 +64,8 @@ const useUsers = createAPIHook(async (api, userIDs) => {
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
 
-  const { data } = await api.get(`/v1/users/by/id/?${idString}`);
+  let { data } = await api.get(`/v1/users/by/id/?${idString}`);
+  data = undefined
   return Object.values(data);
 });
 
