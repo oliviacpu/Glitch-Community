@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -61,12 +61,18 @@ const ProjectResultWithData = (props) => {
   return <ProjectResultItemBase {...props} {...members} />;
 };
 
-const ProjectResultItem = (props) => (
-  <VisibilityContainer>
-    {({ wasEverVisible }) => (wasEverVisible ? <ProjectResultWithData {...props} /> : <ProjectResultItemBase {...props} />)}
-  </VisibilityContainer>
-);
-
+const ProjectResultItem = (props) => {
+  // IntersectionObserver behaves strangely with element.scrollIntoView, so we'll assume if something is active it is also visible.
+  const [wasEverActive, setWasEverActive] = useState(false);
+  useEffect(() => {
+    if (props.active) setWasEverActive(true);
+  }, [props.active]);
+  return (
+    <VisibilityContainer>
+      {({ wasEverVisible }) => (wasEverVisible || wasEverActive ? <ProjectResultWithData {...props} /> : <ProjectResultItemBase {...props} />)}
+    </VisibilityContainer>
+  );
+};
 ProjectResultItem.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
