@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
-import { debounce } from 'lodash';
 
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -64,21 +64,15 @@ const SignInCodeSection = ({ onClick }) => (
 );
 
 function useEmail() {
-  const [email, setEmailValue] = useState('');
-  const [validationError, setValidationError] = useState(null);
-  const validate = useMemo(
-    () =>
-      debounce((value) => {
-        const isValidEmail = parseOneAddress(value) !== null;
-        setValidationError(isValidEmail ? null : 'Enter a valid email address');
-      }),
-    [],
+  const [email, setEmail] = useState('');
+  const debouncedEmail = useDebouncedValue(email, 500);
+  const validationError = useMemo(
+    () => {
+      const isValidEmail = parseOneAddress(debouncedEmail) !== null;
+      return isValidEmail || !debouncedEmail ? null : 'Enter a valid email address';
+    },
+    [debouncedEmail],
   );
-
-  const setEmail = (value) => {
-    setEmailValue(value);
-    validate(value);
-  };
   return [email, setEmail, validationError];
 }
 
