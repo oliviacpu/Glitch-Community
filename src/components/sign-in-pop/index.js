@@ -85,7 +85,7 @@ function useEmail() {
 const ForgotPasswordHandler = () => {
   const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
-  const [{ status, error }, setState] = useState({ status: 'active', error: null });
+  const [{ status, errorMessage }, setState] = useState({ status: 'active', errorMessage: null });
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -94,9 +94,9 @@ const ForgotPasswordHandler = () => {
     try {
       await api.post('email/sendResetPasswordEmail', { emailAddress: email });
       setState({ status: 'done', error: null });
-    } catch (err) {
-      const message = err && err.response && err.response.data && err.response.data.message;
-      setState({ status: 'done', error: message || 'Something went wrong' });
+    } catch (error) {
+      const message = error && error.response && error.response.data && error.response.data.message;
+      setState({ status: 'done', errorMessage: message || 'Something went wrong' });
     }
   };
 
@@ -123,16 +123,16 @@ const ForgotPasswordHandler = () => {
             </Button>
           </form>
         )}
-        {isDone && !error && (
+        {isDone && !errorMessage && (
           <>
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>
             <div>Reset your password by clicking the link sent to {email}.</div>
           </>
         )}
-        {isDone && error && (
+        {isDone && errorMessage && (
           <>
             <div className="notification notifyPersistent notifyError">Error</div>
-            <div>{error}</div>
+            <div>{errorMessage}</div>
           </>
         )}
       </PopoverActions>
