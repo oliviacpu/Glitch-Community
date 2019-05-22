@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-
-import debounce from 'lodash/debounce';
 import Pluralize from 'react-pluralize';
 
 import Heading from 'Components/text/heading';
@@ -40,10 +37,16 @@ const weakPWErrorMsg = 'Password is too common';
 
 const PasswordSettings = () => {
   const { currentUser } = useCurrentUser();
-  
+
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+
+  const [done, setDone] = useState(false);
+  const andClearDone = (func) => (...args) => {
+    func(...args);
+    setDone(false);
+  };
 
   const passwordsMatch = useDebouncedValue(password === password2, 500);
 
@@ -62,70 +65,64 @@ const PasswordSettings = () => {
   } else {
     weakPasswordError = true;
   }
-  
+
   const passwordConfirmError = password && password2 && !passwordsMatch;
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    setDone(false);
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
-    console.log(this.props.user);
-    this.setState({ done: true });
-  }
+    setTimeout(() => setDone(true), 1000);
+  };
 
   const pwMinCharCount = 8;
   const isEnabled = password.length > pwMinCharCount && !weakPasswordError && !passwordConfirmError;
-  const userHasPassword = !!currentUser.password; // i'm guessing this doesn't just have your password...
+  const userHasPassword = !!currentUser.password;
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
-  // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
-  const { passwordStrength } = this.state;
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
-          <TextInput type="password" labelText="current password" placeholder="current password" value={password} />
+          <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
 
         <TextInput
-          value={this.state.password}
+          value={password}
           type="password"
           labelText="password"
           placeholder="new password"
-          onChange={this.onChangePW}
-          error={this.state.weakPasswordErrorMsg}
+          onChange={andClearDone(setPassword)}
+          error={weakPasswordError ? weakPWErrorMsg : null}
         />
 
-        {this.state.password.length >= pwMinCharCount ? (
-          <PasswordStrength strength={passwordStrength} />
+        {password.length >= pwMinCharCount ? (
+          <PasswordStrength strength={pwStrength} />
         ) : (
-          this.state.password.length > 0 && (
+          password.length > 0 && (
             <div className="pw-strength">
-              <span className="note"><Pluralize count={pwMinCharCount - this.state.password.length} singular="character" /> to go....</span>
+              <span className="note"><Pluralize count={pwMinCharCount - password.length} singular="character" /> to go....</span>
             </div>
           )
         )}
 
         <TextInput
-          value={this.state.passwordConfirm}
+          value={password2}
           type="password"
           labelText="confirm new password"
           placeholder="confirm new password"
-          onChange={this.onChangePWConfirm}
-          error={this.state.passwordConfirmErrorMsg}
+          onChange={andClearDone(setPassword2)}
+          error={passwordConfirmError ? matchErrorMsg : null}
         />
 
         <Button type="tertiary" size="small" disabled={!isEnabled} submit>
           Set Password
         </Button>
 
-        {this.state.done && <Badge type="success">Successfully set new password</Badge>}
+        {done && <Badge type="success">Successfully set new password</Badge>}
       </form>
     </>
   );
-};
-
-PasswordSettings.propTypes = {
-  user: PropTypes.object.isRequired,
 };
 
 const AccountSettingsOverlay = () => {
@@ -139,7 +136,7 @@ const AccountSettingsOverlay = () => {
         </OverlayTitle>
       </OverlaySection>
       <OverlaySection type="actions">
-        <PasswordSettings user={currentUser} />
+        <PasswordSettings />
       </OverlaySection>
       <OverlaySection type="info">
         <Text>
