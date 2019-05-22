@@ -255,7 +255,7 @@ class CurrentUserManager extends React.Component {
     return {
       toggleSuperUser: async () => {
         await this.api().post(`https://support-toggle.glitch.me/support/${superUserFeature ? 'disable' : 'enable'}`);
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         window.location.reload();
       },
       canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
