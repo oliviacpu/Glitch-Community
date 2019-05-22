@@ -66,4 +66,13 @@ ProjectResultItem.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export default ProjectResultItem;
+const ProjectResultWithData = (props) => {
+  const { value: members } = useMembers(props.project);
+  return < 
+}
+
+export default (props) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <ProjectResultWithData {...props} /> : <ProjectResult {...props} />)}
+  </VisibilityContainer>
+);
