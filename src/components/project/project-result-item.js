@@ -6,6 +6,7 @@ import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 import Markdown from 'Components/text/markdown';
 import ProfileList from 'Components/profile-list';
+import VisibilityContainer from 'Components/visibility-container';
 import { getLink } from 'Models/project';
 import { createAPIHook } from 'State/api';
 import { getAllPages } from 'Shared/api';
@@ -13,16 +14,7 @@ import { getAllPages } from 'Shared/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './project-result-item.styl';
 
-const useMembers = createAPIHook(async (api, project) => {
-  const [users, teams] = await Promise.all([
-    getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`),
-    getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`),
-  ]);
-  return { users, teams };
-});
-
-const ProjectResultItem = ({ project, active, onClick }) => {
-  const { value: members } = useMembers(project);
+const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => {
   const ref = useRef();
   useEffect(() => {
     if (active && ref.current.scrollIntoView) {
@@ -42,7 +34,7 @@ const ProjectResultItem = ({ project, active, onClick }) => {
               </div>
             )}
             <div className={styles.profileListWrap}>
-              <ProfileList {...members} layout="row" size="small" />
+              <ProfileList teams={teams} users={users} layout="row" size="small" />
             </div>
           </div>
         </div>
@@ -56,6 +48,25 @@ const ProjectResultItem = ({ project, active, onClick }) => {
   );
 };
 
+const useMembers = createAPIHook(async (api, project) => {
+  const [users, teams] = await Promise.all([
+    getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`),
+    getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`),
+  ]);
+  return { users, teams };
+});
+
+const ProjectResultWithData = (props) => {
+  const { value: members } = useMembers(props.project);
+  return <ProjectResultItemBase {...props} {...members} />;
+};
+
+const ProjectResultItem = (props) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <ProjectResultWithData {...props} /> : <ProjectResultItemBase {...props} />)}
+  </VisibilityContainer>
+);
+
 ProjectResultItem.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -66,13 +77,4 @@ ProjectResultItem.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const ProjectResultWithData = (props) => {
-  const { value: members } = useMembers(props.project);
-  return < 
-}
-
-export default (props) => (
-  <VisibilityContainer>
-    {({ wasEverVisible }) => (wasEverVisible ? <ProjectResultWithData {...props} /> : <ProjectResult {...props} />)}
-  </VisibilityContainer>
-);
+export default ProjectResultItem;
