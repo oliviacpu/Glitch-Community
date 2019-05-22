@@ -248,20 +248,33 @@ const SignInWithCode = () => {
 };
 
 const LoginSection = ({ showForgotPassword }) => {
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmail, emailValidationError] = useEmail();
   const [password, setPassword] = useState('');
+  const [working, setWorking] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
+  const api = useAPI();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // TODO actually log the user in...
+    setWorking(true);
+    
+    try {
+      const { data } = await api.post('user/login', { emailAddress, password });
+      console.log(data);
+      // leave working true because the sign in pop will go away in a moment
+    } catch (error) {
+      const message = error.response && error.response.data && error.response.data.message;
+      setErrorMessage(message || 'Failed to sign in, try again?');
+      setWorking(false);
+    }
   }
 
   return (
     <PopoverActions>
       <form onSubmit={handleSubmit}>
-        <TextInput placeholder="your@email.com" labelText="email" value={email} onChange={setEmail} />
-        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} />
-        <Button size="small" submit>Sign in</Button>
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} onChange={setEmail} disabled={working} />
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} />
+        <Button size="small" disabled={working} submit>Sign in</Button>
       </form>
 
       <Button size="small" type="tertiary" onClick={showForgotPassword}>
