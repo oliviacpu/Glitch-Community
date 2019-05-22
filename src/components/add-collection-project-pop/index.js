@@ -14,8 +14,37 @@ import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
 
-import ProjectResultItem from '../includes/project-result-item';
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
+
+const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
+  const activeClass = isActive ? 'active' : '';
+  const privateClass = isPrivate ? 'private' : '';
+  const resultClass = `button-unstyled result result-project ${activeClass} ${privateClass}`;
+  const { id, domain, description, users } = project;
+
+  return (
+    <>
+      <TransparentButton onClick={onClick}>
+        <ProjectAvatar domain={domain} id={id} />
+        <div className="results-info">
+          <div className="result-name" title={domain}>
+            {domain}
+          </div>
+          {description.length > 0 && (
+            <div className="result-description">
+              <Markdown renderAsPlaintext>{description}</Markdown>
+            </div>
+          )}
+          {!!users && users.length > 0 && <ProfileList users={users} layout="row" />}
+        </TransparentButton>
+      </button>
+      <Button size="small" href={getProjectLink(project)}>
+        View →
+      </Button>
+    </>
+  );
+};
+
 
 function parseQuery(query) {
   query = query.trim();
@@ -62,8 +91,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     { origin: 'Add Project collection' },
   );
 
-  console.log(retrievedProjects, initialProjects);
-  const projects = parsedQuery.length ? retrievedProjects : initialProjects.slice(0, 20);
+  const projects = parsedQuery.length ? retrievedProjects : initialProjects;
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
   const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
@@ -85,9 +113,16 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           <Loader />
         </PopoverInfo>
       )}
+      {status === 'ready' && excludingExactMatch && (
+        <PopoverInfo>
+          <p>
+            {parsedQuery} is already in this collection <Emoji name="sparkles" />
+          </p>
+        </PopoverInfo>
+      )}
       {newProjectsToAdd.length > 0 && (
         <PopoverSection>
-          <ResultsList scroll items={newProjectsToAdd}>
+          <ResultsList scroll items={newProjectsToAdd.slice(0, 10)}>
             {(project) => (
               <ProjectResultItem
                 domain={project.domain}
@@ -102,13 +137,6 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
             )}
           </ResultsList>
         </PopoverSection>
-      )}
-      {status === 'ready' && newProjectsToAdd.length === 0 && excludingExactMatch && (
-        <PopoverInfo>
-          <p>
-            {parsedQuery} is already in this collection <Emoji name="sparkles" />
-          </p>
-        </PopoverInfo>
       )}
       {status === 'ready' && newProjectsToAdd.length === 0 && !excludingExactMatch && (
         <PopoverInfo>
