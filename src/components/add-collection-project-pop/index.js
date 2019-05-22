@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
@@ -40,6 +40,31 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
   return null;
 });
 
+function useActiveIndex (projects) {
+  const [activeIndex, setActiveIndex] = useState(-1);
+  useEffect(() => {
+    setActiveIndex(-1)
+  }, [projects])
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex(prev => {
+        if (prev < 0) {
+          return projects.length - 1
+        }
+        return prev - 1
+      })
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex(prev => {
+        if (prev === projects.length - 1) {
+          re
+        }
+      })
+    }
+  };
+}
+
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
@@ -61,8 +86,10 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     'Project Added to Collection',
     { origin: 'Add Project collection' },
   );
-
+  
   const projects = parsedQuery.length ? retrievedProjects : initialProjects;
+  const { activeIndex, onKeyDown } = useActiveIndex(projects);
+  
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
   const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);

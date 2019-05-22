@@ -43,10 +43,9 @@ const ProjectResultItem = ({ project, onClick }) => {
       </TransparentButton>
       <div className={styles.linkButtonWrap}>
         <Button size="small" href={getLink(project)}>
-        View →
-      </Button>
+          View →
+        </Button>
       </div>
-      
     </div>
   );
 };
