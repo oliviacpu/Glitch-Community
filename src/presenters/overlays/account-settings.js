@@ -11,6 +11,7 @@ import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import PasswordStrength from 'Components/password-strength';
 import { useCurrentUser } from 'State/current-user';
 
 import PopoverContainer from '../pop-overs/popover-container';
@@ -129,26 +130,7 @@ class PasswordSettings extends React.Component {
           />
 
           {this.state.password.length >= pwMinCharCount ? (
-            <div className="pw-strength">
-              <progress value={Math.max(passwordStrength, 1)} max="3" className={`pw-strength score-${passwordStrength}`} />
-              <span className="pw-strength-word">
-                {passwordStrength === 0 && (
-                  <>
-                    <Emoji name="faceExpressionless" /> weak
-                  </>
-                )}
-                {(passwordStrength === 1 || passwordStrength === 2) && (
-                  <>
-                    <Emoji name="faceSlightlySmiling" /> okay
-                  </>
-                )}
-                {passwordStrength === 3 && (
-                  <>
-                    <Emoji name="bicep" /> strong
-                  </>
-                )}
-              </span>
-            </div>
+            <PasswordStrength strength={passwordStrength} />
           ) : (
             this.state.password.length > 0 && (
               <div className="pw-strength">
