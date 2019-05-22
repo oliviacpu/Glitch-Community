@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import Emoji from 'Components/images/emoji';
 
@@ -14,8 +15,8 @@ const PasswordStrength = ({ strength }) => {
   };
   return (
     <div className={styles.container}>
-      <progress value={Math.max(strength, 1)} max="3" className={styles.m} />
-      <span className="pw-strength-word">
+      <progress value={Math.max(strength, 1)} max="3" className={classNames(styles.meter, styles[`score${strength}`])} />
+      <span className={styles.word}>
         {labels[strength]}
       </span>
     </div>
