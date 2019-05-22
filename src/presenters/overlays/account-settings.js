@@ -12,8 +12,8 @@ import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import PasswordStrength from 'Components/password-strength';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useCurrentUser } from 'State/current-user';
-import useDebouncedValue from ''
 
 import PopoverContainer from '../pop-overs/popover-container';
 
@@ -39,71 +39,31 @@ const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
 const PasswordSettings = () => {
+  const { currentUser } = useCurrentUser();
+  
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+
+  const passwordsMatch = useDebouncedValue(password === password2, 500);
+
+  // if password is part of weak pw list, show it as weak
+  // has capital letter(s) = +1
+  // has number(s) = +1
+  // has special characters = +1
+  // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
+  let weakPasswordError = false;
+  let pwStrength = 0;
+  if (!weakPWs.includes(password)) {
+    const hasCapScore = /^(?=.*[A-Z])/.test(password) ? 1 : 0;
+    const hasNumScore = /^(?=.*\d)/.test(password) ? 1 : 0;
+    const hasCharScore = /[!@#$%^&*(),.?":{}|<>]/.test(password) ? 1 : 0;
+    pwStrength = hasCapScore + hasNumScore + hasCharScore;
+  } else {
+    weakPasswordError = true;
+  }
   
-  const passwordsMatch = useDebouncedValue(password === password2);
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: '',
-      passwordConfirm: '',
-      passwordStrength: 0,
-      weakPasswordErrorMsg: '',
-      passwordConfirmErrorMsg: '',
-      done: false,
-    };
-    this.onChangePW = this.onChangePW.bind(this);
-    this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
-    this.checkPWStrength = this.checkPWStrength.bind(this);
-    this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
-  }
-
-  onChangePW(password) {
-    // check if it's a bad password
-    this.setState({ password }, () => {
-      this.checkPWStrength();
-      if (this.state.passwordConfirm) {
-        this.validatePasswordMatch();
-      }
-    });
-  }
-
-  onChangePWConfirm(passwordConfirm) {
-    this.setState({ passwordConfirm }, () => {
-      this.validatePasswordMatch();
-    });
-  }
-
-  checkPWStrength() {
-    // if password is part of weak pw list, show it as weak
-    // has capital letter(s) = +1
-    // has number(s) = +1
-    // has special characters = +1
-    // total = strength with 3=strong (💪), 1-2= ok (🙂), 0 = weak (😑)
-    const pw = this.state.password;
-    let pwStrength = 0;
-    if (!weakPWs.includes(pw)) {
-      this.setState({ weakPasswordErrorMsg: '' });
-      const hasCapScore = /^(?=.*[A-Z])/.test(pw) ? 1 : 0;
-      const hasNumScore = /^(?=.*\d)/.test(pw) ? 1 : 0;
-      const hasCharScore = /[!@#$%^&*(),.?":{}|<>]/.test(pw) ? 1 : 0;
-      pwStrength = hasCapScore + hasNumScore + hasCharScore;
-    } else {
-      this.setState({ weakPasswordErrorMsg: weakPWErrorMsg });
-    }
-
-    this.setState({ passwordStrength: pwStrength });
-  }
-
-  validatePasswordMatch() {
-    const passwordsMatch = this.state.password === this.state.passwordConfirm;
-    if (this.state.passwordConfirm) {
-      this.setState({ passwordConfirmErrorMsg: passwordsMatch ? undefined : matchErrorMsg });
-    }
-  }
+  const passwordConfirmError = password && password2 && !passwordsMatch;
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -113,8 +73,8 @@ const PasswordSettings = () => {
   }
 
   const pwMinCharCount = 8;
-  const isEnabled = this.state.password.length > pwMinCharCount && !this.state.weakPasswordErrorMsg && !this.state.passwordConfirmErrorMsg;
-  const userHasPassword = !!this.props.user.password;
+  const isEnabled = password.length > pwMinCharCount && !weakPasswordError && !passwordConfirmError;
+  const userHasPassword = !!currentUser.password; // i'm guessing this doesn't just have your password...
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
   // correspondings with strength 0=weak, 1=okay, 2=okay, 3=strong
   const { passwordStrength } = this.state;
@@ -123,7 +83,7 @@ const PasswordSettings = () => {
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
       <form onSubmit={this.handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
-          <TextInput type="password" labelText="current password" placeholder="current password" value={this.state.password} />
+          <TextInput type="password" labelText="current password" placeholder="current password" value={password} />
         )}
 
         <TextInput
