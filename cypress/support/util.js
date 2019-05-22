@@ -1,4 +1,4 @@
-export const makeTestProject = () => {
+export const makeTestProject = (options) => {
   return {
     id: "test-project",
     description: "The test project that does useless things",
@@ -22,26 +22,14 @@ export const makeTestProject = () => {
     deletedAt: null,
     authUserIsMember: true,
     authUserIsTeamMember: false,
-    permissions: [
-      {
-        userId: 3803619,
-        accessLevel: 30
-      }
-    ],
+    permissions: [],
     features: [],
-    permission: {
-      userId: 3803619,
-      projectId: "test-project",
-      accessLevel: 30,
-      userLastAccess: "2019-04-15T15:32:18.654Z",
-      createdAt: "2019-04-12T23:23:28.981Z",
-      updatedAt: "2019-04-15T15:32:18.661Z"
-    },
-    teamIds: []
+    teamIds: [],
+    ...options
   }
 }
 
-export const makeTestCollection = () => {
+export const makeTestCollection = (options) => {
   return {
     authUserIsTeamMember: false,
     avatarThumbnailUrl: null,
@@ -52,18 +40,50 @@ export const makeTestCollection = () => {
     description: "A collection of projects that does intentional things",
     featuredProjectId: null,
     fullUrl: "test-user-1/test-collection",
-    id: 8778,
+    id: 1,
     name: "test-collection",
     team: null,
     teamId: -1,
     updatedAt: "2019-05-21T23:50:43.185Z",
     url: "test-collection",
-    user: { isSupport: false, isInfrastructureUser: false, id: 3803619, login: "olivia" },
-    userId: 3803619,
+    projects: [],
+    ...options
   }
 }
 
+export const makeTestUser = (options) => {
+  return {
+    avatarThumbnailUrl: "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/249bdc0c-61f2-4465-b001-e44ce3267b2e-small.jpg",
+    avatarUrl: "https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/user-avatar/249bdc0c-61f2-4465-b001-e44ce3267b2e-large.jpg",
+    color: "#aacef7",
+    coverColor: "rgb(244,73,68)",
+    createdAt: "2019-04-09T19:50:14.645Z",
+    description: "test-user",
+    featuredProjectId: null,
+    features: [],
+    hasCoverImage: true,
+    id: 1,
+    isInfrastructureUser: false,
+    isSupport: false,
+    lastActiveDay: "2019-05-22",
+    location: null,
+    login: "test-user",
+    name: "test-user",
+    thanksCount: 0,
+    updatedAt: "2019-05-22T10:03:04.046Z",
+    utcOffset: -420,
+    ...options,
+  }
+}
+
+export const itemsResponse = (items = []) => {
+  return {
+    items: [...items],
+  }
+}
 export default {
   makeTestProject,
-  makeTestCollection
+  makeTestCollection,
+  makeTestUser,
+  itemsResponse
 }
