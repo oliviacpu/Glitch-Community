@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
@@ -9,49 +10,14 @@ import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDesc
 import TextInput from 'Components/inputs/text-input';
 import ResultsList from 'Components/containers/results-list';
 import Emoji from 'Components/images/emoji';
+import ProjectResultItem from 'Components/project/project-result-item';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
+import { getLink as getProjectLink } from 'Models/project';
 
-import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
-const styles = {}
-
-// const useUsers = createAPIHook(async (api, project) => {
-//   const result
-// })
-
-const Foo = () => (
-  <Foo/>
-  
-)
-
-const ProjectResultItem = ({ project, onClick }) => {
-  const { value: users } = useUsers(project)
-  return (
-    <div className={classnames(styles.projectResult, project.isPrivate && styles.private)}>
-      <TransparentButton onClick={onClick}>
-        <ProjectAvatar {...project}/>
-        <div className={styles.resultInfo}>
-          <div className={styles.resultName}>
-            {project.domain}
-          </div>
-          {description.length > 0 && (
-            
-            <div className={styles.resultDescription}>
-              <Markdown renderAsPlaintext>{project.description}</Markdown>
-            </div>
-          )}
-          {!!users && users.length > 0 && <ProfileList users={users} layout="row" />}
-        </div>
-        </TransparentButton>
-      <Button size="small" href={getProjectLink(project)}>
-        View →
-      </Button>
-    </div>
-  );
-};
-
+import { useNotifications, AddProjectToCollectionMsg } from '../../presenters/notifications';
 
 function parseQuery(query) {
   query = query.trim();
