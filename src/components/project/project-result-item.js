@@ -1,10 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import TransparentButton from 'Components/buttons/transparent-button'
-import {ProjectAvatar} from 'Components/images/avatar';
-import Markdown from 'COmponents/'
+import TransparentButton from 'Components/buttons/transparent-button';
+import Button from 'Components/buttons/button';
+import Markdown from 'Components/text/markdown';
+import ProfileList from 'Components/profile-list';
+import { getLink } from 'Models/project';
+import { createAPIHook } from 'State/api';
+import { getAllPages } from 'Shared/api';
 
+import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './project-result-item.styl';
 
 const useMembers = createAPIHook(async (api, project) => {
@@ -33,9 +39,21 @@ const ProjectResultItem = ({ project, onClick }) => {
           </div>
         </div>
       </TransparentButton>
-      <Button size="small" href={getProjectLink(project)}>
+      <Button size="small" href={getLink(project)}>
         View →
       </Button>
     </div>
   );
 };
+
+ProjectResultItem.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    isPrivate: PropTypes.bool,
+  }).isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+export default ProjectResultItem;

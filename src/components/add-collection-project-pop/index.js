@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
@@ -15,7 +14,6 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
-import { getLink as getProjectLink } from 'Models/project';
 
 import { useNotifications, AddProjectToCollectionMsg } from '../../presenters/notifications';
 
@@ -98,14 +96,8 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           <ResultsList scroll items={newProjectsToAdd.slice(0, 10)}>
             {(project) => (
               <ProjectResultItem
-                domain={project.domain}
-                description={project.description}
-                users={project.users}
-                id={project.id}
-                isActive={false}
-                collection={collection}
+                project={project}
                 onClick={() => onClick(project)}
-                isPrivate={project.private}
               />
             )}
           </ResultsList>
