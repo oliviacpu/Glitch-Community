@@ -77,6 +77,9 @@ const PasswordSettings = () => {
         newPassword: password,
       });
       setDone(true);
+      setOldPassword('');
+      setPassword('');
+      setPassword2('');
       reload();
     } catch (error) {
       console.error(error);
