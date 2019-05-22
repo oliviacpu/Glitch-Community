@@ -133,15 +133,13 @@ const UserPage = ({
       </section>
 
       {featuredProject && (
-        <div data-cy="featured-project">
-          <FeaturedProject
-            featuredProject={featuredProject}
-            isAuthorized={isAuthorized}
-            unfeatureProject={unfeatureProject}
-            addProjectToCollection={addProjectToCollection}
-            currentUser={maybeCurrentUser}
-          />
-        </div>
+        <FeaturedProject
+          featuredProject={featuredProject}
+          isAuthorized={isAuthorized}
+          unfeatureProject={unfeatureProject}
+          addProjectToCollection={addProjectToCollection}
+          currentUser={maybeCurrentUser}
+        />
       )}
 
       {/* Pinned Projects */}
@@ -167,7 +165,6 @@ const UserPage = ({
 
       {!!user.login && (
         <CollectionsList
-          data-cy="collections"
           title="Collections"
           collections={user.collections.map((collection) => ({
             ...collection,
