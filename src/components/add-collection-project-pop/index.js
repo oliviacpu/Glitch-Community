@@ -67,15 +67,17 @@ function useActiveIndex(items) {
   return { activeIndex, onKeyDown };
 }
 
-const searchParams = {
-  notSafeForKids: false,
-  types: ['project'],
-}
-
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
-  const { project: retrievedProjects, status } = useAlgoliaSearch(parsedQuery, searchParams);
+  const { project: retrievedProjects, status } = useAlgoliaSearch(
+    parsedQuery,
+    {
+      notSafeForKids: false,
+      filterTypes: ['project'],
+    },
+    [],
+  );
 
   const { value: teamProjects } = useTeamProjects(collection.teamId);
   const { currentUser } = useCurrentUser();
@@ -123,9 +125,9 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       )}
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
-          <p>
+          <InfoDescription>
             {parsedQuery} is already in this collection <Emoji name="sparkles" />
-          </p>
+          </InfoDescription>
         </PopoverInfo>
       )}
       {newProjectsToAdd.length > 0 && (
