@@ -3,10 +3,9 @@ const onProductionSite = (projectDomain, apiEnvironment) => productionDomains.in
 
 const filterSecrets = function(jsonEvent) {
   const secrets = ['\\w+Token', 'email', 'password'];
-  secrets.forEach((secret) => {
-    const regexp = new RegExp(`("${secret}":\\s*)"[^"]+"`, 'g');
-    jsonEvent = jsonEvent.replace(regexp, '$1"****"');
-  });
+  const reSecrets = `(?:${secrets.join('|')})`;
+  const regexp = new RegExp(`("${reSecrets}":\\s*)"[^"]+"`, 'g');
+  jsonEvent = jsonEvent.replace(regexp, '$1"****"');
   return jsonEvent;
 };
 
