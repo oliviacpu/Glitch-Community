@@ -11,6 +11,7 @@ import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import { useCurrentUser } from 'State/current-user';
 
 import PopoverContainer from '../pop-overs/popover-container';
 
@@ -180,34 +181,34 @@ PasswordSettings.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const AccountSettingsOverlay = ({ user }) => (
-  <Overlay className="account-settings-overlay">
-    <OverlaySection type="info">
-      <OverlayTitle>
-        Account Settings <Emoji name="key" />
-      </OverlayTitle>
-    </OverlaySection>
-    <OverlaySection type="actions">
-      <PasswordSettings user={user} />
-    </OverlaySection>
-    <OverlaySection type="info">
-      <Text>
-        Email notifications are sent to <b>{user.email}</b>
-      </Text>
-    </OverlaySection>
-  </Overlay>
-);
-
-AccountSettingsOverlay.propTypes = {
-  user: PropTypes.object.isRequired,
+const AccountSettingsOverlay = () => {
+  const { currentUser } = useCurrentUser();
+  const primaryEmail = currentUser.emails.find((email) => email.primary);
+  return (
+    <Overlay className="account-settings-overlay">
+      <OverlaySection type="info">
+        <OverlayTitle>
+          Account Settings <Emoji name="key" />
+        </OverlayTitle>
+      </OverlaySection>
+      <OverlaySection type="actions">
+        <PasswordSettings user={currentUser} />
+      </OverlaySection>
+      <OverlaySection type="info">
+        <Text>
+          Email notifications are sent to <b>{primaryEmail.email}</b>
+        </Text>
+      </OverlaySection>
+    </Overlay>
+  );
 };
 
-const AccountSettings = ({ user, children }) => (
+const AccountSettings = ({ children }) => (
   <PopoverContainer>
     {({ visible, setVisible }) => (
       <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
         <summary>{children}</summary>
-        <AccountSettingsOverlay user={user} />
+        <AccountSettingsOverlay />
       </details>
     )}
   </PopoverContainer>
