@@ -64,8 +64,7 @@ const useUsers = createAPIHook(async (api, userIDs) => {
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
 
-  let { data } = await api.get(`/v1/users/by/id/?${idString}`);
-  data = undefined
+  const { data } = await api.get(`/v1/users/by/id/?${idString}`);
   return Object.values(data);
 });
 
