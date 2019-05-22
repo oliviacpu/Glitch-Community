@@ -140,7 +140,7 @@ Are you sure you want to sign out?`)
         </Link>
 
         {userPasswordEnabled && (
-          <AccountSettings user={user}>
+          <AccountSettings>
             <div className="button button-small has-emoji button-tertiary button-on-secondary-background">
               Account Settings <Emoji name="key" />
             </div>
