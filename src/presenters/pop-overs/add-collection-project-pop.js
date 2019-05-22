@@ -61,20 +61,42 @@ ProjectSearchResults.defaultProps = {
   excludedProjectsCount: 0,
 };
 
+function parseQuery(query) {
+  query = query.trim();
+  try {
+    const queryUrl = new URL(query);
+    if (queryUrl.href.includes('me') && !queryUrl.href.includes('~')) {
+      // https://add-to-alexa.glitch.me/
+      return  queryUrl.hostname.substring(0, queryUrl.hostname.indexOf('.'));
+    }
+    // https://glitch.com/~add-to-alexa
+    return queryUrl.pathname.substring(queryUrl.pathname.indexOf('~') + 1);
+  } catch (e) {
+    return query;
+  }
+}
+
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
-  const { projects, status } = useAlgoliaSearch(query, { types: ['projects'] });
+  const { isUrl, parsedQuery } = parseQuery(query);
+  const { projects, status } = useAlgoliaSearch(parsedQuery, { types: ['projects'] });
   const { createNotification } = useNotifications();
-  
-  const onClick = useTrackedFunc(async (project) => {
-    togglePopover();
-    // add project to page if successful & show notification
-    await addProjectToCollection(project, collection)
-    createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, 'notifySuccess')
-  }, 'Project Added to Collection', { origin: 'Add Project collection' });
-  
-  const availableProjects = 
-  
+
+  const onClick = useTrackedFunc(
+    async (project) => {
+      togglePopover();
+      // add project to page if successful & show notification
+      await addProjectToCollection(project, collection);
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, 'notifySuccess');
+    },
+    'Project Added to Collection',
+    { origin: 'Add Project collection' },
+  );
+
+  const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
+  const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
+  const 
+
   return (
     <PopoverDialog wide align="right">
       <PopoverInfo>
@@ -91,9 +113,9 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           <Loader />
         </PopoverInfo>
       )}
-      {status === 'ready' && projects.length > 0 && (
+      {status === 'ready' && newProjectsToAdd.length > 0 && (
         <PopoverSection>
-          <ResultsList items={projects}>
+          <ResultsList items={newProjectsToAdd}>
             {(project) => (
               <ProjectResultItem
                 domain={project.domain}
@@ -130,8 +152,6 @@ class AddCollectionProjectPop extends React.Component {
     this.startSearch = debounce(this.startSearch.bind(this), 300);
     this.onClick = this.onClick.bind(this);
   }
-
-  
 
   handleChange(evt) {
     const query = evt.currentTarget.value.trim();
