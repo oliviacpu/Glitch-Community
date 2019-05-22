@@ -141,9 +141,9 @@ Are you sure you want to sign out?`)
 
         {userPasswordEnabled && (
           <AccountSettings user={user}>
-            <button type="button" className="button-small has-emoji button-tertiary button-on-secondary-background">
+            <div className="button button-small has-emoji button-tertiary button-on-secondary-background">
               Account Settings <Emoji name="key" />
-            </button>
+            </div>
           </AccountSettings>
         )}
 

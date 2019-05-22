@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import debounce from 'lodash/debounce';
+import Pluralize from 'react-pluralize';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
@@ -49,7 +50,6 @@ class PasswordSettings extends React.Component {
     this.onChangePWConfirm = this.onChangePWConfirm.bind(this);
     this.checkPWStrength = this.checkPWStrength.bind(this);
     this.debounceValidatePasswordMatch = debounce(this.validatePasswordMatch.bind(this), 500);
-    this.setPassword = this.setPassword.bind(this);
   }
 
   onChangePW(password) {
@@ -66,10 +66,6 @@ class PasswordSettings extends React.Component {
     this.setState({ passwordConfirm }, () => {
       this.validatePasswordMatch();
     });
-  }
-
-  setPassword() {
-    this.setState({ done: true });
   }
 
   checkPWStrength() {
@@ -104,6 +100,7 @@ class PasswordSettings extends React.Component {
     evt.preventDefault();
     // TODO actually set the password & handle errors if the user has incorrectly entered their current password
     console.log(this.props.user);
+    this.setState({ done: true });
   }
 
   render() {
@@ -154,7 +151,7 @@ class PasswordSettings extends React.Component {
           ) : (
             this.state.password.length > 0 && (
               <div className="pw-strength">
-                <span className="note">{pwMinCharCount - this.state.password.length} characters to go....</span>
+                <span className="note"><Pluralize count={pwMinCharCount - this.state.password.length} singular="character" /> to go....</span>
               </div>
             )
           )}
@@ -168,7 +165,7 @@ class PasswordSettings extends React.Component {
             error={this.state.passwordConfirmErrorMsg}
           />
 
-          <Button type="tertiary submit" size="small" onClick={this.setPassword} disabled={!isEnabled}>
+          <Button type="tertiary" size="small" disabled={!isEnabled} submit>
             Set Password
           </Button>
 
