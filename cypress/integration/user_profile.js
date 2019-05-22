@@ -2,6 +2,9 @@
 
 import util from '../support/util'
 
+let testProject
+let testCollection
+
 describe('User profile', () => {
   context('when signed in', () => {
     context('when on your own profile', () => {
@@ -9,17 +12,42 @@ describe('User profile', () => {
         cy.signIn()
 
         cy.server()
-        cy.route({
-          method: 'GET',
-          url: 'https://api.glitch.com/v1/projects/by/id*',
-        }).as('projectsById')
+
+        testProject = util.makeTestProject()
+        testCollection = util.makeTestCollection()
+        
+        cy.route('GET', '**/v1/projects/by/id*', {
+          items: [
+            testProject
+          ]
+        })
+
+
+        cy.route('GET', '**/v1/users/by/login/projects?login*', {
+          items: [
+            testProject,
+          ]
+        })
+
+        cy.route('GET', '**/v1/projects/by/id/collections*', {
+          items: []
+        })
+
+        cy.route('GET', '**/v1/users/by/id/collections?id*', {
+          items: [],
+        })
+
+        cy.route('GET', '**/v1/users/by/login/collections?login*', {
+          items: [],
+        })
+
+        cy.route('GET', '**/collections?userId=*', [])
       })
 
       it('can feature projects', () => {
-        cy.route('GET', 'https://api.glitch.com/v1/users/by/login/projects?login*', 'fixture:userByLoginProjects')
-        cy.route('PATCH', 'https://api.glitch.com/users/3803619', { featuredProjectId: "a122f2b2-8a43-41b7-a1db-35237223a45e" })
+        cy.route('PATCH', '**/users/*', { featuredProjectId: testProject.id })
 
-        cy.visit('/@olivia').wait('@projectsById')
+        cy.visit('/@olivia')
 
         cy.get('[data-cy=featured-project]').should('not.exist')
 
@@ -34,15 +62,9 @@ describe('User profile', () => {
       })
 
       it('can add pin', () => {
-        cy.route('GET', 'https://api.glitch.com/v1/users/by/login/projects?login*', 'fixture:userByLoginProjects')
-        cy.route('POST', 'https://api.glitch.com/users/3803619/pinned-projects/*', {
-          createdAt: "2019-05-21T21:19:13.854Z",
-          projectId: "a122f2b2-8a43-41b7-a1db-35237223a45e",
-          updatedAt: "2019-05-21T21:19:13.854Z",
-          userId: 3803619
-        })
+        cy.route('POST', '**/users/*/pinned-projects/*', { projectId: testProject.id })
 
-        cy.visit('/@olivia').wait('@projectsById')
+        cy.visit('/@olivia')
 
         cy.get('[data-cy=pinned-projects]').should('not.exist')
 
@@ -57,26 +79,14 @@ describe('User profile', () => {
       })
 
       it('can remove pin', () => {
-        const testProject = util.makeTestProject()
-        cy.route('GET', 'https://api.glitch.com/v1/users/by/login/projects?login*', 'fixture:userByLoginProjects')
-        cy.route('GET', 'https://api.glitch.com/v1/users/by/login/pinnedProjects?login=olivia&limit=100&orderKey=createdAt&orderDirection=DESC', {
-          "items":[
+        cy.route('GET', '**/v1/users/by/login/pinnedProjects*', {
+          items: [
             testProject
-          ],
-          "limit":100,
-          "orderKey":"createdAt",
-          "orderDirection":"DESC",
-          "lastOrderValue":"2019-04-12T23:23:28.941Z",
-          "hasMore":false
+          ]
         })
-        cy.route({
-          method: 'DELETE',
-          url: 'https://api.glitch.com/users/3803619/pinned-projects/*',
-          response: 'OK',
-        })
+        cy.route('DELETE', '**/users/3803619/pinned-projects/*', 'OK')
 
-        cy.signIn()
-        cy.visit('/@olivia').wait('@projectsById')
+        cy.visit('/@olivia')
 
         cy.get('[data-cy=pinned-projects]').should('exist').within(() => {
           cy.get('ul').find('li').first().within(() => {
@@ -88,21 +98,53 @@ describe('User profile', () => {
         cy.get('[data-cy=pinned-projects]').should('not.exist')
       })
 
-      xit('can add project to collection', () => { })
+      it('can add project to collection', () => {
+        cy.visit('/@olivia')
+
+        cy.route('GET', '**/v1/users/by/id/collections?id*', {
+          items: [
+            testCollection,
+          ],
+        })
+
+        cy.route('GET', '**/v1/users/by/login/collections?login*', {
+          items: [
+            testCollection,
+          ],
+        })
+
+        cy.route('GET', '**/collections?userId=*', [testCollection])
+
+        cy.route('PATCH', '**/collections/*/add/*', "OK")
+
+        cy.get('[data-cy=recent-projects]').should('exist').within(() => {
+          cy.get('ul').find('li').first().within(() => {
+            cy.get('.project-options').click()
+            cy.contains('Add to Collection').should('exist').click()
+
+            cy.route('GET', '**/collections?userId=*', [
+              {
+                ...testCollection,
+                projects: [
+                  testProject
+                ]
+              },
+            ])
+
+            cy.get('.add-project-to-collection-pop').should('exist').within(() => {
+              cy.get('.results').find('li').first().click()
+            })
+          })
+        })
+      })
+
       xit('can leave project', () => { })
 
       it('can delete project', () => {
-        cy.route('GET', 'https://api.glitch.com/v1/users/by/login/projects?login*', 'fixture:userByLoginProjects')
-        cy.route({
-          method: 'DELETE',
-          url: 'https://api.glitch.com/projects/*',
-          response: 'OK',
-        }).as('deleteProject')
+        cy.route('DELETE', '**/projects/*', 'OK').as('deleteProject')
+        cy.route('GET', '**/user/deleted-projects', [testProject]).as('getDeletedProject')
 
-        cy.visit('/@olivia').wait('@projectsById')
-
-        cy.get('[data-cy=page-numbers]').should('contain', '1 / 3')
-        cy.get('[data-cy=total-projects]').should('contain', '13')
+        cy.visit('/@olivia')
 
         cy.get('[data-cy=recent-projects]').within(() => {
           cy.get('ul').find('li').first().within(() => {
@@ -112,9 +154,6 @@ describe('User profile', () => {
         })
 
         cy.wait('@deleteProject')
-
-        cy.get('[data-cy=page-numbers]').should('contain', '1 / 2')
-        cy.get('[data-cy=total-projects]').should('contain', '12')
       })
     })
   })
