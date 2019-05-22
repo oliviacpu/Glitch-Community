@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import { debounce, partition } from 'lodash';
+import { partition } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo } from 'Components/popover';
+import TextInput from 'Components/inputs/text-input';
+import ResultsList from 'Components/containers/results-list';
+import Emoji from 'Components/images/emoji';
 import { useTrackedFunc } from 'State/segment-analytics';
-import { useAPI, createAPIHook } from 'State/api';
+import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
 
 import ProjectResultItem from '../includes/project-result-item';
-import ProjectsLoader from '../projects-loader';
 import { useNotifications, AddProjectToCollectionMsg } from '../notifications';
-import PopoverWithButton from './popover-with-button';
 
 function parseQuery(query) {
   query = query.trim();
@@ -47,10 +49,9 @@ function AddCollectionProjectPop({ collection, initialProjects, togglePopover, a
     { origin: 'Add Project collection' },
   );
 
-  const projects = parsedQuery.lengtth ? initialProjects : retrievedProjects; 
+  const projects = parsedQuery.lengtth ? initialProjects : retrievedProjects;
   const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
   const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
-  const excludedProjectsCount = projectsAlreadyInCollection.length;
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
 
   return (
