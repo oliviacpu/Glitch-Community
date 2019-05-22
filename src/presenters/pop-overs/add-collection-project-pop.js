@@ -98,6 +98,48 @@ function isUrl(s) {
   }
 }
 
+function AddCollectionProjectPop ({ }) {
+  const [query, setQuery] = useState('')
+  const searchResults = useAlgoliaSearch(query);
+
+    return (
+      <PopoverDialog wide align="right">
+        <PopoverInfo>
+          <TextInput
+            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+            value={query}
+            onChange={setQuery}
+            placeholder="Search by project name or URL"
+          />
+        </PopoverInfo>
+        <PopoverSection>
+          
+        </PopoverSection>
+        {showResults && (
+          <section className="pop-over-actions last-section results-list">
+            {isLoading && <Loader />}
+
+            {!!results && (
+              <ProjectsLoader projects={results}>
+                {(projects) => (
+                  <ProjectSearchResults
+                    projects={projects}
+                    onClick={this.onClick}
+                    collection={this.props.collection}
+                    projectName={this.state.projectName}
+                    excludedProjectsCount={this.state.excludedProjectsCount}
+                  />
+                )}
+              </ProjectsLoader>
+            )}
+          </section>
+        )}
+      </dialog>
+    );
+  
+}
+
+
 class AddCollectionProjectPop extends React.Component {
   constructor(props) {
     super(props);
@@ -226,44 +268,7 @@ class AddCollectionProjectPop extends React.Component {
   }
 
   render() {
-    // load user's recent projects
-    const results = this.state.query ? this.state.maybeResults : this.props.initialProjects;
-
-    const showResults = !!(this.state.query || (results && results.length));
-    const isLoading = !!(this.state.maybeRequest || !results);
-
-    return (
-      <dialog className="pop-over add-collection-project-pop wide-pop">
-        <section className="pop-over-info">
-          <input
-            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-            value={this.state.query}
-            onChange={this.handleChange}
-            className="pop-over-input search-input pop-over-search"
-            placeholder="Search by project name or URL"
-          />
-        </section>
-        {showResults && (
-          <section className="pop-over-actions last-section results-list">
-            {isLoading && <Loader />}
-
-            {!!results && (
-              <ProjectsLoader projects={results}>
-                {(projects) => (
-                  <ProjectSearchResults
-                    projects={projects}
-                    onClick={this.onClick}
-                    collection={this.props.collection}
-                    projectName={this.state.projectName}
-                    excludedProjectsCount={this.state.excludedProjectsCount}
-                  />
-                )}
-              </ProjectsLoader>
-            )}
-          </section>
-        )}
-      </dialog>
-    );
+    
   }
 }
 
