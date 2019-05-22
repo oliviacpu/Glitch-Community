@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition, uniqBy } from 'lodash';
@@ -64,7 +64,9 @@ function useActiveIndex(items, onSelect) {
       });
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      onSelect()
+      if (items[activeIndex]) {
+        onSelect(items[activeIndex]);
+      }
     }
   };
   return { activeIndex, onKeyDown };
@@ -99,12 +101,19 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     { origin: 'Add Project collection' },
   );
 
-  const projects = parsedQuery.length ? uniqBy(topResults.concat(retrievedProjects), (p) => p.id) : initialProjects;
-  const { activeIndex, onKeyDown } = useActiveIndex(projects);
+  /* eslint-disable no-shadow */
+  const { visibleProjects, projectsAlreadyInCollection } = useMemo(() => {
+    const projects = parsedQuery.length ? uniqBy(topResults.concat(retrievedProjects), (p) => p.id) : initialProjects;
 
-  const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
-  const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
+    const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
+    const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
+
+    const visibleProjects = newProjectsToAdd.slice(0, 10);
+    return { visibleProjects, projectsAlreadyInCollection };
+  }, [parsedQuery, initialProjects, topResults, retrievedProjects]);
+
   const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
+  const { activeIndex, onKeyDown } = useActiveIndex(visibleProjects, onClick);
 
   return (
     <PopoverDialog wide align="left">
@@ -133,14 +142,14 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           </InfoDescription>
         </PopoverInfo>
       )}
-      {newProjectsToAdd.length > 0 && (
+      {visibleProjects.length > 0 && (
         <PopoverSection>
-          <ResultsList scroll items={newProjectsToAdd.slice(0, 10)}>
+          <ResultsList scroll items={visibleProjects}>
             {(project, i) => <ProjectResultItem project={project} active={i === activeIndex} onClick={() => onClick(project)} />}
           </ResultsList>
         </PopoverSection>
       )}
-      {status === 'ready' && newProjectsToAdd.length === 0 && !excludingExactMatch && (
+      {status === 'ready' && visibleProjects.length === 0 && !excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
             nothing found <Emoji name="sparkles" />
