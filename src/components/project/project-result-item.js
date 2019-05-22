@@ -35,7 +35,9 @@ const ProjectResultItem = ({ project, onClick }) => {
                 <Markdown renderAsPlaintext>{project.description}</Markdown>
               </div>
             )}
-            <ProfileList {...members} layout="row" size="small" />
+            <div className={styles.profileListWrap}>
+              <ProfileList {...members} layout="row" size="small" />
+            </div>
           </div>
         </div>
       </TransparentButton>
