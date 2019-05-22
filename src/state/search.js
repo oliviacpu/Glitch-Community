@@ -76,6 +76,8 @@ function useSearchProvider(provider, query, params) {
       return;
     }
     dispatch({ type: 'loading' });
+    const selectedProviders = pick(provider, params.filterTypes)
+    
     allByKeys(mapValues(provider, (index) => index(query, params)))
       .then((res) => {
         dispatch({ type: 'ready', payload: res });
@@ -129,7 +131,7 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
     ...formatByType[type](value),
   }));
 
-const defaultParams = { notSafeForKids: false };
+const defaultParams = { notSafeForKids: false, filterTypes: ['user','team','project','collection'] };
 
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));

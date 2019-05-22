@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -23,8 +23,14 @@ const useMembers = createAPIHook(async (api, project) => {
 
 const ProjectResultItem = ({ project, active, onClick }) => {
   const { value: members } = useMembers(project);
+  const ref = useRef();
+  useEffect(() => {
+    if (active && ref.current.scrollIntoView) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [active]);
   return (
-    <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
+    <div ref={ref} className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
       <TransparentButton onClick={onClick}>
         <div className={styles.resultWrap}>
           <ProjectAvatar {...project} />
