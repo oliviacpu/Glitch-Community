@@ -7,9 +7,11 @@ import useUniqueId from '../../hooks/use-unique-id';
 import styles from './button.styl';
 import checkboxStyles from './checkbox-button.styl';
 
+const cx = classNames.bind(styles);
+
 const CheckboxButton = ({ children, onChange, value, matchBackground }) => {
   const id = useUniqueId();
-  const className = classNames(styles.btn, styles.small, checkboxStyles.label);
+  const className = cx({ btn: true, small: true, label: true, matchBackground });
   return (
     <label className={className} htmlFor={id}>
       <input
@@ -29,6 +31,10 @@ CheckboxButton.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.bool.isRequired,
   matchBackground: PropTypes.bool,
+};
+
+CheckboxButton.defaultProps = {
+  matchBackground: false,
 };
 
 export default CheckboxButton;
