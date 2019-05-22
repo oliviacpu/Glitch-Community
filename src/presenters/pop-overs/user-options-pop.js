@@ -131,7 +131,7 @@ Are you sure you want to sign out?`)
       <section className="pop-over-info">
         {canBecomeSuperUser && (
           <div className="user-options-pop-checkbox">
-            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser}>
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
               Super User
             </CheckboxButton>
           </div>
