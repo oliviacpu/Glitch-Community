@@ -1,5 +1,5 @@
 // add-project-to-collection-pop -> Add a project to a collection via a project item's menu
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { flatten, orderBy, partition } from 'lodash';
@@ -190,7 +190,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const [collectionType, setCollectionType] = useState(filterTypes[0]);
   const [query, setQuery] = useState('');
   const { maybeCollections: collections, collectionsWithProject } = useCollectionSearch(project, collectionType);
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
 
   return (
     <MultiPopover
@@ -249,7 +249,7 @@ AddProjectToCollectionBase.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
 };
 
-const AddProjectToCollection = ({ project, ...props }) => (
+const AddProjectToCollection = ({ project, addProjectToCollection }) => (
   <PopoverWithButton
     buttonProps={{ size: 'small' }}
     buttonText={
@@ -258,7 +258,14 @@ const AddProjectToCollection = ({ project, ...props }) => (
       </>
     }
   >
-    {({ togglePopover }) => <AddProjectToCollectionBase {...props} fromProject={false} project={project} togglePopover={togglePopover} />}
+    {({ togglePopover }) => (
+      <AddProjectToCollectionBase
+        addProjectToCollection={addProjectToCollection}
+        fromProject={false}
+        project={project}
+        togglePopover={togglePopover}
+      />
+    )}
   </PopoverWithButton>
 );
 
