@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Loader from 'Components/loader';
+import { PopoverWithButton, PopoverDialog, ActionDescription } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
+import Image from 'Components/images/image';
 // import { teamAdmins } from 'Models/team';
 import { useNotifications } from '../notifications';
-import { useAPI } from '../../state/api';
-import PopoverWithButton from './popover-with-button';
+import { useAPI } from 'State/api';
 
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
@@ -28,31 +31,29 @@ const DeleteTeamPop = withRouter(({ history, team, focusFirstElement }) => {
   }
 
   return (
-    <dialog className="pop-over delete-team-pop" open ref={focusFirstElement} tabIndex="0">
-      <section className="pop-over-info">
-        <div className="pop-title">Delete {team.name}</div>
-      </section>
-      <section className="pop-over-actions">
-        <img className="illustration" src={illustration} aria-label="illustration" alt="" />
-        <div className="action-description">
+    <PopoverDialog focusOnDialog align="left">
+      <PopoverTitle>
+        Delete {team.name}
+      </PopoverTitle>
+      <PopoverActions>
+        <Image width="110px" src={illustration} alt="" />
+        <ActionDescription>
           Deleting {team.name} will remove this team page. No projects will be deleted, but only current project members will be able to edit them.
-        </div>
-      </section>
-      <section className="pop-over-actions danger-zone">
-        <button type="button" className="button-small has-emoji" onClick={deleteTeam}>
-          Delete {team.name}&nbsp;
-          <span className="emoji bomb" role="img" aria-label="bomb emoji" />
+        </ActionDescription>
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        <Button size="small" type="dangerZone" onClick={deleteTeam}>
+          Delete {team.name} <Emoji name="bomb"/>
           {teamIsDeleting && <Loader />}
-        </button>
-      </section>
-
+        </Button>
+      </PopoverActions>
       {/* temp hidden until the email part of this is ready
-        <section className="pop-over-info">
+        <PopoverInfo>
           <UsersList users={teamAdmins({ team })}/>
-          <p className="info-description">This will also email all team admins, giving them an option to undelete it later</p>
+          <InfoDescription>This will also email all team admins, giving them an option to undelete it later</InfoDescription>
         </section>
-         */}
-    </dialog>
+      */}
+    </PopoverDialog>
   );
 });
 
@@ -64,7 +65,7 @@ DeleteTeamPop.propTypes = {
 const DeleteTeam = ({ team }) => (
   <section>
     <PopoverWithButton
-      buttonClass="button-small button-tertiary has-emoji danger-zone"
+      buttonProps={{ size: "small", type: "dangerZone"}}
       buttonText={
         <>
           Delete {team.name}
@@ -73,7 +74,7 @@ const DeleteTeam = ({ team }) => (
         </>
       }
     >
-      {({ togglePopover, focusFirstElement }) => <DeleteTeamPop team={team} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />}
+      {({ togglePopover }) => <DeleteTeamPop team={team} togglePopover={togglePopover} />}
     </PopoverWithButton>
   </section>
 );
