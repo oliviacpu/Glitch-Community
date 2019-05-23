@@ -23,7 +23,7 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, displayNew
     <PopoverContainer>
       {({ togglePopover, visible, focusFirstElement }) => (
         <div>
-          <button className="project-options button-borderless featured-project-options-pop-btn" onClick={togglePopover}>
+          <button className="project-options button-borderless featured-project-options-pop-btn" onClick={togglePopover} aria-label='Featured Project Options'>
             <div className="down-arrow" />
           </button>
           {visible && (
