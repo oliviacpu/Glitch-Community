@@ -109,3 +109,17 @@ PopoverWithButton.defaultProps = {
   buttonProps: {},
   onOpen: null,
 };
+
+export const PopoverMenu = ({ children }) => (
+  <PopoverWithButton
+    buttonText={<div className="down-arrow" aria-label="options" />}
+    containerClass="collection-options-pop-btn"
+    buttonClass="collection-options button-borderless"
+  >
+    {children}
+  </PopoverWithButton>
+);
+
+PopoverMenu.propTypes = {
+  children: PropTypes.func.isRequired,
+}
