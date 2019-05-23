@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Pluralize from 'react-pluralize';
 import { partition, uniqBy } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
@@ -113,7 +112,6 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     return { visibleProjects, excludingExactMatch };
   }, [parsedQuery, initialProjects, topResults, retrievedProjects]);
 
-  
   const { activeIndex, onKeyDown } = useActiveIndex(visibleProjects, onClick);
 
   return (

@@ -30,11 +30,14 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   });
 
   if (href) {
-    const targetProps = newTab ? {
-      target: "_blank",
-      rel: "noopener noreferrer",
-    } : {}
-    
+    let targetProps = {};
+    if (newTab) {
+      targetProps = {
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      };
+    }
+
     return (
       <Link to={href} onClick={onClick} className={className} {...targetProps}>
         {children}
