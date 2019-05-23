@@ -4,7 +4,7 @@ import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
 
 import TextInput from 'Components/inputs/text-input';
-import PopoverWithButton from './popover-with-button';
+import { PopoverWithButton, PopoverDialog } from 'Components/popover';
 
 const validHex = (hex) => {
   const re = /[0-9A-Fa-f]{6}/g;
@@ -13,6 +13,51 @@ const validHex = (hex) => {
   }
   return false;
 };
+
+function EditCollectionColorPop({ initialColor, updateColor }) {
+  const [color, setColor] = useState(initialColor)
+  const [query, setQuery] = useState(initialColor)
+  const [queryInvalid, setQueryInvalid] = useState(false)
+  
+  const changeColor = thr (color) {
+    setColor(color)
+    setQuery(color)
+    updateColor(color)
+  }
+  
+  return (
+    <PopoverDialog>
+      <PopoverInfo>
+        <input
+          className="color-picker"
+          type="color"
+          value={color}
+          onChange={(e) => changeColor(e.target.value)}
+          style={{ backgroundColor: color }}
+          id="color-picker"
+        />
+
+        <div className="custom-color-input">
+          <TextInput
+            opaque
+            value={this.state.query}
+            onChange={this.handleChange}
+            onKeyPress={this.keyPress}
+            placeholder="Hex"
+            labelText="Custom color hex"
+            error={this.state.error ? 'Invalid Hex' : null}
+          />
+        </div>
+      </PopoverInfo>
+
+      <PopoverActions>
+        <Button size="small" type="tertiary" onClick={this.getRandomColor}>
+          Random <Emoji name="bouquet" />
+        </Button>
+      </PopoverActions>
+    </PopoverDialog>
+  );
+}
 
 class EditCollectionColorPop extends React.Component {
   constructor(props) {
@@ -77,38 +122,7 @@ class EditCollectionColorPop extends React.Component {
   }
 
   render() {
-    return (
-      <dialog className="pop-over edit-collection-color-pop" ref={this.props.focusFirstElement}>
-        <section className="pop-over-info">
-          <input
-            className="color-picker"
-            type="color"
-            value={this.state.color}
-            onChange={(e) => this.changeColor(e.target.value)}
-            style={{ backgroundColor: this.state.color }}
-            id="color-picker"
-          />
-
-          <div className="custom-color-input">
-            <TextInput
-              opaque
-              value={this.state.query}
-              onChange={this.handleChange}
-              onKeyPress={this.keyPress}
-              placeholder="Hex"
-              labelText="Custom color hex"
-              error={this.state.error ? 'Invalid Hex' : null}
-            />
-          </div>
-        </section>
-
-        <section className="pop-over-info">
-          <button className="random-color-btn button-tertiary" onClick={this.getRandomColor}>
-            Random <span className="emoji bouquet" />
-          </button>
-        </section>
-      </dialog>
-    );
+    return;
   }
 }
 
