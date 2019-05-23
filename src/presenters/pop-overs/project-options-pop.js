@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverInfo, PopoverActions, PopoverMenuButton } from 'Components/popover';
 
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -73,18 +74,6 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   };
 };
 
-const PopoverButton = ({ onClick, text, emoji }) => (
-  <button className="button-small has-emoji button-tertiary" onClick={onClick} type="button">
-    <span>{`${text} `}</span>
-    <span className={`emoji ${emoji}`} />
-  </button>
-);
-PopoverButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  text: PropTypes.string.isRequired,
-  emoji: PropTypes.string.isRequired,
-};
-
 const ProjectOptionsContent = (props) => {
   function toggleAndCB(cb) {
     props.togglePopover();
@@ -99,59 +88,59 @@ const ProjectOptionsContent = (props) => {
   const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
 
   return (
-    <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
+    <PopoverDialog align="right">
       {showPinOrFeatureSection && (
-        <section className="pop-over-actions">
-          {props.featureProject && <PopoverButton onClick={() => toggleAndCB(props.featureProject)} text="Feature" emoji="clapper" />}
-          {props.addPin && <PopoverButton onClick={() => toggleAndCB(props.addPin)} text="Pin " emoji="pushpin" />}
-          {props.removePin && <PopoverButton onClick={() => toggleAndCB(props.removePin)} text="Un-Pin " emoji="pushpin" />}
-        </section>
+        <PopoverActions>
+          {props.featureProject && <PopoverMenuButton onClick={() => toggleAndCB(props.featureProject)} label="Feature" emoji="clapper" />}
+          {props.addPin && <PopoverMenuButton onClick={() => toggleAndCB(props.addPin)} label="Pin " emoji="pushpin" />}
+          {props.removePin && <PopoverMenuButton onClick={() => toggleAndCB(props.removePin)} label="Un-Pin " emoji="pushpin" />}
+        </PopoverActions>
       )}
 
       {props.displayNewNote && (
-        <section className="pop-over-actions">
-          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiral_note_pad" />
-        </section>
+        <PopoverActions>
+          <PopoverMenuButton onClick={() => toggleAndCB(props.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
+        </PopoverActions>
       )}
 
       {props.addProjectToCollection && (
-        <section className="pop-over-actions">
-          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
-        </section>
+        <PopoverActions>
+          <PopoverMenuButton onClick={props.addToCollectionPopover} label="Add to Collection " emoji="framedPicture" />
+        </PopoverActions>
       )}
 
       {props.joinTeamProject && (
-        <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
-        </section>
+        <PopoverActions>
+          <PopoverMenuButton onClick={props.joinTeamProject} label="Join Project " emoji="rainbow" />
+        </PopoverActions>
       )}
 
       {props.leaveTeamProject && (
-        <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
-        </section>
+        <PopoverActions>
+          <PopoverMenuButton onClick={onClickLeaveTeamProject} label="Leave Project " emoji="wave" />
+        </PopoverActions>
       )}
 
       {props.leaveProject && (
-        <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
-        </section>
+        <PopoverActions>
+          <PopoverMenuButton onClick={onClickLeaveProject} label="Leave Project " emoji="wave" />
+        </PopoverActions>
       )}
 
       {showDangerZone && (
-        <section className="pop-over-actions danger-zone last-section">
+        <PopoverActions type="dangerZone">
           {props.removeProjectFromTeam && (
-            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+            <PopoverMenuButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
           )}
 
-          {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
+          {props.deleteProject && <PopoverMenuButton onClick={onClickDeleteProject} label="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
-            <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbs_down" />
+            <PopoverMenuButton onClick={props.removeProjectFromCollection} label="Remove from Collection" emoji="thumbsDown" />
           )}
-        </section>
+        </PopoverActions>
       )}
-    </dialog>
+    </PopoverDialog>
   );
 };
 
@@ -192,35 +181,41 @@ export default function ProjectOptionsPop(props) {
   }
 
   return (
-    <PopoverWithButton
-      buttonClass="project-options button-borderless button-small"
-      buttonText={<div className="down-arrow" aria-label="options" />}
-      containerClass="project-options-pop-btn"
-    >
-      {({ togglePopover, focusFirstElement }) => (
+    <PopoverMenu>
+      {({ togglePopover }) => (
+        <MultiPopover
+          views={{ 
+            addToCollection: () => <div>TODO</div>,
+            createCollection: () => <div>TODO</div>,
+          }}>
+          {(showView) => (
+            <ProjectOptionsContent
+              {...props}
+              {...projectOptions}
+              addToCollectionPopover={addToCollectionPopover}
+              togglePopover={togglePopover}
+            
+            />
+          )}
+        </MultiPopover>
+        
+        
         <NestedPopover
           alternateContent={() => (
             <AddProjectToCollectionBase
               {...props}
               {...projectOptions}
               togglePopover={togglePopover}
-              focusFirstElement={focusFirstElement}
               currentUser={currentUser}
             />
           )}
         >
           {(addToCollectionPopover) => (
-            <ProjectOptionsContent
-              {...props}
-              {...projectOptions}
-              addToCollectionPopover={addToCollectionPopover}
-              togglePopover={togglePopover}
-              focusFirstElement={focusFirstElement}
-            />
+            
           )}
         </NestedPopover>
       )}
-    </PopoverWithButton>
+    </PopoverMenu>
   );
 }
 
