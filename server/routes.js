@@ -123,8 +123,9 @@ module.exports = function(external) {
     const { name } = req.params;
     const team = await getTeam(name);
     if (team) {
-      console.log(team);
-      const description = team.description ? cheerio.load(md.render(team.description)).text() : DEFAULT_TEAM_DESCRIPTION(name);
+      const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
+      const description =
+        team.description && hasMaybeUpdatedDescription ? cheerio.load(md.render(team.description)).text() : DEFAULT_TEAM_DESCRIPTION(name);
       const args = [res, team.name, description];
 
       if (team.hasAvatarImage) {
@@ -139,7 +140,9 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
-      const description = user.description ? cheerio.load(md.render(user.description)).text() : DEFAULT_USER_DESCRIPTION(name);
+      const hasMaybeUpdatedDescription = user.createdAt !== user.updatedAt;
+      const description =
+        user.description && hasMaybeUpdatedDescription ? cheerio.load(md.render(user.description)).text() : DEFAULT_USER_DESCRIPTION(name);
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
