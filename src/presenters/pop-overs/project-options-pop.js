@@ -76,27 +76,17 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
 const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
-      group.length && (
+      group.some((item) => item.onClick) && (
         <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
-          {group.children.map(
-            (item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />,
-          )}
+          {group.map((item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
         </PopoverActions>
       ),
   );
 
-const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, togglePopover }) => {
-  projectOptions = mapValues(projectOptions, (action) => {
-    togglePopover();
-    action();
-  });
-
+const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
   const onClickLeaveTeamProject = useTrackedFunc(projectOptions.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc(() => projectOptions.deleteProject, 'Delete Project clicked');
-
-  const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
-  const showDangerZone = projectOptions.removeProjectFromTeam || projectOptions.deleteProject || projectOptions.removeProjectFromCollection;
+  const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (
     <PopoverDialog align="right">
@@ -134,6 +124,17 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     return null;
   }
 
+  const toggleBeforeAction = (togglePopover) =>
+    mapValues(
+      projectOptions,
+      (action) =>
+        action &&
+        ((...args) => {
+          togglePopover();
+          action(...args);
+        }),
+    );
+
   return (
     <PopoverMenu>
       {({ togglePopover }) => (
@@ -144,7 +145,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           }}
         >
           {({ addToCollection }) => (
-            <ProjectOptionsContent projectOptions={projectOptions} addToCollectionPopover={addToCollection} togglePopover={togglePopover} />
+            <ProjectOptionsContent projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
           )}
         </MultiPopover>
       )}
