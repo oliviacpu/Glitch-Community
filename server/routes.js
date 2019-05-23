@@ -14,6 +14,11 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 
+const DEFAULT_USER_DESCRIPTION = (user) =>
+  `See what @${user} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web.`;
+const DEFAULT_TEAM_DESCRIPTION = (team) =>
+  `See what Team @${team} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web.`;
+
 module.exports = function(external) {
   const app = express.Router();
 
@@ -118,11 +123,14 @@ module.exports = function(external) {
     const { name } = req.params;
     const team = await getTeam(name);
     if (team) {
-      const description = team.description ? cheerio.load(md.render(team.description)).text() : '';
+      const description = team.description ? cheerio.load(md.render(team.description)).text() : DEFAULT_TEAM_DESCRIPTION(name);
       const args = [res, team.name, description];
 
       if (team.hasAvatarImage) {
         args.push(`${CDN_URL}/team-avatar/${team.id}/large`);
+      } else {
+        // default team avatar (need to use PNG version, social cards don't support SVG)
+        args.push(`${CDN_URL}/a6ad4878-b6c3-48fe-81d3-42f26aa3182d%2Fteam-avatar.png?1558031923766`);
       }
 
       await render(...args);
@@ -130,7 +138,7 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
-      const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
+      const description = user.description ? cheerio.load(md.render(user.description)).text() : DEFAULT_USER_DESCRIPTION(name);
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
