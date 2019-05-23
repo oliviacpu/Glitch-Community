@@ -17,7 +17,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
-import AddCollectionProject from 'Components/add-collection-project-pop';
+import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
