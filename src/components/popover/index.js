@@ -110,16 +110,25 @@ PopoverWithButton.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenu = ({ children }) => (
-  <PopoverWithButton
-    buttonText={<div className="down-arrow" aria-label="options" />}
-    containerClass="collection-options-pop-btn"
-    buttonClass="collection-options button-borderless"
-  >
-    {children}
-  </PopoverWithButton>
+export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
+  <div className={styles.popoverWithButtonWrap}>
+    <PopoverContainer onOpen={onOpen}>
+      {(popoverProps) => (
+        <div>
+          <div className={styles.buttonWrap}>
+            <TransparentButton onClick={popoverProps.togglePopover}>
+              <div className={styles.arrowPadding}>
+                <div className="down-arrow" aria-label="options" />
+              </div>
+            </TransparentButton>
+          </div>
+          {popoverProps.visible && renderChildren(popoverProps)}
+        </div>
+      )}
+    </PopoverContainer>
+  </div>
 );
 
 PopoverMenu.propTypes = {
   children: PropTypes.func.isRequired,
-}
+};
