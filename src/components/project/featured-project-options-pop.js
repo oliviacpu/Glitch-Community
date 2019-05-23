@@ -18,8 +18,8 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, createNote
       {({ togglePopover }) => (
         <PopoverDialog align="right" focusOnPopover>
           <PopoverActions>
-            {!hasNote && createNote && <PopoverMenuButton onClick={() => toggleAndCreateNote(togglePopover)} label="Add note" emoji="spiral_note_pad" />}
-            <PopoverButton onClick={() => toggleAndUnfeature(togglePopover)} text="Un-feature" emoji="arrow-down" />
+            {!hasNote && createNote && <PopoverMenuButton onClick={() => toggleAndCreateNote(togglePopover)} label="Add note" emoji="spiralNotePad" />}
+            <PopoverMenuButton onClick={() => toggleAndUnfeature(togglePopover)} label="Un-feature" emoji="arrowDown" />
           </PopoverActions>
         </PopoverDialog>
       )}
