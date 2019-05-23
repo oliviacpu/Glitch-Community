@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { mapValues } from 'lodash';
 import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
 
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -71,34 +72,52 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   };
 };
 
+const PopoverMenuItems = ({ children }) =>
+  children.map(
+    (group, i) =>
+      group.children.length && (
+        <PopoverActions key={i} type={group.type}>
+          {group.children.map((item, j) => item.onClick && <PopoverMenuButton onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
+        </PopoverActions>
+      ),
+  );
+
 const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, togglePopover }) => {
-  function toggleAndCB(cb) {
+  projectOptions = mapValues(projectOptions, (action) => {
     togglePopover();
-    cb();
-  }
+    action();
+  });
 
   const onClickLeaveTeamProject = useTrackedFunc(projectOptions.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(projectOptions.deleteProject), 'Delete Project clicked');
+  const onClickDeleteProject = useTrackedFunc(() => (projectOptions.deleteProject), 'Delete Project clicked');
 
   const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
   const showDangerZone = projectOptions.removeProjectFromTeam || projectOptions.deleteProject || projectOptions.removeProjectFromCollection;
 
+  return <PopoverMenuItems>
+    {[
+      { children: [
+        { onClick: }
+      ]}
+    ]}
+  </PopoverMenuItems>
+  
   return (
     <PopoverDialog align="right">
       {showPinOrFeatureSection && (
         <PopoverActions>
           {projectOptions.featureProject && (
-            <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.featureProject)} label="Feature" emoji="clapper" />
+            <PopoverMenuButton onClick={() => (projectOptions.featureProject)} label="Feature" emoji="clapper" />
           )}
-          {projectOptions.addPin && <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.addPin)} label="Pin " emoji="pushpin" />}
-          {projectOptions.removePin && <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.removePin)} label="Un-Pin " emoji="pushpin" />}
+          {projectOptions.addPin && <PopoverMenuButton onClick={() => (projectOptions.addPin)} label="Pin " emoji="pushpin" />}
+          {projectOptions.removePin && <PopoverMenuButton onClick={() => (projectOptions.removePin)} label="Un-Pin " emoji="pushpin" />}
         </PopoverActions>
       )}
 
       {projectOptions.displayNewNote && (
         <PopoverActions>
-          <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
+          <PopoverMenuButton onClick={() => (projectOptions.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
         </PopoverActions>
       )}
 
@@ -129,7 +148,7 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, toggleP
       {showDangerZone && (
         <PopoverActions type="dangerZone">
           {projectOptions.removeProjectFromTeam && (
-            <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
+            <PopoverMenuButton onClick={() => (projectOptions.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
           )}
 
           {projectOptions.deleteProject && <PopoverMenuButton onClick={onClickDeleteProject} label="Delete Project " emoji="bomb" />}
