@@ -14,6 +14,7 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
+import { captureException } from 'Utils/sentry';
 
 import { useAPI, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
@@ -73,8 +74,12 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
     return undefined;
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
-
-  const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
+  try {
+    const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
+  } catch (error) {
+    captureException(error);
+    Object.values([])
+  }
   return Object.values(data);
 });
 

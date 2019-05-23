@@ -8,6 +8,7 @@ import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
+import { captureException } from 'Utils/sentry';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { createAPIHook } from 'State/api';
@@ -99,19 +100,24 @@ ProjectItem.defaultProps = {
 
 const useUsers = createAPIHook((api, project) => {
   try {
-    throw new Error("beepboop")
     return getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`);
   } catch (error) {
-    console.log("here?")
+    captureException(error);
     return [];
   }
-})
+});
 
-const useTeams = createAPIHook(async (api, project) => getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`));
+const useTeams = createAPIHook((api, project) => {
+  try {
+    return getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
+});
 
 function ProjectWithDataLoading({ project, ...props }) {
   const { value: users } = useUsers(project);
-  console.log({ users })
   const { value: teams } = useTeams(project);
   const projectWithData = { ...project, users, teams };
   return <ProjectItem project={projectWithData} {...props} />;
