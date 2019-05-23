@@ -138,7 +138,7 @@ module.exports = function(external) {
         args.push(`${CDN_URL}/team-avatar/${team.id}/large`);
       } else {
         // default team avatar (need to use PNG version, social cards don't support SVG)
-        args.push(`${CDN_URL}/a6ad4878-b6c3-48fe-81d3-42f26aa3182d%2Fteam-avatar.png?1558031923766`);
+        args.push(`${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`);
       }
 
       await render(...args);
@@ -147,7 +147,7 @@ module.exports = function(external) {
     const user = await getUser(name);
     if (user) {
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
-      
+
       await render(
         res,
         user.name || `@${user.login}`,
