@@ -28,6 +28,7 @@ dependencies:
   d3-array: 2.0.3
   dayjs: 1.8.11
   details-element-polyfill: 2.3.1
+  dotenv: 8.0.0
   ejs: 2.6.1
   email-addresses: 3.0.3
   eslint: 5.15.3
@@ -5611,6 +5612,12 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
+  /dotenv/8.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-30xVGqjLjiUOArT4+M5q9sYdvuR4riM6yK9wMcas9Vbp6zZa+ocC9dp6QoftuhTPhFAiLK/0C5Ni2nou/Bk8lg==
   /duplexer/0.1.1:
     dev: false
     resolution:
@@ -12784,6 +12791,7 @@ specifiers:
   d3-array: ^2.0.3
   dayjs: ^1.8.8
   details-element-polyfill: ^2.3.1
+  dotenv: ^8.0.0
   ejs: ^2.6.1
   email-addresses: ^3.0.3
   eslint: ^5.15.1

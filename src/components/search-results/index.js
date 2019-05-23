@@ -14,6 +14,7 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
+import { captureException } from 'Utils/sentry';
 
 import { useAPI, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
@@ -63,9 +64,13 @@ const useUsers = createAPIHook(async (api, userIDs) => {
     return undefined;
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
-
-  const { data } = await api.get(`/v1/users/by/id/?${idString}`);
-  return Object.values(data);
+  try {
+    const { data } = await api.get(`/v1/users/by/id/?${idString}`);
+    return Object.values(data);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
 });
 
 const useTeams = createAPIHook(async (api, teamIDs) => {
@@ -73,9 +78,13 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
     return undefined;
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
-
-  const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
-  return Object.values(data);
+  try {
+    const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
+    return Object.values(data);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
 });
 
 function ProjectWithDataLoading({ project, ...props }) {
