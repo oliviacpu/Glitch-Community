@@ -1,4 +1,0 @@
-{
-    "pageLoadTimeout": 360000,
-    "blacklistHosts": ["*.wistia.com"]
-}
