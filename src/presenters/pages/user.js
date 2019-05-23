@@ -194,7 +194,7 @@ const UserPage = ({
         />
       )}
       {isAuthorized && (
-        <article>
+        <article data-cy="deleted-projects">
           <Heading tagName="h2">
             Deleted Projects
             <Emoji inTitle name="bomb" />
