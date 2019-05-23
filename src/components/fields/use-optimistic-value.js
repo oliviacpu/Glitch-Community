@@ -29,7 +29,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
     setState((prevState) => ({ ...prevState, value: newValue }));
   };
 
-  return [optimisticValue, state.error, setOptimisticValue];
+  return [optimisticValue, setOptimisticValue, state.error];
 };
 
 export default useOptimisticValue;
