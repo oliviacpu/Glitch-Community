@@ -124,7 +124,7 @@ module.exports = function(external) {
     const team = await getTeam(name);
     if (team) {
       const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
-      let description = DEFAULT_TEAM_DESCRIPTION(name);
+      let description = DEFAULT_TEAM_DESCRIPTION(team.login, name);
       
       if (team.description && hasMaybeUpdatedDescription) {
         description += cheerio.load(md.render(team.description)).text();
@@ -145,7 +145,7 @@ module.exports = function(external) {
     const user = await getUser(name);
     if (user) {
       const hasMaybeUpdatedDescription = user.createdAt !== user.updatedAt;
-      let description = DEFAULT_USER_DESCRIPTION(name);
+      let description = DEFAULT_USER_DESCRIPTION(user.login, name);
       
       if (user.description && hasMaybeUpdatedDescription) {
         description += cheerio.load(md.render(user.description)).text();
