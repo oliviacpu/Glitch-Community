@@ -10,19 +10,23 @@ import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover';
 import styles from './edit-collection-color-pop.styl';
 
-const validHex = (hex) => /^#?[0-9A-Fa-f]{6}$/.test(hex);
-
 const formatAndValidateHex = (hex) => {
-  if (!hex) return null
-  hex = hex.trim()
+  if (!hex) return null;
+  hex = hex.trim();
   if (!hex.startsWith('#')) {
-    hex = '#' + hex
+    hex = `#${hex}`;
   }
+  // #ff00ff
   if (/^#?[0-9A-Fa-f]{6}$/.test(hex)) {
-    return hex
+    return hex;
   }
+  // #f0f
   if (/^#?[0-9A-Fa-f]{3}$/.test(hex)) {
-}
+    const [, r, g, b] = hex.split('');
+    return ['#', r, r, g, g, b, b].join('');
+  }
+  return null;
+};
 
 function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   const [color, setColor] = useState(initialColor);
@@ -43,13 +47,10 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
 
   const onChangeHex = (value) => {
     setHex(value);
-    value = value.trim();
-    if (validHex(value)) {
-      if (!/^#/.test(value)) {
-        value = `#${value}`;
-      }
-      setColor(value);
-      updateColor(value);
+    const formatted = formatAndValidateHex(value);
+    if (formatted) {
+      setColor(formatted);
+      updateColor(formatted);
       setHexInvalid(false);
       return;
     }
