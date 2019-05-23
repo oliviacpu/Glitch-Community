@@ -127,11 +127,11 @@ module.exports = function(external) {
       // if so, don't include it
       const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
       let description = DEFAULT_TEAM_DESCRIPTION(team.url, team.name);
-      
+
       if (team.description && hasMaybeUpdatedDescription) {
         description += cheerio.load(md.render(team.description)).text();
       }
-      
+
       const args = [res, team.name, description];
 
       if (team.hasAvatarImage) {
@@ -149,7 +149,12 @@ module.exports = function(external) {
       console.log(user);
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
       
-      await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
+      await render(
+        res,
+        user.name || `@${user.login}`,
+        description,
+        user.avatarThumbnailUrl || 'https://cdn.glitch.com/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932',
+      );
       return;
     }
     await render(res, `@${name}`, `We couldn't find @${name}`);
