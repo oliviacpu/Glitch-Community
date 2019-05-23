@@ -12,6 +12,18 @@ import styles from './edit-collection-color-pop.styl';
 
 const validHex = (hex) => /^#?[0-9A-Fa-f]{6}$/.test(hex);
 
+const formatAndValidateHex = (hex) => {
+  if (!hex) return null
+  hex = hex.trim()
+  if (!hex.startsWith('#')) {
+    hex = '#' + hex
+  }
+  if (/^#?[0-9A-Fa-f]{6}$/.test(hex)) {
+    return hex
+  }
+  if (/^#?[0-9A-Fa-f]{3}$/.test(hex)) {
+}
+
 function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   const [color, setColor] = useState(initialColor);
   const [hex, setHex] = useState(initialColor);
@@ -33,7 +45,9 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
     setHex(value);
     value = value.trim();
     if (validHex(value)) {
-      value = value.replace(/^#/, '');
+      if (!/^#/.test(value)) {
+        value = `#${value}`;
+      }
       setColor(value);
       updateColor(value);
       setHexInvalid(false);
@@ -59,7 +73,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
             <TextInput
               opaque
               value={hex}
-              onChange={(e) => onChangeHex(e.target.value)}
+              onChange={onChangeHex}
               onKeyPress={keyPress}
               placeholder="Hex"
               labelText="Custom color hex"
