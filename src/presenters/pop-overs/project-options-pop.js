@@ -72,12 +72,15 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   };
 };
 
+/* eslint-disable react/no-array-index-key */
 const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
-      group.children.length && (
-        <PopoverActions key={i} type={group.type}>
-          {group.children.map((item, j) => item.onClick && <PopoverMenuButton onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
+      group.length && (
+        <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
+          {group.children.map(
+            (item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />,
+          )}
         </PopoverActions>
       ),
   );
@@ -90,74 +93,34 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, toggleP
 
   const onClickLeaveTeamProject = useTrackedFunc(projectOptions.leaveTeamProject, 'Leave Project clicked');
   const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc(() => (projectOptions.deleteProject), 'Delete Project clicked');
+  const onClickDeleteProject = useTrackedFunc(() => projectOptions.deleteProject, 'Delete Project clicked');
 
   const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
   const showDangerZone = projectOptions.removeProjectFromTeam || projectOptions.deleteProject || projectOptions.removeProjectFromCollection;
 
-  return <PopoverMenuItems>
-    {[
-      { children: [
-        { onClick: }
-      ]}
-    ]}
-  </PopoverMenuItems>
-  
   return (
     <PopoverDialog align="right">
-      {showPinOrFeatureSection && (
-        <PopoverActions>
-          {projectOptions.featureProject && (
-            <PopoverMenuButton onClick={() => (projectOptions.featureProject)} label="Feature" emoji="clapper" />
-          )}
-          {projectOptions.addPin && <PopoverMenuButton onClick={() => (projectOptions.addPin)} label="Pin " emoji="pushpin" />}
-          {projectOptions.removePin && <PopoverMenuButton onClick={() => (projectOptions.removePin)} label="Un-Pin " emoji="pushpin" />}
-        </PopoverActions>
-      )}
-
-      {projectOptions.displayNewNote && (
-        <PopoverActions>
-          <PopoverMenuButton onClick={() => (projectOptions.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
-        </PopoverActions>
-      )}
-
-      {projectOptions.addProjectToCollection && (
-        <PopoverActions>
-          <PopoverMenuButton onClick={addToCollectionPopover} label="Add to Collection " emoji="framedPicture" />
-        </PopoverActions>
-      )}
-
-      {projectOptions.joinTeamProject && (
-        <PopoverActions>
-          <PopoverMenuButton onClick={projectOptions.joinTeamProject} label="Join Project " emoji="rainbow" />
-        </PopoverActions>
-      )}
-
-      {projectOptions.leaveTeamProject && (
-        <PopoverActions>
-          <PopoverMenuButton onClick={onClickLeaveTeamProject} label="Leave Project " emoji="wave" />
-        </PopoverActions>
-      )}
-
-      {projectOptions.leaveProject && (
-        <PopoverActions>
-          <PopoverMenuButton onClick={onClickLeaveProject} label="Leave Project " emoji="wave" />
-        </PopoverActions>
-      )}
-
-      {showDangerZone && (
-        <PopoverActions type="dangerZone">
-          {projectOptions.removeProjectFromTeam && (
-            <PopoverMenuButton onClick={() => (projectOptions.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
-          )}
-
-          {projectOptions.deleteProject && <PopoverMenuButton onClick={onClickDeleteProject} label="Delete Project " emoji="bomb" />}
-
-          {projectOptions.removeProjectFromCollection && (
-            <PopoverMenuButton onClick={projectOptions.removeProjectFromCollection} label="Remove from Collection" emoji="thumbsDown" />
-          )}
-        </PopoverActions>
-      )}
+      <PopoverMenuItems>
+        {[
+          [
+            { onClick: projectOptions.featureProject, label: 'Feature', emoji: 'clapper' },
+            { onClick: projectOptions.addPin, label: 'Pin', emoji: 'pushpin' },
+            { onClick: projectOptions.removePin, label: 'Un-Pin', emoji: 'pushpin' },
+          ],
+          [{ onClick: projectOptions.displayNewNote, label: 'Add Note', emoji: 'spiralNotePad' }],
+          [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
+          [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
+          [
+            { onClick: onClickLeaveTeamProject, label: 'Leave Project', emoji: 'wave' },
+            { onClick: onClickLeaveProject, label: 'Leave Project', emoji: 'wave' },
+          ],
+          [
+            { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', type: 'dangerZone' },
+            { onClick: onClickDeleteProject, label: 'Delete Project', emoji: 'bomb', type: 'dangerZone' },
+            { onClick: projectOptions.removeProjectFromCollection, label: 'Remove from Collection', emoji: 'thumbsDown', type: 'dangerZone' },
+          ],
+        ]}
+      </PopoverMenuItems>
     </PopoverDialog>
   );
 };
