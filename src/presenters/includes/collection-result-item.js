@@ -7,16 +7,7 @@ import Markdown from 'Components/text/markdown';
 import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
 import CollectionAvatar from './collection-avatar';
 
-const addProject = (addProjectToCollection, project, collection, collectionPath, notification, togglePopover) => {
-  // add project to collection
-  addProjectToCollection(project, collection).then(() => {
-    // show notification
-    const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={collectionPath} />;
-    notification(content, 'notifySuccess');
-  });
 
-  togglePopover();
-};
 
 const CollectionResultItem = ({ onClick, project, collection, isActive, togglePopover }) => {
   const { createNotification } = useNotifications();
