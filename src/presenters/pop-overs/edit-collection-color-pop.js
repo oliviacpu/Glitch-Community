@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
@@ -14,17 +14,48 @@ const validHex = (hex) => {
   return false;
 };
 
-function EditCollectionColorPop({ initialColor, updateColor }) {
-  const [color, setColor] = useState(initialColor)
-  const [query, setQuery] = useState(initialColor)
-  const [queryInvalid, setQueryInvalid] = useState(false)
-  
-  const changeColor = thr (color) {
-    setColor(color)
-    setQuery(color)
-    updateColor(color)
-  }
-  
+function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
+  const [color, setColor] = useState(initialColor);
+  const [hex, setHex] = useState(initialColor);
+  const [hexInvalid, setHexInvalid] = useState(false);
+
+  const changeColor = useMemo(() =>
+    throttle((color) => {
+      setColor(color);
+      setHex(color);
+      updateColor(color);
+    }, []),
+  );
+
+  const setRandomColor = () => {
+    changeColor(randomColor({ luminosity: 'light' }));
+  };
+
+  const changeHex = (hex) => {
+    setHex(hex)
+    setHexInvalid(false)
+    if (hex && hex.length <= 7) {
+      if (validHex(hex)) {
+        hex = hex.replace(/^#/,'')
+        setColor(hex)
+        update(hex)
+      } else {
+        this.setState({ error: true });
+      }
+    } else {
+      // user has cleared the input field
+      this.setState({ error: true });
+    }
+  };
+
+  const keyPress = (e) => {
+    if (e.key === 'Enter') {
+      togglePopover();
+    } else {
+      setHexInvalid(false);
+    }
+  };
+
   return (
     <PopoverDialog>
       <PopoverInfo>
@@ -40,18 +71,18 @@ function EditCollectionColorPop({ initialColor, updateColor }) {
         <div className="custom-color-input">
           <TextInput
             opaque
-            value={this.state.query}
-            onChange={this.handleChange}
-            onKeyPress={this.keyPress}
+            value={hex}
+            onChange={changeHex}
+            onKeyPress={keyPress}
             placeholder="Hex"
             labelText="Custom color hex"
-            error={this.state.error ? 'Invalid Hex' : null}
+            error={hexInvalid ? 'Invalid Hex' : null}
           />
         </div>
       </PopoverInfo>
 
       <PopoverActions>
-        <Button size="small" type="tertiary" onClick={this.getRandomColor}>
+        <Button size="small" type="tertiary" onClick={setRandomColor}>
           Random <Emoji name="bouquet" />
         </Button>
       </PopoverActions>
@@ -59,7 +90,7 @@ function EditCollectionColorPop({ initialColor, updateColor }) {
   );
 }
 
-class EditCollectionColorPop extends React.Component {
+class _EditCollectionColorPop extends React.Component {
   constructor(props) {
     super(props);
 
@@ -79,13 +110,6 @@ class EditCollectionColorPop extends React.Component {
 
   onClick() {
     this.props.togglePopover();
-  }
-
-  getRandomColor() {
-    const newCoverColor = randomColor({ luminosity: 'light' });
-    this.setState({ color: newCoverColor });
-    this.setState({ query: newCoverColor });
-    this.update(newCoverColor);
   }
 
   handleChange(query) {
@@ -152,3 +176,4 @@ EditCollectionColor.propTypes = {
 };
 
 export default EditCollectionColor;
+CollectionColor;
