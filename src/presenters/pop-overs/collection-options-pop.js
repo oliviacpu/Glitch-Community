@@ -1,11 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PopoverWithButton from './popover-with-button';
-import PopoverButton from './popover-button';
-import { useCurrentUser } from '../../state/current-user';
+import { PopoverWithButton, PopoverDialog, PopoverActions } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import { useCurrentUser } from 'State/current-user';
 
-// Collection Options Pop
-const CollectionOptionsPop = ({ deleteCollection, collection, focusFirstElement }) => {
+const CollectionOptionsPop = ({ deleteCollection }) => (
+  <PopoverDialog focusOnDialog>
+    <PopoverActions>
+      <Button onClick={deleteCollection} size="small" type="dangerZone">
+        Delete Collection <Emoji name="bomb" />
+      </Button>
+    </PopoverActions>
+  </PopoverDialog>
+);
+
+CollectionOptionsPop.propTypes = {
+  deleteCollection: PropTypes.func.isRequired,
+};
+
+const PopoverMenu = ({ children }) => (
+  <PopoverWithButton
+    buttonText={<div className="down-arrow" aria-label="options" />}
+    containerClass="collection-options-pop-btn"
+    buttonClass="collection-options button-borderless"
+  >
+    {children}
+  </PopoverWithButton>
+);
+
+// Collection Options Container
+export default function CollectionOptions({ deleteCollection, collection }) {
+  if (!deleteCollection) {
+    return null;
+  }
   function confirmThenDelete() {
     if (!window.confirm('Are you sure you want to delete your collection?')) {
       return;
@@ -13,48 +40,7 @@ const CollectionOptionsPop = ({ deleteCollection, collection, focusFirstElement 
     deleteCollection(collection.id);
   }
 
-  return (
-    <dialog className="pop-over collection-options-pop" tabIndex="0" ref={focusFirstElement}>
-      <section className="pop-over-actions danger-zone last-section">
-        {deleteCollection && <PopoverButton onClick={confirmThenDelete} text="Delete Collection " emoji="bomb" />}
-      </section>
-    </dialog>
-  );
-};
-
-CollectionOptionsPop.propTypes = {
-  deleteCollection: PropTypes.func,
-  focusFirstElement: PropTypes.func.isRequired,
-};
-
-CollectionOptionsPop.defaultProps = {
-  deleteCollection: null,
-};
-
-// Collection Options Container
-export default function CollectionOptions({ deleteCollection, collection }) {
-  const { currentUser } = useCurrentUser();
-
-  if (!deleteCollection) {
-    return null;
-  }
-
-  return (
-    <PopoverWithButton
-      buttonText={<div className="down-arrow" aria-label="options" />}
-      containerClass="collection-options-pop-btn"
-      buttonClass="collection-options button-borderless"
-    >
-      {({ focusFirstElement }) => (
-        <CollectionOptionsPop
-          collection={collection}
-          deleteCollection={deleteCollection}
-          currentUser={currentUser}
-          focusFirstElement={focusFirstElement}
-        />
-      )}
-    </PopoverWithButton>
-  );
+  return <PopoverMenu>{() => <CollectionOptionsPop deleteCollection={confirmThenDelete} />}</PopoverMenu>;
 }
 
 CollectionOptions.propTypes = {
