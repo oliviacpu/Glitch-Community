@@ -28,7 +28,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
-import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/includes/notifications';
+import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
@@ -208,8 +208,8 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
           {currentUser.teams.length > 0 && (
             <PopoverActions>
-            <SegmentedButtons value={collectionType} buttons={segmentedButtonOptions} onChange={setCollectionType} />
-          </PopoverActions>
+              <SegmentedButtons value={collectionType} buttons={segmentedButtonOptions} onChange={setCollectionType} />
+            </PopoverActions>
           )}
 
           {collections && collections.length > 3 && (

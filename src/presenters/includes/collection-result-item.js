@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getLink as getCollectionLink } from 'Models/collection';
+import { getLink } from 'Models/collection';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import Markdown from 'Components/text/markdown';
 
@@ -13,15 +13,11 @@ const CollectionResultItem = ({ onClick, project, collection, isActive }) => {
     resultClass += ' active';
   }
 
-  const collectionPath = getCollectionLink(collection);
+  const collectionPath = ;
 
   return (
-    <div>
-      <button
-        className={resultClass}
-        onClick={onClick}
-        data-project-id={project.id}
-      >
+    <div className={}>
+      <TransparentButton onClick={onClick}>
         <div className="avatar" id={`avatar-collection-${collection.id}`}>
           <CollectionAvatar color={collection.coverColor} />
         </div>
@@ -38,9 +34,9 @@ const CollectionResultItem = ({ onClick, project, collection, isActive }) => {
           {collection.user && <UserAvatar user={collection.user} />}
         </div>
       </button>
-      <a href={collectionPath} className="view-result-link button button-small button-link" target="_blank" rel="noopener noreferrer">
+      <Button size="small" href={getLink(collection)} newTab>
         View →
-      </a>
+      </Button>
     </div>
   );
 };

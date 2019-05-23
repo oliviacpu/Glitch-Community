@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { partition, uniqBy } from 'lodash';
 
@@ -6,7 +6,7 @@ import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDescription } from 'Components/popover';
 import TextInput from 'Components/inputs/text-input';
-import ResultsList from 'Components/containers/results-list';
+import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -38,38 +38,6 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
   }
   return null;
 });
-
-function useActiveIndex(items, onSelect) {
-  const [activeIndex, setActiveIndex] = useState(-1);
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [items]);
-  const onKeyDown = (e) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActiveIndex((prev) => {
-        if (prev < 0) {
-          return items.length - 1;
-        }
-        return prev - 1;
-      });
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActiveIndex((prev) => {
-        if (prev === items.length - 1) {
-          return -1;
-        }
-        return prev + 1;
-      });
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (items[activeIndex]) {
-        onSelect(items[activeIndex]);
-      }
-    }
-  };
-  return { activeIndex, onKeyDown };
-}
 
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
@@ -144,7 +112,11 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {visibleProjects.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={visibleProjects}>
-            {(project, i) => <ProjectResultItem project={project} active={i === activeIndex} onClick={() => onClick(project)} />}
+            {(project, i) => (
+              <ScrollResult active={i === activeIndex}>
+                <ProjectResultItem project={project} onClick={() => onClick(project)} />
+              </ScrollResult>
+            )}
           </ResultsList>
         </PopoverSection>
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -14,43 +14,31 @@ import { getAllPages } from 'Shared/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './project-result-item.styl';
 
-const ScrollResult = ({ active, children }) =>  {
-  
-  }
-
-const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => {
-  const ref = useRef();
-  useEffect(() => {
-    if (active && ref.current.scrollIntoView) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }, [active]);
-  return (
-    <div ref={ref} className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
-      <TransparentButton onClick={onClick}>
-        <div className={styles.resultWrap}>
-          <ProjectAvatar {...project} />
-          <div className={styles.resultInfo}>
-            <div className={styles.resultName}>{project.domain}</div>
-            {project.description.length > 0 && (
-              <div className={styles.resultDescription}>
-                <Markdown renderAsPlaintext>{project.description}</Markdown>
-              </div>
-            )}
-            <div className={styles.profileListWrap}>
-              <ProfileList teams={teams} users={users} layout="row" size="small" />
+const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => (
+  <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
+    <TransparentButton onClick={onClick}>
+      <div className={styles.resultWrap}>
+        <ProjectAvatar {...project} />
+        <div className={styles.resultInfo}>
+          <div className={styles.resultName}>{project.domain}</div>
+          {project.description.length > 0 && (
+            <div className={styles.resultDescription}>
+              <Markdown renderAsPlaintext>{project.description}</Markdown>
             </div>
+          )}
+          <div className={styles.profileListWrap}>
+            <ProfileList teams={teams} users={users} layout="row" size="small" />
           </div>
         </div>
-      </TransparentButton>
-      <div className={styles.linkButtonWrap}>
-        <Button size="small" href={getLink(project)} newTab>
-          View →
-        </Button>
       </div>
+    </TransparentButton>
+    <div className={styles.linkButtonWrap}>
+      <Button size="small" href={getLink(project)} newTab>
+        View →
+      </Button>
     </div>
-  );
-};
+  </div>
+);
 
 const useMembers = createAPIHook(async (api, project) => {
   const [users, teams] = await Promise.all([
