@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AnalyticsContext } from 'State/segment-analytics';
+import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
 
 import ErrorBoundary from './presenters/includes/error-boundary';
@@ -24,6 +25,7 @@ const App = () => (
                 <APIContextProvider>
                   <>
                     <SuperUserBanner />
+                    <OfflineNotice />
                     <Router />
                   </>
                 </APIContextProvider>
