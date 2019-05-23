@@ -75,12 +75,14 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
   try {
+    console.log("sup")
+    throw new Error("beep")
     const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
+    return Object.values(data);
   } catch (error) {
     captureException(error);
-    Object.values([])
+    return [];
   }
-  return Object.values(data);
 });
 
 function ProjectWithDataLoading({ project, ...props }) {
