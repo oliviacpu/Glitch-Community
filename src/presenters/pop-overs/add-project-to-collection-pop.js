@@ -8,19 +8,18 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
+import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
-import { captureException } from '../../utils/sentry';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { captureException } from 'Utils/sentry';
 import useDebouncedValue from '../../hooks/use-debounced-value';
-
-import { useTrackedFunc } from '../segment-analytics';
-import { getAvatarUrl } from '../../models/project';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
-
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
+import PopoverWithButton from './popover-with-button';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -115,7 +114,7 @@ const AddProjectToCollectionPopContents = ({
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} /> }
+      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
 
       {collections && collections.length > 3 && (
         <section className="pop-over-info">
@@ -204,7 +203,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   );
 };
 
-const AddProjectToCollectionPop = (props) => {
+export const AddProjectToCollectionBase = (props) => {
   const { project, togglePopover, focusFirstElement } = props;
 
   const api = useAPI();
@@ -280,17 +279,37 @@ const AddProjectToCollectionPop = (props) => {
   );
 };
 
-AddProjectToCollectionPop.propTypes = {
+AddProjectToCollectionBase.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
   focusFirstElement: PropTypes.func,
 };
 
-AddProjectToCollectionPop.defaultProps = {
+AddProjectToCollectionBase.defaultProps = {
   fromProject: false,
   togglePopover: null,
   focusFirstElement: null,
 };
 
-export default AddProjectToCollectionPop;
+const AddProjectToCollection = ({ project, ...props }) => (
+  <PopoverWithButton
+    buttonClass="button-small has-emoji add-project"
+    buttonText={
+      <>
+        Add to Collection <span className="emoji framed-picture" role="presentation" />
+      </>
+    }
+  >
+    {({ togglePopover, focusFirstElement }) => (
+      <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+    )}
+  </PopoverWithButton>
+);
+
+AddProjectToCollection.propTypes = {
+  addProjectToCollection: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
+};
+
+export default AddProjectToCollection;

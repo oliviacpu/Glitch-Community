@@ -22,7 +22,7 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions }) => {
+const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
     <Container items={projects}>
@@ -39,7 +39,7 @@ const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions 
               />
             </div>
           )}
-          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
         </>
       )}
     </Container>
@@ -65,15 +65,15 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       {children(projects)}
       {canPaginate && (
         <div className={styles.viewControls}>
-          <div data-cy="pagination-controls" className={styles.paginationControls}>
-            <Button data-cy="previous-page" aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
-              <Image alt="" className={styles.paginationArrow} src={arrowSrc} />
+          <div className={styles.paginationControls}>
+            <Button type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+              <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             <div data-cy="page-numbers" className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
-            <Button data-cy="next-page" aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
-              <Image alt="" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
+            <Button type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
           <Button data-cy="show-all" type="tertiary" onClick={() => setExpanded(true)}>
@@ -146,6 +146,7 @@ function ProjectsList({
   placeholder,
   enableFiltering,
   enablePagination,
+  fetchMembers,
   projectsPerPage,
   collection,
   noteOptions,
@@ -169,6 +170,7 @@ function ProjectsList({
                   noteOptions={noteOptions}
                   layout={layout}
                   projectOptions={projectOptions}
+                  fetchMembers={fetchMembers}
                 />
               )}
             </PaginationController>
@@ -186,6 +188,7 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
+  fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
@@ -197,6 +200,7 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
+  fetchMembers: false,
   projectsPerPage: 6,
   collection: null,
   noteOptions: {},

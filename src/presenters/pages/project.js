@@ -18,34 +18,28 @@ import ProjectDomainInput from 'Components/fields/project-domain-input';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
+import RelatedProjects from 'Components/related-projects';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { getLink as getUserLink } from 'Models/user';
+import { addBreadcrumb } from 'Utils/sentry';
 
 import PopoverWithButton from '../pop-overs/popover-with-button';
-
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
-
-import { AnalyticsContext } from '../segment-analytics';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-import RelatedProjects from '../includes/related-projects';
-import { addBreadcrumb } from '../../utils/sentry';
-
-import { useAPI, createAPIHook } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-
-import { getLink as getUserLink } from '../../models/user';
-
 import Layout from '../layout';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const useIncludingCollections = createAPIHook(async (api, projectId) => {
+const getIncludedCollections = async (api, projectId) => {
   const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
   const selectedCollections = sampleSize(collections, 3);
-  return Promise.all(
+  const populatedCollections = await Promise.all(
     selectedCollections.map(async (collection) => {
       const { projects, user, team } = await allByKeys({
         projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
@@ -55,24 +49,21 @@ const useIncludingCollections = createAPIHook(async (api, projectId) => {
       return { ...collection, projects, user, team };
     }),
   );
-});
-
-const IncludedInCollections = ({ projectId }) => {
-  const { status, value: rawCollections } = useIncludingCollections(projectId);
-  if (status === 'loading') {
-    return null;
-  }
-  const collections = rawCollections.filter((c) => c.team || c.user);
-  if (!collections.length) {
-    return null;
-  }
-  return (
-    <>
-      <Heading tagName="h2">Included in Collections</Heading>
-      <Row items={collections}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
-    </>
-  );
+  return populatedCollections.filter((c) => c.team || c.user);
 };
+
+const IncludedInCollections = ({ projectId }) => (
+  <DataLoader get={(api) => getIncludedCollections(api, projectId)} renderLoader={() => null}>
+    {(collections) =>
+      collections.length > 0 && (
+        <>
+          <Heading tagName="h2">Included in Collections</Heading>
+          <Row items={collections}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
+        </>
+      )
+    }
+  </DataLoader>
+);
 
 const PrivateTooltip = 'Only members can view code';
 const PublicTooltip = 'Visible to everyone';
@@ -113,18 +104,16 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = ({ domain }) => {
-  const api = useAPI();
-  return (
-    <DataLoader get={() => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
-      {({ data }) => (
-        <Expander height={250}>
-          <Markdown>{data.toString()}</Markdown>
-        </Expander>
-      )}
-    </DataLoader>
-  );
-};
+const ReadmeLoader = ({ domain }) => (
+  <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
+    {({ data }) => (
+      <Expander height={250}>
+        <Markdown>{data.toString()}</Markdown>
+      </Expander>
+    )}
+  </DataLoader>
+);
+
 ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
@@ -220,7 +209,7 @@ const ProjectPage = ({
               />
             ) : (
               <>
-                {!currentUser.isSupport && suspendedReason ? ('suspended project') : (domain)} {project.private && <PrivateBadge />}
+                {!currentUser.isSupport && suspendedReason ? 'suspended project' : domain} {project.private && <PrivateBadge />}
               </>
             )}
           </Heading>
@@ -231,7 +220,7 @@ const ProjectPage = ({
           )}
           <AuthDescription
             authorized={isAuthorized}
-            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? ('suspended project') : project.description}
+            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? 'suspended project' : project.description}
             update={updateDescription}
             placeholder="Tell us about your app"
           />
@@ -258,7 +247,7 @@ const ProjectPage = ({
         <IncludedInCollections projectId={project.id} />
       </section>
       <section id="related">
-        <RelatedProjects ignoreProjectId={project.id} {...{ teams, users }} />
+        <RelatedProjects project={project} />
       </section>
     </main>
   );
@@ -296,11 +285,10 @@ async function getProject(api, domain) {
 }
 
 const ProjectPageLoader = ({ domain, ...props }) => {
-  const api = useAPI();
   const { currentUser } = useCurrentUser();
 
   return (
-    <DataLoader get={() => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
+    <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
       {(project) =>
         project ? (
           <ProjectEditor initialProject={project}>

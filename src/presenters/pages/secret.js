@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import Helmet from 'react-helmet';
-import { useDevToggles } from '../includes/dev-toggles';
+import { useDevToggles } from 'State/dev-toggles';
 
 function useZeldaMusicalCue() {
   useEffect(() => {
