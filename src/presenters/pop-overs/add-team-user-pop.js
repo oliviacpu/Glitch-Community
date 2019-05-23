@@ -335,6 +335,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
       setInvitee(getDisplayName(user));
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      captureException(error);
     }
   };
 
@@ -344,7 +345,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
     try {
       await inviteEmail(email);
     } catch (error) {
-      // nothing to do here...
+      captureException(error);
     }
   };
 
