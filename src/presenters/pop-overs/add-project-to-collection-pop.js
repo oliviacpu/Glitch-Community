@@ -8,6 +8,7 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
+import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, InfoDescription } from 'Components/popover';
 import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -18,19 +19,17 @@ import useDebouncedValue from '../../hooks/use-debounced-value';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
-import { NestedPopover, NestedPopoverTitle } from './popover-nested';
-import PopoverWithButton from './popover-with-button';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
-const NoSearchResultsPlaceholder = () => <p className="info-description">No matching collections found – add to a new one?</p>;
+const NoSearchResultsPlaceholder = () => <InfoDescription>No matching collections found – add to a new one?</InfoDescription>;
 
-const NoCollectionPlaceholder = () => <p className="info-description">Create collections to organize your favorite projects.</p>;
+const NoCollectionPlaceholder = () => <InfoDescription>Create collections to organize your favorite projects.</InfoDescription>;
 
 const AddProjectPopoverTitle = ({ project }) => (
-  <NestedPopoverTitle>
+  <MultiPopoverTitle>
     <img src={getAvatarUrl(project.id)} alt="" /> Add {project.domain} to collection
-  </NestedPopoverTitle>
+  </MultiPopoverTitle>
 );
 AddProjectPopoverTitle.propTypes = {
   project: PropTypes.object.isRequired,
