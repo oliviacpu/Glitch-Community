@@ -15,9 +15,9 @@ const initWebpack = require('./webpack');
 const constants = require('./constants');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) =>
-  `See what ${name} @${login} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+  `See what ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) =>
-  `See what Team ${name} @${login} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+  `See what Team ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -146,6 +146,7 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
+      console.log(user);
       const description = DEFAULT_USER_DESCRIPTION(user.login, name) + cheerio.load(md.render(user.description)).text();
       
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
