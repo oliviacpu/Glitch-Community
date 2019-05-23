@@ -18,7 +18,6 @@ const PopoverButton = ({ onClick, text, emoji }) => (
 const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   function isTeamProject() {
     const { currentUser, project } = props;
-    console.log({ currentUser, project });
     for (const team of currentUser.teams) {
       if (project.teamIds.includes(team.id)) {
         return true;
