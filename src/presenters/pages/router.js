@@ -130,7 +130,7 @@ const Router = () => (
       />
 
       {Object.keys(rootTeams).map((name) => (
-        <Route key={name} path={`/${name}`} exact render={({ location }) => <TeamPage key={location.key} id={rootTeams[name]} name={name} />} />
+        <Route key={name} path={`/${name}`} exact render={({ location }) => <TeamPage key={location.key} name={name} />} />
       ))}
 
       <Route

@@ -1,12 +1,77 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useTrackedFunc } from '../segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+
 import PopoverWithButton from './popover-with-button';
 import { NestedPopover } from './popover-nested';
-import { useCurrentUser } from '../../state/current-user';
+import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-import AddProjectToCollectionPop from './add-project-to-collection-pop';
+const isTeamProject = ({ currentUser, project }) => {
+  for (const team of currentUser.teams) {
+    if (project.teamIds.includes(team.id)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
+  if (isTeamProject({ currentUser, project })) {
+    leaveProject(project.id, event);
+    return;
+  }
+
+  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
+    project.domain
+  }?`;
+  if (window.confirm(prompt)) {
+    leaveProject(project.id, event);
+  }
+};
+
+const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
+  const isAnon = !(currentUser && currentUser.login);
+  const projectUserIds = project && project.users && Array.isArray(project.users) && project.users.map((projectUser) => projectUser.id);
+  const isProjectMember = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
+  const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
+  const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
+  const {
+    isAuthorized,
+    featureProject,
+    addPin,
+    removePin,
+    displayNewNote,
+    addProjectToCollection,
+    joinTeamProject,
+    leaveTeamProject,
+    leaveProject,
+    removeProjectFromTeam,
+    deleteProject,
+    removeProjectFromCollection,
+  } = projectOptions;
+
+  return {
+    featureProject: featureProject && !project.private && !isAnon && isAuthorized ? () => featureProject(project.id) : null,
+    addPin: addPin && !isAnon && isAuthorized ? () => addPin(project.id) : null,
+    removePin: removePin && !isAnon && isAuthorized ? () => removePin(project.id) : null,
+    displayNewNote:
+      !(project.note || project.isAddingANewNote) && displayNewNote && !isAnon && isAuthorized ? () => displayNewNote(project.id) : null,
+    addProjectToCollection: addProjectToCollection && !isAnon ? addProjectToCollection : null,
+    joinTeamProject: joinTeamProject && !isProjectMember && !isAnon && isAuthorized ? () => joinTeamProject(project.id, currentUser.id) : null,
+    leaveTeamProject:
+      leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
+    leaveProject:
+      leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
+        ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
+        : null,
+    removeProjectFromTeam:
+      removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
+    deleteProject: !removeProjectFromCollection && deleteProject && isProjectAdmin ? () => deleteProject(project.id) : null,
+    removeProjectFromCollection: removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromCollection(project) : null,
+  };
+};
 
 const PopoverButton = ({ onClick, text, emoji }) => (
   <button className="button-small has-emoji button-tertiary" onClick={onClick} type="button">
@@ -14,117 +79,60 @@ const PopoverButton = ({ onClick, text, emoji }) => (
     <span className={`emoji ${emoji}`} />
   </button>
 );
+PopoverButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  emoji: PropTypes.string.isRequired,
+};
 
-const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
-  function isTeamProject() {
-    const { currentUser, project } = props;
-    for (const team of currentUser.teams) {
-      if (project.teamIds.includes(team.id)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  function leaveProject(event) {
-    if (isTeamProject()) {
-      props.leaveProject(props.project.id, event);
-      return;
-    }
-
-    const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-      props.project.domain
-    }?`;
-    if (window.confirm(prompt)) {
-      props.leaveProject(props.project.id, event);
-    }
-  }
-
-  function leaveTeamProject() {
-    props.leaveTeamProject(props.project.id, props.currentUser.id);
-  }
-
-  function joinTeamProject() {
-    props.joinTeamProject(props.project.id, props.currentUser);
-  }
-
-  function animateThenAddPin() {
-    props.addPin(props.project.id);
+const ProjectOptionsContent = (props) => {
+  function toggleAndCB(cb) {
     props.togglePopover();
+    cb();
   }
 
-  function animateThenRemovePin() {
-    props.removePin(props.project.id);
-    props.togglePopover();
-  }
+  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
+  const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
+  const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(props.deleteProject), 'Delete Project clicked');
 
-  function animateThenDeleteProject() {
-    props.deleteProject(props.project.id);
-    props.togglePopover();
-  }
-
-  function animateThenRemoveProjectFromTeam() {
-    props.removeProjectFromTeam(props.project.id);
-    props.togglePopover();
-  }
-
-  function featureProject() {
-    props.featureProject(props.project.id);
-    props.togglePopover();
-  }
-
-  function toggleAndDisplayNote() {
-    props.togglePopover();
-    props.displayNewNote(props.project.id);
-  }
-
-  const showLeaveProject = props.leaveProject && props.project.users.length > 1 && props.currentUserIsOnProject;
-  const showAddNote = !(props.project.note || props.project.isAddingANewNote) && !!props.displayNewNote;
-  const showPinOrFeatureSection = props.addPin || props.removePin || (props.featureProject && !props.project.private);
-  const showRemoveProjectFromTeam = !!props.removeProjectFromTeam && !props.removeProjectFromCollection;
-  const showDeleteProject = props.currentUserIsAdminOnProject && !props.removeProjectFromCollection;
-  const showDangerZone = showRemoveProjectFromTeam || showDeleteProject || props.removeProjectFromCollection;
-
-  const onClickAddPin = useTrackedFunc(animateThenAddPin, 'Project Pinned');
-  const onClickRemovePin = useTrackedFunc(animateThenRemovePin, 'Project Un-Pinned');
-  const onClickLeaveTeamProject = useTrackedFunc(leaveTeamProject, 'Leave Project clicked');
-  const onClickLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc(animateThenDeleteProject, 'Delete Project clicked');
+  const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
+  const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
 
   return (
     <dialog className="pop-over project-options-pop" ref={props.focusFirstElement}>
       {showPinOrFeatureSection && (
         <section className="pop-over-actions">
-          {!!props.featureProject && !props.project.private && <PopoverButton onClick={featureProject} text="Feature" emoji="clapper" />}
-          {!!props.addPin && <PopoverButton onClick={onClickAddPin} text="Pin " emoji="pushpin" />}
-          {!!props.removePin && <PopoverButton onClick={onClickRemovePin} text="Un-Pin " emoji="pushpin" />}
-        </section>
-      )}
-      {showAddNote && (
-        <section className="pop-over-actions">
-          <PopoverButton onClick={toggleAndDisplayNote} {...props} text="Add Note" emoji="spiral_note_pad" />
+          {props.featureProject && <PopoverButton onClick={() => toggleAndCB(props.featureProject)} text="Feature" emoji="clapper" />}
+          {props.addPin && <PopoverButton onClick={() => toggleAndCB(props.addPin)} text="Pin " emoji="pushpin" />}
+          {props.removePin && <PopoverButton onClick={() => toggleAndCB(props.removePin)} text="Un-Pin " emoji="pushpin" />}
         </section>
       )}
 
-      {!!props.addProjectToCollection && (
+      {props.displayNewNote && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={addToCollectionPopover} {...props} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiral_note_pad" />
         </section>
       )}
 
-      {props.joinTeamProject && !props.currentUserIsOnProject && (
+      {props.addProjectToCollection && (
+        <section className="pop-over-actions">
+          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
+        </section>
+      )}
+
+      {props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={joinTeamProject} text="Join Project " emoji="rainbow" />
+          <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
         </section>
       )}
 
-      {props.leaveTeamProject && props.currentUserIsOnProject && (
+      {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
         </section>
       )}
 
-      {showLeaveProject && (
+      {props.leaveProject && (
         <section className="pop-over-actions collaborator-actions">
           <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
         </section>
@@ -132,12 +140,14 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
 
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
-          {showRemoveProjectFromTeam && <PopoverButton onClick={animateThenRemoveProjectFromTeam} text="Remove Project " emoji="thumbs_down" />}
+          {props.removeProjectFromTeam && (
+            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+          )}
 
-          {showDeleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
+          {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
-            <PopoverButton onClick={() => props.removeProjectFromCollection(props.project)} text="Remove from Collection" emoji="thumbs_down" />
+            <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbs_down" />
           )}
         </section>
       )}
@@ -145,67 +155,40 @@ const ProjectOptionsContent = ({ addToCollectionPopover, ...props }) => {
   );
 };
 
-// Project Options Pop
-const ProjectOptionsPop = ({ ...props }) => (
-  <NestedPopover
-    alternateContent={() => <AddProjectToCollectionPop {...props} togglePopover={props.togglePopover} focusFirstElement={props.focusFirstElement} />}
-  >
-    {(addToCollectionPopover) => (
-      <ProjectOptionsContent {...props} addToCollectionPopover={addToCollectionPopover} focusFirstElementg={props.focusFirstElementg} />
-    )}
-  </NestedPopover>
-);
-
-ProjectOptionsPop.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  project: PropTypes.shape({
-    users: PropTypes.array.isRequired,
-  }).isRequired,
+ProjectOptionsContent.propTypes = {
+  addPin: PropTypes.func,
+  addProjectToCollection: PropTypes.func,
+  deleteProject: PropTypes.func,
+  displayNewNote: PropTypes.func,
+  featureProject: PropTypes.func,
+  joinTeamProject: PropTypes.func,
+  leaveProject: PropTypes.func,
+  leaveTeamProject: PropTypes.func,
+  removePin: PropTypes.func,
+  removeProjectFromTeam: PropTypes.func,
   togglePopover: PropTypes.func.isRequired,
   focusFirstElement: PropTypes.func.isRequired,
-  addPin: PropTypes.func,
-  removePin: PropTypes.func,
-  deleteProject: PropTypes.func,
-  leaveProject: PropTypes.func,
-  removeProjectFromTeam: PropTypes.func,
-  joinTeamProject: PropTypes.func,
-  leaveTeamProject: PropTypes.func,
-  featureProject: PropTypes.func,
-  currentUserIsOnProject: PropTypes.bool,
-  displayNewNote: PropTypes.func,
 };
-ProjectOptionsPop.defaultProps = {
-  currentUserIsOnProject: false,
+ProjectOptionsContent.defaultProps = {
   addPin: null,
-  removePin: null,
+  addProjectToCollection: null,
   deleteProject: null,
-  leaveProject: null,
-  removeProjectFromTeam: null,
-  joinTeamProject: null,
-  leaveTeamProject: null,
-  featureProject: null,
   displayNewNote: null,
+  featureProject: null,
+  joinTeamProject: null,
+  leaveProject: null,
+  leaveTeamProject: null,
+  removePin: null,
+  removeProjectFromTeam: null,
 };
 
-// Project Options Container
-// create as stateful react component
-export default function ProjectOptions({ projectOptions, project }, { ...props }) {
+export default function ProjectOptionsPop(props) {
   const { currentUser } = useCurrentUser();
-  if (Object.keys(projectOptions).length === 0) {
+  const projectOptions = determineProjectOptionsFunctions({ currentUser, ...props });
+  const noProjectOptions = Object.values(projectOptions).every((option) => !option);
+
+  if (noProjectOptions) {
     return null;
-  }
-
-  function currentUserIsOnProject(user) {
-    const projectUsers = project.users.map((projectUser) => projectUser.id);
-    if (projectUsers.includes(user.id)) {
-      return true;
-    }
-    return false;
-  }
-
-  function currentUserIsAdminOnProject(user) {
-    const projectPermissions = project && project.permissions && project.permissions.find((p) => p.userId === user.id);
-    return projectPermissions && projectPermissions.accessLevel === 30;
   }
 
   return (
@@ -215,26 +198,37 @@ export default function ProjectOptions({ projectOptions, project }, { ...props }
       containerClass="project-options-pop-btn"
     >
       {({ togglePopover, focusFirstElement }) => (
-        <ProjectOptionsPop
-          {...props}
-          {...projectOptions}
-          project={project}
-          currentUser={currentUser}
-          currentUserIsOnProject={currentUserIsOnProject(currentUser)}
-          currentUserIsAdminOnProject={currentUserIsAdminOnProject(currentUser)}
-          togglePopover={togglePopover}
-          focusFirstElement={focusFirstElement}
-        />
+        <NestedPopover
+          alternateContent={() => (
+            <AddProjectToCollectionBase
+              {...props}
+              {...projectOptions}
+              togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
+              currentUser={currentUser}
+            />
+          )}
+        >
+          {(addToCollectionPopover) => (
+            <ProjectOptionsContent
+              {...props}
+              {...projectOptions}
+              addToCollectionPopover={addToCollectionPopover}
+              togglePopover={togglePopover}
+              focusFirstElement={focusFirstElement}
+            />
+          )}
+        </NestedPopover>
       )}
     </PopoverWithButton>
   );
 }
 
-ProjectOptions.propTypes = {
+ProjectOptionsPop.propTypes = {
   project: PropTypes.object.isRequired,
   projectOptions: PropTypes.object,
 };
 
-ProjectOptions.defaultProps = {
+ProjectOptionsPop.defaultProps = {
   projectOptions: {},
 };

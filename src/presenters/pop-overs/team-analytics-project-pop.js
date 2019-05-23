@@ -12,7 +12,7 @@ const AllProjectsItem = ({ currentProjectDomain, action }) => {
   }
   return (
     <button className={resultsClass} onClick={action} type="button">
-      <img className="avatar" src={BENTO_BOX} alt="Bento emoji" />
+      <img className="avatar" src={BENTO_BOX} alt="" />
       <div className="result-name" title="All Projects">
         All Projects
       </div>
@@ -52,6 +52,7 @@ const PopOver = ({ projects, togglePopover, setFilter, filter, updateProjectDoma
           id="analytics-project-filter"
           className="pop-over-input search-input pop-over-search"
           placeholder="Filter projects"
+          aria-label="Filter projects"
           value={filter}
         />
       </section>

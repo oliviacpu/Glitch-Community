@@ -13,24 +13,24 @@ import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
+import ReportButton from 'Components/report-abuse-pop';
 import { getLink } from 'Models/team';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 
-import { AnalyticsContext } from '../segment-analytics';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
 import TeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
-import AddTeamProject from '../includes/add-team-project';
-import DeleteTeam from '../includes/delete-team';
+import AddTeamProject from '../pop-overs/add-team-project-pop';
+import DeleteTeam from '../pop-overs/delete-team-pop';
 import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing } from '../includes/team-elements';
-import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
@@ -79,12 +79,11 @@ class TeamPage extends React.Component {
       addProjectToCollection: this.addProjectToCollection,
       deleteProject: this.props.deleteProject,
       leaveTeamProject: this.props.leaveTeamProject,
+      removeProjectFromTeam: this.props.removeProject,
+      joinTeamProject: this.props.joinTeamProject,
+      featureProject: this.props.featureProject,
+      isAuthorized: this.props.currentUserIsOnTeam,
     };
-    if (this.props.currentUserIsOnTeam) {
-      projectOptions.removeProjectFromTeam = this.props.removeProject;
-      projectOptions.joinTeamProject = this.props.joinTeamProject;
-      projectOptions.featureProject = this.props.featureProject;
-    }
 
     return projectOptions;
   }
@@ -165,9 +164,8 @@ class TeamPage extends React.Component {
             }
             projects={pinnedProjects}
             isAuthorized={this.props.currentUserIsOnTeam}
-            removePin={this.props.removePin}
             projectOptions={{
-              removePin: this.props.currentUserIsOnTeam ? this.props.removePin : undefined,
+              removePin: this.props.removePin,
               ...this.getProjectOptions(),
             }}
           />
@@ -183,7 +181,7 @@ class TeamPage extends React.Component {
             enablePagination
             enableFiltering={recentProjects.length > 6}
             projectOptions={{
-              addPin: this.props.currentUserIsOnTeam ? this.props.addPin : undefined,
+              addPin: this.props.addPin,
               ...this.getProjectOptions(),
             }}
           />
@@ -194,7 +192,7 @@ class TeamPage extends React.Component {
         {/* TEAM COLLECTIONS */}
         <ErrorBoundary>
           <DataLoader
-            get={() => this.props.api.get(`collections?teamId=${team.id}`)}
+            get={(api) => api.get(`collections?teamId=${team.id}`)}
             renderLoader={() => <TeamPageCollections {...this.props} collections={team.collections} />}
           >
             {({ data }) => <TeamPageCollections {...this.props} collections={data} />}

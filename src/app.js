@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import ErrorBoundary from './presenters/includes/error-boundary';
-import { AnalyticsContext } from './presenters/segment-analytics';
-import { CurrentUserProvider } from './state/current-user';
-import { APIContextProvider } from './state/api';
-import { UserPrefsProvider } from './presenters/includes/user-prefs';
-import { DevTogglesProvider } from './presenters/includes/dev-toggles';
-import { Notifications } from './presenters/notifications';
-import SuperUserBanner from './presenters/overlays/super-user-banner';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { CurrentUserProvider } from 'State/current-user';
+import { APIContextProvider } from 'State/api';
+import { UserPrefsProvider } from 'State/user-prefs';
+import { DevTogglesProvider } from 'State/dev-toggles';
+import SuperUserBanner from 'Components/banners/super-user';
 
+import ErrorBoundary from './presenters/includes/error-boundary';
+import { Notifications } from './presenters/notifications';
 import Router from './presenters/pages/router';
 
 const App = () => (

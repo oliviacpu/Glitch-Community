@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useLocalStorage from '../../state/local-storage';
+import useLocalStorage from 'State/local-storage';
 
 export const Context = React.createContext();
 

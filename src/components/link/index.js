@@ -7,8 +7,11 @@ import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';
+import WrappingLink from './wrapping-link';
+import TrackedExternalLink from './tracked-external-link';
 
-/* global */
+export { WrappingLink, TrackedExternalLink };
+
 const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
 
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
