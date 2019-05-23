@@ -146,6 +146,7 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
+      console.log(user);
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
       
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
