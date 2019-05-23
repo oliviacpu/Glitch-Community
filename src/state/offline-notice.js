@@ -4,18 +4,18 @@ import { useNotifications } from '../presenters/notifications';
 
 const PersistentNotification = ({ children, className }) => {
   const { createPersistentNotification } = useNotifications();
-  
+
   useEffect(() => {
     const { removeNotification } = createPersistentNotification(children, className);
     return removeNotification;
   }, [children, className]);
-  
+
   return null;
 };
 
 const OfflineNotice = () => {
   const [online, setOnline] = useState(() => navigator.onLine);
-  
+
   useEffect(() => {
     const onNetwork = () => setOnline(navigator.onLine);
     window.addEventListener('offline', onNetwork);
@@ -29,7 +29,7 @@ const OfflineNotice = () => {
   if (!online) {
     return (
       <PersistentNotification className="notifyError">
-        You are offline
+        It looks like you're offline
       </PersistentNotification>
     );
   }
