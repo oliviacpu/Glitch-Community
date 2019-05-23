@@ -6,7 +6,6 @@ import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
 import { UserPrefsProvider } from 'State/user-prefs';
 import { DevTogglesProvider } from 'State/dev-toggles';
-import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
 
 import ErrorBoundary from './presenters/includes/error-boundary';
@@ -24,7 +23,6 @@ const App = () => (
                 <APIContextProvider>
                   <>
                     <SuperUserBanner />
-                    <OfflineNotice />
                     <Router />
                   </>
                 </APIContextProvider>
