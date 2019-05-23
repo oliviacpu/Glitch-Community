@@ -35,7 +35,7 @@ AddProjectPopoverTitle.propTypes = {
   project: PropTypes.object.isRequired,
 };
 
-const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...props }) => {
+const AddProjectToCollectionResultItem = ({ onClick, collection, ...props }) => {
   const onClickTracked = useTrackedFunc(
     onClick,
     'Project Added to Collection',
@@ -45,7 +45,7 @@ const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...p
     },
   );
   return <CollectionResultItem onClick={onClickTracked} collection={collection} {...props} />;
-});
+};
 
 const AddProjectToCollectionResults = ({ addProjectToCollection, collections, currentUser, project, togglePopover, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
@@ -109,14 +109,14 @@ const AddProjectToCollectionPopContents = ({
   const [query, setQuery] = React.useState('');
 
   return (
-    <dialog className="pop-over add-project-to-collection-pop wide-pop">
+    <PopoverDialog wide align="right">
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
 
       {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
 
       {collections && collections.length > 3 && (
-        <section className="pop-over-info">
+        <PopoverInfo>
           <TextInput
             autoFocus
             value={query}
@@ -126,19 +126,19 @@ const AddProjectToCollectionPopContents = ({
             opaque
             type="search"
           />
-        </section>
+        </PopoverInfo>
       )}
 
       {!collections ? (
-        <section className="pop-over-actions">
+        <PopoverActions>
           <Loader />
-        </section>
+        </PopoverActions>
       ) : (
         <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
       )}
 
       {collections && collectionsWithProject.length ? (
-        <section className="pop-over-info">
+        <PopoverInfo>
           <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
           {collectionsWithProject
             .slice(0, 3)
@@ -157,15 +157,15 @@ const AddProjectToCollectionPopContents = ({
               <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
             </>
           )}
-        </section>
+        </PopoverInfo>
       ) : null}
 
-      <section className="pop-over-actions">
-        <button className="create-new-collection button-small button-tertiary" onClick={createCollectionPopover}>
+      <PopoverActions>
+        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
           Add to a new collection
-        </button>
-      </section>
-    </dialog>
+        </Button>
+      </PopoverActions>
+    </PopoverDialog>
   );
 };
 
@@ -258,13 +258,12 @@ export const AddProjectToCollectionBase = (props) => {
   }, [project.id, currentUser.id, collectionType]);
 
   return (
-    <NestedPopover
-      alternateContent={() => (
-        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
-      )}
-      startAlternateVisible={false}
+    <MultiPopover
+      views={{
+        createCollectionPopover: () => <div>TODO</div>,
+      }}
     >
-      {(createCollectionPopover) => (
+      {({ createCollectionPopover }) => (
         <AddProjectToCollectionPopContents
           {...props}
           collections={maybeCollections}
@@ -274,7 +273,7 @@ export const AddProjectToCollectionBase = (props) => {
           setCollectionType={setCollectionType}
         />
       )}
-    </NestedPopover>
+    </MultiPopover>
   );
 };
 
@@ -294,14 +293,15 @@ AddProjectToCollectionBase.defaultProps = {
 const AddProjectToCollection = ({ project, ...props }) => (
   <PopoverWithButton
     buttonClass="button-small has-emoji add-project"
+    buttonProps={{ size: "small"}}
     buttonText={
       <>
-        Add to Collection <span className="emoji framed-picture" role="presentation" />
+        Add to Collection <Emoji name="framedPicture" />
       </>
     }
   >
-    {({ togglePopover, focusFirstElement }) => (
-      <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+    {({ togglePopover,  }) => (
+      <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover}/>
     )}
   </PopoverWithButton>
 );
