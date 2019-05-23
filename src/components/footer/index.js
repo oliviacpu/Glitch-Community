@@ -41,7 +41,7 @@ const Footer = () => (
     </FooterLink>
     <FooterLink href="/legal" track="legal stuff">
       Legal Stuff
-      <Emoji name="policeOfficer" />
+      <Emoji name="scales" />
     </FooterLink>
     <FooterLink className={styles.teams} href="/teams" track="platforms">
       <PlatformsIcon />
