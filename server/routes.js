@@ -15,9 +15,9 @@ const initWebpack = require('./webpack');
 const constants = require('./constants');
 
 const DEFAULT_USER_DESCRIPTION = (user) =>
-  `See what @${user} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web.`;
+  `See what @${user} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
 const DEFAULT_TEAM_DESCRIPTION = (team) =>
-  `See what Team @${team} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web.`;
+  `See what Team @${team} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -124,8 +124,12 @@ module.exports = function(external) {
     const team = await getTeam(name);
     if (team) {
       const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
-      const description =
-        team.description && hasMaybeUpdatedDescription ? cheerio.load(md.render(team.description)).text() : DEFAULT_TEAM_DESCRIPTION(name);
+      let description = DEFAULT_TEAM_DESCRIPTION(name);
+      
+      if (team.description && hasMaybeUpdatedDescription) {
+        description += cheerio.load(md.render(team.description)).text();
+      }
+      
       const args = [res, team.name, description];
 
       if (team.hasAvatarImage) {
@@ -141,8 +145,12 @@ module.exports = function(external) {
     const user = await getUser(name);
     if (user) {
       const hasMaybeUpdatedDescription = user.createdAt !== user.updatedAt;
-      const description =
-        user.description && hasMaybeUpdatedDescription ? cheerio.load(md.render(user.description)).text() : DEFAULT_USER_DESCRIPTION(name);
+      let description = DEFAULT_USER_DESCRIPTION(name);
+      
+      if (user.description && hasMaybeUpdatedDescription) {
+        description += cheerio.load(md.render(user.description)).text();
+      }
+      
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
     }
