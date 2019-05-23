@@ -35,11 +35,9 @@ PopoverSection.defaultProps = {
 };
 
 export const PopoverActions = ({ ...props }) => <PopoverSection {...props} className={styles.popoverActions} />;
-export const PopoverInfo = ({ ...props }) => <PopoverSection {...props} className={styles.popoverInfo} />;
-
-const styled = (Component, baseClassName) => ({ className, ...props }) => <Component className={classnames(className, baseClassName)} {...props} />;
-export const PopoverTitle = styled('div', styles.popoverTitle);
-export const InfoDescription = styled('p', styles.infoDescription);
+export const PopoverInfo = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverInfo} />;
+export const PopoverTitle = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverTitle} />;
+export const InfoDescription = ({ children }) => <p className={styles.infoDescription}>{children}</p>;
 
 const MultiPopoverContext = createContext();
 
@@ -66,15 +64,13 @@ export const MultiPopoverTitle = ({ children }) => {
   const { setActiveView, defaultView } = useContext(MultiPopoverContext);
   return (
     <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
-      <PopoverSection type="secondary">
-        <PopoverTitle>
-          <div className={styles.backArrow}>
-            <div className="left-arrow icon" />
-          </div>
-          &nbsp;
-          {children}
-        </PopoverTitle>
-      </PopoverSection>
+      <PopoverTitle>
+        <div className={styles.backArrow}>
+          <div className="left-arrow icon" />
+        </div>
+        &nbsp;
+        {children}
+      </PopoverTitle>
     </TransparentButton>
   );
 };

@@ -7,7 +7,12 @@
     right: 0
   &.left
     left: 0
-  
+  &.topLeft
+    left: 0
+    bottom: 100%
+  &.topRight
+    right: 0
+    bottom: 100%
   &.wide
     width: 350px
   
@@ -68,6 +73,11 @@
 .popoverTitle:hover .backArrow
   background-color: section-line
 
+.infoDescription
+  margin: 0
+.infoDescription + .infoDescription
+  margin-top: 1rem
+
 .arrowPadding
   padding: 10px 10px 8px
   border-radius: 5px
@@ -89,3 +99,4 @@
   
 .popoverButtonContent
   white-space: nowrap
+
