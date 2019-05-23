@@ -154,9 +154,9 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
     });
   }, [user.id]);
 
-  function removeUser(selectedProjects = []) {
+  async function removeUser(selectedProjects = []) {
+    await removeUserFromTeam(user.id, Array.from(selectedProjects));
     createNotification(`${getDisplayName(user)} removed from Team`);
-    removeUserFromTeam(user.id, Array.from(selectedProjects));
   }
 
   return (
