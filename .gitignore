@@ -6,6 +6,7 @@ src/cache/*
 src/templates/**/*.js
 node_modules/*
 .cache-loader
+.DS_Store
 *.md5
 .config/configstore/update-notifier-nodemon.json
 .config/configstore/update-notifier-pnpm.json
@@ -15,3 +16,7 @@ node_modules/*
 .forever
 .vscode
 .log
+.data
+.env
+cypress/screenshots
+cypress/videos

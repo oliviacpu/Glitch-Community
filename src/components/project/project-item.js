@@ -8,6 +8,7 @@ import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
+import { captureException } from 'Utils/sentry';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { createAPIHook } from 'State/api';
@@ -97,9 +98,23 @@ ProjectItem.defaultProps = {
   projectOptions: {},
 };
 
-const useUsers = createAPIHook((api, project) => getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`));
+const useUsers = createAPIHook((api, project) => {
+  try {
+    return getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
+});
 
-const useTeams = createAPIHook(async (api, project) => getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`));
+const useTeams = createAPIHook((api, project) => {
+  try {
+    return getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
+});
 
 function ProjectWithDataLoading({ project, ...props }) {
   const { value: users } = useUsers(project);
