@@ -105,9 +105,9 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
             { onClick: onClickLeaveProject, label: 'Leave Project', emoji: 'wave' },
           ],
           [
-            { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', type: 'dangerZone' },
-            { onClick: onClickDeleteProject, label: 'Delete Project', emoji: 'bomb', type: 'dangerZone' },
-            { onClick: projectOptions.removeProjectFromCollection, label: 'Remove from Collection', emoji: 'thumbsDown', type: 'dangerZone' },
+            { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
+            { onClick: onClickDeleteProject, label: 'Delete Project', emoji: 'bomb', dangerZone: true },
+            { onClick: projectOptions.removeProjectFromCollection, label: 'Remove from Collection', emoji: 'thumbsDown', dangerZone: true },
           ],
         ]}
       </PopoverMenuItems>
