@@ -96,21 +96,87 @@ AddProjectToCollectionResults.defaultProps = {
   query: '',
 };
 
-const AddProjectToCollectionPopContents = ({
-  addProjectToCollection,
-  collections,
-  collectionsWithProject,
-  createCollectionPopover,
-  currentUser,
-  fromProject,
-  project,
-  togglePopover,
-  collectionType,
-  setCollectionType,
-}) => {
+const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
+  const buttons = filterTypes.map((name) => ({
+    name,
+    contents: name,
+  }));
+  return (
+    <section className="pop-over-actions">
+      <div className="segmented-button-wrap">
+        <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+      </div>
+    </section>
+  );
+};
+
+function useCollectionSearch (project, collectionType) {
+  const api = useAPI();
+  const { currentUser } = useCurrentUser();
+
+  const [maybeCollections, setMaybeCollections] = React.useState(null);
+  const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
+
+  React.useEffect(() => {
+    let canceled = false;
+    setMaybeCollections(null); // reset maybCollections on reload to show loader
+
+    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
+
+    const loadUserCollections = async (user) => {
+      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, user }));
+    };
+
+    const loadTeamCollections = async (team) => {
+      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
+      return collections.map((collection) => ({ ...collection, team }));
+    };
+
+    const loadCollections = async () => {
+      const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
+      const userCollectionsRequest = loadUserCollections(currentUser);
+
+      const requests =
+        collectionType === filterTypes[0]
+          ? [projectCollectionsRequest, userCollectionsRequest]
+          : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
+
+      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
+
+      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
+      const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
+
+      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
+      if (!canceled) {
+        setMaybeCollections(orderedCollections);
+        setCollectionsWithProject(_collectionsWithProject);
+      }
+    };
+
+    loadCollections().catch(captureException);
+    return () => {
+      canceled = true;
+    };
+  }, [project.id, currentUser.id, collectionType]);
+  return { maybeCollections, collectionsWithProject }
+}
+
+
+export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover }) => {
+  const [collectionType, setCollectionType] = React.useState(filterTypes[0]);
   const [query, setQuery] = React.useState('');
+  const { maybeCollections: collections, collectionsWithProject } = useCollectionSearch(project, collectionType)
+  const currentUser = useCurrentUser();
 
   return (
+    <MultiPopover
+      views={{
+        createCollectionPopover: () => <div>TODO</div>,
+      }}
+    >
+      {({ createCollectionPopover }) => (
     <PopoverDialog wide align="right">
       {/* Only show this nested popover title from project-options */}
       {!fromProject && <AddProjectPopoverTitle project={project} />}
@@ -168,113 +234,7 @@ const AddProjectToCollectionPopContents = ({
         </Button>
       </PopoverActions>
     </PopoverDialog>
-  );
-};
-
-AddProjectToCollectionPopContents.propTypes = {
-  addProjectToCollection: PropTypes.func,
-  collections: PropTypes.array,
-  currentUser: PropTypes.object,
-  togglePopover: PropTypes.func, // required but added dynamically
-  project: PropTypes.object.isRequired,
-  fromProject: PropTypes.bool,
-  collectionType: PropTypes.string.isRequired,
-  setCollectionType: PropTypes.func.isRequired,
-};
-
-AddProjectToCollectionPopContents.defaultProps = {
-  addProjectToCollection: null,
-  collections: [],
-  currentUser: null,
-  togglePopover: null,
-  fromProject: false,
-};
-
-const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
-  const buttons = filterTypes.map((name) => ({
-    name,
-    contents: name,
-  }));
-  return (
-    <section className="pop-over-actions">
-      <div className="segmented-button-wrap">
-        <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
-      </div>
-    </section>
-  );
-};
-
-export const AddProjectToCollectionBase = (props) => {
-  const { project } = props;
-
-  const api = useAPI();
-  const { currentUser } = useCurrentUser();
-
-  const [collectionType, setCollectionType] = React.useState(filterTypes[0]);
-
-  const [maybeCollections, setMaybeCollections] = React.useState(null);
-  const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
-
-  React.useEffect(() => {
-    let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
-
-    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
-
-    const loadUserCollections = async (user) => {
-      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, user }));
-    };
-
-    const loadTeamCollections = async (team) => {
-      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, team }));
-    };
-
-    const loadCollections = async () => {
-      const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
-      const userCollectionsRequest = loadUserCollections(currentUser);
-
-      const requests =
-        collectionType === filterTypes[0]
-          ? [projectCollectionsRequest, userCollectionsRequest]
-          : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
-
-      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
-
-      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-      const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
-
-      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
-      if (!canceled) {
-        setMaybeCollections(orderedCollections);
-        setCollectionsWithProject(_collectionsWithProject);
-      }
-    };
-
-    loadCollections().catch(captureException);
-    return () => {
-      canceled = true;
-    };
-  }, [project.id, currentUser.id, collectionType]);
-
-  return (
-    <MultiPopover
-      views={{
-        createCollectionPopover: () => <div>TODO</div>,
-      }}
-    >
-      {({ createCollectionPopover }) => (
-        <AddProjectToCollectionPopContents
-          {...props}
-          collections={maybeCollections}
-          collectionsWithProject={collectionsWithProject}
-          createCollectionPopover={createCollectionPopover}
-          collectionType={collectionType}
-          setCollectionType={setCollectionType}
-        />
-      )}
+  )}
     </MultiPopover>
   );
 };

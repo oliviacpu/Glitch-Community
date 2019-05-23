@@ -28,7 +28,7 @@ const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCol
   const BottomRight = () => (
     <>
       {currentUser.login && (
-        <span style={{display: 'in'}>
+        <span style={{display: 'inline-block'}>
           <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
         </span>
       )}
@@ -68,3 +68,4 @@ ProjectEmbed.defaultProps = {
 };
 
 export default ProjectEmbed;
+}
