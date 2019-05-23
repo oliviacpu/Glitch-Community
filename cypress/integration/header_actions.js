@@ -34,7 +34,7 @@ describe('Header actions', () => {
             status: 403,
             response: { status: 403, message: 'The provider facebook did not return any email.' },
           });
-  
+
           cy.visit('/login/facebook?code=fbcode');
         });
       });
@@ -54,5 +54,5 @@ describe('Header actions', () => {
 
       cy.get('.what-is-glitch').should('exist');
     });
-  })
+  });
 });

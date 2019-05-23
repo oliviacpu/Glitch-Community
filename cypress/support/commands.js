@@ -7,28 +7,31 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
 
-const omitBy = require('lodash/omitBy')
-const keys = require('lodash/keys')
-const isObject = require('lodash/isObject')
-const isArray = require('lodash/isArray')
+require('@percy/cypress');
+
+const omitBy = require('lodash/omitBy');
+const keys = require('lodash/keys');
+const isObject = require('lodash/isObject');
+const isArray = require('lodash/isArray');
 
 const filterTokens = (value) => {
   if (isArray(value)) {
-    value = value.map(filterTokens)
+    value = value.map(filterTokens);
   } else if (isObject(value)) {
-    keys(value).map((key) => { value[key] = filterTokens(value[key]) })
-    value = omitBy(value, (_, key) => key.match('\\w+Token|password|email'))
+    keys(value).map((key) => {
+      value[key] = filterTokens(value[key]);
+    });
+    value = omitBy(value, (_, key) => key.match('\\w+Token|password|email'));
   }
-  return value
-}
+  return value;
+};
 
-Cypress.Commands.add('createFixture', (name, url) => cy
-  .request({ url, headers: { Authorization: Cypress.env('GLITCH_TOKEN') } })
-  .then((response) => cy.writeFile(`cypress/fixtures/${name}.json`, filterTokens(response.body))));
+Cypress.Commands.add('createFixture', (name, url) =>
+  cy
+    .request({ url, headers: { Authorization: Cypress.env('GLITCH_TOKEN') } })
+    .then((response) => cy.writeFile(`cypress/fixtures/${name}.json`, filterTokens(response.body))),
+);
 
 Cypress.Commands.add('createFixtures', (fixtures) => Object.entries(fixtures).forEach((entry) => cy.createFixture(entry[0], entry[1])));
 
