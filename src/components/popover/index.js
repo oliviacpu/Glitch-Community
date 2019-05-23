@@ -111,14 +111,14 @@ PopoverWithButton.defaultProps = {
 };
 
 export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
-  <div className={styles.popoverWithButtonWrap}>
+  <div className={styles.popoverMenuWrap}>
     <PopoverContainer onOpen={onOpen}>
       {(popoverProps) => (
         <div>
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
               <div className={styles.arrowPadding}>
-                <div className="down-arrow" aria-label="options" />
+                <div className={styles.downArrow} aria-label="options" />
               </div>
             </TransparentButton>
           </div>
@@ -131,4 +131,15 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
 
 PopoverMenu.propTypes = {
   children: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
 };
+
+PopoverMenu.defaultProps = {
+  onOpen: null,
+};
+
+export const PopoverMenuButton = ({ children, onClick }) => (
+  <Button size="small" onClick={onClick}>
+    <div className={styles.popoverButtonContent} />
+  </Button>
+);

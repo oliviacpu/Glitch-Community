@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopoverMenu, PopoverDialog, PopoverActions } from 'Components/popover';
+import { PopoverMenu, PopoverMenuButton, PopoverDialog, PopoverActions } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 
