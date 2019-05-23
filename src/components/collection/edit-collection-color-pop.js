@@ -4,6 +4,7 @@ import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
 
 import TextInput from 'Components/inputs/text-input';
+import ColorInput from 'Components/inputs/color';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover';
@@ -25,11 +26,11 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
     changeColor(randomColor({ luminosity: 'light' }));
   };
 
-  const onChangeColorPicker = useMemo(() => throttle((event) => changeColor(event.target.value), 100), []);
+  const onChangeColorPicker = useMemo(() => throttle(changeColor, 100), []);
 
-  const onChangeHex = (event) => {
-    setHex(event.target.value);
-    let value = event.target.value.trim();
+  const onChangeHex = (value) => {
+    setHex(value);
+    value = value.trim();
     if (validHex(value)) {
       value = value.replace(/^#/, '');
       setColor(value);
@@ -51,20 +52,17 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   return (
     <PopoverDialog align="left">
       <PopoverInfo>
-        <input
-          className="color-picker"
-          type="color"
-          value={color}
-          onChange={onChangeColorPicker}
-          style={{ backgroundColor: color }}
-          id="color-picker"
-        />
+        <div className={styles.colorFormWrap}>
+        
+        </div>
+        
+        
 
         <div className="custom-color-input">
           <TextInput
             opaque
             value={hex}
-            onChange={onChangeHex}
+            onChange={(e) => onChangeHex(e.target.value)}
             onKeyPress={keyPress}
             placeholder="Hex"
             labelText="Custom color hex"
@@ -73,7 +71,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
         </div>
       </PopoverInfo>
 
-      <PopoverActions>
+      <PopoverActions type="secondary">
         <Button size="small" type="tertiary" onClick={setRandomColor}>
           Random <Emoji name="bouquet" />
         </Button>
