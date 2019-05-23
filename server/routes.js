@@ -14,10 +14,10 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 
-const DEFAULT_USER_DESCRIPTION = (user) =>
-  `See what @${user} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
-const DEFAULT_TEAM_DESCRIPTION = (team) =>
-  `See what Team @${team} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+const DEFAULT_USER_DESCRIPTION = (login, name) =>
+  `See what ${name} @${login} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+const DEFAULT_TEAM_DESCRIPTION = (login, name) =>
+  `See what Team ${name} @${login} is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
 
 module.exports = function(external) {
   const app = express.Router();
