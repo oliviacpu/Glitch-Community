@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopoverMenu, PopoverMenuButton, PopoverDialog, PopoverActions } from 'Components/popover';
-import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 
 export default function CollectionOptions({ deleteCollection, collection }) {
   if (!deleteCollection) {
@@ -20,9 +18,7 @@ export default function CollectionOptions({ deleteCollection, collection }) {
       {() => (
         <PopoverDialog focusOnDialog align="right">
           <PopoverActions type="dangerZone">
-            <Button onClick={deleteCollection} size="small" type="dangerZone">
-              Delete Collection <Emoji name="bomb" />
-            </Button>
+            <PopoverMenuButton onClick={deleteCollection} label="Delete Collection" emoji="bomb" />
           </PopoverActions>
         </PopoverDialog>
       )}

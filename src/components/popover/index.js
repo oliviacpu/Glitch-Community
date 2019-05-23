@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
@@ -138,8 +139,17 @@ PopoverMenu.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenuButton = ({ children, onClick }) => (
-  <Button size="small" onClick={onClick}>
-    <div className={styles.popoverButtonContent} />
+// Use with PopoverMenu so that popover can correctly adjust to fit the content
+export const PopoverMenuButton = ({ label, emoji, onClick }) => (
+  <Button size="small" type="tertiary" onClick={onClick}>
+    <div className={styles.popoverButtonContent}>
+      {label} <Emoji name={emoji} />
+    </div>
   </Button>
 );
+
+PopoverMenuButton.propTypes = {
+  label: PropTypes.string.isRequired,
+  emoji: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
