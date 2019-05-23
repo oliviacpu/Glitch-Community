@@ -1,5 +1,5 @@
 // add-project-to-collection-pop -> Add a project to a collection via a project item's menu
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { flatten, orderBy, partition } from 'lodash';
@@ -20,7 +20,7 @@ import { captureException } from 'Utils/sentry';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
-import CollectionResultItem from '../includes/collection-result-item';
+import CollectionResultItem from '../../presenters/includes/collection-result-item';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -51,7 +51,7 @@ const AddProjectToCollectionResultItem = ({ onClick, collection, ...props }) => 
 
 const AddProjectToCollectionResults = ({ addProjectToCollection, collections, currentUser, project, togglePopover, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
-  const filteredCollections = React.useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
+  const filteredCollections = useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
     debouncedQuery,
     collections,
   ]);
@@ -110,14 +110,37 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
   );
 };
 
-function useCollectionSearch (project, collectionType) {
+const AlreadyInCollection = ({ project, collectionsWithProject }) => (
+  <PopoverInfo>
+    <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
+    {collectionsWithProject
+      .slice(0, 3)
+      .map((collection) => (
+        <CollectionLink key={collection.id} collection={collection}>
+          {collection.name}
+        </CollectionLink>
+      ))
+      .reduce((prev, curr) => [prev, ', ', curr])}
+    {collectionsWithProject.length > 3 && (
+      <>
+        , and{' '}
+        <div className="more-collections-badge">
+          <Badge>{collectionsWithProject.length - 3}</Badge>
+        </div>{' '}
+        <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
+      </>
+    )}
+  </PopoverInfo>
+);
+
+function useCollectionSearch(project, collectionType) {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
 
-  const [maybeCollections, setMaybeCollections] = React.useState(null);
-  const [collectionsWithProject, setCollectionsWithProject] = React.useState([]);
+  const [maybeCollections, setMaybeCollections] = useState(null);
+  const [collectionsWithProject, setCollectionsWithProject] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let canceled = false;
     setMaybeCollections(null); // reset maybCollections on reload to show loader
 
@@ -160,14 +183,13 @@ function useCollectionSearch (project, collectionType) {
       canceled = true;
     };
   }, [project.id, currentUser.id, collectionType]);
-  return { maybeCollections, collectionsWithProject }
+  return { maybeCollections, collectionsWithProject };
 }
 
-
 export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover }) => {
-  const [collectionType, setCollectionType] = React.useState(filterTypes[0]);
-  const [query, setQuery] = React.useState('');
-  const { maybeCollections: collections, collectionsWithProject } = useCollectionSearch(project, collectionType)
+  const [collectionType, setCollectionType] = useState(filterTypes[0]);
+  const [query, setQuery] = useState('');
+  const { maybeCollections: collections, collectionsWithProject } = useCollectionSearch(project, collectionType);
   const currentUser = useCurrentUser();
 
   return (
@@ -177,77 +199,54 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       }}
     >
       {({ createCollectionPopover }) => (
-    <PopoverDialog wide align="right">
-      {/* Only show this nested popover title from project-options */}
-      {!fromProject && <AddProjectPopoverTitle project={project} />}
+        <PopoverDialog wide align="right">
+          {/* Only show this nested popover title from project-options */}
+          {!fromProject && <AddProjectPopoverTitle project={project} />}
 
-      {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
+          {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
 
-      {collections && collections.length > 3 && (
-        <PopoverInfo>
-          <TextInput
-            autoFocus
-            value={query}
-            onChange={setQuery}
-            placeholder="Filter collections"
-            labelText="Filter collections"
-            opaque
-            type="search"
-          />
-        </PopoverInfo>
-      )}
-
-      {!collections ? (
-        <PopoverActions>
-          <Loader />
-        </PopoverActions>
-      ) : (
-        <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
-      )}
-
-      {collections && collectionsWithProject.length ? (
-        <PopoverInfo>
-          <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
-          {collectionsWithProject
-            .slice(0, 3)
-            .map((collection) => (
-              <CollectionLink key={collection.id} collection={collection}>
-                {collection.name}
-              </CollectionLink>
-            ))
-            .reduce((prev, curr) => [prev, ', ', curr])}
-          {collectionsWithProject.length > 3 && (
-            <>
-              , and{' '}
-              <div className="more-collections-badge">
-                <Badge>{collectionsWithProject.length - 3}</Badge>
-              </div>{' '}
-              <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
-            </>
+          {collections && collections.length > 3 && (
+            <PopoverInfo>
+              <TextInput
+                autoFocus
+                value={query}
+                onChange={setQuery}
+                placeholder="Filter collections"
+                labelText="Filter collections"
+                opaque
+                type="search"
+              />
+            </PopoverInfo>
           )}
-        </PopoverInfo>
-      ) : null}
 
-      <PopoverActions>
-        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
-          Add to a new collection
-        </Button>
-      </PopoverActions>
-    </PopoverDialog>
-  )}
+          {collections ? (
+            <AddProjectToCollectionResults {...{ addProjectToCollection, collections, currentUser, project, togglePopover, query }} />
+          ) : (
+            <PopoverActions>
+              <Loader />
+            </PopoverActions>
+          )}
+
+          {collections && collectionsWithProject.length > 0 && (
+            <AlreadyInCollection project={project} collectionsWithProject={collectionsWithProject} />
+          )}
+
+          <PopoverActions>
+            <Button size="small" type="tertiary" onClick={createCollectionPopover}>
+              Add to a new collection
+            </Button>
+          </PopoverActions>
+        </PopoverDialog>
+      )}
     </MultiPopover>
   );
 };
 
 AddProjectToCollectionBase.propTypes = {
-  fromProject: PropTypes.bool,
+  fromProject: PropTypes.bool.isRequired,
   project: PropTypes.object.isRequired,
-  togglePopover: PropTypes.func,
-};
-
-AddProjectToCollectionBase.defaultProps = {
-  fromProject: false,
-  togglePopover: null,
+  togglePopover: PropTypes.func.isRequired,
+  addProjectToCollection: PropTypes.func.isRequired,
 };
 
 const AddProjectToCollection = ({ project, ...props }) => (
@@ -259,7 +258,7 @@ const AddProjectToCollection = ({ project, ...props }) => (
       </>
     }
   >
-    {({ togglePopover }) => <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} />}
+    {({ togglePopover }) => <AddProjectToCollectionBase {...props} fromProject={false} project={project} togglePopover={togglePopover} />}
   </PopoverWithButton>
 );
 

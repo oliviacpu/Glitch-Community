@@ -109,18 +109,12 @@ const Router = () => (
         render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
       />
 
-      <Route
-        path="/@:name"
-        exact
-        render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />}
-      />
+      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => (
-          <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />
-        )}
+        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
       />
 
       <Route
