@@ -6,46 +6,37 @@ import { throttle } from 'lodash';
 import TextInput from 'Components/inputs/text-input';
 import { PopoverWithButton, PopoverDialog } from 'Components/popover';
 
-const validHex = (hex) => {
-  const re = /[0-9A-Fa-f]{6}/g;
-  if (re.test(hex)) {
-    return true;
-  }
-  return false;
-};
+const validHex = (hex) => /^#?[0-9A-Fa-f]{6}$/.test(hex);
 
 function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   const [color, setColor] = useState(initialColor);
   const [hex, setHex] = useState(initialColor);
   const [hexInvalid, setHexInvalid] = useState(false);
 
-  const changeColor = useMemo(() =>
-    throttle((color) => {
-      setColor(color);
-      setHex(color);
-      updateColor(color);
-    }, []),
-  );
+  const changeColor = (color) => {
+    setColor(color);
+    setHex(color);
+    updateColor(color);
+  };
 
   const setRandomColor = () => {
     changeColor(randomColor({ luminosity: 'light' }));
   };
+  
+  const onChangeColorPicker = useMemo()
 
-  const changeHex = (hex) => {
-    setHex(hex)
-    setHexInvalid(false)
-    if (hex && hex.length <= 7) {
-      if (validHex(hex)) {
-        hex = hex.replace(/^#/,'')
-        setColor(hex)
-        update(hex)
-      } else {
-        this.setState({ error: true });
-      }
-    } else {
-      // user has cleared the input field
-      this.setState({ error: true });
+  const onChangeHex = (event) => {
+    const hex = event.target.value;
+    setHex(hex);
+    hex = hex.trim();
+    if (validHex(hex)) {
+      hex = hex.replace(/^#/, '');
+      setColor(hex);
+      updateColor(hex);
+      setHexInvalid(false);
+      return;
     }
+    setHexInvalid(true);
   };
 
   const keyPress = (e) => {
@@ -72,7 +63,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
           <TextInput
             opaque
             value={hex}
-            onChange={changeHex}
+            onChange={onChangeHex}
             onKeyPress={keyPress}
             placeholder="Hex"
             labelText="Custom color hex"
