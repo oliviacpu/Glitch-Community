@@ -21,6 +21,7 @@ import {
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import ResultsList from 'Components/containers/results-list';
+import CollectionResultItem from 'Components/collection/collection-result-item';
 import { getAvatarUrl } from 'Models/project';
 import { getLink as getCollectionLink } from 'Models/collection';
 import { getAllPages } from 'Shared/api';
@@ -32,7 +33,6 @@ import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/no
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
-import CollectionResultItem from '../../presenters/includes/collection-result-item';
 import styles from './popover.styl';
 
 const filterTypes = ['Your collections', 'Team collections'];
@@ -54,7 +54,7 @@ AddProjectPopoverTitle.propTypes = {
   project: PropTypes.object.isRequired,
 };
 
-const AddProjectToCollectionResultItem = ({ onClick, project, collection }) => {
+const AddProjectToCollectionResultItem = ({ onClick, collection }) => {
   const onClickTracked = useTrackedFunc(
     onClick,
     'Project Added to Collection',
@@ -63,10 +63,10 @@ const AddProjectToCollectionResultItem = ({ onClick, project, collection }) => {
       groupId: collection.team ? collection.team.id : 0,
     },
   );
-  return <CollectionResultItem onClick={onClickTracked} project={project} collection={collection} />;
+  return <CollectionResultItem onClick={onClickTracked} collection={collection} />;
 };
 
-const AddProjectToCollectionResults = ({ addProjectToCollection, collections, project, query }) => {
+const AddProjectToCollectionResults = ({ addProjectToCollection, collections, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
   const filteredCollections = useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
     debouncedQuery,
@@ -77,9 +77,7 @@ const AddProjectToCollectionResults = ({ addProjectToCollection, collections, pr
       {filteredCollections.length ? (
         <PopoverSection>
           <ResultsList items={filteredCollections} scroll>
-            {(collection) => (
-              <AddProjectToCollectionResultItem onClick={() => addProjectToCollection(collection)} project={project} collection={collection} />
-            )}
+            {(collection) => <AddProjectToCollectionResultItem onClick={() => addProjectToCollection(collection)} collection={collection} />}
           </ResultsList>
         </PopoverSection>
       ) : (
@@ -87,18 +85,6 @@ const AddProjectToCollectionResults = ({ addProjectToCollection, collections, pr
       )}
     </>
   );
-};
-
-AddProjectToCollectionResults.propTypes = {
-  addProjectToCollection: PropTypes.func,
-  collections: PropTypes.array.isRequired,
-  project: PropTypes.object.isRequired,
-  query: PropTypes.string,
-};
-
-AddProjectToCollectionResults.defaultProps = {
-  addProjectToCollection: null,
-  query: '',
 };
 
 const AlreadyInCollection = ({ project, collectionsWithProject }) => (
@@ -227,7 +213,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           )}
 
           {collections ? (
-            <AddProjectToCollectionResults addProjectToCollection={addProject} collections={collections} project={project} query={query} />
+            <AddProjectToCollectionResults addProjectToCollection={addProject} collections={collections} query={query} />
           ) : (
             <PopoverActions>
               <Loader />
