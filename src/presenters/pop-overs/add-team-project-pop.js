@@ -203,7 +203,7 @@ const AddTeamProject = ({ addProject, teamProjects }) => {
         buttonClass="add-project has-emoji"
         buttonText={
           <>
-            Add Project <span className="emoji bento-box" role="img" aria-label="" />
+            Add Project <span className="emoji bento-box" role="presentation" />
           </>
         }
       >
