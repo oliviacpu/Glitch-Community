@@ -14,6 +14,10 @@ import { getAllPages } from 'Shared/api';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './project-result-item.styl';
 
+const ScrollResult = ({ active, children }) =>  {
+  
+  }
+
 const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => {
   const ref = useRef();
   useEffect(() => {

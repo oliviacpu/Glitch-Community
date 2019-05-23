@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 import { getLink as getCollectionLink } from 'Models/collection';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import Markdown from 'Components/text/markdown';
-import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
+
 import CollectionAvatar from './collection-avatar';
 
-
-
-const CollectionResultItem = ({ onClick, project, collection, isActive, togglePopover }) => {
-  const { createNotification } = useNotifications();
+const CollectionResultItem = ({ onClick, project, collection, isActive }) => {
   let resultClass = 'button-unstyled result result-collection';
   if (isActive) {
     resultClass += ' active';
@@ -22,7 +19,7 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
     <div>
       <button
         className={resultClass}
-        onClick={() => addProject(onClick, project, collection, collectionPath, createNotification, togglePopover)}
+        onClick={onClick}
         data-project-id={project.id}
       >
         <div className="avatar" id={`avatar-collection-${collection.id}`}>
@@ -53,7 +50,6 @@ CollectionResultItem.propTypes = {
   collection: PropTypes.object.isRequired,
   isActive: PropTypes.bool,
   project: PropTypes.object.isRequired,
-  togglePopover: PropTypes.func.isRequired,
 };
 
 CollectionResultItem.defaultProps = {
