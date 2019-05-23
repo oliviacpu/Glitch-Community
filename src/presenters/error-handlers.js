@@ -2,11 +2,7 @@ import { useNotifications } from './notifications';
 
 function handleError(notify, error) {
   console.error(error);
-  if (error && error.request && navigator.onLine === false) {
-    notify("It looks like you're offline. Try refreshing?");
-  } else {
-    notify();
-  }
+  notify();
   return Promise.reject(error);
 }
 
