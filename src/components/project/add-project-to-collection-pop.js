@@ -8,7 +8,9 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
-import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, InfoDescription } from 'Components/popover';
+import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, InfoDescription, PopoverInfo, PopoverActions } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -17,7 +19,7 @@ import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
-import CreateCollectionPop from './create-collection-pop';
+// import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
 
 const filterTypes = ['Your collections', 'Team collections'];
@@ -203,7 +205,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
 };
 
 export const AddProjectToCollectionBase = (props) => {
-  const { project, togglePopover, focusFirstElement } = props;
+  const { project } = props;
 
   const api = useAPI();
   const { currentUser } = useCurrentUser();
@@ -281,28 +283,23 @@ AddProjectToCollectionBase.propTypes = {
   fromProject: PropTypes.bool,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func,
-  focusFirstElement: PropTypes.func,
 };
 
 AddProjectToCollectionBase.defaultProps = {
   fromProject: false,
   togglePopover: null,
-  focusFirstElement: null,
 };
 
 const AddProjectToCollection = ({ project, ...props }) => (
   <PopoverWithButton
-    buttonClass="button-small has-emoji add-project"
-    buttonProps={{ size: "small"}}
+    buttonProps={{ size: 'small' }}
     buttonText={
       <>
         Add to Collection <Emoji name="framedPicture" />
       </>
     }
   >
-    {({ togglePopover,  }) => (
-      <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover}/>
-    )}
+    {({ togglePopover }) => <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} />}
   </PopoverWithButton>
 );
 
