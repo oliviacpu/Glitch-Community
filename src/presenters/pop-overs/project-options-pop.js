@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverInfo, PopoverActions, PopoverMenuButton } from 'Components/popover';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
 
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-
-import PopoverWithButton from './popover-with-button';
-import { NestedPopover } from './popover-nested';
-import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
+// import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
 const isTeamProject = ({ currentUser, project }) => {
   for (const team of currentUser.teams) {
@@ -74,54 +71,56 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
   };
 };
 
-const ProjectOptionsContent = (props) => {
+const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, togglePopover }) => {
   function toggleAndCB(cb) {
-    props.togglePopover();
+    togglePopover();
     cb();
   }
 
-  const onClickLeaveTeamProject = useTrackedFunc(props.leaveTeamProject, 'Leave Project clicked');
-  const onClickLeaveProject = useTrackedFunc(props.leaveProject, 'Leave Project clicked');
-  const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(props.deleteProject), 'Delete Project clicked');
+  const onClickLeaveTeamProject = useTrackedFunc(projectOptions.leaveTeamProject, 'Leave Project clicked');
+  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject, 'Leave Project clicked');
+  const onClickDeleteProject = useTrackedFunc(() => toggleAndCB(projectOptions.deleteProject), 'Delete Project clicked');
 
-  const showPinOrFeatureSection = props.addPin || props.removePin || props.featureProject;
-  const showDangerZone = props.removeProjectFromTeam || props.deleteProject || props.removeProjectFromCollection;
+  const showPinOrFeatureSection = projectOptions.addPin || projectOptions.removePin || projectOptions.featureProject;
+  const showDangerZone = projectOptions.removeProjectFromTeam || projectOptions.deleteProject || projectOptions.removeProjectFromCollection;
 
   return (
     <PopoverDialog align="right">
       {showPinOrFeatureSection && (
         <PopoverActions>
-          {props.featureProject && <PopoverMenuButton onClick={() => toggleAndCB(props.featureProject)} label="Feature" emoji="clapper" />}
-          {props.addPin && <PopoverMenuButton onClick={() => toggleAndCB(props.addPin)} label="Pin " emoji="pushpin" />}
-          {props.removePin && <PopoverMenuButton onClick={() => toggleAndCB(props.removePin)} label="Un-Pin " emoji="pushpin" />}
+          {projectOptions.featureProject && (
+            <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.featureProject)} label="Feature" emoji="clapper" />
+          )}
+          {projectOptions.addPin && <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.addPin)} label="Pin " emoji="pushpin" />}
+          {projectOptions.removePin && <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.removePin)} label="Un-Pin " emoji="pushpin" />}
         </PopoverActions>
       )}
 
-      {props.displayNewNote && (
+      {projectOptions.displayNewNote && (
         <PopoverActions>
-          <PopoverMenuButton onClick={() => toggleAndCB(props.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
+          <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.displayNewNote)} label="Add Note" emoji="spiralNotePad" />
         </PopoverActions>
       )}
 
-      {props.addProjectToCollection && (
+      {projectOptions.addProjectToCollection && (
         <PopoverActions>
-          <PopoverMenuButton onClick={props.addToCollectionPopover} label="Add to Collection " emoji="framedPicture" />
+          <PopoverMenuButton onClick={addToCollectionPopover} label="Add to Collection " emoji="framedPicture" />
         </PopoverActions>
       )}
 
-      {props.joinTeamProject && (
+      {projectOptions.joinTeamProject && (
         <PopoverActions>
-          <PopoverMenuButton onClick={props.joinTeamProject} label="Join Project " emoji="rainbow" />
+          <PopoverMenuButton onClick={projectOptions.joinTeamProject} label="Join Project " emoji="rainbow" />
         </PopoverActions>
       )}
 
-      {props.leaveTeamProject && (
+      {projectOptions.leaveTeamProject && (
         <PopoverActions>
           <PopoverMenuButton onClick={onClickLeaveTeamProject} label="Leave Project " emoji="wave" />
         </PopoverActions>
       )}
 
-      {props.leaveProject && (
+      {projectOptions.leaveProject && (
         <PopoverActions>
           <PopoverMenuButton onClick={onClickLeaveProject} label="Leave Project " emoji="wave" />
         </PopoverActions>
@@ -129,14 +128,14 @@ const ProjectOptionsContent = (props) => {
 
       {showDangerZone && (
         <PopoverActions type="dangerZone">
-          {props.removeProjectFromTeam && (
-            <PopoverMenuButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
+          {projectOptions.removeProjectFromTeam && (
+            <PopoverMenuButton onClick={() => toggleAndCB(projectOptions.removeProjectFromTeam)} label="Remove Project " emoji="thumbsDown" />
           )}
 
-          {props.deleteProject && <PopoverMenuButton onClick={onClickDeleteProject} label="Delete Project " emoji="bomb" />}
+          {projectOptions.deleteProject && <PopoverMenuButton onClick={onClickDeleteProject} label="Delete Project " emoji="bomb" />}
 
-          {props.removeProjectFromCollection && (
-            <PopoverMenuButton onClick={props.removeProjectFromCollection} label="Remove from Collection" emoji="thumbsDown" />
+          {projectOptions.removeProjectFromCollection && (
+            <PopoverMenuButton onClick={projectOptions.removeProjectFromCollection} label="Remove from Collection" emoji="thumbsDown" />
           )}
         </PopoverActions>
       )}
@@ -144,36 +143,9 @@ const ProjectOptionsContent = (props) => {
   );
 };
 
-ProjectOptionsContent.propTypes = {
-  addPin: PropTypes.func,
-  addProjectToCollection: PropTypes.func,
-  deleteProject: PropTypes.func,
-  displayNewNote: PropTypes.func,
-  featureProject: PropTypes.func,
-  joinTeamProject: PropTypes.func,
-  leaveProject: PropTypes.func,
-  leaveTeamProject: PropTypes.func,
-  removePin: PropTypes.func,
-  removeProjectFromTeam: PropTypes.func,
-  togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
-};
-ProjectOptionsContent.defaultProps = {
-  addPin: null,
-  addProjectToCollection: null,
-  deleteProject: null,
-  displayNewNote: null,
-  featureProject: null,
-  joinTeamProject: null,
-  leaveProject: null,
-  leaveTeamProject: null,
-  removePin: null,
-  removeProjectFromTeam: null,
-};
-
-export default function ProjectOptionsPop(props) {
+export default function ProjectOptionsPop({ project, projectOptions }) {
   const { currentUser } = useCurrentUser();
-  const projectOptions = determineProjectOptionsFunctions({ currentUser, ...props });
+  projectOptions = determineProjectOptionsFunctions({ currentUser, project, projectOptions });
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
 
   if (noProjectOptions) {
@@ -184,36 +156,15 @@ export default function ProjectOptionsPop(props) {
     <PopoverMenu>
       {({ togglePopover }) => (
         <MultiPopover
-          views={{ 
+          views={{
             addToCollection: () => <div>TODO</div>,
             createCollection: () => <div>TODO</div>,
-          }}>
-          {(showView) => (
-            <ProjectOptionsContent
-              {...props}
-              {...projectOptions}
-              addToCollectionPopover={addToCollectionPopover}
-              togglePopover={togglePopover}
-            
-            />
+          }}
+        >
+          {({ addToCollection }) => (
+            <ProjectOptionsContent projectOptions={projectOptions} addToCollectionPopover={addToCollection} togglePopover={togglePopover} />
           )}
         </MultiPopover>
-        
-        
-        <NestedPopover
-          alternateContent={() => (
-            <AddProjectToCollectionBase
-              {...props}
-              {...projectOptions}
-              togglePopover={togglePopover}
-              currentUser={currentUser}
-            />
-          )}
-        >
-          {(addToCollectionPopover) => (
-            
-          )}
-        </NestedPopover>
       )}
     </PopoverMenu>
   );
