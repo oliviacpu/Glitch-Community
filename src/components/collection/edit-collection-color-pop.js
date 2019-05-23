@@ -8,6 +8,7 @@ import ColorInput from 'Components/inputs/color';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover';
+import styles from './edit-collection-color-pop.styl';
 
 const validHex = (hex) => /^#?[0-9A-Fa-f]{6}$/.test(hex);
 
@@ -50,24 +51,21 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   };
 
   return (
-    <PopoverDialog align="left">
+    <PopoverDialog align="left" className={styles.container}>
       <PopoverInfo>
         <div className={styles.colorFormWrap}>
-        
-        </div>
-        
-        
-
-        <div className="custom-color-input">
-          <TextInput
-            opaque
-            value={hex}
-            onChange={(e) => onChangeHex(e.target.value)}
-            onKeyPress={keyPress}
-            placeholder="Hex"
-            labelText="Custom color hex"
-            error={hexInvalid ? 'Invalid Hex' : null}
-          />
+          <ColorInput value={color} onChange={(e) => onChangeColorPicker(e.target.value)} />
+          <div className={styles.hexWrap}>
+            <TextInput
+              opaque
+              value={hex}
+              onChange={(e) => onChangeHex(e.target.value)}
+              onKeyPress={keyPress}
+              placeholder="Hex"
+              labelText="Custom color hex"
+              error={hexInvalid ? 'Invalid Hex' : null}
+            />
+          </div>
         </div>
       </PopoverInfo>
 
