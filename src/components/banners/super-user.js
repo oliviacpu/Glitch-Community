@@ -17,7 +17,7 @@ const SuperUserBanner = () => {
   const superUser = currentUser.features && currentUser.features.find((feature) => feature.name === 'super_user');
 
   if (persistentToken && (superUser || canBecomeSuperUser)) {
-    const expirationDate = superUser && new Date(superUser.expiresAt).toUTCString();
+    const expirationDate = superUser && new Date(superUser.expiresAt).toLocaleString();
     const displayText = `SUPER USER MODE ${superUser ? `ENABLED UNTIL: ${expirationDate}` : 'DISABLED'} `;
     const toggleSuperUser = async () => {
       await api.post(`https://support-toggle.glitch.me/support/${superUser ? 'disable' : 'enable'}`);

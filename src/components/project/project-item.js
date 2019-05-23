@@ -9,6 +9,8 @@ import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { getAllPages } from 'Shared/api';
+import { createAPIHook } from 'State/api';
 import ProjectOptionsPop from '../../presenters/pop-overs/project-options-pop';
 import styles from './project-item.styl';
 
@@ -95,4 +97,15 @@ ProjectItem.defaultProps = {
   projectOptions: {},
 };
 
-export default ProjectItem;
+const useUsers = createAPIHook((api, project) => getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`));
+
+const useTeams = createAPIHook(async (api, project) => getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`));
+
+function ProjectWithDataLoading({ project, ...props }) {
+  const { value: users } = useUsers(project);
+  const { value: teams } = useTeams(project);
+  const projectWithData = { ...project, users, teams };
+  return <ProjectItem project={projectWithData} {...props} />;
+}
+
+export default ({ fetchMembers, ...props }) => (fetchMembers ? <ProjectWithDataLoading {...props} /> : <ProjectItem {...props} />);

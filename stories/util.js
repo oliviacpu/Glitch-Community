@@ -1,7 +1,7 @@
-import { Context as CurrentUserContext } from '../src/state/current-user';
-import { Context as APIContext } from '../src/state/api';
-import { Context as UserPrefsContext } from '../src/presenters/includes/user-prefs';
-import { Context as DevTogglesContext } from '../src/presenters/includes/dev-toggles';
+import { Context as CurrentUserContext } from 'State/current-user';
+import { Context as APIContext } from 'State/api';
+import { Context as UserPrefsContext } from 'State/user-prefs';
+import { Context as DevTogglesContext } from 'State/dev-toggles';
 
 /* eslint-disable import/prefer-default-export */
 
@@ -29,12 +29,12 @@ const defaultDevToggles = {
 };
 
 export const provideContext = (
-  { userPrefs = defaultUserPrefs, devToggles = defaultDevToggles, currentUser = {}, api = {} } = {},
+  { userPrefs = defaultUserPrefs, devToggles = defaultDevToggles, currentUser = {}, currentUserFetched = true, api = {} } = {},
   Component,
 ) => () => (
   <UserPrefsContext.Provider value={userPrefs}>
     <DevTogglesContext.Provider value={devToggles}>
-      <CurrentUserContext.Provider value={{ currentUser }}>
+      <CurrentUserContext.Provider value={{ currentUser, fetched: currentUserFetched }}>
         <APIContext.Provider value={api}>
           <Component />
         </APIContext.Provider>

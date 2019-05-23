@@ -20,7 +20,7 @@ export const NotFoundPage = () => (
   <Layout>
     <Helmet title="👻 Page not found" />
     <main className="error-page-container">
-      <Image className="error-image" src={telescopeImageUrl} role="presentation" width="318px" height="297px" />
+      <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
       <div className="error-msg">
         <Heading tagName="h1">Page Not Found</Heading>
         <Text>Maybe a typo, or perhaps it's moved?</Text>

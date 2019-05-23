@@ -13,6 +13,7 @@ import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
+import ReportButton from 'Components/report-abuse-pop';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -30,7 +31,6 @@ import TeamUsers from '../includes/team-users';
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing } from '../includes/team-elements';
-import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {

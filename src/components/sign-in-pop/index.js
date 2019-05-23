@@ -13,8 +13,9 @@ import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, Popo
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
-import useDevToggle from '../../presenters/includes/dev-toggles';
+
 import styles from './styles.styl';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
@@ -223,10 +224,10 @@ const SignInPopBase = withRouter(({ location, align }) => {
     >
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <div className={styles.termsAndConditions}>
               By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
               <Link to="/legal/#privacy">Privacy Statement</Link>

@@ -22,7 +22,7 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions }) => {
+const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
     <Container items={projects}>
@@ -39,7 +39,7 @@ const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions 
               />
             </div>
           )}
-          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
         </>
       )}
     </Container>
@@ -144,6 +144,7 @@ function ProjectsList({
   placeholder,
   enableFiltering,
   enablePagination,
+  fetchMembers,
   projectsPerPage,
   collection,
   noteOptions,
@@ -166,6 +167,7 @@ function ProjectsList({
                   noteOptions={noteOptions}
                   layout={layout}
                   projectOptions={projectOptions}
+                  fetchMembers={fetchMembers}
                 />
               )}
             </PaginationController>
@@ -183,6 +185,7 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
+  fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
@@ -194,6 +197,7 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
+  fetchMembers: false,
   projectsPerPage: 6,
   collection: null,
   noteOptions: {},
