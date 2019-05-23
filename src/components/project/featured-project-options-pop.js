@@ -2,18 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PopoverMenu, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
 
-export default function FeaturedProjectOptionsPop({ unfeatureProject, addNote, hasNote }) {
+export default function FeaturedProjectOptionsPop({ unfeatureProject, createNote, hasNote }) {
   function toggleAndUnfeature(togglePopover) {
-    // featuredProjectRef.current.classList.add('slide-down');
-    // featuredProjectRef.current.addEventListener('animationend', () => {
     togglePopover();
     unfeatureProject();
-    // });
   }
 
-  function toggleAndDisplayNewNote(togglePopover) {
+  function toggleAndCreateNote(togglePopover) {
     togglePopover();
-    addNote();
+    createNote();
   }
 
   return (
@@ -21,7 +18,7 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, addNote, h
       {({ togglePopover }) => (
         <PopoverDialog align="right" focusOnPopover>
           <PopoverActions>
-            {!hasNote && addNote && <PopoverMenuButton onClick={toggleAndDisplayNewNote(togglePopover)} label="Add note" emoji="spiral_note_pad" />}
+            {!hasNote && createNote && <PopoverMenuButton onClick={() => toggleAndCreateNote(togglePopover)} label="Add note" emoji="spiral_note_pad" />}
             <PopoverButton onClick={() => toggleAndUnfeature(togglePopover)} text="Un-feature" emoji="arrow-down" />
           </PopoverActions>
         </PopoverDialog>
@@ -32,11 +29,11 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, addNote, h
 
 FeaturedProjectOptionsPop.propTypes = {
   unfeatureProject: PropTypes.func.isRequired,
-  addNote: PropTypes.func,
+  createNote: PropTypes.func,
   hasNote: PropTypes.bool,
 };
 
 FeaturedProjectOptionsPop.defaultProps = {
-  addNote: null,
+  createNote: null,
   hasNote: false,
 };
