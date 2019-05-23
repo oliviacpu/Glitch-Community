@@ -125,6 +125,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       <PopoverTitle>Report Abuse</PopoverTitle>
       <PopoverActions>
         <TextArea
+          className={styles.textArea}
           value={reason}
           onChange={reasonOnChange}
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
