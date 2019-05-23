@@ -102,7 +102,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
   );
 
   /* eslint-disable no-shadow */
-  const { visibleProjects, projectsAlreadyInCollection } = useMemo(() => {
+  const { visibleProjects, excludingExactMatch } = useMemo(() => {
     const projects = parsedQuery.length ? uniqBy(topResults.concat(retrievedProjects), (p) => p.id) : initialProjects;
 
     const idsOfProjectsInCollection = new Set(collection.projects.map((p) => p.id));
@@ -110,9 +110,10 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
 
     const visibleProjects = newProjectsToAdd.slice(0, 10);
     const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
-    return { visibleProjects, projectsAlreadyInCollection };
+    return { visibleProjects, excludingExactMatch };
   }, [parsedQuery, initialProjects, topResults, retrievedProjects]);
 
+  
   const { activeIndex, onKeyDown } = useActiveIndex(visibleProjects, onClick);
 
   return (
