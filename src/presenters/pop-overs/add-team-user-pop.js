@@ -328,13 +328,13 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
 
   const onInviteUser = async (togglePopover, user) => {
     togglePopover();
-    setInvitee(getDisplayName(user));
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
+      setInvitee(getDisplayName(user));
     } catch (error) {
-      setInvitee('');
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      captureException(error);
     }
   };
 
@@ -344,7 +344,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
     try {
       await inviteEmail(email);
     } catch (error) {
-      setInvitee('');
+      captureException(error);
     }
   };
 
@@ -369,7 +369,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
             <AddTeamUserPop
               api={api}
               allowEmailInvites={allowEmailInvites}
-              members={members}
+              members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
               whitelistedDomain={whitelistedDomain}
               setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
               inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
@@ -387,8 +387,10 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
   );
 };
 AddTeamUser.propTypes = {
+  invitedMembers: PropTypes.array.isRequired,
   inviteEmail: PropTypes.func,
   inviteUser: PropTypes.func,
+  members: PropTypes.array.isRequired,
   setWhitelistedDomain: PropTypes.func,
 };
 AddTeamUser.defaultProps = {
