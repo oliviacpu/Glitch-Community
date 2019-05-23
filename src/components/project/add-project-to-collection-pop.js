@@ -72,18 +72,28 @@ const AddProjectToCollectionResults = ({ addProjectToCollection, collections, qu
     debouncedQuery,
     collections,
   ]);
+
+  if (filteredCollections.length) {
+    return (
+      <PopoverSection>
+        <ResultsList items={filteredCollections} scroll>
+          {(collection) => <AddProjectToCollectionResultItem onClick={() => addProjectToCollection(collection)} collection={collection} />}
+        </ResultsList>
+      </PopoverSection>
+    );
+  }
+
+  if (query) {
+    return (
+      <PopoverInfo>
+        <NoSearchResultsPlaceholder />
+      </PopoverInfo>
+    );
+  }
   return (
-    <>
-      {filteredCollections.length ? (
-        <PopoverSection>
-          <ResultsList items={filteredCollections} scroll>
-            {(collection) => <AddProjectToCollectionResultItem onClick={() => addProjectToCollection(collection)} collection={collection} />}
-          </ResultsList>
-        </PopoverSection>
-      ) : (
-        <PopoverInfo>{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</PopoverInfo>
-      )}
-    </>
+    <PopoverInfo>
+      <NoCollectionPlaceholder />
+    </PopoverInfo>
   );
 };
 

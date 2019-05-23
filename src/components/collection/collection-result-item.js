@@ -9,14 +9,15 @@ import { ProfileItem } from 'Components/profile-list';
 import { getLink } from 'Models/collection';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
-
-const styles = {};
+import styles from './collection-result-item.styl';
 
 const CollectionResultItem = ({ onClick, collection, isActive }) => (
-  <div className={classnames(styles.container, isActive && styles.active)}>
+  <div className={classnames(styles.collectionResult, isActive && styles.active)}>
     <TransparentButton onClick={onClick}>
       <div className={styles.resultWrap}>
-        <CollectionAvatar color={collection.coverColor} />
+        <div className={styles.avatarWrap}>
+          <CollectionAvatar color={collection.coverColor} />
+        </div>
         <div className={styles.resultInfo}>
           <div className={styles.resultName}>{collection.name}</div>
           {collection.description.length > 0 && (
@@ -30,9 +31,11 @@ const CollectionResultItem = ({ onClick, collection, isActive }) => (
         </div>
       </div>
     </TransparentButton>
-    <Button size="small" href={getLink(collection)} newTab>
-      View →
-    </Button>
+    <div className={styles.linkButtonWrap}>
+      <Button size="small" href={getLink(collection)} newTab>
+        View →
+      </Button>
+    </div>
   </div>
 );
 

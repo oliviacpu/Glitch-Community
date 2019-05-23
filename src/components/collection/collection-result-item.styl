@@ -1,12 +1,10 @@
 @import '../constants.styl'
 
-.projectResult
+.collectionResult
   padding: 12px 70px 12px 6px
   color: primary
   background-color: primary-background
   position: relative
-  &.private
-    background-color: private
   &.active,
   &:hover,
   &:focus
@@ -15,7 +13,7 @@
     .resultDescription
       color: secondary-hover-on-color
 
-.projectResult > button
+.collectionResult > button
   color: inherit
     
 .resultWrap
@@ -35,6 +33,13 @@
   font-size: 12px
   line-height: 18px
   padding-top: 6px
+  
+.avatarWrap
+  width: 35px
+  height: 35px
+  svg
+    width: 100%
+    height: auto
   
 .linkButtonWrap
   position: absolute
