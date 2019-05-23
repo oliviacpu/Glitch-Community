@@ -1,22 +1,18 @@
 import { useNotifications } from './notifications';
 
-function genericNotification(notify) {
-  if (navigator.onLine === false) {
-    notify("It looks like you're offline. Try refreshing?");
-  }
-  notify();
-};
-
 function handleError(notify, error) {
   console.error(error);
-  genericNotification(notify);
+  if (error && error.request && navigator.onLine === false) {
+    notify("It looks like you're offline. Try refreshing?");
+  } else {
+    notify();
+  }
   return Promise.reject(error);
 }
 
 function handleErrorForInput(notify, error) {
   if (!(error && error.response && error.response.data)) {
-    console.error(error);
-    genericNotification(notify);
+    return handleError(notify, error);
   }
   return Promise.reject(error);
 }
