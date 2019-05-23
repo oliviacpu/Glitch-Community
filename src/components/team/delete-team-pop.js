@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Loader from 'Components/loader';
-import { PopoverWithButton, PopoverDialog, Pop ActionDescription } from 'Components/popover';
+import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Image from 'Components/images/image';
-// import { teamAdmins } from 'Models/team';
-import { useNotifications } from '../notifications';
 import { useAPI } from 'State/api';
+// import { teamAdmins } from 'Models/team';
+
+import { useNotifications } from '../../presenters/notifications';
 
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 

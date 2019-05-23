@@ -14,6 +14,7 @@ import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
+import DeleteTeam from 'Components/team/delete-team-pop';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -25,7 +26,6 @@ import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
 import AddTeamProject from '../pop-overs/add-team-project-pop';
-import DeleteTeam from '../pop-overs/delete-team-pop';
 import TeamUsers from '../includes/team-users';
 
 import ProjectsLoader from '../projects-loader';
