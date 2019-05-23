@@ -97,12 +97,21 @@ ProjectItem.defaultProps = {
   projectOptions: {},
 };
 
-const useUsers = createAPIHook((api, project) => getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`));
+const useUsers = createAPIHook((api, project) => {
+  try {
+    throw new Error("beepboop")
+    return getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`);
+  } catch (error) {
+    console.log("here?")
+    return [];
+  }
+})
 
 const useTeams = createAPIHook(async (api, project) => getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`));
 
 function ProjectWithDataLoading({ project, ...props }) {
   const { value: users } = useUsers(project);
+  console.log({ users })
   const { value: teams } = useTeams(project);
   const projectWithData = { ...project, users, teams };
   return <ProjectItem project={projectWithData} {...props} />;
