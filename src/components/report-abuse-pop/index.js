@@ -128,6 +128,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
           className={styles.textArea}
           value={reason}
           onChange={reasonOnChange}
+          onBlur={() => reasonOnChange(reason)}
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           error={reasonError}
         />
@@ -142,7 +143,15 @@ function ReportAbusePop({ reportedType, reportedModel }) {
         </PopoverInfo>
       ) : (
         <PopoverInfo>
-          <TextInput value={email} onChange={emailOnChange} placeholder="your@email.com" error={emailError} type="email" labelText="email address" />
+          <TextInput
+            value={email}
+            onChange={emailOnChange}
+            onBlur={() => emailOnChange(email)}
+            placeholder="your@email.com"
+            error={emailError}
+            type="email"
+            labelText="email address"
+          />
         </PopoverInfo>
       )}
       <PopoverActions>
