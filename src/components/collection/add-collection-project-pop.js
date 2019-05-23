@@ -109,10 +109,10 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     const [projectsAlreadyInCollection, newProjectsToAdd] = partition(projects, (project) => idsOfProjectsInCollection.has(project.id));
 
     const visibleProjects = newProjectsToAdd.slice(0, 10);
+    const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
     return { visibleProjects, projectsAlreadyInCollection };
   }, [parsedQuery, initialProjects, topResults, retrievedProjects]);
 
-  const excludingExactMatch = projectsAlreadyInCollection.some((p) => p.domain === parsedQuery);
   const { activeIndex, onKeyDown } = useActiveIndex(visibleProjects, onClick);
 
   return (
@@ -154,11 +154,6 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           <InfoDescription>
             nothing found <Emoji name="sparkles" />
           </InfoDescription>
-          {projectsAlreadyInCollection.length > 0 && (
-            <InfoDescription>
-              Excluded <Pluralize count={projectsAlreadyInCollection.length} singular="search result" />
-            </InfoDescription>
-          )}
         </PopoverInfo>
       )}
     </PopoverDialog>

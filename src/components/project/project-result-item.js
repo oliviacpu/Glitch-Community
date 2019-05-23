@@ -40,7 +40,7 @@ const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => {
         </div>
       </TransparentButton>
       <div className={styles.linkButtonWrap}>
-        <Button size="small" href={getLink(project)}>
+        <Button size="small" href={getLink(project)} newTab>
           View →
         </Button>
       </div>

@@ -14,7 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative }) => {
+const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -30,8 +30,13 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   });
 
   if (href) {
+    const targetProps = newTab ? {
+      target: "_blank",
+      rel: "noopener noreferrer",
+    } : {}
+    
     return (
-      <Link to={href} onClick={onClick} className={className}>
+      <Link to={href} onClick={onClick} className={className} {...targetProps}>
         {children}
       </Link>
     );
@@ -79,6 +84,8 @@ Button.propTypes = {
   matchBackground: PropTypes.bool,
   /** whether the button is active or not */
   active: PropTypes.bool,
+  /** whether the link opens in a new tab or the same window */
+  newTab: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -91,6 +98,7 @@ Button.defaultProps = {
   matchBackground: false,
   active: false,
   decorative: false,
+  newTab: false,
 };
 
 export default Button;
