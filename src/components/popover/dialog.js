@@ -55,7 +55,7 @@ const mergeRefs = (...refs) => (element) => {
   });
 };
 
-const alignTypes = ['left', 'right'];
+const alignTypes = ['left', 'right', 'topLeft', 'topRight'];
 const PopoverDialog = ({ children, align, wide, className, focusOnDialog }) => {
   const { ref: positionRef, offset } = usePositionAdjustment({ margin: 12 });
   const { ref: focusRef } = useOpenedFromKeyboardFocus(focusOnDialog);
