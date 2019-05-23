@@ -243,7 +243,6 @@ const UserPageContainer = ({ user }) => {
       <UserEditor initialUser={user}>
         {(userFromEditor, funcs, isAuthorized) => (
           <>
-            {console.log(userFromEditor)}
             <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
             <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
               {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser }} user={{ ...userFromEditor, projects }} {...funcs} />}
