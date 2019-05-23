@@ -64,19 +64,24 @@ const useUsers = createAPIHook(async (api, userIDs) => {
     return undefined;
   }
   const idString = userIDs.map((id) => `id=${id}`).join('&');
-
-  const { data } = await api.get(`/v1/users/by/id/?${idString}`);
-  return Object.values(data);
+  try {
+    console.log("sup")
+    const { data } = await api.get(`/v1/users/by/id/?${idString}`);
+    return Object.values(data);
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
 });
 
 const useTeams = createAPIHook(async (api, teamIDs) => {
+  console.log("hi?", teamIDs)
   if (!teamIDs.length) {
     return undefined;
   }
   const idString = teamIDs.map((id) => `id=${id}`).join('&');
   try {
     console.log("sup")
-    throw new Error("beep")
     const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
     return Object.values(data);
   } catch (error) {
@@ -137,6 +142,7 @@ const resultComponents = {
 };
 
 const ResultComponent = ({ result }) => {
+  console.log("here??", result.type)
   const Component = resultComponents[result.type];
   return <Component result={result} />;
 };
