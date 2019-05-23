@@ -8,9 +8,10 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
-import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, InfoDescription, PopoverInfo, PopoverActions } from 'Components/popover';
+import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, InfoDescription, PopoverInfo, PopoverActions, PopoverSection } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import ResultsList from 'Components/containers/results-list';
 import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -21,6 +22,7 @@ import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../../presenters/includes/collection-result-item';
+import styles from './popover.styl'
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -58,23 +60,21 @@ const AddProjectToCollectionResults = ({ addProjectToCollection, collections, cu
   return (
     <>
       {filteredCollections.length ? (
-        <section className="pop-over-actions results-list">
-          <ul className="results">
-            {filteredCollections.map((collection) => (
-              <li key={collection.id}>
-                <AddProjectToCollectionResultItem
-                  onClick={addProjectToCollection}
-                  project={project}
-                  collection={collection}
-                  togglePopover={togglePopover}
-                  currentUser={currentUser}
-                />
-              </li>
-            ))}
-          </ul>
-        </section>
+        <PopoverSection>
+          <ResultsList items={filteredCollections} scroll>
+            {(collection) => (
+              <AddProjectToCollectionResultItem
+                onClick={addProjectToCollection}
+                project={project}
+                collection={collection}
+                togglePopover={togglePopover}
+                currentUser={currentUser}
+              />
+            )}
+          </ResultsList>
+        </PopoverSection>
       ) : (
-        <section className="pop-over-info">{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</section>
+        <PopoverInfo>{query ? <NoSearchResultsPlaceholder /> : <NoCollectionPlaceholder />}</PopoverInfo>
       )}
     </>
   );
@@ -102,11 +102,9 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
     contents: name,
   }));
   return (
-    <section className="pop-over-actions">
-      <div className="segmented-button-wrap">
-        <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
-      </div>
-    </section>
+    <PopoverActions>
+      <SegmentedButtons value={activeType} buttons={buttons} onChange={setType} />
+    </PopoverActions>
   );
 };
 
@@ -124,7 +122,7 @@ const AlreadyInCollection = ({ project, collectionsWithProject }) => (
     {collectionsWithProject.length > 3 && (
       <>
         , and{' '}
-        <div className="more-collections-badge">
+        <div className={styles.moreCollectionsBadge}>
           <Badge>{collectionsWithProject.length - 3}</Badge>
         </div>{' '}
         <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
@@ -201,7 +199,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       {({ createCollectionPopover }) => (
         <PopoverDialog wide align="right">
           {/* Only show this nested popover title from project-options */}
-          {!fromProject && <AddProjectPopoverTitle project={project} />}
+          {fromProject && <AddProjectPopoverTitle project={project} />}
 
           {currentUser.teams.length > 0 && <UserOrTeamSegmentedButtons activeType={collectionType} setType={setCollectionType} />}
 
