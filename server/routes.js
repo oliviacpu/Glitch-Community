@@ -126,7 +126,7 @@ module.exports = function(external) {
       // detect if team uses default description "an adjectivy team that does adjectivy things"
       // if so, don't include it
       const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
-      let description = DEFAULT_TEAM_DESCRIPTION(team.url, name);
+      let description = DEFAULT_TEAM_DESCRIPTION(team.url, team.name);
       
       if (team.description && hasMaybeUpdatedDescription) {
         description += cheerio.load(md.render(team.description)).text();
@@ -146,8 +146,7 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
-      console.log(user);
-      const description = DEFAULT_USER_DESCRIPTION(user.login, name) + cheerio.load(md.render(user.description)).text();
+      const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
       
       await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
       return;
