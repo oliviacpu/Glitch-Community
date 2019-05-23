@@ -159,6 +159,7 @@ class AddTeamProjectPop extends React.Component {
             id="team-project-search"
             className="pop-over-input search-input pop-over-search"
             placeholder={this.state.filterPlaceholder}
+            aria-label={this.state.filterPlaceholder}
             autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           />
         </section>
@@ -203,7 +204,7 @@ const AddTeamProject = ({ addProject, teamProjects }) => {
         buttonClass="add-project has-emoji"
         buttonText={
           <>
-            Add Project <span className="emoji bento-box" role="img" aria-label="" />
+            Add Project <span className="emoji bento-box" role="presentation" />
           </>
         }
       >

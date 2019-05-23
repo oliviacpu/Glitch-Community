@@ -66,14 +66,14 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       {canPaginate && (
         <div className={styles.viewControls}>
           <div className={styles.paginationControls}>
-            <Button aria-label="Previous" type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
-              <Image alt="" className={styles.paginationArrow} src={arrowSrc} />
+            <Button type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+              <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             <div className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
-            <Button aria-label="Next" type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
-              <Image alt="" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
+            <Button type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
           <Button type="tertiary" onClick={() => setExpanded(true)}>
