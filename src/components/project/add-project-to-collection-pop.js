@@ -30,6 +30,7 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
+import ProjectAvatar from '../../presenters/includes/project-avatar';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
@@ -47,8 +48,7 @@ const NoCollectionPlaceholder = () => <InfoDescription>Create collections to org
 
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
-    <ProjectAvatar {...project}
-    <img src={getAvatarUrl(project.id)} alt="" /> Add {project.domain} to collection
+    <ProjectAvatar {...project} /> Add {project.domain} to collection
   </MultiPopoverTitle>
 );
 AddProjectPopoverTitle.propTypes = {

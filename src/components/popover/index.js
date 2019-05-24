@@ -60,6 +60,7 @@ MultiPopover.defaultProps = {
   initialView: null,
 };
 
+// TODO: these don't nest properly
 export const MultiPopoverTitle = ({ children }) => {
   const { setActiveView, defaultView } = useContext(MultiPopoverContext);
   return (
