@@ -17,37 +17,55 @@ import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './popover.styl';
 
 // getTeamOptions: Format teams in { value: teamId, label: html elements } format for react-select
-function getTeamOptions(teams) {
-  const orderedTeams = orderBy(teams, (team) => team.name.toLowerCase());
-
-  const teamOptions = orderedTeams.map((team) => {
-    const option = {};
-    const label = (
+function getOptions(currentUser) {
+  const userOption = {
+    value: currentUser.id,
+    type: 'user',
+    label: (
+      <span>
+        myself
+        <UserAvatar user={currentUser} hideTooltip />
+      </span>
+    ),
+  };
+  const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
+  const teamOptions = orderedTeams.map((team) => ({
+    value: team.id,
+    type: 'team',
+    label: (
       <span id={team.id}>
         {team.name}
         <TeamAvatar team={team} hideTooltip />
       </span>
-    );
-    option.value = team.id;
-    option.label = label;
-    return option;
-  });
-  return teamOptions;
+    ),
+  }));
+}
+function getCurrentUserOption(currentUser) {
+  return 
 }
 
 const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
-function CreateCollectionPop({ collections, focusFirstElement, addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
+const useCollections = createAPIHook(async (api, selection) => {});
+
+function CreateCollectionPop({ addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
   const api = useAPI();
   const addProject = addProjectToCollection || defaultAddProjectToCollection(api);
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
+  const { value: collections = [] } = useCollections();
+
+  const options = [getCurrentUserOption(currentUser), ...getTeamOptions(currentUser.teams)];
+  const [selection, setSelection] = useState(options[0]);
 
   const [loading, setLoading] = useState(false);
-
   const [query, setQuery] = useState('');
-  // if user already has a collection with the specified name
-  const hasQueryError = !!collections && selectedOwnerCollections.some((c) => c.url === kebabCase(query));
+
+  // determine if entered name already exists for selected user / team
+  const selectedOwnerCollections = selection.value
+    ? collections.filter(({ teamId }) => teamId === selection.value)
+    : collections.filter(({ userId }) => userId === currentUser.id);
+  const hasQueryError = selectedOwnerCollections.some((c) => c.url === kebabCase(query));
   const queryError = hasQueryError ? 'You already have a collection with this name' : '';
 
   const track = useTracker('Create Collection clicked', (inherited) => ({
@@ -55,24 +73,8 @@ function CreateCollectionPop({ collections, focusFirstElement, addProjectToColle
     origin: `${inherited.origin} project`,
   }));
 
-  const options = useMemo(() => {
-    const currentUserOptionLabel = (
-      <span>
-        myself
-        <UserAvatar user={currentUser} hideTooltip />
-      </span>
-    );
-    return [{ value: null, label: currentUserOptionLabel }, ...getTeamOptions(currentUser.teams)];
-  }, [currentUser.teams]);
-  const [selection, setSelection] = useState(options[0]);
-
   const submitEnabled = query.length > 0;
   const placeholder = 'New Collection Name';
-
-  // determine if entered name already exists for selected user / team
-  const selectedOwnerCollections = selection.value
-    ? collections.filter(({ teamId }) => teamId === selection.value)
-    : collections.filter(({ userId }) => userId === currentUser.id);
 
   const [newCollectionUrl, setNewCollectionUrl] = useState(null);
   if (newCollectionUrl) {
@@ -133,7 +135,6 @@ CreateCollectionPop.propTypes = {
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
   createNotification: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
 };
 
 CreateCollectionPop.defaultProps = {
