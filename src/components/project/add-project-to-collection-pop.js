@@ -47,6 +47,7 @@ const NoCollectionPlaceholder = () => <InfoDescription>Create collections to org
 
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
+    <ProjectAvatar {...project}
     <img src={getAvatarUrl(project.id)} alt="" /> Add {project.domain} to collection
   </MultiPopoverTitle>
 );
@@ -54,7 +55,7 @@ AddProjectPopoverTitle.propTypes = {
   project: PropTypes.object.isRequired,
 };
 
-const AddProjectToCollectionResultItem = ({ onClick, collection }) => {
+const AddProjectToCollectionResultItem = ({ onClick, collection, active }) => {
   const onClickTracked = useTrackedFunc(
     onClick,
     'Project Added to Collection',
@@ -63,18 +64,23 @@ const AddProjectToCollectionResultItem = ({ onClick, collection }) => {
       groupId: collection.team ? collection.team.id : 0,
     },
   );
-  return <CollectionResultItem onClick={onClickTracked} collection={collection} />;
+  return <CollectionResultItem onClick={onClickTracked} collection={collection} active={active} />;
 };
 
 const AddProjectToCollectionResults = ({ addProjectToCollection, collections, query, activeIndex }) => {
-
-  if (filteredCollections.length) {
+  if (collections.length) {
     return (
       <PopoverSection>
-        <ResultsList items={filteredCollections} scroll>
-          {(collection, i) => <ScrollResult active={activeIndex === i}>
-          <AddProjectToCollectionResultItem active={activeIndex === i} onClick={() => addProjectToCollection(collection)} collection={collection} />
-                                </ScrollResult>}
+        <ResultsList items={collections} scroll>
+          {(collection, i) => (
+            <ScrollResult active={activeIndex === i}>
+              <AddProjectToCollectionResultItem
+                active={activeIndex === i}
+                onClick={() => addProjectToCollection(collection)}
+                collection={collection}
+              />
+            </ScrollResult>
+          )}
         </ResultsList>
       </PopoverSection>
     );
@@ -188,12 +194,13 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
     togglePopover();
   };
-  
+
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
-  const filteredCollections = useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
+  const filteredCollections = useMemo(
+    () => (collections || []).filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)).slice(0, 20), [
     debouncedQuery,
     collections,
-  ])
+  ]);
   const { activeIndex, onKeyDown } = useActiveIndex(filteredCollections, addProject);
 
   return (
@@ -229,7 +236,12 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           )}
 
           {collections ? (
-            <AddProjectToCollectionResults addProjectToCollection={addProject} collections={collections} query={query} activeIndex={activeIndex} />
+            <AddProjectToCollectionResults
+              addProjectToCollection={addProject}
+              collections={filteredCollections}
+              query={query}
+              activeIndex={activeIndex}
+            />
           ) : (
             <PopoverActions>
               <Loader />

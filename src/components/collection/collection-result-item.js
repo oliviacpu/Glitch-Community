@@ -11,8 +11,8 @@ import { getLink } from 'Models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
 
-const CollectionResultItem = ({ onClick, collection, isActive }) => (
-  <div className={classnames(styles.collectionResult, isActive && styles.active)}>
+const CollectionResultItem = ({ onClick, collection, active }) => (
+  <div className={classnames(styles.collectionResult, active && styles.active)}>
     <TransparentButton onClick={onClick}>
       <div className={styles.resultWrap}>
         <div className={styles.avatarWrap}>
@@ -42,11 +42,11 @@ const CollectionResultItem = ({ onClick, collection, isActive }) => (
 CollectionResultItem.propTypes = {
   onClick: PropTypes.func.isRequired,
   collection: PropTypes.object.isRequired,
-  isActive: PropTypes.bool,
+  active: PropTypes.bool,
 };
 
 CollectionResultItem.defaultProps = {
-  isActive: false,
+  active: false,
 };
 
 export default CollectionResultItem;
