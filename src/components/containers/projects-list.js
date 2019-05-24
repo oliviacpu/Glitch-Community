@@ -22,10 +22,10 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions, fetchMembers }) => {
+const ProjectsUL = ({ collection, projects, sortable, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
-    <Container items={projects}>
+    <Container items={projects} sortable={sortable}>
       {(project) => (
         <>
           {collection && (
@@ -147,6 +147,7 @@ function ProjectsList({
   fetchMembers,
   projectsPerPage,
   collection,
+  enableSorting,
   noteOptions,
   projectOptions,
 }) {
@@ -166,6 +167,7 @@ function ProjectsList({
                   collection={collection}
                   noteOptions={noteOptions}
                   layout={layout}
+                  sortable={enableSorting && paginatedProjects.length === projects.length}
                   projectOptions={projectOptions}
                   fetchMembers={fetchMembers}
                 />
@@ -185,6 +187,7 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
+  enableSorting: PropTypes.bool,
   fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
@@ -197,6 +200,7 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
+  enableSorting: false,
   fetchMembers: false,
   projectsPerPage: 6,
   collection: null,

@@ -36,8 +36,8 @@ GridContainer.defaultProps = {
   minWidth: undefined,
 };
 
-const GridItem = ({ children }) => (
-  <li className={styles.item} tabIndex={0}>
+const GridItem = ({ children, ...props }) => (
+  <li className={styles.item} {...props}>
     {children}
   </li>
 );
@@ -54,7 +54,7 @@ const Grid = ({ items, children, sortable, ...props }) => {
     return (
       <SortableGridContainer {...props} axis="xy">
         {items.map((item, index) => (
-          <SortableGridItem key={item.id} index={index}>
+          <SortableGridItem key={item.id} index={index} tabIndex={0}>
             {children(item)}
           </SortableGridItem>
         ))}

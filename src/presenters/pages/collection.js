@@ -159,6 +159,7 @@ const CollectionPageContents = ({
                   {...props}
                   projects={projects}
                   collection={collection}
+                  enableSorting
                   noteOptions={{
                     hideNote,
                     updateNote,
