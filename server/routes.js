@@ -109,9 +109,16 @@ module.exports = function(external) {
       await render(res, domain, `We couldn't find ~${domain}`);
       return;
     }
+    const {description} = project;
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
-    const usesDefaultDescription = project.description.match(defaultProjectDescriptionPattern);
-    console.log('default?', usesDefaultDescription)
+    
+    const helloTemplateDescriptions = new Set(
+      'Your very own basic webpage, ready for you to customize.',
+      'A simple Node app built on Express, immediately up and running.',
+      'A simple Node app with a SQLite database to hold app data.'
+    );
+  
+    const usesDefaultDescription = description.match(defaultProjectDescriptionPattern) || helloTemplateDescriptions.has(description);
     
     const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
 
