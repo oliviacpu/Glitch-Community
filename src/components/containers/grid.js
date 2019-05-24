@@ -52,7 +52,7 @@ const SortableGridItem = SortableElement(GridItem);
 const Grid = ({ items, children, sortable, ...props }) => {
   if (sortable) {
     return (
-      <SortableGridContainer {...props} axis="xy">
+      <SortableGridContainer {...props} axis="xy" distance={15}>
         {items.map((item, index) => (
           <SortableGridItem key={item.id} index={index} tabIndex={0}>
             {children(item)}
