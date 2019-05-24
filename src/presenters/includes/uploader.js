@@ -19,6 +19,7 @@ async function uploadWrapper(notifications, upload) {
     'notifyUploading',
   );
   try {
+    throw new Error("this is a fake error")
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
         progress = loaded / total;
@@ -26,13 +27,13 @@ async function uploadWrapper(notifications, upload) {
         progress = (progress + 1) / 2;
       }
       updateNotification(<NotifyUploading progress={progress} />);
+      removeNotification();
+      notifications.createNotification('Image uploaded!');
     });
   } catch (e) {
     notifications.createErrorNotification(<NotifyError />);
-    throw e;
-  } finally {
     removeNotification();
-    notifications.createNotification('Image uploaded!');
+    // throw e;
   }
   return result;
 }
