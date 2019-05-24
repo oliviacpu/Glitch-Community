@@ -49,6 +49,15 @@ class CollectionEditor extends React.Component {
     }));
   }
 
+  async updateProjectOrder(project, index) {
+    this.setState(({ projects }) => {
+      const projectsWithoutItem = projects.filter((p) => p !== project);
+      projectsWithoutItem.splice(index, 0, project);
+      return { projects: sortedProjects };
+    });
+    console.log(project.id, index);
+  }
+
   async deleteCollection() {
     await this.props.api.delete(`/collections/${this.state.id}`);
   }
@@ -98,6 +107,7 @@ class CollectionEditor extends React.Component {
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleError),
       updateColor: (color) => this.updateFields({ coverColor: color }),
+      updateProjectOrder: (project, index) => this.updateProjectOrder(project, index).catch(handleError),
       featureProject: (id) => this.featureProject(id).catch(handleError),
       unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
     };

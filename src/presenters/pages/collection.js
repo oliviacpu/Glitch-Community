@@ -70,6 +70,7 @@ const CollectionPageContents = ({
   addProjectToCollection,
   removeProjectFromCollection,
   updateColor,
+  updateProjectOrder,
   displayNewNote,
   updateNote,
   hideNote,
@@ -160,6 +161,7 @@ const CollectionPageContents = ({
                   projects={projects}
                   collection={collection}
                   enableSorting
+                  onReorder={updateProjectOrder}
                   noteOptions={{
                     hideNote,
                     updateNote,
