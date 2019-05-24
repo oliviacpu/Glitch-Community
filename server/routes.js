@@ -109,18 +109,17 @@ module.exports = function(external) {
       await render(res, domain, `We couldn't find ~${domain}`);
       return;
     }
-    const {description} = project;
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
-    
-    const helloTemplateDescriptions = new Set(
+
+    const helloTemplateDescriptions = new Set([
       'Your very own basic webpage, ready for you to customize.',
       'A simple Node app built on Express, immediately up and running.',
-      'A simple Node app with a SQLite database to hold app data.'
-    );
-  
-    const usesDefaultDescription = description.match(defaultProjectDescriptionPattern) || helloTemplateDescriptions.has(description);
-    
-    const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
+      'A simple Node app with a SQLite database to hold app data.',
+    ]);
+
+    const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
+    const description =
+      usesDefaultDescription || !project.description ? 'TODO, need to discuss with Ezra' : cheerio.load(md.render(project.description)).text();
 
     await render(res, domain, description, avatar);
   });
