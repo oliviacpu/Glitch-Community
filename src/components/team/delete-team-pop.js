@@ -35,7 +35,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
     <PopoverDialog focusOnDialog align="left">
       <PopoverTitle>Delete {team.name}</PopoverTitle>
       <PopoverActions>
-        <Image width="110px" src={illustration} alt="" />
+        <Image height="98px" src={illustration} alt="" />
         <ActionDescription>
           Deleting {team.name} will remove this team page. No projects will be deleted, but only current project members will be able to edit them.
         </ActionDescription>
