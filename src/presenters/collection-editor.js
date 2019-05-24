@@ -55,7 +55,7 @@ class CollectionEditor extends React.Component {
   async updateProjectOrder(project, filteredIndex) {
     // the filtered index ignores the featured project, bump it up one if moving after it
     const featuredIndex = this.state.projects.findIndex((p) => p.id === this.state.featuredProjectId);
-    const index = index >= featuredIndex ? index + 1 : index;
+    const index = (featuredIndex >= 0 && filteredIndex >= featuredIndex) ? filteredIndex + 1 : filteredIndex;
     this.setState(({ projects }) => {
       const sortedProjects = projects.filter((p) => p !== project);
       sortedProjects.splice(index, 0, project);

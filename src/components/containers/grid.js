@@ -51,11 +51,12 @@ const SortableGridItem = SortableElement(GridItem);
 
 const Grid = ({ items, children, sortable, onReorder, ...props }) => {
   if (sortable) {
+    const onDragStart = (event) => event.preventDefault();
     const onSortEnd = ({ oldIndex, newIndex }) => onReorder(items[oldIndex], newIndex);
     return (
       <SortableGridContainer {...props} axis="xy" distance={15} onSortEnd={onSortEnd}>
         {items.map((item, index) => (
-          <SortableGridItem key={item.id} index={index} tabIndex={0} onDragStart={(event) => event.preventDefault()}>
+          <SortableGridItem key={item.id} index={index} tabIndex={0} onDragStart={onDragStart}>
             {children(item)}
           </SortableGridItem>
         ))}
