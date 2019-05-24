@@ -18,33 +18,11 @@ const GridContainer = ({ children, gap, minWidth, className, style }) => (
   </ul>
 );
 
-GridContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  style: PropTypes.object,
-  gap: PropTypes.oneOfType([
-    PropTypes.shape({ row: PropTypes.node.isRequired, column: PropTypes.node.isRequired }).isRequired,
-    PropTypes.node.isRequired,
-  ]),
-  minWidth: PropTypes.node,
-};
-
-GridContainer.defaultProps = {
-  className: '',
-  style: {},
-  gap: undefined,
-  minWidth: undefined,
-};
-
 const GridItem = ({ children, ...props }) => (
   <li className={styles.item} {...props}>
     {children}
   </li>
 );
-
-GridItem.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 const SortableGridContainer = SortableContainer(GridContainer);
 const SortableGridItem = SortableElement(GridItem);
