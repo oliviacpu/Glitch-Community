@@ -21,13 +21,13 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import CollectionResultItem from 'Components/collection/collection-result-item';
+import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 
-import { CreateCollectionWithProject } from './create-collection-pop';
 import styles from './popover.styl';
 
 const collectionTypeOptions = [

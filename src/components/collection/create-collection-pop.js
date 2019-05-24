@@ -53,7 +53,7 @@ const useCollections = createAPIHook((api, teamId, currentUser) => {
   return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
 });
 
-function CreateCollectionPopBase({ title, onSubmit, options }) {
+function CreateCollectionPopBase({ align, title, onSubmit, options }) {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
@@ -79,7 +79,7 @@ function CreateCollectionPopBase({ title, onSubmit, options }) {
   }
 
   return (
-    <PopoverDialog wide align="right">
+    <PopoverDialog wide align={align}>
       {title}
 
       <PopoverActions>
@@ -113,7 +113,6 @@ function CreateCollectionPopBase({ title, onSubmit, options }) {
 }
 
 export function CreateCollectionWithProject({ project, addProjectToCollection }) {
-  const api = useAPI();
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
   const options = getOptions(currentUser);
@@ -124,11 +123,10 @@ export function CreateCollectionWithProject({ project, addProjectToCollection })
   const onSubmit = (collection) => {
     track();
     if (!collection || !collection.id) return;
-    const addProject = addProjectToCollection || (() => api.patch(`collections/${collection.id}/add/${project.id}`));
 
     try {
       // TODO: should this block?
-      addProject(project, collection);
+      addProjectToCollection(project, collection);
 
       // TODO: does this have fullUrl?
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
@@ -139,7 +137,7 @@ export function CreateCollectionWithProject({ project, addProjectToCollection })
   };
   const title = <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>;
 
-  return <CreateCollectionPopBase title={title} options={options} onSubmit={onSubmit} />;
+  return <CreateCollectionPopBase align="right" title={title} options={options} onSubmit={onSubmit} />;
 }
 
 CreateCollectionWithProject.propTypes = {
@@ -153,7 +151,7 @@ const CreateCollectionPop = withRouter(({ team, history }) => {
 
   return (
     <PopoverWithButton buttonText="Create Collection">
-      {() => <CreateCollectionPopBase options={options} onSubmit={(collection) => history.push(collection.fullUrl)} />}
+      {() => <CreateCollectionPopBase align="left" options={options} onSubmit={(collection) => history.push(collection.fullUrl)} />}
     </PopoverWithButton>
   );
 });

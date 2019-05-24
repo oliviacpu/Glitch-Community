@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
 import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
-
+import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
-import { CreateCollectionWithProject } from './create-collection-pop';
 
 const isTeamProject = ({ currentUser, project }) => {
   for (const team of currentUser.teams) {
@@ -141,12 +141,13 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
       {({ togglePopover }) => (
         <MultiPopover
           views={{
-            addToCollection: () => (
+            addToCollection: ({ createCollection }) => (
               <AddProjectToCollectionBase
                 fromProject
                 project={project}
                 togglePopover={togglePopover}
                 addProjectToCollection={projectOptions.addProjectToCollection}
+                createCollectionPopover={createCollection}
               />
             ),
             createCollection: () => <CreateCollectionWithProject project={project} addProjectToCollection={projectOptions.addProjectToCollection} />,
