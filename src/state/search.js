@@ -154,8 +154,10 @@ function createAlgoliaProvider(api) {
     project: searchClient.initIndex('search_projects'),
     collection: searchClient.initIndex('search_collections'),
   };
+  
   return {
-    ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
+    ...mapValues(searchIndices, (index, type) => (query,  params) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
+    collection: (query, { teamIDs, userIDs }) 
     project: (query, { notSafeForKids }) =>
       searchIndices.project
         .search({
