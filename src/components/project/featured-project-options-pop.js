@@ -14,7 +14,7 @@ export default function FeaturedProjectOptionsPop({ unfeatureProject, createNote
   }
 
   return (
-    <PopoverMenu>
+    <PopoverMenu label="Featured Project Options">
       {({ togglePopover }) => (
         <PopoverDialog align="right" focusOnPopover>
           <PopoverActions>

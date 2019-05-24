@@ -107,15 +107,15 @@ PopoverWithButton.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
+export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
   <div className={styles.popoverMenuWrap}>
     <PopoverContainer onOpen={onOpen}>
       {(popoverProps) => (
         <div>
           <div className={styles.buttonWrap}>
-            <TransparentButton onClick={popoverProps.togglePopover}>
+            <TransparentButton onClick={popoverProps.togglePopover} label={label}>
               <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} aria-label="options" />
+                <div className={styles.downArrow} />
               </div>
             </TransparentButton>
           </div>
@@ -127,11 +127,13 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
 );
 
 PopoverMenu.propTypes = {
+  label: PropTypes.string,
   children: PropTypes.func.isRequired,
   onOpen: PropTypes.func,
 };
 
 PopoverMenu.defaultProps = {
+  label: "options",
   onOpen: null,
 };
 

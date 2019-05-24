@@ -8,8 +8,8 @@ Transparent buttons are useful for making a whole container clickable, without b
 This should be used for containers that have descriptive text contents, not icon buttons.
 */
 
-const TransparentButton = ({ children, onClick, className }) => (
-  <button type="button" onClick={onClick} className={classnames(styles.transparentButton, className)}>
+const TransparentButton = ({ label, children, onClick, className }) => (
+  <button type="button" onClick={onClick} className={classnames(styles.transparentButton, className)} aria-label={label}>
     {children}
   </button>
 );
@@ -18,10 +18,12 @@ TransparentButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
+  label: PropTypes.string,
 };
 
 TransparentButton.defaultProps = {
   className: '',
+  label: null,
 };
 
 export default TransparentButton;
