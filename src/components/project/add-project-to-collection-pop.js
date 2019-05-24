@@ -27,6 +27,7 @@ import { getLink as getCollectionLink } from 'Models/collection';
 import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
+import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
@@ -124,9 +125,25 @@ const AlreadyInCollection = ({ project, collectionsWithProject }) => (
   </PopoverInfo>
 );
 
-function useCollectionSearch(project, collectionType) {
-  const api = useAPI();
+
+function useCollectionSearch (project, collectionType) {
+  const [query, setQuery] = useState('');
   const { currentUser } = useCurrentUser();
+  const teamIDs = currentUser.teams.map(team => team.id)
+  const filters
+  
+  const searchResults = useAlgoliaSearch(query, { userIDs: [currentUser.id]})
+}
+
+
+function useCollectionSearch(project, collectionType) {
+  const { currentUser } = useCurrentUser();
+  
+  
+  
+  
+  const api = useAPI();
+  
 
   const [maybeCollections, setMaybeCollections] = useState(null);
   const [collectionsWithProject, setCollectionsWithProject] = useState([]);

@@ -146,6 +146,11 @@ function createSearchClient(api) {
   };
 }
 
+const buildCollectionFilters = ({ teamIDs = [], userIDs = [] }) => {
+  if (!teamIDs.length && !userIDs.length) return undefined;
+  return [...teamIDs.map((id) => `team=${id}`), ...userIDs.map((id) => `user=${id}`)].join(' OR ');
+};
+
 function createAlgoliaProvider(api) {
   const searchClient = createSearchClient(api);
   const searchIndices = {
@@ -154,10 +159,15 @@ function createAlgoliaProvider(api) {
     project: searchClient.initIndex('search_projects'),
     collection: searchClient.initIndex('search_collections'),
   };
-  
+
   return {
-    ...mapValues(searchIndices, (index, type) => (query,  params) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
-    collection: (query, { teamIDs, userIDs }) 
+    ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
+    collection: (query, { teamIDs, userIDs }) =>
+      searchIndices.collection.search({
+        query,
+        hitsPerPage: 100,
+        filters: buildCollectionFilters({ teamIDs, userIDs }),
+      }),
     project: (query, { notSafeForKids }) =>
       searchIndices.project
         .search({
