@@ -14,6 +14,7 @@ import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
 
+import useDebouncedValue from '../../hooks/use-debounced-value';
 import { useNotifications, AddProjectToCollectionMsg } from '../../presenters/notifications';
 
 function parseQuery(query) {
@@ -42,8 +43,9 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
+  const debouncedQuery = useDebouncedValue(query, 200);
   const { topResults, project: retrievedProjects, status } = useAlgoliaSearch(
-    parsedQuery,
+    debouncedQuery,
     {
       notSafeForKids: false,
       filterTypes: ['project'],

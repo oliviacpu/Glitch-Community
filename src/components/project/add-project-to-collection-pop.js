@@ -47,7 +47,9 @@ const NoCollectionPlaceholder = () => <InfoDescription>Create collections to org
 
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
-    <ProjectAvatar {...project} /> Add {project.domain} to collection
+    <div className={styles.popoverTitleWrap}>
+      <ProjectAvatar {...project} /> Add {project.domain} to collection
+    </div>
   </MultiPopoverTitle>
 );
 AddProjectPopoverTitle.propTypes = {
@@ -153,11 +155,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           <ResultsList items={collections} scroll>
             {(collection, i) => (
               <ScrollResult active={activeIndex === i}>
-                <AddProjectToCollectionResultItem
-                  active={activeIndex === i}
-                  onClick={() => addProjectTo(collection)}
-                  collection={collection}
-                />
+                <AddProjectToCollectionResultItem active={activeIndex === i} onClick={() => addProjectTo(collection)} collection={collection} />
               </ScrollResult>
             )}
           </ResultsList>
