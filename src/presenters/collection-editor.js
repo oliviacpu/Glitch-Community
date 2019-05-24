@@ -40,6 +40,9 @@ class CollectionEditor extends React.Component {
       }));
     }
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
+    if (collection.id === this.state.id) {
+      await this.props.api.post(`collections/${collection.id}/project/${project.id}/index/0`);
+    }
   }
 
   async removeProjectFromCollection(project) {
@@ -55,12 +58,7 @@ class CollectionEditor extends React.Component {
       sortedProjects.splice(index, 0, project);
       return { projects: sortedProjects };
     });
-    try {
-      await this.props.api.post(`collections/${this.state.id}/project/${project.id}/index/${index}`);
-    } catch (error) {
-      
-      throw error;
-    }
+    await this.props.api.post(`collections/${this.state.id}/project/${project.id}/index/${index}`);
   }
 
   async deleteCollection() {
