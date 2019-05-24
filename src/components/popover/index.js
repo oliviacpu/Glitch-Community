@@ -133,7 +133,7 @@ PopoverMenu.propTypes = {
 };
 
 PopoverMenu.defaultProps = {
-  label: "options",
+  label: 'options',
   onOpen: null,
 };
 
