@@ -51,43 +51,36 @@ SubmitButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
 };
 
+const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
-const defaultAddProjectToCollection = (api, project, collection) => 
-  api.patch(`collections/${collection.id}/add/${project.id}`);
+async function handleSubmitInner({ api, query, selection, createNotification }) {
+  // create the new collection with createCollection(api, name, teamId, notification)
+  const collection = await createCollection(api, query, selection.value, createNotification);
+  // add the project to the collection
+  if (!collection || !collection.id) return;
+  addProjectToCollection(project, collection);
+
+  const newCollectionUrl = `/@${collection.fullUrl}`;
+
+  if (this.props.removeProjectFromTeam) {
+    // coming from team page -> redirect to newly created collection
+    this.setState({ newCollectionUrl });
+  } else {
+    // show notification
+    const content = <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />;
+    createNotification(content, 'notifySuccess');
+  }
+}
 
 async function handleSubmit(event, createNotification) {
   event.preventDefault();
   this.setState({ loading: true });
-  // create the new collection with createCollection(api, name, teamId, notification)
-  const collectionResponse = await createCollection(api, query, selection.value, createNotification);
-  // add the project to the collection
-  if (collectionResponse && collectionResponse.id) {
-    const collection = collectionResponse;
-    // add the selected project to the collection
-    try {
-      if (addProjectToCollection) {
-        addProjectToCollection(project, collection);
-      } else {
-        defaultAddProjectToCollection(api, project, collection);
-        
-      }
-  
-      const newCollectionUrl = `/@${collection.fullUrl}`;
-
-      if (this.props.removeProjectFromTeam) {
-        // coming from team page -> redirect to newly created collection
-        this.setState({ newCollectionUrl });
-      } else {
-        // show notification
-        const content = (
-          <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />
-        );
-        createNotification(content, 'notifySuccess');
-      }
-    } catch (error) {
-      createNotification('Unable to add project to collection.', 'notifyError');
-    }
+  try {
+    await handleSubmitInner({ addProjectToCollection: addProjectToCollection || defaultAddProjectToCollection(api) });
+  } catch (e) {
+    createNotification('Unable to add project to collection.', 'notifyError');
   }
+
   this.props.togglePopover();
 }
 
