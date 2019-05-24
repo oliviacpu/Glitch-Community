@@ -9,18 +9,18 @@ import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
 import { getLink, createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
-import { useAPI } from 'State/api';
+import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { getAllPages } from 'Shared/api';
 
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './popover.styl';
 
-// getTeamOptions: Format teams in { value: teamId, label: html elements } format for react-select
+// Format in { value: teamId, label: html elements } format for react-select
 function getOptions(currentUser) {
   const userOption = {
-    value: currentUser.id,
-    type: 'user',
+    value: null,
     label: (
       <span>
         myself
@@ -31,7 +31,6 @@ function getOptions(currentUser) {
   const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
   const teamOptions = orderedTeams.map((team) => ({
     value: team.id,
-    type: 'team',
     label: (
       <span id={team.id}>
         {team.name}
@@ -39,50 +38,43 @@ function getOptions(currentUser) {
       </span>
     ),
   }));
-}
-function getCurrentUserOption(currentUser) {
-  return 
+  return [userOption, ...teamOptions];
 }
 
 const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
-const useCollections = createAPIHook(async (api, selection) => {});
+const useCollections = createAPIHook((api, teamId) => {
+  const { currentUser } = useCurrentUser();
+  if (teamId) {
+    return getAllPages(api, `/v1/teams/by/id/collections?id=${teamId}&limit=100`);
+  }
+  return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
+});
 
 function CreateCollectionPop({ addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
   const api = useAPI();
   const addProject = addProjectToCollection || defaultAddProjectToCollection(api);
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
-  const { value: collections = [] } = useCollections();
 
-  const options = [getCurrentUserOption(currentUser), ...getTeamOptions(currentUser.teams)];
+  const options = getOptions(currentUser);
   const [selection, setSelection] = useState(options[0]);
 
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
 
   // determine if entered name already exists for selected user / team
-  const selectedOwnerCollections = selection.value
-    ? collections.filter(({ teamId }) => teamId === selection.value)
-    : collections.filter(({ userId }) => userId === currentUser.id);
-  const hasQueryError = selectedOwnerCollections.some((c) => c.url === kebabCase(query));
-  const queryError = hasQueryError ? 'You already have a collection with this name' : '';
+  const { value: collections = [] } = useCollections(selection.value);
+  const hasQueryError = collections.some((c) => c.url === kebabCase(query));
+  const error = hasQueryError ? 'You already have a collection with this name' : '';
 
   const track = useTracker('Create Collection clicked', (inherited) => ({
     ...inherited,
     origin: `${inherited.origin} project`,
   }));
 
-  const submitEnabled = query.length > 0;
-  const placeholder = 'New Collection Name';
-
-  const [newCollectionUrl, setNewCollectionUrl] = useState(null);
-  if (newCollectionUrl) {
-    return <Redirect to={newCollectionUrl} />;
-  }
-
   async function handleSubmit(event) {
-    if (loading) return;
+    if (loading || query.length === 0) return;
     event.preventDefault();
     setLoading(true);
     track();
@@ -108,7 +100,7 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
-          <TextInput value={query} onChange={setQuery} placeholder={placeholder} error={queryError} labelText={placeholder} />
+          <TextInput value={query} onChange={setQuery} error={error} placeholder="New Collection Name" labelText="New Collection Name" />
 
           {(currentUser.teams || []).length > 0 && (
             <div>
