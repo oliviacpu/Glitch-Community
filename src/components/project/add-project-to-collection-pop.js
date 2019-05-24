@@ -27,7 +27,7 @@ import { useCurrentUser } from 'State/current-user';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 
-// import CreateCollectionPop from './create-collection-pop';
+import CreateCollectionPop from './create-collection-pop';
 import styles from './popover.styl';
 
 const collectionTypeOptions = [
@@ -164,7 +164,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       )}
 
       {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
-      
+
       {collections.length === 0 && collectionsWithProject.length === 0 && query.length > 0 && (
         <PopoverInfo>
           <NoSearchResultsPlaceholder />
@@ -206,7 +206,9 @@ const AddProjectToCollection = ({ project, addProjectToCollection }) => (
     {({ togglePopover }) => (
       <MultiPopover
         views={{
-          createCollectionPopover: () => <div>TODO</div>,
+          createCollectionPopover: () => (
+            <CreateCollectionPop addProjectToCollection={addProjectToCollection} project={project} togglePopover={togglePopover} />
+          ),
         }}
       >
         {({ createCollectionPopover }) => (

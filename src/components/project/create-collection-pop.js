@@ -1,13 +1,14 @@
 // create-collection-pop.jsx -> add a project to a new user or team collection
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { kebabCase, orderBy } from 'lodash';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
-import { getLink, createCollection } from 'Models/collection';
+import { PopoverDialog, MultiPopoverTitle, PopoverActions } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import { createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -15,7 +16,7 @@ import { getAllPages } from 'Shared/api';
 
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import Dropdown from '../../presenters/pop-overs/dropdown';
-import styles from './popover.styl';
+// import styles from './popover.styl';
 
 // Format in { value: teamId, label: html elements } format for react-select
 function getOptions(currentUser) {
@@ -59,13 +60,16 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
 
   const options = getOptions(currentUser);
   const [selection, setSelection] = useState(options[0]);
+  const hasTeams = currentUser.teams.length > 0;
 
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState('');
+  // TODO: should this be pre-populated with a friendly name?
+  const [collectionName, setCollectionName] = useState('');
 
   // determine if entered name already exists for selected user / team
-  const { value: collections = [] } = useCollections(selection.value);
-  const hasQueryError = collections.some((c) => c.url === kebabCase(query));
+  const { value: collections } = useCollections(selection.value);
+  console.log(collections);
+  const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
   const error = hasQueryError ? 'You already have a collection with this name' : '';
 
   const track = useTracker('Create Collection clicked', (inherited) => ({
@@ -74,11 +78,11 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
   }));
 
   async function handleSubmit(event) {
-    if (loading || query.length === 0) return;
+    if (loading || collectionName.length === 0) return;
     event.preventDefault();
     setLoading(true);
     track();
-    const collection = await createCollection(api, query, selection.value, createNotification);
+    const collection = await createCollection(api, collectionName, selection.value, createNotification);
     togglePopover();
     if (!collection || !collection.id) return;
 
@@ -89,7 +93,7 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
       createNotification(content, 'notifySuccess');
       onProjectAddedToCollection(collection);
-    } catch (error) {
+    } catch (e) {
       createNotification('Unable to add project to collection.', 'notifyError');
     }
   }
@@ -100,9 +104,15 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
-          <TextInput value={query} onChange={setQuery} error={error} placeholder="New Collection Name" labelText="New Collection Name" />
+          <TextInput
+            value={collectionName}
+            onChange={setCollectionName}
+            error={error}
+            placeholder="New Collection Name"
+            labelText="New Collection Name"
+          />
 
-          {(currentUser.teams || []).length > 0 && (
+          {hasTeams && (
             <div>
               {'for '}
               <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={setSelection} />
@@ -122,11 +132,12 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
   );
 }
 
+// TODO: figure out relationship between addProjectToCollection and redirecting to collection page
 CreateCollectionPop.propTypes = {
   addProjectToCollection: PropTypes.func,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
-  createNotification: PropTypes.func.isRequired,
+  onProjectAddedToCollection: PropTypes.func,
 };
 
 CreateCollectionPop.defaultProps = {
@@ -135,3 +146,5 @@ CreateCollectionPop.defaultProps = {
 };
 
 export default CreateCollectionPop;
+
+// TODO: make popover with button for 'create collection' button on user/team page
