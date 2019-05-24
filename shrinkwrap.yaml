@@ -13,7 +13,6 @@ dependencies:
   algoliasearch: 3.32.1
   autoprefixer-stylus: 0.14.0
   axios: 0.18.0
-  axios-cache-adapter: 2.3.2
   babel-eslint: 10.0.1
   babel-loader: 8.0.5
   babel-plugin-lodash: 3.3.4
@@ -3498,13 +3497,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-hMKcyHsZn5+qL6AUeP3c8OyuteZ4VaUlg+fWbyl8z7PqsKHF/Bf8/px3K6AT8aMzDkBo8Bc11245MM+itDBOxQ==
-  /axios-cache-adapter/2.3.2:
-    dependencies:
-      axios: 0.18.0
-      lodash: 4.17.11
-    dev: false
-    resolution:
-      integrity: sha512-//I5iTc4FjG3/+QtoExz7v1We3BfQ8itY8o+fmEDoi46oUZdfoDpI5tFk0RKqsQrUOsqLSOd1zvZ/3tXGoq6KQ==
   /axios/0.18.0:
     dependencies:
       follow-redirects: 1.7.0
@@ -12784,7 +12776,6 @@ specifiers:
   algoliasearch: ^3.32.1
   autoprefixer-stylus: ^0.14.0
   axios: ^0.18.0
-  axios-cache-adapter: ^2.3.2
   babel-eslint: ^10.0.1
   babel-loader: ^8.0.5
   babel-plugin-lodash: ^3.3.4

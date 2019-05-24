@@ -8,32 +8,39 @@ import { captureException } from '../utils/sentry';
 export const Context = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
-  const cacheInterceptor = () => {}
-  
-  let api
-  // const cache = { maxAge: 15 * 60 * 1000 }); // 1 minute -- just enough for requests on a single page load
+  const cache = {};
+  const maxAge = 60 * 1000;
+  let api;
   if (persistentToken) {
     api = axios.create({
       baseURL: API_URL,
       headers: {
         Authorization: persistentToken,
       },
-    })
+    });
   } else {
-  api = axios.create({
-    baseURL: API_URL,
-  });
-  
+    api = axios.create({
+      baseURL: API_URL,
+    });
   }
 
   return {
-    ...api  
-  
-    get: (url) =>
-  }
-  
-  
-  return api
+    ...api,
+    get: (url, config) => {
+      // TODO: support params
+      if (config) return api.get(url, config);
+      const now = Date.now();
+      if (cache[url] && cache[url].timestamp + maxAge > now) {
+        return cache[url].response;
+      }
+      const response = api.get(url);
+      cache[url] = {
+        timestamp: now,
+        response,
+      };
+      return response;
+    },
+  };
 });
 
 export function APIContextProvider({ children }) {
