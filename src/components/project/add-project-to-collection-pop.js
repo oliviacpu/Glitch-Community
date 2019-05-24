@@ -110,7 +110,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
 
-  const addProject = (collection) => {
+  const addProjectTo = (collection) => {
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
@@ -121,7 +121,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     togglePopover();
   };
 
-  const { activeIndex, onKeyDown } = useActiveIndex(collections, addProject);
+  const { activeIndex, onKeyDown } = useActiveIndex(collections, addProjectTo);
 
   return (
     <PopoverDialog wide align="right">
@@ -144,6 +144,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           labelText="Filter collections"
           opaque
           type="search"
+          autocomplete={false}
         />
       </PopoverInfo>
 
@@ -154,7 +155,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
               <ScrollResult active={activeIndex === i}>
                 <AddProjectToCollectionResultItem
                   active={activeIndex === i}
-                  onClick={() => addProjectToCollection(project, collection)}
+                  onClick={() => addProjectTo(collection)}
                   collection={collection}
                 />
               </ScrollResult>
