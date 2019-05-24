@@ -10,7 +10,7 @@ import TextInput from 'Components/inputs/text-input';
 import { getLink, createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
-import { useCurrentUser } from 'State/current-userr'
+import { useCurrentUser } from 'State/'
 
 import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
 import { NestedPopoverTitle } from './popover-nested';
