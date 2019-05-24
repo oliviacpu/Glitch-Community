@@ -144,10 +144,11 @@ function ProjectsList({
   placeholder,
   enableFiltering,
   enablePagination,
+  enableSorting,
+  onReorder,
   fetchMembers,
   projectsPerPage,
   collection,
-  enableSorting,
   noteOptions,
   projectOptions,
 }) {
@@ -168,6 +169,7 @@ function ProjectsList({
                   noteOptions={noteOptions}
                   layout={layout}
                   sortable={enableSorting && paginatedProjects.length === projects.length}
+                  onReorder={onReorder}
                   projectOptions={projectOptions}
                   fetchMembers={fetchMembers}
                 />
@@ -188,6 +190,7 @@ ProjectsList.propTypes = {
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
   enableSorting: PropTypes.bool,
+  onReorder: PropTypes.func,
   fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
