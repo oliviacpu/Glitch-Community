@@ -51,111 +51,125 @@ SubmitButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
 };
 
-const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-
-async function handleSubmitInner({ api, query, selection, createNotification }) {
-  // create the new collection with createCollection(api, name, teamId, notification)
-  const collection = await createCollection(api, query, selection.value, createNotification);
-  // add the project to the collection
-  if (!collection || !collection.id) return;
-  addProjectToCollection(project, collection);
-
-  const newCollectionUrl = `/@${collection.fullUrl}`;
-
-  if (this.props.removeProjectFromTeam) {
-    // coming from team page -> redirect to newly created collection
-    this.setState({ newCollectionUrl });
-  } else {
-    // show notification
-    const content = <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />;
-    createNotification(content, 'notifySuccess');
-  }
-}
-
-async function handleSubmit(event, createNotification) {
-  event.preventDefault();
-  this.setState({ loading: true });
-  try {
-    await handleSubmitInner({ addProjectToCollection: addProjectToCollection || defaultAddProjectToCollection(api) });
-  } catch (e) {
-    createNotification('Unable to add project to collection.', 'notifyError');
-  }
-
-  this.props.togglePopover();
-}
+const defaultAddProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
 class CreateCollectionPop extends React.Component {
   constructor(props) {
     super(props);
 
-    const currentUserOptionLabel = (
-      <span>
-        myself
-        <UserAvatar user={this.props.currentUser} hideTooltip />
-      </span>
-    );
-    const currentUserOption = { value: null, label: currentUserOptionLabel };
-
-    this.options = [currentUserOption].concat(getTeamOptions(this.props.currentUser.teams));
-
     this.state = {
-      loading: false,
       query: '', // The entered collection name
       selection: currentUserOption, // the selected option from the dropdown
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setSelection = this.setSelection.bind(this);
-  }
-
-  setSelection(option) {
-    this.setState({
-      selection: option,
-    });
   }
 
   render() {
-    const { error, query } = this.state;
-    const { collections, createNotification, focusFirstElement } = this.props;
-    const { teams } = this.props.currentUser;
+    const { error, query, selection, newCollectionUrl } = this.state;
+    const {
+      collections,
+      createNotification,
+      focusFirstElement,
+      addProjectToCollection,
+      togglePopover,
+      project,
+      api,
+      removeProjectFromTeam,
+      currentUser
+    } = this.props;
+    const { teams } = currentUser;
     let queryError; // if user already has a collection with the specified name
 
-    const submitEnabled = this.state.query.length > 0;
+    const submitEnabled = query.length > 0;
     const placeholder = 'New Collection Name';
 
     // determine if entered name already exists for selected user / team
-    const selectedOwnerCollections = this.state.selection.value
-      ? collections.filter(({ teamId }) => teamId === this.state.selection.value)
-      : collections.filter(({ userId }) => userId === this.props.currentUser.id);
+    const selectedOwnerCollections = selection.value
+      ? collections.filter(({ teamId }) => teamId === selection.value)
+      : collections.filter(({ userId }) => userId === currentUser.id);
 
     if (!!collections && selectedOwnerCollections.some((c) => c.url === kebabCase(query))) {
       queryError = 'You already have a collection with this name';
     }
-    if (this.state.newCollectionUrl) {
-      return <Redirect to={this.state.newCollectionUrl} />;
+    if (newCollectionUrl) {
+      return <Redirect to={newCollectionUrl} />;
     }
 
     const handleChange = (newValue) => {
       this.setState({ query: newValue, error: null });
     };
 
+    const setSelection = (option) => {
+      this.setState({
+        selection: option,
+      });
+    };
+
+    const [loading, setLoading] = useState(false)
+    const [{ query, error }, setQueryState] = useState({ query: '', error: null })
+    const handleChange = 
+    
+    const setLoading = (loading) => this.setState({ loading });
+    const setNewCollectionUrl = (newCollectionUrl) => this.setState({ newCollectionUrl });
+    
+    const currentUserOptionLabel = (
+      <span>
+        myself
+        <UserAvatar user={currentUser} hideTooltip />
+      </span>
+    );
+    const currentUserOption = { value: null, label: currentUserOptionLabel };
+
+    const options = [currentUserOption].concat(getTeamOptions(currentUser.teams));
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      setLoading(true);
+      // create the new collection with createCollection(api, name, teamId, notification)
+      const collectionResponse = await createCollection(api, query, selection.value, createNotification);
+      // add the project to the collection
+      if (collectionResponse && collectionResponse.id) {
+        const collection = collectionResponse;
+        // add the selected project to the collection
+        try {
+          if (addProjectToCollection) {
+            addProjectToCollection(project, collection);
+          } else {
+            defaultAddProjectToCollection(api, project, collection);
+          }
+          // TODO: does this have fullUrl?
+          const newCollectionUrl = `/@${collection.fullUrl}`;
+
+          if (removeProjectFromTeam) {
+            // coming from team page -> redirect to newly created collection
+            setNewCollectionUrl(newCollectionUrl);
+          } else {
+            // show notification
+            const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={newCollectionUrl} />;
+            createNotification(content, 'notifySuccess');
+          }
+        } catch (error) {
+          createNotification('Unable to add project to collection.', 'notifyError');
+        }
+      }
+      togglePopover();
+    }
+
     return (
       <PopoverDialog wide align="right">
-        <MultiPopoverTitle>{`Add ${this.props.project.domain} to a new collection`}</MultiPopoverTitle>
+        <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>
 
         <PopoverActions>
-          <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
+          <form onSubmit={handleSubmit}>
             <TextInput value={query} onChange={handleChange} placeholder={placeholder} error={error || queryError} labelText={placeholder} />
 
             {teams && teams.length > 0 && (
               <div>
                 {'for '}
-                <Dropdown containerClass="user-or-team-toggle" options={this.options} selection={this.state.selection} onUpdate={this.setSelection} />
+                <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={setSelection} />
               </div>
             )}
 
-            {!this.state.loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
+            {!loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
           </form>
         </PopoverActions>
       </PopoverDialog>
