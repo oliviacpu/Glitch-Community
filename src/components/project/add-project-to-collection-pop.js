@@ -37,11 +37,16 @@ import useDebouncedValue from '../../hooks/use-debounced-value';
 // import CreateCollectionPop from './create-collection-pop';
 import styles from './popover.styl';
 
-const filterTypes = ['Your collections', 'Team collections'];
-const segmentedButtonOptions = filterTypes.map((name) => ({
-  name,
-  contents: name,
-}));
+const collectionTypeOptions = [
+  {
+    name: 'user',
+    contents: 'Your collections',
+  },
+  {
+    name: 'team',
+    contents: 'Team collections',
+  },
+];
 
 const NoSearchResultsPlaceholder = () => <InfoDescription>No matching collections found – add to a new one?</InfoDescription>;
 
@@ -119,85 +124,30 @@ const AlreadyInCollection = ({ project, collectionsWithProject }) => (
         <div className={styles.moreCollectionsBadge}>
           <Badge>{collectionsWithProject.length - 3}</Badge>
         </div>{' '}
-        po <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
+        <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
       </>
     )}
   </PopoverInfo>
 );
 
-
-function useCollectionSearch (project, collectionType) {
-  const [query, setQuery] = useState('');
+function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
-  const teamIDs = currentUser.teams.map(team => team.id)
-  const filters
+  const filters = collectionType == 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
+
+  const searchResults = useAlgoliaSearch(query, filters);
+
+  const [collectionsWithProject, collections] = useMemo(
+    () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
+    [searchResults.collection, project.id],
+  );
   
-  const searchResults = useAlgoliaSearch(query, { userIDs: [currentUser.id]})
-}
-
-
-function useCollectionSearch(project, collectionType) {
-  const { currentUser } = useCurrentUser();
-  
-  
-  
-  
-  const api = useAPI();
-  
-
-  const [maybeCollections, setMaybeCollections] = useState(null);
-  const [collectionsWithProject, setCollectionsWithProject] = useState([]);
-
-  useEffect(() => {
-    let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
-
-    const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
-
-    const loadUserCollections = async (user) => {
-      const collections = await getAllPages(api, `v1/users/by/id/collections?id=${user.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, user }));
-    };
-
-    const loadTeamCollections = async (team) => {
-      const collections = await getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&${orderParams}`);
-      return collections.map((collection) => ({ ...collection, team }));
-    };
-
-    const loadCollections = async () => {
-      const projectCollectionsRequest = getAllPages(api, `v1/projects/by/id/collections?id=${project.id}&${orderParams}`);
-      const userCollectionsRequest = loadUserCollections(currentUser);
-
-      const requests =
-        collectionType === filterTypes[0]
-          ? [projectCollectionsRequest, userCollectionsRequest]
-          : [projectCollectionsRequest, ...currentUser.teams.map((team) => loadTeamCollections(team))];
-
-      const [projectCollections, ...collectionArrays] = await Promise.all(requests);
-
-      const alreadyInCollectionIds = new Set(projectCollections.map((c) => c.id));
-      const [collections, _collectionsWithProject] = partition(flatten(collectionArrays), (c) => !alreadyInCollectionIds.has(c.id));
-
-      const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
-      if (!canceled) {
-        setMaybeCollections(orderedCollections);
-        setCollectionsWithProject(_collectionsWithProject);
-      }
-    };
-
-    loadCollections().catch(captureException);
-    return () => {
-      canceled = true;
-    };
-  }, [project.id, currentUser.id, collectionType]);
-  return { maybeCollections, collectionsWithProject };
+  return { collections, collectionsWithProject }
 }
 
 export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover }) => {
-  const [collectionType, setCollectionType] = useState(filterTypes[0]);
+  const [collectionType, setCollectionType] = useState('user');
   const [query, setQuery] = useState('');
-  const { maybeCollections: collections, collectionsWithProject } = useCollectionSearch(project, collectionType);
+  const { collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
 
@@ -214,10 +164,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
   const filteredCollections = useMemo(
-    () => (collections || []).filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)).slice(0, 20), [
-    debouncedQuery,
-    collections,
-  ]);
+    () => (collections || []).filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)).slice(0, 20),
+    [debouncedQuery, collections],
+  );
   const { activeIndex, onKeyDown } = useActiveIndex(filteredCollections, addProject);
 
   return (
@@ -233,7 +182,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
           {currentUser.teams.length > 0 && (
             <PopoverActions>
-              <SegmentedButtons value={collectionType} buttons={segmentedButtonOptions} onChange={setCollectionType} />
+              <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
             </PopoverActions>
           )}
 
