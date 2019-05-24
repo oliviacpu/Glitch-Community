@@ -71,7 +71,7 @@ function useSearchProvider(provider, query, params, deps) {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    if (!query) {
+    if (!query && !params.allowEmptyQuery) {
       dispatch({ type: 'clearQuery' });
       return;
     }
