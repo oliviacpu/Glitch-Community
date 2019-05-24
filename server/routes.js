@@ -13,6 +13,7 @@ const cheerio = require('cheerio');
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
+const { defaultProjectDescriptionPattern } = require('../shared/regex');
 
 module.exports = function(external) {
   const app = express.Router();
@@ -109,7 +110,9 @@ module.exports = function(external) {
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
-    console.log(project);
+    const usesDefaultDescription = project.description.match(defaultProjectDescriptionPattern);
+    console.log('default?', usesDefaultDescription)
+    
     const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
 
     await render(res, domain, description, avatar);
