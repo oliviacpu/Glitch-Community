@@ -49,13 +49,11 @@ const useCollections = createAPIHook((api, teamId, currentUser) => {
   return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
 });
 
-
-function CreateCollectionPopBase({ title, onSubmit }) {
+function CreateCollectionPopBase({ title, onSubmit, options }) {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
 
-  const options = getOptions(currentUser);
   const [selection, setSelection] = useState(options[0]);
   const hasTeams = currentUser.teams.length > 0;
 
@@ -68,7 +66,6 @@ function CreateCollectionPopBase({ title, onSubmit }) {
   const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
   const error = hasQueryError ? 'You already have a collection with this name' : '';
 
-  
   const submitDisabled = loading || collectionName.length === 0;
 
   async function handleSubmit(event) {
@@ -77,7 +74,6 @@ function CreateCollectionPopBase({ title, onSubmit }) {
     setLoading(true);
     const collection = await createCollection(api, collectionName, selection.value, createNotification);
     onSubmit(collection);
-
   }
 
   return (
@@ -94,7 +90,7 @@ function CreateCollectionPopBase({ title, onSubmit }) {
             labelText="New Collection Name"
           />
 
-          {hasTeams && (
+          {options.length > 1 && (
             <div>
               {'for '}
               <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
@@ -129,37 +125,46 @@ CreateCollectionPopBase.defaultProps = {
   onSubmit: () => {},
 };
 
-function CreateCollectionWithProject ({ project, addProjectToCollection }) {
+function CreateCollectionWithProject({ project, addProjectToCollection }) {
   const api = useAPI();
+  const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
+  const options = getOptions(currentUser);
   const track = useTracker('Create Collection clicked', (inherited) => ({
     ...inherited,
     origin: `${inherited.origin} project`,
   }));
   const onSubmit = (collection) => {
+    track();
     if (!collection || !collection.id) return;
     const addProject = addProjectToCollection || ((project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`));
-    
+
     try {
       // TODO: should this block?
       addProject(project, collection);
-      
+
       // TODO: does this have fullUrl?
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
       createNotification(content, 'notifySuccess');
-      onProjectAddedToCollection(collection);
     } catch (e) {
       createNotification('Unable to add project to collection.', 'notifyError');
     }
-  }
-  const title = 
-      <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>
+  };
+  const title = <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>;
+
+  return <CreateCollectionPopBase title={title} onSubmit={onSubmit} />;
 }
 
+const redirectTo = {};
 
-const CreateCollectionPop = () => (
-  <PopoverWithButton buttonText="Create Collection">
-    {({ togglePopover }) => <CreateCollectionPopBase onSubmit={() => togglePopover()} />}
-  </PopoverWithButton>
-)
-
+const CreateCollectionPop = ({ team }) => {
+  const { cufrent}
+  const options = team ? createOptions(null, [team]) : createOptions(currentUser)
+  
+  return (
+    <PopoverWithButton buttonText="Create Collection">
+      {() => <CreateCollectionPopBase onSubmit={(collection) => redirectTo(collection.fullUrl)} />}
+    </PopoverWithButton>
+  );
+};
 export default CreateCollectionPop;
