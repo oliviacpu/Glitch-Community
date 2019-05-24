@@ -35,23 +35,6 @@ function getTeamOptions(teams) {
   return teamOptions;
 }
 
-const SubmitButton = ({ disabled }) => {
-  const track = useTracker('Create Collection clicked', (inherited) => ({
-    ...inherited,
-    origin: `${inherited.origin} project`,
-  }));
-  return (
-    <div className="button-wrap">
-      <button type="submit" onClick={track} className="create-collection button-small" disabled={disabled}>
-        Create
-      </button>
-    </div>
-  );
-};
-SubmitButton.propTypes = {
-  disabled: PropTypes.bool.isRequired,
-};
-
 const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
 function CreateCollectionPop({
@@ -63,16 +46,20 @@ function CreateCollectionPop({
   removeProjectFromTeam,
 }) {
   const api = useAPI();
+  const addProject = addProjectToCollection || defaultAddProjectToCollection(api)
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
   
-  const { teams } = currentUser;
-
   const [loading, setLoading] = useState(false);
 
   const [{ query, error }, setQueryState] = useState({ query: '', error: null });
   const handleChange = (value) => setQueryState({ query: value, error: null });
 
+    const track = useTracker('Create Collection clicked', (inherited) => ({
+    ...inherited,
+    origin: `${inherited.origin} project`,
+  }));
+  
   const options = useMemo(() => {
     const currentUserOptionLabel = (
       <span>
@@ -103,21 +90,18 @@ function CreateCollectionPop({
     return <Redirect to={newCollectionUrl} />;
   }
   
-
   async function handleSubmit(event) {
+    if (loading) return
     event.preventDefault();
     setLoading(true);
+    track();
     // create the new collection with createCollection(api, name, teamId, notification)
     const collection = await createCollection(api, query, selection.value, createNotification);
-    if (!collection || !collection.id) {
-      togglePopover();
-      return;
-    }
-    // add the project to the collection
-    try {
-      const addProject = addProjectToCollection || defaultAddProjectToCollection(api)
+    togglePopover()
+    if (!collection || !collection.id) return
+    
+    try {      
       addProject(project, collection);
-      
       // TODO: does this have fullUrl?
       const newCollectionUrl = `/@${collection.fullUrl}`;
 
@@ -132,7 +116,6 @@ function CreateCollectionPop({
     } catch (error) {
       createNotification('Unable to add project to collection.', 'notifyError');
     }
-    togglePopover();
   }
 
   return (
@@ -143,14 +126,18 @@ function CreateCollectionPop({
         <form onSubmit={handleSubmit}>
           <TextInput value={query} onChange={handleChange} placeholder={placeholder} error={error || queryError} labelText={placeholder} />
 
-          {teams && teams.length > 0 && (
+          {(currentUser.teams || []).length > 0 && (
             <div>
               {'for '}
               <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={setSelection} />
             </div>
           )}
-
-          {!loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
+          
+          {loading ? <Loader /> : (
+            <Button size="small" onClick={handleSubmit}>
+              Create
+            </Button>
+          )}
         </form>
       </PopoverActions>
     </PopoverDialog>
