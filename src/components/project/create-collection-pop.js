@@ -6,7 +6,7 @@ import { kebabCase, orderBy } from 'lodash';
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
-import { PopoverDialog, MultiPopoverTitle, PopoverActions } from 'Components/popover';
+import { PopoverDialog, MultiPopoverTitle, PopoverActions, PopoverWithButton } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import { createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
@@ -51,7 +51,7 @@ const useCollections = createAPIHook((api, teamId, currentUser) => {
   return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
 });
 
-function CreateCollectionPop({ addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
+export function CreateCollectionPopBase({ addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
   const api = useAPI();
   const addProject = addProjectToCollection || defaultAddProjectToCollection(api);
   const { createNotification } = useNotifications();
@@ -84,7 +84,7 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
     track();
     const collection = await createCollection(api, collectionName, selection.value, createNotification);
     togglePopover();
-    if (!collection || !collection.id) return;
+    if (!collection || !collection.id || !project) return;
 
     try {
       // TODO: should this block?
@@ -101,7 +101,8 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
 
   return (
     <PopoverDialog wide align="right">
-      <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>
+      {project && 
+      <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>}
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
@@ -134,18 +135,20 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
 }
 
 // TODO: figure out relationship between addProjectToCollection and redirecting to collection page
-CreateCollectionPop.propTypes = {
+CreateCollectionPopBase.propTypes = {
   addProjectToCollection: PropTypes.func,
-  project: PropTypes.object.isRequired,
+  project: PropTypes.object,
   togglePopover: PropTypes.func.isRequired,
   onProjectAddedToCollection: PropTypes.func,
 };
 
-CreateCollectionPop.defaultProps = {
+CreateCollectionPopBase.defaultProps = {
   addProjectToCollection: null,
   onProjectAddedToCollection: () => {},
 };
 
 export default CreateCollectionPop;
+
+
 
 // TODO: make popover with button for 'create collection' button on user/team page
