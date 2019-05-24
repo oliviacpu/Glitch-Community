@@ -6,7 +6,6 @@ import Markdown from 'Components/text/markdown';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
-import { getLink } from 'Models/collection';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
@@ -32,7 +31,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
       </div>
     </TransparentButton>
     <div className={styles.linkButtonWrap}>
-      <Button size="small" href={getLink(collection)} newTab>
+      <Button size="small" href={`/@${collection.fullUrl}`} newTab>
         View →
       </Button>
     </div>

@@ -6,7 +6,7 @@ import { partition } from 'lodash';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
-import { CollectionLink } from 'Components/link';
+import Link from 'Components/link';
 import {
   PopoverWithButton,
   MultiPopover,
@@ -21,14 +21,11 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import CollectionResultItem from 'Components/collection/collection-result-item';
-import { getLink as getCollectionLink } from 'Models/collection';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
-import { captureException } from 'Utils/sentry';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
-import useDebouncedValue from '../../hooks/use-debounced-value';
 
 // import CreateCollectionPop from './create-collection-pop';
 import styles from './popover.styl';
@@ -69,49 +66,15 @@ const AddProjectToCollectionResultItem = ({ onClick, collection, active }) => {
   return <CollectionResultItem onClick={onClickTracked} collection={collection} active={active} />;
 };
 
-const AddProjectToCollectionResults = ({ addProjectToCollection, collections, query, activeIndex }) => {
-  if (collections.length) {
-    return (
-      <PopoverSection>
-        <ResultsList items={collections} scroll>
-          {(collection, i) => (
-            <ScrollResult active={activeIndex === i}>
-              <AddProjectToCollectionResultItem
-                active={activeIndex === i}
-                onClick={() => addProjectToCollection(collection)}
-                collection={collection}
-              />
-            </ScrollResult>
-          )}
-        </ResultsList>
-      </PopoverSection>
-    );
-  }
-
-  if (query) {
-    return (
-      <PopoverInfo>
-        <NoSearchResultsPlaceholder />
-      </PopoverInfo>
-    );
-  }
-
-  return (
-    <PopoverInfo>
-      <NoCollectionPlaceholder />
-    </PopoverInfo>
-  );
-};
-
 const AlreadyInCollection = ({ project, collections }) => (
   <PopoverInfo>
     <strong>{project.domain}</strong> is already in <Pluralize count={collections.length} showCount={false} singular="collection" />{' '}
     {collections
       .slice(0, 3)
       .map((collection) => (
-        <CollectionLink key={collection.id} collection={collection}>
+        <Link key={collection.id} to={`/@${collection.fullUrl}`}>
           {collection.name}
-        </CollectionLink>
+        </Link>
       ))
       .reduce((prev, curr) => [prev, ', ', curr])}
     {collections.length > 3 && (
@@ -128,13 +91,13 @@ const AlreadyInCollection = ({ project, collections }) => (
 
 function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
-  const filters = collectionType == 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
+  const filters = collectionType === 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
   const searchResults = useAlgoliaSearch(query, { ...filters, filterTypes: ['collection'] });
 
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
-    [searchResults.collection, project.id],
+    [searchResults.collection, project.id, collectionType],
   );
 
   return { collections, collectionsWithProject };
@@ -183,6 +146,34 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           type="search"
         />
       </PopoverInfo>
+      
+    {collections.length > 0 && (
+      <PopoverSection>
+        <ResultsList items={collections} scroll>
+          {(collection, i) => (
+            <ScrollResult active={activeIndex === i}>
+              <AddProjectToCollectionResultItem
+                active={activeIndex === i}
+                onClick={() => addProjectToCollection(collection)}
+                collection={collection}
+              />
+            </ScrollResult>
+          )}
+        </ResultsList>
+      </PopoverSection>
+    )}
+
+  {collections.length === 0 && query.length > 0 && (
+      <PopoverInfo>
+        <NoSearchResultsPlaceholder />
+      </PopoverInfo>
+  )}
+
+  {}(
+    <PopoverInfo>
+      <NoCollectionPlaceholder />
+    </PopoverInfo>
+  );
 
       <AddProjectToCollectionResults addProjectToCollection={addProject} collections={collections} query={query} activeIndex={activeIndex} />
 
