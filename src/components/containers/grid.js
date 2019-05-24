@@ -1,7 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import classnames from 'classnames';
 import styles from './grid.styl';
+
+
+const GridItem = ({ children }) => (
+  <li className={styles.item} tabIndex={0}>
+    {children}
+  </li>
+);
+
+GridItem.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const SortableGridItem = SortableElement(GridItem);
 
 const Grid = ({ items, children, gap, minWidth, className, style }) => (
   <ul
@@ -13,10 +27,10 @@ const Grid = ({ items, children, gap, minWidth, className, style }) => (
       '--min-width': minWidth,
     }}
   >
-    {items.map((item) => (
-      <li key={item.id} className={styles.item}>
+    {items.map((item, index) => (
+      <SortableGridItem key={item.id} index={index}>
         {children(item)}
-      </li>
+      </SortableGridItem>
     ))}
   </ul>
 );
@@ -40,4 +54,6 @@ Grid.defaultProps = {
   minWidth: undefined,
 };
 
-export default Grid;
+const SortableGrid = SortableContainer(Grid);
+
+export default (props) => <SortableGrid axis="xy" {...props} />;
