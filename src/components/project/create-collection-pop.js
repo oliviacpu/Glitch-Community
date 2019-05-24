@@ -19,27 +19,30 @@ import Dropdown from '../../presenters/pop-overs/dropdown';
 // import styles from './popover.styl';
 
 // Format in { value: teamId, label: html elements } format for react-select
+const getUserOption = (currentUser) => ({
+  value: null,
+  label: (
+    <span>
+      myself
+      <UserAvatar user={currentUser} hideTooltip />
+    </span>
+  ),
+});
+
+const getTeamOption = (team) => ({
+  value: team.id,
+  label: (
+    <span id={team.id}>
+      {team.name}
+      <TeamAvatar team={team} hideTooltip />
+    </span>
+  ),
+});
+
 function getOptions(currentUser) {
-  const userOption = {
-    value: null,
-    label: (
-      <span>
-        myself
-        <UserAvatar user={currentUser} hideTooltip />
-      </span>
-    ),
-  };
   const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
-  const teamOptions = orderedTeams.map((team) => ({
-    value: team.id,
-    label: (
-      <span id={team.id}>
-        {team.name}
-        <TeamAvatar team={team} hideTooltip />
-      </span>
-    ),
-  }));
-  return [userOption, ...teamOptions];
+  const teamOptions = orderedTeams.map(getTeamOption);
+  return [getUserOption(currentUser), ...teamOptions];
 }
 
 const useCollections = createAPIHook((api, teamId, currentUser) => {
@@ -54,13 +57,11 @@ function CreateCollectionPopBase({ title, onSubmit, options }) {
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
 
-  const [selection, setSelection] = useState(options[0]);
-  const hasTeams = currentUser.teams.length > 0;
-
   const [loading, setLoading] = useState(false);
   // TODO: should this be pre-populated with a friendly name?
   const [collectionName, setCollectionName] = useState('');
 
+  const [selection, setSelection] = useState(options[0]);
   // determine if entered name already exists for selected user / team
   const { value: collections } = useCollections(selection.value, currentUser);
   const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
@@ -152,18 +153,18 @@ function CreateCollectionWithProject({ project, addProjectToCollection }) {
   };
   const title = <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>;
 
-  return <CreateCollectionPopBase title={title} onSubmit={onSubmit} />;
+  return <CreateCollectionPopBase title={title} options={options} onSubmit={onSubmit} />;
 }
 
 const redirectTo = {};
 
 const CreateCollectionPop = ({ team }) => {
-  const { cufrent}
-  const options = team ? createOptions(null, [team]) : createOptions(currentUser)
-  
+  const { currentUser } = useCurrentUser();
+  const options = team ? [getTeamOption(team)] : [getUserOption(currentUser)];
+
   return (
     <PopoverWithButton buttonText="Create Collection">
-      {() => <CreateCollectionPopBase onSubmit={(collection) => redirectTo(collection.fullUrl)} />}
+      {() => <CreateCollectionPopBase options={options} onSubmit={(collection) => redirectTo(collection.fullUrl)} />}
     </PopoverWithButton>
   );
 };
