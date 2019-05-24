@@ -51,6 +51,46 @@ SubmitButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
 };
 
+
+const defaultAddProjectToCollection = (api, project, collection) => 
+  api.patch(`collections/${collection.id}/add/${project.id}`);
+
+async function handleSubmit(event, createNotification) {
+  event.preventDefault();
+  this.setState({ loading: true });
+  // create the new collection with createCollection(api, name, teamId, notification)
+  const collectionResponse = await createCollection(api, query, selection.value, createNotification);
+  // add the project to the collection
+  if (collectionResponse && collectionResponse.id) {
+    const collection = collectionResponse;
+    // add the selected project to the collection
+    try {
+      if (addProjectToCollection) {
+        addProjectToCollection(project, collection);
+      } else {
+        defaultAddProjectToCollection(api, project, collection);
+        
+      }
+  
+      const newCollectionUrl = `/@${collection.fullUrl}`;
+
+      if (this.props.removeProjectFromTeam) {
+        // coming from team page -> redirect to newly created collection
+        this.setState({ newCollectionUrl });
+      } else {
+        // show notification
+        const content = (
+          <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />
+        );
+        createNotification(content, 'notifySuccess');
+      }
+    } catch (error) {
+      createNotification('Unable to add project to collection.', 'notifyError');
+    }
+  }
+  this.props.togglePopover();
+}
+
 class CreateCollectionPop extends React.Component {
   constructor(props) {
     super(props);
@@ -82,56 +122,6 @@ class CreateCollectionPop extends React.Component {
     });
   }
 
-  async handleSubmit(event, createNotification) {
-    event.preventDefault();
-    this.setState({ loading: true });
-    // create the new collection with createCollection(api, name, teamId, notification)
-    const collectionResponse = await createCollection(this.props.api, this.state.query, this.state.selection.value, createNotification);
-    // add the project to the collection
-    if (collectionResponse && collectionResponse.id) {
-      const collection = collectionResponse;
-      // add the selected project to the collection
-      try {
-        if (this.props.addProjectToCollection) {
-          // custom add project to collection function from user page
-          this.props.addProjectToCollection(this.props.project, collection);
-        } else {
-          // default API call to add project to collection
-          this.props.api.patch(`collections/${collection.id}/add/${this.props.project.id}`);
-        }
-        if (this.state.selection.value) {
-          const team = this.props.currentUser.teams.find(({ id }) => id === this.state.selection.value);
-          collection.team = team;
-        }
-        collection.user = this.props.currentUser;
-
-        const newCollectionUrl = getLink(collection);
-
-        if (this.props.removeProjectFromTeam) {
-          // coming from team page -> redirect to newly created collection
-          this.setState({ newCollectionUrl });
-        } else {
-          // show notification
-          const content = (
-            <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />
-          );
-          createNotification(content, 'notifySuccess');
-        }
-        this.props.togglePopover();
-      } catch (error) {
-        createNotification('Unable to add project to collection.', 'notifyError');
-        this.props.togglePopover();
-      }
-    } else {
-      // error messaging is handled in createCollection
-      this.props.togglePopover();
-    }
-  }
-
-  handleChange(newValue) {
-    this.setState({ query: newValue, error: null });
-  }
-
   render() {
     const { error, query } = this.state;
     const { collections, createNotification, focusFirstElement } = this.props;
@@ -153,19 +143,17 @@ class CreateCollectionPop extends React.Component {
       return <Redirect to={this.state.newCollectionUrl} />;
     }
 
-    return (
-      <dialog className="pop-over create-collection-pop wide-pop" ref={focusFirstElement}>
-        <NestedPopoverTitle>{`Add ${this.props.project.domain} to a new collection`}</NestedPopoverTitle>
+    const handleChange = (newValue) => {
+      this.setState({ query: newValue, error: null });
+    };
 
-        <section className="pop-over-actions">
+    return (
+      <PopoverDialog wide align="right">
+        <MultiPopoverTitle>{`Add ${this.props.project.domain} to a new collection`}</MultiPopoverTitle>
+
+        <PopoverActions>
           <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
-            <TextInput
-              value={query}
-              onChange={this.handleChange}
-              placeholder={placeholder}
-              error={error || queryError}
-              labelText={placeholder}
-            />
+            <TextInput value={query} onChange={handleChange} placeholder={placeholder} error={error || queryError} labelText={placeholder} />
 
             {teams && teams.length > 0 && (
               <div>
@@ -174,14 +162,10 @@ class CreateCollectionPop extends React.Component {
               </div>
             )}
 
-            {!this.state.loading ? (
-              <SubmitButton disabled={!!queryError || !submitEnabled} />
-            ) : (
-              <Loader />
-            )}
+            {!this.state.loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
           </form>
-        </section>
-      </dialog>
+        </PopoverActions>
+      </PopoverDialog>
     );
   }
 }
