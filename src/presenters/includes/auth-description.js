@@ -30,8 +30,6 @@ AuthDescription.propTypes = {
   update: PropTypes.func,
 };
 
-
-
 AuthDescription.defaultProps = {
   allowImages: true,
   placeholder: '',
