@@ -44,8 +44,7 @@ function getOptions(currentUser) {
 
 const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
-const useCollections = createAPIHook((api, teamId) => {
-  const { currentUser } = useCurrentUser();
+const useCollections = createAPIHook((api, teamId, currentUser) => {
   if (teamId) {
     return getAllPages(api, `/v1/teams/by/id/collections?id=${teamId}&limit=100`);
   }
@@ -67,8 +66,7 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
   const [collectionName, setCollectionName] = useState('');
 
   // determine if entered name already exists for selected user / team
-  const { value: collections } = useCollections(selection.value);
-  console.log(collections);
+  const { value: collections } = useCollections(selection.value, currentUser);
   const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
   const error = hasQueryError ? 'You already have a collection with this name' : '';
 
@@ -76,9 +74,11 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
     ...inherited,
     origin: `${inherited.origin} project`,
   }));
+  
+  const submitDisabled = loading || collectionName.length === 0;
 
   async function handleSubmit(event) {
-    if (loading || collectionName.length === 0) return;
+    if (submitDisabled) return;
     event.preventDefault();
     setLoading(true);
     track();
@@ -89,6 +89,7 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
     try {
       // TODO: should this block?
       addProject(project, collection);
+      
       // TODO: does this have fullUrl?
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
       createNotification(content, 'notifySuccess');
@@ -115,14 +116,14 @@ function CreateCollectionPop({ addProjectToCollection, togglePopover, project, o
           {hasTeams && (
             <div>
               {'for '}
-              <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={setSelection} />
+              <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
             </div>
           )}
 
           {loading ? (
             <Loader />
           ) : (
-            <Button size="small" onClick={handleSubmit}>
+            <Button size="small" onClick={handleSubmit} disabled={submitDisabled}>
               Create
             </Button>
           )}
