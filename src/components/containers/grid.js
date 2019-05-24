@@ -51,7 +51,7 @@ const Grid = ({ items, children, sortable, onReorder, ...props }) => {
 Grid.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.node.isRequired })).isRequired,
   children: PropTypes.func.isRequired,
-  sortable: PropTypes.bool,
+  sortable: (props) => props.sortable && !props.onReorder && new Error('If a container is sortable, it needs onReorder defined'),
   onReorder: PropTypes.func,
   className: PropTypes.string,
   style: PropTypes.object,

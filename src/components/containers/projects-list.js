@@ -46,6 +46,10 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
   );
 };
 
+ProjectsUL.propTypes = {
+  sortable: (props) => props.sortable && props.layout === 'row' && new Error('Sortable rows are not supported'),
+};
+
 const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
 const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
