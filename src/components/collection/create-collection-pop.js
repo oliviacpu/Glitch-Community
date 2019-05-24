@@ -17,15 +17,14 @@ import { getAllPages } from 'Shared/api';
 
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import Dropdown from '../../presenters/pop-overs/dropdown';
-// import styles from './popover.styl';
+import styles from './create-collection-pop.styl';
 
 // Format in { value: teamId, label: html elements } format for react-select
 const getUserOption = (currentUser) => ({
   value: null,
   label: (
     <span>
-      <UserAvatar user={currentUser} hideTooltip />
-      myself
+      <UserAvatar user={currentUser} hideTooltip /> myself
     </span>
   ),
 });
@@ -34,8 +33,7 @@ const getTeamOption = (team) => ({
   value: team.id,
   label: (
     <span id={team.id}>
-      <TeamAvatar team={team} hideTooltip />
-      {team.name}
+      <TeamAvatar team={team} hideTooltip /> {team.name}
     </span>
   ),
 });
@@ -86,18 +84,20 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
-          <TextInput
-            value={collectionName}
-            onChange={setCollectionName}
-            error={error}
-            placeholder="New Collection Name"
-            labelText="New Collection Name"
-          />
+          <div className={styles.inputWrap}>
+            <TextInput
+              value={collectionName}
+              onChange={setCollectionName}
+              error={error}
+              placeholder="New Collection Name"
+              labelText="New Collection Name"
+            />
+          </div>
 
           {options.length > 1 && (
             <div>
               {'for '}
-              <Dropdown containerClass="user-or-team-toggle" options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
+              <Dropdown containerClass={styles.userOrTeamToggle} options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
             </div>
           )}
 

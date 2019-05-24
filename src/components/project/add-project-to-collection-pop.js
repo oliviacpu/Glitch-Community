@@ -154,7 +154,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
               <ScrollResult active={activeIndex === i}>
                 <AddProjectToCollectionResultItem
                   active={activeIndex === i}
-                  onClick={() => addProjectToCollection(collection)}
+                  onClick={() => addProjectToCollection(project, collection)}
                   collection={collection}
                 />
               </ScrollResult>
