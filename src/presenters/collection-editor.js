@@ -55,7 +55,12 @@ class CollectionEditor extends React.Component {
       sortedProjects.splice(index, 0, project);
       return { projects: sortedProjects };
     });
-    await this.props.api.post(`collections/${this.state.id}/projects/${project.id}/index/${index}`);
+    try {
+      await this.props.api.post(`collections/${this.state.id}/project/${project.id}/index/${index}`);
+    } catch (error) {
+      
+      throw error;
+    }
   }
 
   async deleteCollection() {
