@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase, orderBy } from 'lodash';
+import { withRouter } from 'react-router-dom';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
@@ -111,19 +112,10 @@ function CreateCollectionPopBase({ title, onSubmit, options }) {
   );
 }
 
-// TODO: figure out relationship between addProjectToCollection and redirecting to collection page
 CreateCollectionPopBase.propTypes = {
-  addProjectToCollection: PropTypes.func,
-  project: PropTypes.object,
-  togglePopover: PropTypes.func.isRequired,
-  onProjectAddedToCollection: PropTypes.func,
-  onSubmit: PropTypes.func,
-};
-
-CreateCollectionPopBase.defaultProps = {
-  addProjectToCollection: null,
-  onProjectAddedToCollection: () => {},
-  onSubmit: () => {},
+  title: PropTypes.node,
+  options: PropTypes.array,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 function CreateCollectionWithProject({ project, addProjectToCollection }) {
@@ -156,16 +148,14 @@ function CreateCollectionWithProject({ project, addProjectToCollection }) {
   return <CreateCollectionPopBase title={title} options={options} onSubmit={onSubmit} />;
 }
 
-const redirectTo = {};
-
-const CreateCollectionPop = ({ team }) => {
+const CreateCollectionPop = withRouter(({ team, history }) => {
   const { currentUser } = useCurrentUser();
   const options = team ? [getTeamOption(team)] : [getUserOption(currentUser)];
 
   return (
     <PopoverWithButton buttonText="Create Collection">
-      {() => <CreateCollectionPopBase options={options} onSubmit={(collection) => redirectTo(collection.fullUrl)} />}
+      {() => <CreateCollectionPopBase options={options} onSubmit={(collection) => history.push(collection.fullUrl)} />}
     </PopoverWithButton>
   );
-};
+});
 export default CreateCollectionPop;
