@@ -75,6 +75,8 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
     event.preventDefault();
     setLoading(true);
     const collection = await createCollection(api, collectionName, selection.value, createNotification);
+    const team = currentUser.teams.find((team) => team.id === selection.value);
+    collection.fullUrl = `${team ? team.name : currentUser.login}/${collection.url}`;
     onSubmit(collection);
   }
 
@@ -128,7 +130,6 @@ export function CreateCollectionWithProject({ project, addProjectToCollection })
       // TODO: should this block?
       addProjectToCollection(project, collection);
 
-      // TODO: does this have fullUrl?
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
       createNotification(content, 'notifySuccess');
     } catch (e) {
@@ -148,10 +149,17 @@ CreateCollectionWithProject.propTypes = {
 const CreateCollectionPop = withRouter(({ team, history }) => {
   const { currentUser } = useCurrentUser();
   const options = team ? [getTeamOption(team)] : [getUserOption(currentUser)];
+  const track = useTracker('Create Collection clicked');
+  const onSubmit = (collection) => {
+    track();
+    if (collection) {
+      history.push(`/@${collection.fullUrl}`);
+    }
+  };
 
   return (
     <PopoverWithButton buttonText="Create Collection">
-      {() => <CreateCollectionPopBase align="left" options={options} onSubmit={(collection) => history.push(collection.fullUrl)} />}
+      {() => <CreateCollectionPopBase align="left" options={options} onSubmit={onSubmit} />}
     </PopoverWithButton>
   );
 });
