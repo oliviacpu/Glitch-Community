@@ -34,6 +34,8 @@ async function uploadWrapper(notifications, upload) {
     notifications.createErrorNotification(<NotifyError />);
     removeNotification();
     // throw e;
+    
+    
   }
   return result;
 }
