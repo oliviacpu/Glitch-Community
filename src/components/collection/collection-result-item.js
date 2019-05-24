@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -6,6 +6,9 @@ import Markdown from 'Components/text/markdown';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
+import VisibilityContainer from 'Components/visibility-container';
+import { createAPIHook } from 'State/api';
+import { getSingleItem } from 'Shared/api';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
@@ -40,21 +43,21 @@ const CollectionResultItemBase = ({ onClick, collection, active }) => (
 
 const useMembers = createAPIHook(async (api, collection) => {
   if (collection.userIDs.length) {
-    const id = collection.userIDs[0]
-    const user = await getSingleItem(api, `/v1/users/by/id?id=${id}`, id)
-    return { ...collection, user }
+    const id = collection.userIDs[0];
+    const user = await getSingleItem(api, `/v1/users/by/id?id=${id}`, id);
+    return { ...collection, user };
   }
   if (collection.teamIDs.length) {
-    const id = collection.teamIDs[0] 
-    const team = await getSingleItem(api, `/v1/teams/by/id?id=${id}`, id)
-    return { ...collection, team }
+    const id = collection.teamIDs[0];
+    const team = await getSingleItem(api, `/v1/teams/by/id?id=${id}`, id);
+    return { ...collection, team };
   }
-  return {}
+  return collection;
 });
 
 const CollectionResultWithData = (props) => {
-  const { value: collectionWithMembers } = useMembers(props.project);
-  return <CollectionResultItemBase {...props} colleciton={} />;
+  const { value: collectionWithMembers } = useMembers(props.collection);
+  return <CollectionResultItemBase {...props} collection={collectionWithMembers || props.collection} />;
 };
 
 const CollectionResultItem = (props) => {
@@ -65,11 +68,10 @@ const CollectionResultItem = (props) => {
   }, [props.active]);
   return (
     <VisibilityContainer>
-      {({ wasEverVisible }) => (wasEverVisible || wasEverActive ? <ProjectResultWithData {...props} /> : <CollectionResultItemBase {...props} />)}
+      {({ wasEverVisible }) => (wasEverVisible || wasEverActive ? <CollectionResultWithData {...props} /> : <CollectionResultItemBase {...props} />)}
     </VisibilityContainer>
   );
 };
-
 
 CollectionResultItem.propTypes = {
   onClick: PropTypes.func.isRequired,

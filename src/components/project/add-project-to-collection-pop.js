@@ -163,19 +163,19 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         </PopoverSection>
       )}
 
-      {collections.length === 0 && query.length > 0 && (
+      {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
+      
+      {collections.length === 0 && collectionsWithProject.length === 0 && query.length > 0 && (
         <PopoverInfo>
           <NoSearchResultsPlaceholder />
         </PopoverInfo>
       )}
 
-      {collections.length === 0 && query.length === 0 && (
+      {collections.length === 0 && collectionsWithProject.length === 0 && query.length === 0 && (
         <PopoverInfo>
           <NoCollectionPlaceholder />
         </PopoverInfo>
       )}
-
-      {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
 
       <PopoverActions>
         <Button size="small" type="tertiary" onClick={createCollectionPopover}>
