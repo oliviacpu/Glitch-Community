@@ -253,6 +253,7 @@ class AddTeamUserPop extends React.Component {
             onChange={this.handleChange}
             className="pop-over-input search-input pop-over-search"
             placeholder="Search for a user"
+            aria-label="Search for a user"
           />
         </section>
         {!!query && <Results isLoading={isLoading} results={results} />}
