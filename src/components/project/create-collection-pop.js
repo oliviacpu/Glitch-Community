@@ -147,7 +147,8 @@ CreateCollectionPopBase.defaultProps = {
   onProjectAddedToCollection: () => {},
 };
 
-export default CreateCollectionPop;
+const 
+
 
 
 
