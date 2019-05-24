@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { mapValues, flatMap } from 'lodash';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getUserLink } from 'Models/user';
 import { getLink as getTeamLink } from 'Models/team';
 import { useAlgoliaSearch } from 'State/search';
-import useDevToggle from 'State/dev-toggles';
 import TextInput from '../inputs/text-input';
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import AutocompleteSearch from './autocomplete';
