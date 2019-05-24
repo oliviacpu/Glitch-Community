@@ -51,11 +51,11 @@ class CollectionEditor extends React.Component {
 
   async updateProjectOrder(project, index) {
     this.setState(({ projects }) => {
-      const projectsWithoutItem = projects.filter((p) => p !== project);
-      projectsWithoutItem.splice(index, 0, project);
+      const sortedProjects = projects.filter((p) => p !== project);
+      sortedProjects.splice(index, 0, project);
       return { projects: sortedProjects };
     });
-    console.log(project.id, index);
+    await this.props.api.post(`collections/${this.state.id}/projects/${project.id}/index/${index}`);
   }
 
   async deleteCollection() {
