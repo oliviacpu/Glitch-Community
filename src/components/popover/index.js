@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
@@ -104,4 +105,47 @@ PopoverWithButton.propTypes = {
 PopoverWithButton.defaultProps = {
   buttonProps: {},
   onOpen: null,
+};
+
+export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
+  <div className={styles.popoverMenuWrap}>
+    <PopoverContainer onOpen={onOpen}>
+      {(popoverProps) => (
+        <div>
+          <div className={styles.buttonWrap}>
+            <TransparentButton onClick={popoverProps.togglePopover}>
+              <div className={styles.arrowPadding}>
+                <div className={styles.downArrow} aria-label="options" />
+              </div>
+            </TransparentButton>
+          </div>
+          {popoverProps.visible && renderChildren(popoverProps)}
+        </div>
+      )}
+    </PopoverContainer>
+  </div>
+);
+
+PopoverMenu.propTypes = {
+  children: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
+};
+
+PopoverMenu.defaultProps = {
+  onOpen: null,
+};
+
+// Use with PopoverMenu so that popover can correctly adjust to fit the content
+export const PopoverMenuButton = ({ label, emoji, onClick }) => (
+  <Button size="small" type="tertiary" onClick={onClick}>
+    <div className={styles.popoverButtonContent}>
+      {label} <Emoji name={emoji} />
+    </div>
+  </Button>
+);
+
+PopoverMenuButton.propTypes = {
+  label: PropTypes.string.isRequired,
+  emoji: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
