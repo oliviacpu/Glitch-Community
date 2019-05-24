@@ -25,6 +25,8 @@ import { CreateCollectionWithProject } from 'Components/collection/create-collec
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
+
+import useDebouncedValue from '../../hooks/use-debounced-value';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 
@@ -93,9 +95,10 @@ const AlreadyInCollection = ({ project, collections }) => (
 
 function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
+  const debouncedQuery = useDebouncedValue(query, 200);
   const filters = collectionType === 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
-  const searchResults = useAlgoliaSearch(query, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
+  const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
 
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
@@ -146,7 +149,6 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           labelText="Filter collections"
           opaque
           type="search"
-          autocomplete={false}
         />
       </PopoverInfo>
 
