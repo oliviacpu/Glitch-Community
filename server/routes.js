@@ -152,7 +152,7 @@ module.exports = function(external) {
         res,
         user.name || `@${user.login}`,
         description,
-        user.avatarThumbnailUrl || 'https://cdn.glitch.com/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932',
+        user.avatarThumbnailUrl || `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932`,
       );
       return;
     }
