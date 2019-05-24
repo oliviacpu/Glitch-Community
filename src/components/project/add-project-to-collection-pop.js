@@ -1,9 +1,8 @@
 // add-project-to-collection-pop -> Add a project to a collection via a project item's menu
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import { flatten, orderBy, partition } from 'lodash';
-import Loader from 'Components/loader';
+import { partition } from 'lodash';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
@@ -22,11 +21,8 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import CollectionResultItem from 'Components/collection/collection-result-item';
-import { getAvatarUrl } from 'Models/project';
 import { getLink as getCollectionLink } from 'Models/collection';
-import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
-import { useAPI } from 'State/api';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
@@ -107,10 +103,10 @@ const AddProjectToCollectionResults = ({ addProjectToCollection, collections, qu
   );
 };
 
-const AlreadyInCollection = ({ project, collectionsWithProject }) => (
+const AlreadyInCollection = ({ project, collections }) => (
   <PopoverInfo>
-    <strong>{project.domain}</strong> is already in <Pluralize count={collectionsWithProject.length} showCount={false} singular="collection" />{' '}
-    {collectionsWithProject
+    <strong>{project.domain}</strong> is already in <Pluralize count={collections.length} showCount={false} singular="collection" />{' '}
+    {collections
       .slice(0, 3)
       .map((collection) => (
         <CollectionLink key={collection.id} collection={collection}>
@@ -118,13 +114,13 @@ const AlreadyInCollection = ({ project, collectionsWithProject }) => (
         </CollectionLink>
       ))
       .reduce((prev, curr) => [prev, ', ', curr])}
-    {collectionsWithProject.length > 3 && (
+    {collections.length > 3 && (
       <>
         , and{' '}
         <div className={styles.moreCollectionsBadge}>
-          <Badge>{collectionsWithProject.length - 3}</Badge>
+          <Badge>{collections.length - 3}</Badge>
         </div>{' '}
-        <Pluralize count={collectionsWithProject.length - 3} singular="other" showCount={false} />
+        <Pluralize count={collections.length - 3} singular="other" showCount={false} />
       </>
     )}
   </PopoverInfo>
@@ -134,17 +130,17 @@ function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
   const filters = collectionType == 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
-  const searchResults = useAlgoliaSearch(query, filters);
+  const searchResults = useAlgoliaSearch(query, { ...filters, filterTypes: ['collection'] });
 
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
     [searchResults.collection, project.id],
   );
-  
-  return { collections, collectionsWithProject }
+
+  return { collections, collectionsWithProject };
 }
 
-export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover }) => {
+export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
   const [collectionType, setCollectionType] = useState('user');
   const [query, setQuery] = useState('');
   const { collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
@@ -162,70 +158,42 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     togglePopover();
   };
 
-  const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
-  const filteredCollections = useMemo(
-    () => (collections || []).filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)).slice(0, 20),
-    [debouncedQuery, collections],
-  );
-  const { activeIndex, onKeyDown } = useActiveIndex(filteredCollections, addProject);
+  const { activeIndex, onKeyDown } = useActiveIndex(collections, addProject);
 
   return (
-    <MultiPopover
-      views={{
-        createCollectionPopover: () => <div>TODO</div>,
-      }}
-    >
-      {({ createCollectionPopover }) => (
-        <PopoverDialog wide align="right">
-          {/* Only show this nested popover title from project-options */}
-          {fromProject && <AddProjectPopoverTitle project={project} />}
+    <PopoverDialog wide align="right">
+      {/* Only show this nested popover title from project-options */}
+      {fromProject && <AddProjectPopoverTitle project={project} />}
 
-          {currentUser.teams.length > 0 && (
-            <PopoverActions>
-              <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
-            </PopoverActions>
-          )}
-
-          {collections && collections.length > 0 && (
-            <PopoverInfo>
-              <TextInput
-                autoFocus
-                value={query}
-                onChange={setQuery}
-                onKeyDown={onKeyDown}
-                placeholder="Filter collections"
-                labelText="Filter collections"
-                opaque
-                type="search"
-              />
-            </PopoverInfo>
-          )}
-
-          {collections ? (
-            <AddProjectToCollectionResults
-              addProjectToCollection={addProject}
-              collections={filteredCollections}
-              query={query}
-              activeIndex={activeIndex}
-            />
-          ) : (
-            <PopoverActions>
-              <Loader />
-            </PopoverActions>
-          )}
-
-          {collections && collectionsWithProject.length > 0 && (
-            <AlreadyInCollection project={project} collectionsWithProject={collectionsWithProject} />
-          )}
-
-          <PopoverActions>
-            <Button size="small" type="tertiary" onClick={createCollectionPopover}>
-              Add to a new collection
-            </Button>
-          </PopoverActions>
-        </PopoverDialog>
+      {currentUser.teams.length > 0 && (
+        <PopoverActions>
+          <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
+        </PopoverActions>
       )}
-    </MultiPopover>
+
+      <PopoverInfo>
+        <TextInput
+          autoFocus
+          value={query}
+          onChange={setQuery}
+          onKeyDown={onKeyDown}
+          placeholder="Filter collections"
+          labelText="Filter collections"
+          opaque
+          type="search"
+        />
+      </PopoverInfo>
+
+      <AddProjectToCollectionResults addProjectToCollection={addProject} collections={collections} query={query} activeIndex={activeIndex} />
+
+      {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
+
+      <PopoverActions>
+        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
+          Add to a new collection
+        </Button>
+      </PopoverActions>
+    </PopoverDialog>
   );
 };
 
@@ -234,6 +202,7 @@ AddProjectToCollectionBase.propTypes = {
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
   addProjectToCollection: PropTypes.func.isRequired,
+  createCollectionPopover: PropTypes.func.isRequired,
 };
 
 const AddProjectToCollection = ({ project, addProjectToCollection }) => (
@@ -246,12 +215,21 @@ const AddProjectToCollection = ({ project, addProjectToCollection }) => (
     }
   >
     {({ togglePopover }) => (
-      <AddProjectToCollectionBase
-        addProjectToCollection={addProjectToCollection}
-        fromProject={false}
-        project={project}
-        togglePopover={togglePopover}
-      />
+      <MultiPopover
+        views={{
+          createCollectionPopover: () => <div>TODO</div>,
+        }}
+      >
+        {({ createCollectionPopover }) => (
+          <AddProjectToCollectionBase
+            addProjectToCollection={addProjectToCollection}
+            fromProject={false}
+            project={project}
+            togglePopover={togglePopover}
+            createCollectionPopover={createCollectionPopover}
+          />
+        )}
+      </MultiPopover>
     )}
   </PopoverWithButton>
 );

@@ -167,7 +167,7 @@ function createAlgoliaProvider(api) {
         query,
         hitsPerPage: 100,
         filters: buildCollectionFilters({ teamIDs, userIDs }),
-      }),
+      }).then(formatAlgoliaResult('collection')),
     project: (query, { notSafeForKids }) =>
       searchIndices.project
         .search({
