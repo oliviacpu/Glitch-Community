@@ -27,7 +27,7 @@ import { useCurrentUser } from 'State/current-user';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 
-import CreateCollectionPop from './create-collection-pop';
+import { CreateCollectionWithProject } from './create-collection-pop';
 import styles from './popover.styl';
 
 const collectionTypeOptions = [
@@ -207,7 +207,13 @@ const AddProjectToCollection = ({ project, addProjectToCollection }) => (
       <MultiPopover
         views={{
           createCollectionPopover: () => (
-            <CreateCollectionPop addProjectToCollection={addProjectToCollection} project={project} togglePopover={togglePopover} />
+            <CreateCollectionWithProject
+              addProjectToCollection={(...args) => {
+                addProjectToCollection(...args);
+                togglePopover();
+              }}
+              project={project}
+            />
           ),
         }}
       >

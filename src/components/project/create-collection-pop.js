@@ -24,8 +24,8 @@ const getUserOption = (currentUser) => ({
   value: null,
   label: (
     <span>
-      myself
       <UserAvatar user={currentUser} hideTooltip />
+      myself
     </span>
   ),
 });
@@ -34,8 +34,8 @@ const getTeamOption = (team) => ({
   value: team.id,
   label: (
     <span id={team.id}>
-      {team.name}
       <TeamAvatar team={team} hideTooltip />
+      {team.name}
     </span>
   ),
 });
@@ -112,13 +112,7 @@ function CreateCollectionPopBase({ title, onSubmit, options }) {
   );
 }
 
-CreateCollectionPopBase.propTypes = {
-  title: PropTypes.node,
-  options: PropTypes.array,
-  onSubmit: PropTypes.func.isRequired,
-};
-
-function CreateCollectionWithProject({ project, addProjectToCollection }) {
+export function CreateCollectionWithProject({ project, addProjectToCollection }) {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
@@ -130,7 +124,7 @@ function CreateCollectionWithProject({ project, addProjectToCollection }) {
   const onSubmit = (collection) => {
     track();
     if (!collection || !collection.id) return;
-    const addProject = addProjectToCollection || ((project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`));
+    const addProject = addProjectToCollection || (() => api.patch(`collections/${collection.id}/add/${project.id}`));
 
     try {
       // TODO: should this block?
@@ -148,6 +142,11 @@ function CreateCollectionWithProject({ project, addProjectToCollection }) {
   return <CreateCollectionPopBase title={title} options={options} onSubmit={onSubmit} />;
 }
 
+CreateCollectionWithProject.propTypes = {
+  project: PropTypes.object.isRequired,
+  addProjectToCollection: PropTypes.func.isRequired,
+};
+
 const CreateCollectionPop = withRouter(({ team, history }) => {
   const { currentUser } = useCurrentUser();
   const options = team ? [getTeamOption(team)] : [getUserOption(currentUser)];
@@ -158,4 +157,12 @@ const CreateCollectionPop = withRouter(({ team, history }) => {
     </PopoverWithButton>
   );
 });
+
+CreateCollectionPop.propTypes = {
+  team: PropTypes.object,
+};
+CreateCollectionPop.defaultProps = {
+  team: null,
+};
+
 export default CreateCollectionPop;

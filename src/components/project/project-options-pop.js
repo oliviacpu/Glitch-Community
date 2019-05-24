@@ -6,6 +6,7 @@ import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuBu
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
+import { CreateCollectionWithProject } from './create-collection-pop';
 
 const isTeamProject = ({ currentUser, project }) => {
   for (const team of currentUser.teams) {
@@ -148,7 +149,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
                 addProjectToCollection={projectOptions.addProjectToCollection}
               />
             ),
-            createCollection: () => <div>TODO</div>,
+            createCollection: () => <CreateCollectionWithProject project={project} addProjectToCollection={projectOptions.addProjectToCollection} />,
           }}
         >
           {({ addToCollection }) => (
