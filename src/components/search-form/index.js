@@ -105,7 +105,7 @@ const { actions, reducer } = createSlice({
   }),
 });
 
-function AlgoliaSearchController({ visible, setVisible, children, defaultValue, useSearchProvider }) {
+function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
   const initialState = {
     selectedResult: null,
     query: defaultValue,
@@ -113,7 +113,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue, 
     results: [],
   };
   const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState);
-  const algoliaResults = useSearchProvider(query);
+  const algoliaResults = useAlgoliaSearch(query);
 
   useEffect(() => {
     // use last complete results
@@ -162,40 +162,20 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue, 
   });
 }
 
-function LegacySearchController({ children, defaultValue }) {
-  const [query, onChange] = useState(defaultValue);
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if (!query) return;
-    window.location = `/search?q=${query}`;
-  };
-
-  return children({
-    query,
-    onChange,
-    onSubmit,
-    autoComplete: 'on',
-    autoCompleteResults: null,
-  });
+function SearchController({ children, defaultValue }) {
+  return (
+    <PopoverContainer>
+      {(popoverProps) => (
+        <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue}>
+          {children}
+        </AlgoliaSearchController>
+      )}
+    </PopoverContainer>
+  );
 }
 
-function SearchController({ children, defaultValue, showAutocomplete, useSearchProvider }) {
-  if (showAutocomplete) {
-    return (
-      <PopoverContainer>
-        {(popoverProps) => (
-          <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue} useSearchProvider={useSearchProvider}>
-            {children}
-          </AlgoliaSearchController>
-        )}
-      </PopoverContainer>
-    );
-  }
-  return <LegacySearchController defaultValue={defaultValue}>{children}</LegacySearchController>;
-}
-
-export const BaseSearchForm = (props) => (
-  <SearchController {...props}>
+const SearchForm = ({ defaultValue }) => (
+  <SearchController defaultValue={defaultValue}>
     {({ query, onChange, onFocus, onSubmit, onKeyDown, autoComplete, autoCompleteResults }) => (
       <form
         className={styles.container}
@@ -222,11 +202,6 @@ export const BaseSearchForm = (props) => (
     )}
   </SearchController>
 );
-
-const SearchForm = ({ defaultValue }) => {
-  const algoliaFlag = useDevToggle('Algolia Search');
-  return <BaseSearchForm defaultValue={defaultValue} showAutocomplete={algoliaFlag} useSearchProvider={useAlgoliaSearch} />;
-};
 
 SearchForm.propTypes = {
   defaultValue: PropTypes.string,
