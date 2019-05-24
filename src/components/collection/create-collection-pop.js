@@ -122,13 +122,12 @@ export function CreateCollectionWithProject({ project, addProjectToCollection })
     ...inherited,
     origin: `${inherited.origin} project`,
   }));
-  const onSubmit = (collection) => {
+  const onSubmit = async (collection) => {
     track();
     if (!collection || !collection.id) return;
 
     try {
-      // TODO: should this block?
-      addProjectToCollection(project, collection);
+      await addProjectToCollection(project, collection);
 
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
       createNotification(content, 'notifySuccess');

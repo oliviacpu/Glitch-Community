@@ -116,7 +116,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
           <ResultsList scroll items={visibleProjects}>
             {(project, i) => (
               <ScrollResult active={i === activeIndex}>
-                <ProjectResultItem project={project} onClick={() => onClick(project)} />
+                <ProjectResultItem project={project} active={i === activeIndex} onClick={() => onClick(project)} />
               </ScrollResult>
             )}
           </ResultsList>
