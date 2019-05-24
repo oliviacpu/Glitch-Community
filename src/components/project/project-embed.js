@@ -28,7 +28,7 @@ const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCol
   const BottomRight = () => (
     <>
       {currentUser.login && (
-        <span style={styles.addToCollectionWrap}>
+        <span className={styles.addToCollectionWrap}>
           <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
         </span>
       )}
