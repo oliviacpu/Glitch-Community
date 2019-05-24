@@ -118,6 +118,7 @@ module.exports = function(external) {
     ]);
 
     const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
+
     const description =
       usesDefaultDescription || !project.description ? 'TODO, need to discuss with Ezra' : cheerio.load(md.render(project.description)).text();
 
