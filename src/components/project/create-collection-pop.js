@@ -42,8 +42,6 @@ function getOptions(currentUser) {
   return [userOption, ...teamOptions];
 }
 
-const defaultAddProjectToCollection = (api) => (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-
 const useCollections = createAPIHook((api, teamId, currentUser) => {
   if (teamId) {
     return getAllPages(api, `/v1/teams/by/id/collections?id=${teamId}&limit=100`);
@@ -51,9 +49,9 @@ const useCollections = createAPIHook((api, teamId, currentUser) => {
   return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
 });
 
-export function CreateCollectionPopBase({ addProjectToCollection, togglePopover, project, onProjectAddedToCollection }) {
+
+function CreateCollectionPopBase({ title, onSubmit }) {
   const api = useAPI();
-  const addProject = addProjectToCollection || defaultAddProjectToCollection(api);
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
 
@@ -70,10 +68,6 @@ export function CreateCollectionPopBase({ addProjectToCollection, togglePopover,
   const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
   const error = hasQueryError ? 'You already have a collection with this name' : '';
 
-  const track = useTracker('Create Collection clicked', (inherited) => ({
-    ...inherited,
-    origin: `${inherited.origin} project`,
-  }));
   
   const submitDisabled = loading || collectionName.length === 0;
 
@@ -81,28 +75,14 @@ export function CreateCollectionPopBase({ addProjectToCollection, togglePopover,
     if (submitDisabled) return;
     event.preventDefault();
     setLoading(true);
-    track();
     const collection = await createCollection(api, collectionName, selection.value, createNotification);
-    togglePopover();
-    if (!collection || !collection.id || !project) return;
+    onSubmit(collection);
 
-    try {
-      // TODO: should this block?
-      addProject(project, collection);
-      
-      // TODO: does this have fullUrl?
-      const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
-      createNotification(content, 'notifySuccess');
-      onProjectAddedToCollection(collection);
-    } catch (e) {
-      createNotification('Unable to add project to collection.', 'notifyError');
-    }
   }
 
   return (
     <PopoverDialog wide align="right">
-      {project && 
-      <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>}
+      {title}
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
@@ -140,16 +120,46 @@ CreateCollectionPopBase.propTypes = {
   project: PropTypes.object,
   togglePopover: PropTypes.func.isRequired,
   onProjectAddedToCollection: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 CreateCollectionPopBase.defaultProps = {
   addProjectToCollection: null,
   onProjectAddedToCollection: () => {},
+  onSubmit: () => {},
 };
 
-const 
+function CreateCollectionWithProject ({ project, addProjectToCollection }) {
+  const api = useAPI();
+  const track = useTracker('Create Collection clicked', (inherited) => ({
+    ...inherited,
+    origin: `${inherited.origin} project`,
+  }));
+  const onSubmit = (collection) => {
+    if (!collection || !collection.id) return;
+    const addProject = addProjectToCollection || ((project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`));
+    
+    try {
+      // TODO: should this block?
+      addProject(project, collection);
+      
+      // TODO: does this have fullUrl?
+      const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
+      createNotification(content, 'notifySuccess');
+      onProjectAddedToCollection(collection);
+    } catch (e) {
+      createNotification('Unable to add project to collection.', 'notifyError');
+    }
+  }
+  const title = 
+      <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>
+}
 
 
+const CreateCollectionPop = () => (
+  <PopoverWithButton buttonText="Create Collection">
+    {({ togglePopover }) => <CreateCollectionPopBase onSubmit={() => togglePopover()} />}
+  </PopoverWithButton>
+)
 
-
-// TODO: make popover with button for 'create collection' button on user/team page
+export default CreateCollectionPop;
