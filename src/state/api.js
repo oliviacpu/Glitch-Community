@@ -1,7 +1,6 @@
 /* globals API_URL */
 import React, { useState, useEffect, useContext, useRef, createContext } from 'react';
 import axios from 'axios';
-import { setupCache } from 'axios-cache-adapter';
 import { memoize } from 'lodash';
 import { useCurrentUser } from './current-user';
 import { captureException } from '../utils/sentry';
@@ -9,7 +8,10 @@ import { captureException } from '../utils/sentry';
 export const Context = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
-  const cache = setupCache({ maxAge: 15 * 60 * 1000 }); // 1 minute -- just enough for requests on a single page load
+  const cache 
+  
+  
+  // const cache = { maxAge: 15 * 60 * 1000 }); // 1 minute -- just enough for requests on a single page load
   if (persistentToken) {
     return axios.create({
       baseURL: API_URL,
