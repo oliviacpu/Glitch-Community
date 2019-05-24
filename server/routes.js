@@ -112,8 +112,8 @@ module.exports = function(external) {
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
 
     const helloTemplateDescriptions = new Set([
-      'Your very own basic webpage, ready for you to customize.',
-      'A simple Node app built on Express, immediately up and running.',
+      'Your very own basic web page, ready for you to customize.',
+      'A simple Node app built on Express, instantly up and running.',
       'A simple Node app with a SQLite database to hold app data.',
     ]);
 
