@@ -109,6 +109,7 @@ module.exports = function(external) {
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
+    console.log(project);
     const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
 
     await render(res, domain, description, avatar);
