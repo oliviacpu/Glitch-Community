@@ -9,6 +9,7 @@ import Emoji from 'Components/images/emoji';
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
 import styles from './styles.styl';
+import globalStyles from '../global.styl';
 
 /*
 A popover is a light, hollow roll made from an egg batter similar to
@@ -114,10 +115,10 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
         <div>
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
-              <div className="visuallyHidden">{label}</div>
               <div className={styles.arrowPadding}>
                 <div className={styles.downArrow} />
               </div>
+              <div className={globalStyles.visuallyHidden}>{label}</div>
             </TransparentButton>
           </div>
           {popoverProps.visible && renderChildren(popoverProps)}
