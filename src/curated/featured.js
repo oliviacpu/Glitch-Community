@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Create Shareable Audio Clips',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FGlitchfinal5TsjisseTalsma.jpg?1546519621503',
-    link: 'https://glitch.com/~audiogram'
+    title: 'Draw Your Own Magic Eye Art',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fmagic-eye_GLITCH.png?1543234498314',
+    link: 'https://glitch.com/~magic-eye'
   },  
   {
-    title: 'An App with a View',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fblue-ridge.png?1539601709907',
-    link: 'https://glitch.com/~blueridge'
+    title: 'Take On Another Project?',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fshould-i-do-it.jpg?1538392879435',
+    link: 'https://glitch.com/~shouldidoit'
   },
   {
-    title: 'Your Next Must-have Subscription?',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsubscribe2me.png?1535971898937',
-    link: 'https://glitch.com/~subscribe2me'  
+    title: 'Turn Off Retweets',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fturn-off-retweets.png?1535971899505',
+    link: 'https://glitch.com/~turn-off-retweets'  
   }
 ];

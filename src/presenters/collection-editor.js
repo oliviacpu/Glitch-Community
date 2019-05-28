@@ -96,7 +96,7 @@ class CollectionEditor extends React.Component {
       displayNewNote: (projectId) => this.displayNewNote(projectId),
       updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       hideNote: (projectId) => this.hideNote(projectId),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleError),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       updateColor: (color) => this.updateFields({ coverColor: color }),
       featureProject: (id) => this.featureProject(id).catch(handleError),
       unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
