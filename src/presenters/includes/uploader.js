@@ -2,6 +2,7 @@ import React from 'react';
 
 import { uploadAsset, uploadAssetSizes } from '../../utils/assets';
 import { useNotifications } from '../notifications';
+import { captureException } from './utils/sentry';
 
 const NotifyUploading = ({ progress }) => (
   <>
@@ -31,11 +32,9 @@ async function uploadWrapper(notifications, upload) {
       notifications.createNotification('Image uploaded!');
     });
   } catch (e) {
+    captureException(e);
     notifications.createErrorNotification(<NotifyError />);
     removeNotification();
-    // throw e;
-    
-    
   }
   return result;
 }
