@@ -135,6 +135,7 @@ class CreateCollectionPop extends React.Component {
   render() {
     const { error, query } = this.state;
     const { collections, createNotification, focusFirstElement } = this.props;
+    console.log(collections);
     const { teams } = this.props.currentUser;
     let queryError; // if user already has a collection with the specified name
 
