@@ -9,6 +9,7 @@ import Emoji from 'Components/images/emoji';
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
 import styles from './styles.styl';
+import globalStyles from '../global.styl';
 
 /*
 A popover is a light, hollow roll made from an egg batter similar to
@@ -108,7 +109,7 @@ PopoverWithButton.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
+export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
   <div className={styles.popoverMenuWrap}>
     <PopoverContainer onOpen={onOpen}>
       {(popoverProps) => (
@@ -116,8 +117,9 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
               <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} aria-label="options" />
+                <div className={styles.downArrow} />
               </div>
+              <div className={globalStyles.visuallyHidden}>{label}</div>
             </TransparentButton>
           </div>
           {popoverProps.visible && renderChildren(popoverProps)}
@@ -128,21 +130,25 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
 );
 
 PopoverMenu.propTypes = {
+  label: PropTypes.string,
   children: PropTypes.func.isRequired,
   onOpen: PropTypes.func,
 };
 
 PopoverMenu.defaultProps = {
+  label: 'options',
   onOpen: null,
 };
 
 // Use with PopoverMenu so that popover can correctly adjust to fit the content
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
-  <Button size="small" type="tertiary" onClick={onClick}>
-    <div className={styles.popoverButtonContent}>
-      {label} <Emoji name={emoji} />
-    </div>
-  </Button>
+  <div className={styles.menuButtonWrap}>
+    <Button size="small" type="tertiary" onClick={onClick}>
+      <div className={styles.popoverButtonContent}>
+        {label} <Emoji name={emoji} />
+      </div>
+    </Button>
+  </div>
 );
 
 PopoverMenuButton.propTypes = {

@@ -248,6 +248,21 @@ class CurrentUserManager extends React.Component {
     this.props.setCachedUser(undefined);
   }
 
+  superUserHelpers() {
+    const { cachedUser } = this.props;
+    const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
+
+    return {
+      toggleSuperUser: async () => {
+        await this.api().post(`https://support-toggle.glitch.me/support/${superUserFeature ? 'disable' : 'enable'}`);
+        window.scrollTo(0, 0);
+        window.location.reload();
+      },
+      canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
+      superUserFeature,
+    };
+  }
+
   render() {
     const { children, sharedUser, cachedUser } = this.props;
     return children({
@@ -258,6 +273,7 @@ class CurrentUserManager extends React.Component {
       login: (user) => this.login(user),
       update: (changes) => this.update(changes),
       clear: () => this.logout(),
+      superUserHelpers: this.superUserHelpers(),
     });
   }
 }

@@ -6,9 +6,9 @@ import styles from './results-list.styl';
 const ResultsList = ({ scroll, items, className, children }) => (
   <div className={classnames(scroll && styles.scrollContainer, className)}>
     <ul className={styles.resultsList}>
-      {items.map((item) => (
-        <li key={item.id} className={styles.resultItem}>
-          {children(item)}
+      {items.map((item, i) => (
+        <li key={item.id} className={classnames(styles.resultItem)}>
+          {children(item, i)}
         </li>
       ))}
     </ul>

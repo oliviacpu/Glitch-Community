@@ -5,7 +5,7 @@ import styles from './button.styl';
 
 /**
 Transparent buttons are useful for making a whole container clickable, without breaking accessibility.
-This should be used for containers that have descriptive text contents, not icon buttons.
+If you're using this for an icon button, be sure to also include an accessible label.
 */
 
 const TransparentButton = ({ children, onClick, className }) => (
