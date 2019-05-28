@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { uploadAsset, uploadAssetSizes } from '../../utils/assets';
+import { captureException } from '../../utils/sentry';
 import { useNotifications } from '../notifications';
-import { captureException } from './utils/sentry';
 
 const NotifyUploading = ({ progress }) => (
   <>
@@ -20,7 +20,7 @@ async function uploadWrapper(notifications, upload) {
     'notifyUploading',
   );
   try {
-    throw new Error("this is a fake error")
+    throw new Error("FAKE")
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
         progress = loaded / total;
@@ -28,13 +28,15 @@ async function uploadWrapper(notifications, upload) {
         progress = (progress + 1) / 2;
       }
       updateNotification(<NotifyUploading progress={progress} />);
-      removeNotification();
-      notifications.createNotification('Image uploaded!');
     });
   } catch (e) {
     captureException(e);
     notifications.createErrorNotification(<NotifyError />);
     removeNotification();
+    return result;
+  } finally {
+    removeNotification();
+    notifications.createNotification('Image uploaded!');
   }
   return result;
 }
