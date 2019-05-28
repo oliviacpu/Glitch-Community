@@ -39,6 +39,7 @@ export const PopoverActions = ({ ...props }) => <PopoverSection {...props} class
 export const PopoverInfo = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverInfo} />;
 export const PopoverTitle = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverTitle} />;
 export const InfoDescription = ({ children }) => <p className={styles.infoDescription}>{children}</p>;
+export const ActionDescription = ({ children }) => <p className={styles.actionDescription}>{children}</p>;
 
 const MultiPopoverContext = createContext();
 
