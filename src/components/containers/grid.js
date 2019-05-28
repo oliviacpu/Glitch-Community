@@ -18,8 +18,8 @@ const GridContainer = ({ children, gap, minWidth, className, style }) => (
   </ul>
 );
 
-const GridItem = ({ children, ...props }) => (
-  <li className={styles.item} {...props}>
+const GridItem = ({ children, className, ...props }) => (
+  <li className={classnames(styles.item, className)} {...props}>
     {children}
   </li>
 );
@@ -27,14 +27,14 @@ const GridItem = ({ children, ...props }) => (
 const SortableGridContainer = SortableContainer(GridContainer);
 const SortableGridItem = SortableElement(GridItem);
 
-const Grid = ({ items, children, sortable, onReorder, ...props }) => {
+const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props }) => {
   if (sortable) {
     const onDragStart = (event) => event.preventDefault();
     const onSortEnd = ({ oldIndex, newIndex }) => onReorder(items[oldIndex], newIndex);
     return (
       <SortableGridContainer {...props} axis="xy" distance={15} onSortEnd={onSortEnd}>
         {items.map((item, index) => (
-          <SortableGridItem key={item.id} index={index} tabIndex={0} onDragStart={onDragStart}>
+          <SortableGridItem key={item.id} className={itemClassName} index={index} tabIndex={0} onDragStart={onDragStart}>
             {children(item)}
           </SortableGridItem>
         ))}
@@ -43,7 +43,7 @@ const Grid = ({ items, children, sortable, onReorder, ...props }) => {
   }
   return (
     <GridContainer {...props}>
-      {items.map((item) => <GridItem key={item.id}>{children(item)}</GridItem>)}
+      {items.map((item) => <GridItem key={item.id} className={itemClassName}>{children(item)}</GridItem>)}
     </GridContainer>
   );
 };
@@ -54,6 +54,7 @@ Grid.propTypes = {
   sortable: (props) => props.sortable && !props.onReorder && new Error('If a container is sortable, it needs onReorder defined'),
   onReorder: PropTypes.func,
   className: PropTypes.string,
+  itemClassName: PropTypes.string,
   style: PropTypes.object,
   gap: PropTypes.oneOfType([
     PropTypes.shape({ row: PropTypes.node.isRequired, column: PropTypes.node.isRequired }).isRequired,
@@ -66,6 +67,7 @@ Grid.defaultProps = {
   sortable: false,
   onReorder: null,
   className: '',
+  itemClassName: '',
   style: {},
   gap: undefined,
   minWidth: undefined,
