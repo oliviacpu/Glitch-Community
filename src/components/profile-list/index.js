@@ -71,7 +71,8 @@ const RowContainer = ({ size, users, teams }) => {
   const maxTeams = Math.floor(width / (avatarWidth + teamOffset));
   const remainingWidth = width - (avatarWidth + teamOffset) * teams.length - teamOffset;
   const maxUsers = Math.floor((remainingWidth + userOffset) / (avatarWidth + userOffset));
-
+  console.log('🏀', teams);
+  console.log('👩‍👩‍👦‍👦', users);
   return (
     <ul ref={ref} className={classnames(styles.container, styles.row, styles[size])}>
       {teams.slice(0, maxTeams).map((team) => (
