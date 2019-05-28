@@ -48,6 +48,7 @@ const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...p
   return <CollectionResultItem onClick={onClickTracked} collection={collection} {...props} />;
 });
 
+// TODO tbv, pull out collections to confirm that this is the issue
 const AddProjectToCollectionResults = ({ addProjectToCollection, collections, currentUser, project, togglePopover, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
   const filteredCollections = React.useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
