@@ -11,7 +11,6 @@ const NotifyUploading = ({ progress }) => (
   </>
 );
 const NotifyError = ({ e }) => {
-  console.log(e)
   if (e && Object.hasOwnProperty.call(e, "status_code") && e.status_code === 0) {
     return 'File upload failed. Check your firewall settings and try again?'
   }
@@ -26,9 +25,6 @@ async function uploadWrapper(notifications, upload) {
     'notifyUploading',
   );
   try {
-    let errir = new Error("FAKE")
-    errir.status_code = 0;
-    throw errir
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
         progress = loaded / total;
