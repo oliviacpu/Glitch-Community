@@ -10,7 +10,13 @@ const NotifyUploading = ({ progress }) => (
     <progress className="notify-progress" value={progress} />
   </>
 );
-const NotifyError = () => 'File upload failed. Try again in a few minutes?';
+const NotifyError = ({ e }) => {
+  console.log(e)
+  if (e && Object.hasOwnProperty.call(e, "status_code") && e.status_code === 0) {
+    return 'File upload failed. Check your firewall settings and try again?'
+  }
+  return 'File upload failed. Try again in a few minutes?'
+};
 
 async function uploadWrapper(notifications, upload) {
   let result = null;
@@ -20,7 +26,9 @@ async function uploadWrapper(notifications, upload) {
     'notifyUploading',
   );
   try {
-    // throw new Error("FAKE")
+    let errir = new Error("FAKE")
+    errir.status_code = 0;
+    throw errir
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
         progress = loaded / total;
@@ -31,7 +39,7 @@ async function uploadWrapper(notifications, upload) {
     });
   } catch (e) {
     captureException(e);
-    notifications.createErrorNotification(<NotifyError />);
+    notifications.createErrorNotification(<NotifyError e={e} />);
     removeNotification();
     return result;
   }
