@@ -27,7 +27,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
   return (
     <Container items={projects} sortable={sortable} onReorder={onReorder}>
       {(project) => (
-        <>
+        <div className={styles.projectsItem}>
           {collection && (
             <div className={styles.projectsContainerNote}>
               <Note
@@ -40,7 +40,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
             </div>
           )}
           <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
-        </>
+        </div>
       )}
     </Container>
   );
