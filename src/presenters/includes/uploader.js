@@ -25,6 +25,9 @@ async function uploadWrapper(notifications, upload) {
     'notifyUploading',
   );
   try {
+    let fake = new Error("i'm bad")
+    fake.status_code = 0
+    throw fake
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
         progress = loaded / total;
