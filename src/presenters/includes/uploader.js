@@ -11,7 +11,7 @@ const NotifyUploading = ({ progress }) => (
   </>
 );
 const NotifyError = ({ e }) => {
-  if (e && Object.hasOwnProperty.call(e, "status_code") && e.status_code === 0) {
+  if (e && Object.hasOwnProperty.call(e, 'status_code') && e.status_code === 0) {
     return 'File upload failed. Check your firewall settings and try again?';
   }
   return 'File upload failed. Try again in a few minutes?';
@@ -39,7 +39,7 @@ async function uploadWrapper(notifications, upload) {
     removeNotification();
     return result;
   }
-  
+
   removeNotification();
   notifications.createNotification('Image uploaded!');
   return result;
