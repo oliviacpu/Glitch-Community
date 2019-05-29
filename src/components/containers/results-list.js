@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+
+import TransparentButton from 'Components/buttons/transparent-button';
+import Button from 'Components/buttons/button';
+
 import styles from './results-list.styl';
 
 export const ScrollResult = ({ active, children }) => {

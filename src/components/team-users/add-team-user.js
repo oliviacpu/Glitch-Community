@@ -4,19 +4,17 @@ import axios from 'axios';
 import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
-import classnames from 'classnames';
 
 import Loader from 'Components/loader';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
-import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import TextInput from 'Components/inputs/text-input';
 import Emoji from 'Components/images/emoji';
-import UserResultItem from 'Components/user/user-result-item';
+import Thanks from 'Components/thanks';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from 'Components/popover';
-import ResultsList, { ScrollResult, useActiveIndex, ResultItem, ResultInfo } from 'Components/containers/results-list';
-import { ANON_AVATAR_URL, getDisplayName } from 'Models/user';
+import ResultsList, { ScrollResult, useActiveIndex, ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
+import { getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
@@ -33,19 +31,14 @@ const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
 
 const UserResult = ({ result: user, active, onClick }) => (
   <ResultItem onClick={onClick} active={active}>
-        <UserAvatar user={user} />
-        <ResultInfo>
-          <ResultName>{getDisplayName(user)}</ResultName>
-          {!!user.name && <ResultDescription>@{user.login}</div>}
-          <Thanks short count={user.thanksCount} />
-        </ResultInfo>
-      </div>
-    </TransparentButton>
-  </div>
+    <UserAvatar user={user} />
+    <ResultInfo>
+      <ResultName>{getDisplayName(user)}</ResultName>
+      {!!user.name && <ResultDescription>@{user.login}</ResultDescription>}
+      <Thanks short count={user.thanksCount} />
+    </ResultInfo>
+  </ResultItem>
 );
-
-
-const UserResult = ({ result: user, active, onClick }) => <UserResultItem user={user} active={active} onClick={onClick} />;
 
 const InviteByEmail = ({ result: email, active, onClick }) => {
   const { current: color } = useRef(randomColor({ luminosity: 'light' }));
@@ -86,6 +79,111 @@ function useCheckedDomains(query) {
   }, [query, checkedDomains]);
   return checkedDomains;
 }
+
+function SearchPopover ({ }) {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebouncedValue(query, 200);
+  
+  
+  const checkedDomains = useCheckedDomains(debouncedQuery);
+
+  const { user: retrievedUsers, status } = useAlgoliaSearch(
+    debouncedQuery,
+    {
+      filterTypes: ['user'],
+    },
+    [],
+  );
+
+  const results = useMemo(() => {
+    const memberSet = new Set(members);
+    const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
+    const out = [];
+
+    const email = parseOneAddress(query);
+    if (email && allowEmailInvites) {
+      out.push({
+        id: 'invite-by-email',
+        result: email.address,
+        onClick: () => inviteEmail(email.address),
+        component: InviteByEmail,
+      });
+    }
+
+    if (setWhitelistedDomain && !whitelistedDomain) {
+      const domain = getDomain(query);
+      if (domain && checkedDomains[domain]) {
+        out.push({
+          id: 'whitelist-email-domain',
+          result: domain,
+          onClick: () => setWhitelistedDomain(domain),
+          component: WhitelistEmailDomain,
+        });
+      }
+    }
+
+    // now add the actual search results
+    out.push(
+      ...filteredUsers.map((user) => ({
+        id: user.id,
+        result: user,
+        onClick: () => inviteUser(user),
+        component: UserResult,
+      })),
+    );
+
+    return out;
+  }, [query, retrievedUsers, members, whitelistedDomain]);
+
+  const { activeIndex, onKeyDown } = useActiveIndex(results, (result) => result.onClick());
+
+  return (
+    <PopoverDialog align="left">
+      <PopoverInfo>
+        <TextInput
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          labelText="User name"
+          value={query}
+          onChange={setQuery}
+          onKeyDown={onKeyDown}
+          opaque
+          placeholder="Search for a user"
+          type="search"
+        />
+      </PopoverInfo>
+      {!query && !!setWhitelistedDomain && !whitelistedDomain && (
+        <PopoverInfo>
+          <InfoDescription>You can also whitelist with @example.com</InfoDescription>
+        </PopoverInfo>
+      )}
+      {query.length > 0 && status === 'loading' && (
+        <PopoverActions>
+          <Loader />
+        </PopoverActions>
+      )}
+      {query.length > 0 && status === 'ready' && results.length === 0 && (
+        <PopoverActions>
+          <InfoDescription>
+            Nothing found <Emoji name="sparkles" />
+          </InfoDescription>
+        </PopoverActions>
+      )}
+      {query.length > 0 && status === 'ready' && results.length > 0 && (
+        <PopoverSection>
+          <ResultsList scroll items={results}>
+            {({ onClick, result, component: Component }, i) => (
+              <ScrollResult active={i === activeIndex}>
+                <Component active={i === activeIndex} result={result} onClick={onClick} />
+              </ScrollResult>
+            )}
+          </ResultsList>
+        </PopoverSection>
+      )}
+    </PopoverDialog>
+  );
+}
+
+
 
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [query, setQuery] = useState('');
