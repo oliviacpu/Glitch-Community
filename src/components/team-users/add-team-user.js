@@ -57,7 +57,7 @@ const getDomain = (query) => {
 };
 
 function useCheckedDomains(query) {
-  const [checkedDomains, setCheckedDomains] = useState({ 'gmail.com': true, 'yahoo.com': true });
+  const [checkedDomains, setCheckedDomains] = useState({ 'gmail.com': false, 'yahoo.com': false });
   useEffect(() => {
     const domain = getDomain(query);
     if (!domain || domain in checkedDomains) return undefined;
