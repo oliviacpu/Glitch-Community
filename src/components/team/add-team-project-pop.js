@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { useCurrentUser } from 'State/current-user';
-import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, ActionDescription } from 'Components/popover';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDescription } from 'Components/popover';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import ProjectResultItem from 'Components/project/project-result-item';
 import Emoji from 'Components/images/emoji';
+import TextInput from 'Components/inputs/text-input';
+import { useCurrentUser } from 'State/current-user';
 
 const filterProjects = (query, projects, teamProjects) => {
   query = query.toLowerCase().trim();
@@ -38,20 +39,18 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
   const filteredProjects = useMemo(() => filterProjects(query, myProjects, teamProjects), [query, myProjects, teamProjects]);
   const { activeIndex, onKeyDown } = useActiveIndex(filteredProjects, addProject);
 
-  const filterPlaceholder = 'Filter my projects';
-
   return (
     <PopoverDialog wide align="left">
       <PopoverInfo>
-        <input
-          onChange={(event) => {
-            setQuery(event.target.value);
-          }}
-          id="team-project-search"
-          className="pop-over-input search-input pop-over-search"
-          placeholder={filterPlaceholder}
-          aria-label={filterPlaceholder}
+        <TextInput
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          labelText="Project name"
+          value={query}
+          onChange={setQuery}
+          onKeyDown={onKeyDown}
+          opaque
+          placeholder="Filter my projects"
+          type="search"
         />
       </PopoverInfo>
 
