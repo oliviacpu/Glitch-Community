@@ -48,8 +48,7 @@ const AddProjectToCollectionResultItem = React.memo(({ onClick, collection, ...p
   return <CollectionResultItem onClick={onClickTracked} collection={collection} {...props} />;
 });
 
-// TODO tbv, pull out collections to confirm that this is the issue
-const AddProjectToCollectionResults = ({ addProjectToCollection, collections currentUser, project, togglePopover, query }) => {
+const AddProjectToCollectionResults = ({ addProjectToCollection, collections, currentUser, project, togglePopover, query }) => {
   const debouncedQuery = useDebouncedValue(query.toLowerCase().trim(), 300);
   const filteredCollections = React.useMemo(() => collections.filter((collection) => collection.name.toLowerCase().includes(debouncedQuery)), [
     debouncedQuery,
@@ -217,7 +216,7 @@ export const AddProjectToCollectionBase = (props) => {
 
   React.useEffect(() => {
     let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
+    setMaybeCollections(null); // reset maybeCollections on reload to show loader
 
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
 
@@ -262,7 +261,7 @@ export const AddProjectToCollectionBase = (props) => {
   return (
     <NestedPopover
       alternateContent={() => (
-        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
       )}
       startAlternateVisible={false}
     >
