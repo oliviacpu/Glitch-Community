@@ -5,15 +5,12 @@ import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
 
-import Loader from 'Components/loader';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
-import TextInput from 'Components/inputs/text-input';
-import Emoji from 'Components/images/emoji';
 import Thanks from 'Components/thanks';
-import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from 'Components/popover';
-import ResultsList, { ScrollResult, useActiveIndex, ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
+import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
+import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import { getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
@@ -80,8 +77,6 @@ function useCheckedDomains(query) {
   return checkedDomains;
 }
 
-
-
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [value, onChange] = useState('');
   const debouncedValue = useDebouncedValue(value, 200);
@@ -136,26 +131,24 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
   }, [debouncedValue, retrievedUsers, members, whitelistedDomain]);
 
   return (
-    <SearchPopover
-      value={value}
-      onChange={onChange}
-      results={results}
-      status={status}
-      onSubmit={(result) => result.onClick()}
-      align="left"
-      labelText="User name"
-      placeholder="Search for a user"
-      renderInitial={() => (
-        <>
-          {!!setWhitelistedDomain && !whitelistedDomain && (
-            <PopoverInfo>
-              <InfoDescription>You can also whitelist with @example.com</InfoDescription>
-            </PopoverInfo>
-          )}
-        </>
+    <PopoverDialog align="right">
+      <PopoverSearch
+        value={value}
+        onChange={onChange}
+        results={results}
+        status={status}
+        onSubmit={(result) => result.onClick()}
+        align="left"
+        labelText="User name"
+        placeholder="Search for a user"
+        renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
+      />
+      {!value && !!setWhitelistedDomain && !whitelistedDomain && (
+        <PopoverInfo>
+          <InfoDescription>You can also whitelist with @example.com</InfoDescription>
+        </PopoverInfo>
       )}
-      renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
-    />
+    </PopoverDialog>
   );
 }
 

@@ -1,6 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import 
+import Loader from 'Components/loader';
+import Emoji from 'Components/images/emoji';
+import ResultsList, { useActiveIndex, ScrollResult } from 'Components/containers/results-list';
+import { PopoverActions, PopoverInfo, PopoverSection } from './base';
 
 const PopoverLoader = () => (
   <PopoverActions>
@@ -16,13 +20,12 @@ const NothingFound = () => (
   </PopoverActions>
 );
 
-function SearchPopover({
+function PopoverSearch({
   value,
   onChange,
   results,
   status,
   onSubmit,
-  align,
   renderInitial,
   renderItem,
   renderNoResults,
@@ -32,9 +35,8 @@ function SearchPopover({
 }) {
   const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
 
-
   return (
-    <PopoverDialog align={align}>
+    <>
       <PopoverInfo>
         <TextInput
           autoFocus
@@ -57,12 +59,14 @@ function SearchPopover({
       )}
       {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
       {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
-    </PopoverDialog>
+    </>
   );
 }
 
-SearchPopover.defaultProps = {
+PopoverSearch.defaultProps = {
   renderInitial: () => null,
   renderLoader: () => <PopoverLoader />,
   renderNoResults: () => <NothingFound />,
 };
+
+export default PopoverSearch;
