@@ -30,6 +30,8 @@ const envs = {
   },
 };
 
+const tagline = 'friendly community where everyone can discover & create the best apps on the web.';
+
 // in the backend, just switch between staging and production
 // the client supports RUNNING_ON = development
 const currentEnv = process.env.RUNNING_ON === 'staging' ? 'staging' : 'production';
@@ -37,4 +39,5 @@ module.exports = {
   ...envs,
   current: envs[currentEnv],
   currentEnv,
+  tagline,
 };
