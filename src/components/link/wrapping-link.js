@@ -17,6 +17,7 @@ const WrappingLink = withRouter(({ href, children, className, style, history }) 
     console.log("href", href)
     history.push(href);
   };
+  console.log(href, "hhhh")
   return (
     <div data-href onClick={handler} className={className} style={style} role="presentation">
       {children}
