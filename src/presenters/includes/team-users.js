@@ -8,47 +8,51 @@ import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
-import { PopoverContainer, PopoverDialog, PopoverActions } from 'Components/popover';
+import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
+import Emoji from 'Components/images/emoji';
+import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
+import { captureException } from 'Utils/sentry';
+
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
-import { captureException } from '../../utils/sentry';
 
 // Whitelisted domain icon
 
-const tooltip = `Anyone with an @${domain} email can join`;
-const WhitelistedDomain = ({ domain, setDomain }) =>  (
-    <PopoverContainer>
-      {() => (
-        <PopoverContainer focusOnPopover>
-          <summary>
-            <TooltipContainer
-              id="whitelisted-domain-tooltip"
-              type="action"
-              tooltip={tooltip}
-              target={
-                <div>
-                  <WhitelistedDomainIcon domain={domain} />
-                </div>
-              }
-            />
-          </summary>
-          <dialog className="pop-over">
-            <section className="pop-over-info">
-              <p className="info-description">{tooltip}</p>
-            </section>
+const WhitelistedDomain = ({ domain, setDomain }) => (
+  <PopoverContainer>
+    {({ visible, togglePopover }) => (
+      <div style={{ position: 'relative' }}>
+        <TransparentButton onClick={togglePopover}>
+          <TooltipContainer
+            id="whitelisted-domain-tooltip"
+            type="action"
+            tooltip={!visible && `Anyone with an @${domain} email can join`}
+            target={
+              <div>
+                <WhitelistedDomainIcon domain={domain} />
+              </div>
+            }
+          />
+        </TransparentButton>
+        {visible && (
+          <PopoverDialog focusOnDialog align="left">
+            <PopoverInfo>
+              <InfoDescription>Anyone with an @{domain} email can join</InfoDescription>
+            </PopoverInfo>
             {!!setDomain && (
-              <section className="pop-over-actions danger-zone">
-                <button className="button button-small button-tertiary button-on-secondary-background has-emoji" onClick={() => setDomain(null)}>
-                  Remove {domain} <span className="emoji bomb" />
-                </button>
-              </section>
+              <PopoverActions type="dangerZone">
+                <Button type="dangerZone" size="small" onClick={() => setDomain(null)}>
+                  Remove {domain} <Emoji name="bomb" />
+                </Button>
+              </PopoverActions>
             )}
-          </dialog>
-        </details>
-      )}
-    </PopoverContainer>
-  );
-
+          </PopoverDialog>
+        )}
+      </div>
+    )}
+  </PopoverContainer>
+);
 
 WhitelistedDomain.propTypes = {
   domain: PropTypes.string.isRequired,
@@ -95,7 +99,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const { value } = useInvitees(team, currentUserIsOnTeam);
   const invitees = value || [];
 
-  const members = uniq([...team.users, ...invitees, ...newlyInvited].map(user => user.id))
+  const members = uniq([...team.users, ...invitees, ...newlyInvited].map((user) => user.id));
 
   const onInviteUser = async (user) => {
     setNewlyInvited((invited) => [...invited, user]);
