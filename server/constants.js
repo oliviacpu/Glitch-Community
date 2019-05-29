@@ -30,7 +30,7 @@ const envs = {
   },
 };
 
-const tagline = (prefix = '') => `${prefix}friendly community where everyone can discover & create the best apps on the web.`;
+const tagline = 'friendly community where everyone can discover & create the best apps on the web.';
 
 // in the backend, just switch between staging and production
 // the client supports RUNNING_ON = development
