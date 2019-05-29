@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
 import Emoji from 'Components/images/emoji';
+import TextInput from 'Components/inputs/text-input';
 import ResultsList, { useActiveIndex, ScrollResult } from 'Components/containers/results-list';
-import { PopoverActions, PopoverInfo, PopoverSection } from './base';
+import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './base';
 
 const PopoverLoader = () => (
   <PopoverActions>
@@ -26,10 +27,10 @@ function PopoverSearch({
   results,
   status,
   onSubmit,
-  renderInitial,
   renderItem,
   renderNoResults,
   renderLoader,
+  renderError,
   labelText,
   placeholder,
 }) {
@@ -49,7 +50,6 @@ function PopoverSearch({
           type="search"
         />
       </PopoverInfo>
-      {value.length === 0 && renderInitial()}
       {results.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={results}>
@@ -59,14 +59,29 @@ function PopoverSearch({
       )}
       {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
       {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
+      {status === 'error' && renderError()}
     </>
   );
 }
 
+PopoverSearch.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  results: PropTypes.array.isRequired,
+  status: PropTypes.oneOf(['init', 'loading', 'ready', 'error']).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  renderItem: PropTypes.func.isRequired,
+  renderNoResults: PropTypes.func,
+  renderLoader: PropTypes.func,
+  labelText: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+};
+
 PopoverSearch.defaultProps = {
-  renderInitial: () => null,
   renderLoader: () => <PopoverLoader />,
   renderNoResults: () => <NothingFound />,
+  renderError: () => null,
+  placeholder: null,
 };
 
 export default PopoverSearch;

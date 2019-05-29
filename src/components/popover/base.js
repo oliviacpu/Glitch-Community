@@ -1,7 +1,7 @@
-import React from 'react'
-import classnames from 'classnames'
-import PropTypes from 'prop-types'
-import styles from './styles.styl'
+import React from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import styles from './styles.styl';
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone'];
 export const PopoverSection = ({ className, children, type }) => (

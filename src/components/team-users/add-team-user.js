@@ -18,6 +18,7 @@ import useDevToggle from 'State/dev-toggles';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
+import styles form
 
 const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
   <ResultItem onClick={onClick} active={active}>
@@ -131,14 +132,13 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
   }, [debouncedValue, retrievedUsers, members, whitelistedDomain]);
 
   return (
-    <PopoverDialog align="right">
+    <PopoverDialog align="left">
       <PopoverSearch
         value={value}
         onChange={onChange}
         results={results}
         status={status}
         onSubmit={(result) => result.onClick()}
-        align="left"
         labelText="User name"
         placeholder="Search for a user"
         renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
@@ -206,7 +206,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
   };
 
   return (
-    <span className="add-user-container">
+    <div>
       <ul className="users">
         {alreadyInvitedAndNewInvited.map((user) => (
           <li key={user.id}>
@@ -235,7 +235,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
           </div>
         )}
       </span>
-    </span>
+    </div>
   );
 };
 AddTeamUser.propTypes = {

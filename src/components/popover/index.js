@@ -1,6 +1,5 @@
 import React, { useState, useContext, useMemo, createContext } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';

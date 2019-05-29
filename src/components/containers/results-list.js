@@ -100,4 +100,3 @@ const withClass = (Component, baseClassName) => ({ children, className, ...props
 export const ResultInfo = withClass('div', styles.resultInfo);
 export const ResultName = withClass('div', styles.resultName);
 export const ResultDescription = withClass('div', styles.resultDescription);
-p
