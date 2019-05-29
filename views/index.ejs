@@ -86,7 +86,6 @@
                 <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a>, <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.
               </p>
             </div>
-            </div>
             <div class="error-msg" id="fallback-translate" style="display: none">
               <h1>Unfortunately, Glitch does not support Google translate at this time</h1>
               <p>redirecting to glitch.com in English...</p>
@@ -107,17 +106,17 @@
       }
     </script>
     <script>
-      // const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
-      // if (isCodeRunningInsideGoogleTranslateIframe) {
+      const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      if (isCodeRunningInsideGoogleTranslateIframe) {
         var fallback = document.getElementById('fallback');
         var fallbackImg = document.getElementById('fallback-img');
         var fallbackTranslate = document.getElementById('fallback-translate');
         fallback.style.display = 'block';
         fallbackImg.style.display = 'block';
         fallbackTranslate.style.display = 'block';
-        // setTimeout(function(){
-        //   window.location.href = "https://glitch.com";      
-        // }, 3000);
+        setTimeout(function(){
+          window.location.href = "https://glitch.com";      
+        }, 3000);
       }
     </script>
     <% for (let i = 0; i < scripts.length; ++i) { %>

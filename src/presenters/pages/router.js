@@ -65,7 +65,6 @@ const Router = () => (
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
-      
       <Route
         path="/login/facebook"
         exact
@@ -158,8 +157,8 @@ const Router = () => (
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
-      
-      <Route render={({ location }) => (<NotFoundPage key={location.key} />)} />
+
+      <Route render={({ location }) => <NotFoundPage key={location.key} />} />
     </Switch>
   </>
 );
