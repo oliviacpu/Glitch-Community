@@ -78,7 +78,7 @@ const CollectionPageContents = ({
   unfeatureProject,
   ...props
 }) => {
-  const collectionHasProjects = !!collection && !!collection.projects && !!collection.projects.length;
+  const collectionHasProjects = !!collection && !!collection.projects;
   let featuredProject = null;
   let { projects } = collection;
   if (collection.featuredProjectId) {
