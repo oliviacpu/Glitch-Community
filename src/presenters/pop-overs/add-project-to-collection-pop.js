@@ -216,7 +216,7 @@ export const AddProjectToCollectionBase = (props) => {
 
   React.useEffect(() => {
     let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
+    setMaybeCollections(null); // reset maybeCollections on reload to show loader
 
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
 
@@ -261,7 +261,7 @@ export const AddProjectToCollectionBase = (props) => {
   return (
     <NestedPopover
       alternateContent={() => (
-        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
       )}
       startAlternateVisible={false}
     >
