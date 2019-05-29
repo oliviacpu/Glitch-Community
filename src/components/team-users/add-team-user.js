@@ -166,17 +166,15 @@ AddTeamUserPop.defaultProps = {
 };
 
 const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
-  const [invitee, setInvitee] = useState('');
-  const [newlyInvited, setNewlyInvited] = useState([]);
+  
+  
 
-  const alreadyInvitedAndNewInvited = uniqBy(invitedMembers.concat(newlyInvited), (user) => user.id);
+  const newlyInvitedIDs = newlyIvited
+  
+  const alreadyInvitedAndNewInvited = uniqBy(members.concat(newlyInvited), (user) => user.id);
   const track = useTracker('Add to Team clicked');
   const allowEmailInvites = useDevToggle('Email Invites');
 
-  const onSetWhitelistedDomain = async (togglePopover, domain) => {
-    togglePopover();
-    await setWhitelistedDomain(domain);
-  };
 
   const onInviteUser = async (togglePopover, user) => {
     togglePopover();
@@ -205,25 +203,21 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
   };
 
   return (
-    <div>
       <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
         {({ togglePopover }) => (
           <AddTeamUserPop
             allowEmailInvites={allowEmailInvites}
             members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
             whitelistedDomain={whitelistedDomain}
-            setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
+            setWhitelistedDomain={setWhitelistedDomain ? (domain) => {
+              togglePopover()
+              return setWhitelistedDomain(domain)
+            } : null}
             inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
             inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
           />
         )}
       </PopoverWithButton>
-      {!!invitee && (
-        <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-          Invited {invitee}
-        </div>
-      )}
-    </div>
   );
 };
 AddTeamUser.propTypes = {

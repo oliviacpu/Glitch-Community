@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
+import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
@@ -85,11 +86,41 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
+  const [invitee, setInvitee] = useState('');
+  const [newlyInvited, setNewlyInvited] = useState([]);
+
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
   const invitees = value || [];
+  
+  const members = team.users.map(({ id }) => id)
+  
+
+  const onInviteUser = async (user) => {
+    setNewlyInvited((invited) => [...invited, user]);
+    try {
+      await inviteUser(user);
+      setInvitee(getDisplayName(user));
+    } catch (error) {
+      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      captureException(error);
+    }
+  };
+
+  const onInviteEmail = async (email) => {
+    setInvitee(email);
+    try {
+      await inviteEmail(email);
+    } catch (error) {
+      captureException(error);
+    }
+  };
+  
+  const removeNotifyInvited = () => {
+    setInvitee('');
+  };
 
   return (
     <>
@@ -102,11 +133,17 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
           inviteEmail={inviteEmail}
           inviteUser={inviteUser}
           setWhitelistedDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null}
-          members={team.users.map(({ id }) => id)}
+          members={members}
           invitedMembers={invitees}
           whitelistedDomain={team.whitelistedDomain}
         />
       )}
+      {!!invitee && (
+        <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+          Invited {invitee}
+        </div>
+      )}
+
       {currentUserCanJoinTeam && <JoinTeam onClick={joinTeam} />}
     </>
   );
