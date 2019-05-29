@@ -8,24 +8,23 @@ import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
+import { PopoverContainer, PopoverDialog, PopoverActions } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
-import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
 import { captureException } from '../../utils/sentry';
 
 // Whitelisted domain icon
 
-const WhitelistedDomain = ({ domain, setDomain }) => {
-  const tooltip = `Anyone with an @${domain} email can join`;
-  return (
+const tooltip = `Anyone with an @${domain} email can join`;
+const WhitelistedDomain = ({ domain, setDomain }) =>  (
     <PopoverContainer>
-      {({ visible, setVisible }) => (
-        <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="popover-container whitelisted-domain-container">
+      {() => (
+        <PopoverContainer focusOnPopover>
           <summary>
             <TooltipContainer
               id="whitelisted-domain-tooltip"
               type="action"
-              tooltip={visible ? null : tooltip}
+              tooltip={tooltip}
               target={
                 <div>
                   <WhitelistedDomainIcon domain={domain} />
@@ -49,7 +48,7 @@ const WhitelistedDomain = ({ domain, setDomain }) => {
       )}
     </PopoverContainer>
   );
-};
+
 
 WhitelistedDomain.propTypes = {
   domain: PropTypes.string.isRequired,

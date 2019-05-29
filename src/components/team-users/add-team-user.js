@@ -165,44 +165,30 @@ AddTeamUserPop.defaultProps = {
   whitelistedDomain: '',
 };
 
-const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
+const AddTeamUser = ({ members, whitelistedDomain, inviteEmail, inviteUser, setWhitelistedDomain }) => {
   const track = useTracker('Add to Team clicked');
-  const fn = (toggle, func) => {
-    if (!func) return null
-    return (...args) => {
-      toggle()
-      func(...args)
-    }
-  }
-  
   return (
     <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
-      {({ togglePopover }) => (
+      {({ toggleAndCall }) => (
         <AddTeamUserPop
           whitelistedDomain={whitelistedDomain}
-          setWhitelistedDomain={fn(togglePopover, setWhitelistedDomain)}
-          inviteUser={fn(togglePopover, inviteUser)}
-          inviteEmail={fn(togglePopover, )
-            inviteEmail
-              ? (email) => {
-                  togglePopover();
-                  return inviteEmail(email);
-                }
-              : null
-          }
+          setWhitelistedDomain={toggleAndCall(setWhitelistedDomain)}
+          inviteUser={toggleAndCall(inviteUser)}
+          inviteEmail={toggleAndCall(inviteEmail)}
         />
       )}
     </PopoverWithButton>
   );
 };
 AddTeamUser.propTypes = {
-  invitedMembers: PropTypes.array.isRequired,
+  members: PropTypes.array.isRequired,
+  whitelistedDomain: PropTypes.string,
   inviteEmail: PropTypes.func,
   inviteUser: PropTypes.func,
-  members: PropTypes.array.isRequired,
   setWhitelistedDomain: PropTypes.func,
 };
 AddTeamUser.defaultProps = {
+  whitelistedDomain: null,
   setWhitelistedDomain: null,
   inviteUser: null,
   inviteEmail: null,

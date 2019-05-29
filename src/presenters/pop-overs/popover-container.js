@@ -60,6 +60,11 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     }
   };
 
+  const toggleAndCall = (func) => {
+    if (!func) return null;
+    return (...args) => func(...args);
+  };
+
   React.useEffect(() => {
     if (!visible) return undefined;
     const keyHandler = (event) => {
@@ -72,7 +77,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [visible]);
 
-  const props = { visible, setVisible, togglePopover, focusFirstElement };
+  const props = { visible, setVisible, togglePopover, toggleAndCall, focusFirstElement };
 
   const inner = children(props);
   if (isFragment(inner)) {
