@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { pickBy } from 'lodash';
 
+import useUniqueId from 'Hooks/use-unique-id';
 import InputErrorMessage from './input-error-message';
 import InputErrorIcon from './input-error-icon';
-import useUniqueId from 'Hooks/use-unique-id';
 
 import styles from './text-input.styl';
 import { visuallyHidden } from '../global.styl';
