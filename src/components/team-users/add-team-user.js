@@ -18,6 +18,7 @@ import useDevToggle from 'State/dev-toggles';
 import { useAPI } from 'State/api';
 import { useAlgoliaSearch } from 'State/search';
 
+import useDebouncedValue from '../../hooks/use-debounced-value';
 import PopoverWithButton from './popover-with-button';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
@@ -83,6 +84,12 @@ const getDomain = (query) => {
   return null;
 };
 
+function useValidDomains (domain) {
+  const 
+  
+}
+
+
 async function validateDomain(query) {
   const domain = getDomain(query);
   if (!domain || this.state.validDomains[domain] !== undefined) {
@@ -110,7 +117,7 @@ async function validateDomain(query) {
 function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 200);
-  
+
   const { user: retrievedUsers, status } = useAlgoliaSearch(
     debouncedQuery,
     {
@@ -140,14 +147,12 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
   }
 
   // now add the actual search results
-  if (maybeResults) {
-    results.push(
-      ...maybeResults.map((user) => ({
-        key: user.id,
-        item: <UserResultItem user={user} action={() => inviteUser(user)} />,
-      })),
-    );
-  }
+  results.push(
+    ...retrievedUsers.map((user) => ({
+      key: user.id,
+      item: <UserResultItem user={user} action={() => inviteUser(user)} />,
+    })),
+  );
 
   return (
     <dialog className="pop-over add-team-user-pop">
@@ -162,8 +167,29 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
           aria-label="Search for a user"
         />
       </section>
-      {!!query && <Results isLoading={isLoading} results={results} />}
       {!query && !!setWhitelistedDomain && !whitelistedDomain && <aside className="pop-over-info">You can also whitelist with @example.com</aside>}
+      {query.length > 0 && status === 'loading' && (
+        <section className="pop-over-actions last-section">
+          <Loader />
+        </section>
+      )}
+      {query.length > 0 && status === 'ready' && results.length === 0 && (
+        <section className="pop-over-actions last-section">
+          Nothing found{' '}
+          <span role="img" aria-label="">
+            💫
+          </span>
+        </section>
+      )}
+      {query.length > 0 && status === 'ready' && results.length > 0 && (
+        <section className="pop-over-actions last-section results-list">
+          <ul className="results">
+            {results.map(({ key, item }) => (
+              <li key={key}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </dialog>
   );
 }
@@ -181,42 +207,6 @@ AddTeamUserPop.propTypes = {
 AddTeamUserPop.defaultProps = {
   setWhitelistedDomain: () => {},
   whitelistedDomain: '',
-};
-
-const Results = ({ results, isLoading }) => {
-  if (isLoading) {
-    return (
-      <section className="pop-over-actions last-section">
-        <Loader />
-      </section>
-    );
-  }
-
-  if (results.length === 0) {
-    return (
-      <section className="pop-over-actions last-section">
-        Nothing found{' '}
-        <span role="img" aria-label="">
-          💫
-        </span>
-      </section>
-    );
-  }
-
-  return (
-    <section className="pop-over-actions last-section results-list">
-      <ul className="results">
-        {results.map(({ key, item }) => (
-          <li key={key}>{item}</li>
-        ))}
-      </ul>
-    </section>
-  );
-};
-
-Results.propTypes = {
-  results: PropTypes.array.isRequired,
-  isLoading: PropTypes.bool.isRequired,
 };
 
 const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
