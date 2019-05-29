@@ -14,6 +14,7 @@ const WrappingLink = withRouter(({ href, children, className, style, history }) 
     // Make sure there wasn't a clicky div inside this clicky div
     if (evt.target.closest('[data-href]') !== evt.currentTarget) return;
     // Ok, this click is real. Do the thing
+    console.log("href", href)
     history.push(href);
   };
   return (
