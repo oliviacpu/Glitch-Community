@@ -22,7 +22,7 @@ export const NotFoundPage = () => {
   if (window.location.origin === 'https://translate.googleusercontent.com') {
     return null;
   }
-  
+
   return (
     <Layout>
       <Helmet title="👻 Page not found" />
