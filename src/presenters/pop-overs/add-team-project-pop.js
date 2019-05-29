@@ -2,9 +2,10 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { useCurrentUser } from 'State/current-user';
-import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, ActionDescription } from 'components/popover'
-
-import ProjectResultItem from '../includes/project-result-item';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, ActionDescription } from 'Components/popover';
+import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
+import ProjectResultItem from 'Components/project/project-result-item';
+import Emoji from 'Components/images/emoji';
 
 const filterProjects = (query, projects, teamProjects) => {
   query = query.toLowerCase().trim();
@@ -29,24 +30,19 @@ const filterProjects = (query, projects, teamProjects) => {
   return filteredProjects;
 };
 
-function AddTeamProjectPop({ teamProjects, togglePopover, addProject }) {
+function AddTeamProjectPop({ teamProjects, addProject }) {
   const [query, setQuery] = useState('');
   const { currentUser } = useCurrentUser();
   const myProjects = currentUser.projects;
 
   const filteredProjects = useMemo(() => filterProjects(query, myProjects, teamProjects), [query, myProjects, teamProjects]);
-
-  const onClick = (event, project) => {
-    event.preventDefault();
-    togglePopover();
-    addProject(project);
-  };
+  const { activeIndex, onKeyDown } = useActiveIndex(filteredProjects, addProject);
 
   const filterPlaceholder = 'Filter my projects';
 
   return (
     <PopoverDialog wide align="left">
-      <section className="pop-over-info">
+      <PopoverInfo>
         <input
           onChange={(event) => {
             setQuery(event.target.value);
@@ -57,22 +53,30 @@ function AddTeamProjectPop({ teamProjects, togglePopover, addProject }) {
           aria-label={filterPlaceholder}
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
         />
-      </section>
+      </PopoverInfo>
 
-      <section className="pop-over-actions results-list">
-        <ul className="results">
-          {filteredProjects.map((project) => (
-            <li key={project.id}>
-              <ProjectResultItem onClick={(event) => onClick(event, project)} {...project} title={project.domain} isPrivate={project.private} />
-            </li>
-          ))}
-        </ul>
-        
-      </section>
+      <PopoverSection>
+        {filteredProjects.length > 0 && (
+          <ResultsList items={filteredProjects} scroll>
+            {(project, i) => (
+              <ScrollResult active={i === activeIndex}>
+                <ProjectResultItem active={i === activeIndex} onClick={() => addProject(project)} project={project} />
+              </ScrollResult>
+            )}
+          </ResultsList>
+        )}
+      </PopoverSection>
+      {filteredProjects.length === 0 && query.length > 0 && (
+        <PopoverInfo>
+          <InfoDescription>
+            nothing found <Emoji name="sparkles" />
+          </InfoDescription>
+        </PopoverInfo>
+      )}
       {filteredProjects.length === 0 && query.length === 0 && (
-        <PopoverActions>
-          <ActionDescription>Create or Join projects to add them to the team</ActionDescription>
-        </PopoverActions>
+        <PopoverInfo>
+          <InfoDescription>Create or Join projects to add them to the team</InfoDescription>
+        </PopoverInfo>
       )}
     </PopoverDialog>
   );
@@ -82,11 +86,19 @@ const AddTeamProject = ({ addProject, teamProjects }) => (
   <PopoverWithButton
     buttonText={
       <>
-        Add Project <span className="emoji bento-box" role="presentation" />
+        Add Project <Emoji name="bentoBox" />
       </>
     }
   >
-    {({ togglePopover }) => <AddTeamProjectPop addProject={addProject} teamProjects={teamProjects} togglePopover={togglePopover} />}
+    {({ togglePopover }) => (
+      <AddTeamProjectPop
+        addProject={(project) => {
+          togglePopover();
+          addProject(project);
+        }}
+        teamProjects={teamProjects}
+      />
+    )}
   </PopoverWithButton>
 );
 AddTeamProject.propTypes = {
