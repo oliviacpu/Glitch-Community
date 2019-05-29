@@ -80,118 +80,86 @@ function useCheckedDomains(query) {
   return checkedDomains;
 }
 
-function SearchPopover ({ }) {
-  const [query, setQuery] = useState('');
+const PopoverLoader = () => (
+  <PopoverActions>
+    <Loader />
+  </PopoverActions>
+);
+
+const NothingFound = () => (
+  <PopoverActions>
+    <InfoDescription>
+      Nothing found <Emoji name="sparkles" />
+    </InfoDescription>
+  </PopoverActions>
+);
+
+function SearchPopover({
+  value,
+  onChange,
+  results,
+  status,
+  onSubmit,
+  align,
+  renderResult,
+  renderNoResults,
+  renderLoader,
+  labelText,
+  placeholder,
+  children,
+}) {
+  const [query, setQuery] = useState(value);
   const debouncedQuery = useDebouncedValue(query, 200);
-  
-  
-  const checkedDomains = useCheckedDomains(debouncedQuery);
+  useEffect(() => {
+    onSubmit(debouncedQuery);
+  }, [debouncedQuery]);
 
-  const { user: retrievedUsers, status } = useAlgoliaSearch(
-    debouncedQuery,
-    {
-      filterTypes: ['user'],
-    },
-    [],
-  );
-
-  const results = useMemo(() => {
-    const memberSet = new Set(members);
-    const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
-    const out = [];
-
-    const email = parseOneAddress(query);
-    if (email && allowEmailInvites) {
-      out.push({
-        id: 'invite-by-email',
-        result: email.address,
-        onClick: () => inviteEmail(email.address),
-        component: InviteByEmail,
-      });
-    }
-
-    if (setWhitelistedDomain && !whitelistedDomain) {
-      const domain = getDomain(query);
-      if (domain && checkedDomains[domain]) {
-        out.push({
-          id: 'whitelist-email-domain',
-          result: domain,
-          onClick: () => setWhitelistedDomain(domain),
-          component: WhitelistEmailDomain,
-        });
-      }
-    }
-
-    // now add the actual search results
-    out.push(
-      ...filteredUsers.map((user) => ({
-        id: user.id,
-        result: user,
-        onClick: () => inviteUser(user),
-        component: UserResult,
-      })),
-    );
-
-    return out;
-  }, [query, retrievedUsers, members, whitelistedDomain]);
-
-  const { activeIndex, onKeyDown } = useActiveIndex(results, (result) => result.onClick());
+  const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
 
   return (
-    <PopoverDialog align="left">
+    <PopoverDialog align={align}>
       <PopoverInfo>
         <TextInput
-          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-          labelText="User name"
+          autoFocus
+          labelText={labelText}
           value={query}
           onChange={setQuery}
           onKeyDown={onKeyDown}
           opaque
-          placeholder="Search for a user"
+          placeholder={placeholder}
           type="search"
         />
       </PopoverInfo>
-      {!query && !!setWhitelistedDomain && !whitelistedDomain && (
-        <PopoverInfo>
-          <InfoDescription>You can also whitelist with @example.com</InfoDescription>
-        </PopoverInfo>
-      )}
-      {query.length > 0 && status === 'loading' && (
-        <PopoverActions>
-          <Loader />
-        </PopoverActions>
-      )}
-      {query.length > 0 && status === 'ready' && results.length === 0 && (
-        <PopoverActions>
-          <InfoDescription>
-            Nothing found <Emoji name="sparkles" />
-          </InfoDescription>
-        </PopoverActions>
-      )}
-      {query.length > 0 && status === 'ready' && results.length > 0 && (
-        <PopoverSection>
-          <ResultsList scroll items={results}>
-            {({ onClick, result, component: Component }, i) => (
-              <ScrollResult active={i === activeIndex}>
-                <Component active={i === activeIndex} result={result} onClick={onClick} />
-              </ScrollResult>
-            )}
-          </ResultsList>
-        </PopoverSection>
+      {children(
+        <>
+          {query.length > 0 && status === 'loading' && renderLoader()}
+          {query.length > 0 && status === 'ready' && results.length === 0 && renderNoResults()}
+          {query.length > 0 && status === 'ready' && results.length > 0 && (
+            <PopoverSection>
+              <ResultsList scroll items={results}>
+                {(result, i) => (
+                  <ScrollResult active={i === activeIndex}>{renderResult({ result, onSubmit, active: i === activeIndex })}</ScrollResult>
+                )}
+              </ResultsList>
+            </PopoverSection>
+          )}
+        </>,
       )}
     </PopoverDialog>
   );
 }
 
-
+SearchPopover.defaultProps = {
+  renderLoader: () => <PopoverLoader />,
+  renderNoResults: () => <NothingFound />,
+};
 
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
-  const [query, setQuery] = useState('');
-  const debouncedQuery = useDebouncedValue(query, 200);
-  const checkedDomains = useCheckedDomains(debouncedQuery);
+  const [value, onChange] = useState('');
+  const checkedDomains = useCheckedDomains(value);
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
-    debouncedQuery,
+    value,
     {
       filterTypes: ['user'],
     },
@@ -203,7 +171,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
     const out = [];
 
-    const email = parseOneAddress(query);
+    const email = parseOneAddress(value);
     if (email && allowEmailInvites) {
       out.push({
         id: 'invite-by-email',
@@ -214,7 +182,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     }
 
     if (setWhitelistedDomain && !whitelistedDomain) {
-      const domain = getDomain(query);
+      const domain = getDomain(value);
       if (domain && checkedDomains[domain]) {
         out.push({
           id: 'whitelist-email-domain',
@@ -236,53 +204,37 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     );
 
     return out;
-  }, [query, retrievedUsers, members, whitelistedDomain]);
+  }, [value, retrievedUsers, members, whitelistedDomain]);
 
-  const { activeIndex, onKeyDown } = useActiveIndex(results, (result) => result.onClick());
+  const { activeIndex, onKeyDown } = useActiveIndex(results, );
 
   return (
-    <PopoverDialog align="left">
-      <PopoverInfo>
-        <TextInput
-          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-          labelText="User name"
-          value={query}
-          onChange={setQuery}
-          onKeyDown={onKeyDown}
-          opaque
-          placeholder="Search for a user"
-          type="search"
-        />
-      </PopoverInfo>
-      {!query && !!setWhitelistedDomain && !whitelistedDomain && (
-        <PopoverInfo>
-          <InfoDescription>You can also whitelist with @example.com</InfoDescription>
-        </PopoverInfo>
+    <SearchPopover
+      value={value}
+      onChange={onChange}
+      results={results}
+      status={status}
+      onSubmit={(result) => result.onClick()}
+      align="left"
+      labelText="User name"
+      placeholder="Search for a user"
+      renderItem={({ onClick, result, component: Component }, i) => (
+        <ScrollResult active={i === activeIndex}>
+          <Component active={i === activeIndex} result={result} onClick={onClick} />
+        </ScrollResult>
       )}
-      {query.length > 0 && status === 'loading' && (
-        <PopoverActions>
-          <Loader />
-        </PopoverActions>
+    >
+      {(contents) => (
+        <>
+          {!value && !!setWhitelistedDomain && !whitelistedDomain && (
+            <PopoverInfo>
+              <InfoDescription>You can also whitelist with @example.com</InfoDescription>
+            </PopoverInfo>
+          )}
+          {contents}
+        </>
       )}
-      {query.length > 0 && status === 'ready' && results.length === 0 && (
-        <PopoverActions>
-          <InfoDescription>
-            Nothing found <Emoji name="sparkles" />
-          </InfoDescription>
-        </PopoverActions>
-      )}
-      {query.length > 0 && status === 'ready' && results.length > 0 && (
-        <PopoverSection>
-          <ResultsList scroll items={results}>
-            {({ onClick, result, component: Component }, i) => (
-              <ScrollResult active={i === activeIndex}>
-                <Component active={i === activeIndex} result={result} onClick={onClick} />
-              </ScrollResult>
-            )}
-          </ResultsList>
-        </PopoverSection>
-      )}
-    </PopoverDialog>
+    </SearchPopover>
   );
 }
 
