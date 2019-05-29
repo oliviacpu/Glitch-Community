@@ -4,6 +4,7 @@ import axios from 'axios';
 import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
+import classnames from 'classnames';
 
 import Loader from 'Components/loader';
 import { UserAvatar } from 'Components/images/avatar';
@@ -22,24 +23,26 @@ import useDevToggle from 'State/dev-toggles';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
+import styles from './add-team-user.styl';
 
-const WhitelistEmailDomain = ({ result: domain, onClick }) => (
-  <TransparentButton onClick={onClick} className="result">
-    <div className="add-team-user-pop__whitelist-email-domain">
-      <div className="add-team-user-pop__whitelist-email-image">
-        <WhitelistedDomainIcon domain={domain} />
-      </div>
-      <div>Allow anyone with an @{domain} email to join</div>
+const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
+  <TransparentButton onClick={onClick} className={classnames(styles.result, active && styles.active)}>
+    <div className={styles.resultWrap}>
+      <WhitelistedDomainIcon domain={domain} />
+      <div className={styles.resultInfo}>Allow anyone with an @{domain} email to join</div>
     </div>
   </TransparentButton>
 );
 
 const UserResult = ({ result: user, active, onClick }) => <UserResultItem user={user} active={active} onClick={onClick} />;
 
-const InviteByEmail = ({ result: email, onClick }) => {
+const InviteByEmail = ({ result: email, active, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
   return (
-    <TransparentButton onClick={onClick} className="result result-user">
+    <TransparentButton onClick={onClick} className={classnames(styles.result, active && styles.active)}>
+      <div className={styles.resultWrap}>
+        <UserAvatar user={{ }} />
+      </div>
       <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
       <div className="result-info">
         <div className="result-name">Invite {email}</div>
