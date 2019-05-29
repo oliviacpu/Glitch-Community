@@ -139,12 +139,9 @@ const CollectionPageContents = ({
           {collectionHasProjects && (
             <>
               <div className="collection-contents">
-                {currentUserIsAuthor && (
-                  <div className="collection-project-container-header">
-                    <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />
-                    asdf
-                  </div>
-                )}
+                <div className="collection-project-container-header">
+                  {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
+                </div>
                 {featuredProject && (
                   <FeaturedProject
                     isAuthorized={currentUserIsAuthor}
@@ -179,6 +176,7 @@ const CollectionPageContents = ({
                   }}
                   fetchMembers
                 />
+                {currentUserIsAuthor && <div>asdfadfs</div>}
               </div>
             </>
           )}
