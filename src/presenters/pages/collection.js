@@ -78,7 +78,7 @@ const CollectionPageContents = ({
   unfeatureProject,
   ...props
 }) => {
-  const collectionHasProjects = !!collection && !!collection.projects;
+  const collectionHasProjects = !!collection && !!collection.projects && !!collection.projects.length;
   let featuredProject = null;
   let { projects } = collection;
   if (collection.featuredProjectId) {
@@ -176,7 +176,7 @@ const CollectionPageContents = ({
                   }}
                   fetchMembers
                 />
-                {currentUserIsAuthor && <div>asdfadfs</div>}
+                {currentUserIsAuthor && <div>Click and drag to reorder projects, or press space while a project is focused</div>}
               </div>
             </>
           )}
