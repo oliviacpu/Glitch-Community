@@ -5,7 +5,7 @@ import { pickBy } from 'lodash';
 
 import InputErrorMessage from './input-error-message';
 import InputErrorIcon from './input-error-icon';
-import useUniqueId from '../../hooks/use-unique-id';
+import useUniqueId from 'Hooks/use-unique-id';
 
 import styles from './text-input.styl';
 import { visuallyHidden } from '../global.styl';
