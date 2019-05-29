@@ -18,7 +18,6 @@ import useDevToggle from 'State/dev-toggles';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import styles form
 
 const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
   <ResultItem onClick={onClick} active={active}>
@@ -207,34 +206,23 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
 
   return (
     <div>
-      <ul className="users">
-        {alreadyInvitedAndNewInvited.map((user) => (
-          <li key={user.id}>
-            <UserLink user={user} className="user">
-              <UserAvatar user={user} />
-            </UserLink>
-          </li>
-        ))}
-      </ul>
-      <span className="add-user-wrap">
-        <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
-          {({ togglePopover }) => (
-            <AddTeamUserPop
-              allowEmailInvites={allowEmailInvites}
-              members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
-              whitelistedDomain={whitelistedDomain}
-              setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
-              inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
-              inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
-            />
-          )}
-        </PopoverWithButton>
-        {!!invitee && (
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-            Invited {invitee}
-          </div>
+      <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
+        {({ togglePopover }) => (
+          <AddTeamUserPop
+            allowEmailInvites={allowEmailInvites}
+            members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
+            whitelistedDomain={whitelistedDomain}
+            setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
+            inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
+            inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
+          />
         )}
-      </span>
+      </PopoverWithButton>
+      {!!invitee && (
+        <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+          Invited {invitee}
+        </div>
+      )}
     </div>
   );
 };

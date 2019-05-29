@@ -73,6 +73,7 @@ PopoverSearch.propTypes = {
   renderItem: PropTypes.func.isRequired,
   renderNoResults: PropTypes.func,
   renderLoader: PropTypes.func,
+  renderError: PropTypes.func,
   labelText: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
 };
