@@ -6,7 +6,7 @@ import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
-import AddTeamUserPop from '../pop-overs/add-team-user-pop';
+import AddTeamUserPop from 'Components/team-users/add-team-user';
 import PopoverContainer from '../pop-overs/popover-container';
 import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
 import { captureException } from '../../utils/sentry';

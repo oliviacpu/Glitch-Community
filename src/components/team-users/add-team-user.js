@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { debounce, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
 
@@ -19,7 +19,7 @@ import { useAPI } from 'State/api';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import PopoverWithButton from './popover-with-button';
+import PopoverWithButton from '../../presenters/pop-overs/popover-with-button';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">
@@ -77,6 +77,7 @@ InviteByEmail.propTypes = {
 };
 
 const getDomain = (query) => {
+  if (!query) return null;
   const email = parseOneAddress(query.replace('@', 'test@'));
   if (email && email.domain.includes('.')) {
     return email.domain.toLowerCase();
@@ -87,14 +88,13 @@ const getDomain = (query) => {
 function useCheckedDomains(query) {
   const [checkedDomains, setCheckedDomains] = useState({ 'gmail.com': true, 'yahoo.com': true });
   useEffect(() => {
-    let isCurrentRequest = true;
-    if (!query) return;
     const domain = getDomain(query);
-    if (!domain || checkedDomains[domain]) return;
+    if (!domain || domain in checkedDomains) return undefined;
 
+    let isCurrentRequest = true;
     axios.get(`https://freemail.glitch.me/${domain}`).then(({ data }) => {
       if (!isCurrentRequest) return;
-      setCheckedDomains((domains) => ({...domains, [domain]: !data.free }));
+      setCheckedDomains((domains) => ({ ...domains, [domain]: !data.free }));
     }, captureException);
 
     return () => {
@@ -104,7 +104,7 @@ function useCheckedDomains(query) {
   return checkedDomains;
 }
 
-function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
+function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 200);
   const checkedDomains = useCheckedDomains(debouncedQuery);
@@ -117,10 +117,15 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
     [],
   );
 
+  const filteredUsers = useMemo(() => {
+    const memberIDs = new Set(members.map((user) => user.id));
+    return retrievedUsers.filter((user) => !memberIDs.has(user.id));
+  }, [retrievedUsers, members]);
+
   const results = [];
 
   const email = parseOneAddress(query);
-  if (email && this.props.allowEmailInvites) {
+  if (email && allowEmailInvites) {
     results.push({
       key: 'invite-by-email',
       item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
@@ -129,7 +134,7 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
 
   if (setWhitelistedDomain && !whitelistedDomain) {
     const domain = getDomain(query);
-    if (domain && this.state.validDomains[domain]) {
+    if (domain && checkedDomains[domain]) {
       results.push({
         key: 'whitelist-email-domain',
         item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
@@ -139,7 +144,7 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
 
   // now add the actual search results
   results.push(
-    ...retrievedUsers.map((user) => ({
+    ...filteredUsers.map((user) => ({
       key: user.id,
       item: <UserResultItem user={user} action={() => inviteUser(user)} />,
     })),
@@ -152,7 +157,7 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
           id="team-user-search"
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
           value={query}
-          onChange={this.handleChange}
+          onChange={(e) => setQuery(e.target.value)}
           className="pop-over-input search-input pop-over-search"
           placeholder="Search for a user"
           aria-label="Search for a user"
@@ -186,7 +191,6 @@ function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whiteli
 }
 
 AddTeamUserPop.propTypes = {
-  api: PropTypes.func.isRequired,
   inviteEmail: PropTypes.func.isRequired,
   inviteUser: PropTypes.func.isRequired,
   members: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
