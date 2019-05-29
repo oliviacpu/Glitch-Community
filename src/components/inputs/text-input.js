@@ -12,9 +12,7 @@ import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children, className }) => (
-  <span className={classNames(styles.inputPart, className)}>{children}</span>
-);
+const InputPart = ({ children, className }) => <span className={classNames(styles.inputPart, className)}>{children}</span>;
 
 const TextInput = ({
   autoFocus,
@@ -25,6 +23,7 @@ const TextInput = ({
   maxLength,
   name,
   onChange,
+  onBlur,
   opaque,
   placeholder,
   postfix,
@@ -57,6 +56,7 @@ const TextInput = ({
           maxLength={maxLength}
           name={name}
           onChange={(evt) => onChange(evt.target.value)}
+          onBlur={onBlur}
           placeholder={placeholder}
           type={type}
           value={value}
@@ -83,6 +83,7 @@ TextInput.propTypes = {
   maxLength: PropTypes.number,
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
   opaque: PropTypes.bool,
   placeholder: PropTypes.string,
   postfix: PropTypes.node,
@@ -98,6 +99,7 @@ TextInput.defaultProps = {
   error: null,
   maxLength: undefined,
   name: undefined,
+  onBlur: undefined,
   opaque: false,
   placeholder: undefined,
   postfix: null,
