@@ -5,7 +5,6 @@ import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
 
-import Thanks from 'Components/thanks';
 import Loader from 'Components/loader';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
@@ -13,9 +12,10 @@ import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import TextInput from 'Components/inputs/text-input';
 import Emoji from 'Components/images/emoji';
+import UserResultItem from 'Components/user/user-result-item';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from 'Components/popover';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
-import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { ANON_AVATAR_URL, getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
@@ -34,33 +34,7 @@ const WhitelistEmailDomain = ({ result: domain, onClick }) => (
   </TransparentButton>
 );
 
-const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => (
-  <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
-    <TransparentButton onClick={onClick}>
-      <div className={styles.resultWrap}>
-        <ProjectAvatar {...project} />
-        <div className={styles.resultInfo}>
-          <div className={styles.resultName}>{project.domain}</div>
-          {project.description.length > 0 && (
-            <div className={styles.resultDescription}>
-              <Markdown renderAsPlaintext>{project.description}</Markdown>
-            </div>
-          )}
-          <div className={styles.profileListWrap}>
-            <ProfileList teams={teams} users={users} layout="row" size="small" />
-          </div>
-        </div>
-      </div>
-    </TransparentButton>
-    <div className={styles.linkButtonWrap}>
-      <Button size="small" href={getLink(project)} newTab>
-        View →
-      </Button>
-    </div>
-  </div>
-);
-
-
+const UserResult = ({ result: user, active, onClick }) => <UserResultItem user={user} active={active} onClick={onClick} />;
 
 const InviteByEmail = ({ result: email, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
@@ -72,11 +46,6 @@ const InviteByEmail = ({ result: email, onClick }) => {
       </div>
     </TransparentButton>
   );
-};
-
-InviteByEmail.propTypes = {
-  email: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 const getDomain = (query) => {
@@ -123,11 +92,11 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
   const results = useMemo(() => {
     const memberSet = new Set(members);
     const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
-    const results = [];
+    const out = [];
 
     const email = parseOneAddress(query);
     if (email && allowEmailInvites) {
-      results.push({
+      out.push({
         id: 'invite-by-email',
         result: email.address,
         onClick: () => inviteEmail(email.address),
@@ -138,7 +107,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     if (setWhitelistedDomain && !whitelistedDomain) {
       const domain = getDomain(query);
       if (domain && checkedDomains[domain]) {
-        results.push({
+        out.push({
           id: 'whitelist-email-domain',
           result: domain,
           onClick: () => setWhitelistedDomain(domain),
@@ -148,16 +117,16 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     }
 
     // now add the actual search results
-    results.push(
+    out.push(
       ...filteredUsers.map((user) => ({
         id: user.id,
         result: user,
         onClick: () => inviteUser(user),
-        component: UserResultItem,
+        component: UserResult,
       })),
     );
 
-    return results;
+    return out;
   }, [query, retrievedUsers, members, whitelistedDomain]);
 
   const { activeIndex, onKeyDown } = useActiveIndex(results, (result) => result.onClick());

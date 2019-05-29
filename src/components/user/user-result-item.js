@@ -1,11 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import TransparentButon from 'Components/buttons/transparent-button'
+import TransparentButton from 'Components/buttons/transparent-button';
 import { UserAvatar } from 'Components/images/avatar';
+import Thanks from 'Components/thanks';
+import { getDisplayName } from 'Models/user';
 
-import styles from './user-result-item.styl'
+import styles from './user-result-item.styl';
 
 const UserResultItem = ({ user, active, onClick }) => (
   <div className={classnames(styles.userResult, active && styles.active)}>
@@ -23,7 +25,7 @@ const UserResultItem = ({ user, active, onClick }) => (
 );
 
 UserResultItem.propTypes = {
-  result: PropTypes.shape({
+  user: PropTypes.shape({
     avatarThumbnailUrl: PropTypes.string,
     name: PropTypes.string,
     login: PropTypes.string.isRequired,
@@ -32,3 +34,5 @@ UserResultItem.propTypes = {
   active: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
+
+export default UserResultItem;
