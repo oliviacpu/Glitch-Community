@@ -13,6 +13,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
+import ReportButton from 'Components/report-abuse-pop';
 import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -20,7 +21,6 @@ import { useCurrentUser } from 'State/current-user';
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 import ProjectsLoader from '../projects-loader';
-import ReportButton from '../pop-overs/report-abuse-pop';
 import styles from './user.styl';
 
 function syncPageToLogin(login) {

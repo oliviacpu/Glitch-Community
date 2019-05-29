@@ -13,8 +13,9 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
-import useDevToggle from '../../presenters/includes/dev-toggles';
+
 import styles from './styles.styl';
 
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
@@ -172,7 +173,7 @@ const EmailHandler = ({ showView }) => {
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
-            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} />
+            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} autoFocus />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link
@@ -227,7 +228,7 @@ const SignInWithCode = () => {
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
             Paste your temporary sign in code below
-            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" />
+            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Sign In
@@ -318,10 +319,10 @@ const SignInPopBase = withRouter(({ location, align }) => {
     >
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
-          <PopoverInfo type="secondary">
+          <PopoverInfo>
             <div className={styles.termsAndConditions}>
               By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
               <Link to="/legal/#privacy">Privacy Statement</Link>

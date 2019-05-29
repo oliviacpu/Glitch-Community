@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import TextAreaAutosize from 'react-textarea-autosize';
+import useUniqueId from 'Hooks/use-unique-id';
 import InputErrorMessage from './input-error-message';
 import InputErrorIcon from './input-error-icon';
-import useUniqueId from '../../hooks/use-unique-id';
 
 import styles from './text-area.styl';
 
-const TextArea = ({ autoFocus, disabled, error, name, onBlur, onChange, onFocus, placeholder, value }) => {
+const TextArea = ({ className, autoFocus, disabled, error, name, onBlur, onChange, onFocus, placeholder, value }) => {
   const uniqueId = useUniqueId();
   return (
     <label className={styles.inputWrap} htmlFor={uniqueId}>
       <div className={styles.inputBorder}>
         <TextAreaAutosize
           autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
-          className={styles.input}
+          className={classnames(styles.input, className)}
           disabled={disabled}
           id={uniqueId}
           name={name}
@@ -42,6 +43,7 @@ TextArea.propTypes = {
   onFocus: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 TextArea.defaultProps = {
@@ -52,6 +54,7 @@ TextArea.defaultProps = {
   onBlur: null,
   onFocus: null,
   placeholder: undefined,
+  className: '',
 };
 
 export default TextArea;

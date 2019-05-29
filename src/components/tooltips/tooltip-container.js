@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import useUniqueId from 'Hooks/use-unique-id';
 import styles from './tooltip.styl';
 
 const cx = classNames.bind(styles);
@@ -14,9 +15,14 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
   });
+  const uniqueId = useUniqueId();
 
   // prevents invalid aria-labelledby values when names contain whitespace
   id = id.replace(/\s/g, '-');
+
+  if (id !== 'new-stuff-tooltip') {
+    id = id.concat(uniqueId);
+  }
 
   const tooltipClassName = cx({
     tooltip: true,

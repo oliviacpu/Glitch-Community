@@ -139,7 +139,7 @@ class UserEditor extends React.Component {
     const funcs = {
       updateName: (name) => this.updateFields({ name }).catch(handleErrorForInput),
       updateLogin: (login) => this.updateFields({ login }).catch(handleErrorForInput),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleError),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
       uploadCover: () => assets.requestFile((blob) => this.uploadCover(blob).catch(handleError)),
       clearCover: () => this.updateFields({ hasCoverImage: false }).catch(handleError),

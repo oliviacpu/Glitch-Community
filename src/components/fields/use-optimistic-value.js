@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useDebouncedValue from '../../hooks/use-debounced-value';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message
@@ -18,7 +18,10 @@ const useOptimisticValue = (realValue, setValueAsync) => {
       // this scope can't be async/await because it's an effect
       setValueAsync(debouncedValue).then(
         () => setStateIfMatches({ value: undefined, error: null }),
-        (error) => setStateIfMatches({ value: debouncedValue, error }),
+        (error) => {
+          const message = error && error.response && error.response.data && error.response.data.message;
+          setStateIfMatches({ value: debouncedValue, error: message });
+        },
       );
     }
   }, [debouncedValue]);
@@ -29,7 +32,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
     setState((prevState) => ({ ...prevState, value: newValue }));
   };
 
-  return [optimisticValue, state.error, setOptimisticValue];
+  return [optimisticValue, setOptimisticValue, state.error];
 };
 
 export default useOptimisticValue;

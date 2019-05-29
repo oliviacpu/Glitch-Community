@@ -27,6 +27,18 @@ class ProjectEditor extends React.Component {
     this.setState(changes);
   }
 
+  async updateDomain(domain) {
+    await this.updateFields({ domain });
+    // don't await this because the project domain has already changed and I don't want to delay other things updating
+    this.props.api.post(`project/domainChanged?projectId=${this.state.id}&authorization=${this.props.currentUser.persistentToken}`, {}, {
+      transformRequest: (data, headers) => {
+        // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
+        delete headers.Authorization;
+        return data;
+      },
+    });
+  }
+
   async addProjectToCollection(project, collection) {
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
   }
@@ -46,8 +58,8 @@ class ProjectEditor extends React.Component {
     const funcs = {
       addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
       deleteProject: () => this.deleteProject().catch(handleError),
-      updateDomain: (domain) => this.updateFields({ domain }).catch(handleErrorForInput),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleError),
+      updateDomain: (domain) => this.updateDomain(domain).catch(handleErrorForInput),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       updatePrivate: (isPrivate) => this.updateFields({ private: isPrivate }).catch(handleError),
       uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
     };

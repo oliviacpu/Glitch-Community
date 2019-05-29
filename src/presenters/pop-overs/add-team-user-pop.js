@@ -12,12 +12,11 @@ import { UserLink } from 'Components/link';
 import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { useAPI } from 'State/api';
-import { useTracker } from 'State/segment-analytics';
 import { captureException } from 'Utils/sentry';
-import useDevToggle from '../includes/dev-toggles';
+import { useTracker } from 'State/segment-analytics';
+import useDevToggle from 'State/dev-toggles';
+import { useAPI } from 'State/api';
 import PopoverWithButton from './popover-with-button';
-
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">
@@ -254,6 +253,7 @@ class AddTeamUserPop extends React.Component {
             onChange={this.handleChange}
             className="pop-over-input search-input pop-over-search"
             placeholder="Search for a user"
+            aria-label="Search for a user"
           />
         </section>
         {!!query && <Results isLoading={isLoading} results={results} />}
@@ -329,13 +329,13 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
 
   const onInviteUser = async (togglePopover, user) => {
     togglePopover();
-    setInvitee(getDisplayName(user));
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
+      setInvitee(getDisplayName(user));
     } catch (error) {
-      setInvitee('');
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      captureException(error);
     }
   };
 
@@ -345,7 +345,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
     try {
       await inviteEmail(email);
     } catch (error) {
-      setInvitee('');
+      captureException(error);
     }
   };
 
@@ -370,7 +370,7 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
             <AddTeamUserPop
               api={api}
               allowEmailInvites={allowEmailInvites}
-              members={members}
+              members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
               whitelistedDomain={whitelistedDomain}
               setWhitelistedDomain={setWhitelistedDomain ? (domain) => onSetWhitelistedDomain(togglePopover, domain) : null}
               inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
@@ -388,8 +388,10 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
   );
 };
 AddTeamUser.propTypes = {
+  invitedMembers: PropTypes.array.isRequired,
   inviteEmail: PropTypes.func,
   inviteUser: PropTypes.func,
+  members: PropTypes.array.isRequired,
   setWhitelistedDomain: PropTypes.func,
 };
 AddTeamUser.defaultProps = {

@@ -13,10 +13,10 @@ import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
+import { isDarkColor } from 'Models/collection';
 
-import { isDarkColor } from '../../models/collection';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
-import CollectionOptionsContainer from '../../presenters/pop-overs/collection-options-pop';
+import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
 
@@ -67,7 +67,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
         {(showCurator || isAuthorized) && (
           <div className={styles.header}>
             <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
-            {isAuthorized && <CollectionOptionsContainer collection={collection} deleteCollection={animateAndDeleteCollection} />}
+            {isAuthorized && <CollectionOptions collection={collection} deleteCollection={animateAndDeleteCollection} />}
           </div>
         )}
         <CollectionLink
