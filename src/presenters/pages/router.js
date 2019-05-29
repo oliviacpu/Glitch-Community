@@ -63,7 +63,7 @@ const Router = () => (
   <>
     <PageChangeHandler />
     <Switch>
-      <Route path="/" render={({ location }) => <IndexPage key={location.key} />} />
+      <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
 
       <Route
