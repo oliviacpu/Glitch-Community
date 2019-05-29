@@ -15,7 +15,7 @@ import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { captureException } from 'Utils/sentry';
 
-import TeamUserInfoPop from '../pop-overs/team-user-info-pop';
+import TeamUserPop from '../pop-overs/team-user-info-pop';
 
 // Whitelisted domain icon
 
@@ -126,28 +126,47 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   return (
-    <>
-      <TeamUserInfoPop team={team} removeUserFromTeam={removeUserFromTeam} updateUserPermissions={updateUserPermissions} />
+    <ul>
+      {team.users.map((user) => (
+        <li key={user.id}>
+          <TeamUserPop team={team} user={user} removeUserFromTeam={removeUserFromTeam} updateUserPermissions={updateUserPermissions} />
+        </li>
+      ))}
       {!!team.whitelistedDomain && (
-        <WhitelistedDomain domain={team.whitelistedDomain} setDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null} />
+        <li>
+          <WhitelistedDomain domain={team.whitelistedDomain} setDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null} />
+        </li>
       )}
+      {[...invitees, ...newlyInvited].map((user) => (
+        <li key={user.id}>
+          <ProfileItem user={user} />
+        </li>
+      ))}
       {currentUserIsOnTeam && (
-        <AddTeamUserPop
-          inviteEmail={inviteEmail ? onInviteEmail : null}
-          inviteUser={inviteUser ? onInviteUser : null}
-          setWhitelistedDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null}
-          members={members}
-          whitelistedDomain={team.whitelistedDomain}
-        />
+        <li>
+          <AddTeamUserPop
+            inviteEmail={inviteEmail ? onInviteEmail : null}
+            inviteUser={inviteUser ? onInviteUser : null}
+            setWhitelistedDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null}
+            members={members}
+            whitelistedDomain={team.whitelistedDomain}
+          />
+        </li>
       )}
-      {!!invitee && (
-        <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-          Invited {invitee}
-        </div>
+      {currentUserCanJoinTeam && (
+        <li>
+          <JoinTeam onClick={joinTeam} />
+        </li>
       )}
 
-      {currentUserCanJoinTeam && <JoinTeam onClick={joinTeam} />}
-    </>
+      {!!invitee && (
+        <li>
+          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+            Invited {invitee}
+          </div>
+        </li>
+      )}
+    </ul>
   );
 };
 
