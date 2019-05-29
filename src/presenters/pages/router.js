@@ -33,14 +33,6 @@ function ExternalPageReloader() {
   return null;
 }
 
-function redirectHomeIfGoogleIsTranslating() {
-  if (window.location.origin === "https://translate.googleusercontent.com") {
-    window.location.replace("https://glitch.com")
-  } else {
-    return 
-  }
-}
-
 function track() {
   try {
     const { analytics } = window;
@@ -55,6 +47,7 @@ function track() {
 const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
+
   useEffect(() => {
     if (isUpdate.current) {
       window.scrollTo(0, 0);
@@ -66,13 +59,21 @@ const PageChangeHandler = withRouter(({ location }) => {
   return null;
 });
 
+const GoogleTranslateHandler = withRouter((location) => {
+  if (window.location.origin === "https://translate.googleusercontent.com") {
+    window.location.href = "https://glitch.com";
+  }
+  return null;
+})
+
 const Router = () => (
   <>
     <PageChangeHandler />
+    <GoogleTranslateHandler />
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
-
+      
       <Route
         path="/login/facebook"
         exact
@@ -165,9 +166,6 @@ const Router = () => (
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
-      
-      <Route path="/translate"
-
       <Route render={({ location }) => <NotFoundPage key={location.key} />} />
     </Switch>
   </>
