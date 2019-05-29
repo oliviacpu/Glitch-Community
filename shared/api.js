@@ -7,13 +7,8 @@ const joinIdsToQueryString = (ids) => {
 };
 
 const getFromApi = async (api, url) => {
-  try {
-    const { data } = await api.get(url);
-    return data;
-  } catch (error) {
-    console.log("hit an error")
-    return null
-  }
+  const { data } = await api.get(url);
+  return data;
 };
 
 const getSingleItem = async (api, url, key) => {
