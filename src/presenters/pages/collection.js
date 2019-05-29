@@ -225,7 +225,6 @@ async function loadCollection(api, ownerName, collectionName) {
 
     return collection;
   } catch (error) {
-    console.log({ error })
     if (error && error.response && error.response.status === 404) {
       return null;
     }
