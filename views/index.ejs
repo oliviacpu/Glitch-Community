@@ -85,6 +85,11 @@
               <p>Please upgrade to a web browser that can support Glitch features. Please use 
                 <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a>, <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.</p>
             </div>
+            </div>
+              <div class="error-msg" id="fallback-translate" style="display: none">
+              <h1>Unfortunately, Glitch does not support Google translate at this time</h1>
+              <p>redirecting to glitch.com ...</p>
+            </div>
           </main>
       </div>
     </div>
@@ -99,6 +104,13 @@
         fallbackIe.style.display = 'block';
         fallbackImg.style.display = 'block';
       }
+    </script>
+    <script>
+      // redirect to homepage if inside of a google translate iframe, as it breaks all of our links and doesn't translate
+      if (window.location.origin === "https://translate.googleusercontent.com") {
+        window.location.href = "https://glitch.com";      
+      }
+      
     </script>
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>

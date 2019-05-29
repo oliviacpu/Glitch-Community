@@ -59,7 +59,6 @@ const PageChangeHandler = withRouter(({ location }) => {
   return null;
 });
 
-
 const Router = () => (
   <>
     <PageChangeHandler />

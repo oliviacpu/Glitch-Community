@@ -18,31 +18,27 @@ const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cd
 
 function redirectIfInsideGoogleTranslateIframe() {
   // redirect to homepage if inside of a google translate iframe, as it breaks all of our links and doesn't translate
-  if (window.location.origin !== "https://translate.googleusercontent.com") {
-  window.location.href = "https://glitch.com";      
+  if (window.location.origin === "https://translate.googleusercontent.com") {
+    window.location.href = "https://glitch.com";      
   }
 }
 
-export const NotFoundPage = () => {
-  React.useEffect(() => {
+export const NotFoundPage = () => (
+  <Layout>
+    <Helmet title="👻 Page not found" />
+    <main className="error-page-container">
+      <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
+      <div className="error-msg">
+        <Heading tagName="h1">Page Not Found</Heading>
+        <Text>Maybe a typo, or perhaps it's moved?</Text>
+        <a className="button button-link" href="/">
+          Back to Glitch
+        </a>
+      </div>
+    </main>
+  </Layout>
+);
 
-  }, []);
-  return (
-    <Layout>
-      <Helmet title="👻 Page not found" />
-      <main className="error-page-container">
-        <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
-        <div className="error-msg">
-          <Heading tagName="h1">Page Not Found</Heading>
-          <Text>Maybe a typo, or perhaps it's moved?</Text>
-          <a className="button button-link" href="/">
-            Back to Glitch
-          </a>
-        </div>
-      </main>
-    </Layout>
-  );
-}
 
 const emailImageUrl = 'https://cdn.glitch.com/26ac422d-705d-42be-b9cb-1fbdfe7e5a63%2Ferror-mailer.svg?1543429767321';
 
