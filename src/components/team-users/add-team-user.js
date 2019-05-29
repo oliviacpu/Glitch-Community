@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { debounce, uniqBy } from 'lodash';
@@ -84,39 +84,30 @@ const getDomain = (query) => {
   return null;
 };
 
-function useValidDomains (domain) {
-  const 
-  
-}
+function useCheckedDomains(query) {
+  const [checkedDomains, setCheckedDomains] = useState({ 'gmail.com': true, 'yahoo.com': true });
+  useEffect(() => {
+    let isCurrentRequest = true;
+    if (!query) return;
+    const domain = getDomain(query);
+    if (!domain || checkedDomains[domain]) return;
 
+    axios.get(`https://freemail.glitch.me/${domain}`).then(({ data }) => {
+      if (!isCurrentRequest) return;
+      setCheckedDomains((domains) => ({...domains, [domain]: !data.free }));
+    }, captureException);
 
-async function validateDomain(query) {
-  const domain = getDomain(query);
-  if (!domain || this.state.validDomains[domain] !== undefined) {
-    return;
-  }
-
-  this.setState((prevState) => ({
-    validDomains: { ...prevState.validDomains, [domain]: null },
-  }));
-
-  let valid = !['gmail.com', 'yahoo.com'].includes(domain); // Used if we can't reach freemail
-
-  try {
-    const { data } = await axios.get(`https://freemail.glitch.me/${domain}`);
-    valid = !data.free;
-  } catch (error) {
-    captureException(error);
-  }
-
-  this.setState((prevState) => ({
-    validDomains: { ...prevState.validDomains, [domain]: valid },
-  }));
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [query, checkedDomains]);
+  return checkedDomains;
 }
 
 function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebouncedValue(query, 200);
+  const checkedDomains = useCheckedDomains(debouncedQuery);
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
     debouncedQuery,
