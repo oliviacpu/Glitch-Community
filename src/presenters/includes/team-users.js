@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { uniq } from 'lodash';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
@@ -94,9 +95,8 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
   const invitees = value || [];
-  
-  const members = team.users.map(({ id }) => id)
-  
+
+  const members = uniq([...team.users, ...invitees, ...newlyInvited].map(user => user.id))
 
   const onInviteUser = async (user) => {
     setNewlyInvited((invited) => [...invited, user]);
@@ -117,7 +117,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       captureException(error);
     }
   };
-  
+
   const removeNotifyInvited = () => {
     setInvitee('');
   };
@@ -130,11 +130,10 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       )}
       {currentUserIsOnTeam && (
         <AddTeamUserPop
-          inviteEmail={inviteEmail}
-          inviteUser={inviteUser}
+          inviteEmail={inviteEmail ? onInviteEmail : null}
+          inviteUser={inviteUser ? onInviteUser : null}
           setWhitelistedDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null}
           members={members}
-          invitedMembers={invitees}
           whitelistedDomain={team.whitelistedDomain}
         />
       )}

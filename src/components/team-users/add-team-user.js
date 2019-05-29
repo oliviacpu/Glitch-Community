@@ -77,10 +77,11 @@ function useCheckedDomains(query) {
   return checkedDomains;
 }
 
-function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
+function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain }) {
   const [value, onChange] = useState('');
   const debouncedValue = useDebouncedValue(value, 200);
   const checkedDomains = useCheckedDomains(debouncedValue);
+  const allowEmailInvites = useDevToggle('Email Invites');
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
     debouncedValue,
@@ -157,7 +158,6 @@ AddTeamUserPop.propTypes = {
   members: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   setWhitelistedDomain: PropTypes.func,
   whitelistedDomain: PropTypes.string,
-  allowEmailInvites: PropTypes.bool.isRequired,
 };
 
 AddTeamUserPop.defaultProps = {
@@ -166,58 +166,33 @@ AddTeamUserPop.defaultProps = {
 };
 
 const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, invitedMembers, whitelistedDomain }) => {
-  
-  
-
-  const newlyInvitedIDs = newlyIvited
-  
-  const alreadyInvitedAndNewInvited = uniqBy(members.concat(newlyInvited), (user) => user.id);
   const track = useTracker('Add to Team clicked');
-  const allowEmailInvites = useDevToggle('Email Invites');
-
-
-  const onInviteUser = async (togglePopover, user) => {
-    togglePopover();
-    setNewlyInvited((invited) => [...invited, user]);
-    try {
-      await inviteUser(user);
-      setInvitee(getDisplayName(user));
-    } catch (error) {
-      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
-      captureException(error);
+  const fn = (toggle, func) => {
+    if (!func) return null
+    return (...args) => {
+      toggle()
+      func(...args)
     }
-  };
-
-  const onInviteEmail = async (togglePopover, email) => {
-    togglePopover();
-    setInvitee(email);
-    try {
-      await inviteEmail(email);
-    } catch (error) {
-      captureException(error);
-    }
-  };
-
-  const removeNotifyInvited = () => {
-    setInvitee('');
-  };
-
+  }
+  
   return (
-      <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
-        {({ togglePopover }) => (
-          <AddTeamUserPop
-            allowEmailInvites={allowEmailInvites}
-            members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
-            whitelistedDomain={whitelistedDomain}
-            setWhitelistedDomain={setWhitelistedDomain ? (domain) => {
-              togglePopover()
-              return setWhitelistedDomain(domain)
-            } : null}
-            inviteUser={inviteUser ? (user) => onInviteUser(togglePopover, user) : null}
-            inviteEmail={inviteEmail ? (email) => onInviteEmail(togglePopover, email) : null}
-          />
-        )}
-      </PopoverWithButton>
+    <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
+      {({ togglePopover }) => (
+        <AddTeamUserPop
+          whitelistedDomain={whitelistedDomain}
+          setWhitelistedDomain={fn(togglePopover, setWhitelistedDomain)}
+          inviteUser={fn(togglePopover, inviteUser)}
+          inviteEmail={fn(togglePopover, )
+            inviteEmail
+              ? (email) => {
+                  togglePopover();
+                  return inviteEmail(email);
+                }
+              : null
+          }
+        />
+      )}
+    </PopoverWithButton>
   );
 };
 AddTeamUser.propTypes = {
