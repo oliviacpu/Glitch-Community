@@ -37,17 +37,18 @@ const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
 const UserResult = ({ result: user, active, onClick }) => <UserResultItem user={user} active={active} onClick={onClick} />;
 
 const InviteByEmail = ({ result: email, active, onClick }) => {
-  const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
+  const { current: color } = useRef(randomColor({ luminosity: 'light' }));
   return (
-    <TransparentButton onClick={onClick} className={classnames(styles.result, active && styles.active)}>
-      <div className={styles.resultWrap}>
-        <UserAvatar user={{ }} />
-      </div>
-      <img className="avatar" src={ANON_AVATAR_URL} style={{ backgroundColor }} alt="" />
-      <div className="result-info">
-        <div className="result-name">Invite {email}</div>
-      </div>
-    </TransparentButton>
+    <div className={classnames(styles.result, active && styles.active)}>
+      <TransparentButton onClick={onClick}>
+        <div className={styles.resultWrap}>
+          <UserAvatar user={{ color }} />
+          <div className={styles.resultInfo}>
+            <div className={styles.resultName}>Invite {email}</div>
+          </div>
+        </div>
+      </TransparentButton>
+    </div>
   );
 };
 
