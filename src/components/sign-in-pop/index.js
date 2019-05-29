@@ -66,12 +66,13 @@ const SignInCodeSection = ({ onClick }) => (
 
 function useEmail() {
   const [email, setEmailValue] = useState('');
+  const [hasBlurred, setHasBlurred] = useState(false);
   const [validationError, setValidationError] = useState(null);
   const validate = useMemo(
     () =>
       debounce((value) => {
         const isValidEmail = parseOneAddress(value) !== null;
-        setValidationError(isValidEmail ? null : 'Enter a valid email address');
+        setValidationError(isValidEmail || !hasBlurred ? null : 'Enter a valid email address');
       }),
     [],
   );
