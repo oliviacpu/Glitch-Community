@@ -72,9 +72,11 @@ ResultsList.defaultProps = {
 export default ResultsList;
 
 export const ResultItem = ({ active, className, onClick, href, children }) => (
-  <div className={classnames(className, styles.resultItem, active && styles.active)}>
+  <div className={classnames(className, styles.resultItem, active && styles.active, href && styles.withLink)}>
     <TransparentButton className={styles.resultItemButton} onClick={onClick}>
-      {children}
+      <div className={styles.resultWrap}>
+        {children}
+      </div>
     </TransparentButton>
     {href && (
       <div className={styles.linkButtonWrap}>
@@ -86,3 +88,12 @@ export const ResultItem = ({ active, className, onClick, href, children }) => (
   </div>
 );
 
+const withClass = (Component, baseClassName) => ({ children, className, ...props }) => (
+  <Component className={classnames(className, baseClassName)} {...props}>
+    {children}
+  </Component>
+);
+
+export const ResultInfo = withClass('div', styles.resultInfo);
+export const ResultName = withClass('div', styles.resultName);
+export const ResultDescription = withClass('div', styles.resultDescription);

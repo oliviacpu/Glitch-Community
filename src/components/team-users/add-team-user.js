@@ -15,7 +15,7 @@ import TextInput from 'Components/inputs/text-input';
 import Emoji from 'Components/images/emoji';
 import UserResultItem from 'Components/user/user-result-item';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from 'Components/popover';
-import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
+import ResultsList, { ScrollResult, useActiveIndex, ResultItem, ResultInfo } from 'Components/containers/results-list';
 import { ANON_AVATAR_URL, getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
@@ -23,32 +23,39 @@ import useDevToggle from 'State/dev-toggles';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import styles from './add-team-user.styl';
 
 const WhitelistEmailDomain = ({ result: domain, active, onClick }) => (
-  <TransparentButton onClick={onClick} className={classnames(styles.result, active && styles.active)}>
-    <div className={styles.resultWrap}>
-      <WhitelistedDomainIcon domain={domain} />
-      <div className={styles.resultInfo}>Allow anyone with an @{domain} email to join</div>
-    </div>
-  </TransparentButton>
+  <ResultItem onClick={onClick} active={active}>
+    <WhitelistedDomainIcon domain={domain} />
+    <ResultInfo>Allow anyone with an @{domain} email to join</ResultInfo>
+  </ResultItem>
 );
+
+const UserResult = ({ result: user, active, onClick }) => (
+  <ResultItem onClick={onClick} active={active}>
+        <UserAvatar user={user} />
+        <ResultInfo>
+          <ResultName>{getDisplayName(user)}</ResultName>
+          {!!user.name && <ResultDescription>@{user.login}</div>}
+          <Thanks short count={user.thanksCount} />
+        </ResultInfo>
+      </div>
+    </TransparentButton>
+  </div>
+);
+
 
 const UserResult = ({ result: user, active, onClick }) => <UserResultItem user={user} active={active} onClick={onClick} />;
 
 const InviteByEmail = ({ result: email, active, onClick }) => {
   const { current: color } = useRef(randomColor({ luminosity: 'light' }));
   return (
-    <div className={classnames(styles.result, active && styles.active)}>
-    <TransparentButton onClick={onClick}>
-      <div className={styles.resultWrap}>
-        <UserAvatar user={{ color }} />
-        <div className={styles.resultInfo}>
-          <div className={styles.resultName}>Invite {email}</div>
-        </div>
-      </div>
-    </TransparentButton>
-    </div>
+    <ResultItem onClick={onClick} active={active}>
+      <UserAvatar user={{ color }} />
+      <ResultInfo>
+        <ResultName>Invite {email}</ResultName>
+      </ResultInfo>
+    </ResultItem>
   );
 };
 
