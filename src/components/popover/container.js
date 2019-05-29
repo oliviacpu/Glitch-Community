@@ -26,9 +26,12 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     }
   };
 
-    const toggleAndCall = (func) => {
+  const toggleAndCall = (func) => {
     if (!func) return null;
-    return (...args) => func(...args);
+    return (...args) => {
+      togglePopover();
+      return func(...args);
+    }
   };
   
   useEffect(() => {

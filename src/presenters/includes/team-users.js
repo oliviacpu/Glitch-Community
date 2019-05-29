@@ -27,7 +27,7 @@ const WhitelistedDomain = ({ domain, setDomain }) => (
           <TooltipContainer
             id="whitelisted-domain-tooltip"
             type="action"
-            tooltip={!visible && `Anyone with an @${domain} email can join`}
+            tooltip={visible ? null : `Anyone with an @${domain} email can join`}
             target={
               <div>
                 <WhitelistedDomainIcon domain={domain} />
