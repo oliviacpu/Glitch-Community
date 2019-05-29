@@ -16,9 +16,9 @@ const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) =>
-  `See what ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+  `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) =>
-  `See what Team ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+  `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -200,7 +200,7 @@ module.exports = function(external) {
   });
 
   app.get('*', async (req, res) => {
-    await render(res, 'Glitch', 'The friendly community where everyone can discover & create the best stuff on the web');
+    await render(res, 'Glitch', `The ${constants.tagline}`);
   });
 
   return app;
