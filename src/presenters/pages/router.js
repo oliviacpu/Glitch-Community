@@ -21,7 +21,6 @@ import SearchPage from './search';
 import SecretPage from './secret';
 
 /* global EXTERNAL_ROUTES */
-
 const parse = (search, name) => {
   const params = new URLSearchParams(search);
   return params.get(name);
@@ -32,6 +31,10 @@ function ExternalPageReloader() {
     window.location.reload();
   }, []);
   return null;
+}
+
+function isGoogleTranslating() {
+  if(window.location )
 }
 
 function track() {
