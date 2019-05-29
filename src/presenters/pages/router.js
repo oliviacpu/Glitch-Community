@@ -33,8 +33,12 @@ function ExternalPageReloader() {
   return null;
 }
 
-function isGoogleTranslating() {
-  if(window.location )
+function redirectHomeIfGoogleIsTranslating() {
+  if (window.location.origin === "https://translate.googleusercontent.com") {
+    window.location.replace("https://glitch.com")
+  } else {
+    return 
+  }
 }
 
 function track() {
@@ -161,6 +165,8 @@ const Router = () => (
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
+      
+      <Route path="/translate"
 
       <Route render={({ location }) => <NotFoundPage key={location.key} />} />
     </Switch>
