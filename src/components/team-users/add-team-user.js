@@ -94,18 +94,6 @@ const NothingFound = () => (
   </PopoverActions>
 );
 
-function useDebouncedState(value, onChange, debounce) {
-  const [local, setLocal] = useState(value);
-  const debouncedLocal = useDebouncedValue(local, 200);
-  useEffect(() => {
-    setLocal(value);
-  }, [value]);
-  useEffect(() => {
-    onChange(debouncedLocal);
-  }, [debouncedLocal]);
-  return [local, setLocal]
-}
-
 function SearchPopover({
   value,
   onChange,
@@ -120,21 +108,19 @@ function SearchPopover({
   placeholder,
   children,
 }) {
-  const [query, setQuery] = useDebouncedState(value, onChange, 200);
-
   const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
 
   const contents = (
     <>
-      {value.length > 0 && status === 'loading' && renderLoader()}
-      {value.length > 0 && status === 'ready' && results.length === 0 && renderNoResults()}
-      {value.length > 0 && status === 'ready' && results.length > 0 && (
+      {results.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={results}>
             {(item, i) => <ScrollResult active={i === activeIndex}>{renderItem({ item, onSubmit, active: i === activeIndex })}</ScrollResult>}
           </ResultsList>
         </PopoverSection>
       )}
+      {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
+      {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
     </>
   );
 
@@ -164,11 +150,11 @@ SearchPopover.defaultProps = {
 
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [value, onChange] = useState('');
-  const debouncedValue = useDebouncedValue(value)
-  const checkedDomains = useCheckedDomains(value);
+  const debouncedValue = useDebouncedValue(value, 200);
+  const checkedDomains = useCheckedDomains(debouncedValue);
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
-    value,
+    debouncedValue,
     {
       filterTypes: ['user'],
     },
@@ -180,7 +166,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
     const out = [];
 
-    const email = parseOneAddress(value);
+    const email = parseOneAddress(debouncedValue);
     if (email && allowEmailInvites) {
       out.push({
         id: 'invite-by-email',
@@ -191,7 +177,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     }
 
     if (setWhitelistedDomain && !whitelistedDomain) {
-      const domain = getDomain(value);
+      const domain = getDomain(debouncedValue);
       if (domain && checkedDomains[domain]) {
         out.push({
           id: 'whitelist-email-domain',
@@ -213,7 +199,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     );
 
     return out;
-  }, [value, retrievedUsers, members, whitelistedDomain]);
+  }, [debouncedValue, retrievedUsers, members, whitelistedDomain]);
 
   return (
     <SearchPopover
