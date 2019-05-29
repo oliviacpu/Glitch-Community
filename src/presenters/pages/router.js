@@ -33,11 +33,6 @@ function ExternalPageReloader() {
   return null;
 }
 
-function redirectIfGoogleIsTranslatingInIframe(){
-  if (window.location.origin !== "https://translate.googleusercontent.com") return false
-  window.location.href = "https://glitch.com";
-}
-
 function track() {
   try {
     const { analytics } = window;
@@ -164,11 +159,8 @@ const Router = () => (
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
-      <Route render={({ location }) => {
-        if(!redirectIfGoogleIsTranslatingInIframe){
-          return <NotFoundPage key={location.key} />
-        }  
-      }} />
+      
+      <Route render={({ location }) => (<NotFoundPage key={location.key} />)} />
     </Switch>
   </>
 );
