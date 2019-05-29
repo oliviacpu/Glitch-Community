@@ -52,7 +52,6 @@ module.exports = function(external) {
     const zine = (await getZine()) || [];
     let scripts = [];
     let styles = [];
-    console.log('');
 
     try {
       const stats = JSON.parse(await readFilePromise('build/stats.json'));
