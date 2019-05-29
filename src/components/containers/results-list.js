@@ -4,7 +4,6 @@ import classnames from 'classnames';
 
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
-
 import styles from './results-list.styl';
 
 export const ScrollResult = ({ active, children }) => {
@@ -101,3 +100,4 @@ const withClass = (Component, baseClassName) => ({ children, className, ...props
 export const ResultInfo = withClass('div', styles.resultInfo);
 export const ResultName = withClass('div', styles.resultName);
 export const ResultDescription = withClass('div', styles.resultDescription);
+p

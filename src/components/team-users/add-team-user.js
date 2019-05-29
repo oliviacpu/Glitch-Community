@@ -80,73 +80,7 @@ function useCheckedDomains(query) {
   return checkedDomains;
 }
 
-const PopoverLoader = () => (
-  <PopoverActions>
-    <Loader />
-  </PopoverActions>
-);
 
-const NothingFound = () => (
-  <PopoverActions>
-    <InfoDescription>
-      Nothing found <Emoji name="sparkles" />
-    </InfoDescription>
-  </PopoverActions>
-);
-
-function SearchPopover({
-  value,
-  onChange,
-  results,
-  status,
-  onSubmit,
-  align,
-  renderItem,
-  renderNoResults,
-  renderLoader,
-  labelText,
-  placeholder,
-  children,
-}) {
-  const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
-
-  const contents = (
-    <>
-      {results.length > 0 && (
-        <PopoverSection>
-          <ResultsList scroll items={results}>
-            {(item, i) => <ScrollResult active={i === activeIndex}>{renderItem({ item, onSubmit, active: i === activeIndex })}</ScrollResult>}
-          </ResultsList>
-        </PopoverSection>
-      )}
-      {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
-      {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
-    </>
-  );
-
-  return (
-    <PopoverDialog align={align}>
-      <PopoverInfo>
-        <TextInput
-          autoFocus
-          labelText={labelText}
-          value={value}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          opaque
-          placeholder={placeholder}
-          type="search"
-        />
-      </PopoverInfo>
-      {typeof children === 'function' ? children(contents) : children}
-    </PopoverDialog>
-  );
-}
-
-SearchPopover.defaultProps = {
-  renderLoader: () => <PopoverLoader />,
-  renderNoResults: () => <NothingFound />,
-};
 
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [value, onChange] = useState('');
@@ -211,19 +145,17 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
       align="left"
       labelText="User name"
       placeholder="Search for a user"
-      renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
-    >
-      {(contents) => (
+      renderInitial={() => (
         <>
-          {!value && !!setWhitelistedDomain && !whitelistedDomain && (
+          {!!setWhitelistedDomain && !whitelistedDomain && (
             <PopoverInfo>
               <InfoDescription>You can also whitelist with @example.com</InfoDescription>
             </PopoverInfo>
           )}
-          {contents}
         </>
       )}
-    </SearchPopover>
+      renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
+    />
   );
 }
 
