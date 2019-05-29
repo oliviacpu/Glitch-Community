@@ -16,6 +16,8 @@ import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 import { useAPI } from 'State/api';
+import { useAlgoliaSearch } from 'State/search';
+
 import PopoverWithButton from './popover-with-button';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
@@ -81,187 +83,91 @@ const getDomain = (query) => {
   return null;
 };
 
-const rankSearchResult = (result, query) => {
-  // example result:
-  /*
-  login: "judeallred"
-  name: "Jude Allred"
-  */
-  const lowerQuery = query.toLowerCase();
-  let points = 0;
-
-  const login = result.login || '';
-  const lowerLogin = login.toLowerCase();
-  const name = result.name || '';
-  const lowerName = name.toLowerCase();
-
-  // Big point items -- exact matches:
-  if (lowerLogin === lowerQuery) {
-    points += 9000; // exact match on login name :over nine thousand!:
+async function validateDomain(query) {
+  const domain = getDomain(query);
+  if (!domain || this.state.validDomains[domain] !== undefined) {
+    return;
   }
 
-  if (lowerName === lowerQuery) {
-    points += 50; // Exact match on name, case insensitive.
+  this.setState((prevState) => ({
+    validDomains: { ...prevState.validDomains, [domain]: null },
+  }));
 
-    if (name === query) {
-      points += 10; // Bonus case-sensitive match
-    }
+  let valid = !['gmail.com', 'yahoo.com'].includes(domain); // Used if we can't reach freemail
+
+  try {
+    const { data } = await axios.get(`https://freemail.glitch.me/${domain}`);
+    valid = !data.free;
+  } catch (error) {
+    captureException(error);
   }
 
-  // Points for matching either of login or name.
-  // Bonus if startsWith.
-  [lowerLogin, lowerName].forEach((lowerField) => {
-    if (lowerField.includes(lowerQuery)) {
-      points += 10;
+  this.setState((prevState) => ({
+    validDomains: { ...prevState.validDomains, [domain]: valid },
+  }));
+}
 
-      if (lowerField.startsWith(lowerQuery)) {
-        points += 5;
-      }
-    }
-  });
+function AddTeamUserPop({ inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebouncedValue(query, 200);
+  
+  const { user: retrievedUsers, status } = useAlgoliaSearch(
+    debouncedQuery,
+    {
+      filterTypes: ['user'],
+    },
+    [],
+  );
 
-  return points;
-};
+  const results = [];
 
-class AddTeamUserPop extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      query: '', // The actual search text
-      maybeRequest: null, // The active request promise
-      maybeResults: null, // Null means still waiting vs empty
-      validDomains: {}, // Null means loading that domain
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.clearSearch = this.clearSearch.bind(this);
-    this.debouncedSearch = debounce(this.debouncedSearch.bind(this), 300);
-  }
-
-  handleChange(evt) {
-    const query = evt.currentTarget.value.trimStart();
-    this.setState({ query });
-    if (query) {
-      this.debouncedSearch();
-    } else {
-      this.clearSearch();
-    }
-  }
-
-  clearSearch() {
-    this.setState({
-      maybeRequest: null,
-      maybeResults: null,
+  const email = parseOneAddress(query);
+  if (email && this.props.allowEmailInvites) {
+    results.push({
+      key: 'invite-by-email',
+      item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
     });
   }
 
-  debouncedSearch() {
-    const query = this.state.query.trim();
-    if (!query) {
-      this.clearSearch();
-      return;
-    }
-    this.startSearch(query);
-    this.validateDomain(query);
-  }
-
-  async startSearch(query) {
-    const request = this.props.api.get(`users/search?q=${query}`);
-    this.setState({ maybeRequest: request });
-
-    const { data } = await request;
-    const nonMemberResults = data.filter((user) => !this.props.members.includes(user.id));
-    const rankedResults = nonMemberResults.sort((a, b) => rankSearchResult(b, query) - rankSearchResult(a, query));
-
-    this.setState(({ maybeRequest }) => {
-      if (request === maybeRequest) {
-        return {
-          maybeRequest: null,
-          maybeResults: rankedResults,
-        };
-      }
-      return {};
-    });
-  }
-
-  async validateDomain(query) {
+  if (setWhitelistedDomain && !whitelistedDomain) {
     const domain = getDomain(query);
-    if (!domain || this.state.validDomains[domain] !== undefined) {
-      return;
-    }
-
-    this.setState((prevState) => ({
-      validDomains: { ...prevState.validDomains, [domain]: null },
-    }));
-
-    let valid = !['gmail.com', 'yahoo.com'].includes(domain); // Used if we can't reach freemail
-
-    try {
-      const { data } = await axios.get(`https://freemail.glitch.me/${domain}`);
-      valid = !data.free;
-    } catch (error) {
-      captureException(error);
-    }
-
-    this.setState((prevState) => ({
-      validDomains: { ...prevState.validDomains, [domain]: valid },
-    }));
-  }
-
-  render() {
-    const { inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain } = this.props;
-    const { maybeRequest, maybeResults, query } = this.state;
-    const isLoading = !!maybeRequest || !maybeResults;
-    const results = [];
-
-    const email = parseOneAddress(query);
-    if (email && this.props.allowEmailInvites) {
+    if (domain && this.state.validDomains[domain]) {
       results.push({
-        key: 'invite-by-email',
-        item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
+        key: 'whitelist-email-domain',
+        item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
       });
     }
+  }
 
-    if (setWhitelistedDomain && !whitelistedDomain) {
-      const domain = getDomain(query);
-      if (domain && this.state.validDomains[domain]) {
-        results.push({
-          key: 'whitelist-email-domain',
-          item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
-        });
-      }
-    }
-
-    // now add the actual search results
-    if (maybeResults) {
-      results.push(
-        ...maybeResults.map((user) => ({
-          key: user.id,
-          item: <UserResultItem user={user} action={() => inviteUser(user)} />,
-        })),
-      );
-    }
-
-    return (
-      <dialog className="pop-over add-team-user-pop">
-        <section className="pop-over-info">
-          <input
-            id="team-user-search"
-            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-            value={query}
-            onChange={this.handleChange}
-            className="pop-over-input search-input pop-over-search"
-            placeholder="Search for a user"
-            aria-label="Search for a user"
-          />
-        </section>
-        {!!query && <Results isLoading={isLoading} results={results} />}
-        {!query && !!setWhitelistedDomain && !whitelistedDomain && <aside className="pop-over-info">You can also whitelist with @example.com</aside>}
-      </dialog>
+  // now add the actual search results
+  if (maybeResults) {
+    results.push(
+      ...maybeResults.map((user) => ({
+        key: user.id,
+        item: <UserResultItem user={user} action={() => inviteUser(user)} />,
+      })),
     );
   }
+
+  return (
+    <dialog className="pop-over add-team-user-pop">
+      <section className="pop-over-info">
+        <input
+          id="team-user-search"
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          value={query}
+          onChange={this.handleChange}
+          className="pop-over-input search-input pop-over-search"
+          placeholder="Search for a user"
+          aria-label="Search for a user"
+        />
+      </section>
+      {!!query && <Results isLoading={isLoading} results={results} />}
+      {!query && !!setWhitelistedDomain && !whitelistedDomain && <aside className="pop-over-info">You can also whitelist with @example.com</aside>}
+    </dialog>
+  );
 }
+
 AddTeamUserPop.propTypes = {
   api: PropTypes.func.isRequired,
   inviteEmail: PropTypes.func.isRequired,
