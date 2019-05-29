@@ -175,7 +175,11 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
           type="search"
         />
       </PopoverInfo>
-      {!query && !!setWhitelistedDomain && !whitelistedDomain && <PopoverInfo>You can also whitelist with @example.com</PopoverInfo>}
+      {!query && !!setWhitelistedDomain && !whitelistedDomain && (
+        <PopoverInfo>
+          <InfoDescription>You can also whitelist with @example.com</InfoDescription>
+        </PopoverInfo>
+      )}
       {query.length > 0 && status === 'loading' && (
         <PopoverActions>
           <Loader />
@@ -193,7 +197,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
           <ResultsList scroll items={results}>
             {({ onClick, result, component: Component }, i) => (
               <ScrollResult active={i === activeIndex}>
-                <Component active={i === activeIndex} result={result} onClick={onClick}/>
+                <Component active={i === activeIndex} result={result} onClick={onClick} />
               </ScrollResult>
             )}
           </ResultsList>
