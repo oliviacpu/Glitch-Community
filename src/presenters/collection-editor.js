@@ -40,6 +40,9 @@ class CollectionEditor extends React.Component {
       }));
     }
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
+    if (collection.id === this.state.id) {
+      await this.props.api.post(`collections/${collection.id}/project/${project.id}/index/0`);
+    }
   }
 
   async removeProjectFromCollection(project) {
@@ -47,6 +50,18 @@ class CollectionEditor extends React.Component {
     this.setState(({ projects }) => ({
       projects: projects.filter((p) => p.id !== project.id),
     }));
+  }
+
+  async updateProjectOrder(project, filteredIndex) {
+    // the shown projects list doesn't include the featured project, bump the index to include it
+    const featuredIndex = this.state.projects.findIndex((p) => p.id === this.state.featuredProjectId);
+    const index = (featuredIndex >= 0 && filteredIndex > featuredIndex) ? filteredIndex + 1 : filteredIndex;
+    this.setState(({ projects }) => {
+      const sortedProjects = projects.filter((p) => p !== project);
+      sortedProjects.splice(index, 0, project);
+      return { projects: sortedProjects };
+    });
+    await this.props.api.post(`collections/${this.state.id}/project/${project.id}/index/${index}`);
   }
 
   async deleteCollection() {
@@ -98,6 +113,7 @@ class CollectionEditor extends React.Component {
       hideNote: (projectId) => this.hideNote(projectId),
       updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       updateColor: (color) => this.updateFields({ coverColor: color }),
+      updateProjectOrder: (project, index) => this.updateProjectOrder(project, index).catch(handleError),
       featureProject: (id) => this.featureProject(id).catch(handleError),
       unfeatureProject: () => this.updateFields({ featuredProjectId: null }).catch(handleError),
     };

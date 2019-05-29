@@ -13,11 +13,11 @@ const cheerio = require('cheerio');
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
+const { defaultProjectDescriptionPattern } = require('../shared/regex');
 
-const DEFAULT_USER_DESCRIPTION = (login, name) =>
-  `See what ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
-const DEFAULT_TEAM_DESCRIPTION = (login, name) =>
-  `See what Team ${name} (@${login}) is up to on Glitch, the friendly community where everyone can discover & create the best apps on the web. `;
+const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch, the ${constants.tagline}`;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -114,7 +114,22 @@ module.exports = function(external) {
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
-    const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
+
+    const helloTemplateDescriptions = new Set([
+      'Your very own basic web page, ready for you to customize.',
+      'A simple Node app built on Express, instantly up and running.',
+      'A simple Node app with a SQLite database to hold app data.',
+    ]);
+
+    const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
+
+    let description;
+    if (usesDefaultDescription || !project.description) {
+      description = DEFAULT_PROJECT_DESCRIPTION(domain);
+    } else {
+      const textDescription = cheerio.load(md.render(project.description)).text();
+      description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
+    }
 
     await render(res, domain, description, avatar);
   });
@@ -188,7 +203,7 @@ module.exports = function(external) {
   });
 
   app.get('*', async (req, res) => {
-    await render(res, 'Glitch', 'The friendly community where everyone can discover & create the best stuff on the web');
+    await render(res, 'Glitch', `The ${constants.tagline}`);
   });
 
   return app;
