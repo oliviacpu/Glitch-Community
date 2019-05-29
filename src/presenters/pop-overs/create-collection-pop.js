@@ -194,10 +194,12 @@ CreateCollectionPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
   createNotification: PropTypes.func.isRequired,
   focusFirstElement: PropTypes.func.isRequired,
+  collections: PropTypes.array,
 };
 
 CreateCollectionPop.defaultProps = {
   addProjectToCollection: null,
+  collections: [],
 };
 
 export default (props) => {

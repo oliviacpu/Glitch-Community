@@ -13,6 +13,11 @@ const cheerio = require('cheerio');
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
+const { defaultProjectDescriptionPattern } = require('../shared/regex');
+
+const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch, the ${constants.tagline}`;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -109,7 +114,22 @@ module.exports = function(external) {
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
-    const description = project.description ? cheerio.load(md.render(project.description)).text() : '';
+
+    const helloTemplateDescriptions = new Set([
+      'Your very own basic web page, ready for you to customize.',
+      'A simple Node app built on Express, instantly up and running.',
+      'A simple Node app with a SQLite database to hold app data.',
+    ]);
+
+    const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
+
+    let description;
+    if (usesDefaultDescription || !project.description) {
+      description = DEFAULT_PROJECT_DESCRIPTION(domain);
+    } else {
+      const textDescription = cheerio.load(md.render(project.description)).text();
+      description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
+    }
 
     await render(res, domain, description, avatar);
   });
@@ -118,11 +138,22 @@ module.exports = function(external) {
     const { name } = req.params;
     const team = await getTeam(name);
     if (team) {
-      const description = team.description ? cheerio.load(md.render(team.description)).text() : '';
+      // detect if team uses default description "an adjectivy team that does adjectivy things"
+      // if so, don't include it
+      const hasMaybeUpdatedDescription = team.createdAt !== team.updatedAt;
+      let description = DEFAULT_TEAM_DESCRIPTION(team.url, team.name);
+
+      if (team.description && hasMaybeUpdatedDescription) {
+        description += cheerio.load(md.render(team.description)).text();
+      }
+
       const args = [res, team.name, description];
 
       if (team.hasAvatarImage) {
         args.push(`${CDN_URL}/team-avatar/${team.id}/large`);
+      } else {
+        // default team avatar (need to use PNG version, social cards don't support SVG)
+        args.push(`${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`);
       }
 
       await render(...args);
@@ -130,8 +161,14 @@ module.exports = function(external) {
     }
     const user = await getUser(name);
     if (user) {
-      const description = user.description ? cheerio.load(md.render(user.description)).text() : '';
-      await render(res, user.name || `@${user.login}`, description, user.avatarThumbnailUrl);
+      const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
+
+      await render(
+        res,
+        user.name || `@${user.login}`,
+        description,
+        user.avatarThumbnailUrl || `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932`,
+      );
       return;
     }
     await render(res, `@${name}`, `We couldn't find @${name}`);
@@ -166,7 +203,7 @@ module.exports = function(external) {
   });
 
   app.get('*', async (req, res) => {
-    await render(res, 'Glitch', 'The friendly community where everyone can discover & create the best stuff on the web');
+    await render(res, 'Glitch', `The ${constants.tagline}`);
   });
 
   return app;
