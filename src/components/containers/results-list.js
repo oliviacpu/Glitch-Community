@@ -49,7 +49,7 @@ const ResultsList = ({ scroll, items, className, children }) => (
   <div className={classnames(scroll && styles.scrollContainer, className)}>
     <ul className={styles.resultsList}>
       {items.map((item, i) => (
-        <li key={item.id} className={classnames(styles.resultItem)}>
+        <li key={item.id} className={classnames(styles.resultItemWrap)}>
           {children(item, i)}
         </li>
       ))}
@@ -70,3 +70,19 @@ ResultsList.defaultProps = {
 };
 
 export default ResultsList;
+
+export const ResultItem = ({ active, className, onClick, href, children }) => (
+  <div className={classnames(className, styles.resultItem, active && styles.active)}>
+    <TransparentButton className={styles.resultItemButton} onClick={onClick}>
+      {children}
+    </TransparentButton>
+    {href && (
+      <div className={styles.linkButtonWrap}>
+        <Button size="small" href={href} newTab>
+          View →
+        </Button>
+      </div>
+    )}
+  </div>
+);
+

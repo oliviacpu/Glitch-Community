@@ -40,14 +40,14 @@ const InviteByEmail = ({ result: email, active, onClick }) => {
   const { current: color } = useRef(randomColor({ luminosity: 'light' }));
   return (
     <div className={classnames(styles.result, active && styles.active)}>
-      <TransparentButton onClick={onClick}>
-        <div className={styles.resultWrap}>
-          <UserAvatar user={{ color }} />
-          <div className={styles.resultInfo}>
-            <div className={styles.resultName}>Invite {email}</div>
-          </div>
+    <TransparentButton onClick={onClick}>
+      <div className={styles.resultWrap}>
+        <UserAvatar user={{ color }} />
+        <div className={styles.resultInfo}>
+          <div className={styles.resultName}>Invite {email}</div>
         </div>
-      </TransparentButton>
+      </div>
+    </TransparentButton>
     </div>
   );
 };
