@@ -15,10 +15,9 @@ const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 
-const DEFAULT_USER_DESCRIPTION = (login, name) =>
-  `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
-const DEFAULT_TEAM_DESCRIPTION = (login, name) =>
-  `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
+const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch, the ${constants.tagline}`;
 
 module.exports = function(external) {
   const app = express.Router();
@@ -125,8 +124,13 @@ module.exports = function(external) {
 
     const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
 
-    const description =
-      usesDefaultDescription || !project.description ? 'TODO, need to discuss with Ezra' : cheerio.load(md.render(project.description)).text();
+    let description;
+    if (usesDefaultDescription || !project.description) {
+      description = DEFAULT_PROJECT_DESCRIPTION(domain);
+    } else {
+      const textDescription = cheerio.load(md.render(project.description)).text();
+      description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
+    }
 
     await render(res, domain, description, avatar);
   });
