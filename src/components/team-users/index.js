@@ -31,7 +31,7 @@ const WhitelistedDomain = ({ domain, setDomain }) => (
             type="action"
             tooltip={visible ? null : `Anyone with an @${domain} email can join`}
             target={
-              <div>
+              <div className={styles.whitelistedDomainIconWrap}>
                 <WhitelistedDomainIcon domain={domain} />
               </div>
             }
