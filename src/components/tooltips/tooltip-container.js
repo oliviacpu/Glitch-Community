@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import useUniqueId from 'Hooks/use-unique-id';
 import styles from './tooltip.styl';
-import useUniqueId from '../../hooks/use-unique-id';
 
 const cx = classNames.bind(styles);
 
