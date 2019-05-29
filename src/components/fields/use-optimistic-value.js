@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useDebouncedValue from '../../hooks/use-debounced-value';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message

@@ -14,7 +14,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
-import useDebouncedValue from '../../hooks/use-debounced-value';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
