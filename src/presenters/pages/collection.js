@@ -139,9 +139,12 @@ const CollectionPageContents = ({
           {collectionHasProjects && (
             <>
               <div className="collection-contents">
-                <div className="collection-project-container-header">
-                  {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
-                </div>
+                {currentUserIsAuthor && (
+                  <div className="collection-project-container-header">
+                    <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />
+                    asdf
+                  </div>
+                )}
                 {featuredProject && (
                   <FeaturedProject
                     isAuthorized={currentUserIsAuthor}
