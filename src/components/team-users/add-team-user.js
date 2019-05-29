@@ -11,15 +11,17 @@ import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import TransparentButton from 'Components/buttons/transparent-button';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
+import TextInput from 'Components/inputs/text-input';
+import Emoji from 'Components/images/emoji';
+import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from 'Components/popover';
+import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
-import { useAPI } from 'State/api';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import PopoverWithButton from '../../presenters/pop-overs/popover-with-button';
 
 const WhitelistEmailDomain = ({ domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">
@@ -117,76 +119,80 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     [],
   );
 
-  const filteredUsers = useMemo(() => {
-    const memberIDs = new Set(members.map((user) => user.id));
-    return retrievedUsers.filter((user) => !memberIDs.has(user.id));
-  }, [retrievedUsers, members]);
+  const results = useMemo(() => {
+    const memberSet = new Set(members);
+    const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
+    const results = [];
 
-  const results = [];
+    //   todo
+    const onKeyDown = () => {};
 
-  const email = parseOneAddress(query);
-  if (email && allowEmailInvites) {
-    results.push({
-      key: 'invite-by-email',
-      item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
-    });
-  }
-
-  if (setWhitelistedDomain && !whitelistedDomain) {
-    const domain = getDomain(query);
-    if (domain && checkedDomains[domain]) {
+    const email = parseOneAddress(query);
+    if (email && allowEmailInvites) {
       results.push({
-        key: 'whitelist-email-domain',
-        item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
+        id: 'invite-by-email',
+        item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
       });
     }
-  }
 
-  // now add the actual search results
-  results.push(
-    ...filteredUsers.map((user) => ({
-      key: user.id,
-      item: <UserResultItem user={user} action={() => inviteUser(user)} />,
-    })),
-  );
+    if (setWhitelistedDomain && !whitelistedDomain) {
+      const domain = getDomain(query);
+      if (domain && checkedDomains[domain]) {
+        results.push({
+          id: 'whitelist-email-domain',
+          item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
+        });
+      }
+    }
+    
+      // now add the actual search results
+      results.push(
+        ...filteredUsers.map((user) => ({
+          id: user.id,
+          item: <UserResultItem user={user} action={() => inviteUser(user)} />,
+        })),
+      );
+    
+    return results
+  }, [retrievedUsers, members]);
+
+  
+
+
 
   return (
-    <dialog className="pop-over add-team-user-pop">
-      <section className="pop-over-info">
-        <input
-          id="team-user-search"
+    <PopoverDialog align="left">
+      <PopoverInfo>
+        <TextInput
           autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          labelText="User name"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="pop-over-input search-input pop-over-search"
+          onChange={setQuery}
+          onKeyDown={onKeyDown}
+          opaque
           placeholder="Search for a user"
-          aria-label="Search for a user"
+          type="search"
         />
-      </section>
-      {!query && !!setWhitelistedDomain && !whitelistedDomain && <aside className="pop-over-info">You can also whitelist with @example.com</aside>}
+      </PopoverInfo>
+      {!query && !!setWhitelistedDomain && !whitelistedDomain && <PopoverInfo>You can also whitelist with @example.com</PopoverInfo>}
       {query.length > 0 && status === 'loading' && (
-        <section className="pop-over-actions last-section">
+        <PopoverActions>
           <Loader />
-        </section>
+        </PopoverActions>
       )}
       {query.length > 0 && status === 'ready' && results.length === 0 && (
-        <section className="pop-over-actions last-section">
-          Nothing found{' '}
-          <span role="img" aria-label="">
-            💫
-          </span>
-        </section>
+        <PopoverActions>
+          <InfoDescription>
+            Nothing found <Emoji name="sparkles" />
+          </InfoDescription>
+        </PopoverActions>
       )}
       {query.length > 0 && status === 'ready' && results.length > 0 && (
-        <section className="pop-over-actions last-section results-list">
-          <ul className="results">
-            {results.map(({ key, item }) => (
-              <li key={key}>{item}</li>
-            ))}
-          </ul>
-        </section>
+        <PopoverSection>
+          <ResultsList items={results}>{({ key, item }) => item}</ResultsList>
+        </PopoverSection>
       )}
-    </dialog>
+    </PopoverDialog>
   );
 }
 
@@ -210,7 +216,6 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
 
   const alreadyInvitedAndNewInvited = uniqBy(invitedMembers.concat(newlyInvited), (user) => user.id);
   const track = useTracker('Add to Team clicked');
-  const api = useAPI();
   const allowEmailInvites = useDevToggle('Email Invites');
 
   const onSetWhitelistedDomain = async (togglePopover, domain) => {
@@ -256,10 +261,9 @@ const AddTeamUser = ({ inviteEmail, inviteUser, setWhitelistedDomain, members, i
         ))}
       </ul>
       <span className="add-user-wrap">
-        <PopoverWithButton buttonClass="button-small button-tertiary add-user" buttonText="Add" onOpen={track}>
+        <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Add" onOpen={track}>
           {({ togglePopover }) => (
             <AddTeamUserPop
-              api={api}
               allowEmailInvites={allowEmailInvites}
               members={alreadyInvitedAndNewInvited.map((user) => user.id).concat(members)}
               whitelistedDomain={whitelistedDomain}
