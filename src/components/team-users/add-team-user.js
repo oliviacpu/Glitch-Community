@@ -23,7 +23,7 @@ import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
 
-const WhitelistEmailDomain = ({ domain, onClick }) => (
+const WhitelistEmailDomain = ({ result: domain, onClick }) => (
   <TransparentButton onClick={onClick} className="result">
     <div className="add-team-user-pop__whitelist-email-domain">
       <div className="add-team-user-pop__whitelist-email-image">
@@ -34,11 +34,11 @@ const WhitelistEmailDomain = ({ domain, onClick }) => (
   </TransparentButton>
 );
 
-const UserResultItem = ({ user, action }) => {
+const UserResultItem = ({ result: user, onClick }) => {
   const name = getDisplayName(user);
 
   return (
-    <TransparentButton onClick={action} className="result result-user">
+    <TransparentButton onClick={onClick} className="result result-user">
       <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
       <div className="result-info">
         <div className="result-name" title={name}>
@@ -61,7 +61,7 @@ UserResultItem.propTypes = {
   action: PropTypes.func.isRequired,
 };
 
-const InviteByEmail = ({ email, onClick }) => {
+const InviteByEmail = ({ result: email, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
   return (
     <TransparentButton onClick={onClick} className="result result-user">
@@ -124,14 +124,13 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
     const results = [];
 
-    //   todo
-    const onKeyDown = () => {};
-
     const email = parseOneAddress(query);
     if (email && allowEmailInvites) {
       results.push({
         id: 'invite-by-email',
-        item: <InviteByEmail email={email.address} onClick={() => inviteEmail(email.address)} />,
+        result: email.address,
+        onClick: () => inviteEmail(email.address),
+        component: InviteByEmail,
       });
     }
 
@@ -140,25 +139,27 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
       if (domain && checkedDomains[domain]) {
         results.push({
           id: 'whitelist-email-domain',
-          item: <WhitelistEmailDomain domain={domain} onClick={() => setWhitelistedDomain(domain)} />,
+          result: domain,
+          onClick: () => setWhitelistedDomain(domain),
+          component: WhitelistEmailDomain,
         });
       }
     }
-    
-      // now add the actual search results
-      results.push(
-        ...filteredUsers.map((user) => ({
-          id: user.id,
-          item: <UserResultItem user={user} action={() => inviteUser(user)} />,
-        })),
-      );
-    
-    return results
-  }, [retrievedUsers, members]);
 
-  
+    // now add the actual search results
+    results.push(
+      ...filteredUsers.map((user) => ({
+        id: user.id,
+        result: user,
+        onClick: () => inviteUser(user),
+        component: UserResultItem,
+      })),
+    );
 
+    return results;
+  }, [query, retrievedUsers, members, whitelistedDomain]);
 
+  const { activeIndex, onKeyDown } = useActiveIndex(results, (result) => result.onClick());
 
   return (
     <PopoverDialog align="left">
@@ -189,7 +190,13 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
       )}
       {query.length > 0 && status === 'ready' && results.length > 0 && (
         <PopoverSection>
-          <ResultsList items={results}>{({ key, item }) => item}</ResultsList>
+          <ResultsList scroll items={results}>
+            {({ onClick, result, component: Component }, i) => (
+              <ScrollResult active={i === activeIndex}>
+                <Component active={i === activeIndex} result={result} onClick={onClick}/>
+              </ScrollResult>
+            )}
+          </ResultsList>
         </PopoverSection>
       )}
     </PopoverDialog>
