@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { uniqBy } from 'lodash';
 import { parseOneAddress } from 'email-addresses';
 import randomColor from 'randomcolor';
 
 import { UserAvatar } from 'Components/images/avatar';
-import { UserLink } from 'Components/link';
 import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import Thanks from 'Components/thanks';
 import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';

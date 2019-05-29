@@ -31,9 +31,9 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     return (...args) => {
       togglePopover();
       return func(...args);
-    }
+    };
   };
-  
+
   useEffect(() => {
     if (status === 'closed') return undefined;
     const keyHandler = (event) => {

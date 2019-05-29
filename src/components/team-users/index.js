@@ -13,9 +13,11 @@ import AddTeamUserPop from 'Components/team-users/add-team-user';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
+import { ProfileItem } from 'Components/profile-list';
 import { captureException } from 'Utils/sentry';
 
-import TeamUserPop from '../pop-overs/team-user-info-pop';
+import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
+import styles from './styles.styl';
 
 // Whitelisted domain icon
 
@@ -97,9 +99,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = value || [];
+  const invitees = (value || []).concat(newlyInvited);
 
-  const members = uniq([...team.users, ...invitees, ...newlyInvited].map((user) => user.id));
+  const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
   const onInviteUser = async (user) => {
     setNewlyInvited((invited) => [...invited, user]);
@@ -126,24 +128,24 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   return (
-    <ul>
+    <ul className={styles.container}>
       {team.users.map((user) => (
-        <li key={user.id}>
+        <li key={user.id} className={styles.teamMember}>
           <TeamUserPop team={team} user={user} removeUserFromTeam={removeUserFromTeam} updateUserPermissions={updateUserPermissions} />
         </li>
       ))}
       {!!team.whitelistedDomain && (
-        <li>
+        <li className={styles.whitelistedDomain}>
           <WhitelistedDomain domain={team.whitelistedDomain} setDomain={currentUserIsTeamAdmin ? updateWhitelistedDomain : null} />
         </li>
       )}
-      {[...invitees, ...newlyInvited].map((user) => (
-        <li key={user.id}>
+      {invitees.map((user) => (
+        <li key={user.id} className={styles.invitedMember}>
           <ProfileItem user={user} />
         </li>
       ))}
       {currentUserIsOnTeam && (
-        <li>
+        <li className={styles.addButtonWrap}>
           <AddTeamUserPop
             inviteEmail={inviteEmail ? onInviteEmail : null}
             inviteUser={inviteUser ? onInviteUser : null}
@@ -154,7 +156,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
         </li>
       )}
       {currentUserCanJoinTeam && (
-        <li>
+        <li className={styles.joinButtonWrap}>
           <JoinTeam onClick={joinTeam} />
         </li>
       )}
