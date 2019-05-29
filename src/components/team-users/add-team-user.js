@@ -34,32 +34,33 @@ const WhitelistEmailDomain = ({ result: domain, onClick }) => (
   </TransparentButton>
 );
 
-const UserResultItem = ({ result: user, onClick }) => {
-  const name = getDisplayName(user);
-
-  return (
-    <TransparentButton onClick={onClick} className="result result-user">
-      <img className="avatar" src={getAvatarThumbnailUrl(user)} alt="" />
-      <div className="result-info">
-        <div className="result-name" title={name}>
-          {name}
+const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => (
+  <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
+    <TransparentButton onClick={onClick}>
+      <div className={styles.resultWrap}>
+        <ProjectAvatar {...project} />
+        <div className={styles.resultInfo}>
+          <div className={styles.resultName}>{project.domain}</div>
+          {project.description.length > 0 && (
+            <div className={styles.resultDescription}>
+              <Markdown renderAsPlaintext>{project.description}</Markdown>
+            </div>
+          )}
+          <div className={styles.profileListWrap}>
+            <ProfileList teams={teams} users={users} layout="row" size="small" />
+          </div>
         </div>
-        {!!user.name && <div className="result-description">@{user.login}</div>}
-        <Thanks short count={user.thanksCount} />
       </div>
     </TransparentButton>
-  );
-};
+    <div className={styles.linkButtonWrap}>
+      <Button size="small" href={getLink(project)} newTab>
+        View →
+      </Button>
+    </div>
+  </div>
+);
 
-UserResultItem.propTypes = {
-  user: PropTypes.shape({
-    avatarThumbnailUrl: PropTypes.string,
-    name: PropTypes.string,
-    login: PropTypes.string.isRequired,
-    thanksCount: PropTypes.number.isRequired,
-  }).isRequired,
-  action: PropTypes.func.isRequired,
-};
+
 
 const InviteByEmail = ({ result: email, onClick }) => {
   const { current: backgroundColor } = useRef(randomColor({ luminosity: 'light' }));
