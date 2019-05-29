@@ -33,6 +33,11 @@ function ExternalPageReloader() {
   return null;
 }
 
+function redirectIfGoogleIsTranslatingInIframe(){
+  if (window.location.origin !== "https://translate.googleusercontent.com") return false
+  window.location.href = "https://glitch.com";
+}
+
 function track() {
   try {
     const { analytics } = window;
@@ -59,17 +64,10 @@ const PageChangeHandler = withRouter(({ location }) => {
   return null;
 });
 
-const GoogleTranslateHandler = withRouter((location) => {
-  if (window.location.origin === "https://translate.googleusercontent.com") {
-    window.location.href = "https://glitch.com";
-  }
-  return null;
-})
 
 const Router = () => (
   <>
     <PageChangeHandler />
-    <GoogleTranslateHandler />
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
@@ -166,7 +164,11 @@ const Router = () => (
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
-      <Route render={({ location }) => <NotFoundPage key={location.key} />} />
+      <Route render={({ location }) => {
+        if(!redirectIfGoogleIsTranslatingInIframe){
+          return <NotFoundPage key={location.key} />
+        }  
+      }} />
     </Switch>
   </>
 );
