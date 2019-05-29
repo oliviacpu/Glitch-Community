@@ -94,6 +94,18 @@ const NothingFound = () => (
   </PopoverActions>
 );
 
+function useDebouncedState(value, onChange, debounce) {
+  const [local, setLocal] = useState(value);
+  const debouncedLocal = useDebouncedValue(local, 200);
+  useEffect(() => {
+    setLocal(value);
+  }, [value]);
+  useEffect(() => {
+    onChange(debouncedLocal);
+  }, [debouncedLocal]);
+  return [local, setLocal]
+}
+
 function SearchPopover({
   value,
   onChange,
@@ -101,20 +113,30 @@ function SearchPopover({
   status,
   onSubmit,
   align,
-  renderResult,
+  renderItem,
   renderNoResults,
   renderLoader,
   labelText,
   placeholder,
   children,
 }) {
-  const [query, setQuery] = useState(value);
-  const debouncedQuery = useDebouncedValue(query, 200);
-  useEffect(() => {
-    onSubmit(debouncedQuery);
-  }, [debouncedQuery]);
+  const [query, setQuery] = useDebouncedState(value, onChange, 200);
 
   const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
+
+  const contents = (
+    <>
+      {value.length > 0 && status === 'loading' && renderLoader()}
+      {value.length > 0 && status === 'ready' && results.length === 0 && renderNoResults()}
+      {value.length > 0 && status === 'ready' && results.length > 0 && (
+        <PopoverSection>
+          <ResultsList scroll items={results}>
+            {(item, i) => <ScrollResult active={i === activeIndex}>{renderItem({ item, onSubmit, active: i === activeIndex })}</ScrollResult>}
+          </ResultsList>
+        </PopoverSection>
+      )}
+    </>
+  );
 
   return (
     <PopoverDialog align={align}>
@@ -122,29 +144,15 @@ function SearchPopover({
         <TextInput
           autoFocus
           labelText={labelText}
-          value={query}
-          onChange={setQuery}
+          value={value}
+          onChange={onChange}
           onKeyDown={onKeyDown}
           opaque
           placeholder={placeholder}
           type="search"
         />
       </PopoverInfo>
-      {children(
-        <>
-          {query.length > 0 && status === 'loading' && renderLoader()}
-          {query.length > 0 && status === 'ready' && results.length === 0 && renderNoResults()}
-          {query.length > 0 && status === 'ready' && results.length > 0 && (
-            <PopoverSection>
-              <ResultsList scroll items={results}>
-                {(result, i) => (
-                  <ScrollResult active={i === activeIndex}>{renderResult({ result, onSubmit, active: i === activeIndex })}</ScrollResult>
-                )}
-              </ResultsList>
-            </PopoverSection>
-          )}
-        </>,
-      )}
+      {typeof children === 'function' ? children(contents) : children}
     </PopoverDialog>
   );
 }
@@ -156,6 +164,7 @@ SearchPopover.defaultProps = {
 
 function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain, whitelistedDomain, allowEmailInvites }) {
   const [value, onChange] = useState('');
+  const debouncedValue = useDebouncedValue(value)
   const checkedDomains = useCheckedDomains(value);
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
@@ -206,8 +215,6 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     return out;
   }, [value, retrievedUsers, members, whitelistedDomain]);
 
-  const { activeIndex, onKeyDown } = useActiveIndex(results, );
-
   return (
     <SearchPopover
       value={value}
@@ -218,11 +225,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
       align="left"
       labelText="User name"
       placeholder="Search for a user"
-      renderItem={({ onClick, result, component: Component }, i) => (
-        <ScrollResult active={i === activeIndex}>
-          <Component active={i === activeIndex} result={result} onClick={onClick} />
-        </ScrollResult>
-      )}
+      renderItem={({ item: { onClick, result, component: Component }, active }) => <Component active={active} result={result} onClick={onClick} />}
     >
       {(contents) => (
         <>
