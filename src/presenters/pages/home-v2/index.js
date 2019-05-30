@@ -2,7 +2,7 @@ import React from 'react'
 import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button'
-import Row, { RowContainer, RowItem } from 'Components/containers/row'
+import Row from 'Components/containers/row'
 import ProfileList, { ProfileItem } from 'Components/profile-list'
 import Embed from 'Components/project/embed'
 import MaskImage from 'Components/images/mask-image'
@@ -12,20 +12,6 @@ import Layout from '../../layout';
 import data from './example-data';
 import CuratedCollectionContainer from './collection-container';
 import styles from './styles.styl';
-
-const FourBlock = ({ items, children }) => (
-  <RowContainer count={2} className={styles.fourBlock}>
-    <RowContainer as={RowItem} count={2}>
-      <RowItem>{children(items[0])}</RowItem>
-      <RowItem>{children(items[1])}</RowItem>
-    </RowContainer>
-    <RowContainer as={RowItem} count={2}>
-      <RowItem>{children(items[2])}</RowItem>
-      <RowItem>{children(items[3])}</RowItem>
-    </RowContainer>
-  </RowContainer>
-)
-
 
 const BannerVideo = () => (
   <div className={styles.bannerVideoWrap}>
@@ -183,19 +169,26 @@ const CultureZine = ({ content }) => (
   <section id="enter-our-universe" className={styles.cultureZine}>
     <h2><Mark color="lavender">Enter our universe</Mark></h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
-    <FourBlock items={content}>
-      {({ title, source, img, url }) => (
-        <a href={`/culture${url}`} className={styles.plainLink}>
-          <div className={styles.cultureZineImageWrap}>
-            <MaskImage src={img} />
-          </div>
-          <div className={styles.cultureZineText}>
-            <h3>{title}</h3>
-            <p>{source}</p>
-          </div>
-        </a>
+    <Row count={2} items={[
+        { id: 'left', items: content.slice(0, 2) },
+        { id: 'right', items: content.slice(2, 4) }
+      ]}>
+      {({ items }) => (
+        <Row count={2} items={items}>
+          {({ title, source, img, url }) => (
+            <a href={`/culture${url}`} className={styles.plainLink}>
+              <div className={styles.cultureZineImageWrap}>
+                <MaskImage src={img} />
+              </div>
+              <div className={styles.cultureZineText}>
+                <h3>{title}</h3>
+                <p>{source}</p>
+              </div>
+            </a>
+        )}
+        </Row>
       )}
-    </FourBlock>
+    </Row>
   </section>
 )
 
