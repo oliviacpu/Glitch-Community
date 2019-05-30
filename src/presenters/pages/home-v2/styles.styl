@@ -25,18 +25,18 @@ breakpoint = 800px
   display: inline-block
   transform: rotate(-1deg)
   position: relative
-  left: -4px
+  left: "-%s" % u1
 .mark
   background-color: var(--mark-color)
   color: var(--mark-color)
-  padding: u05 u1
-  border-radius: u05
+  padding: u1
+  border-radius: u1
+  user-select: none
 .markText
-  padding: u05 u1
   position: absolute
   width: 100%
   top: 0
-  left: 0
+  left: u1
   display: inline-block
   transform: rotate(1deg)  
   
