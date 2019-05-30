@@ -21,16 +21,24 @@ breakpoint = 800px
 :global img[src=""]
   border: 1px solid #ccc
 
-.mark
+.markWrap
   display: inline-block
+  transform: rotate(-1deg)
+  position: relative
+  left: -4px
+.mark
   background-color: var(--mark-color)
+  color: var(--mark-color)
   padding: u05 u1
   border-radius: u05
-  transform: rotate(-1deg)
-.markInner
+.markText
+  padding: u05 u1
+  position: absolute
+  width: 100%
+  top: 0
+  left: 0
   display: inline-block
-  transform: rotate(1deg)
-  
+  transform: rotate(1deg)  
   
 .banner
   display: flex
