@@ -170,12 +170,12 @@ const wavy = {
     <div className={styles.bubbleImages}>    
       <svg viewBox="0 0 109 153">
          <defs>
-           {users.map((user, i) => (
+           {users.slice(0, 6).map((user, i) => (
              <pattern
               key={user.id}
               id={`user-${i}`}
-              x={widths[i] * -0.5}
-              y={widths[i] * -0.5}
+              x={0}
+              y={0}
               patternUnits="userSpaceOnUse" 
               height={widths[i]} 
               width={widths[i]}>
@@ -184,13 +184,13 @@ const wavy = {
            ))}
           
         </defs>
-        <g id="user-avatar-mask-1" transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
-          <rect className="user-5" x="0" y="0" width="51" height="51" rx="25.5"></rect>
-          <rect className="user-4" x="-49" y="-16" width="42" height="42" rx="21"></rect>
-          <rect className="user-3" x="-7" y="-37" width="32" height="32" rx="16"></rect>
-          <rect className="user-2" x="-39" y="-62" width="32" height="32" rx="16"></rect>
-          <rect className="user-1" x="28" y="-73" width="32" height="32" rx="16"></rect>
-          <rect className="user-0" fill="url(#user-0)"  x="-15" y="-102" width="40" height="40" rx="20"></rect>
+        <g transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
+          <rect fill="url(#user-5)" x="0" y="0" width="51" height="51" rx="25.5"></rect>
+          <rect fill="url(#user-4)" x="-49" y="-16" width="42" height="42" rx="21"></rect>
+          <rect fill="url(#user-3)" x="-7" y="-37" width="32" height="32" rx="16"></rect>
+          <rect fill="url(#user-2)" x="-39" y="-62" width="32" height="32" rx="16"></rect>
+          <rect fill="url(#user-1)" x="28" y="-73" width="32" height="32" rx="16"></rect>
+          <rect fill="url(#user-0)" x="-15" y="-102" width="40" height="40" rx="20"></rect>
         </g>
       </svg>
     </div>
