@@ -161,10 +161,22 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
+const Bubble = ({ user, x, y, r }) => {
+  if (!user) return null
+  return (
+    <img 
+      className={styles.bubble} 
+      src={user.avatarUrl} 
+      alt={user.name || `@${user.login}`}
+      style={{ top: x, left: y, width: r, height: r }}
+    />
+  )
+}
+
 const wavy = {
-  color: 'blue',
+  color: 'lightblue',
   texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
-  mask: ({ users }) => (
+  userMask: ({ users }) => (
     <>
       <Bubble user={users[5]} x="0" y="0" r="51" />
       <Bubble user={users[4]} x="-49" y="-16" r="42"/>
@@ -176,14 +188,16 @@ const wavy = {
   )
 }
 
-
 const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
   <div className={styles.curatedCollectionContainer} style={{ backgroundColor: wavy.color }}>
     <div className={styles.curatedCollectionText}>
       {children}
     </div>
     <div className={styles.curatedCollectionUsers}>
-      <img src={wavy.texture} alt=""
+      <img src={wavy.texture} alt="" className={styles.curatedCollectionTexture} />
+      <div className={styles.curatedCollectionUsersMaskWrap}>
+        {React.createElement(wavy.userMask, { users })}
+      </div>
     </div>
   </div>
 )
