@@ -78,7 +78,7 @@ const CollectionPageContents = ({
   unfeatureProject,
   ...props
 }) => {
-  const collectionHasProjects = !!collection && !!collection.projects;
+  const collectionHasProjects = !!collection && !!collection.projects && collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
   if (collection.featuredProjectId) {
@@ -128,16 +128,14 @@ const CollectionPageContents = ({
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
           </header>
           {!collectionHasProjects && currentUserIsAuthor && (
-            <div className="empty-collection-hint">
+            <div className="empty-collection-hint" style={{ backgroundColor: collection.coverColor }}>
               <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
               <Text>You can add any project, created by any user</Text>
             </div>
           )}
           {!collectionHasProjects && !currentUserIsAuthor && (
-            <div className="empty-collection-hint">No projects to see in this collection just yet.</div>
+            <div className="empty-collection-hint" style={{ backgroundColor: collection.coverColor }}>No projects to see in this collection just yet.</div>
           )}
-          {collectionHasProjects && (
-            <>
               <div className="collection-contents">
                 <div className="collection-project-container-header">
                   {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
@@ -155,6 +153,7 @@ const CollectionPageContents = ({
                     hideNote={hideNote}
                   />
                 )}
+          {collectionHasProjects && (
                 <ProjectsList
                   layout="gridCompact"
                   {...props}
@@ -176,10 +175,9 @@ const CollectionPageContents = ({
                   }}
                   fetchMembers
                 />
+          )}
                 {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or press space and use the arrow keys</div>}
               </div>
-            </>
-          )}
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
