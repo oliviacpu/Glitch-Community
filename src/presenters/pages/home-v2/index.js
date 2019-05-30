@@ -38,7 +38,9 @@ const BannerVideo = () => (
 )
 
 const Mark = ({ color, children }) => (
-  <span className={} style={{ backgroundColor: color }}>{children}</span>
+  <span className={styles.mark} style={{ '--mark-color': color }}>
+    <span className={styles.markInner}>{children}</span>
+  </span>
 ) 
 
 const Banner = () => (
