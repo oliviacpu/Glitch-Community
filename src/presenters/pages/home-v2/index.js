@@ -7,7 +7,9 @@ import Layout from '../../layout';
 
 const BannerVideo = () => <div>TODO video</div>
 
-const Mark = 'span'
+const Mark = ({ color, children }) => (
+  <span style={{ backgroundColor: color }}>{children}</span>
+) 
 
 const Banner = () => (
   <header>
@@ -19,7 +21,7 @@ const Banner = () => (
         <Mark>create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
-      <Button type="cta">Check out fresh apps →</Button>
+      <Button type="cta" href="/apps">Check out fresh apps →</Button>
     </div>
     <BannerVideo />
   </header>
@@ -32,8 +34,8 @@ const featureCalloutContent = [
     description: 'Over a million free apps you’ll only find on Glitch.  All instantly remixable and created by people like you.',
     cta: 'Our favorite new apps →',
     imgSrc: '',
-    href: '',
-    color: ""
+    href: '/apps',
+    color: 'yellow',
   },
   {
     id: 'dev',
@@ -42,6 +44,7 @@ const featureCalloutContent = [
     cta: 'Glitch for devs →',
     imgSrc: '',
     href: '/create',
+    color: 'pink',
   },
   {
     id: 'team',
@@ -50,30 +53,50 @@ const featureCalloutContent = [
     cta: 'Glitch for teams →',
     imgSrc: '',
     href: '/teams',
+    color: 'teal'
   }
 ]
 
-const FeatureCallout = ({ label, description, cta, imgSrc, href }) => (
-  <a href={href}>
-    <img src={imgSrc} alt="" />
-    <h2><Mark>{label}</Mark></h2>
-    <p>{description}</p>
-    <Button decorative>{cta}</Button>
-  </a>
+const FeatureCallouts = ({ content }) => (
+  <section>
+    <Row items={content}>
+      {({ label, description, cta, imgSrc, href }) => (
+        <a href={href}>
+          <img src={imgSrc} alt="" />
+          <h2><Mark>{label}</Mark></h2>
+          <p>{description}</p>
+          <Button decorative>{cta}</Button>
+        </a>
+      )}
+    </Row>
+  </section>
 )
 
-const FeatureCallouts = () => (
+const unifiedStoriesContent = {
+  hed: 'AOC says algorithms are biased.\n Here’s how a software developer proved it.',
+  dek: 'Algorithms and bias',
+  summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porta sit amet velit suscipit rhoncus. Nulla et ante bibendum, lacinia urna in, tincidunt erat. Fusce sollicitudin consequat mi eu rhoncus. Etiam arcu sapien, gravida vel libero vel, facilisis tempor nibh. Cras euismod tincidunt maximus. Nulla at nunc porttitor, mollis eros eu, interdum ipsum. Proin et hendrerit velit, ut gravida ligula. Integer congue est id massa sollicitudin, in efficitur ligula facilisis.',
+  cta: 'The Whole Story →',
+  href: '/culture',
+  relatedContent: [
+    {
+      hed: 'The FIlter Bubble',
+    }
+  ]
+}
+
+const UnifiedStories = ({ content: {} }) => (
   <section>
-    <Row items={featureCalloutContent}>
-      {(props) => <FeatureCallout {...props} />}
-    </Row>
+    <div>
+      
+    </div>
   </section>
 )
 
 const Home = () => (
   <Layout>
     <Banner />
-    <FeatureCallouts />
+    <FeatureCallouts content={featureCalloutContent} />
   </Layout>
 )
 
