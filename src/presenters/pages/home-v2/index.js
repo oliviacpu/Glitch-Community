@@ -161,30 +161,21 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
-const Bubble = ({ user, x, y, r }) => {
-  if (!user) return null
-  return (
-    <img 
-      className={styles.bubble} 
-      src={user.avatarUrl} 
-      alt={user.name || `@${user.login}`}
-      style={{ top: x, left: y, width: r, height: r }}
-    />
-  )
-}
 
 const wavy = {
   color: 'lightblue',
   texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
   userMask: ({ users }) => (
-    <>
-      <Bubble user={users[5]} x="0" y="0" r="51" />
-      <Bubble user={users[4]} x="-49" y="-16" r="42"/>
-      <Bubble user={users[3]} x="-7" y="-37" r="32" />
-      <Bubble user={users[2]} x="-39" y="-62" r="32" />
-      <Bubble user={users[1]} x="28" y="-73" r="32"/>
-      <Bubble user={users[0]} x="-15" y="-102" r="40" />
-    </>
+    <svg viewBox="0 0 109 153" >
+      <g id="user-avatar-mask-1" transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fill-rule="nonzero">
+        <rect className="user-6" x="0" y="0" width="51" height="51" rx="25.5"></rect>
+        <rect className="user-5" x="-49" y="-16" width="42" height="42" rx="21"></rect>
+        <rect className="user-4" x="-7" y="-37" width="32" height="32" rx="16"></rect>
+        <rect className="user-3" x="-39" y="-62" width="32" height="32" rx="16"></rect>
+        <rect className="user-2" x="28" y="-73" width="32" height="32" rx="16"></rect>
+        <rect className="user-1" x="-15" y="-102" width="40" height="40" rx="20"></rect>
+      </g>
+    </svg>
   )
 }
 
