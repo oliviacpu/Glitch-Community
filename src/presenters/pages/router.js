@@ -19,6 +19,7 @@ import { NotFoundPage, ProjectNotFoundPage } from './error';
 import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
+import NewHomePage from './home-v2';
 
 /* global EXTERNAL_ROUTES */
 const parse = (search, name) => {
@@ -65,6 +66,8 @@ const Router = () => (
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
+      <Route path="/home-v2" exact render={({ location }) => <NewHomePage key={location.key} />}/>
+
       <Route
         path="/login/facebook"
         exact
@@ -153,7 +156,7 @@ const Router = () => (
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
-
+      
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
       ))}
