@@ -142,7 +142,7 @@ const TopPicks = ({ children}) => (
   </section>
 )
 
-const featuredEmbed = {
+const featuredEmbedContent = {
   domain: 'deface-the-moon',
   title: "Deface the moon",
   description: "Recreate the iconic moon defacement from the animated series based on The Tick.",
@@ -153,27 +153,64 @@ const useProjectMembers = createAPIHook(async(api, domain) => {
   return data.items
 })
 
-const FeaturedEmbed = ({ domain, title, description }) => {
+const ProjectMembers = ({ domain }) => {
   const { value: users } = useProjectMembers(domain)
-  return (
-    <figure>
-      <Embed domain={domain}/>
-      <figcaption>
-        <div>
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-        <ProfileList layout="row" users={users} />
-      </figcaption>
-    </figure>
-  )
+  return <ProfileList layout="row" users={users} />
 }
 
-const appsWeLove = [
+const FeaturedEmbed = ({ content: { domain, title, description } }) => (
+  <figure>
+    <Embed domain={domain}/>
+    <figcaption>
+      <div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+      <ProjectMembers domain={domain} />
+    </figcaption>
+  </figure>
+)
+
+const appsWeLoveContent = [
   {
-  
+    domain: 'magic-eye',
+    title: 'Magic Eye',
+    description: 'Draw Your Own Magic Eye Art',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fmagic-eye_GLITCH.png?1543234498314',
+    
+  },  
+  {
+    domain: 'shouldidoit',
+    title: 'Take On Another Project?',
+    description: 'A handy exercise for figuring out whether or not you should take on a new project.',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fshould-i-do-it.jpg?1538392879435',
+  },
+  {
+    domain: 'turn-off-retweets',
+    title: 'Turn Off Retweets',
+    description: 'Turn off retweets for every person you follow on Twitter.',
+    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fturn-off-retweets.png?1535971899505',
   }
 ]
+
+const AppsWeLove = ({ content }) => (
+  <section id="apps-we-love">
+    <h3><Mark color="salmon">Apps we love</Mark></h3>
+    <Row items={content.map(data => ({ ...data, id: data.domain }))}>
+      {({ domain, title, description, img }) => (
+        <>
+          <ProjectMembers domain={domain} />
+          <a href={`${domain}.glitch.me`}>
+            <img src={img} alt=""/>
+            <h4>{title}</h4>
+            <p>{description}</p>
+          </a>
+        </>
+      )}
+    </Row>
+  </section>
+)
+
 
 const Home = () => (
   <Layout>
@@ -181,7 +218,8 @@ const Home = () => (
     <FeatureCallouts content={featureCalloutContent} />
     <UnifiedStories content={unifiedStoriesContent} />
     <TopPicks>
-      <FeaturedEmbed content={featuredEmbed} />
+      <FeaturedEmbed content={featuredEmbedContent} />
+      <AppsWeLove content={appsWeLoveContent} />
     </TopPicks>
   </Layout>
 )
