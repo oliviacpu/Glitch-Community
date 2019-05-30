@@ -41,11 +41,11 @@ const Banner = () => (
 )
 
 const FeatureCallouts = ({ content }) => (
-  <section id="feature-callouts">
-    <Row items={content}>
+  <section id="feature-callouts" className={styles.featureCalloutsContainer}>
+    <Row items={content} className={styles.featureCallloutsRow}>
       {({ label, description, cta, imgSrc, href, color }) => (
-        <a href={href}>
-          <img src={imgSrc} alt="" />
+        <a href={href} className={styles.featureCalloutLink}>
+          <img src={imgSrc} alt="" className={srty}/>
           <h2><Mark color={color}>{label}</Mark></h2>
           <p>{description}</p>
           <Button decorative>{cta}</Button>
