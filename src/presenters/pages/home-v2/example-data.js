@@ -102,7 +102,7 @@ const curatedCollections = [
     fullUrl: 'glitch/glitch-this-week-may-29-2019',
     users: [],
     count: 11,
-    collectionStyle: 'blue',
+    collectionStyle: 'wavey',
   },
   {
     title: 'Colorful Creations',
@@ -110,7 +110,7 @@ const curatedCollections = [
     fullUrl: 'glitch/colorful-creations',
     users: [],
     count: 13,
-    collectionStyle: 'yellow',
+    collectionStyle: 'diagonal',
   },
   {
     title: 'Draw With Music',
@@ -118,7 +118,7 @@ const curatedCollections = [
     fullUrl: 'glitch/draw-with-music',
     users: [],
     count: 9,
-    collectionStyle: 'red',
+    collectionStyle: 'triangle',
   }
 ]
 
