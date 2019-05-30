@@ -31,7 +31,7 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   // get project details for each collection
   let moreCollectionsWithProjects = await Promise.all(
     moreCollectionsFromAuthor.map(async (c) => {
-      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}orderKey=projectOrder&orderDirection=ASC`, 'items');
+      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}`, 'items');
       return c;
     }),
   );
