@@ -177,3 +177,17 @@ breakpoint = 800px
   padding: u3 u1 u1
   border-radius: u1
   background-color: bg1
+  
+.buildingOnGlitchRow
+  display: flex
+  flex-direction: column
+  margin: "-%s" % u1
+  a
+    display: block
+    margin: u1
+  
+@media (min-width: breakpoint)
+  .buildingOnGlitchRow
+    flex-direction: row
+    a
+      flex: 1 0 50%
