@@ -21,7 +21,6 @@ import SearchPage from './search';
 import SecretPage from './secret';
 
 /* global EXTERNAL_ROUTES */
-
 const parse = (search, name) => {
   const params = new URLSearchParams(search);
   return params.get(name);
@@ -48,6 +47,7 @@ function track() {
 const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
+
   useEffect(() => {
     if (isUpdate.current) {
       window.scrollTo(0, 0);
@@ -65,7 +65,6 @@ const Router = () => (
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
-
       <Route
         path="/login/facebook"
         exact

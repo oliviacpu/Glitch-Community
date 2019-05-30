@@ -13,7 +13,6 @@
     <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fapple-touch-icon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- facebook open graph tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://glitch.com">
@@ -64,7 +63,6 @@
       var BUILD_COMPLETE = <%- BUILD_COMPLETE %>;
       var BUILD_TIMESTAMP = '<%= BUILD_TIMESTAMP %>';
     </script>
-
     <div id="fallback" style="display: none">
       <div class="content">
         <header>
@@ -85,7 +83,12 @@
             <div class="error-msg" id="fallback-ie" style="display: none">
               <h1>Glitch doesn't support Internet Explorer yet</h1>
               <p>Please upgrade to a web browser that can support Glitch features. Please use 
-                <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a>, <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.</p>
+                <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a>, <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.
+              </p>
+            </div>
+            <div class="error-msg" id="fallback-translate" style="display: none">
+              <h1>Unfortunately, Glitch does not support Google translate at this time</h1>
+              <p>redirecting to glitch.com in English...</p>
             </div>
           </main>
       </div>
@@ -100,6 +103,20 @@
         fallback.style.display = 'block';
         fallbackIe.style.display = 'block';
         fallbackImg.style.display = 'block';
+      }
+    </script>
+    <script>
+      const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      if (isCodeRunningInsideGoogleTranslateIframe) {
+        var fallback = document.getElementById('fallback');
+        var fallbackImg = document.getElementById('fallback-img');
+        var fallbackTranslate = document.getElementById('fallback-translate');
+        fallback.style.display = 'block';
+        fallbackImg.style.display = 'block';
+        fallbackTranslate.style.display = 'block';
+        setTimeout(function(){
+          window.location.href = "https://glitch.com";      
+        }, 3000);
       }
     </script>
     <% for (let i = 0; i < scripts.length; ++i) { %>
