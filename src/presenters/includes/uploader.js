@@ -11,7 +11,7 @@ const NotifyUploading = ({ progress }) => (
   </>
 );
 const NotifyError = ({ error }) => {
-  if (error && Object.hasOwnProperty.call(error, 'status_code') && error.status_code === 0) {
+  if (error && error.status_code === 0) {
     return 'File upload failed. Check your firewall settings and try again?';
   }
   return 'File upload failed. Try again in a few minutes?';
