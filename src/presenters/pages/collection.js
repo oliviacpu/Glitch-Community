@@ -159,7 +159,7 @@ const CollectionPageContents = ({
                 {...props}
                 projects={projects}
                 collection={collection}
-                enableSorting={currentUserIsAuthor}
+                enableSorting={currentUserIsAuthor && projects.length > 1}
                 onReorder={updateProjectOrder}
                 noteOptions={{
                   hideNote,
