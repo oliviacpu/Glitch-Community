@@ -196,16 +196,18 @@ const CultureZine = ({ content }) => (
 const BuildingOnGlitch = () => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2><Mark color="yellow">Start building on Glitch</Mark></h2>
-    <a href="/create" className={styles.plainLink}>
-      <img src="" alt=""/>
-      <h3>Developers →</h3>
-      <p>Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.</p>
-    </a>
-    <a href="/teams"className={styles.plainLink}>
-      <img src="" alt=""/>
-      <h3>Teams →</h3>
-      <p>Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.</p>
-    </a>
+    <div className={styles.buildingOnGlitchRow}>
+      <a href="/create" className={styles.plainLink}>
+        <img src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FfirstWebsite.svg?1492031604409" alt=""/>
+        <h3>Developers →</h3>
+        <p>Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.</p>
+      </a>
+      <a href="/teams"className={styles.plainLink}>
+        <img src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt=""/>
+        <h3>Teams →</h3>
+        <p>Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.</p>
+      </a>
+    </div>
   </section>
 )
 
