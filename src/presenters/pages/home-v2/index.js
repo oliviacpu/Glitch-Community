@@ -1,8 +1,9 @@
 import React from 'react'
+import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button'
 import Row from 'Components/containers/row'
-import ProfileList from 'Components/profile-list'
+import ProfileList, { ProfileItem } from 'Components/profile-list'
 import Embed from 'Components/project/embed'
 import { createAPIHook } from 'State/api'
 
@@ -153,6 +154,7 @@ const useProjectMembers = createAPIHook(async(api, domain) => {
   return data.items
 })
 
+// TODO: should this data be loaded at compile-time?
 const ProjectMembers = ({ domain }) => {
   const { value: users } = useProjectMembers(domain)
   return <ProfileList layout="row" users={users} />
@@ -206,6 +208,25 @@ const AppsWeLove = ({ content }) => (
             <p>{description}</p>
           </a>
         </>
+      )}
+    </Row>
+  </section>
+)
+
+const CuratedCollectionContainer = ({ })
+
+const CuratedCollections = ({ content }) => (
+  <section id="curated-collections">
+    <h3><Mark color="skyblue">Curated collections</Mark></h3>
+    <Row items={content.map(data => ({ ...data, id: data.fullUrl }))}>
+      {({ title, description, fullUrl, users, count, collectionStyle }) => (
+        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users}>
+          <h4>{title}</h4>
+          <p>{description}</p>
+          <Button href={`/@${fullUrl}`}>
+            View <Pluralize count={count} singular="project" /> →
+          </Button>
+        </CuratedCollectionContainer>
       )}
     </Row>
   </section>
