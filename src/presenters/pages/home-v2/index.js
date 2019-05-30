@@ -2,7 +2,7 @@ import React from 'react'
 import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button'
-import Row from 'Components/containers/row'
+import Row, { RowContainer, RowItem } from 'Components/containers/row'
 import ProfileList, { ProfileItem } from 'Components/profile-list'
 import Embed from 'Components/project/embed'
 import MaskImage from 'Components/images/mask-image'
@@ -20,17 +20,21 @@ const Mark = ({ color, children }) => (
 
 const Banner = () => (
   <header id="banner" className={styles.banner}>
-    <div>
-      <h1>
-        Glitch is the<br/> 
-        <Mark color="blue">friendly community</Mark><br/>
-        where anyone can<br/>
-        <Mark color="green">create the web</Mark>
-      </h1>
-      <p>The easiest way to build, ship, and share apps on the web, for free.</p>
-      <Button type="cta" href="/apps">Check out fresh apps →</Button>
-    </div>
-    <BannerVideo />
+    <RowContainer minWidth="300px" gap="10px">
+      <RowItem>
+        <h1>
+          Glitch is the<br/> 
+          <Mark color="blue">friendly community</Mark><br/>
+          where anyone can<br/>
+          <Mark color="green">create the web</Mark>
+        </h1>
+        <p>The easiest way to build, ship, and share apps on the web, for free.</p>
+        <Button type="cta" href="/apps">Check out fresh apps →</Button>
+      </RowItem>
+      <RowItem>
+        <BannerVideo />
+      </RowItem>
+    </RowContainer>
   </header>
 )
 
