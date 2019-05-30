@@ -5,6 +5,7 @@ import Button from 'Components/buttons/button'
 import Row from 'Components/containers/row'
 import ProfileList, { ProfileItem } from 'Components/profile-list'
 import Embed from 'Components/project/embed'
+import MaskImage from 'Components/images/mask-image'
 import { createAPIHook } from 'State/api'
 
 import Layout from '../../layout';
@@ -86,21 +87,25 @@ const unifiedStoriesContent = {
   href: '/culture',
   relatedContent: [
     {
+      id: 'the-filter-bubble',
       title: 'The Filter Bubble',
       source: 'On the Blog',
       href: ''
     },
     {
+      id: 'i-made-racist-software',
       title: 'I Made Racist Software',
       source: 'Function Podcast',
       href: ''
     },
     {
+      id: 'tensorflow-starters',
       title: 'TensorFlow Starters',
       source: 'App Collection',
       href: ''
     },
     {
+      id: 'uncovering-search',
       title: 'Uncovering Search',
       source: 'On the Blog',
       href: ''
@@ -122,10 +127,10 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div>
       <h3>Featuring</h3>
       <ul>
-        {relatedContent.map(({ title, source, href }) => (
-          <li key={title}>
+        {relatedContent.map(({ id, title, source, href }) => (
+          <li key={id}>
             <a href={href}>
-              <h4>{label}</h4>
+              <h4>{title}</h4>
               <p>{source}</p>
             </a>
           </li>
@@ -262,15 +267,62 @@ const CuratedCollections = ({ content }) => (
   </section>
 )
 
+const cultureZineContent = [
+  {
+    "id": "5cc884da8ce5b5009ac694f0",
+    "title": "Episode 296: Shar Biggers",
+    "url": "/revisionpath-shar-biggers/",
+    "img": "/culture/content/images/2019/04/glitch-shar-biggers.jpg",
+    "source": "Revision Path",
+  },
+  {
+    "id": "5c52e7f067c3dc007a6b1101",
+    "title": "An Intro to WebVR",
+    "url": "/an-intro-to-webvr/",
+    "img": "/culture/content/images/2019/04/WebVR-Starter-Kit.-Part-1_-Intro-to-WebVR-1.png",
+    "source": "Starter Kit",
+  },
+  {
+    "id": "5bb66cc271231c026d7771fb",
+    "title": "Fun Apps, and Meaningful Change with Patrick Weaver",
+    "url": "/making-fun-apps-and-meaningful-change-with-patrick-weaver-a-glitch-creator-profile/",
+    "img": "/culture/content/images/2018/10/PatrickPhoto2-2.jpg",
+    "source": "Creator Profile",
+
+  },
+  {
+    "id": "5bb66cc271231c026d777209",
+    "title": "Making Web Apps with React",
+    "url": "/you-got-this-zine-2/",
+    "img": "/culture/content/images/2018/10/ygt-zine-react.jpg",
+    "source": "You Got This! Zine",
+  }
+]
+
+const FourBlock = ({ items, children }) => (
+  <div>
+    <div>
+      {children(items[0])}
+      {children(items[1])}
+    </div>
+    <div>
+      {children(items[2])}
+      {children(items[3])}
+    </div>
+  </div>
+)
+
+
 const CultureZine = ({ content }) => (
   <section id="enter-our-universe">
     <h2><Mark color="lavender">Enter our universe</Mark></h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
     <FourBlock items={content}>
-      {({ title, source, img, href }) => (
-        <a href={href}>
+      {({ title, source, img, url }) => (
+        <a href={`/culture${url}`}>
           <MaskImage src={img} />
-          <h3></h3>
+          <h3>{title}</h3>
+          <p>{source}</p>
         </a>
       )}
     </FourBlock>
@@ -287,6 +339,7 @@ const Home = () => (
       <AppsWeLove content={appsWeLoveContent} />
       <CuratedCollections content={curatedCollectionsContent} />
     </TopPicks>
+    <CultureZine content={cultureZineContent} />
   </Layout>
 )
 
