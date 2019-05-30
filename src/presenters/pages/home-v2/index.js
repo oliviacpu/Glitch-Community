@@ -12,7 +12,13 @@ import Layout from '../../layout';
 import data from './example-data';
 import styles from './styles.styl';
 
-const BannerVideo = () => <div>TODO video</div>
+const BannerVideo = () => (
+  <div className={styles.bannerVideoWrap}>
+    <div className={styles.bannerVideo}> 
+      <div>TODO video</div>
+    </div>  
+  </div>
+)
 
 const Mark = ({ color, children }) => (
   <span style={{ backgroundColor: color }}>{children}</span>
@@ -20,21 +26,17 @@ const Mark = ({ color, children }) => (
 
 const Banner = () => (
   <header id="banner" className={styles.banner}>
-    <RowContainer minWidth="300px" gap="10px">
-      <RowItem>
-        <h1>
-          Glitch is the<br/> 
-          <Mark color="blue">friendly community</Mark><br/>
-          where anyone can<br/>
-          <Mark color="green">create the web</Mark>
-        </h1>
-        <p>The easiest way to build, ship, and share apps on the web, for free.</p>
-        <Button type="cta" href="/apps">Check out fresh apps →</Button>
-      </RowItem>
-      <RowItem>
-        <BannerVideo />
-      </RowItem>
-    </RowContainer>
+    <div className={styles.bannerCopy}>
+      <h1>
+        Glitch is the<br/> 
+        <Mark color="blue">friendly community</Mark><br/>
+        where anyone can<br/>
+        <Mark color="green">create the web</Mark>
+      </h1>
+      <p>The easiest way to build, ship, and share apps on the web, for free.</p>
+      <Button type="cta" href="/apps">Check out fresh apps →</Button>
+    </div>
+    <BannerVideo />
   </header>
 )
 
