@@ -163,27 +163,27 @@ const AppsWeLove = ({ content }) => (
 
 const widths = [40, 32, 32, 32, 42, 51]
 
-const wavy = {
-  color: 'lightblue',
-  texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
-  userMask: ({ users }) => (
-    <div className={styles.bubbleImages}>    
+const Defs = ({ users, widths }) => (
+  <defs>
+    {users.slice(0, widths.length + 1).map((user, i) => (
+      <pattern
+        key={user.id}
+        id={`user-${i}`}              
+        height={widths[i]} 
+        width={widths[i]}>
+        <image xlinkHref={users[i].avatarUrl} width={widths[i]} />
+      </pattern>
+    ))}
+  </defs>
+)
+
+const curatedCollectionStyles = {
+  wavy: {
+    color: 'lightblue',
+    texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
+    userMask: ({ users }) => (    
       <svg viewBox="0 0 109 153">
-         <defs>
-           {users.slice(0, 6).map((user, i) => (
-             <pattern
-              key={user.id}
-              id={`user-${i}`}
-              x={0}
-              y={0}
-              patternUnits="userSpaceOnUse" 
-              height={widths[i]} 
-              width={widths[i]}>
-              <image xlinkHref={users[i].avatarUrl} width={widths[i]} />
-            </pattern>
-           ))}
-          
-        </defs>
+        <Defs users={users} widths={widths} />
         <g transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
           <rect fill="url(#user-5)" x="0" y="0" width="51" height="51" rx="25.5"></rect>
           <rect fill="url(#user-4)" x="-49" y="-16" width="42" height="42" rx="21"></rect>
@@ -193,8 +193,8 @@ const wavy = {
           <rect fill="url(#user-0)" x="-15" y="-102" width="40" height="40" rx="20"></rect>
         </g>
       </svg>
-    </div>
-  )
+    )
+  }
 }
 
 const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
@@ -205,7 +205,9 @@ const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
     <div className={styles.curatedCollectionUsers}>
       <img src={wavy.texture} alt="" className={styles.curatedCollectionTexture} />
       <div className={styles.curatedCollectionUsersMaskWrap}>
+        <div className={styles.bubbleImages}>    
         {React.createElement(wavy.userMask, { users })}
+        </div>
       </div>
     </div>
   </div>
