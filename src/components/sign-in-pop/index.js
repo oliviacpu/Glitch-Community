@@ -64,15 +64,14 @@ const SignInCodeSection = ({ onClick }) => (
   </PopoverActions>
 );
 
-function useEmail(hasBlurred) {
+function useEmail() {
   const [email, setEmailValue] = useState('');
   const [validationError, setValidationError] = useState(null);
   const validate = useMemo(
     () =>
       debounce((value) => {
         const isValidEmail = parseOneAddress(value) !== null;
-        console.log('hasBlurred in useEmail', hasBlurred);
-        setValidationError(isValidEmail || !hasBlurred ? null : 'Enter a valid email address');
+        setValidationError(isValidEmail ? null : 'Enter a valid email address');
       }),
     [],
   );
@@ -86,8 +85,8 @@ function useEmail(hasBlurred) {
 
 const EmailHandler = ({ showView }) => {
   const api = useAPI();
-  const [hasBlurred, setHasBlurred] = useState(false);
-  const [email, setEmail, validationError] = useEmail(hasBlurred);
+  const [email, setEmail, validationError] = useEmail();
+  const [isFocused, setIsFocused] = useState(true);
   const [{ status, submitError }, setStatus] = useState({ status: 'ready' });
   const isEnabled = email.length > 0;
 
@@ -128,9 +127,9 @@ const EmailHandler = ({ showView }) => {
               labelText="Email address"
               value={email}
               onChange={setEmail}
-              onBlur={() => console.log('blur')}
+              onBlur={() => setIsFocused(false)}
               placeholder="new@user.com"
-              error={validationError}
+              error={isEnabled && hasBlurred && validationError}
               autoFocus
             />
             <div className={styles.submitWrap}>
