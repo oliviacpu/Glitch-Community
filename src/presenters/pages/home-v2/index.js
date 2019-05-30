@@ -61,7 +61,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
       <h2><Mark color="white">{hed}</Mark></h2>
-      <img src={featuredImage} alt={featuredImageDescription}/>
+      <img src={featuredImage} alt={featuredImageDescription} />
     </div>
     <div className={styles.unifiedStoriesPreview}>
       <h3>{dek}</h3>
@@ -104,14 +104,18 @@ const ProjectMembers = ({ domain }) => {
 }
 
 const FeaturedEmbed = ({ content: { domain, title, description } }) => (
-  <figure>
-    <Embed domain={domain}/>
-    <figcaption>
-      <div>
+  <figure className={styles.featuredEmbed}>
+    <div className={styles.featuredEmbedWrap}>
+      <Embed domain={domain}/>
+    </div>
+    <figcaption className={styles.featuredEmbedCaption}>
+      <div className={styles.featuredEmbedText}>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
-      <ProjectMembers domain={domain} />
+      <div className={styles.featuredEmbedProfileWrap}>
+        <ProjectMembers domain={domain} />
+      </div>
     </figcaption>
   </figure>
 )
