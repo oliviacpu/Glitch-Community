@@ -180,7 +180,9 @@ const CultureZine = ({ content }) => (
     <FourBlock items={content}>
       {({ title, source, img, url }) => (
         <a href={`/culture${url}`} className={styles.plainLink}>
-          <MaskImage src={img} />
+          <div className={styles.cultureZineImageWrap}>
+            <MaskImage src={img} />
+          </div>
           <div className={styles.cultureZineText}>
             <h3>{title}</h3>
             <p>{source}</p>
@@ -192,13 +194,15 @@ const CultureZine = ({ content }) => (
 )
 
 const BuildingOnGlitch = () => (
-  <section id="building-on-glitch">
+  <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2><Mark color="yellow">Start building on Glitch</Mark></h2>
-    <a href="/create">
+    <a href="/create" className={styles.plainLink}>
+      <img src="" alt=""/>
       <h3>Developers →</h3>
       <p>Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.</p>
     </a>
-    <a href="/teams">
+    <a href="/teams"className={styles.plainLink}>
+      <img src="" alt=""/>
       <h3>Teams →</h3>
       <p>Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.</p>
     </a>

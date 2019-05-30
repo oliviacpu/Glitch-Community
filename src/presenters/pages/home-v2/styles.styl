@@ -136,16 +136,20 @@ breakpoint = 800px
   height: 80vh
   max-height: 500px
   margin-bottom: "-%s" % u2
-  border-radius: u2
   
 .featuredEmbedCaption
   padding: u3 u2 u2
   background-color: bg1
   display: flex
   flex-direction: column
+  border-radius: u1
 
 .featuredEmbedText
   flex: 1 0 auto
+  h3
+    margin: u1 0
+  p
+    margin: 0
   
 @media (min-width: breakpoint)
   .featuredEmbedCaption
@@ -163,6 +167,10 @@ breakpoint = 800px
 .fourBlock
   --gap: u1
   --min-width: 200px
+  
+.cultureZineImageWrap
+  padding: 0 u2 53%
+  height: 0
   
 .cultureZineText
   margin-top: "-%s" % u3
