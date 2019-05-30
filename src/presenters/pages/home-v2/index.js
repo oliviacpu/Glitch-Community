@@ -29,14 +29,16 @@ const FourBlock = ({ items, children }) => (
 
 const BannerVideo = () => (
   <div className={styles.bannerVideoWrap}>
-    <div className={styles.bannerVideo}> 
-      <div>TODO video</div>
+    <div className={styles.bannerVideoChrome}> 
+      <div className={styles.bannerVideoInnerWrap}>
+        <div className={styles.bannerVideo}/>
+      </div>
     </div>  
   </div>
 )
 
 const Mark = ({ color, children }) => (
-  <span style={{ backgroundColor: color }}>{children}</span>
+  <span className={} style={{ backgroundColor: color }}>{children}</span>
 ) 
 
 const Banner = () => (
