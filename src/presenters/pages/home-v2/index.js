@@ -8,7 +8,6 @@ import Embed from 'Components/project/embed'
 import MaskImage from 'Components/images/mask-image'
 import { createAPIHook } from 'State/api'
 
-
 import Layout from '../../layout';
 import data from './example-data';
 import styles from './styles.styl';
@@ -38,8 +37,11 @@ const BannerVideo = () => (
 )
 
 const Mark = ({ color, children }) => (
-  <span className={styles.mark} style={{ '--mark-color': color }}>
-    <span className={styles.markInner}>{children}</span>
+  <span className={styles.markWrap}>
+    <span className={styles.mark} style={{ '--mark-color': color }}>
+      <span role="presentation">{children}</span>
+    </span>
+    <span className={styles.markText}>{children}</span>
   </span>
 ) 
 
