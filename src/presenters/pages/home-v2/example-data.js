@@ -34,7 +34,7 @@ const featureCallout = [
 const unifiedStories = {
   hed: 'AOC says algorithms are biased.\n\nHere’s how a software developer proved it.',
   dek: 'Algorithms and bias',
-  featuredImage: '',
+  featuredImage: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fwayback_importer.png?1536570052496',
   featuredImageDescription: '',
   summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porta sit amet velit suscipit rhoncus. Nulla et ante bibendum, lacinia urna in, tincidunt erat. Fusce sollicitudin consequat mi eu rhoncus. Etiam arcu sapien, gravida vel libero vel, facilisis tempor nibh. Cras euismod tincidunt maximus. Nulla at nunc porttitor, mollis eros eu, interdum ipsum. Proin et hendrerit velit, ut gravida ligula. Integer congue est id massa sollicitudin, in efficitur ligula facilisis.',
   cta: 'The Whole Story →',
