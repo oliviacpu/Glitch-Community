@@ -45,7 +45,7 @@ const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCallloutsRow}>
       {({ label, description, cta, imgSrc, href, color }) => (
-        <a href={href} className={styles.featureCalloutsLink}>
+        <a href={href} className={styles.plainLink}>
           <img src={imgSrc} alt="" className={styles.featureCalloutsImage}/>
           <h2><Mark color={color}>{label}</Mark></h2>
           <p>{description}</p>
@@ -73,7 +73,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       <ul>
         {relatedContent.map(({ id, title, source, href }) => (
           <li key={id}>
-            <a href={href} className={styles.relatedContentLink}>
+            <a href={href} className={styles.plainLink}>
               <h4>{title}</h4>
               <p>{source}</p>
             </a>
@@ -121,14 +121,14 @@ const FeaturedEmbed = ({ content: { domain, title, description } }) => (
 )
 
 const AppsWeLove = ({ content }) => (
-  <section id="apps-we-love">
+  <section id="apps-we-love" className={styles.appsWeLoveContainer}>
     <h3><Mark color="salmon">Apps we love</Mark></h3>
-    <Row items={content.map(data => ({ ...data, id: data.domain }))}>
+    <Row items={content.map(data => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
       {({ domain, title, description, img }) => (
         <>
           <ProjectMembers domain={domain} />
-          <a href={`${domain}.glitch.me`}>
-            <img src={img} alt=""/>
+          <a href={`${domain}.glitch.me`} className={styles.plainLink}>
+            <MaskImage maskClass="speechBubble" src={img} alt=""/>
             <h4>{title}</h4>
             <p>{description}</p>
           </a>
