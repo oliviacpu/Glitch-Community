@@ -75,20 +75,58 @@ const FeatureCallouts = ({ content }) => (
 const unifiedStoriesContent = {
   hed: 'AOC says algorithms are biased.\n Here’s how a software developer proved it.',
   dek: 'Algorithms and bias',
+  featuredImage: '',
+  featuredImageDescription: '',
   summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porta sit amet velit suscipit rhoncus. Nulla et ante bibendum, lacinia urna in, tincidunt erat. Fusce sollicitudin consequat mi eu rhoncus. Etiam arcu sapien, gravida vel libero vel, facilisis tempor nibh. Cras euismod tincidunt maximus. Nulla at nunc porttitor, mollis eros eu, interdum ipsum. Proin et hendrerit velit, ut gravida ligula. Integer congue est id massa sollicitudin, in efficitur ligula facilisis.',
   cta: 'The Whole Story →',
   href: '/culture',
   relatedContent: [
     {
-      hed: 'The FIlter Bubble',
-    }
+      label: 'The Filter Bubble',
+      source: 'On the Blog',
+      href: ''
+    },
+    {
+      label: 'I Made Racist Software',
+      source: 'Function Podcast',
+      href: ''
+    },
+    {
+      label: 'TensorFlow Starters',
+      source: 'App Collection',
+      href: ''
+    },
+    {
+      label: 'Uncovering Search',
+      source: 'On the Blog',
+      href: ''
+    },
   ]
 }
 
-const UnifiedStories = ({ content: {} }) => (
+const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
   <section>
     <div>
-      
+      <h2><Mark color="white">{hed}</Mark></h2>
+      <img src={featuredImage} alt={featuredImageDescription}/>
+    </div>
+    <div>
+      <h3>{dek}</h3>
+      <p>{summary}</p>
+      <Button href={href}>{cta}</Button>
+    </div>
+    <div>
+      <h3>Featuring</h3>
+      <ul>
+        {relatedContent.map(({ label, source, href }) => (
+          <li key={label}>
+            <a href={href}>
+              <h4>{label}</h4>
+              <p>{source}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 )
@@ -97,6 +135,7 @@ const Home = () => (
   <Layout>
     <Banner />
     <FeatureCallouts content={featureCalloutContent} />
+    <UnifiedStories content={unifiedStoriesContent} />
   </Layout>
 )
 
