@@ -166,16 +166,23 @@ const wavy = {
   color: 'lightblue',
   texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
   userMask: ({ users }) => (
-    <svg viewBox="0 0 109 153" >
-      <g id="user-avatar-mask-1" transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fill-rule="nonzero">
-        <rect className="user-6" x="0" y="0" width="51" height="51" rx="25.5"></rect>
-        <rect className="user-5" x="-49" y="-16" width="42" height="42" rx="21"></rect>
-        <rect className="user-4" x="-7" y="-37" width="32" height="32" rx="16"></rect>
-        <rect className="user-3" x="-39" y="-62" width="32" height="32" rx="16"></rect>
-        <rect className="user-2" x="28" y="-73" width="32" height="32" rx="16"></rect>
-        <rect className="user-1" x="-15" y="-102" width="40" height="40" rx="20"></rect>
-      </g>
-    </svg>
+    <div className={styles.bubbleImages}>    
+      <svg viewBox="0 0 109 153">
+         <defs>
+          <pattern id="user-0" x="-32" y="-32" patternUnits="userSpaceOnUse" height="64" width="64">
+            <image xlinkHref={users[0].avatarUrl}/>
+          </pattern>
+        </defs>
+        <g id="user-avatar-mask-1" transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
+          <rect className="user-5" x="0" y="0" width="51" height="51" rx="25.5"></rect>
+          <rect className="user-4" x="-49" y="-16" width="42" height="42" rx="21"></rect>
+          <rect className="user-3" x="-7" y="-37" width="32" height="32" rx="16"></rect>
+          <rect className="user-2" x="-39" y="-62" width="32" height="32" rx="16"></rect>
+          <rect className="user-1" x="28" y="-73" width="32" height="32" rx="16"></rect>
+          <rect className="user-0" fill="url(#user-0)"  x="-15" y="-102" width="40" height="40" rx="20"></rect>
+        </g>
+      </svg>
+    </div>
   )
 }
 
