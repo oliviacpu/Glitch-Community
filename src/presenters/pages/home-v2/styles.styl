@@ -107,10 +107,21 @@ breakpoint = 800px
   &:hover
     text-decoration: none
     
-.featureCalloutsImage
-  width: auto
+.featureCalloutsImageWrap
   height: 200px
-  margin-bottom: "-%s" % u1
+  margin-bottom: "-%s" % u3
+  background-size: contain
+  background-repeat: no-repeat
+  background-position: center
+  display: flex
+  align-items: center
+  justify-content: center
+    
+.featureCalloutsImage
+  width: 100%
+  max-width: 100%
+  max-height: 100%
+  padding: u2 u2 u3
   display: block
   
 .unifiedStories

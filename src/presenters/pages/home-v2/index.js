@@ -68,7 +68,7 @@ const FeatureCallouts = ({ content }) => (
     <Row items={content} className={styles.featureCallloutsRow}>
       {({ label, description, cta, imgSrc, backgroundSrc, href, color }) => (
         <a href={href} className={styles.plainLink}>
-          <div style={{ backgroundImage: backgroundSrc }}>
+          <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
             <img src={imgSrc} alt="" className={styles.featureCalloutsImage}/>
           </div>
           <h2><Mark color={color}>{label}</Mark></h2>
