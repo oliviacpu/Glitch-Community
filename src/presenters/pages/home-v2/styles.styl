@@ -182,12 +182,17 @@ breakpoint = 800px
   display: flex
   flex-direction: column
   margin: "-%s" % u1
+  img
+    height: 120px
+    width: auto
   a
     display: block
     margin: u1
+  h3
+    font-size: t4
   
 @media (min-width: breakpoint)
   .buildingOnGlitchRow
     flex-direction: row
     a
-      flex: 1 0 50%
+      width: 50%
