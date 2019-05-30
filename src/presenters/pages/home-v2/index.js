@@ -329,6 +329,20 @@ const CultureZine = ({ content }) => (
   </section>
 )
 
+const BuildingOnGlitch = () => (
+  <section id="building-on-glitch">
+    <h2><Mark color="yellow">Start building on Glitch</Mark></h2>
+    <a href="/create">
+      <h3>Developers →</h3>
+      <p>Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.</p>
+    </a>
+    <a href="/teams">
+      <h3>Teams →</h3>
+      <p>Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.</p>
+    </a>
+  </section>
+)
+
 const Home = () => (
   <Layout>
     <Banner />
@@ -340,6 +354,7 @@ const Home = () => (
       <CuratedCollections content={curatedCollectionsContent} />
     </TopPicks>
     <CultureZine content={cultureZineContent} />
+    <BuildingOnGlitch/>
   </Layout>
 )
 
