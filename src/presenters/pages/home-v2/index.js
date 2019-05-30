@@ -161,6 +161,7 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
+const widths = [40, 32, 32, 32, 42, 51]
 
 const wavy = {
   color: 'lightblue',
@@ -169,9 +170,19 @@ const wavy = {
     <div className={styles.bubbleImages}>    
       <svg viewBox="0 0 109 153">
          <defs>
-          <pattern id="user-0" x="-32" y="-32" patternUnits="userSpaceOnUse" height="64" width="64">
-            <image xlinkHref={users[0].avatarUrl}/>
-          </pattern>
+           {users.map((user, i) => (
+             <pattern
+              key={user.id}
+              id={`user-${i}`}
+              x={widths[i] * -0.5}
+              y={widths[i] * -0.5}
+              patternUnits="userSpaceOnUse" 
+              height={widths[i]} 
+              width={widths[i]}>
+              <image xlinkHref={users[i].avatarUrl} width={widths[i]} />
+            </pattern>
+           ))}
+          
         </defs>
         <g id="user-avatar-mask-1" transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
           <rect className="user-5" x="0" y="0" width="51" height="51" rx="25.5"></rect>
