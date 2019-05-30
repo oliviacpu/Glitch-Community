@@ -9,7 +9,7 @@ t2 = 14px
 t3 = 16px
 t4 = 18px
 t5 = 24px
-t6 = 36px
+t6 = 32px
 
 breakpoint = 800px
 
@@ -20,35 +20,38 @@ breakpoint = 800px
   color: white
   background-color: purple
   border-radius: u2
-  padding: u2
-  h1
-    font-size: t6
+  padding: u3
   
 .bannerCopy
-  max-width: 300px
+  max-width: 400px
   padding-bottom: u2
+  h1
+    font-size: t6
+    margin: 0
+  p
+    margin: u1 0
   
 .bannerVideoWrap
   width: 100%
-  max-width: 500px
+  max-width: 700px
   
 .bannerVideo
   background-color: lightblue
   border-radius: u1
   width: 100%
   height: 0
-  padding-bottom: 56.25% // 16:9
+  padding-bottom: 75%
   
 @media (min-width: breakpoint)
   .banner
     flex-direction: row
     justify-content: flex-end
-    margin: u2 0
+    margin: u3 0
   .bannerCopy
     padding-bottom: 0
     padding-right: u3
   .bannerVideoWrap
-    margin: "-%s 0" % u3
+    margin: "-%s 0" % u4
     
 .featureCalloutsRow
   --gap: u1
@@ -75,17 +78,19 @@ breakpoint = 800px
   
 .unifiedStoriesFeatureLabel
   display: inline-block
-  padding: u05
+  padding: u05 u05 0
   border-radius: u05
   text-transform: uppercase
   background-color: yellow
+  font-weight: bold
   font-size: t1
-  
+  margin-bottom: u1
   
 .unifiedStoriesHeadline
   white-space: pre-line
-  h1
+  h2
     font-size: t6
+    margin: 0
   
 .unifiedStoriesPreview
   padding: u2 0
@@ -97,6 +102,13 @@ breakpoint = 800px
     list-style-type: none
   h3
     text-transform: uppercase
+    font-size: t1
+    margin-bottom: u2
+  h4
+    margin: 0
+  p
+    margin: 0 0 u1
+    font-size: t2
   
 @media (min-width: breakpoint)
   .unifiedStories
@@ -105,7 +117,7 @@ breakpoint = 800px
   .unifiedStoriesHeadline
     flex: 1 1 35%
   .unifiedStoriesPreview
-    padding: 0 u2 0 u3
+    padding: 0 u3 0 u4
     flex: 1 1 40%
   .unifiedStoriesRelatedContent
     flex: 1 1 25%

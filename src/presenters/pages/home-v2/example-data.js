@@ -29,7 +29,7 @@ const featureCallout = [
 ]
 
 const unifiedStories = {
-  hed: 'AOC says algorithms are biased.\n Here’s how a software developer proved it.',
+  hed: 'AOC says algorithms are biased.\n\nHere’s how a software developer proved it.',
   dek: 'Algorithms and bias',
   featuredImage: '',
   featuredImageDescription: '',
