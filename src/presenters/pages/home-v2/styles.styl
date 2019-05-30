@@ -12,14 +12,23 @@ t4 = 18px
 t5 = 24px
 t6 = 32px
 
+fg0 = #222
+fg1 = #555
+
 bg0 = #fff
 bg1 = #f6f6f6
 bg2 = #e5e5e5
 
 breakpoint = 800px
 
-:global img[src=""]
-  border: 1px solid #ccc
+.h2
+  font-size: t5
+  margin: 0 0 u2
+  
+.h3
+  font-size: t4
+  margin: 0 0 u2
+
 
 .mark
   display: inline-block
@@ -103,8 +112,7 @@ breakpoint = 800px
     
 .featureCalloutsImageWrap
   height: 200px
-  margin: u2
-  margin-bottom: "-%s" % u3
+  margin: u2 u2 0
   background-size: contain
   background-repeat: no-repeat
   background-position: center
@@ -116,15 +124,18 @@ breakpoint = 800px
   width: 100%
   max-width: 100%
   max-height: 100%
-  padding: u2 u3
+  padding: u2 u3 u3
   display: block
+  
+.featureCalloutsText
+  margin-top: "-%s" % u3
   
 .unifiedStories
   display: flex
   flex-direction: column
   background-color: bg2
   border-radius: u1
-  padding: u2 u3 u3
+  padding: u2 u3
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -198,7 +209,8 @@ breakpoint = 800px
 .featuredEmbedText
   flex: 1 0 auto
   h3
-    margin: u1 0
+    margin: u1 0 u05
+    font-size: t4
   p
     margin: 0
   
@@ -210,7 +222,11 @@ breakpoint = 800px
 
 .appsWeLoveContainer
   h4
-    margin: u1 0
+    margin: u1 0 u05
+    font-size: t3
+  p
+    margin: 0
+    color: fg1
     
 .appsWeLoveRow
   --gap: u1
@@ -218,6 +234,7 @@ breakpoint = 800px
 .curatedCollectionContainer
   position: relative
   border-radius: u1
+  padding: u2 u1 u2 u2
   overflow: hidden
   display: flex
   height: 100%
@@ -230,15 +247,18 @@ breakpoint = 800px
   top: -20px
   
 .curatedCollectionText
-  padding: u2
-  flex: 1 1 100%  
+  flex: 1 1 100%
   a
     white-space: nowrap
+  h4
+    font-size: t5
+    margin: 0 0 u2
+  p
+    font-size: t2
 
 .curatedCollectionUsers
   flex: 1 0 150px
   position: relative
-  padding: u2 u2 u2 0
   svg
     height: 100%
     max-height: 200px  

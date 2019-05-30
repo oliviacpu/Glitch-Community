@@ -208,7 +208,7 @@ const users = {
 
 const curatedCollections = [
   {
-    title: 'Glitch This Week (May 29, 2019)',
+    title: 'Glitch This Week',
     description: 'Just a few projects that caught our eye this week on Glitch',
     fullUrl: 'glitch/glitch-this-week-may-29-2019',
     users: Object.values(users),
