@@ -1,11 +1,12 @@
 const featureCallout = [
   {
-    id: 'app',
+    id: 'discover',
     label: 'Discover the best stuff on the web',
     description: 'Over a million free apps you’ll only find on Glitch.  All instantly remixable and created by people like you.',
     cta: 'Our favorite new apps →',
     imgSrc: '',
-    href: '/apps',
+    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdiscover-background.svg?1559244637952',
+    href: '#apps-we-love',
     color: 'yellow',
   },
   {
@@ -14,6 +15,7 @@ const featureCallout = [
     description: 'No servers, no setup, no worries. Glitch is so easy that it’s beloved by expert developers and brand new coders.',
     cta: 'Glitch for devs →',
     imgSrc: '',
+    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fcreators-background.svg?1559244638269',
     href: '/create',
     color: 'pink',
   },
@@ -23,6 +25,7 @@ const featureCallout = [
     description: 'Real-time collaboration features packaged with curated apps, designed to boost your team’s productivity.',
     cta: 'Glitch for teams →',
     imgSrc: '',
+    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fteams-background.svg?1559244638129',
     href: '/teams',
     color: 'aquamarine'
   }

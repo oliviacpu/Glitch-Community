@@ -26,6 +26,7 @@ breakpoint = 800px
   transform: rotate(-1deg)
   position: relative
   left: "-%s" % u1
+  z-index: 0
 .mark
   background-color: var(--mark-color)
   color: var(--mark-color)
@@ -40,14 +41,18 @@ breakpoint = 800px
   display: inline-block
   transform: rotate(1deg)  
   
+.unmarked
+  position: relative
+  z-index: 1
+  
 .banner
   display: flex
   flex-direction: column
   align-items: center
   color: white
-  bacckground-image: url('https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fbanner-background.svg?1559244211716')
+  background-image: url('https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fbanner-background.svg?1559244211716')
   background-size: cover
-  background-position: 
+  background-position: right
   border-radius: u2
   padding: u3
   

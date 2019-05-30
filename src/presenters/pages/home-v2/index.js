@@ -45,13 +45,15 @@ const Mark = ({ color, children }) => (
   </span>
 ) 
 
+const Unmarked = ({ children }) => (<span className={styles.unmarked}>{children}</span>)
+
 const Banner = () => (
   <header id="banner" className={styles.banner}>
     <div className={styles.bannerCopy}>
       <h1>
-        Glitch is the<br/> 
+        <Unmarked>Glitch is the</Unmarked><br/> 
         <Mark color="blue">friendly community</Mark><br/>
-        where anyone can<br/>
+        <Unmarked>where anyone can</Unmarked><br/>
         <Mark color="green">create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
@@ -64,9 +66,11 @@ const Banner = () => (
 const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCallloutsRow}>
-      {({ label, description, cta, imgSrc, href, color }) => (
+      {({ label, description, cta, imgSrc, backgroundSrc, href, color }) => (
         <a href={href} className={styles.plainLink}>
-          <img src={imgSrc} alt="" className={styles.featureCalloutsImage}/>
+          <div style={{ backgroundImage: backgroundSrc }}>
+            <img src={imgSrc} alt="" className={styles.featureCalloutsImage}/>
+          </div>
           <h2><Mark color={color}>{label}</Mark></h2>
           <p>{description}</p>
           <Button decorative>{cta}</Button>
