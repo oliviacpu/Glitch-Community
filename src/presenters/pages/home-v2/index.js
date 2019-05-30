@@ -8,6 +8,7 @@ import Embed from 'Components/project/embed'
 import MaskImage from 'Components/images/mask-image'
 import { createAPIHook } from 'State/api'
 
+
 import Layout from '../../layout';
 import data from './example-data';
 import styles from './styles.styl';
@@ -58,6 +59,7 @@ const FeatureCallouts = ({ content }) => (
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesHeadline}>
+      <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
       <h2><Mark color="white">{hed}</Mark></h2>
       <img src={featuredImage} alt={featuredImageDescription}/>
     </div>
@@ -71,7 +73,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       <ul>
         {relatedContent.map(({ id, title, source, href }) => (
           <li key={id}>
-            <a href={href} className={}>
+            <a href={href} className={styles.relatedContentLink}>
               <h4>{title}</h4>
               <p>{source}</p>
             </a>
