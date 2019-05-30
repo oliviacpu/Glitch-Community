@@ -161,16 +161,30 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
-const curatedCollectionConfig = {
-  
+const wavy = {
+  color: 'blue',
+  texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
+  mask: ({ users }) => (
+    <>
+      <Bubble user={users[5]} x="0" y="0" r="51" />
+      <Bubble user={users[4]} x="-49" y="-16" r="42"/>
+      <Bubble user={users[3]} x="-7" y="-37" r="32" />
+      <Bubble user={users[2]} x="-39" y="-62" r="32" />
+      <Bubble user={users[1]} x="28" y="-73" r="32"/>
+      <Bubble user={users[0]} x="-15" y="-102" r="40" />
+    </>
+  )
 }
 
+
 const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
-  <div className={styles.curatedCollectionContainer}>
+  <div className={styles.curatedCollectionContainer} style={{ backgroundColor: wavy.color }}>
     <div className={styles.curatedCollectionText}>
       {children}
     </div>
-    <div></div>
+    <div className={styles.curatedCollectionUsers}>
+      <img src={wavy.texture} alt=""
+    </div>
   </div>
 )
 
