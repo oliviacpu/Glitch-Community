@@ -11,7 +11,14 @@ t4 = 18px
 t5 = 24px
 t6 = 32px
 
+bg0 = #fff
+bg1 = #f6f6f6
+bg2 = #e5e5e5
+
 breakpoint = 800px
+
+:global img[src=""]
+  border: 1px solid #ccc
 
 .banner
   display: flex
@@ -33,7 +40,7 @@ breakpoint = 800px
   
 .bannerVideoWrap
   width: 100%
-  max-width: 700px
+  max-width: 600px
   
 .bannerVideo
   background-color: lightblue
@@ -46,7 +53,7 @@ breakpoint = 800px
   .banner
     flex-direction: row
     justify-content: flex-end
-    margin: u3 0
+    margin: u4 0
   .bannerCopy
     padding-bottom: 0
     padding-right: u3
@@ -72,7 +79,7 @@ breakpoint = 800px
 .unifiedStories
   display: flex
   flex-direction: column
-  background-color: #efefef
+  background-color: bg2
   border-radius: u1
   padding: u2
   
@@ -84,7 +91,7 @@ breakpoint = 800px
   background-color: yellow
   font-weight: bold
   font-size: t1
-  margin-bottom: u1
+  margin-bottom: u3
   
 .unifiedStoriesHeadline
   white-space: pre-line
@@ -121,3 +128,12 @@ breakpoint = 800px
     flex: 1 1 40%
   .unifiedStoriesRelatedContent
     flex: 1 1 25%
+    
+.featuredEmbedWrap
+  height: 80vh
+  max-height: 500px
+  margin-bottom: "-%s" % u2
+  
+.featuredEmbedCaption
+  padding: u3 u2 u2
+  background-color: bg1
