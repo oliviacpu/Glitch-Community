@@ -86,22 +86,22 @@ const unifiedStoriesContent = {
   href: '/culture',
   relatedContent: [
     {
-      label: 'The Filter Bubble',
+      title: 'The Filter Bubble',
       source: 'On the Blog',
       href: ''
     },
     {
-      label: 'I Made Racist Software',
+      title: 'I Made Racist Software',
       source: 'Function Podcast',
       href: ''
     },
     {
-      label: 'TensorFlow Starters',
+      title: 'TensorFlow Starters',
       source: 'App Collection',
       href: ''
     },
     {
-      label: 'Uncovering Search',
+      title: 'Uncovering Search',
       source: 'On the Blog',
       href: ''
     },
@@ -122,8 +122,8 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div>
       <h3>Featuring</h3>
       <ul>
-        {relatedContent.map(({ label, source, href }) => (
-          <li key={label}>
+        {relatedContent.map(({ title, source, href }) => (
+          <li key={title}>
             <a href={href}>
               <h4>{label}</h4>
               <p>{source}</p>
@@ -213,7 +213,37 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
-const CuratedCollectionContainer = ({ })
+const curatedCollectionsContent = [
+  {
+    title: 'Glitch This Week (May 29, 2019)',
+    description: 'Just a few projects that caught our eye this week on Glitch',
+    fullUrl: 'glitch/glitch-this-week-may-29-2019',
+    users: [],
+    count: 11,
+    collectionStyle: 'blue',
+  },
+  {
+    title: 'Colorful Creations',
+    description: 'A rainbow of apps for finding and enjoying colors 🌈',
+    fullUrl: 'glitch/colorful-creations',
+    users: [],
+    count: 13,
+    collectionStyle: 'yellow',
+  },
+  {
+    title: 'Draw With Music',
+    description: 'Use these apps to draw with music. Waveforms, visualizations, & more! 🎧🎶',
+    fullUrl: 'glitch/draw-with-music',
+    users: [],
+    count: 9,
+    collectionStyle: 'red',
+  }
+]
+
+
+const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
+  <div>{children}</div>
+)
 
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections">
@@ -232,6 +262,20 @@ const CuratedCollections = ({ content }) => (
   </section>
 )
 
+const CultureZine = ({ content }) => (
+  <section id="enter-our-universe">
+    <h2><Mark color="lavender">Enter our universe</Mark></h2>
+    <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
+    <FourBlock items={content}>
+      {({ title, source, img, href }) => (
+        <a href={href}>
+          <MaskImage src={img} />
+          <h3></h3>
+        </a>
+      )}
+    </FourBlock>
+  </section>
+)
 
 const Home = () => (
   <Layout>
@@ -241,6 +285,7 @@ const Home = () => (
     <TopPicks>
       <FeaturedEmbed content={featuredEmbedContent} />
       <AppsWeLove content={appsWeLoveContent} />
+      <CuratedCollections content={curatedCollectionsContent} />
     </TopPicks>
   </Layout>
 )
