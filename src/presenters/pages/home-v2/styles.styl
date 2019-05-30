@@ -208,37 +208,26 @@ breakpoint = 800px
   --gap: u1
 
 .curatedCollectionContainer
+  position: relative
   border-radius: u1
   overflow: hidden
   display: flex
+  height: 100%
   
+.curatedCollectionTexture
+  position: absolute
+  transform: rotate(12deg)
+  height: 120%
+  right: u3
+  top: -20px
   
 .curatedCollectionText
   padding: u2
   flex: 1 0 200px  
 
 .curatedCollectionUsers
-  flex: 1 0 auto
+  flex: 1 1 100%
   position: relative
-  
-.curatedCollectionTexture
-  position: absolute
-  transform: rotate(12deg)
-  height: 120%
-  width: 100%
-  right: 0
-  top: -20px
-  
-.curatedCollectionUsersMaskWrap
-  position: absolute
-  height: 100%
-  width: 100%
-  top: 0
-  display: flex
-  align-items: center
-  
-.bubbleImages
-  flex: 1 0 auto
   padding: u2 u2 u2 0
   svg
     max-height: 100%
