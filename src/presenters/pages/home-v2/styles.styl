@@ -4,6 +4,8 @@ u2 = 16px
 u3 = 32px
 u4 = 64px
 
+breakpoint = 800px
+
 .banner
   display: flex
   flex-direction: column
@@ -28,7 +30,7 @@ u4 = 64px
   height: 0
   padding-bottom: 56.25% // 16:9
   
-@media (min-width: 800px)
+@media (min-width: breakpoint)
   .banner
     flex-direction: row
     justify-content: flex-end
@@ -53,3 +55,25 @@ u4 = 64px
   height: 200px
   margin-bottom: "-%s" % u1
   display: block
+  
+.unifiedStories
+  display: flex
+  flex-direction: column
+  background-color: #efefef
+  border-radius: u1
+  padding: u2
+  
+.unifiedStoriesPreview
+  padding: u2 0
+
+@media (min-width: breakpoint)
+  .unifiedStories
+    flex-direction: row
+    align-items: center
+  .unifiedStoriesHeadline
+    flex: 1 1 30%
+  .unifiedStoriesPreview
+    padding: 0 u2 0 u3
+    flex: 1 1 40%
+  .unifiedStoriesRelatedContent
+    flex: 1 1 30%

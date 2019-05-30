@@ -34,7 +34,7 @@ const Banner = () => (
         <Mark color="green">create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
-      <Button type="cta" href="/apps">Check out fresh apps →</Button>
+      <Button type="cta" href="#top-picks">Check out fresh apps →</Button>
     </div>
     <BannerVideo />
   </header>
@@ -56,22 +56,22 @@ const FeatureCallouts = ({ content }) => (
 )
 
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
-  <section id="unified-stories">
-    <div>
+  <section id="unified-stories" className={styles.unifiedStories}>
+    <div className={styles.unifiedStoriesHeadline}>
       <h2><Mark color="white">{hed}</Mark></h2>
       <img src={featuredImage} alt={featuredImageDescription}/>
     </div>
-    <div>
+    <div className={styles.unifiedStoriesPreview}>
       <h3>{dek}</h3>
       <p>{summary}</p>
       <Button href={href}>{cta}</Button>
     </div>
-    <div>
+    <div className={styles.unifiedStoriesRelatedContent}>
       <h3>Featuring</h3>
       <ul>
         {relatedContent.map(({ id, title, source, href }) => (
           <li key={id}>
-            <a href={href}>
+            <a href={href} className={}>
               <h4>{title}</h4>
               <p>{source}</p>
             </a>
