@@ -161,8 +161,17 @@ const AppsWeLove = ({ content }) => (
   </section>
 )
 
+const curatedCollectionConfig = {
+  
+}
+
 const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
-  <div>{children}</div>
+  <div className={styles.curatedCollectionContainer}>
+    <div className={styles.curatedCollectionText}>
+      {children}
+    </div>
+    <div></div>
+  </div>
 )
 
 const CuratedCollections = ({ content }) => (
