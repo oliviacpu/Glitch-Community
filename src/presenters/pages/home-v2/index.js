@@ -13,6 +13,20 @@ import Layout from '../../layout';
 import data from './example-data';
 import styles from './styles.styl';
 
+const FourBlock = ({ items, children }) => (
+  <RowContainer count={2} className={styles.fourBlock}>
+    <RowContainer as={RowItem} count={2}>
+      <RowItem>{children(items[0])}</RowItem>
+      <RowItem>{children(items[1])}</RowItem>
+    </RowContainer>
+    <RowContainer as={RowItem} count={2}>
+      <RowItem>{children(items[2])}</RowItem>
+      <RowItem>{children(items[3])}</RowItem>
+    </RowContainer>
+  </RowContainer>
+)
+
+
 const BannerVideo = () => (
   <div className={styles.bannerVideoWrap}>
     <div className={styles.bannerVideo}> 
@@ -159,30 +173,18 @@ const CuratedCollections = ({ content }) => (
   </section>
 )
 
-const FourBlock = ({ items, children }) => (
-  <div>
-    <div>
-      {children(items[0])}
-      {children(items[1])}
-    </div>
-    <div>
-      {children(items[2])}
-      {children(items[3])}
-    </div>
-  </div>
-)
-
-
 const CultureZine = ({ content }) => (
-  <section id="enter-our-universe">
+  <section id="enter-our-universe" className={styles.cultureZine}>
     <h2><Mark color="lavender">Enter our universe</Mark></h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
     <FourBlock items={content}>
       {({ title, source, img, url }) => (
-        <a href={`/culture${url}`}>
+        <a href={`/culture${url}`} className={styles.plainLink}>
           <MaskImage src={img} />
-          <h3>{title}</h3>
-          <p>{source}</p>
+          <div className={styles.cultureZineText}>
+            <h3>{title}</h3>
+            <p>{source}</p>
+          </div>
         </a>
       )}
     </FourBlock>
