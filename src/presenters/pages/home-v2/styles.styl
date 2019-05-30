@@ -21,24 +21,17 @@ breakpoint = 800px
 :global img[src=""]
   border: 1px solid #ccc
 
-.markWrap
+.mark
   display: inline-block
   transform: rotate(-1deg)
   position: relative
   left: "-%s" % u1
   z-index: 0
-  // white-space: nowrap
-.mark
   background-color: var(--mark-color)
-  color: var(--mark-color)
   padding: u1
   border-radius: u1
-  user-select: none
 .markText
-  position: absolute
-  width: 100%
-  top: 0
-  left: u1
+  position: relative
   display: inline-block
   transform: rotate(1deg)  
   
@@ -143,10 +136,11 @@ breakpoint = 800px
   margin-bottom: u3
   
 .unifiedStoriesHeadline
-  white-space: pre-line
   h2
     font-size: t6
     margin: 0
+  h2 + h2
+    margin-top: u2
   
 .unifiedStoriesPreview
   padding: u2 0

@@ -37,10 +37,7 @@ const BannerVideo = () => (
 )
 
 const Mark = ({ color, children }) => (
-  <span className={styles.markWrap}>
-    <span className={styles.mark} style={{ '--mark-color': color }}>
-      <span role="presentation">{children}</span>
-    </span>
+  <span className={styles.mark} style={{ '--mark-color': color }}>
     <span className={styles.markText}>{children}</span>
   </span>
 ) 
@@ -80,15 +77,13 @@ const FeatureCallouts = ({ content }) => (
   </section>
 )
 
-const TextLines = ({ text, children }) => {
-  const [lines, setLines] = useState(null)
-}
-
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
-      <h2><Mark color="white">{hed}</Mark></h2>
+      {hed.split('\n\n').map((line, i) => (
+        <h2 key={i}><Mark color="white">{line}</Mark></h2>
+      ))}
       <img src={featuredImage} alt={featuredImageDescription} />
     </div>
     <div className={styles.unifiedStoriesPreview}>
