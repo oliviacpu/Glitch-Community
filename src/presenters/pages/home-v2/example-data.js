@@ -24,7 +24,7 @@ const featureCallout = [
     cta: 'Glitch for teams →',
     imgSrc: '',
     href: '/teams',
-    color: 'teal'
+    color: 'aquamarine'
   }
 ]
 
