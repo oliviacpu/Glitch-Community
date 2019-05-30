@@ -93,7 +93,7 @@ breakpoint = 800px
     margin: "-%s 0" % u4
     
 .featureCalloutsRow
-  --gap: u1
+  --gap: u3
 
 .plainLink
   color: inherit
@@ -103,6 +103,7 @@ breakpoint = 800px
     
 .featureCalloutsImageWrap
   height: 200px
+  margin: u2
   margin-bottom: "-%s" % u3
   background-size: contain
   background-repeat: no-repeat
@@ -115,7 +116,7 @@ breakpoint = 800px
   width: 100%
   max-width: 100%
   max-height: 100%
-  padding: u2 u3 u3
+  padding: u2 u3
   display: block
   
 .unifiedStories
@@ -123,7 +124,7 @@ breakpoint = 800px
   flex-direction: column
   background-color: bg2
   border-radius: u1
-  padding: u2 u3
+  padding: u2 u3 u3
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -137,13 +138,20 @@ breakpoint = 800px
   
 .unifiedStoriesHeadline
   h2
-    font-size: t6
+    font-size: t5
     margin: 0
   h2 + h2
     margin-top: u3
+  img
+    width: 100%
+    margin-top: u2
   
 .unifiedStoriesPreview
   padding: u2 0
+  h3
+    font-size: t5
+  p
+    line-height: 1.4
 
 .unifiedStoriesRelatedContent
   ul
@@ -165,12 +173,12 @@ breakpoint = 800px
     flex-direction: row
     align-items: center
   .unifiedStoriesHeadline
-    flex: 1 1 35%
+    flex: 0 0 300px
   .unifiedStoriesPreview
-    padding: 0 u3 0 u4
-    flex: 1 1 40%
+    padding: 0 u3
+    flex: 1 1 auto
   .unifiedStoriesRelatedContent
-    flex: 0 0 200px
+    flex: 0 0 180px
     
 .featuredEmbed
   margin: 0
