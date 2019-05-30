@@ -3,6 +3,7 @@ import React from 'react'
 import Button from 'Components/buttons/button'
 import Row from 'Components/containers/row'
 import ProfileList from 'Components/profile-list'
+import Embed from 'Components/project/embed'
 import { createAPIHook } from 'State/api'
 
 import Layout from '../../layout';
@@ -18,9 +19,9 @@ const Banner = () => (
     <div>
       <h1>
         Glitch is the<br/> 
-        <Mark>friendly community</Mark><br/>
+        <Mark color="blue">friendly community</Mark><br/>
         where anyone can<br/>
-        <Mark>create the web</Mark>
+        <Mark color="green">create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
       <Button type="cta" href="/apps">Check out fresh apps →</Button>
@@ -62,10 +63,10 @@ const featureCalloutContent = [
 const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts">
     <Row items={content}>
-      {({ label, description, cta, imgSrc, href }) => (
+      {({ label, description, cta, imgSrc, href, color }) => (
         <a href={href}>
           <img src={imgSrc} alt="" />
-          <h2><Mark>{label}</Mark></h2>
+          <h2><Mark color={color}>{label}</Mark></h2>
           <p>{description}</p>
           <Button decorative>{cta}</Button>
         </a>
@@ -133,24 +134,28 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
   </section>
 )
 
-const topPicksContent = {
-  
-}
-
-const useProjectMembers = createAPIHook(async(api, domain) => {
-  const { items } = await api.get(`v1/projects/by/domain/users?domain={domain}?limit=100`)
-  return items
-})
-
-const ProjectAuthors = ({ domain }) => {
-  const { value: users } = useProjectMembers(domain)
-  return <ProfileList layout="row" users={users} />
-}
-
-const TopPicks = ({ content: { domain, title, description } }) => (
+const TopPicks = ({ children}) => (
   <section id="top-picks">
     <h2><Mark color="turquoise">Our top picks</Mark></h2>
     <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
+    {children}
+  </section>
+)
+
+const featuredEmbed = {
+  domain: 'deface-the-moon',
+  title: "Deface the moon",
+  description: "Recreate the iconic moon defacement from the animated series based on The Tick.",
+}
+
+const useProjectMembers = createAPIHook(async(api, domain) => {
+  const { data } = await api.get(`v1/projects/by/domain/users?domain=${domain}&limit=100`)
+  return data.items
+})
+
+const FeaturedEmbed = ({ domain, title, description }) => {
+  const { value: users } = useProjectMembers(domain)
+  return (
     <figure>
       <Embed domain={domain}/>
       <figcaption>
@@ -158,17 +163,26 @@ const TopPicks = ({ content: { domain, title, description } }) => (
           <h3>{title}</h3>
           <p>{description}</p>
         </div>
-        <ProjectAuthors domain={domain} />
+        <ProfileList layout="row" users={users} />
       </figcaption>
     </figure>
-  </section>
-)
+  )
+}
+
+const appsWeLove = [
+  {
+  
+  }
+]
 
 const Home = () => (
   <Layout>
     <Banner />
     <FeatureCallouts content={featureCalloutContent} />
     <UnifiedStories content={unifiedStoriesContent} />
+    <TopPicks>
+      <FeaturedEmbed content={featuredEmbed} />
+    </TopPicks>
   </Layout>
 )
 
