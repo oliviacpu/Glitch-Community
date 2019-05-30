@@ -2,6 +2,8 @@ import React from 'react'
 
 import Button from 'Components/buttons/button'
 import Row from 'Components/containers/row'
+import ProfileList from 'Components/profile-list'
+import { createAPIHook } from 'State/api'
 
 import Layout from '../../layout';
 
@@ -12,7 +14,7 @@ const Mark = ({ color, children }) => (
 ) 
 
 const Banner = () => (
-  <header>
+  <header id="banner">
     <div>
       <h1>
         Glitch is the<br/> 
@@ -58,7 +60,7 @@ const featureCalloutContent = [
 ]
 
 const FeatureCallouts = ({ content }) => (
-  <section>
+  <section id="feature-callouts">
     <Row items={content}>
       {({ label, description, cta, imgSrc, href }) => (
         <a href={href}>
@@ -105,7 +107,7 @@ const unifiedStoriesContent = {
 }
 
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
-  <section>
+  <section id="unified-stories">
     <div>
       <h2><Mark color="white">{hed}</Mark></h2>
       <img src={featuredImage} alt={featuredImageDescription}/>
@@ -128,6 +130,37 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         ))}
       </ul>
     </div>
+  </section>
+)
+
+const topPicksContent = {
+  
+}
+
+const useProjectMembers = createAPIHook(async(api, domain) => {
+  const { items } = await api.get(`v1/projects/by/domain/users?domain={domain}?limit=100`)
+  return items
+})
+
+const ProjectAuthors = ({ domain }) => {
+  const { value: users } = useProjectMembers(domain)
+  return <ProfileList layout="row" users={users} />
+}
+
+const TopPicks = ({ content: { domain, title, description } }) => (
+  <section id="top-picks">
+    <h2><Mark color="turquoise">Our top picks</Mark></h2>
+    <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
+    <figure>
+      <Embed domain={domain}/>
+      <figcaption>
+        <div>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </div>
+        <ProjectAuthors domain={domain} />
+      </figcaption>
+    </figure>
   </section>
 )
 
