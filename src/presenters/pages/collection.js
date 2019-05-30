@@ -133,7 +133,7 @@ const CollectionPageContents = ({
             </div>
             {!collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
-                <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" width="" height="" />
+                <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
                 <Text>You can add any project, created by any user</Text>
               </div>
             )}
