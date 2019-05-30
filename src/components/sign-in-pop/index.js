@@ -128,8 +128,9 @@ const EmailHandler = ({ showView }) => {
               value={email}
               onChange={setEmail}
               onBlur={() => setIsFocused(false)}
+              onFocus={() => setIsFocused(true)}
               placeholder="new@user.com"
-              error={isEnabled && hasBlurred && validationError}
+              error={isEnabled && !isFocused && validationError}
               autoFocus
             />
             <div className={styles.submitWrap}>

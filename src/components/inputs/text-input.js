@@ -24,6 +24,7 @@ const TextInput = ({
   name,
   onChange,
   onBlur,
+  onFocus,
   opaque,
   placeholder,
   postfix,
@@ -57,6 +58,7 @@ const TextInput = ({
           name={name}
           onChange={(evt) => onChange(evt.target.value)}
           onBlur={onBlur}
+          onFocus={onFocus}
           placeholder={placeholder}
           type={type}
           value={value}
@@ -84,6 +86,7 @@ TextInput.propTypes = {
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   opaque: PropTypes.bool,
   placeholder: PropTypes.string,
   postfix: PropTypes.node,
@@ -100,6 +103,7 @@ TextInput.defaultProps = {
   maxLength: undefined,
   name: undefined,
   onBlur: undefined,
+  onFocus: undefined,
   opaque: false,
   placeholder: undefined,
   postfix: null,
