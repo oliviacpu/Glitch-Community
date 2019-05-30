@@ -176,7 +176,7 @@ const CollectionPageContents = ({
                   }}
                   fetchMembers
                 />
-                {currentUserIsAuthor && <div>Click and drag to reorder projects, or press space while a project is focused</div>}
+                {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or press space and use the arrow keys</div>}
               </div>
             </>
           )}
