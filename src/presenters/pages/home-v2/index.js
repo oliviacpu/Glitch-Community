@@ -44,8 +44,8 @@ const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCallloutsRow}>
       {({ label, description, cta, imgSrc, href, color }) => (
-        <a href={href} className={styles.featureCalloutLink}>
-          <img src={imgSrc} alt="" className={srty}/>
+        <a href={href} className={styles.featureCalloutsLink}>
+          <img src={imgSrc} alt="" className={styles.featureCalloutsImage}/>
           <h2><Mark color={color}>{label}</Mark></h2>
           <p>{description}</p>
           <Button decorative>{cta}</Button>
