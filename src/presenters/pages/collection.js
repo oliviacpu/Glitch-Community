@@ -127,57 +127,57 @@ const CollectionPageContents = ({
 
             {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
           </header>
-          {!collectionHasProjects && currentUserIsAuthor && (
-            <div className="empty-collection-hint" style={{ backgroundColor: collection.coverColor }}>
-              <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
-              <Text>You can add any project, created by any user</Text>
+          <div className="collection-contents">
+            <div className="collection-project-container-header">
+              {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
             </div>
-          )}
-          {!collectionHasProjects && !currentUserIsAuthor && (
-            <div className="empty-collection-hint" style={{ backgroundColor: collection.coverColor }}>No projects to see in this collection just yet.</div>
-          )}
-              <div className="collection-contents">
-                <div className="collection-project-container-header">
-                  {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
-                </div>
-                {featuredProject && (
-                  <FeaturedProject
-                    isAuthorized={currentUserIsAuthor}
-                    currentUser={currentUser}
-                    featuredProject={featuredProject}
-                    unfeatureProject={unfeatureProject}
-                    addProjectToCollection={addProjectToCollection}
-                    collection={collection}
-                    displayNewNote={displayNewNote}
-                    updateNote={updateNote}
-                    hideNote={hideNote}
-                  />
-                )}
-          {collectionHasProjects && (
-                <ProjectsList
-                  layout="gridCompact"
-                  {...props}
-                  projects={projects}
-                  collection={collection}
-                  enableSorting={currentUserIsAuthor}
-                  onReorder={updateProjectOrder}
-                  noteOptions={{
-                    hideNote,
-                    updateNote,
-                    isAuthorized: currentUserIsAuthor,
-                  }}
-                  projectOptions={{
-                    removeProjectFromCollection,
-                    addProjectToCollection,
-                    displayNewNote,
-                    featureProject,
-                    isAuthorized: currentUserIsAuthor,
-                  }}
-                  fetchMembers
-                />
-          )}
-                {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or press space and use the arrow keys</div>}
+            {!collectionHasProjects && currentUserIsAuthor && (
+              <div className="empty-collection-hint">
+                <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" width="" height="" />
+                <Text>You can add any project, created by any user</Text>
               </div>
+            )}
+            {!collectionHasProjects && !currentUserIsAuthor && (
+              <div className="empty-collection-hint">No projects to see in this collection just yet.</div>
+            )}
+            {featuredProject && (
+              <FeaturedProject
+                isAuthorized={currentUserIsAuthor}
+                currentUser={currentUser}
+                featuredProject={featuredProject}
+                unfeatureProject={unfeatureProject}
+                addProjectToCollection={addProjectToCollection}
+                collection={collection}
+                displayNewNote={displayNewNote}
+                updateNote={updateNote}
+                hideNote={hideNote}
+              />
+            )}
+            {collectionHasProjects && (
+              <ProjectsList
+                layout="gridCompact"
+                {...props}
+                projects={projects}
+                collection={collection}
+                enableSorting={currentUserIsAuthor}
+                onReorder={updateProjectOrder}
+                noteOptions={{
+                  hideNote,
+                  updateNote,
+                  isAuthorized: currentUserIsAuthor,
+                }}
+                projectOptions={{
+                  removeProjectFromCollection,
+                  addProjectToCollection,
+                  displayNewNote,
+                  featureProject,
+                  isAuthorized: currentUserIsAuthor,
+                }}
+                fetchMembers
+              />
+            )}
+            {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or focus a project and press space</div>}
+          </div>
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
