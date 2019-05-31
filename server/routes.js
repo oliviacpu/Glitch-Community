@@ -14,7 +14,6 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { saveHomeDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -51,6 +50,7 @@ module.exports = function(external) {
     let built = true;
 
     const zine = (await getZine()) || [];
+    const homeData = {};
     let scripts = [];
     let styles = [];
 
@@ -88,6 +88,7 @@ module.exports = function(external) {
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
+      V2_HOME_DATA: JSON.stringify(homeData),
     });
   }
 
@@ -201,19 +202,6 @@ module.exports = function(external) {
       CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
     });
-  });
-
-  app.post('/api/home', async (req, res) => {
-    const persistentToken = req.headers.authorization;
-    const data = req.body;
-    console.log({ persistentToken, data });
-    try {
-      await saveHomeDataToFile({ persistentToken, data });
-      res.sendStatus(200);
-    } catch (e) {
-      console.warn(e);
-      res.sendStatus(403);
-    }
   });
 
   app.get('*', async (req, res) => {

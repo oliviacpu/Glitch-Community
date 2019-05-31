@@ -60,7 +60,7 @@ async function getFromCacheOrApi(key, api, ...args) {
     }
     return null;
   }
-}
+} 
 
 module.exports = {
   getProject: (domain) => getFromCacheOrApi(`project ${domain}`, getProjectFromApi, domain),
