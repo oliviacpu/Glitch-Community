@@ -149,7 +149,9 @@ const AppsWeLove = ({ content }) => (
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
       {({ domain, title, description, img, users }) => (
         <>
-          <ProfileList layout="row" users={users} />
+          <div className={styles.appsWeLoveUsers}>
+            <ProfileList layout="row" users={users} />
+          </div>
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
             <h4>{title}</h4>
