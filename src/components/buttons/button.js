@@ -14,7 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }) => {
+const Button = React.forwardRef(({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }, ref) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -39,7 +39,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     }
 
     return (
-      <Link to={href} onClick={onClick} className={className} {...targetProps}>
+      <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
         {children}
       </Link>
     );
@@ -50,11 +50,11 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   return (
-    <button onClick={onClick} className={className} disabled={disabled}>
+    <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
       {children}
     </button>
   );
-};
+});
 
 Button.propTypes = {
   /** element(s) to display in the button */
