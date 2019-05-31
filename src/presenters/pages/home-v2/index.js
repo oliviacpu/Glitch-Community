@@ -53,43 +53,9 @@ const Banner = () => (
   </header>
 );
 
-// TODO: how important is it that this can be easily edited?
-const featureCallouts = [
-  {
-    id: 'discover',
-    label: 'Discover the best stuff on the web',
-    description: 'Over a million free apps you’ll only find on Glitch.  All instantly remixable and created by people like you.',
-    cta: 'Our favorite new apps',
-    imgSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdiscover-animation.svg?1559245019429',
-    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdiscover-background.svg?1559244637952',
-    href: '#apps-we-love',
-    color: 'yellow',
-  },
-  {
-    id: 'dev',
-    label: 'Code the app of your dreams',
-    description: 'No servers, no setup, no worries. Glitch is so easy that it’s beloved by expert developers and brand new coders.',
-    cta: 'Glitch for devs',
-    imgSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fcreators-animation.svg?1559245019111',
-    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fcreators-background.svg?1559244638269',
-    href: '/create',
-    color: 'pink',
-  },
-  {
-    id: 'team',
-    label: 'Build with your team',
-    description: 'Real-time collaboration features packaged with curated apps, designed to boost your team’s productivity.',
-    cta: 'Glitch for teams',
-    imgSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fteam-animation.svg?1559245019268',
-    backgroundSrc: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fteams-background.svg?1559244638129',
-    href: '/teams',
-    color: 'aquamarine',
-  },
-];
-
-const FeatureCallouts = () => (
+const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
-    <Row items={featureCallouts} className={styles.featureCalloutsRow}>
+    <Row items={content} className={styles.featureCalloutsRow}>
       {({ label, description, cta, imgSrc, backgroundSrc, href, color }) => (
         <a href={href} className={styles.plainLink}>
           <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
@@ -238,50 +204,27 @@ const CultureZine = ({ content }) => (
   </section>
 );
 
-const buildingOnGlitchData = [
-  {
-    id: 'create',
-    href: '/create',
-    title: 'Developers',
-    description: 'Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.'
-  },
-  {
-    id: 'teams',
-    href: '/teams',
-    title: 'Teams',
-    description: 'Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.'
-  }
-]
-
-const BuildingOnGlitch = () => (
+const BuildingOnGlitch = ({ content }) => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
       <Mark color="yellow">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
-      {buildingOnGlitchData.map(() => (
-        <a href={href} className={styles.plainLink}>
-        <img src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FfirstWebsite.svg?1492031604409" alt="" />
-        <h3>Developers <Arrow /></h3>
-        <p>Whether you’re learning how to code or building a production-level app, find out how Glitch can power your next idea.</p>
-      </a>
+      {content.map(({ href, img, title, description }) => (
+        <a key={href} href={href} className={styles.plainLink}>
+          <img src={img} alt="" />
+          <h3>{title} <Arrow /></h3>
+          <p>{description}</p>
+        </a>
       ))}
-      
-      <a href="/teams" className={styles.plainLink}>
-        <img src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
-        <h3>Teams →</h3>
-        <p>Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.</p>
-      </a>
     </div>
   </section>
 );
 
-
-
 export const Home = ({ data }) => (
   <>
     <Banner />
-    <FeatureCallouts />
+    <FeatureCallouts content={data.featureCallouts} />
     <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
       <FeaturedEmbed content={data.featuredEmbed} />
@@ -289,7 +232,7 @@ export const Home = ({ data }) => (
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
     <CultureZine content={data.cultureZine} />
-    <BuildingOnGlitch />
+    <BuildingOnGlitch content={data.buildingOnGlitch} />
   </>
 );
 

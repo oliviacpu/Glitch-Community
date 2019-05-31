@@ -8,6 +8,7 @@ import { featuredCollections } from '../../../curated/collections'
 import featuredProjects from '../../../curated/featured'
 import featuredEmbed from '../../../curated/featured-embed'
 import unifiedStories from '../../../curated/unified-stories'
+import { featureCallouts, buildingOnGlitch } from '../../../curated/home-features'
 
 import Layout from '../../layout';
 import { Home } from './index';
