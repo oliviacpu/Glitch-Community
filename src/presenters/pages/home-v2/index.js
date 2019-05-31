@@ -8,8 +8,8 @@ import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
 
 import Layout from '../../layout';
-import exampleData from './example-data';
 import CuratedCollectionContainer from './collection-container';
+import data from '../../../curated/home.json'
 import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
@@ -238,7 +238,7 @@ export const Home = ({ data }) => (
 
 const HomeWithProductionData = () => (
   <Layout>
-    <Home data={exampleData} />
+    <Home data={data} />
   </Layout>
 );
 
