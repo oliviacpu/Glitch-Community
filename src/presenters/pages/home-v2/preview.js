@@ -28,7 +28,7 @@ const PreviewBanner = () => (
 const HomePreview = () => (
   <Layout>
     <PreviewBanner />
-    <DataLoader get={(api) => api.get(`${window.location.origin}/api/home.json`)}>
+    <DataLoader get={(api) => api.get(`${window.location.origin}/api/home.json`).then(res => res.data)}>
       {(data) => <Home data={data} />}
     </DataLoader>
   </Layout>
