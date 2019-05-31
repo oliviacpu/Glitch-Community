@@ -18,3 +18,5 @@ async function saveHomeDataToFile ({ data, persistentToken }) {
   
   await fs.writeFile(path.join(__dirname, '../src/curated/home.json'), JSON.stringify(data), { encoding: 'utf8' })
 }
+
+module.exports = { saveHomeDataToFile };
