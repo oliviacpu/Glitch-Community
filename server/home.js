@@ -4,11 +4,11 @@ const axios = require('axios');
 const { API_URL } = require('./constants').current;
 const { getAllPages, allByKeys } = require('Shared/api');
 
-const { featuredCollections } = require('src/curated/collections')
-const featuredProjects = require('src/curated/featured')
-const featuredEmbed = require('src/curated/featured-embed')
-const unifiedStories = require('src/curated/unified-stories')
-const { featureCallouts, buildingOnGlitch } = require('src/curated/home-features')
+const { featuredCollections } = require('../src/curated/collections')
+const featuredProjects = require('../src/curated/featured')
+const featuredEmbed = require('../src/curated/featured-embed')
+const unifiedStories = require('../src/curated/unified-stories')
+const { featureCallouts, buildingOnGlitch } = require('../src/curated/home-features')
 
 const api = axios.create({
   baseURL: API_URL,
@@ -118,9 +118,6 @@ async function getHomeData(api) {
     featureCallouts: getFeatureCallouts(api),
     buildingOnGlitch: getBuildingOnGlitch(api),
   })
-  const json = JSON.stringify(data)
-  console.log(`Payload size: ${Math.round(json.length / 1024)} KB`)
-  return data
 }
 
 module.exports = { getHomeData }

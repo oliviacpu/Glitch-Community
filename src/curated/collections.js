@@ -9,4 +9,6 @@ export const featuredCollections = [
 ];
 
 // More ideas is populated from this team
-export const moreIdeasTeam = 'glitch';
+const moreIdeasTeam = 'glitch';
+
+module.exports = { featuredCollections, moreIdeasTeam }
