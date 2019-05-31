@@ -202,20 +202,20 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
-  
+
   app.post('/api/home', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
-    console.log({ persistentToken, data })
+    console.log({ persistentToken, data });
     try {
-      await saveHomeDataToFile({ persistentToken, data })
-      res.sendStatus(200)
+      await saveHomeDataToFile({ persistentToken, data });
+      res.sendStatus(200);
     } catch (e) {
-      console.warn(e)
-      res.sendStatus(403)
+      console.warn(e);
+      res.sendStatus(403);
     }
-  })
-  
+  });
+
   app.get('*', async (req, res) => {
     await render(res, 'Glitch', `The ${constants.tagline}`);
   });
