@@ -122,9 +122,6 @@ const EmailHandler = ({ showView }) => {
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
-<<<<<<< HEAD
-            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} autoFocus />
-=======
             <TextInput
               type="email"
               labelText="Email address"
@@ -136,7 +133,6 @@ const EmailHandler = ({ showView }) => {
               error={isEnabled && !isFocused && validationError}
               autoFocus
             />
->>>>>>> b03f5edd92dd96decbaf789427abfa572a3b2a71
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link
