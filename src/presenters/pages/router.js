@@ -20,6 +20,7 @@ import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
 import NewHomePage from './home-v2';
+import NewHomePagePreview from './home-v2/preview';
 
 /* global EXTERNAL_ROUTES */
 
@@ -68,6 +69,7 @@ const Router = () => (
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
       
       <Route path="/home-v2" exact render={({ location }) => <NewHomePage key={location.key} />}/>
+      <Route path="/home-v2/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />}/>
 
       <Route
         path="/login/facebook"
