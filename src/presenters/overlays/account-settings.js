@@ -68,7 +68,7 @@ const PasswordSettings = () => {
     weakPasswordError = true;
   }
 
-  this.handleSubmit = async (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
     setDone(false);
     try {
@@ -93,7 +93,7 @@ const PasswordSettings = () => {
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
