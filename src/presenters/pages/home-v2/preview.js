@@ -3,22 +3,39 @@ import React from 'react';
 import DataLoader from 'Components/data-loader';
 
 import { Home } from './index';
+import { featuredCollections } from '../../../curated/collections'
+
 import exampleData from './example-data';
 
 async function getCultureZine (api) {
   // TODO: this can be fetched fresh here instead of being cached by the home page
-  return window.ZINE_POSTS.map(formatCultureZinePost)
+  return window.ZINE_POSTS.map((post) => ({
+    id: post.id,
+    title: post.title,
+    url: post.url,
+    img: post.feature_image,
+    source: post.primary_tag.name,
+  }))
 }
 
-function formatCultureZinePost(post) {
-  return {
-    id: '5cc884da8ce5b5009ac694f0',
-    title: 'Episode 296: Shar Biggers',
-    url: '/revisionpath-shar-biggers/',
-    img: '/culture/content/images/2019/04/glitch-shar-biggers.jpg',
-    source: 'Revision Path',
-  }
+async function getFeaturedCollections (api) {
+  const fullUrls = featuredCollections.map(({ owner, name }) => `fullUrl=${owner}/${name}`).join('&')
+  const { data } = await api.get(`/v1/collections/by/fullUrl?${fullUrls}`)
+  const users
+  
+  return featuredCollections.map(({ owner, name }) => {
+    const collection = data[`${owner}/${name}`]
+    return {
+      title: collection.title,
+      description: collection.description,
+      fullUrl: 'glitch/glitch-this-week-may-29-2019',
+      users: shuffle(Object.values(users)),
+      count: 11,
+      collectionStyle: 'wavey',
+    }
+  })
 }
+
 
 async function getHomeData(api) {
   const [cultureZine] = await Promise.all([getCultureZine(api)])
