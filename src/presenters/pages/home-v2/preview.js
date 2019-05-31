@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 
 import DataLoader from 'Components/data-loader';
 import Button from 'Components/buttons/button';
+import { useAPI } from 'State/api';
 import { getAllPages, allByKeys } from 'Shared/api';
 
 import { featuredCollections } from '../../../curated/collections'
@@ -123,21 +124,35 @@ async function getHomeData(api) {
   return data
 }
 
-const PreviewBanner = () => (
-  <div className={styles.previewBanner}>
-    <p>This is a live preview of your edits to the home page.</p>
-    <Button type="cta" decorative>
-      Publish
-    </Button>
-    <Button decorative>Reset</Button>
-  </div>
-);
+
+
+const PreviewBanner = ({ data }) => {
+  const api = useAPI()
+  const onPublish = async () => {
+    try {
+      await api.post(`${window.location.origin}/api/home`, data)
+      window.location = `/home-v2`
+    } catch (e) {
+      console.error(e)
+    } 
+  }
+  return (
+    <div className={styles.previewBanner}>
+      <p>This is a live preview of your edits to the home page.</p>
+      <Button type="cta" onClick={onPublish}>
+        Publish
+      </Button>
+    </div>
+  );
+}
 
 const HomePreview = () => (
   <Layout>
-    <PreviewBanner />
     <DataLoader get={getHomeData}>
-      {(data) => <Home data={data} />}
+      {(data) => <> 
+        <PreviewBanner data={data} />
+        <Home data={data} />
+      </>}
     </DataLoader>
   </Layout>
   
