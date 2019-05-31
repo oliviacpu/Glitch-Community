@@ -217,7 +217,7 @@ const unifiedStories = {
 const featuredEmbed = {
   domain: 'deface-the-moon',
   title: 'Deface the moon',
-  description: 'Recreate the iconic moon defacement from the animated series based on The Tick.',
+  description: '<p>Recreate the iconic moon defacement from the animated series based on The Tick.</p>',
   users: [users.modernserf],
 };
 
