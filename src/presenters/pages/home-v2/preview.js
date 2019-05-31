@@ -1,8 +1,7 @@
 import React from 'react';
-import { uniq } from 'lodash';
 
 import DataLoader from 'Components/data-loader';
-import getAllItems from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 
 import { Home } from './index';
 import { featuredCollections } from '../../../curated/collections'
@@ -23,13 +22,13 @@ async function getCultureZine () {
 async function getUniqueUsersInProjects (api, projects, maxCount) {
   const users = {}
   for await (const project of projects) {
-    const projectUsers = await getAllItems(api, `v1/projects/by/id/users?id=${project.id}?limit=100`)
+    const projectUsers = await getAllPages(api, `v1/projects/by/id/users?id=${project.id}&limit=100`)
     for (const user of projectUsers) {
       users[user.id] = user
     }
     if (Object.keys(users).length > maxCount) break
   }
-  return Object.values(users).slice(0, maxCount)
+  return Object.values(users)
 }
 
 async function getFeaturedCollections (api) {
@@ -42,7 +41,7 @@ async function getFeaturedCollections (api) {
   const collectionsWithData = featuredCollections.map(async ({ owner, name, title, description, style }, i) => {
     const fullUrl = `${owner}/${name}`
     const collection = collections[fullUrl]
-    const projects = await getAllItems(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}?limit=100`)
+    const projects = await getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&limit=100`)
     const users = await getUniqueUsersInProjects(api, projects, 5)
     
     return {
