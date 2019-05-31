@@ -68,7 +68,7 @@ const PasswordSettings = () => {
     weakPasswordError = true;
   }
 
-  const handleSubmit = async (evt) => {
+  this.handleSubmit = async (evt) => {
     evt.preventDefault();
     setDone(false);
     try {
@@ -93,7 +93,7 @@ const PasswordSettings = () => {
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
@@ -112,7 +112,9 @@ const PasswordSettings = () => {
         ) : (
           password.length > 0 && (
             <div className="pw-strength">
-              <span className="note"><Pluralize count={pwMinCharCount - password.length} singular="character" /> to go....</span>
+              <span className="note">
+                <Pluralize count={pwMinCharCount - password.length} singular="character" /> to go....
+              </span>
             </div>
           )
         )}
