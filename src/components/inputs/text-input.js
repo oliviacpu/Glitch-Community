@@ -3,18 +3,16 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { pickBy } from 'lodash';
 
+import useUniqueId from 'Hooks/use-unique-id';
 import InputErrorMessage from './input-error-message';
 import InputErrorIcon from './input-error-icon';
-import useUniqueId from '../../hooks/use-unique-id';
 
 import styles from './text-input.styl';
 import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children, className }) => (
-  <span className={classNames(styles.inputPart, className)}>{children}</span>
-);
+const InputPart = ({ children, className }) => <span className={classNames(styles.inputPart, className)}>{children}</span>;
 
 const TextInput = ({
   autoFocus,
@@ -25,6 +23,8 @@ const TextInput = ({
   maxLength,
   name,
   onChange,
+  onBlur,
+  onFocus,
   opaque,
   placeholder,
   postfix,
@@ -57,9 +57,12 @@ const TextInput = ({
           maxLength={maxLength}
           name={name}
           onChange={(evt) => onChange(evt.target.value)}
+          onBlur={onBlur}
+          onFocus={onFocus}
           placeholder={placeholder}
           type={type}
           value={value}
+          spellCheck={type !== 'email' && type !== 'password'}
         />
         {!!error && (
           <InputPart className={styles.errorIcon}>
@@ -82,6 +85,8 @@ TextInput.propTypes = {
   maxLength: PropTypes.number,
   name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   opaque: PropTypes.bool,
   placeholder: PropTypes.string,
   postfix: PropTypes.node,
@@ -97,6 +102,8 @@ TextInput.defaultProps = {
   error: null,
   maxLength: undefined,
   name: undefined,
+  onBlur: undefined,
+  onFocus: undefined,
   opaque: false,
   placeholder: undefined,
   postfix: null,
