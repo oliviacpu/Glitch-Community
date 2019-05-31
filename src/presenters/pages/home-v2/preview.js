@@ -139,7 +139,7 @@ const PreviewBanner = withRouter(({ history, data }) => {
   const api = useAPI();
   const onPublish = async () => {
     try {
-      await api.post(`https://ablaze-peacock.glitch.me/home`, data);
+      await api.post(`${window.location.origin}/api/home`, data);
       history.push('/home-v2');
     } catch (e) {
       console.error(e);
