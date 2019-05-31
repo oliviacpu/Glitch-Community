@@ -4,6 +4,7 @@ const axios = require('axios');
 const { API_URL } = require('./constants').current;
 const { getAllPages, allByKeys } = require('Shared/api');
 
+const { getZine } = require('./api') 
 const { featuredCollections } = require('../src/curated/collections')
 const featuredProjects = require('../src/curated/featured')
 const featuredEmbed = require('../src/curated/featured-embed')
@@ -12,7 +13,7 @@ const { featureCallouts, buildingOnGlitch } = require('../src/curated/home-featu
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 // Trimming the user props to only what is needed for rendering their avatar tooltip reduces the payload size by half!
@@ -20,8 +21,8 @@ const userProps = ['id', 'avatarUrl', 'avatarThumbnailUrl', 'login', 'name', 'co
 const trimUserProps = (user) => pick(user, userProps)
 
 async function getCultureZine () {
-  // TODO: this can be fetched fresh here instead of being cached by the home page
-  return window.ZINE_POSTS.map((post) => ({
+  const posts = await getZine()
+  return posts.slice(0, 4).map((post) => ({
     id: post.id,
     title: post.title,
     url: post.url,
@@ -30,7 +31,7 @@ async function getCultureZine () {
   }))
 }
 
-async function getUniqueUsersInProjects (api, projects, maxCount) {
+async function getUniqueUsersInProjects (projects, maxCount) {
   const users = {}
   for await (const project of projects) {
     const projectUsers = await getAllPages(api, `v1/projects/by/id/users?id=${project.id}&limit=100`)
@@ -42,7 +43,7 @@ async function getUniqueUsersInProjects (api, projects, maxCount) {
   return Object.values(users)
 }
 
-async function getFeaturedCollections (api) {
+async function getFeaturedCollections () {
   const fullUrls = featuredCollections.map(({ owner, name }) => `fullUrl=${owner}/${name}`).join('&')
   const { data: collections } = await api.get(`/v1/collections/by/fullUrl?${fullUrls}`)
   
@@ -53,7 +54,7 @@ async function getFeaturedCollections (api) {
     const fullUrl = `${owner}/${name}`
     const collection = collections[fullUrl]
     const projects = await getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&limit=100`)
-    const users = await getUniqueUsersInProjects(api, projects, 5)
+    const users = await getUniqueUsersInProjects(projects, 5)
     
     return {
       title: title || collection.name,
@@ -68,11 +69,11 @@ async function getFeaturedCollections (api) {
   return Promise.all(collectionsWithData)
 }
 
-async function getFeaturedProjects (api) {
+async function getFeaturedProjects () {
   const projectsWithDomains = featuredProjects.map(project => ({ ...project, domain: project.link.split('~')[1] }))
   const domains = projectsWithDomains.map(p => `domain=${p.domain}`).join('&')
   const { data: projectData } = await api.get(`/v1/projects/by/domain?${domains}`)
-  const projectsWithData = projectsWithDomains.map(async ({ title, img, link, domain, description }) => {
+  const projectsWithData = projectsWithDomains.map(async ({ title, img, domain, description }) => {
     const project = projectData[domain]
     const users = await getAllPages(api, `/v1/projects/by/domain/users?domain=${domain}&limit=100`)
     return {
@@ -86,7 +87,7 @@ async function getFeaturedProjects (api) {
   return Promise.all(projectsWithData)
 }
 
-async function getFeaturedEmbed (api) {
+async function getFeaturedEmbed () {
   const users = await getAllPages(api, `/v1/projects/by/domain/users?domain=${featuredEmbed.appDomain}&limit=100`)
   return {
     domain: featuredEmbed.appDomain,
@@ -108,15 +109,15 @@ async function getBuildingOnGlitch() {
   return buildingOnGlitch
 }
 
-async function getHomeData(api) {
+async function getHomeData() {
   return allByKeys({
-    cultureZine: getCultureZine(api),
-    curatedCollections: getFeaturedCollections(api),
-    appsWeLove: getFeaturedProjects(api),
-    featuredEmbed: getFeaturedEmbed(api),
-    unifiedStories: getUnifiedStories(api),
-    featureCallouts: getFeatureCallouts(api),
-    buildingOnGlitch: getBuildingOnGlitch(api),
+    cultureZine: getCultureZine(),
+    curatedCollections: getFeaturedCollections(),
+    appsWeLove: getFeaturedProjects(),
+    featuredEmbed: getFeaturedEmbed(),
+    unifiedStories: getUnifiedStories(),
+    featureCallouts: getFeatureCallouts(),
+    buildingOnGlitch: getBuildingOnGlitch(),
   })
 }
 
