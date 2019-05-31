@@ -1,4 +1,5 @@
 import React from 'react';
+import { pick } from 'lodash';
 
 import DataLoader from 'Components/data-loader';
 import Button from 'Components/buttons/button';
@@ -14,6 +15,9 @@ import Layout from '../../layout';
 import { Home } from './index';
 import exampleData from './example-data';
 import styles from './styles.styl';
+
+const userProps = ['id', 'avatarUrl', 'avatarThumbnailUrl', 'login', 'name', 'location', 'color', 'description', 'hasCoverImage', 'coverColor','thanksCount', 'utcOffset']
+const trimUserProps = (user) => pick(user, userProps)
 
 async function getCultureZine () {
   // TODO: this can be fetched fresh here instead of being cached by the home page
@@ -52,10 +56,10 @@ async function getFeaturedCollections (api) {
     const users = await getUniqueUsersInProjects(api, projects, 5)
     
     return {
-      title: title || collection.title,
+      title: title || collection.name,
       description: description || collection.description,
       fullUrl: fullUrl,
-      users: users,
+      users: users.map(trimUserProps),
       count: projects.length,
       collectionStyle: style || styles[i]
     }
@@ -75,7 +79,7 @@ async function getFeaturedProjects (api) {
       domain,
       title,
       img,
-      users,
+      users: users.slice(0, 10).map(trimUserProps),
       description: description || project.description,
     }
   }) 
@@ -88,7 +92,7 @@ async function getFeaturedEmbed (api) {
     domain: featuredEmbed.appDomain,
     title: featuredEmbed.title,
     description: featuredEmbed.body,
-    users,
+    users: users.slice(0, 10).map(trimUserProps),
   }
 }
 
@@ -96,19 +100,27 @@ async function getUnifiedStories () {
   return unifiedStories;
 }
 
+async function getFeatureCallouts () {
+  return featureCallouts.map(callout => ({ ...callout, id: callout.href }))
+}
+
+async function getBuildingOnGlitch() {
+  return buildingOnGlitch
+}
+
 async function getHomeData(api) {
-  const loadedData = await allByKeys({
+  const data = await allByKeys({
     cultureZine: getCultureZine(api),
     curatedCollections: getFeaturedCollections(api),
     appsWeLove: getFeaturedProjects(api),
     featuredEmbed: getFeaturedEmbed(api),
     unifiedStories: getUnifiedStories(api),
+    featureCallouts: getFeatureCallouts(api),
+    buildingOnGlitch: getBuildingOnGlitch(api),
   })
-  
-  return {
-    ...exampleData,
-    ...loadedData,
-  };
+  const json = JSON.stringify(data)
+  console.log(`Payload size: ${Math.round(json.length / 1024)} KB`)
+  return data
 }
 
 const PreviewBanner = () => (
