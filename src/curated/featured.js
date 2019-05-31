@@ -12,7 +12,7 @@ Example:
 */
 
 // make sure image urls use https
-export default [
+module.exports = [
   {
     title: 'A Vera Molnár Painting Comes to Life',
     img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_hearing-vera-molnar.png',
