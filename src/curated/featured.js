@@ -12,7 +12,7 @@ Example:
 */
 
 // make sure image urls use https
-export default [
+module.exports = [
   {
     title: 'Draw Your Own Magic Eye Art',
     img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fmagic-eye_GLITCH.png?1543234498314',

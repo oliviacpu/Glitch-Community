@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   hed: 'AOC says algorithms are biased.\n\nHere’s how a software developer proved it.',
   dek: 'Algorithms and bias',
   featuredImage: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fwayback_importer.png?1536570052496',
