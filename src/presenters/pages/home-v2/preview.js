@@ -1,13 +1,17 @@
 import React from 'react';
 
 import DataLoader from 'Components/data-loader';
-import { getAllPages } from 'Shared/api';
+import Button from 'Components/buttons/button';
+import { getAllPages, allByKeys } from 'Shared/api';
 
-import { Home } from './index';
 import { featuredCollections } from '../../../curated/collections'
 import featuredProjects from '../../../curated/featured'
+import featuredEmbed from '../../../curated/featured-embed'
 
+import Layout from '../../layout';
+import { Home } from './index';
 import exampleData from './example-data';
+import styles from './styles.styl';
 
 async function getCultureZine () {
   // TODO: this can be fetched fresh here instead of being cached by the home page
@@ -60,20 +64,54 @@ async function getFeaturedCollections (api) {
 
 async function getFeaturedProjects (api) {
   const projectsWithDomains = featuredProjects.map(project => ({ ...project, domain: project.link.split('~')[1] }))
-  const 
+  const domains = projectsWithDomains.map(p => `domain=${p.domain}`).join('&')
+  const { data: projectData } = await api.get(`/v1/projects/by/domain?${domains}`)
+  const projectsWithData = projectsWithDomains.map(async ({ title, img, link, domain, description }) => {
+    const project = projectData[domain]
+    const users = await getAllPages(api, `/v1/projects/by/domain/users?domain=${domain}&limit=100`)
+    return {
+      domain,
+      title,
+      img,
+      users,
+      description: description || project.description,
+    }
+  }) 
+  return Promise.all(projectsWithData)
 }
 
 
 async function getHomeData(api) {
-  const [cultureZine, curatedCollections] = await Promise.all([getCultureZine(api), getFeaturedCollections(api)])
+  const loadedData = await allByKeys({
+    cultureZine: getCultureZine(api),
+    curatedCollections: getFeaturedCollections(api),
+    appsWeLove: getFeaturedProjects(api),
+  })
   
   return {
     ...exampleData,
-    curatedCollections,
-    cultureZine
+    ...loadedData,
   };
 }
 
-const HomePreview = () => <DataLoader get={getHomeData}>{(data) => <Home isPreview data={data} />}</DataLoader>;
+const PreviewBanner = () => (
+  <div className={styles.previewBanner}>
+    <p>This is a live preview of your edits to the home page.</p>
+    <Button type="cta" decorative>
+      Publish
+    </Button>
+    <Button decorative>Reset</Button>
+  </div>
+);
+
+const HomePreview = () => (
+  <Layout>
+    <PreviewBanner />
+    <DataLoader get={getHomeData}>
+      {(data) => <Home data={data} />}
+    </DataLoader>
+  </Layout>
+  
+);
 
 export default HomePreview;

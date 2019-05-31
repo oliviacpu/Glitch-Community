@@ -222,19 +222,10 @@ const BuildingOnGlitch = () => (
   </section>
 );
 
-const PreviewBanner = () => (
-  <div className={styles.previewBanner}>
-    <p>This is a live preview of your edits to the home page.</p>
-    <Button type="cta" decorative>
-      Publish
-    </Button>
-    <Button decorative>Reset</Button>
-  </div>
-);
 
-export const Home = ({ data, isPreview }) => (
-  <Layout>
-    {isPreview && <PreviewBanner />}
+
+export const Home = ({ data }) => (
+  <>
     <Banner />
     <FeatureCallouts content={data.featureCallout} />
     <UnifiedStories content={data.unifiedStories} />
@@ -245,9 +236,13 @@ export const Home = ({ data, isPreview }) => (
     </TopPicks>
     <CultureZine content={data.cultureZine} />
     <BuildingOnGlitch />
-  </Layout>
+  </>
 );
 
-const HomeWithProductionData = () => <Home data={exampleData} />;
+const HomeWithProductionData = () => (
+  <Layout>
+    <Home data={exampleData} />
+  </Layout>
+);
 
 export default HomeWithProductionData;
