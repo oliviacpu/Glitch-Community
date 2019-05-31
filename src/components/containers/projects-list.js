@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import classNames from 'classnames/bind';
@@ -51,10 +51,18 @@ const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2F
 const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
   const [page, setPage] = useState(1);
   const [expanded, setExpanded] = useState(false);
+  const prevButtonRef = useRef();
 
   const numProjects = projects.length;
   const numPages = Math.ceil(projects.length / projectsPerPage);
   const canPaginate = enabled && !expanded && projectsPerPage < numProjects;
+  
+  const onNextButtonClick = (evt) => {
+    setPage(page + 1);
+    if (!canPaginate && evt.target) {
+      prevButtonRef.focus();
+    }
+  }
 
   if (canPaginate) {
     const startIdx = (page - 1) * projectsPerPage;
@@ -66,13 +74,13 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       {canPaginate && (
         <div className={styles.viewControls}>
           <div className={styles.paginationControls}>
-            <Button type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+            <Button ref={prevButtonRef} type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             <div className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
-            <Button type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
+            <Button type="tertiary" disabled={page === numPages} onClick={onNextButtonClick}>
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
