@@ -15,9 +15,7 @@ const NewStuffArticle = ({ title, body, link }) => (
     </div>
     {!!link && (
       <Text>
-        <Link to={link}>
-          Read the blog post →
-        </Link>
+        <Link to={link}>Read the blog post →</Link>
       </Text>
     )}
   </article>

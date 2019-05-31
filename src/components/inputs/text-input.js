@@ -12,9 +12,7 @@ import { visuallyHidden } from '../global.styl';
 
 const TYPES = ['email', 'password', 'search', 'text'];
 
-const InputPart = ({ children, className }) => (
-  <span className={classNames(styles.inputPart, className)}>{children}</span>
-);
+const InputPart = ({ children, className }) => <span className={classNames(styles.inputPart, className)}>{children}</span>;
 
 const TextInput = ({
   autoFocus,

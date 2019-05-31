@@ -40,7 +40,6 @@ const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => (
   </div>
 );
 
-
 const useMembers = createAPIHook(async (api, project) => {
   const [users, teams] = await Promise.all([
     getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`),

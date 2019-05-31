@@ -9,16 +9,15 @@ import checkboxStyles from './checkbox-button.styl';
 
 const CheckboxButton = ({ children, onChange, value, matchBackground, type }) => {
   const id = useUniqueId();
-  const className = classNames({ [styles.matchBackground]: matchBackground, [styles.tertiary]: type === 'tertiary' }, styles.btn, styles.small, checkboxStyles.label);
+  const className = classNames(
+    { [styles.matchBackground]: matchBackground, [styles.tertiary]: type === 'tertiary' },
+    styles.btn,
+    styles.small,
+    checkboxStyles.label,
+  );
   return (
     <label className={className} htmlFor={id}>
-      <input
-        id={id}
-        className={checkboxStyles.input}
-        type="checkbox"
-        checked={value}
-        onChange={(evt) => onChange(evt.target.checked)}
-      />
+      <input id={id} className={checkboxStyles.input} type="checkbox" checked={value} onChange={(evt) => onChange(evt.target.checked)} />
       {children}
     </label>
   );

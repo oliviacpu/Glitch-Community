@@ -18,14 +18,20 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
   <Overlay className="new-stuff-overlay">
     <OverlaySection type="info">
-      <div className="new-stuff-avatar"><NewStuffPup /></div>
+      <div className="new-stuff-avatar">
+        <NewStuffPup />
+      </div>
       <OverlayTitle>New Stuff</OverlayTitle>
       <div className="new-stuff-toggle">
-        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
+        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>
+          Keep showing me these
+        </CheckboxButton>
       </div>
     </OverlaySection>
     <OverlaySection type="actions">
-      {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
+      {newStuff.map(({ id, ...props }) => (
+        <NewStuffArticle key={id} {...props} />
+      ))}
     </OverlaySection>
   </Overlay>
 );

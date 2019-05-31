@@ -159,13 +159,7 @@ class CreateCollectionPop extends React.Component {
 
         <section className="pop-over-actions">
           <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
-            <TextInput
-              value={query}
-              onChange={this.handleChange}
-              placeholder={placeholder}
-              error={error || queryError}
-              labelText={placeholder}
-            />
+            <TextInput value={query} onChange={this.handleChange} placeholder={placeholder} error={error || queryError} labelText={placeholder} />
 
             {teams && teams.length > 0 && (
               <div>
@@ -174,11 +168,7 @@ class CreateCollectionPop extends React.Component {
               </div>
             )}
 
-            {!this.state.loading ? (
-              <SubmitButton disabled={!!queryError || !submitEnabled} />
-            ) : (
-              <Loader />
-            )}
+            {!this.state.loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
           </form>
         </section>
       </dialog>

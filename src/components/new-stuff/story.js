@@ -9,7 +9,8 @@ const story = storiesOf('New Stuff', module);
 
 story.add('Article', () => (
   <div style={{ maxWidth: '450px' }}>
-    <NewStuffArticle title="Article Title"
+    <NewStuffArticle
+      title="Article Title"
       body="Lorem ipsum is a _placeholder text_ commonly used to demonstrate the visual form of a document without relying on meaningful content (also called _greeking_)."
     />
   </div>

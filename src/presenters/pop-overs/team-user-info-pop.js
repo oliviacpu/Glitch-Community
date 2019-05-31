@@ -232,5 +232,4 @@ TeamUsers.propTypes = {
   updateUserPermissions: PropTypes.func.isRequired,
 };
 
-
 export default TeamUsers;

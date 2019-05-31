@@ -1,7 +1,14 @@
-import React from 'react'
-import { Home } from './index'
-import data from './example-data'
+import React from 'react';
 
-export default function HomePreview () {
-  return <Home isPreview data={data} />
+import DataLoader from 'Components/data-loader';
+
+import { Home } from './index';
+import data from './example-data';
+
+async function getHomeData() {
+  return data;
 }
+
+const HomePreview = () => <DataLoader get={getHomeData}>{(data) => <Home isPreview data={data} />}</DataLoader>;
+
+export default HomePreview;

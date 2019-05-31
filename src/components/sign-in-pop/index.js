@@ -121,7 +121,15 @@ const EmailHandler = ({ showView }) => {
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
-            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} autoFocus />
+            <TextInput
+              type="email"
+              labelText="Email address"
+              value={email}
+              onChange={setEmail}
+              placeholder="new@user.com"
+              error={validationError}
+              autoFocus
+            />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link
