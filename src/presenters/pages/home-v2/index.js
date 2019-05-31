@@ -6,12 +6,13 @@ import Row from 'Components/containers/row'
 import ProfileList, { ProfileItem } from 'Components/profile-list'
 import Embed from 'Components/project/embed'
 import MaskImage from 'Components/images/mask-image'
-import { createAPIHook } from 'State/api'
 
 import Layout from '../../layout';
 import exampleData from './example-data';
 import CuratedCollectionContainer from './collection-container';
 import styles from './styles.styl';
+
+const Arrow = () => <span aria-hidden="true">→</span>
 
 const BannerVideo = () => (
   <div className={styles.bannerVideoWrap}>
@@ -41,7 +42,7 @@ const Banner = () => (
         <Mark color="green">create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
-      <Button type="cta" href="#top-picks">Check out fresh apps →</Button>
+      <Button type="cta" href="#top-picks">Check out fresh apps <Arrow /></Button>
     </div>
     <BannerVideo />
   </header>
@@ -58,7 +59,7 @@ const FeatureCallouts = ({ content }) => (
           <div className={styles.featureCalloutsText}>
             <h2><Mark color={color}>{label}</Mark></h2>
             <p>{description}</p>
-            <Button decorative>{cta}</Button>
+            <Button decorative>{cta} <Arrow /></Button>
           </div>
         </a>
       )}
@@ -78,7 +79,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div className={styles.unifiedStoriesPreview}>
       <h3>{dek}</h3>
       <p>{summary}</p>
-      <Button href={href}>{cta}</Button>
+      <Button href={href}>{cta} <Arrow /></Button>
     </div>
     <div className={styles.unifiedStoriesRelatedContent}>
       <h3>Featuring</h3>
@@ -104,18 +105,7 @@ const TopPicks = ({ children}) => (
   </section>
 )
 
-const useProjectMembers = createAPIHook(async(api, domain) => {
-  const { data } = await api.get(`v1/projects/by/domain/users?domain=${domain}&limit=100`)
-  return data.items
-})
-
-// TODO: should this data be loaded at compile-time?
-const ProjectMembers = ({ domain }) => {
-  const { value: users } = useProjectMembers(domain)
-  return <ProfileList layout="row" users={users} />
-}
-
-const FeaturedEmbed = ({ content: { domain, title, description } }) => (
+const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
   <figure className={styles.featuredEmbed}>
     <div className={styles.featuredEmbedWrap}>
       <Embed domain={domain}/>
@@ -126,7 +116,7 @@ const FeaturedEmbed = ({ content: { domain, title, description } }) => (
         <p>{description}</p>
       </div>
       <div className={styles.featuredEmbedProfileWrap}>
-        <ProjectMembers domain={domain} />
+        <ProfileList layout="row" users={users} />
       </div>
     </figcaption>
   </figure>
@@ -136,9 +126,9 @@ const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
     <h3 className={styles.h3}><Mark color="salmon">Apps we love</Mark></h3>
     <Row items={content.map(data => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
-      {({ domain, title, description, img }) => (
+      {({ domain, title, description, img, users }) => (
         <>
-          <ProjectMembers domain={domain} />
+          <ProfileList layout="row" users={users} />
           <a href={`${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt=""/>
             <h4>{title}</h4>
@@ -159,7 +149,7 @@ const CuratedCollections = ({ content }) => (
           <h4>{title}</h4>
           <p>{description}</p>
           <Button href={`/@${fullUrl}`}>
-            View <Pluralize count={count} singular="project" /> →
+            View <Pluralize count={count} singular="project" /> <Arrow />
           </Button>
         </CuratedCollectionContainer>
       )}
