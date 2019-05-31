@@ -1,4 +1,4 @@
-const featureCallouts = [
+export const featureCallouts = [
   {
     label: 'Discover the best stuff on the web',
     description: 'Over a million free apps you’ll only find on Glitch.  All instantly remixable and created by people like you.',
@@ -28,7 +28,7 @@ const featureCallouts = [
   },
 ];
 
-const buildingOnGlitch = [
+export const buildingOnGlitch = [
   {
     href: '/create',
     img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FfirstWebsite.svg?1492031604409',
@@ -42,5 +42,3 @@ const buildingOnGlitch = [
     description: 'Collaborate on apps with your teammates, create starter apps for your next hackathon, or use Glitch for managing your classroom.'
   }
 ]
-
-module.exports = { featureCallouts, buildingOnGlitch }
