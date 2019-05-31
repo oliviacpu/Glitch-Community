@@ -9,7 +9,7 @@ import { featuredCollections } from '../../../curated/collections'
 
 import exampleData from './example-data';
 
-async function getCultureZine (api) {
+async function getCultureZine () {
   // TODO: this can be fetched fresh here instead of being cached by the home page
   return window.ZINE_POSTS.map((post) => ({
     id: post.id,
@@ -20,36 +20,53 @@ async function getCultureZine (api) {
   }))
 }
 
+async function getUniqueUsersInProjects (api, projects, maxCount) {
+  const users = {}
+  for await (const project of projects) {
+    const projectUsers = await getAllItems(api, `v1/projects/by/id/users?id=${project.id}?limit=100`)
+    for (const user of projectUsers) {
+      users[user.id] = user
+    }
+    if (Object.keys(users).length > maxCount) break
+  }
+  return Object.values(users).slice(0, maxCount)
+}
+
 async function getFeaturedCollections (api) {
-  const fullUrls = featuredCollections.map(({ owner, name }) => `${owner}/${name}`)
-  const { data: collections } = await api.get(`/v1/collections/by/fullUrl?${fullUrls.map(fullUrl => `fullUrl=${fullUrl}`).join('&')}`)
+  const fullUrls = featuredCollections.map(({ owner, name }) => `fullUrl=${owner}/${name}`).join('&')
+  const { data: collections } = await api.get(`/v1/collections/by/fullUrl?${fullUrls}`)
   
-  return fullUrls.map(async (fullUrl) => {
+  // TODO: where should this actually be configured?  
+  const styles = ['wavey', 'diagonal', 'triangle']
+  
+  const collectionsWithData = featuredCollections.map(async ({ owner, name, title, description, style }, i) => {
+    const fullUrl = `${owner}/${name}`
     const collection = collections[fullUrl]
     const projects = await getAllItems(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}?limit=100`)
-    let users = []
-    for (const project of projects) {
-      const projectUsers = await getAllItems 
-    }
-    
+    const users = await getUniqueUsersInProjects(api, projects, 5)
     
     return {
-      title: collection.title,
-      description: collection.description,
+      title: title || collection.title,
+      description: description || collection.description,
       fullUrl: fullUrl,
-      users: 
+      users: users,
       count: projects.length,
-      collectionStyle: 'wavey',
+      collectionStyle: style || styles[i]
     }
   })
+  
+  return Promise.all(collectionsWithData)
 }
 
 
 async function getHomeData(api) {
-  const [cultureZine] = await Promise.all([getCultureZine(api)])
+  const [cultureZine, curatedCollections] = await Promise.all([getCultureZine(api), getFeaturedCollections(api)])
+  
+  console.log(curatedCollections)
   
   return {
     ...exampleData,
+    curatedCollections,
     cultureZine
   };
 }
