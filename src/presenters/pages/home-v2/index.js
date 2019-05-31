@@ -9,7 +9,7 @@ import MaskImage from 'Components/images/mask-image'
 import { createAPIHook } from 'State/api'
 
 import Layout from '../../layout';
-import data from './example-data';
+import exampleData from './example-data';
 import CuratedCollectionContainer from './collection-container';
 import styles from './styles.styl';
 
@@ -212,8 +212,17 @@ const BuildingOnGlitch = () => (
   </section>
 )
 
-const Home = () => (
+const PreviewBanner = () => (
+  <div className={styles.previewBanner}>
+    <p>This is a live preview of your edits to the home page.</p>
+    <Button type="cta" decorative>Publish</Button>
+    <Button decorative>Reset</Button>
+  </div>
+)
+
+export const Home = ({ data, isPreview }) => (
   <Layout>
+    {isPreview && <PreviewBanner />}
     <Banner />
     <FeatureCallouts content={data.featureCallout} />
     <UnifiedStories content={data.unifiedStories} />
@@ -227,4 +236,6 @@ const Home = () => (
   </Layout>
 )
 
-export default Home;
+const HomeWithProductionData = () => (<Home data={exampleData} />)
+
+export default HomeWithProductionData;
