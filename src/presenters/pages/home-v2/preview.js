@@ -80,12 +80,22 @@ async function getFeaturedProjects (api) {
   return Promise.all(projectsWithData)
 }
 
+async function getFeaturedEmbed (api) {
+  const users = await getAllPages(api, `/v1/projects/by/domain/users?domain=${featuredEmbed.appDomain}&limit=100`)
+  return {
+    domain: featuredEmbed.appDomain,
+    title: featuredEmbed.title,
+    description: featuredEmbed.body,
+    users,
+  }
+}
 
 async function getHomeData(api) {
   const loadedData = await allByKeys({
     cultureZine: getCultureZine(api),
     curatedCollections: getFeaturedCollections(api),
     appsWeLove: getFeaturedProjects(api),
+    featuredEmbed: getFeaturedEmbed(api),
   })
   
   return {

@@ -127,8 +127,9 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
     </div>
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
+        <a className=""</a>
         <h3>{title}</h3>
-        <p>{description}</p>
+        <div dangerouslySetInnerHTML={{ __html: description }} />
       </div>
       <div className={styles.featuredEmbedProfileWrap}>
         <ProfileList layout="row" users={users} />
