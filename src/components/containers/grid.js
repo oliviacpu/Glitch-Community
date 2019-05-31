@@ -43,7 +43,11 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
   }
   return (
     <GridContainer {...props}>
-      {items.map((item) => <GridItem key={item.id} className={itemClassName}>{children(item)}</GridItem>)}
+      {items.map((item) => (
+        <GridItem key={item.id} className={itemClassName}>
+          {children(item)}
+        </GridItem>
+      ))}
     </GridContainer>
   );
 };

@@ -5,26 +5,29 @@ import { range } from 'lodash';
 import styles from './row.styl';
 
 export const RowContainer = ({ as: Component = 'div', className, style, count, gap, minWidth, children }) => (
-  <Component 
+  <Component
     className={classnames(styles.row, className)}
     style={{
       ...style,
       '--item-count': count,
       '--gap': gap,
       '--min-width': minWidth,
-    }}>
+    }}
+  >
     {children}
   </Component>
 );
 
 export const RowItem = ({ as: Component = 'div', className, children, ...props }) => (
-  <Component className={classnames(styles.item, className)} {...props}>{children}</Component>
+  <Component className={classnames(styles.item, className)} {...props}>
+    {children}
+  </Component>
 );
 
 const Row = ({ items, children, count, gap, minWidth, className, style }) => (
   <RowContainer as="ul" className={className} style={style} count={count} gap={gap} minWidth={minWidth}>
     {items.slice(0, count).map((item) => (
-      <RowItem as='li' key={item.id}>
+      <RowItem as="li" key={item.id}>
         {children(item)}
       </RowItem>
     ))}

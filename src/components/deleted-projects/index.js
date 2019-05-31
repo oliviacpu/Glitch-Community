@@ -33,7 +33,6 @@ const DeletedProject = ({ id, domain, onClick }) => (
   </AnimationContainer>
 );
 
-
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
@@ -102,11 +101,11 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   }
   return (
     <>
-      {
-        undelete
-          ? <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-          : <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
-      }
+      {undelete ? (
+        <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+      ) : (
+        <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
+      )}
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>

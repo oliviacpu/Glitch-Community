@@ -101,10 +101,10 @@ const glitchCollections = [
 const mockAPI = {
   get: async (url) => {
     if (/v1\/teams/.test(url)) {
-      return { data: { items: glitchCollections } }
-    } 
-    return { data: { items: Object.values(projects) } }
-  }
+      return { data: { items: glitchCollections } };
+    }
+    return { data: { items: Object.values(projects) } };
+  },
 };
 
 storiesOf('Collections', module)

@@ -13,7 +13,6 @@ import { getShowUrl } from '../../models/project';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
-
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
 

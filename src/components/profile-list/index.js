@@ -78,7 +78,7 @@ const RowContainer = ({ size, users, teams }) => {
   return (
     <ul ref={ref} className={classnames(styles.container, styles.row, styles[size])}>
       {teams.slice(0, maxTeams).map((team) => (
-        <li key={`team-${team.id}`} className={(styles.teamItem)}>
+        <li key={`team-${team.id}`} className={styles.teamItem}>
           <TeamItem team={team} />
         </li>
       ))}
@@ -96,7 +96,7 @@ const BlockContainer = ({ size, users, teams }) => (
     {teams.length > 0 && (
       <ul className={classnames(styles.container, styles[size])}>
         {teams.map((team) => (
-          <li key={`team-${team.id}`} className={(styles.teamItem)}>
+          <li key={`team-${team.id}`} className={styles.teamItem}>
             <TeamItem team={team} />
           </li>
         ))}
@@ -118,7 +118,7 @@ const GLITCH_TEAM_AVATAR = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-20439
 
 const GlitchTeamList = ({ size }) => (
   <ul className={classnames(styles.container, styles[size])}>
-    <li className={(styles.teamItem)}>
+    <li className={styles.teamItem}>
       <Avatar name="Glitch Team" src={GLITCH_TEAM_AVATAR} color="#74ecfc" type="team" />
     </li>
   </ul>
