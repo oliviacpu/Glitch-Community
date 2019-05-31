@@ -11,7 +11,6 @@ const md = new MarkdownIt();
 const cheerio = require('cheerio');
 
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
-const { getHomeData } = require('./home');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
@@ -202,11 +201,6 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
-  
-  app.get('/api/home.json', async (_, res) => {
-    const data = await getHomeData()
-    res.json(data)
-  })
   
   app.get('*', async (req, res) => {
     await render(res, 'Glitch', `The ${constants.tagline}`);
