@@ -1,6 +1,8 @@
 import React from 'react';
+import { uniq } from 'lodash';
 
 import DataLoader from 'Components/data-loader';
+import getAllItems from 'Shared/api';
 
 import { Home } from './index';
 import { featuredCollections } from '../../../curated/collections'
@@ -19,18 +21,24 @@ async function getCultureZine (api) {
 }
 
 async function getFeaturedCollections (api) {
-  const fullUrls = featuredCollections.map(({ owner, name }) => `fullUrl=${owner}/${name}`).join('&')
-  const { data } = await api.get(`/v1/collections/by/fullUrl?${fullUrls}`)
-  const users
+  const fullUrls = featuredCollections.map(({ owner, name }) => `${owner}/${name}`)
+  const { data: collections } = await api.get(`/v1/collections/by/fullUrl?${fullUrls.map(fullUrl => `fullUrl=${fullUrl}`).join('&')}`)
   
-  return featuredCollections.map(({ owner, name }) => {
-    const collection = data[`${owner}/${name}`]
+  return fullUrls.map(async (fullUrl) => {
+    const collection = collections[fullUrl]
+    const projects = await getAllItems(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}?limit=100`)
+    let users = []
+    for (const project of projects) {
+      const projectUsers = await getAllItems 
+    }
+    
+    
     return {
       title: collection.title,
       description: collection.description,
-      fullUrl: 'glitch/glitch-this-week-may-29-2019',
-      users: shuffle(Object.values(users)),
-      count: 11,
+      fullUrl: fullUrl,
+      users: 
+      count: projects.length,
       collectionStyle: 'wavey',
     }
   })
