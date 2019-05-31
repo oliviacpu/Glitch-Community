@@ -5,6 +5,7 @@ import { getAllPages } from 'Shared/api';
 
 import { Home } from './index';
 import { featuredCollections } from '../../../curated/collections'
+import featuredProjects from '../../../curated/featured'
 
 import exampleData from './example-data';
 
@@ -57,11 +58,14 @@ async function getFeaturedCollections (api) {
   return Promise.all(collectionsWithData)
 }
 
+async function getFeaturedProjects (api) {
+  const projectsWithDomains = featuredProjects.map(project => ({ ...project, domain: project.link.split('~')[1] }))
+  const 
+}
+
 
 async function getHomeData(api) {
   const [cultureZine, curatedCollections] = await Promise.all([getCultureZine(api), getFeaturedCollections(api)])
-  
-  console.log(curatedCollections)
   
   return {
     ...exampleData,
