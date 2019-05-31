@@ -34,7 +34,7 @@ const PreviewBanner = withRouter(({ history, data }) => {
 
 const HomePreview = () => (
   <Layout>
-    <DataLoader get={() => axios.get('https://ablaze-peacock.glitch.me/').then(res => res.data)}>
+    <DataLoader get={() => axios.get('https://ablaze-peacock.glitch.me/home.json').then(res => res.data)}>
       {(data) => (
         <>
           <PreviewBanner data={data} />
