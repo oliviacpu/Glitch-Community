@@ -3,13 +3,13 @@ import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button';
 import Row from 'Components/containers/row';
-import ProfileList, { ProfileItem } from 'Components/profile-list';
+import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
 
 import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
-import data from '../../../curated/home.json'
+import compiledData from '../../../curated/home.json';
 import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
@@ -81,6 +81,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
       {hed.split('\n\n').map((line, i) => (
+        // eslint-disable-next-line react/no-array-index-key
         <h2 key={i}>
           <Mark color="white">{line}</Mark>
         </h2>
@@ -97,11 +98,11 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     <div className={styles.unifiedStoriesRelatedContent}>
       <h3>Featuring</h3>
       <ul>
-        {relatedContent.map(({ title, source, href }) => (
-          <li key={href}>
-            <a href={href} className={styles.plainLink}>
-              <h4>{title}</h4>
-              <p>{source}</p>
+        {relatedContent.map((related) => (
+          <li key={related.href}>
+            <a href={related.href} className={styles.plainLink}>
+              <h4>{related.title}</h4>
+              <p>{related.source}</p>
             </a>
           </li>
         ))}
@@ -129,6 +130,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
       <div className={styles.featuredEmbedText}>
         <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
           <h3>{title}</h3>
+          {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: description }} />
         </a>
       </div>
@@ -213,7 +215,9 @@ const BuildingOnGlitch = ({ content }) => (
       {content.map(({ href, img, title, description }) => (
         <a key={href} href={href} className={styles.plainLink}>
           <img src={img} alt="" />
-          <h3>{title} <Arrow /></h3>
+          <h3>
+            {title} <Arrow />
+          </h3>
           <p>{description}</p>
         </a>
       ))}
@@ -238,7 +242,7 @@ export const Home = ({ data }) => (
 
 const HomeWithProductionData = () => (
   <Layout>
-    <Home data={data} />
+    <Home data={compiledData} />
   </Layout>
 );
 
