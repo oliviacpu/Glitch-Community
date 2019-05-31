@@ -7,6 +7,7 @@ import { getAllPages, allByKeys } from 'Shared/api';
 import { featuredCollections } from '../../../curated/collections'
 import featuredProjects from '../../../curated/featured'
 import featuredEmbed from '../../../curated/featured-embed'
+import unifiedStories from '../../../curated/unified-stories'
 
 import Layout from '../../layout';
 import { Home } from './index';
@@ -90,12 +91,17 @@ async function getFeaturedEmbed (api) {
   }
 }
 
+async function getUnifiedStories () {
+  return unifiedStories;
+}
+
 async function getHomeData(api) {
   const loadedData = await allByKeys({
     cultureZine: getCultureZine(api),
     curatedCollections: getFeaturedCollections(api),
     appsWeLove: getFeaturedProjects(api),
     featuredEmbed: getFeaturedEmbed(api),
+    unifiedStories: getUnifiedStories(api),
   })
   
   return {
