@@ -33,6 +33,7 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
         className={resultClass}
         onClick={() => addProject(onClick, project, collection, collectionPath, createNotification, togglePopover)}
         data-project-id={project.id}
+        aria-label={`Add project: ${project.domain} to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name }, ${collection.description}`}
       >
         <div className="avatar" id={`avatar-collection-${collection.id}`}>
           <CollectionAvatar color={collection.coverColor} />
