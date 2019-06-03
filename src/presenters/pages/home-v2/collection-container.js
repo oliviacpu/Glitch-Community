@@ -20,7 +20,6 @@ const UserMask = ({ users, config }) => (
       <div
         key={users[i].id}
         className={styles.userMaskBubbleWrap}
-        aria-label={getDisplayName(users[i])}
         style={{
           left: `${(100 * (config.offsetX + point.x)) / config.width}%`,
           top: `${(100 * (config.offsetY + point.y)) / config.height}%`,
@@ -28,7 +27,7 @@ const UserMask = ({ users, config }) => (
           // height: `${100 * point.d / config.height}%`,
         }}
       >
-        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])} />
+        <img className={styles.userMaskBubble} src={users[i].avatarUrl} style={getAvatarStyle(users[i])} alt={getDisplayName(users[i])} />
       </div>
     ))}
   </div>
