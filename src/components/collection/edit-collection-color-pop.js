@@ -69,7 +69,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
     <PopoverDialog align="left" className={styles.container}>
       <PopoverInfo>
         <div className={styles.colorFormWrap}>
-          <ColorInput value={color} onChange={(e) => onChangeColorPicker(e.target.value)} />
+          <ColorInput value={color} onChange={onChangeColorPicker} />
           <div className={styles.hexWrap}>
             <TextInput
               opaque
