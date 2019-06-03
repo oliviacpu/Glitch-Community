@@ -6,7 +6,7 @@ export default {
   image: 'https://culture-zine.glitch.me/culture/content/images/2019/05/stackFullDevSurveyBanner.png',
   mask: 'mask-4',
   title: 'Explore Stack Overflow Dev Survey Results',
-  appDomain: 'marsh-friend',
+  appDomain: '2019-stackoverflow-public-data',
   blogUrl: '/discover-insights-explore-developer-survey-results-2019/',
   body,
   color: '#f5f5f5'
