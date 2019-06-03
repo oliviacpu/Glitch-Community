@@ -16,6 +16,7 @@ import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
 import DeleteTeam from 'Components/team/delete-team-pop';
 import AddTeamProject from 'Components/team/add-team-project-pop';
+import TeamUsers from 'Components/team-users';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -26,8 +27,6 @@ import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
-import TeamUsers from '../includes/team-users';
-
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing } from '../includes/team-elements';

@@ -26,6 +26,14 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     }
   };
 
+  const toggleAndCall = (func) => {
+    if (!func) return null;
+    return (...args) => {
+      togglePopover();
+      return func(...args);
+    };
+  };
+
   useEffect(() => {
     if (status === 'closed') return undefined;
     const keyHandler = (event) => {
@@ -44,6 +52,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
       visible: status !== 'closed',
       closePopover,
       togglePopover,
+      toggleAndCall,
     }),
     [status],
   );
