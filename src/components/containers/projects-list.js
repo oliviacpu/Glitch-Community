@@ -71,6 +71,34 @@ const ProjectsUL = ({
 const arrowSrc =
   "https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269";
 
+
+  const paginationReducer = (oldState, action) => {
+    switch (action) {
+      case "next":
+        return {
+          page: oldState.page + 1,
+          totalPages: oldState.totalPages,
+          announce: `Showing page ${oldState.page + 1} of ${oldState.totalPages}`
+        };
+      case "previous":
+        return {
+          page: oldState.page - 1,
+          totalPages: oldState.totalPages,
+          announce: `Showing page ${oldState.page - 1} of ${oldState.totalPages}`
+        };
+      case "expand":
+        return {
+          expanded: true,
+          totalPages: oldState.totalPages,
+          announce: `Showing all pages`
+        };
+      default: 
+        return {
+          
+        };
+    }
+  };
+
 const PaginationController = ({
   enabled,
   projects,
@@ -79,35 +107,6 @@ const PaginationController = ({
 }) => {
   const numProjects = projects.length;
   const numPages = Math.ceil(projects.length / projectsPerPage);
-
-  const paginationReducer = useMemo((oldState, action) => {
-    switch (action.type) {
-      case "next":
-        return {
-          page: oldState.page + 1,
-          totalPages: oldState.totalPages,
-          announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
-        };
-      case "previous":
-        return {
-          page: oldState.page - 1,
-          totalPages: oldState.totalPages,
-          announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
-        };
-      case "expand":
-        return {
-          expanded: true,
-          totalPages: oldState.totalPages,
-          announce: `Showing all pages`
-        };
-      case "init":
-        return {
-          page: 1,
-          totalPages: numPages,
-          announce: ""
-        };
-    }
-  });
 
   const [state, dispatchState] = useReducer(paginationReducer, {
           page: 1,
@@ -149,7 +148,7 @@ const PaginationController = ({
                 src={arrowSrc}
               />
             </Button>
-            <LiveMessage message={state.announce} aria-live="polite" />
+            {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
             <div className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
