@@ -12,6 +12,18 @@ const Defs = ({ prefix, users, widths }) => (
   </defs>
 );
 
+const collectionStyleConfig = {
+  width: 109,
+  height: 153,
+  offsetX: 49,
+  offsetY: 102,
+  points: [
+    {x: -14, y: -102, r: 40},
+    {x: 28, y: -73, r: 32}
+  ]
+}
+
+
 const collectionStyles = {
   wavey: {
     color: 'lightblue',
