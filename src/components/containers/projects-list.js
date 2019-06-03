@@ -142,7 +142,7 @@ const PaginationController = ({
                 src={arrowSrc}
               />
             </Button>
-            <LiveMessage message={state.message} aria-live="polite" />
+            <LiveMessage message={state.announce} aria-live="polite" />
             <div className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
