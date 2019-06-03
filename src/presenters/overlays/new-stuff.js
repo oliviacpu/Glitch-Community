@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
-import NewStuffPup from 'Components/new-stuff/\';
+import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -65,7 +65,7 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" />}
+        {visible && <div className="overlay-background" role="presentation" tabIndex="-1"/>}
       </>
     );
   };
