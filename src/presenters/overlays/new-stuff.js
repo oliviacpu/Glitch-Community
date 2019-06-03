@@ -16,19 +16,18 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, togglePopover }) => {
-  console.log(togglePopover, "??)")
-  const onKeyDown = (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      
-    }
-  };
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+  // const onKeyDown = (e) => {
+  //   if (e.key === 'Tab') {
+  //     e.preventDefault();
+  //   } else if (e.key === 'Escape') {
+  //     e.preventDefault();
+  //     setVisible(false);
+  //   }
+  // };
   
   return (
-    <Overlay className="new-stuff-overlay">
+    <Overlay className="new-stuff-overlay" >
       <OverlaySection type="info">
         <div className="new-stuff-avatar"><NewStuffPup /></div>
         <OverlayTitle>New Stuff</OverlayTitle>
@@ -86,7 +85,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, togglePopover }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} togglePopover={togglePopover} /> : null)}
+      {({ visible, setVisible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
     </PopoverContainer>
   );
 };

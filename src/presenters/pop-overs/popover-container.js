@@ -66,6 +66,8 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setVisible(false);
+      } else if (event.key === "Tab") {
+        console.log("Sup dawg")
       }
     };
     window.addEventListener('keyup', keyHandler);
