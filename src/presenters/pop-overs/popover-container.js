@@ -26,15 +26,12 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [visible, setVisibleState] = React.useState(startOpen);
   const [openedFromKeyboard, setOpenedFromKeyboard] = React.useState(false);
-  console.log("visible", visible)
   const setVisible = (newVisible) => {
-    console.log("setVisible being called with", newVisible)
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
   };
 
   const focusFirstElement = (dialog) => {
-    console.log("is this getting called?")
     // only focus to next selectable element in dialog if popover is triggered from keyboard
     if (dialog && openedFromKeyboard) {
       // focus on the dialog if it has tabIndex=0 (used when there is only a destructible item in the popover that shouldn't automatically be focused on)
@@ -73,7 +70,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     window.addEventListener('keyup', keyHandler);
     return () => window.removeEventListener('keyup', keyHandler);
   }, [visible]);
-  
+
   const props = { visible, setVisible, togglePopover, focusFirstElement };
 
   const inner = children(props);
