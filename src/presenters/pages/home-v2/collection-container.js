@@ -42,7 +42,6 @@ const UserMask = ({ users, config }) => (
           top: `${100 * (config.offsetY + point.y) / config.width}%`,
           left: `${100 *(config.offsetX + point.x) / config.height}%`,
           width: `${100 * point.d / config.width}%`,
-          height: `${100 * point.d / config.height}%`,
         }} />
     ))}
   </div>
