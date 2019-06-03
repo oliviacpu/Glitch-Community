@@ -66,12 +66,10 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setVisible(false);
-      } else if (event.key === "Tab") {
-        event.preventDefault()
       }
     };
-    window.addEventListener('keyup', keyHandler);
-    return () => window.removeEventListener('keyup', keyHandler);
+    window.addEventListener('keydown', keyHandler);
+    return () => window.removeEventListener('keydown', keyHandler);
   }, [visible]);
 
   const props = { visible, setVisible, togglePopover, focusFirstElement };
