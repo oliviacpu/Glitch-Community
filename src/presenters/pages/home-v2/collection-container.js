@@ -19,20 +19,22 @@ const wavey = {
   texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
   width: 109,
   height: 153,
-  offsetX: 49,
-  offsetY: 102,
+  offsetX: 0,
+  offsetY: 0,
   points: [
-    {x: -14, y: -102, d: 40},
-    {x: 28, y: -73, d: 32},
-    {x: -39, y: -62, d: 32},
-    {x: -7, y: -37, d: 32},
-    {x: -49, y: -16, d: 42},
-    {x: 0, y: 0, d: 51},
+    {"x":35,"y":0,"d":40},
+    {"x":77,"y":29,"d":32},
+    {"x":10,"y":40,"d":32},
+    {"x":42,"y":65,"d":32},
+    {"x":0,"y":86,"d":42},
+    {"x":49,"y":102,"d":51}
   ]
 }
 
 const UserMask = ({ users, config }) => (
-  <div className={styles.userMask}>
+  <div className={styles.userMaskWrap}>
+    <div className={styles.userMask} 
+      style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
     {config.points.slice(0, users.length).map((point, i)=> (
       <div key={users[i].id} 
         className={styles.userMaskBubble}
@@ -42,8 +44,10 @@ const UserMask = ({ users, config }) => (
           top: `${100 * (config.offsetY + point.y) / config.width}%`,
           left: `${100 *(config.offsetX + point.x) / config.height}%`,
           width: `${100 * point.d / config.width}%`,
+          height: `${100 * point.d / config.height}%`,
         }} />
     ))}
+    </div>
   </div>
 );
 
