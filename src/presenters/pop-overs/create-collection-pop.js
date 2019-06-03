@@ -188,7 +188,7 @@ class CreateCollectionPop extends React.Component {
 
 CreateCollectionPop.propTypes = {
   addProjectToCollection: PropTypes.func,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   currentUser: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,

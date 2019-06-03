@@ -174,20 +174,4 @@ export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
   return useSearchProvider(algoliaProvider, query, params, deps);
 }
 
-// legacy search
-
-const formatLegacyResult = (type) => ({ data }) => data.map((value) => ({ type, ...value }));
-
-const getLegacyProvider = (api) => ({
-  team: (query) => api.get(`teams/search?q=${query}`).then(formatLegacyResult('team')),
-  user: (query) => api.get(`users/search?q=${query}`).then(formatLegacyResult('user')),
-  project: (query) => api.get(`projects/search?q=${query}`).then(formatLegacyResult('project')),
-  collection: () => Promise.resolve([]),
-  starterKit: (query) => Promise.resolve(findStarterKits(query)),
-});
-
-export function useLegacySearch(query) {
-  const api = useAPI();
-  const legacyProvider = getLegacyProvider(api);
-  return useSearchProvider(legacyProvider, query);
-}
+export default useAlgoliaSearch;
