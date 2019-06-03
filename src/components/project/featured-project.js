@@ -1,14 +1,15 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import ProjectEmbed from 'Components/project/project-embed';
 import Emoji from 'Components/images/emoji';
 import Note from 'Components/collection/note';
-import FeaturedProjectOptionsPop from '../../presenters/pop-overs/featured-project-options-pop';
+import AnimationContainer from 'Components/animation-container';
+import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, ...props }) => (
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, unfeatureProject, createNote }) => (
   <div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
@@ -17,19 +18,13 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
       </Heading>
       {collection && (
         <div className={styles.note}>
-          <Note
-            project={featuredProject}
-            collection={collection}
-            updateNote={updateNote}
-            hideNote={hideNote}
-            isAuthorized={isAuthorized}
-          />
+          <Note project={featuredProject} collection={collection} updateNote={updateNote} hideNote={hideNote} isAuthorized={isAuthorized} />
         </div>
       )}
     </div>
     {isAuthorized && (
       <div className={styles.unfeatureBtn}>
-        <FeaturedProjectOptionsPop {...props} />
+        <FeaturedProjectOptionsPop unfeatureProject={unfeatureProject} createNote={createNote} hasNote={!!featuredProject.note} />
       </div>
     )}
   </div>
@@ -45,33 +40,31 @@ const FeaturedProject = ({
   isAuthorized,
   updateNote,
   unfeatureProject,
-}) => {
-  const featuredProjectRef = useRef();
-
-  return (
-    <div ref={featuredProjectRef}>
-      <ProjectEmbed
-        top={<Top
-          featuredProject={featuredProject}
-          collection={collection}
-          hideNote={hideNote}
-          updateNote={updateNote}
+}) => (
+  <div data-cy="featured-project">
+    <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
+      {(animateAndUnfeatureProject) => (
+        <ProjectEmbed
+          top={
+            <Top
+              featuredProject={featuredProject}
+              collection={collection}
+              hideNote={hideNote}
+              updateNote={updateNote}
+              isAuthorized={isAuthorized}
+              unfeatureProject={animateAndUnfeatureProject}
+              createNote={collection ? () => displayNewNote(featuredProject.id) : null}
+            />
+          }
+          project={featuredProject}
           isAuthorized={isAuthorized}
-          unfeatureProject={unfeatureProject}
-          displayNewNote={() => displayNewNote(featuredProject.id)}
-          hasNote={!!featuredProject.note}
-          featuredProjectRef={featuredProjectRef}
-          canAddNote={!!collection}
-        />}
-        project={featuredProject}
-        isAuthorized={isAuthorized}
-        currentUser={currentUser}
-        addProjectToCollection={addProjectToCollection}
-      />
-    </div>
-  );
-};
-
+          currentUser={currentUser}
+          addProjectToCollection={addProjectToCollection}
+        />
+      )}
+    </AnimationContainer>
+  </div>
+);
 
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,

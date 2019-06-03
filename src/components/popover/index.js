@@ -1,6 +1,5 @@
 import React, { useState, useContext, useMemo, createContext } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
@@ -8,7 +7,10 @@ import Emoji from 'Components/images/emoji';
 
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
+import PopoverSearch from './search';
+import { PopoverSection, PopoverActions, PopoverInfo, PopoverTitle, InfoDescription, ActionDescription } from './base';
 import styles from './styles.styl';
+import globalStyles from '../global.styl';
 
 /*
 A popover is a light, hollow roll made from an egg batter similar to
@@ -18,26 +20,17 @@ popover pans, which have straight-walled sides rather than angled.
 ...also it's a [Bootstrap UI pattern](https://www.w3schools.com/bootstrap/bootstrap_popover.asp)
 */
 
-export { PopoverContainer, PopoverDialog };
-
-const sectionTypes = ['primary', 'secondary', 'dangerZone'];
-export const PopoverSection = ({ className, children, type }) => (
-  <section className={classnames(styles.popoverSection, styles[type], className)}>{children}</section>
-);
-
-PopoverSection.propTypes = {
-  type: PropTypes.oneOf(sectionTypes),
-  children: PropTypes.node.isRequired,
+export {
+  PopoverContainer,
+  PopoverDialog,
+  PopoverSearch,
+  PopoverSection,
+  PopoverActions,
+  PopoverInfo,
+  PopoverTitle,
+  InfoDescription,
+  ActionDescription,
 };
-
-PopoverSection.defaultProps = {
-  type: 'primary',
-};
-
-export const PopoverActions = ({ ...props }) => <PopoverSection {...props} className={styles.popoverActions} />;
-export const PopoverInfo = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverInfo} />;
-export const PopoverTitle = ({ ...props }) => <PopoverSection type="secondary" {...props} className={styles.popoverTitle} />;
-export const InfoDescription = ({ children }) => <p className={styles.infoDescription}>{children}</p>;
 
 const MultiPopoverContext = createContext();
 
@@ -107,7 +100,7 @@ PopoverWithButton.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
+export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
   <div className={styles.popoverMenuWrap}>
     <PopoverContainer onOpen={onOpen}>
       {(popoverProps) => (
@@ -115,8 +108,9 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
               <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} aria-label="options" />
+                <div className={styles.downArrow} />
               </div>
+              <div className={globalStyles.visuallyHidden}>{label}</div>
             </TransparentButton>
           </div>
           {popoverProps.visible && renderChildren(popoverProps)}
@@ -127,21 +121,25 @@ export const PopoverMenu = ({ children: renderChildren, onOpen }) => (
 );
 
 PopoverMenu.propTypes = {
+  label: PropTypes.string,
   children: PropTypes.func.isRequired,
   onOpen: PropTypes.func,
 };
 
 PopoverMenu.defaultProps = {
+  label: 'options',
   onOpen: null,
 };
 
 // Use with PopoverMenu so that popover can correctly adjust to fit the content
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
-  <Button size="small" type="tertiary" onClick={onClick}>
-    <div className={styles.popoverButtonContent}>
-      {label} <Emoji name={emoji} />
-    </div>
-  </Button>
+  <div className={styles.menuButtonWrap}>
+    <Button size="small" type="tertiary" onClick={onClick}>
+      <div className={styles.popoverButtonContent}>
+        {label} <Emoji name={emoji} />
+      </div>
+    </Button>
+  </div>
 );
 
 PopoverMenuButton.propTypes = {

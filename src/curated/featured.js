@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Create Shareable Audio Clips',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2FGlitchfinal5TsjisseTalsma.jpg?1546519621503',
-    link: 'https://glitch.com/~audiogram'
+    title: 'A Vera Molnár Painting Comes to Life',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_hearing-vera-molnar.png',
+    link: 'https://glitch.com/~hearing-vera-molnar'
   },  
   {
-    title: 'An App with a View',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fblue-ridge.png?1539601709907',
-    link: 'https://glitch.com/~blueridge'
+    title: 'Learn About Material Components',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_adopt-a-pup.png',
+    link: 'https://glitch.com/~adopt-a-pup'
   },
   {
-    title: 'Your Next Must-have Subscription?',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsubscribe2me.png?1535971898937',
-    link: 'https://glitch.com/~subscribe2me'  
+    title: 'Create Chord Patterns',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_chord-machine.png',
+    link: 'https://glitch.com/~chordmachine'  
   }
 ];

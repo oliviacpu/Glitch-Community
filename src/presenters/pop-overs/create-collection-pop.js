@@ -188,16 +188,18 @@ class CreateCollectionPop extends React.Component {
 
 CreateCollectionPop.propTypes = {
   addProjectToCollection: PropTypes.func,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   currentUser: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
   createNotification: PropTypes.func.isRequired,
   focusFirstElement: PropTypes.func.isRequired,
+  collections: PropTypes.array,
 };
 
 CreateCollectionPop.defaultProps = {
   addProjectToCollection: null,
+  collections: [],
 };
 
 export default (props) => {

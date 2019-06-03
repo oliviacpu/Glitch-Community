@@ -1,4 +1,5 @@
 {
     "pageLoadTimeout": 360000,
-    "blacklistHosts": ["*.wistia.com"]
+    "viewportWidth": 1280,
+    "viewportHeight": 1024
 }

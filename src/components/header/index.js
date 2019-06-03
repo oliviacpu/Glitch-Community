@@ -21,7 +21,7 @@ const ResumeCoding = () => (
 );
 
 const Header = ({ searchQuery, showNewStuffOverlay }) => {
-  const { currentUser, clear } = useCurrentUser();
+  const { currentUser, clear, superUserHelpers } = useCurrentUser();
   return (
     <header role="banner" className={styles.header}>
       <Link to="/" className={styles.logoWrap}>
@@ -48,7 +48,7 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           )}
           {!!currentUser && currentUser.login && (
             <li className={styles.buttonWrap}>
-              <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} />
+              <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} superUserHelpers={superUserHelpers} />
             </li>
           )}
         </ul>

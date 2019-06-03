@@ -22,10 +22,10 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions, fetchMembers }) => {
+const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
-    <Container items={projects}>
+    <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
       {(project) => (
         <>
           {collection && (
@@ -69,14 +69,14 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             <Button type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
-            <div className={styles.pageNumbers}>
+            <div data-cy="page-numbers" className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
             <Button type="tertiary" disabled={page === numPages} onClick={() => setPage(page + 1)}>
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button type="tertiary" onClick={() => setExpanded(true)}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => setExpanded(true)}>
             Show all<Badge>{numProjects}</Badge>
           </Button>
         </div>
@@ -108,9 +108,11 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
+
   return children({
     filterInput: enabled && (
       <TextInput
+        data-cy="projects-filter"
         className={styles.headerSearch}
         name="filter"
         onChange={setFilter}
@@ -144,16 +146,19 @@ function ProjectsList({
   placeholder,
   enableFiltering,
   enablePagination,
+  enableSorting,
+  onReorder,
   fetchMembers,
   projectsPerPage,
   collection,
   noteOptions,
   projectOptions,
+  ...props
 }) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article className={classNames(styles.projectsContainer)}>
+        <article {...props} className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
@@ -166,6 +171,8 @@ function ProjectsList({
                   collection={collection}
                   noteOptions={noteOptions}
                   layout={layout}
+                  sortable={enableSorting && paginatedProjects.length === projects.length}
+                  onReorder={onReorder}
                   projectOptions={projectOptions}
                   fetchMembers={fetchMembers}
                 />
@@ -185,6 +192,7 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
+  enableSorting: (props) => props.enableSorting && props.layout === 'row' && new Error('Sortable rows are not supported'),
   fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
@@ -197,6 +205,7 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
+  enableSorting: false,
   fetchMembers: false,
   projectsPerPage: 6,
   collection: null,
