@@ -58,8 +58,11 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   const canPaginate = enabled && !expanded && projectsPerPage < numProjects;
   
   const onNextButtonClick = (evt) => {
-    if (page === numPages) {
-      prevButtonRef.focus();
+    console.log(page);
+    console.log(numPages);
+    console.log(prevButtonRef.current);
+    if (page + 1 === numPages) {
+      prevButtonRef.current.focus();
     }
     
     setPage(page + 1);
