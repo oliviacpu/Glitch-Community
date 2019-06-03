@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
-import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
+import NewStuffPup from 'Components/new-stuff/\';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
