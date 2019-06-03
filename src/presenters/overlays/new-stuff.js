@@ -53,7 +53,7 @@ const NewStuff = ({ children }) => {
   const renderOuter = ({ visible, setVisible }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const pupVisible = true
-    const show = () => {
+    const show = ({ preventDefault }) => {
       track();
       setVisible(true);
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
