@@ -14,6 +14,25 @@ const Defs = ({ prefix, users, widths }) => (
   </defs>
 );
 
+const UserMask = ({ users, config }) => (
+  <div className={styles.userMask} 
+    style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
+    {config.points.slice(0, users.length).map((point, i)=> (
+      <div key={users[i].id} 
+        className={styles.userMaskBubbleWrap}
+        aria-label={getDisplayName(users[i])} 
+        style={{
+          left: `${100 *(config.offsetX + point.x) / config.width}%`,
+          top: `${100 * (config.offsetY + point.y) / config.height}%`,
+          width: `${100 * point.d / config.width}%`,
+          // height: `${100 * point.d / config.height}%`,
+        }}>
+        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])}/>
+      </div>
+    ))}
+  </div>
+);
+
 const wavey = {
   color: 'lightblue',
   texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
@@ -31,26 +50,15 @@ const wavey = {
   ]
 }
 
-const UserMask = ({ users, config }) => (
-  <div className={styles.userMaskWrap}>
-    <div className={styles.userMask} 
-      style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
-    {config.points.slice(0, users.length).map((point, i)=> (
-      <div key={users[i].id} 
-        className={styles.userMaskBubble}
-        aria-label={getDisplayName(users[i])} 
-        style={{
-          ...getAvatarStyle(users[i]),
-          top: `${100 * (config.offsetY + point.y) / config.width}%`,
-          left: `${100 *(config.offsetX + point.x) / config.height}%`,
-          width: `${100 * point.d / config.width}%`,
-          height: `${100 * point.d / config.height}%`,
-        }} />
-    ))}
-    </div>
-  </div>
-);
-
+const diagonal = {
+  width: 116,
+  height: 178,
+  offsetX: 65,
+  offsetY: 127,
+  points: [
+    {}
+  ]
+}
 
 const collectionStyles = {
   wavey: {
