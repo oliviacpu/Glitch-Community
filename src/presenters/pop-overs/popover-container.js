@@ -28,6 +28,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [openedFromKeyboard, setOpenedFromKeyboard] = React.useState(false);
   console.log("visible", visible)
   const setVisible = (newVisible) => {
+    console.log("setVisible being called with", newVisible)
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
   };
@@ -62,8 +63,10 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   };
 
   React.useEffect(() => {
+    console.log("visible inside effect", visible)
     if (!visible) return undefined;
     const keyHandler = (event) => {
+      console.log("visible in keyhandler", visible)
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setVisible(false);
@@ -72,7 +75,10 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     window.addEventListener('keydown', keyHandler);
     return () => window.removeEventListener('keydown', keyHandler);
   }, [visible]);
-
+  
+  //verify visible matches our expectations
+  // when visible, only tab through tabs in dialog
+  console.log("visible out of the effect", visible)
   const props = { visible, setVisible, togglePopover, focusFirstElement };
 
   const inner = children(props);
