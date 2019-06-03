@@ -16,17 +16,8 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible,  }) => {
-  React.useEffect(() => {
-    const keyHandler = (event) => {
-      // if (['Tab'].includes(event.key)) {
-      //   event.preventDefault();
-      //   setVisible(false)
-      // }
-    };
-    window.addEventListener('keydown', keyHandler);
-    return () => window.removeEventListener('keydown', keyHandler);
-  }, []);
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+
   
   return (
     <Overlay className="new-stuff-overlay" >
@@ -63,7 +54,7 @@ const NewStuff = ({ children }) => {
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = React.useState(newStuffLog);
   const track = useTracker('Pupdate');
-
+  
   const renderOuter = ({ visible, setVisible }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const pupVisible = true
@@ -83,7 +74,18 @@ const NewStuff = ({ children }) => {
       </>
     );
   };
-
+  
+  React.useEffect(() => {
+    const keyHandler = (event) => {
+      if (['Tab'].includes(event.key)) {
+        // event.preventDefault();
+        console.log(this)
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+    return () => window.removeEventListener('keydown', keyHandler);
+  }, []);
+  
   return (
     <PopoverContainer outer={renderOuter}>
       {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
