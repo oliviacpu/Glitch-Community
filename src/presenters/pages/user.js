@@ -143,6 +143,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
+          data-cy="pinned-projects"
           layout="grid"
           title={
             <>
@@ -176,6 +177,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
+          data-cy="recent-projects"
           layout="grid"
           title="Recent Projects"
           projects={recentProjects}
@@ -191,8 +193,9 @@ const UserPage = ({
           }}
         />
       )}
+
       {(isAuthorized || isSupport) && (
-        <article>
+        <article data-cy="deleted-projects">
           <Heading tagName="h2">
             Deleted Projects
             <Emoji inTitle name="bomb" />
