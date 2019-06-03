@@ -7,4 +7,5 @@ module.exports = {
   Models: path.resolve(__dirname, '../src/models'),
   State: path.resolve(__dirname, '../src/state'),
   Shared: path.resolve(__dirname),
+  Hooks: path.resolve(__dirname, '../src/hooks'),
 };

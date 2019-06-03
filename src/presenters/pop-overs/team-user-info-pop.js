@@ -202,35 +202,30 @@ TeamUserInfoAndRemovePop.propTypes = {
   focusFirstElement: PropTypes.func.isRequired,
 };
 
-const TeamUsers = ({ team, removeUserFromTeam, updateUserPermissions }) => (
-  <ul className="users">
-    {team.users.map((user) => (
-      <li key={user.id}>
-        <PopoverWithButton
-          buttonClass="user button-unstyled tooltip-container-button"
-          buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
-        >
-          {({ togglePopover, focusFirstElement }) => (
-            <TeamUserInfoAndRemovePop
-              team={team}
-              removeUserFromTeam={removeUserFromTeam}
-              user={user}
-              updateUserPermissions={updateUserPermissions}
-              togglePopover={togglePopover}
-              focusFirstElement={focusFirstElement}
-            />
-          )}
-        </PopoverWithButton>
-      </li>
-    ))}
-  </ul>
+const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) => (
+  <PopoverWithButton
+    buttonClass="user button-unstyled tooltip-container-button"
+    buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
+  >
+    {({ togglePopover, focusFirstElement }) => (
+      <TeamUserInfoAndRemovePop
+        team={team}
+        removeUserFromTeam={removeUserFromTeam}
+        user={user}
+        updateUserPermissions={updateUserPermissions}
+        togglePopover={togglePopover}
+        focusFirstElement={focusFirstElement}
+      />
+    )}
+  </PopoverWithButton>
 );
 
-TeamUsers.propTypes = {
+TeamUserPop.propTypes = {
   team: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   removeUserFromTeam: PropTypes.func.isRequired,
   updateUserPermissions: PropTypes.func.isRequired,
 };
 
 
-export default TeamUsers;
+export default TeamUserPop;

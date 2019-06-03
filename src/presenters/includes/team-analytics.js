@@ -257,7 +257,7 @@ class TeamAnalytics extends React.Component {
 }
 
 TeamAnalytics.propTypes = {
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   id: PropTypes.number.isRequired,
   projects: PropTypes.array.isRequired,
   currentUserIsOnTeam: PropTypes.bool.isRequired,

@@ -22,10 +22,10 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, noteOptions, layout, projectOptions, fetchMembers }) => {
+const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
-    <Container items={projects}>
+    <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
       {(project) => (
         <>
           {collection && (
@@ -146,6 +146,8 @@ function ProjectsList({
   placeholder,
   enableFiltering,
   enablePagination,
+  enableSorting,
+  onReorder,
   fetchMembers,
   projectsPerPage,
   collection,
@@ -169,6 +171,8 @@ function ProjectsList({
                   collection={collection}
                   noteOptions={noteOptions}
                   layout={layout}
+                  sortable={enableSorting && paginatedProjects.length === projects.length}
+                  onReorder={onReorder}
                   projectOptions={projectOptions}
                   fetchMembers={fetchMembers}
                 />
@@ -188,6 +192,7 @@ ProjectsList.propTypes = {
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
+  enableSorting: (props) => props.enableSorting && props.layout === 'row' && new Error('Sortable rows are not supported'),
   fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
@@ -200,6 +205,7 @@ ProjectsList.defaultProps = {
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
+  enableSorting: false,
   fetchMembers: false,
   projectsPerPage: 6,
   collection: null,

@@ -14,6 +14,9 @@ import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
+import DeleteTeam from 'Components/team/delete-team-pop';
+import AddTeamProject from 'Components/team/add-team-project-pop';
+import TeamUsers from 'Components/team-users';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -24,10 +27,6 @@ import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
 import NameConflictWarning from '../includes/name-conflict';
-import AddTeamProject from '../pop-overs/add-team-project-pop';
-import DeleteTeam from '../pop-overs/delete-team-pop';
-import TeamUsers from '../includes/team-users';
-
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
 import { TeamMarketing } from '../includes/team-elements';
@@ -249,7 +248,7 @@ TeamPage.propTypes = {
   updateWhitelistedDomain: PropTypes.func.isRequired,
   inviteEmail: PropTypes.func.isRequired,
   inviteUser: PropTypes.func.isRequired,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   clearCover: PropTypes.func.isRequired,
   currentUser: PropTypes.object.isRequired,
   currentUserIsOnTeam: PropTypes.bool.isRequired,

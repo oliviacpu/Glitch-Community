@@ -1,7 +1,7 @@
 /* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
 import { useEffect, useReducer, useMemo } from 'react';
-import { mapValues, sumBy } from 'lodash';
+import { mapValues, sumBy, pick } from 'lodash';
 import { useAPI } from './api';
 import { allByKeys } from '../../shared/api';
 import useErrorHandlers from '../presenters/error-handlers';
@@ -41,7 +41,7 @@ const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
 // search provider logic -- shared between algolia & legacy API
-function useSearchProvider(provider, query, params) {
+function useSearchProvider(provider, query, params, deps) {
   const { handleError } = useErrorHandlers();
   const emptyResults = mapValues(provider, () => []);
   const initialState = {
@@ -76,12 +76,14 @@ function useSearchProvider(provider, query, params) {
       return;
     }
     dispatch({ type: 'loading' });
-    allByKeys(mapValues(provider, (index) => index(query, params)))
+    const selectedProviders = pick(provider, params.filterTypes);
+
+    allByKeys(mapValues(selectedProviders, (index) => index(query, params)))
       .then((res) => {
         dispatch({ type: 'ready', payload: res });
       })
       .catch(handleError);
-  }, [query, params]);
+  }, [query, ...deps]);
   return state;
 }
 
@@ -129,7 +131,7 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
     ...formatByType[type](value),
   }));
 
-const defaultParams = { notSafeForKids: false };
+const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'] };
 
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
@@ -166,26 +168,10 @@ function createAlgoliaProvider(api) {
   };
 }
 
-export function useAlgoliaSearch(query, params = defaultParams) {
+export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
   const api = useAPI();
   const algoliaProvider = useMemo(() => createAlgoliaProvider(api), [api]);
-  return useSearchProvider(algoliaProvider, query, params);
+  return useSearchProvider(algoliaProvider, query, params, deps);
 }
 
-// legacy search
-
-const formatLegacyResult = (type) => ({ data }) => data.map((value) => ({ type, ...value }));
-
-const getLegacyProvider = (api) => ({
-  team: (query) => api.get(`teams/search?q=${query}`).then(formatLegacyResult('team')),
-  user: (query) => api.get(`users/search?q=${query}`).then(formatLegacyResult('user')),
-  project: (query) => api.get(`projects/search?q=${query}`).then(formatLegacyResult('project')),
-  collection: () => Promise.resolve([]),
-  starterKit: (query) => Promise.resolve(findStarterKits(query)),
-});
-
-export function useLegacySearch(query) {
-  const api = useAPI();
-  const legacyProvider = getLegacyProvider(api);
-  return useSearchProvider(legacyProvider, query);
-}
+export default useAlgoliaSearch;

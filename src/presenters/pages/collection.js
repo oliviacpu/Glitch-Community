@@ -17,6 +17,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -26,7 +27,6 @@ import Layout from '../layout';
 import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 import EditCollectionColor from '../pop-overs/edit-collection-color-pop';
-import AddCollectionProject from '../pop-overs/add-collection-project-pop';
 import CollectionAvatar from '../includes/collection-avatar';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
@@ -70,6 +70,7 @@ const CollectionPageContents = ({
   addProjectToCollection,
   removeProjectFromCollection,
   updateColor,
+  updateProjectOrder,
   displayNewNote,
   updateNote,
   hideNote,
@@ -159,6 +160,8 @@ const CollectionPageContents = ({
                   {...props}
                   projects={projects}
                   collection={collection}
+                  enableSorting={currentUserIsAuthor}
+                  onReorder={updateProjectOrder}
                   noteOptions={{
                     hideNote,
                     updateNote,
@@ -171,6 +174,7 @@ const CollectionPageContents = ({
                     featureProject,
                     isAuthorized: currentUserIsAuthor,
                   }}
+                  fetchMembers
                 />
               </div>
             </>
@@ -211,26 +215,15 @@ CollectionPageContents.defaultProps = {
 async function loadCollection(api, ownerName, collectionName) {
   try {
     const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
-    const collectionProjects = await getAllPages(
+    collection.projects = await getAllPages(
       api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=updatedAt&orderDirection=ASC&limit=100`,
+      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
       collection.user = await getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id);
     } else {
       collection.team = await getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-    }
-
-    // fetch users for each project
-    if (collectionProjects) {
-      const projectsWithUsers = await Promise.all(
-        collectionProjects.map(async (project) => {
-          project.users = await getAllPages(api, `v1/projects/by/id/users?id=${project.id}&orderKey=createdAt&orderDirection=ASC&limit=100`);
-          return project;
-        }),
-      );
-      collection.projects = projectsWithUsers;
     }
 
     return collection;

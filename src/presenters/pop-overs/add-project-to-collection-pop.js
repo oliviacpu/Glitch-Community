@@ -14,7 +14,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
-import useDebouncedValue from '../../hooks/use-debounced-value';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
@@ -216,7 +216,7 @@ export const AddProjectToCollectionBase = (props) => {
 
   React.useEffect(() => {
     let canceled = false;
-    setMaybeCollections(null); // reset maybCollections on reload to show loader
+    setMaybeCollections(null); // reset maybeCollections on reload to show loader
 
     const orderParams = 'orderKey=url&orderDirection=ASC&limit=100';
 
@@ -261,7 +261,7 @@ export const AddProjectToCollectionBase = (props) => {
   return (
     <NestedPopover
       alternateContent={() => (
-        <CreateCollectionPop {...props} collections={maybeCollections} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
       )}
       startAlternateVisible={false}
     >
