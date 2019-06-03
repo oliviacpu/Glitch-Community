@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getAvatarStyle } from 'Models/user';
+import { getAvatarStyle, getDisplayName } from 'Models/user';
 
 import styles from './styles.styl';
 
@@ -32,17 +32,21 @@ const wavey = {
 }
 
 const UserMask = ({ users, config }) => (
-  <div>
+  <div className={styles.userMask}>
     {config.points.slice(0, users.length).map((point, i)=> (
-      <div key={users[i].id} aria-label={getDisplayName(users[i])} 
+      <div key={users[i].id} 
+        className={styles.userMaskBubble}
+        aria-label={getDisplayName(users[i])} 
         style={{
           ...getAvatarStyle(users[i]),
-          top: `${(config.offsetY + point.y) / config.width}%`,
-          left: `${(config.offsetX + point.x) / config.height}%`,
+          top: `${100 * (config.offsetY + point.y) / config.width}%`,
+          left: `${100 *(config.offsetX + point.x) / config.height}%`,
+          width: `${100 * point.d / config.width}%`,
+          height: `${100 * point.d / config.height}%`,
         }} />
     ))}
   </div>
-)
+);
 
 
 const collectionStyles = {
@@ -50,17 +54,7 @@ const collectionStyles = {
     color: 'lightblue',
     texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
     userMask: ({ users }) => (
-      <svg viewBox="0 0 109 153">
-        <Defs prefix="wavey" users={users} widths={[40, 32, 32, 32, 42, 51]} />
-        <g transform="translate(49.000000, 102.000000)" fill="#D8D8D8" fillRule="nonzero">
-          <rect fill="url(#wavey-5)" x="0" y="0" width="51" height="51" rx="25.5" />
-          <rect fill="url(#wavey-4)" x="-49" y="-16" width="42" height="42" rx="21" />
-          <rect fill="url(#wavey-3)" x="-7" y="-37" width="32" height="32" rx="16" />
-          <rect fill="url(#wavey-2)" x="-39" y="-62" width="32" height="32" rx="16" />
-          <rect fill="url(#wavey-1)" x="28" y="-73" width="32" height="32" rx="16" />
-          <rect fill="url(#wavey-0)" x="-15" y="-102" width="40" height="40" rx="20" />
-        </g>
-      </svg>
+      <UserMask users={users} config={wavey} />
     ),
   },
   diagonal: {
