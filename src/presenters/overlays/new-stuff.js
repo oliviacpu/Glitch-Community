@@ -51,8 +51,8 @@ const NewStuff = ({ children }) => {
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, setVisible }) => {
-    const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
-
+    // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
+    const pupVisible = true
     const show = () => {
       track();
       setVisible(true);
