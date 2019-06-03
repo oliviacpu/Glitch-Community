@@ -15,6 +15,7 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
+//update so you can't tab? or maybe tab closes overlay
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
   <Overlay className="new-stuff-overlay">
     <OverlaySection type="info">
