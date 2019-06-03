@@ -86,7 +86,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
+      {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} ref={focusFirstElement}/> : null)}
     </PopoverContainer>
   );
 };
