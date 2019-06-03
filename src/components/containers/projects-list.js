@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useReducer } from "react";
+import React, { useEffect, useState, useRef, useReducer, useMemo } from "react";
 import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import classNames from "classnames/bind";
@@ -13,7 +13,7 @@ import ProjectItem from "Components/project/project-item";
 import Note from "Components/collection/note";
 import Grid from "Components/containers/grid";
 import Row from "Components/containers/row";
-import { LiveMessage } from 'react-aria-live';
+import { LiveMessage } from "react-aria-live";
 
 import styles from "./projects-list.styl";
 
@@ -71,29 +71,6 @@ const ProjectsUL = ({
 const arrowSrc =
   "https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269";
 
-const paginationReducer = (oldState, action) => {
-  switch (action.type) {
-    case "next":
-      return {
-        page: oldState.page + 1,
-        totalPages: oldState.totalPages,
-        announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
-      };
-    case "previous":
-      return {
-        page: oldState.page - 1,
-        totalPages: oldState.totalPages,
-        announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
-      };
-    case "expand":
-      return {
-        expanded: true,
-        totalPages: oldState.totalPages,
-        announce: `Showing all pages`
-      };
-  }
-};
-
 const PaginationController = ({
   enabled,
   projects,
@@ -103,11 +80,40 @@ const PaginationController = ({
   const numProjects = projects.length;
   const numPages = Math.ceil(projects.length / projectsPerPage);
 
-  const [state, dispatchState] = useReducer(paginationReducer, {
-    page: 1,
-    totalPages: numPages,
-    announce: '',
+  const paginationReducer = useMemo((oldState, action) => {
+    switch (action.type) {
+      case "next":
+        return {
+          page: oldState.page + 1,
+          totalPages: oldState.totalPages,
+          announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
+        };
+      case "previous":
+        return {
+          page: oldState.page - 1,
+          totalPages: oldState.totalPages,
+          announce: `Showing page ${oldState.page} of ${oldState.totalPages}`
+        };
+      case "expand":
+        return {
+          expanded: true,
+          totalPages: oldState.totalPages,
+          announce: `Showing all pages`
+        };
+      case "init":
+        return {
+          page: 1,
+          totalPages: numPages,
+          announce: ""
+        };
+    }
   });
+
+  const [state, dispatchState] = useReducer(paginationReducer, {
+          page: 1,
+          totalPages: numPages,
+          announce: ""
+        });
   const prevButtonRef = useRef();
 
   const canPaginate =
