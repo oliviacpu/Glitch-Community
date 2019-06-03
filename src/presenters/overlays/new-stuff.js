@@ -67,7 +67,6 @@ const NewStuff = ({ children }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const pupVisible = true
     const show = ({ preventDefault }) => {
-      console.log("show called?")
       track();
       setVisible(true);
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
