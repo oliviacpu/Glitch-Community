@@ -65,7 +65,7 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" tabIndex="-1"/>}
+        {visible && <div className="overlay-background" role="presentation" />}
       </>
     );
   };
