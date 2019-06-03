@@ -1,4 +1,4 @@
-import React,  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
@@ -45,12 +45,18 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-const focusFirstElement = (dialog) => {
+const messWithFocus = (dialog) => {
+  console.log("dialog", dialog)
   const focusableElements =
     'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
   const focusableDialogElements = dialog.querySelectorAll(focusableElements);
   console.log("focusableDialogElements", focusableDialogElements)
 };
+
+const Mess = ({children}) => {
+  return children
+  // return children(messWithFocus)
+}
 
 const NewStuff = ({ children }) => {
   const { currentUser } = useCurrentUser();
@@ -82,7 +88,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
+      {({ visible, setVisible, focusFirstElement }) => (visible ? <Mess><NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /></Mess> : null)}
     </PopoverContainer>
   );
 };
