@@ -19,9 +19,10 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible,  }) => {
   React.useEffect(() => {
     const keyHandler = (event) => {
-      // if (['Tab'].includes(event.key)) {
-      //   event.preventDefault();
-      // }
+      if (['Tab'].includes(event.key)) {
+        event.preventDefault();
+        setVisible(false)
+      }
     };
     window.addEventListener('keydown', keyHandler);
     return () => window.removeEventListener('keydown', keyHandler);
