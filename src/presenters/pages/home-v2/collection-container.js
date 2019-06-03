@@ -20,14 +20,14 @@ const UserMask = ({ users, config }) => (
       <div
         key={users[i].id}
         className={styles.userMaskBubbleWrap}
+        aria-label={getDisplayName(users[i])}
         style={{
-          left: `${(100 * (config.offsetX + point.x)) / config.width}%`,
-          top: `${(100 * (config.offsetY + point.y)) / config.height}%`,
+          left: `${(100 * point.x) / config.width}%`,
+          top: `${(100 * point.y) / config.height}%`,
           width: `${(100 * point.d) / config.width}%`,
-          // height: `${100 * point.d / config.height}%`,
         }}
       >
-        <img className={styles.userMaskBubble} src={users[i].avatarUrl} style={getAvatarStyle(users[i])} alt={getDisplayName(users[i])} />
+        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])} />
       </div>
     ))}
   </div>
@@ -39,8 +39,6 @@ const collectionStyles = {
     texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
     width: 109,
     height: 153,
-    offsetX: 0,
-    offsetY: 0,
     points: [
       { x: 35, y: 0, d: 40 },
       { x: 77, y: 29, d: 32 },
@@ -55,15 +53,13 @@ const collectionStyles = {
     texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdiagonal.svg?1559249088716',
     width: 116,
     height: 178,
-    offsetX: 65,
-    offsetY: 127,
     points: [
-      { x: -65, y: -126, d: 40 },
-      { x: -25, y: -86, d: 32 },
-      { x: 19, y: -86, d: 32 },
-      { x: -65, y: -42, d: 42 },
-      { x: -13, y: -32, d: 32 },
-      { x: 0, y: 0, d: 51 },
+      { x: 0, y: 1, d: 40 },
+      { x: 40, y: 41, d: 32 },
+      { x: 84, y: 41, d: 32 },
+      { x: 0, y: 85, d: 42 },
+      { x: 52, y: 95, d: 32 },
+      { x: 65, y: 127, d: 51 },
     ],
   },
   triangle: {
@@ -71,15 +67,13 @@ const collectionStyles = {
     texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftriangle.svg?1559249088542',
     width: 102,
     height: 161,
-    offsetX: 45,
-    offsetY: 129,
     points: [
-      { x: -43, y: -123, d: 40 },
-      { x: 6, y: -128, d: 51 },
-      { x: -28, y: -67, d: 42 },
-      { x: 25, y: -58, d: 32 },
-      { x: -45, y: -9, d: 30 },
-      { x: 0, y: 0, d: 32 },
+      { x: 2, y: 6, d: 40 },
+      { x: 51, y: 1, d: 51 },
+      { x: 17, y: 62, d: 42 },
+      { x: 70, y: 71, d: 32 },
+      { x: 0, y: 120, d: 30 },
+      { x: 45, y: 129, d: 32 },
     ],
   },
 };
@@ -88,7 +82,7 @@ const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
   <div className={styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
     <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>
-    <div className={styles.curatedCollectionUsers}>v
+    <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
   </div>
