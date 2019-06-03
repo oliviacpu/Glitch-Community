@@ -16,20 +16,31 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => (
-  <Overlay className="new-stuff-overlay">
-    <OverlaySection type="info">
-      <div className="new-stuff-avatar"><NewStuffPup /></div>
-      <OverlayTitle>New Stuff</OverlayTitle>
-      <div className="new-stuff-toggle">
-        <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
-      </div>
-    </OverlaySection>
-    <OverlaySection type="actions">
-      {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
-    </OverlaySection>
-  </Overlay>
-);
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
+  const onKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      
+    }
+  };
+  
+  return (
+    <Overlay className="new-stuff-overlay">
+      <OverlaySection type="info">
+        <div className="new-stuff-avatar"><NewStuffPup /></div>
+        <OverlayTitle>New Stuff</OverlayTitle>
+        <div className="new-stuff-toggle">
+          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
+        </div>
+      </OverlaySection>
+      <OverlaySection type="actions">
+        {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
+      </OverlaySection>
+    </Overlay>
+  );
+};
 NewStuffOverlay.propTypes = {
   setShowNewStuff: PropTypes.func.isRequired,
   showNewStuff: PropTypes.bool.isRequired,
