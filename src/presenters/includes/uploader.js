@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { uploadAsset, uploadAssetSizes } from '../../utils/assets';
+import { captureException } from '../../utils/sentry';
 import { useNotifications } from '../notifications';
 
 const NotifyUploading = ({ progress }) => (
@@ -9,7 +10,12 @@ const NotifyUploading = ({ progress }) => (
     <progress className="notify-progress" value={progress} />
   </>
 );
-const NotifyError = () => 'File upload failed. Try again in a few minutes?';
+const NotifyError = ({ error }) => {
+  if (error && error.status_code === 0) {
+    return 'File upload failed. Check your firewall settings and try again?';
+  }
+  return 'File upload failed. Try again in a few minutes?';
+};
 
 async function uploadWrapper(notifications, upload) {
   let result = null;
@@ -27,13 +33,15 @@ async function uploadWrapper(notifications, upload) {
       }
       updateNotification(<NotifyUploading progress={progress} />);
     });
-  } catch (e) {
-    notifications.createErrorNotification(<NotifyError />);
-    throw e;
-  } finally {
+  } catch (error) {
+    captureException(error);
+    notifications.createErrorNotification(<NotifyError error={error} />);
     removeNotification();
-    notifications.createNotification('Image uploaded!');
+    return result;
   }
+
+  removeNotification();
+  notifications.createNotification('Image uploaded!');
   return result;
 }
 

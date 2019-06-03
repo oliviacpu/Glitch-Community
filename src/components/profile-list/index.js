@@ -52,19 +52,30 @@ const useResizeObserver = () => {
   return { ref, width };
 };
 
-const RowContainer = ({ users, teams }) => {
+const parametersForSize = {
+  large: {
+    avatarWidth: 32,
+    userOffset: -7,
+    teamOffset: 7,
+  },
+  small: {
+    avatarWidth: 22,
+    userOffset: -5,
+    teamOffset: 2,
+  },
+};
+
+const RowContainer = ({ size, users, teams }) => {
   const { ref, width } = useResizeObserver();
-  const avatarWidth = 32;
-  const userOffset = -7;
-  const teamOffset = 7;
+  const { avatarWidth, userOffset, teamOffset } = parametersForSize[size];
   const maxTeams = Math.floor(width / (avatarWidth + teamOffset));
   const remainingWidth = width - (avatarWidth + teamOffset) * teams.length - teamOffset;
   const maxUsers = Math.floor((remainingWidth + userOffset) / (avatarWidth + userOffset));
 
   return (
-    <ul ref={ref} className={classnames(styles.container, styles.row)}>
+    <ul ref={ref} className={classnames(styles.container, styles.row, styles[size])}>
       {teams.slice(0, maxTeams).map((team) => (
-        <li key={`team-${team.id}`} className={styles.teamItem}>
+        <li key={`team-${team.id}`} className={(styles.teamItem)}>
           <TeamItem team={team} />
         </li>
       ))}
@@ -77,19 +88,19 @@ const RowContainer = ({ users, teams }) => {
   );
 };
 
-const BlockContainer = ({ users, teams }) => (
+const BlockContainer = ({ size, users, teams }) => (
   <>
     {teams.length > 0 && (
-      <ul className={styles.container}>
+      <ul className={classnames(styles.container, styles[size])}>
         {teams.map((team) => (
-          <li key={`team-${team.id}`} className={styles.teamItem}>
+          <li key={`team-${team.id}`} className={(styles.teamItem)}>
             <TeamItem team={team} />
           </li>
         ))}
       </ul>
     )}
     {users.length > 0 && (
-      <ul className={styles.container}>
+      <ul className={classnames(styles.container, styles[size])}>
         {users.map((user) => (
           <li key={`user-${user.id}`} className={styles.userItem}>
             <UserItem user={user} />
@@ -102,16 +113,16 @@ const BlockContainer = ({ users, teams }) => (
 
 const GLITCH_TEAM_AVATAR = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fglitch-team-avatar.svg?1489266029267';
 
-const GlitchTeamList = () => (
-  <ul className={styles.container}>
-    <li className={styles.teamItem}>
+const GlitchTeamList = ({ size }) => (
+  <ul className={classnames(styles.container, styles[size])}>
+    <li className={(styles.teamItem)}>
       <Avatar name="Glitch Team" src={GLITCH_TEAM_AVATAR} color="#74ecfc" type="team" />
     </li>
   </ul>
 );
 
-const PlaceholderList = () => (
-  <ul className={styles.container}>
+const PlaceholderList = ({ size }) => (
+  <ul className={classnames(styles.container, styles[size])}>
     <li className={styles.userItem}>
       <div className={styles.placeholder} />
     </li>
@@ -124,30 +135,32 @@ export const ProfileItem = ({ user, team, glitchTeam }) => (
   <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} glitchTeam={glitchTeam} />
 );
 
-const ProfileList = ({ users, teams, layout, glitchTeam }) => {
+const ProfileList = ({ size, users, teams, layout, glitchTeam }) => {
   if (glitchTeam) {
     return <GlitchTeamList />;
   }
 
   if (!users.length && !teams.length) {
-    return <PlaceholderList />;
+    return <PlaceholderList size={size} />;
   }
 
   if (layout === 'row') {
-    return <RowContainer users={users} teams={teams} />;
+    return <RowContainer size={size} users={users} teams={teams} />;
   }
 
-  return <BlockContainer users={users} teams={teams} />;
+  return <BlockContainer size={size} users={users} teams={teams} />;
 };
 
 ProfileList.propTypes = {
   layout: PropTypes.oneOf(['row', 'block']).isRequired,
+  size: PropTypes.oneOf(['small', 'large']),
   users: PropTypes.array,
   teams: PropTypes.array,
   glitchTeam: PropTypes.bool,
 };
 
 ProfileList.defaultProps = {
+  size: 'large',
   users: [],
   teams: [],
   glitchTeam: false,

@@ -6,6 +6,7 @@ import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Link, { TeamLink, UserLink } from 'Components/link';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
 import PopoverContainer from './popover-container';
@@ -79,7 +80,9 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement, superUserHelpers }) => {
+  const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
+
   const trackLogout = useTracker('Logout');
 
   const clickNewStuff = (event) => {
@@ -126,6 +129,13 @@ Are you sure you want to sign out?`)
       </UserLink>
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
       <section className="pop-over-info">
+        {(canBecomeSuperUser || !!superUserFeature) && (
+          <div className="user-options-pop-checkbox">
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
+              Super User
+            </CheckboxButton>
+          </div>
+        )}
         <button type="button" onClick={clickNewStuff} className="button-small has-emoji button-tertiary button-on-secondary-background">
           New Stuff <span className="emoji dog-face" />
         </button>

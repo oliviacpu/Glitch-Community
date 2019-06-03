@@ -213,7 +213,7 @@ class TeamEditor extends React.Component {
     const funcs = {
       updateName: (name) => this.updateFields({ name }).catch(handleErrorForInput),
       updateUrl: (url) => this.updateFields({ url }).catch(handleErrorForInput),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleError),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       joinTeam: () => this.joinTeam().catch(handleError),
       inviteEmail: (email) => this.inviteEmail(email).catch(handleError),
       inviteUser: (id) => this.inviteUser(id).catch(handleError),

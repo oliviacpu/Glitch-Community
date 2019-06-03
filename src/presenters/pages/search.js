@@ -6,25 +6,12 @@ import { withRouter } from 'react-router-dom';
 import SearchResults from 'Components/search-results';
 import NotFound from 'Components/errors/not-found';
 import MoreIdeas from 'Components/more-ideas';
-import { useAlgoliaSearch, useLegacySearch } from 'State/search';
-import useDevToggle from 'State/dev-toggles';
+import { useAlgoliaSearch } from 'State/search';
 
 import Layout from '../layout';
 
-// Hooks can't be _used_ conditionally, but components can be _rendered_ conditionally
-const AlgoliaSearchWrapper = (props) => {
-  const searchResults = useAlgoliaSearch(props.query);
-  return <SearchResults {...props} searchResults={searchResults} />;
-};
-
-const LegacySearchWrapper = (props) => {
-  const searchResults = useLegacySearch(props.query);
-  return <SearchResults {...props} searchResults={searchResults} />;
-};
-
 const SearchPage = withRouter(({ query, activeFilter, history }) => {
-  const algoliaFlag = useDevToggle('Algolia Search');
-  const SearchWrapper = algoliaFlag ? AlgoliaSearchWrapper : LegacySearchWrapper;
+  const searchResults = useAlgoliaSearch(query);
   const setActiveFilter = (filter) => {
     history.push(`/search?q=${query}&activeFilter=${filter}`);
   };
@@ -32,7 +19,11 @@ const SearchPage = withRouter(({ query, activeFilter, history }) => {
   return (
     <Layout searchQuery={query}>
       {!!query && <Helmet title={`Search for ${query}`} />}
-      {query ? <SearchWrapper query={query} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} /> : <NotFound name="anything" />}
+      {query ? (
+        <SearchResults query={query} searchResults={searchResults} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} />
+      ) : (
+        <NotFound name="anything" />
+      )}
       <MoreIdeas />
     </Layout>
   );
