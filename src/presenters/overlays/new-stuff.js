@@ -16,7 +16,8 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, togglePopover }) => {
+  console.log(togglePopover, "??)")
   const onKeyDown = (e) => {
     if (e.key === 'Tab') {
       e.preventDefault();
@@ -66,6 +67,7 @@ const NewStuff = ({ children }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const pupVisible = true
     const show = ({ preventDefault }) => {
+      console.log("show called?")
       track();
       setVisible(true);
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
@@ -84,7 +86,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} /> : null)}
+      {({ visible, togglePopover }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} togglePopover={togglePopover} /> : null)}
     </PopoverContainer>
   );
 };
