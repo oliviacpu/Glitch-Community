@@ -78,6 +78,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             <Button ref={prevButtonRef} type="tertiary" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
+            <LiveMessage message={} aria-live="polite" />
             <div className={styles.pageNumbers}>
               {page} / {numPages}
             </div>
