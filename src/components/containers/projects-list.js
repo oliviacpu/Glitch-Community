@@ -77,7 +77,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             </Button>
           </div>
           <Button data-cy="show-all" type="tertiary" onClick={() => setExpanded(true)}>
-            Show all<Badge data-cy="total-projects">{numProjects}</Badge>
+            Show all<Badge>{numProjects}</Badge>
           </Button>
         </div>
       )}

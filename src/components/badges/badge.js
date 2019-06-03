@@ -11,9 +11,9 @@ export const TYPES = ['success', 'warning', 'error', 'private'];
 /**
  * Badge Component
  */
-const Badge = ({ type, children, ...props }) => {
+const Badge = ({ type, children }) => {
   const className = cx({ badge: true, [type]: true });
-  return <div className={className} {...props}>{children}</div>;
+  return <div className={className}>{children}</div>;
 };
 
 Badge.propTypes = {
