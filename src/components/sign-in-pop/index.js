@@ -86,6 +86,7 @@ function useEmail() {
 const EmailHandler = ({ showView }) => {
   const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
+  const [isFocused, setIsFocused] = useState(true);
   const [{ status, submitError }, setStatus] = useState({ status: 'ready' });
   const isEnabled = email.length > 0;
 
@@ -121,7 +122,17 @@ const EmailHandler = ({ showView }) => {
       <PopoverActions>
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
-            <TextInput type="email" labelText="Email address" value={email} onChange={setEmail} placeholder="new@user.com" error={validationError} autoFocus />
+            <TextInput
+              type="email"
+              labelText="Email address"
+              value={email}
+              onChange={setEmail}
+              onBlur={() => setIsFocused(false)}
+              onFocus={() => setIsFocused(true)}
+              placeholder="new@user.com"
+              error={isEnabled && !isFocused && validationError}
+              autoFocus
+            />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Link

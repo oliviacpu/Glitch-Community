@@ -191,7 +191,7 @@ AddTeamProjectPop.propTypes = {
   teamProjects: PropTypes.array.isRequired,
   addProject: PropTypes.func.isRequired,
   togglePopover: PropTypes.func.isRequired,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
 };
 
 const AddTeamProject = ({ addProject, teamProjects }) => {

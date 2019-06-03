@@ -16,21 +16,30 @@ import { useCurrentUser } from '../../state/current-user';
 
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
-export const NotFoundPage = () => (
-  <Layout>
-    <Helmet title="👻 Page not found" />
-    <main className="error-page-container">
-      <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
-      <div className="error-msg">
-        <Heading tagName="h1">Page Not Found</Heading>
-        <Text>Maybe a typo, or perhaps it's moved?</Text>
-        <a className="button button-link" href="/">
-          Back to Glitch
-        </a>
-      </div>
-    </main>
-  </Layout>
-);
+
+export const NotFoundPage = () => {
+  // we show a translated error message and redirect in index.ejs (this just ensures we don't show duplicate messages)
+  if (window.location.origin === 'https://translate.googleusercontent.com') {
+    return null;
+  }
+
+  return (
+    <Layout>
+      <Helmet title="👻 Page not found" />
+      <main className="error-page-container">
+        <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
+        <div className="error-msg">
+          <Heading tagName="h1">Page Not Found</Heading>
+          <Text>Maybe a typo, or perhaps it's moved?</Text>
+          <a className="button button-link" href="/">
+            Back to Glitch
+          </a>
+        </div>
+      </main>
+    </Layout>
+  );
+};
+
 
 const emailImageUrl = 'https://cdn.glitch.com/26ac422d-705d-42be-b9cb-1fbdfe7e5a63%2Ferror-mailer.svg?1543429767321';
 
