@@ -249,7 +249,7 @@ TeamPage.propTypes = {
   updateWhitelistedDomain: PropTypes.func.isRequired,
   inviteEmail: PropTypes.func.isRequired,
   inviteUser: PropTypes.func.isRequired,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   clearCover: PropTypes.func.isRequired,
   currentUser: PropTypes.object.isRequired,
   currentUserIsOnTeam: PropTypes.bool.isRequired,
