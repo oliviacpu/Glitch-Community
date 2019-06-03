@@ -1,49 +1,33 @@
-import React, { useEffect, useState, useRef, useReducer, useMemo } from "react";
-import PropTypes from "prop-types";
-import { debounce } from "lodash";
-import classNames from "classnames/bind";
+import React, { useEffect, useState, useRef, useReducer } from 'react';
+import PropTypes from 'prop-types';
+import { debounce } from 'lodash';
+import classNames from 'classnames/bind';
 
-import Text from "Components/text/text";
-import Button from "Components/buttons/button";
-import Badge from "Components/badges/badge";
-import TextInput from "Components/inputs/text-input";
-import Heading from "Components/text/heading";
-import Image from "Components/images/image";
-import ProjectItem from "Components/project/project-item";
-import Note from "Components/collection/note";
-import Grid from "Components/containers/grid";
-import Row from "Components/containers/row";
-import { LiveMessage } from "react-aria-live";
+import Text from 'Components/text/text';
+import Button from 'Components/buttons/button';
+import Badge from 'Components/badges/badge';
+import TextInput from 'Components/inputs/text-input';
+import Heading from 'Components/text/heading';
+import Image from 'Components/images/image';
+import ProjectItem from 'Components/project/project-item';
+import Note from 'Components/collection/note';
+import Grid from 'Components/containers/grid';
+import Row from 'Components/containers/row';
+import { LiveMessage } from 'react-aria-live';
 
-import styles from "./projects-list.styl";
+import styles from './projects-list.styl';
 
 const containers = {
-  row: props => <Row className={styles.projectsRow} {...props} />,
-  grid: props => <Grid className={styles.projectsGrid} {...props} />,
-  gridCompact: props => (
-    <Grid className={styles.projectsGridCompact} {...props} />
-  )
+  row: (props) => <Row className={styles.projectsRow} {...props} />,
+  grid: (props) => <Grid className={styles.projectsGrid} {...props} />,
+  gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({
-  collection,
-  projects,
-  sortable,
-  onReorder,
-  noteOptions,
-  layout,
-  projectOptions,
-  fetchMembers
-}) => {
+const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions, fetchMembers }) => {
   const Container = containers[layout];
   return (
-    <Container
-      itemClassName={styles.projectsItem}
-      items={projects}
-      sortable={sortable}
-      onReorder={onReorder}
-    >
-      {project => (
+    <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
+      {(project) => (
         <>
           {collection && (
             <div className={styles.projectsContainerNote}>
@@ -56,74 +40,59 @@ const ProjectsUL = ({
               />
             </div>
           )}
-          <ProjectItem
-            key={project.id}
-            project={project}
-            projectOptions={projectOptions}
-            fetchMembers={fetchMembers}
-          />
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
         </>
       )}
     </Container>
   );
 };
 
-const arrowSrc =
-  "https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269";
+const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
+const paginationReducer = (oldState, action) => {
+  switch (action) {
+    case 'next':
+      return {
+        page: oldState.page + 1,
+        totalPages: oldState.totalPages,
+        announce: `Showing page ${oldState.page + 1} of ${oldState.totalPages}`,
+      };
+    case 'previous':
+      return {
+        page: oldState.page - 1,
+        totalPages: oldState.totalPages,
+        announce: `Showing page ${oldState.page - 1} of ${oldState.totalPages}`,
+      };
+    case 'expand':
+      return {
+        expanded: true,
+        totalPages: oldState.totalPages,
+        announce: 'Showing all pages',
+      };
+    default:
+      return {};
+  }
+};
 
-  const paginationReducer = (oldState, action) => {
-    switch (action) {
-      case "next":
-        return {
-          page: oldState.page + 1,
-          totalPages: oldState.totalPages,
-          announce: `Showing page ${oldState.page + 1} of ${oldState.totalPages}`
-        };
-      case "previous":
-        return {
-          page: oldState.page - 1,
-          totalPages: oldState.totalPages,
-          announce: `Showing page ${oldState.page - 1} of ${oldState.totalPages}`
-        };
-      case "expand":
-        return {
-          expanded: true,
-          totalPages: oldState.totalPages,
-          announce: `Showing all pages`
-        };
-      default: 
-        return {
-          
-        };
-    }
-  };
-
-const PaginationController = ({
-  enabled,
-  projects,
-  projectsPerPage,
-  children
-}) => {
+const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
   const numProjects = projects.length;
   const numPages = Math.ceil(projects.length / projectsPerPage);
 
   const [state, dispatchState] = useReducer(paginationReducer, {
-          page: 1,
-          totalPages: numPages,
-          announce: ""
-        });
+    page: 1,
+    totalPages: numPages,
+    announce: '',
+  });
   const prevButtonRef = useRef();
 
-  const canPaginate =
-    enabled && !state.expanded && projectsPerPage < numProjects;
+  const canPaginate = enabled && !state.expanded && projectsPerPage < numProjects;
 
-  const onNextButtonClick = evt => {
+  const onNextButtonClick = () => {
     if (state.page + 1 === numPages) {
       prevButtonRef.current.focus();
     }
 
-    dispatchState("next");
+    dispatchState('next');
   };
 
   if (canPaginate) {
@@ -136,36 +105,19 @@ const PaginationController = ({
       {canPaginate && (
         <div className={styles.viewControls}>
           <div className={styles.paginationControls}>
-            <Button
-              ref={prevButtonRef}
-              type="tertiary"
-              disabled={state.page === 1}
-              onClick={() => dispatchState("previous")}
-            >
-              <Image
-                alt="Previous"
-                className={styles.paginationArrow}
-                src={arrowSrc}
-              />
+            <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={() => dispatchState('previous')}>
+              <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
             <div className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
-            <Button
-              type="tertiary"
-              disabled={state.page === numPages}
-              onClick={onNextButtonClick}
-            >
-              <Image
-                alt="Next"
-                className={classNames(styles.paginationArrow, styles.next)}
-                src={arrowSrc}
-              />
+            <Button type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
+              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button type="tertiary" onClick={() => dispatchState("expand")}>
-            Show all<Badge>{numProjects}</Badge>
+          <Button type="tertiary" onClick={() => dispatchState('expand')}>
+            Show all <Badge>{numProjects}</Badge>
           </Button>
         </div>
       )}
@@ -174,7 +126,7 @@ const PaginationController = ({
 };
 
 const FilterController = ({ enabled, placeholder, projects, children }) => {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
@@ -184,13 +136,7 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredProjects(
-        projects.filter(
-          p =>
-            p.domain.includes(lowercaseFilter) ||
-            p.description.toLowerCase().includes(lowercaseFilter)
-        )
-      );
+      setFilteredProjects(projects.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
       setFilteredProjects([]);
@@ -215,22 +161,19 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
         value={filter}
       />
     ),
-    renderProjects: renderFn => {
+    renderProjects: (renderFn) => {
       if (displayedProjects.length) return renderFn(displayedProjects);
 
       if (filtering) {
         return (
           <div className={styles.filterResultsPlaceholder}>
-            <Image
-              alt=""
-              src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630"
-            />
+            <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
             <Text>No projects found</Text>
           </div>
         );
       }
       return placeholder;
-    }
+    },
   });
 };
 
@@ -247,36 +190,25 @@ function ProjectsList({
   projectsPerPage,
   collection,
   noteOptions,
-  projectOptions
+  projectOptions,
 }) {
   return (
-    <FilterController
-      enabled={enableFiltering}
-      placeholder={placeholder}
-      projects={projects}
-    >
+    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
         <article className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          {renderProjects(filteredProjects => (
-            <PaginationController
-              enabled={enablePagination}
-              projects={filteredProjects}
-              projectsPerPage={projectsPerPage}
-            >
-              {paginatedProjects => (
+          {renderProjects((filteredProjects) => (
+            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+              {(paginatedProjects) => (
                 <ProjectsUL
                   projects={paginatedProjects}
                   collection={collection}
                   noteOptions={noteOptions}
                   layout={layout}
-                  sortable={
-                    enableSorting &&
-                    paginatedProjects.length === projects.length
-                  }
+                  sortable={enableSorting && paginatedProjects.length === projects.length}
                   onReorder={onReorder}
                   projectOptions={projectOptions}
                   fetchMembers={fetchMembers}
@@ -292,20 +224,17 @@ function ProjectsList({
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
-  layout: PropTypes.oneOf(["row", "grid", "gridCompact"]).isRequired,
+  layout: PropTypes.oneOf(['row', 'grid', 'gridCompact']).isRequired,
   title: PropTypes.node,
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
-  enableSorting: props =>
-    props.enableSorting &&
-    props.layout === "row" &&
-    new Error("Sortable rows are not supported"),
+  enableSorting: (props) => props.enableSorting && props.layout === 'row' && new Error('Sortable rows are not supported'),
   fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
-  projectOptions: PropTypes.object
+  projectOptions: PropTypes.object,
 };
 
 ProjectsList.defaultProps = {
@@ -318,7 +247,7 @@ ProjectsList.defaultProps = {
   projectsPerPage: 6,
   collection: null,
   noteOptions: {},
-  projectOptions: {}
+  projectOptions: {},
 };
 
 export default ProjectsList;
