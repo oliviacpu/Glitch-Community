@@ -15,6 +15,7 @@ require('dotenv').config();
 
 module.exports = (on, config) => {
   config.env = {
+    PERCY_TOKEN: process.env.PERCY_TOKEN,
     GLITCH_TOKEN: process.env.GLITCH_TOKEN,
   };
   return config;

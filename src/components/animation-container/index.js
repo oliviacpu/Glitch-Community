@@ -30,6 +30,7 @@ const AnimationContainer = ({ type, children, className, onAnimationEnd }) => {
     </div>
   );
 };
+
 AnimationContainer.propTypes = {
   type: PropTypes.oneOf(types).isRequired,
   children: PropTypes.func.isRequired,

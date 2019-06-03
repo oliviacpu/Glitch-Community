@@ -41,27 +41,29 @@ const FeaturedProject = ({
   updateNote,
   unfeatureProject,
 }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
-    {(animateAndUnfeatureProject) => (
-      <ProjectEmbed
-        top={
-          <Top
-            featuredProject={featuredProject}
-            collection={collection}
-            hideNote={hideNote}
-            updateNote={updateNote}
-            isAuthorized={isAuthorized}
-            unfeatureProject={animateAndUnfeatureProject}
-            createNote={collection ? () => displayNewNote(featuredProject.id) : null}
-          />
-        }
-        project={featuredProject}
-        isAuthorized={isAuthorized}
-        currentUser={currentUser}
-        addProjectToCollection={addProjectToCollection}
-      />
-    )}
-  </AnimationContainer>
+  <div data-cy="featured-project">
+    <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
+      {(animateAndUnfeatureProject) => (
+        <ProjectEmbed
+          top={
+            <Top
+              featuredProject={featuredProject}
+              collection={collection}
+              hideNote={hideNote}
+              updateNote={updateNote}
+              isAuthorized={isAuthorized}
+              unfeatureProject={animateAndUnfeatureProject}
+              createNote={collection ? () => displayNewNote(featuredProject.id) : null}
+            />
+          }
+          project={featuredProject}
+          isAuthorized={isAuthorized}
+          currentUser={currentUser}
+          addProjectToCollection={addProjectToCollection}
+        />
+      )}
+    </AnimationContainer>
+  </div>
 );
 
 FeaturedProject.propTypes = {

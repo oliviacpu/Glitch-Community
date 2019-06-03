@@ -23,7 +23,6 @@ import NewHomePage from './home-v2';
 import NewHomePagePreview from './home-v2/preview';
 
 /* global EXTERNAL_ROUTES */
-
 const parse = (search, name) => {
   const params = new URLSearchParams(search);
   return params.get(name);
@@ -50,6 +49,7 @@ function track() {
 const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
+
   useEffect(() => {
     if (isUpdate.current) {
       window.scrollTo(0, 0);

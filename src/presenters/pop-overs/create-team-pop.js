@@ -155,7 +155,7 @@ class CreateTeamPopBase extends React.Component {
 }
 
 CreateTeamPopBase.propTypes = {
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   focusFirstElement: PropTypes.func.isRequired,
 };
 

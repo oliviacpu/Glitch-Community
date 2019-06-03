@@ -15,19 +15,20 @@ const Defs = ({ prefix, users, widths }) => (
 );
 
 const UserMask = ({ users, config }) => (
-  <div className={styles.userMask} 
-    style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
-    {config.points.slice(0, users.length).map((point, i)=> (
-      <div key={users[i].id} 
+  <div className={styles.userMask} style={{ paddingBottom: `${(100 * config.height) / config.width}%` }}>
+    {config.points.slice(0, users.length).map((point, i) => (
+      <div
+        key={users[i].id}
         className={styles.userMaskBubbleWrap}
-        aria-label={getDisplayName(users[i])} 
+        aria-label={getDisplayName(users[i])}
         style={{
-          left: `${100 *(config.offsetX + point.x) / config.width}%`,
-          top: `${100 * (config.offsetY + point.y) / config.height}%`,
-          width: `${100 * point.d / config.width}%`,
+          left: `${(100 * (config.offsetX + point.x)) / config.width}%`,
+          top: `${(100 * (config.offsetY + point.y)) / config.height}%`,
+          width: `${(100 * point.d) / config.width}%`,
           // height: `${100 * point.d / config.height}%`,
-        }}>
-        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])}/>
+        }}
+      >
+        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])} />
       </div>
     ))}
   </div>
@@ -42,13 +43,13 @@ const collectionStyles = {
     offsetX: 0,
     offsetY: 0,
     points: [
-      {"x":35,"y":0,"d":40},
-      {"x":77,"y":29,"d":32},
-      {"x":10,"y":40,"d":32},
-      {"x":42,"y":65,"d":32},
-      {"x":0,"y":86,"d":42},
-      {"x":49,"y":102,"d":51}
-    ]
+      { x: 35, y: 0, d: 40 },
+      { x: 77, y: 29, d: 32 },
+      { x: 10, y: 40, d: 32 },
+      { x: 42, y: 65, d: 32 },
+      { x: 0, y: 86, d: 42 },
+      { x: 49, y: 102, d: 51 },
+    ],
   },
   diagonal: {
     color: 'yellow',
@@ -58,13 +59,13 @@ const collectionStyles = {
     offsetX: 65,
     offsetY: 127,
     points: [
-      {x: -65, y: -126, d: 40},
-      {x: -25, y: -86, d: 32},
-      {x: 19, y: -86, d: 32},
-      {x: -65, y: -42, d: 42},
-      {x: -13, y: -32, d: 32},
-      {x: 0, y: 0, d: 51},
-    ]
+      { x: -65, y: -126, d: 40 },
+      { x: -25, y: -86, d: 32 },
+      { x: 19, y: -86, d: 32 },
+      { x: -65, y: -42, d: 42 },
+      { x: -13, y: -32, d: 32 },
+      { x: 0, y: 0, d: 51 },
+    ],
   },
   triangle: {
     color: 'salmon',
@@ -74,13 +75,13 @@ const collectionStyles = {
     offsetX: 45,
     offsetY: 129,
     points: [
-      {x: -43, y: -123, d: 40},
-      {x: 6, y: -128, d: 51},
-      {x: -28, y: -67, d: 42},
-      {x: 25, y: -58, d: 32},
-      {x: -45, y: -9, d: 30},
-      {x: 0, y: 0, d: 32},
-    ]
+      { x: -43, y: -123, d: 40 },
+      { x: 6, y: -128, d: 51 },
+      { x: -28, y: -67, d: 42 },
+      { x: 25, y: -58, d: 32 },
+      { x: -45, y: -9, d: 30 },
+      { x: 0, y: 0, d: 32 },
+    ],
   },
 };
 
@@ -88,7 +89,7 @@ const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
   <div className={styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
     <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>
-    <div className={styles.curatedCollectionUsers}>
+    <div className={styles.curatedCollectionUsers}>v
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
   </div>

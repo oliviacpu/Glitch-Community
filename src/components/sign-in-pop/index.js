@@ -86,6 +86,7 @@ function useEmail() {
 const EmailHandler = ({ showView }) => {
   const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
+  const [isFocused, setIsFocused] = useState(true);
   const [{ status, submitError }, setStatus] = useState({ status: 'ready' });
   const isEnabled = email.length > 0;
 
@@ -126,8 +127,10 @@ const EmailHandler = ({ showView }) => {
               labelText="Email address"
               value={email}
               onChange={setEmail}
+              onBlur={() => setIsFocused(false)}
+              onFocus={() => setIsFocused(true)}
               placeholder="new@user.com"
-              error={validationError}
+              error={isEnabled && !isFocused && validationError}
               autoFocus
             />
             <div className={styles.submitWrap}>
