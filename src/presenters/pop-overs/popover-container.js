@@ -67,7 +67,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
         event.preventDefault();
         setVisible(false);
       } else if (event.key === "Tab") {
-        console.log("Sup dawg")
+        event.preventDefault()
       }
     };
     window.addEventListener('keyup', keyHandler);
