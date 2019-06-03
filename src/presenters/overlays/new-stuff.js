@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  from 'react';
 import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
@@ -17,19 +17,8 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-  React.useEffect(() => {
-    const keyHandler = (event) => {
-      if (['Tab'].includes(event.key)) {
-        // event.preventDefault();
-        console.log(this)
-      }
-    };
-    window.addEventListener('keydown', keyHandler);
-    return () => window.removeEventListener('keydown', keyHandler);
-  }, []);
-  
   return (
-    <Overlay className="new-stuff-overlay" >
+    <Overlay className="new-stuff-overlay">
       <OverlaySection type="info">
         <div className="new-stuff-avatar"><NewStuffPup /></div>
         <OverlayTitle>New Stuff</OverlayTitle>
@@ -54,6 +43,13 @@ NewStuffOverlay.propTypes = {
       link: PropTypes.string,
     }).isRequired,
   ).isRequired,
+};
+
+const focusFirstElement = (dialog) => {
+  const focusableElements =
+    'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+  const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+  console.log("focusableDialogElements", focusableDialogElements)
 };
 
 const NewStuff = ({ children }) => {
