@@ -26,8 +26,9 @@ const UserMask = ({ users, config }) => (
           top: `${100 * (config.offsetY + point.y) / config.height}%`,
           width: `${100 * point.d / config.width}%`,
           // height: `${100 * point.d / config.height}%`,
-        }}>
-        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])}/>
+        }}
+      >
+        <img className={styles.userMaskBubble} src={users[i].avatarUrl} style={getAvatarStyle(users[i])} alt={getDisplayName(users[i])} />
       </div>
     ))}
   </div>
