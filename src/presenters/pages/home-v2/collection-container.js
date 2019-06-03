@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { getAvatarStyle } from 'Models/user';
+
 import styles from './styles.styl';
 
 const Defs = ({ prefix, users, widths }) => (
@@ -12,16 +14,35 @@ const Defs = ({ prefix, users, widths }) => (
   </defs>
 );
 
-const collectionStyleConfig = {
+const wavey = {
+  color: 'lightblue',
+  texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
   width: 109,
   height: 153,
   offsetX: 49,
   offsetY: 102,
   points: [
-    {x: -14, y: -102, r: 40},
-    {x: 28, y: -73, r: 32}
+    {x: -14, y: -102, d: 40},
+    {x: 28, y: -73, d: 32},
+    {x: -39, y: -62, d: 32},
+    {x: -7, y: -37, d: 32},
+    {x: -49, y: -16, d: 42},
+    {x: 0, y: 0, d: 51},
   ]
 }
+
+const UserMask = ({ users, config }) => (
+  <div>
+    {config.points.slice(0, users.length).map((point, i)=> (
+      <div key={users[i].id} aria-label={getDisplayName(users[i])} 
+        style={{
+          ...getAvatarStyle(users[i]),
+          top: `${(config.offsetY + point.y) / config.width}%`,
+          left: `${(config.offsetX + point.x) / config.height}%`,
+        }} />
+    ))}
+  </div>
+)
 
 
 const collectionStyles = {
