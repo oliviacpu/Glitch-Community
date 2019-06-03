@@ -17,14 +17,15 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-  // const onKeyDown = (e) => {
-  //   if (e.key === 'Tab') {
-  //     e.preventDefault();
-  //   } else if (e.key === 'Escape') {
-  //     e.preventDefault();
-  //     setVisible(false);
-  //   }
-  // };
+  React.useEffect(() => {
+    const keyHandler = (event) => {
+      // if (['Tab'].includes(event.key)) {
+      //   event.preventDefault();
+      // }
+    };
+    window.addEventListener('keydown', keyHandler);
+    return () => window.removeEventListener('keydown', keyHandler);
+  }, []);
   
   return (
     <Overlay className="new-stuff-overlay" >

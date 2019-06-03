@@ -26,7 +26,7 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
   const [visible, setVisibleState] = React.useState(startOpen);
   const [openedFromKeyboard, setOpenedFromKeyboard] = React.useState(false);
-
+  console.log("visible", visible)
   const setVisible = (newVisible) => {
     if (!visible && newVisible && onOpen) onOpen();
     setVisibleState(newVisible);
