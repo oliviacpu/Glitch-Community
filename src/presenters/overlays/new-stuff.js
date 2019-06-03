@@ -17,7 +17,16 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-
+  React.useEffect(() => {
+    const keyHandler = (event) => {
+      if (['Tab'].includes(event.key)) {
+        // event.preventDefault();
+        console.log(this)
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+    return () => window.removeEventListener('keydown', keyHandler);
+  }, []);
   
   return (
     <Overlay className="new-stuff-overlay" >
@@ -74,18 +83,7 @@ const NewStuff = ({ children }) => {
       </>
     );
   };
-  
-  React.useEffect(() => {
-    const keyHandler = (event) => {
-      if (['Tab'].includes(event.key)) {
-        // event.preventDefault();
-        console.log(this)
-      }
-    };
-    window.addEventListener('keydown', keyHandler);
-    return () => window.removeEventListener('keydown', keyHandler);
-  }, []);
-  
+
   return (
     <PopoverContainer outer={renderOuter}>
       {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
