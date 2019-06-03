@@ -19,10 +19,40 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible,  }) => {
   React.useEffect(() => {
     const keyHandler = (event) => {
-      if (['Tab'].includes(event.key)) {
-        event.preventDefault();
-        setVisible(false)
+      var Dialog = this;
+      var KEY_TAB = 9;
+
+      function handleBackwardTab() {
+        if ( document.activeElement === Dialog.firstFocusableEl ) {
+          event.preventDefault();
+          Dialog.lastFocusableEl.focus();
+        }
       }
+      function handleForwardTab() {
+        if ( document.activeElement === Dialog.lastFocusableEl ) {
+          event.preventDefault();
+          Dialog.firstFocusableEl.focus();
+        }
+      }
+
+      switch(event.keyCode) {
+        case KEY_TAB:
+          if ( Dialog.focusableEls.length === 1 ) {
+            event.preventDefault();
+            break;
+          } 
+
+          if (event.shiftKey) {
+            handleBackwardTab();
+          } else {
+            handleForwardTab();
+          }
+
+          break;
+        default:
+          break;
+      } // end switch
+
     };
     window.addEventListener('keydown', keyHandler);
     return () => window.removeEventListener('keydown', keyHandler);
@@ -79,7 +109,7 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" />}
+        {visible && <div className="overlay-background" role="presentation" tabIndex="-1"/>}
       </>
     );
   };
