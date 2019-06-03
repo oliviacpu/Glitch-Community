@@ -13,6 +13,7 @@ import ProjectItem from "Components/project/project-item";
 import Note from "Components/collection/note";
 import Grid from "Components/containers/grid";
 import Row from "Components/containers/row";
+import { LiveMessage } from 'react-aria-live';
 
 import styles from "./projects-list.styl";
 
