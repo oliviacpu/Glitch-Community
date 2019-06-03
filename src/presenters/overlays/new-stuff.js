@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
@@ -17,49 +17,26 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible,  }) => {
+  const dialog = useRef();
+  
   React.useEffect(() => {
     const keyHandler = (event) => {
-      var Dialog = this;
-      var KEY_TAB = 9;
-
-      function handleBackwardTab() {
-        if ( document.activeElement === Dialog.firstFocusableEl ) {
-          event.preventDefault();
-          Dialog.lastFocusableEl.focus();
+      if (['Tab'].includes(event.key)) {
+        event.preventDefault();
+        const focusableElements =
+          'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+        const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+        if (focusableDialogElements) {
+          focusableDialogElements[0].focus();
         }
       }
-      function handleForwardTab() {
-        if ( document.activeElement === Dialog.lastFocusableEl ) {
-          event.preventDefault();
-          Dialog.firstFocusableEl.focus();
-        }
-      }
-
-      switch(event.keyCode) {
-        case KEY_TAB:
-          if ( Dialog.focusableEls.length === 1 ) {
-            event.preventDefault();
-            break;
-          } 
-
-          if (event.shiftKey) {
-            handleBackwardTab();
-          } else {
-            handleForwardTab();
-          }
-
-          break;
-        default:
-          break;
-      } // end switch
-
     };
     window.addEventListener('keydown', keyHandler);
     return () => window.removeEventListener('keydown', keyHandler);
   }, []);
   
   return (
-    <Overlay className="new-stuff-overlay" >
+    <Overlay className="new-stuff-overlay" ref={dialog}>
       <OverlaySection type="info">
         <div className="new-stuff-avatar"><NewStuffPup /></div>
         <OverlayTitle>New Stuff</OverlayTitle>
