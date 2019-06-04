@@ -11,7 +11,7 @@ const useOpenedFromKeyboardFocus = (focusOnDialog) => {
   const { status: popoverStatus } = useContext(PopoverToggleContext);
   useEffect(() => {
     const dialog = ref.current;
-    console.log("dialog", dialog)
+    console.log("dialog in useopenedfromkeyboardfocus", dialog)
     if (!dialog || popoverStatus !== 'openedFromKeyboard') return;
     // focus on the dialog if there is only a destructible item in the popover that shouldn't automatically be focused on
     if (focusOnDialog) {
