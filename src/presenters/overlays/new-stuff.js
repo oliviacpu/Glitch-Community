@@ -15,8 +15,9 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
-const useRestrictKeyBoardFocusToDialog = () => {
+const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
   const ref = React.useRef();
+  
   React.useEffect(() => {
     const dialog = ref.current;
     if (dialog) {
@@ -24,14 +25,27 @@ const useRestrictKeyBoardFocusToDialog = () => {
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
       const focusableDialogElements = dialog.querySelectorAll(focusableElements);
       const focusableItems = [dialog, ...focusableDialogElements];
-      focusableItems[0].focus()
+      const keyHandler = (event) => {
+        if (['Tab'].includes(event.key)) {
+          event.preventDefault();
+          console.log(focus)
+          const newFocus = focus < focusableItems.length ? focus + 1 : 0
+          console.log(focus, newFocus)
+          focusableItems[newFocus].focus()
+          setFocus(newFocus);
+          console.log(focus)
+        }
+      };
+      window.addEventListener('keydown', keyHandler);
+      return () => window.removeEventListener('keydown', keyHandler);
     }
   }, []);
   return ref;
 };
 
 const NewStuffOverlay =({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-  const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog();
+  const [focus, setFocus] = React.useState(0);
+  const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog(focus, setFocus);
 
   return (
     <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef}>
