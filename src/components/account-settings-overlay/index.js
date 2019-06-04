@@ -13,7 +13,7 @@ const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
   const primaryEmail = currentUser.emails.find((email) => email.primary);
   return (
-    <Overlay>
+    <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
           Account Settings <Emoji name="key" />
