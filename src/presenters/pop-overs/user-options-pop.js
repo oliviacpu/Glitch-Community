@@ -4,6 +4,7 @@ import { orderBy } from 'lodash';
 
 import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import AccountSettings from 'Components/account-settings-overlay';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Emoji from 'Components/images/emoji';
 import Link, { TeamLink, UserLink } from 'Components/link';
@@ -14,7 +15,6 @@ import useDevToggle from 'State/dev-toggles';
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';
-import AccountSettings from '../overlays/account-settings';
 
 // Create Team button
 

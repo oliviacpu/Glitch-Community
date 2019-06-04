@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Pluralize from 'react-pluralize';
 
 import Heading from 'Components/text/heading';
-import Text from 'Components/text/text';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
