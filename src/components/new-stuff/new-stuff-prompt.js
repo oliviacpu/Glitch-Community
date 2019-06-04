@@ -14,7 +14,7 @@ const NewStuffPrompt = ({ onClick }) => (
       align={['top']}
       id="new-stuff-tooltip"
       persistent
-      target={<TransparentButton onClick={onClick} ><NewStuffPup /></TransparentButton>}
+      target={<TransparentButton onClick={onClick}><NewStuffPup /></TransparentButton>}
       tooltip="New"
       type="info"
     />

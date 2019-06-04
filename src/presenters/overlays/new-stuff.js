@@ -17,7 +17,7 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
   const ref = React.useRef();
-  
+
   React.useEffect(() => {
     const dialog = ref.current;
     if (dialog) {
@@ -85,8 +85,7 @@ const NewStuff = ({ children }) => {
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, setVisible }) => {
-    // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
-    const pupVisible = true
+    const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const show = () => {
       track();
       setVisible(true);
@@ -106,7 +105,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
+      {({ visible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} /> : null)}
     </PopoverContainer>
   );
 };
