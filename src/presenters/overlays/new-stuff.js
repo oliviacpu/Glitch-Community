@@ -45,18 +45,18 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-const messWithFocus = (dialog) => {
-  console.log("dialog", dialog)
-  const focusableElements =
-    'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-  const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-  console.log("focusableDialogElements", focusableDialogElements)
+const useOpenedFromKeyboardFocus = () => {
+  const ref = useRef();
+  useEffect(() => {
+    const dialog = ref.current;
+      const focusableElements =
+        'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
+      const focusableDialogElement = dialog.querySelector(focusableElements);
+      console.log(focusableDialogElement)
+    }
+  }, []);
+  return { ref };
 };
-
-const Mess = ({children}) => {
-  return children
-  // return children(messWithFocus)
-}
 
 const NewStuff = ({ children }) => {
   const { currentUser } = useCurrentUser();
