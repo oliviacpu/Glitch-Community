@@ -19,7 +19,6 @@ const useRestrictKeyBoardFocusToDialog = () => {
   const ref = React.useRef();
   React.useEffect(() => {
     const dialog = ref.current;
-    console.log("dialog", dialog, "ref, ", ref)
     if (dialog) {
       const focusableElements =
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
