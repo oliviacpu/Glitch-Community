@@ -5,13 +5,16 @@ import { orderBy } from 'lodash';
 import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import Emoji from 'Components/images/emoji';
 import Link, { TeamLink, UserLink } from 'Components/link';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
+import useDevToggle from 'State/dev-toggles';
 
 import PopoverContainer from './popover-container';
 import { NestedPopover } from './popover-nested';
 import CreateTeamPop from './create-team-pop';
+import AccountSettings from '../overlays/account-settings';
 
 // Create Team button
 
@@ -110,6 +113,8 @@ Are you sure you want to sign out?`)
   const userName = user.name || 'Anonymous';
   const userAvatarStyle = { backgroundColor: user.color };
 
+  const userPasswordEnabled = useDevToggle('User Passwords');
+
   return (
     <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
       <UserLink user={user} className="user-info">
@@ -142,6 +147,15 @@ Are you sure you want to sign out?`)
         <Link to="https://support.glitch.com" className="button button-small has-emoji button-tertiary button-on-secondary-background">
           Support <span className="emoji ambulance" />
         </Link>
+
+        {userPasswordEnabled && (
+          <AccountSettings>
+            <div className="button button-small has-emoji button-tertiary button-on-secondary-background">
+              Account Settings <Emoji name="key" />
+            </div>
+          </AccountSettings>
+        )}
+
         <button type="button" onClick={clickSignout} className="button-small has-emoji button-tertiary button-on-secondary-background">
           Sign Out <span className="emoji balloon" />
         </button>

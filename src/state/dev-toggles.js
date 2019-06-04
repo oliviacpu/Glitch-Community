@@ -24,8 +24,8 @@ const toggleData = [
     description: 'Sign in with your Slack account!',
   },
   {
-    name: '(Free Slot)',
-    description: '',
+    name: 'User Passwords',
+    description: 'Enable users to set a password for their account',
   },
 ].slice(0, 3); // <-- Yeah really, only 3.  If you need more, clean up one first.
 

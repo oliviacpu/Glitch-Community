@@ -14,7 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }) => {
+const Button = ({ onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab }) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -50,7 +50,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   return (
-    <button onClick={onClick} className={className} disabled={disabled}>
+    <button onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
       {children}
     </button>
   );
@@ -61,15 +61,15 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   /** callback when button clicked */
   onClick: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'onClick', 'href', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'onClick', 'href', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
   /** OR link when button clicked */
   href: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'href', 'onClick', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'href', 'onClick', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
@@ -81,6 +81,8 @@ Button.propTypes = {
   type: PropTypes.oneOf(TYPES),
   /** size of button */
   size: PropTypes.oneOf(SIZES),
+  /** button submits a form */
+  submit: PropTypes.bool,
   /** whether or not the button's hover state should be active */
   hover: PropTypes.bool,
   /** whether or not the button should match its background */
@@ -97,6 +99,7 @@ Button.defaultProps = {
   disabled: false,
   type: null,
   size: null,
+  submit: false,
   hover: false,
   matchBackground: false,
   active: false,
