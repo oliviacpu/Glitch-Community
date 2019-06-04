@@ -29,7 +29,9 @@ const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
           event.preventDefault();
           const newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
           focusableItems[newFocus].focus();
+          console.log(focusableItems, newFocus)
           setFocus(newFocus);
+          focusableItems[0].focus()
         }
       };
       window.addEventListener('keydown', keyHandler);
@@ -37,11 +39,11 @@ const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
     }
     return () => {};
   }, [focus]);
-  
+
   return ref;
 };
 
-const NewStuffOverlay =({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
   const [focus, setFocus] = React.useState(0);
   const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog(focus, setFocus);
 
@@ -80,7 +82,7 @@ const NewStuff = ({ children }) => {
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = React.useState(newStuffLog);
   const track = useTracker('Pupdate');
-  
+
   const renderOuter = ({ visible, setVisible }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const pupVisible = true
@@ -96,7 +98,7 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" tabIndex="-1"/>}
+        {visible && <div className="overlay-background" role="presentation" tabIndex={-1} />}
       </>
     );
   };
