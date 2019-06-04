@@ -25,7 +25,7 @@ const useRestrictKeyBoardFocusToDialog = () => {
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
       const focusableDialogElements = dialog.querySelectorAll(focusableElements);
       const focusableItems = [dialog, ...focusableDialogElements];
-      console.log("focusableItems", focusableItems)
+      focusableItems[0].focus()
     }
   }, []);
   return ref;
