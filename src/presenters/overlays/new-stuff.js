@@ -16,9 +16,9 @@ import newStuffLog from '../../curated/new-stuff-log';
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 //update so you can't tab? or maybe tab closes overlay
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+const NewStuffOverlay = React.forwardRef(({ setShowNewStuff, showNewStuff, newStuff, setVisible }, ref) => {
   return (
-    <Overlay className="new-stuff-overlay">
+    <Overlay className="new-stuff-overlay" ref={ref}>
       <OverlaySection type="info">
         <div className="new-stuff-avatar"><NewStuffPup /></div>
         <OverlayTitle>New Stuff</OverlayTitle>
@@ -31,7 +31,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
       </OverlaySection>
     </Overlay>
   );
-};
+});
 NewStuffOverlay.propTypes = {
   setShowNewStuff: PropTypes.func.isRequired,
   showNewStuff: PropTypes.bool.isRequired,
@@ -45,17 +45,19 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-const useOpenedFromKeyboardFocus = () => {
-  const ref = useRef();
-  useEffect(() => {
+const useRestrictKeyBoardFocusToDialog = () => {
+  const ref = React.useRef();
+  React.useEffect(() => {
     const dialog = ref.current;
+    console.log("dialog", dialog, "ref, ", ref)
+    if (dialog) {
       const focusableElements =
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-      const focusableDialogElement = dialog.querySelector(focusableElements);
-      console.log(focusableDialogElement)
+      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
+      console.log("focusableDialogElements?", focusableDialogElements)
     }
   }, []);
-  return { ref };
+  return ref;
 };
 
 const NewStuff = ({ children }) => {
@@ -65,6 +67,7 @@ const NewStuff = ({ children }) => {
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = React.useState(newStuffLog);
   const track = useTracker('Pupdate');
+  const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog();
   
   const renderOuter = ({ visible, setVisible }) => {
     // const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
@@ -88,7 +91,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible, focusFirstElement }) => (visible ? <Mess><NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /></Mess> : null)}
+      {({ visible, setVisible, focusFirstElement }) => (visible ? <NewStuffOverlay ref={newStuffOverlayRef} showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null)}
     </PopoverContainer>
   );
 };
