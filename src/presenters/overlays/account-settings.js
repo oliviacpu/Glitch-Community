@@ -149,11 +149,11 @@ const AccountSettingsOverlay = () => {
         </OverlayTitle>
       </OverlaySection>
       <div>
-        <div>
-          <Button type="tertiary" size="small">
+        <div data-cy="account-settings-options">
+          <Button type="primary" size="small">
             Password
           </Button>
-          <Button type="tertiary" size="small">
+          <Button type="primary" size="small">
             Two-Factor Authentication
           </Button>
         </div>
