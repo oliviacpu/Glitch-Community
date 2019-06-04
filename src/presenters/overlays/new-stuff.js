@@ -17,8 +17,9 @@ const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
   const ref = React.useRef();
-  
+  console.log("focus outside of effect", focus)
   React.useEffect(() => {
+    console.log("focus inside of effect", focus)
     const dialog = ref.current;
     if (dialog) {
       const focusableElements =
@@ -36,10 +37,10 @@ const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
           console.log(focus)
         }
       };
-      window.addEventListener('keydown', keyHandler);
-      return () => window.removeEventListener('keydown', keyHandler);
+      window.addEventListener('keydown', keyHander);
+      return () => window.removeEventListener('keydown', keyHander);
     }
-  }, []);
+  }, [focus]);
   return ref;
 };
 
