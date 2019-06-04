@@ -148,9 +148,19 @@ const AccountSettingsOverlay = () => {
           Account Settings <Emoji name="key" />
         </OverlayTitle>
       </OverlaySection>
-      <OverlaySection type="actions">
-        <PasswordSettings />
-      </OverlaySection>
+      <div>
+        <div>
+          <Button type="tertiary" size="small">
+            Password
+          </Button>
+          <Button type="tertiary" size="small">
+            Two-Factor Authentication
+          </Button>
+        </div>
+        <OverlaySection type="actions">
+          <PasswordSettings />
+        </OverlaySection>
+      </div>
       <OverlaySection type="info">
         <Text>
           Email notifications are sent to <b>{primaryEmail.email}</b>
