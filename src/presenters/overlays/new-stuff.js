@@ -24,10 +24,11 @@ const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
       const focusableElements =
         'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
       const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-      const focusableItems = [dialog, ...focusableDialogElements];
+      const focusableItems = [...focusableDialogElements];
       const keyHandler = (event) => {
         if (['Tab'].includes(event.key)) {
           event.preventDefault();
+          event.stopPropagation();
           const newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
           focusableItems[newFocus].focus();
           setFocus(newFocus);
@@ -57,6 +58,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
       </OverlaySection>
       <OverlaySection type="actions">
         {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
+        <button>I'm testing the system man</button>
       </OverlaySection>
     </Overlay>
   );
