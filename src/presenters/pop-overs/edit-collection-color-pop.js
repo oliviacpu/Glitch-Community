@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import { hex as getHexContrastRatio } from 'wcag-contrast';
 import { throttle } from 'lodash';
+import { isDarkColor } from 'Models/collection';
 
 import TextInput from 'Components/inputs/text-input';
 import PopoverWithButton from './popover-with-button';
@@ -16,8 +17,9 @@ const validHex = (hex) => {
 };
 
 const isGoodColorContrast = (hex) => {
-  const contrastHex = "#fff" //TODO not just dark mode, also placeholder text?
+  const contrastHex = isDarkColor(hex) ? "#fff" : "#222"; //TODO placeholder text?
   const contrast = getHexContrastRatio(hex, contrastHex);
+  console.log(contrast)
   return contrast >= 4.5;
 };
 
@@ -53,20 +55,24 @@ class EditCollectionColorPop extends React.Component {
   handleChange(query) {
     this.setState({ error: false, query });
     if (query && query.length <= 7) {
-      if (query[0] !== '#') {
-        query = `#${query}`;
-      }
-      
       const hexIsValid = validHex(query);
       if (!hexIsValid) {
-      ``  this.setState({ error: 'Invalid Hex' });
+        this.setState({ error: 'Invalid Hex' });
         return;
       }
       
-      const hexIsGoodColorContrast = isGoodColorContrast(query)
+      if (query[0] !== '#') {
+        query = `#${query}`;
+      }
       this.setState({ color: query });
       this.update(query);
-
+      
+      
+      const hexIsGoodColorContrast = isGoodColorContrast(query)
+      if (!hexIsGoodColorContrast) {
+        this.setState({ error: 'This color might not have sufficient contrast, want to pick a different one?' })
+      }
+      
     } else {
       // user has cleared the input field
       this.setState({ error: 'Invalid Hex' });
