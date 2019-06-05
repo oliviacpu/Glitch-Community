@@ -153,7 +153,6 @@ function ProjectsList({
   collection,
   noteOptions,
   projectOptions,
-  ...props
 }) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
