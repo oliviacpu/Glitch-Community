@@ -8,6 +8,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import PasswordSettings from './password-settings';
+import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
 const AccountSettingsOverlay = () => {
@@ -34,7 +35,7 @@ const AccountSettingsOverlay = () => {
           </div>
           <div className={styles.accountSettingsContent}>
             {page === 'password' ? <PasswordSettings /> : null}
-            {page === '2fa' ? <div>2fa</div> : null}
+            {page === '2fa' ? <TwoFactorSettings /> : null}
           </div>
         </div>
       </OverlaySection>
