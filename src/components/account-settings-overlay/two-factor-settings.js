@@ -12,7 +12,7 @@ import { useCurrentUser } from 'State/current-user';
 
 const TwoFactorSettings = () => {
   const { currentUser } = useCurrentUser();
-  
+
   const api = useAPI();
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
@@ -21,13 +21,13 @@ const TwoFactorSettings = () => {
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
     try {
-      const response = await api.post('user/tfa/disable');
+      await api.post('user/tfa/disable');
       setDone(true);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const generateSecret = async (evt) => {
     evt.preventDefault();
     try {
@@ -38,33 +38,34 @@ const TwoFactorSettings = () => {
       console.error(error);
     }
   };
-  
+
   const verifyCode = async (evt) => {
     evt.preventDefault();
     try {
-      const response = await api.post('user/tfa/verifyInitialCode', { code });
+      await api.post('user/tfa/verifyInitialCode', { code });
       setDone(true);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {currentUser.twoFactorEnabled ? <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>
-        Disable Authenticator App
-      </Button> : <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>
-        Enable Authenticator App
-      </Button>}
-      {secret && <div>
-        <img alt="QR Code" src={secret} />
-        <TextInput value={code} labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} onChange={setCode} />
-        <Button type="tertiary" disabled={!done && code.length < 6} onClick={verifyCode}>
-          Verify Initial Code
-        </Button>
-      </div>}
+      {currentUser.twoFactorEnabled
+        ? <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>
+        : <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
+      }
+      {secret &&
+        <div>
+          <img alt="QR Code" src={secret} />
+          <TextInput value={code} labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} onChange={setCode} />
+          <Button type="tertiary" disabled={!done && code.length < 6} onClick={verifyCode}>
+            Verify Initial Code
+          </Button>
+        </div>
+      }
       {done && <Badge type="success">Success</Badge>}
     </>
   );
