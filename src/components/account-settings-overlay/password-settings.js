@@ -88,7 +88,7 @@ const PasswordSettings = () => {
   const userHasPassword = !!currentUser.password;
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
   return (
-    <div>
+    <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
       <form className={styles.passwordForm} onSubmit={handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
@@ -131,7 +131,7 @@ const PasswordSettings = () => {
 
         {done && <Badge type="success">Successfully set new password</Badge>}
       </form>
-    <div/>
+    </>
   );
 };
 

@@ -23,7 +23,7 @@ const AccountSettingsOverlay = () => {
 
       <OverlaySection type="actions">
         <div className={styles.accountSettings}>
-          <div>
+          <div className={styles.accountSettingsActions}>
             <Button type="primary" size="small">
               Password
             </Button>
@@ -31,7 +31,9 @@ const AccountSettingsOverlay = () => {
               Two-Factor Authentication
             </Button>
           </div>
+          <div className={styles.accountSettingsContent}>
             <PasswordSettings />
+          </div>
         </div>
       </OverlaySection>
       <OverlaySection type="info">
