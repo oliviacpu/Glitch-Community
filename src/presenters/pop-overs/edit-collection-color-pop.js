@@ -17,7 +17,7 @@ const validHex = (hex) => {
 };
 
 const isGoodColorContrast = (hex) => {
-  const contrastHex = isDarkColor(hex) ? "#fff" : "#222"; //TODO placeholder text?
+  const contrastHex = isDarkColor(hex) ? '#fff' : '#222';
   const contrast = getHexContrastRatio(hex, contrastHex);
   return contrast >= 4.5;
 };
@@ -47,7 +47,6 @@ class EditCollectionColorPop extends React.Component {
   getRandomColor() {
     const newCoverColor = randomColor({ luminosity: 'light' });
     if (!isGoodColorContrast(newCoverColor)) {
-      console.log("boop")
       this.getRandomColor();
       return;
     }
@@ -64,18 +63,17 @@ class EditCollectionColorPop extends React.Component {
         this.setState({ error: 'Invalid Hex' });
         return;
       }
-      
+
       if (query[0] !== '#') {
         query = `#${query}`;
       }
       this.setState({ color: query });
       this.update(query);
-    
-      const hexIsGoodColorContrast = isGoodColorContrast(query)
+
+      const hexIsGoodColorContrast = isGoodColorContrast(query);
       if (!hexIsGoodColorContrast) {
-        this.setState({ error: 'Color contrast a bit low, want to try a different one?' })
+        this.setState({ error: 'Color contrast is a bit low, want to try a different one?' });
       }
-      
     } else {
       // user has cleared the input field
       this.setState({ error: 'Invalid Hex' });

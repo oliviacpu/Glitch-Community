@@ -16,12 +16,12 @@ const cx = classNames.bind(styles);
  */
 const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
   function hideEmptyNote(event) {
-//     let description = event.target.value || '';
-//     description = _.trim(description);
+    let description = event.target.value || '';
+    description = _.trim(description);
 
-//     if (!description || description.length === 0) {
-//       setTimeout(() => hideNote(project.id), 500);
-//     }
+    if (!description || description.length === 0) {
+      setTimeout(() => hideNote(project.id), 500);
+    }
   }
 
   if (!project.isAddingANewNote && !project.note) {
