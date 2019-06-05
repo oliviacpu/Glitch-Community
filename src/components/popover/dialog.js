@@ -34,12 +34,14 @@ const usePositionAdjustment = ({ margin }) => {
     const setPosition = () => {
       if (ref.current) {
         const rect = ref.current.getBoundingClientRect();
-        if (rect.left < margin) {
-          setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
-        } else if (rect.right > window.innerWidth - margin) {
-          setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
-        } else {
-          setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+        if (rect) {
+          if (rect.left < margin) {
+            setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
+          } else if (rect.right > window.innerWidth - margin) {
+            setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
+          } else {
+            setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+          }
         }
       }
     };
