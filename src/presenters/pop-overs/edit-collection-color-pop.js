@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
+import { hex } from 'wcag-contrast';
 import { throttle } from 'lodash';
 
 import TextInput from 'Components/inputs/text-input';
@@ -13,6 +14,11 @@ const validHex = (hex) => {
   }
   return false;
 };
+
+const isGoodColorContrast = (hex, contrastHex) => {
+  
+  return contrast >= 4.5
+}
 
 class EditCollectionColorPop extends React.Component {
   constructor(props) {
