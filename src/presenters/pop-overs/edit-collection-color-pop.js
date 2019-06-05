@@ -50,13 +50,12 @@ class EditCollectionColorPop extends React.Component {
       this.getRandomColor();
       return;
     }
-    this.setState({ color: newCoverColor });
-    this.setState({ query: newCoverColor });
+    this.setState({ color: newCoverColor, query: newCoverColor, error: null });
     this.update(newCoverColor);
   }
 
   handleChange(query) {
-    this.setState({ error: false, query });
+    this.setState({ error: null, query });
     if (query && query.length <= 7) {
       const hexIsValid = validHex(query);
       if (!hexIsValid) {
@@ -85,7 +84,7 @@ class EditCollectionColorPop extends React.Component {
       // enter key pressed - dismiss pop-over
       this.props.togglePopover();
     } else {
-      this.setState({ error: false });
+      this.setState({ error: null });
     }
   }
 
