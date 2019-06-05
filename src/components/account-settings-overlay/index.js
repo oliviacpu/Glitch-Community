@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
@@ -12,6 +12,7 @@ import styles from './styles.styl';
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
+  const [page, setPage] = useState('password');
   const primaryEmail = currentUser.emails.find((email) => email.primary);
   return (
     <Overlay className="account-settings-overlay">
@@ -24,15 +25,16 @@ const AccountSettingsOverlay = () => {
       <OverlaySection type="actions">
         <div className={styles.accountSettings}>
           <div className={styles.accountSettingsActions}>
-            <Button type="primary" size="small">
+            <Button size="small" onClick={() => setPage('password')}>
               Password
             </Button>
-            <Button type="primary" size="small">
+            <Button size="small" onClick={() => setPage('2fa')}>
               Two-Factor Authentication
             </Button>
           </div>
           <div className={styles.accountSettingsContent}>
-            <PasswordSettings />
+            {page === 'password' ? <PasswordSettings /> : null}
+            {page === '2fa' ? <div>2fa</div> : null}
           </div>
         </div>
       </OverlaySection>
