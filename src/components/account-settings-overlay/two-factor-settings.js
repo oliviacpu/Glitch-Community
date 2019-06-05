@@ -17,11 +17,13 @@ const TwoFactorSettings = () => {
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
+  const [enabled, setEnabled] = useState(currentUser.twoFactorEnabled);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
     try {
       await api.post('user/tfa/disable');
+      setEnabled(false);
       setDone(true);
     } catch (error) {
       console.error(error);
@@ -43,6 +45,7 @@ const TwoFactorSettings = () => {
     evt.preventDefault();
     try {
       await api.post('user/tfa/verifyInitialCode', { code });
+      setEnabled(true);
       setDone(true);
     } catch (error) {
       console.error(error);
@@ -53,7 +56,7 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {currentUser.twoFactorEnabled
+      {enabled
         ? <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>
         : <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
       }
