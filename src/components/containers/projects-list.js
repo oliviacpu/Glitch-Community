@@ -158,7 +158,7 @@ function ProjectsList({
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article {...props} className={classNames(styles.projectsContainer)}>
+        <article className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
