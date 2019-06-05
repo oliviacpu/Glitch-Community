@@ -29,8 +29,7 @@ const useOpenedFromKeyboardFocus = (focusOnDialog) => {
 
 const usePositionAdjustment = ({ margin }) => {
   const [offset, setOffset] = useState({ top: 0, left: 0 });
-  // const ref = useRef();
-  const ref = {};
+  const ref = useRef();
   useLayoutEffect(() => {
     const setPosition = () => {
       if (ref.current) {
