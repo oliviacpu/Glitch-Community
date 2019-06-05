@@ -29,16 +29,19 @@ const useOpenedFromKeyboardFocus = (focusOnDialog) => {
 
 const usePositionAdjustment = ({ margin }) => {
   const [offset, setOffset] = useState({ top: 0, left: 0 });
-  const ref = useRef();
+  // const ref = useRef();
+  const ref = {};
   useLayoutEffect(() => {
     const setPosition = () => {
-      const rect = ref.current.getBoundingClientRect();
-      if (rect.left < margin) {
-        setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
-      } else if (rect.right > window.innerWidth - margin) {
-        setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
-      } else {
-        setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        if (rect.left < margin) {
+          setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
+        } else if (rect.right > window.innerWidth - margin) {
+          setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
+        } else {
+          setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+        }
       }
     };
     const debounced = debounce(setPosition, 300);
