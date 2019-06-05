@@ -53,16 +53,17 @@ class EditCollectionColorPop extends React.Component {
   handleChange(query) {
     this.setState({ error: false, query });
     if (query && query.length <= 7) {
+      if (query[0] !== '#') {
+        query = `#${query}`;
+      }
+      
       const hexIsValid = validHex(query);
       if (!hexIsValid) {
-        this.setState({ error: 'Invalid Hex' });
+      ``  this.setState({ error: 'Invalid Hex' });
         return;
       }
       
       const hexIsGoodColorContrast = isGoodColorContrast(query)
-      if (query[0] !== '#') {
-        query = `#${query}`;
-      }
       this.setState({ color: query });
       this.update(query);
 
