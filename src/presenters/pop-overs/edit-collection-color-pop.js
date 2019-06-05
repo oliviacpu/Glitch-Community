@@ -19,7 +19,6 @@ const validHex = (hex) => {
 const isGoodColorContrast = (hex) => {
   const contrastHex = isDarkColor(hex) ? "#fff" : "#222"; //TODO placeholder text?
   const contrast = getHexContrastRatio(hex, contrastHex);
-  console.log(contrast)
   return contrast >= 4.5;
 };
 
@@ -47,6 +46,11 @@ class EditCollectionColorPop extends React.Component {
 
   getRandomColor() {
     const newCoverColor = randomColor({ luminosity: 'light' });
+    if (!isGoodColorContrast(newCoverColor)) {
+      console.log("boop")
+      this.getRandomColor();
+      return;
+    }
     this.setState({ color: newCoverColor });
     this.setState({ query: newCoverColor });
     this.update(newCoverColor);
@@ -66,11 +70,10 @@ class EditCollectionColorPop extends React.Component {
       }
       this.setState({ color: query });
       this.update(query);
-      
-      
+    
       const hexIsGoodColorContrast = isGoodColorContrast(query)
       if (!hexIsGoodColorContrast) {
-        this.setState({ error: 'This color might not have sufficient contrast, want to pick a different one?' })
+        this.setState({ error: 'Color contrast a bit low, want to try a different one?' })
       }
       
     } else {
@@ -115,7 +118,7 @@ class EditCollectionColorPop extends React.Component {
               onKeyPress={this.keyPress}
               placeholder="Hex"
               labelText="Custom color hex"
-              error={this.state.error ? 'Invalid Hex' : null}
+              error={this.state.error || null}
             />
           </div>
         </section>
