@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
-import { hex } from 'wcag-contrast';
+import { hex as getHexContrastRatio } from 'wcag-contrast';
 import { throttle } from 'lodash';
 
 import TextInput from 'Components/inputs/text-input';
@@ -15,10 +15,11 @@ const validHex = (hex) => {
   return false;
 };
 
-const isGoodColorContrast = (hex, contrastHex) => {
-  
-  return contrast >= 4.5
-}
+const isGoodColorContrast = (hex) => {
+  const contrastHex = "#fff" //TODO not just dark mode, also placeholder text?
+  const contrast = getHexContrastRatio(hex, contrastHex);
+  return contrast >= 4.5;
+};
 
 class EditCollectionColorPop extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class EditCollectionColorPop extends React.Component {
     this.state = {
       query: this.props.initialColor,
       color: this.props.initialColor,
-      error: false,
+      error: null,
     };
 
     this.onClick = this.onClick.bind(this);
@@ -52,18 +53,22 @@ class EditCollectionColorPop extends React.Component {
   handleChange(query) {
     this.setState({ error: false, query });
     if (query && query.length <= 7) {
-      if (validHex(query)) {
-        if (query[0] !== '#') {
-          query = `#${query}`;
-        }
-        this.setState({ color: query });
-        this.update(query);
-      } else {
-        this.setState({ error: true });
+      const hexIsValid = validHex(query);
+      if (!hexIsValid) {
+        this.setState({ error: 'Invalid Hex' });
+        return;
       }
+      
+      const hexIsGoodColorContrast = isGoodColorContrast(query)
+      if (query[0] !== '#') {
+        query = `#${query}`;
+      }
+      this.setState({ color: query });
+      this.update(query);
+
     } else {
       // user has cleared the input field
-      this.setState({ error: true });
+      this.setState({ error: 'Invalid Hex' });
     }
   }
 
