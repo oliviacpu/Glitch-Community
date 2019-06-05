@@ -33,7 +33,7 @@ const TwoFactorSettings = () => {
       </Button>
       <div>
         <img alt="QR Code" src={secret} />
-        <TextInput />
+        <TextInput value="00000" labelText="2FA Code" onChange={setState/>
       </div>
     </>
   );
