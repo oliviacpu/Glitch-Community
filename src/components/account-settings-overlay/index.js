@@ -8,6 +8,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import PasswordSettings from './password-settings';
+import styles from './styles.styl';
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
@@ -19,19 +20,20 @@ const AccountSettingsOverlay = () => {
           Account Settings <Emoji name="key" />
         </OverlayTitle>
       </OverlaySection>
-      <div>
-        <div data-cy="account-settings-options">
-          <Button type="primary" size="small">
-            Password
-          </Button>
-          <Button type="primary" size="small">
-            Two-Factor Authentication
-          </Button>
+
+      <OverlaySection type="actions">
+        <div className={styles.accountSettings}>
+          <div>
+            <Button type="primary" size="small">
+              Password
+            </Button>
+            <Button type="primary" size="small">
+              Two-Factor Authentication
+            </Button>
+          </div>
+            <PasswordSettings />
         </div>
-        <OverlaySection type="actions">
-          <PasswordSettings />
-        </OverlaySection>
-      </div>
+      </OverlaySection>
       <OverlaySection type="info">
         <Text>
           Email notifications are sent to <b>{primaryEmail.email}</b>

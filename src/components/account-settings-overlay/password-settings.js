@@ -10,6 +10,8 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './styles.styl';
+
 // top worst passwords from Splashdata (https://en.wikipedia.org/wiki/List_of_the_most_common_passwords#cite_note-splashdata2018-10)
 // edited to only include those with at least 8-character
 // users aren't allowed to set their password to any of these items
@@ -86,9 +88,9 @@ const PasswordSettings = () => {
   const userHasPassword = !!currentUser.password;
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
   return (
-    <>
+    <div>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.passwordForm} onSubmit={handleSubmit}>
         {userHasPassword && !userRequestedPWreset && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
@@ -106,8 +108,8 @@ const PasswordSettings = () => {
           <PasswordStrength strength={pwStrength} />
         ) : (
           password.length > 0 && (
-            <div className="pw-strength">
-              <span className="note">
+            <div className={styles.passwordLength}>
+              <span>
                 <Pluralize count={pwMinCharCount - password.length} singular="character" /> to go....
               </span>
             </div>
@@ -129,7 +131,7 @@ const PasswordSettings = () => {
 
         {done && <Badge type="success">Successfully set new password</Badge>}
       </form>
-    </>
+    <div/>
   );
 };
 
