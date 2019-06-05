@@ -11,6 +11,7 @@ import { useAPI } from 'State/api';
 const TwoFactorSettings = () => {
   const api = useAPI();
   const [secret, setSecret] = useState(undefined);
+  const [code, setCode] = useState('');
 
   const generateSecret = async (evt) => {
     evt.preventDefault();
@@ -23,7 +24,17 @@ const TwoFactorSettings = () => {
       console.error(error);
     }
   };
-
+  
+  const verifyCode = async (evt) => {
+    evt.preventDefault();
+    try {
+      const response = await api.post('user/tfa/verifyInitialCode', { code });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   return (
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
@@ -33,7 +44,10 @@ const TwoFactorSettings = () => {
       </Button>
       <div>
         <img alt="QR Code" src={secret} />
-        <TextInput value="00000" labelText="2FA Code" onChange={setState/>
+        <TextInput value={code} labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} onChange={setCode} />
+        <Button type="tertiary" disabled={code.length < 6} onClick={verifyCode}>
+          Verify Initial Code
+        </Button>
       </div>
     </>
   );
