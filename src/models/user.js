@@ -3,7 +3,7 @@ const cacheBuster = Math.floor(Math.random() * 1000);
 
 export const ANON_AVATAR_URL = 'https://cdn.glitch.com/f6949da2-781d-4fd5-81e6-1fdd56350165%2Fanon-user-on-project-avatar.svg?1488556279399';
 
-export const lightColors = ['#F7ADBF', '#C0F986', '#D7AAF7', '#E7FCA9', '#B7E4F728'];
+export const lightColors = ['#F9EF90', '#C0F986', '#D7AAF7', '#FF9BA1', '#B7E4F728'];
 
 export function getDisplayName({ login, name }) {
   if (name) {
@@ -45,12 +45,12 @@ export function getAvatarStyle({ avatarUrl, color }) {
 
 export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) {
   const customImage = `${CDN_URL}/user-cover/${id}/${size}?${cache}`;
-  const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-cover.svg';
+  const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg';
   return hasCoverImage ? customImage : defaultImage;
 }
 
 export function getProfileStyle(params) {
-  // five random light colors from randomcolor 
+  // five random light colors from randomcolor
   return {
     backgroundColor: lightColors[params.id % 5],
     backgroundImage: `url('${getCoverUrl(params)}')`,
