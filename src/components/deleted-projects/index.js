@@ -38,13 +38,16 @@ DeletedProject.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const DeletedProjectViewOnly = ({ id, domain }) => {
-  return (
-    <div className={styles.deletedProject}>
-      <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-      <div className={styles.projectName}>{domain}</div>
-    </div>
-  );
+const DeletedProjectViewOnly = ({ id, domain }) => (
+  <div className={styles.deletedProject}>
+    <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+    <div className={styles.projectName}>{domain}</div>
+  </div>
+);
+
+DeletedProject.propTypes = {
+  id: PropTypes.string.isRequired,
+  domain: PropTypes.string.isRequired,
 };
 
 export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
@@ -52,7 +55,7 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   return (
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
       {({ id, domain, permission }) => {
-        if (permission.accessLevel === 30 && undelete) {
+        if (permission && permission.accessLevel === 30 && undelete) {
           return <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />;
         } else {
           return <DeletedProjectViewOnly id={id} domain={domain} />;
@@ -66,7 +69,9 @@ DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
   undelete: PropTypes.func,
 };
-
+DeletedProjectsList.defaultProps = {
+  undelete: null, // super users can't delete project from within the ui
+};
 
 function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
@@ -101,9 +106,7 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   }
   return (
     <>
-
-        <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-
+      <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
