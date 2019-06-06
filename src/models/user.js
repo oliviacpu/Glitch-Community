@@ -49,7 +49,7 @@ export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'la
 
 export function getProfileStyle(params) {
   // five random light colors from randomcolor 
-  const lightColors = ['rgb(247, 173, 191)', 'rgb(255, 191, 235)', 'rgb(215, 170, 247)', 'rgb(252, 252, 159)', 'rgb(183, 228, 247)'];
+  const lightColors = ['rgb(247, 173, 191)', 'rgb(192, 249, 134)', 'rgb(215, 170, 247)', 'rgb(252, 252, 159)', 'rgb(183, 228, 247)'];
   return {
     backgroundColor: lightColors[params.id % 5],
     backgroundImage: `url('${getCoverUrl(params)}')`,
