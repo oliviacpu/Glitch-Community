@@ -17,7 +17,7 @@ export const getContrastWithLightText = (hex) => {
 };
 
 export const getContrastWithDarkText = (hex) => {
-  getHexContrastRatio(hex, '#222');
+  return getHexContrastRatio(hex, '#222');
 }
 
 export const isDarkColor = (hex) => {

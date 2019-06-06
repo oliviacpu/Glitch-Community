@@ -16,7 +16,6 @@ const validHex = (hex) => {
 };
 
 const isGoodColorContrast = (hex) => {
-  console.log(getContrastWithDarkText(hex), getContrastWithLightText(hex))
   return getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
 };
 
@@ -62,7 +61,7 @@ class EditCollectionColorPop extends React.Component {
       }
       const hexIsGoodColorContrast = isGoodColorContrast(query);
       if (!hexIsGoodColorContrast) {
-        this.setState({ error: 'This color might make things hard to read, try another!' });
+        this.setState({ error: 'This color might make text hard to read, try another!' });
         return;
       }
 
