@@ -15,9 +15,7 @@ const validHex = (hex) => {
   return false;
 };
 
-const isGoodColorContrast = (hex) => {
-  return getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
-};
+const isGoodColorContrast = (hex) => getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
 
 class EditCollectionColorPop extends React.Component {
   constructor(props) {
