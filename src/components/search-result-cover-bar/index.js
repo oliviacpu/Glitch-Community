@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
-import { getCoverUrl as getTeamCoverUrl } from 'Models/team';
-import { getCoverUrl as getUserCoverUrl } from 'Models/user';
+import { getCoverUrl as getTeamCoverUrl} from 'Models/team';
+import { getCoverUrl as getUserCoverUrl, lightColors } from 'Models/user';
 import styles from './search-result-cover-bar.styl';
 
 const cacheBuster = Math.floor(Math.random() * 1000);
-
-// five random light colors from randomcolor 
-const lightColors = ['rgb(247, 173, 191)', 'rgb(192, 249, 134)', 'rgb(215, 170, 247)', 'rgb(252, 252, 159)', 'rgb(183, 228, 247)'];
 
 const defaultCoverURL = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fdefault-cover-wide.svg?1503518400625';
 
