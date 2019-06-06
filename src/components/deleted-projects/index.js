@@ -40,7 +40,7 @@ DeletedProject.propTypes = {
 
 const DeletedProjectViewOnly = ({ id, domain }) => {
   return (
-    <div>
+    <div className={styles.deletedProject}>
       <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
       <div className={styles.projectName}>{domain}</div>
     </div>
@@ -49,11 +49,10 @@ const DeletedProjectViewOnly = ({ id, domain }) => {
 
 export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
-
   return (
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
       {({ id, domain, permission }) => {
-        if (permission) {
+        if (permission.accessLevel === 30 && undelete) {
           return <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />;
         } else {
           return <DeletedProjectViewOnly id={id} domain={domain} />;
@@ -65,22 +64,9 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
 
 DeletedProjectsList.propTypes = {
   deletedProjects: PropTypes.array.isRequired,
-  undelete: PropTypes.func.isRequired,
+  undelete: PropTypes.func,
 };
 
-const ViewOnlyDeletedProjectsList = ({ deletedProjects }) => (
-  <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
-    {({ id, domain }) => (
-      <div>
-        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-        <div className={styles.projectName}>{domain}</div>
-      </div>
-    )}
-  </Grid>
-);
-ViewOnlyDeletedProjectsList.propTypes = {
-  deletedProjects: PropTypes.array.isRequired,
-};
 
 function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
   const api = useAPI();
@@ -115,11 +101,9 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   }
   return (
     <>
-      {undelete ? (
+
         <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-      ) : (
-        <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
-      )}
+
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
