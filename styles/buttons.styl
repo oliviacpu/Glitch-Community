@@ -17,7 +17,7 @@ button
     &:hover, &:focus
       background-color: warning-background
   &:hover, &:focus
-    background-color: button-hover-background
+    background-color: secondary-background
     text-decoration: none
   &:active,
   &.active
@@ -77,9 +77,10 @@ button
     width: 13px
     height: 13px
     margin-right: 0
-  &:hover
+  &:hover, &:focus
     color: primary
     border-color: line-on-secondary-background
+    background-color: button-hover-background
   .status-badge
     display: inline
     margin-left: 4px
