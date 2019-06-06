@@ -3,7 +3,7 @@ const cacheBuster = Math.floor(Math.random() * 1000);
 
 export const ANON_AVATAR_URL = 'https://cdn.glitch.com/f6949da2-781d-4fd5-81e6-1fdd56350165%2Fanon-user-on-project-avatar.svg?1488556279399';
 
-export const lightColors = ['#F9EF90', '#C0F986', '#D7AAF7', '#FF9BA1', '#B7E4F728'];
+export const lightColors = ['#FFC761', '#9BFFB5', '#FF9BA1', '#9B9EFF'];
 
 export function getDisplayName({ login, name }) {
   if (name) {
@@ -52,7 +52,7 @@ export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'la
 export function getProfileStyle(params) {
   // five random light colors from randomcolor
   return {
-    backgroundColor: lightColors[params.id % 5],
+    backgroundColor: lightColors[params.id % 4],
     backgroundImage: `url('${getCoverUrl(params)}')`,
   };
 }

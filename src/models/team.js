@@ -43,7 +43,7 @@ export const getProfileStyle = ({ id, hasCoverImage, coverColor, cache, size }) 
     size,
   });
   return {
-    backgroundColor: lightColors[id % 5],
+    backgroundColor: lightColors[id % 4],
     backgroundImage: `url('${image}')`,
   };
 };
