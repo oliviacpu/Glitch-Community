@@ -91,6 +91,7 @@ class EditCollectionColorPop extends React.Component {
 
           <div className="custom-color-input">
             <TextInput
+              autoFocus
               opaque
               value={this.state.query}
               onChange={this.handleChange}
