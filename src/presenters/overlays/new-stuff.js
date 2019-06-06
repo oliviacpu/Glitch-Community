@@ -32,7 +32,7 @@ const useRestrictKeyBoardFocusToDialog = () => {
           event.stopPropagation();
           let newFocus;
           if (event.shiftKey) {
-            newFocus = focus - 1 < focusableItems.length ? focus - 1 : focusableItems.length - 1; //not quite right? look at this after lunch
+            newFocus = focus - 1 >= 0 ? focus - 1 : focusableItems.length - 1;
           } else {
             newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
           } 
