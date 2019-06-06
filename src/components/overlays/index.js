@@ -20,17 +20,13 @@ Overlay.propTypes = {
 };
 Overlay.defaultProps = {
   className: null,
-  ariaLabelledBy: "",
+  ariaLabelledBy: '',
   ariaModal: false,
 };
 
 export const OverlaySection = ({ children, type }) => {
   const sectionClass = classNames(styles.section, styles[type]);
-  return (
-    <section className={sectionClass}>
-      {children}
-    </section>
-  );
+  return <section className={sectionClass}>{children}</section>;
 };
 OverlaySection.propTypes = {
   children: PropTypes.node.isRequired,
@@ -44,8 +40,8 @@ export const OverlayTitle = ({ children, id }) => (
 );
 OverlayTitle.propTypes = {
   children: PropTypes.node.isRequired,
-  id: PropTypes.string
+  id: PropTypes.string,
 };
 OverlayTitle.defaultProps = {
-  id: "", // for aria labelled by purposes only
-}
+  id: '', // for aria labelled by purposes only
+};

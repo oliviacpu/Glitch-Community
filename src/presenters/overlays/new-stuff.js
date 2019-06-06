@@ -34,9 +34,11 @@ const useRestrictKeyboardFocusToDialog = () => {
           event.stopPropagation();
 
           let newFocus;
-          if (event.shiftKey) { // tab backwards
+          if (event.shiftKey) {
+            // tab backwards
             newFocus = focus - 1 >= 0 ? focus - 1 : focusableItems.length - 1;
-          } else { // tab forwards
+          } else {
+            // tab forwards
             newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
           }
 
@@ -57,7 +59,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
   const newStuffOverlayRef = useRestrictKeyboardFocusToDialog();
 
   return (
-    <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef} ariaModal={true} ariaLabelledBy="newStuff">
+    <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef} ariaModal ariaLabelledBy="newStuff">
       <OverlaySection type="info">
         <div className="new-stuff-avatar">
           <NewStuffPup />
@@ -73,7 +75,9 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <button onClick={() => setVisible(false)}>Back to Glitch <Emoji name="carp_streamer" /></button>
+        <button onClick={() => setVisible(false)}>
+          Back to Glitch <Emoji name="carpStreamer" />
+        </button>
       </OverlaySection>
     </Overlay>
   );
@@ -120,7 +124,9 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible}/> : null)}
+      {({ visible, setVisible }) =>
+        visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null
+      }
     </PopoverContainer>
   );
 };
