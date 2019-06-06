@@ -160,6 +160,7 @@ class CreateCollectionPop extends React.Component {
         <section className="pop-over-actions">
           <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
             <TextInput
+              autoFocus
               value={query}
               onChange={this.handleChange}
               placeholder={placeholder}
