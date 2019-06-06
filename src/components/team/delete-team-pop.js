@@ -15,7 +15,7 @@ const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a03
 
 const DeleteTeamPop = withRouter(({ history, team }) => {
   const api = useAPI();
-  const { createErrorNotification, createPersistentNotification } = useNotifications();
+  const { createErrorNotification } = useNotifications();
   const [teamIsDeleting, setTeamIsDeleting] = useState(false);
 
   async function deleteTeam() {
