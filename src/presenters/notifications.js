@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
@@ -14,39 +14,30 @@ const Notification = ({ children, className, remove }) => (
   </aside>
 );
 
-export class Notifications extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notifications: [],
-    };
-  }
-
-  create(content, className = '') {
+function Notifications () {
+  const [notifications, setNotifications] = useState([]);
+  
+  const create = (content, className = '') => {
     const notification = {
       id: `${Date.now()}{Math.random()}`,
       className,
       content,
     };
-    this.setState(({ notifications }) => ({
-      notifications: [...notifications, notification],
-    }));
+    setNotifications(prevNotifications => [...prevNotifications, notification]);
     return notification.id;
-  }
+  };
 
-  createError(content = 'Something went wrong. Try refreshing?') {
-    this.create(content, 'notifyError');
-  }
+  const createError = (content = 'Something went wrong. Try refreshing?') => {
+    create(content, 'notifyError');
+  };
 
-  createPersistent(content, className = '') {
-    const id = this.create(content, `notifyPersistent ${className}`);
+  const createPersistent = (content, className = '') => {
+    const id = create(content, `notifyPersistent ${className}`);
     const updateNotification = (updatedContent) => {
-      this.setState(({ notifications }) => ({
-        notifications: notifications.map((n) => (n.id === id ? { ...n, updatedContent } : n)),
-      }));
+      setNotifications(prevNotifications => prevNotifications.map((n) => (n.id === id ? { ...n, updatedContent } : n)));
     };
     const removeNotification = () => {
-      this.remove(id);
+      remove(id);
     };
     return {
       updateNotification,
@@ -54,34 +45,32 @@ export class Notifications extends React.Component {
     };
   }
 
-  remove(id) {
+  const remove = (id) => {
     this.setState(({ notifications }) => ({
       notifications: notifications.filter((n) => n.id !== id),
     }));
   }
 
-  render() {
-    const funcs = {
-      createNotification: this.create.bind(this),
-      createPersistentNotification: this.createPersistent.bind(this),
-      createErrorNotification: this.createError.bind(this),
-    };
-    const { notifications } = this.state;
-    return (
-      <>
-        <Provider value={funcs}>{this.props.children}</Provider>
-        {!!notifications.length && (
-          <div className="notifications">
-            {notifications.map(({ id, className, content }) => (
-              <Notification key={id} className={className} remove={this.remove.bind(this, id)}>
-                {content}
-              </Notification>
-            ))}
-          </div>
-        )}
-      </>
-    );
-  }
+  const funcs = {
+    createNotification: this.create.bind(this),
+    createPersistentNotification: this.createPersistent.bind(this),
+    createErrorNotification: this.createError.bind(this),
+  };
+
+  return (
+    <>
+      <Provider value={funcs}>{this.props.children}</Provider>
+      {!!notifications.length && (
+        <div className="notifications">
+          {notifications.map(({ id, className, content }) => (
+            <Notification key={id} className={className} remove={this.remove.bind(this, id)}>
+              {content}
+            </Notification>
+          ))}
+        </div>
+      )}
+    </>
+  );
 }
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
