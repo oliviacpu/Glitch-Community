@@ -2,6 +2,8 @@
 
 import { kebabCase } from 'lodash';
 import randomColor from 'randomcolor';
+import { hex as getHexContrastRatio } from 'wcag-contrast';
+
 import { getLink as getTeamLink } from './team';
 import { getLink as getUserLink } from './user';
 
@@ -12,6 +14,11 @@ export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78f
 
 // from http://dannyruchtie.com/color-contrast-calculator-with-yiq/
 export const isDarkColor = (hex) => {
+    const contrastWithWhite = getHexContrastRatio(hex, '#fff');
+    const contrastWithBlack = getHexContrastRatio(hex, '#222');
+
+    return contrastWith;
+  };
   if (hex) {
     hex = hex.substring(1);
     const r = parseInt(hex.substr(0, 2), 16);
