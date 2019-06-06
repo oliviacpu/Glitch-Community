@@ -17,37 +17,39 @@ import { useTrackedFunc } from 'State/segment-analytics';
 
 import styles from './deleted-projects.styl';
 
-const DeletedProject = ({ id, domain, onClick }) => (
-  <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
-    {(animateAndDeleteProject) => (
-      <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
+const DeletedProject = ({ id, domain, onClick }) => {
+  // non-admin members of projects and super users can't undelete
+  if (!onClick) {
+    return (
+      <div className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
-        <div className={styles.buttonWrap}>
-          <Button size="small" decorative>
-            Undelete
-          </Button>
-        </div>
-      </TransparentButton>
-    )}
-  </AnimationContainer>
-);
-DeletedProject.propTypes = {
-  id: PropTypes.string.isRequired,
-  domain: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+      </div>
+    );
+  }
+  return (
+    <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
+      {(animateAndDeleteProject) => (
+        <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
+          <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+          <div className={styles.projectName}>{domain}</div>
+          <div className={styles.buttonWrap}>
+            <Button size="small" decorative>
+              Undelete
+            </Button>
+          </div>
+        </TransparentButton>
+      )}
+    </AnimationContainer>
+  );
 };
-
-const DeletedProjectViewOnly = ({ id, domain }) => (
-  <div className={styles.deletedProject}>
-    <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-    <div className={styles.projectName}>{domain}</div>
-  </div>
-);
-
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+};
+DeletedProject.defaultProps = {
+  onClick: null,
 };
 
 export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
@@ -55,11 +57,10 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   return (
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
       {({ id, domain, permission }) => {
-        if (permission && permission.accessLevel === 30 && undelete) {
-          return <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />;
-        } else {
-          return <DeletedProjectViewOnly id={id} domain={domain} />;
-        }
+        const canUndelete = permission && permission.accessLevel === 30 && undelete;
+        const onClick = canUndelete ? () => undeleteTracked(id) : null;
+
+        return <DeletedProject id={id} domain={domain} onClick={onClick} />;
       }}
     </Grid>
   );
@@ -70,7 +71,7 @@ DeletedProjectsList.propTypes = {
   undelete: PropTypes.func,
 };
 DeletedProjectsList.defaultProps = {
-  undelete: null, // super users can't delete project from within the ui
+  undelete: null,
 };
 
 function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }) {
