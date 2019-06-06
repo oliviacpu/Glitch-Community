@@ -38,6 +38,7 @@ const TwoFactorSettings = () => {
     try {
       const response = await api.post('user/tfa/generateSecret');
       const qrcode = await QRCode.toDataURL(response.data.twoFactorKeyUri);
+      setDone(false);
       setSecret(qrcode);
     } catch (error) {
       console.error(error);
@@ -59,15 +60,15 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {enabled && <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {enabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
       {!enabled &&
         <>
-          <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
+          <Button type="tertiary" size="small" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
             <form className={styles.passwordForm} onSubmit={verifyCode}>
               <img alt="QR Code" src={secret} />
               <TextInput labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} value={code} onChange={setCode} />
-              <Button type="tertiary" disabled={code.length < 6} submit>Verify Initial Code</Button>
+              <Button type="tertiary" size="small" disabled={code.length < 6} submit>Verify Initial Code</Button>
             </form>
           }
         </>

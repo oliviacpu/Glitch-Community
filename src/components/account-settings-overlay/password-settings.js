@@ -149,7 +149,7 @@ const PasswordSettings = () => {
       {userHasPassword &&
         <>
           <Heading tagName="h2">Reset Password</Heading>
-          <Button type="tertiary" onClick={resetPassword}>Send Reset Password Email</Button>
+          <Button type="tertiary" size="small" onClick={resetPassword}>Send Reset Password Email</Button>
         </>
       }
     </>
