@@ -11,7 +11,7 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 const TwoFactorSettings = () => {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, reload } = useCurrentUser();
 
   const api = useAPI();
   const [secret, setSecret] = useState(undefined);
@@ -25,6 +25,7 @@ const TwoFactorSettings = () => {
       await api.post('user/tfa/disable');
       setEnabled(false);
       setDone(true);
+      await reload();
     } catch (error) {
       console.error(error);
     }
@@ -56,12 +57,10 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {enabled
-        ? <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>
-        : <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
-      }
-      {secret &&
+      {enabled && <Button type="tertiary" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {!enabled &&
         <div>
+          <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
           <img alt="QR Code" src={secret} />
           <TextInput value={code} labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} onChange={setCode} />
           <Button type="tertiary" disabled={!done && code.length < 6} onClick={verifyCode}>

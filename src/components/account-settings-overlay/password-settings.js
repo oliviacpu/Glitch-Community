@@ -77,7 +77,7 @@ const PasswordSettings = () => {
       setOldPassword('');
       setPassword('');
       setPassword2('');
-      reload();
+      await reload();
     } catch (error) {
       console.error(error);
     }
@@ -85,7 +85,7 @@ const PasswordSettings = () => {
 
   const pwMinCharCount = 8;
   const isEnabled = password.length > pwMinCharCount && password2 && !weakPasswordError && !passwordConfirmError;
-  const userHasPassword = !!currentUser.password;
+  const userHasPassword = !!currentUser.password; // This should be "hasPasswordSet" or something else from the API
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
   return (
     <>
