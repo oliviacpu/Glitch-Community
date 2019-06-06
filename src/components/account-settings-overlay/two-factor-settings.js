@@ -10,6 +10,8 @@ import Badge from 'Components/badges/badge';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './styles.styl';
+
 const TwoFactorSettings = () => {
   const { currentUser, reload } = useCurrentUser();
 
@@ -62,7 +64,7 @@ const TwoFactorSettings = () => {
         <>
           <Button type="tertiary" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
-            <form onSubmit={verifyCode}>
+            <form className={styles.passwordForm} onSubmit={verifyCode}>
               <img alt="QR Code" src={secret} />
               <TextInput labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} value={code} onChange={setCode} />
               <Button type="tertiary" disabled={code.length < 6} submit>Verify Initial Code</Button>
