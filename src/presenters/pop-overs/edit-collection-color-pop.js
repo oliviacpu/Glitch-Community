@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
-import { hex as getHexContrastRatio } from 'wcag-contrast';
 import { throttle } from 'lodash';
-import { isDarkColor } from 'Models/collection';
+import { getContrastWithDarkText, getContrastWithLightText } from 'Models/collection';
 
 import TextInput from 'Components/inputs/text-input';
 import PopoverWithButton from './popover-with-button';
@@ -17,9 +16,8 @@ const validHex = (hex) => {
 };
 
 const isGoodColorContrast = (hex) => {
-  const contrastHex = isDarkColor(hex) ? '#fff' : '#222';
-  const contrast = getHexContrastRatio(hex, contrastHex);
-  return contrast >= 4.5;
+  console.log(getContrastWithDarkText(hex), getContrastWithLightText(hex))
+  return getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
 };
 
 class EditCollectionColorPop extends React.Component {
