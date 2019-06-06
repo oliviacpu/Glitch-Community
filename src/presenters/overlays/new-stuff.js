@@ -6,6 +6,7 @@ import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
 import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
 import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
 import CheckboxButton from 'Components/buttons/checkbox-button';
+import Emoji from 'Components/images/emoji';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
@@ -52,7 +53,7 @@ const useRestrictKeyboardFocusToDialog = () => {
   return ref;
 };
 
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
   const newStuffOverlayRef = useRestrictKeyboardFocusToDialog();
 
   return (
@@ -72,7 +73,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <button onClick={() => {}}>Back to Glitch</button>
+        <button onClick={() => setVisible(false)}>Back to Glitch <Emoji name="carp_streamer" /></button>
       </OverlaySection>
     </Overlay>
   );
@@ -119,7 +120,7 @@ const NewStuff = ({ children }) => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} /> : null)}
+      {({ visible, setVisible }) => (visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible}/> : null)}
     </PopoverContainer>
   );
 };
