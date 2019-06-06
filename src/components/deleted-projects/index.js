@@ -38,25 +38,25 @@ DeletedProject.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-const DeletedProjectViewOnly = ({ id, domain}) => {
+const DeletedProjectViewOnly = ({ id, domain }) => {
   return (
-        <div>
-        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-        <div className={styles.projectName}>{domain}</div>
-      </div>
-  )
-}
-   
+    <div>
+      <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
+      <div className={styles.projectName}>{domain}</div>
+    </div>
+  );
+};
+
 export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
-  console.log(deletedProjects[0])
+
   return (
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
       {({ id, domain, permission }) => {
         if (permission) {
-          return <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />          
+          return <DeletedProject id={id} domain={domain} onClick={() => undeleteTracked(id)} />;
         } else {
-          return <DeletedProjectViewOnly id={id} domain={domain}/>
+          return <DeletedProjectViewOnly id={id} domain={domain} />;
         }
       }}
     </Grid>
@@ -115,11 +115,11 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   }
   return (
     <>
-      {
-        undelete
-          ? <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-          : <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
-      }
+      {undelete ? (
+        <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
+      ) : (
+        <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
+      )}
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
