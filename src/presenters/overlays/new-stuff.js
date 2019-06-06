@@ -58,6 +58,8 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
       </OverlaySection>
       <OverlaySection type="actions">
         {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
+        <button>testing</button>
+        <button>more testing</button>
       </OverlaySection>
     </Overlay>
   );
