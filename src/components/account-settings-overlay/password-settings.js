@@ -65,8 +65,8 @@ const PasswordSettings = () => {
     weakPasswordError = true;
   }
 
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
+  const updatePassword = async (event) => {
+    event.preventDefault();
     setDone(false);
     try {
       await api.post('user/updatePassword', {
@@ -83,6 +83,18 @@ const PasswordSettings = () => {
     }
   };
 
+  const resetPassword = async (event) => {
+    event.preventDefault();
+    setDone(false);
+    try {
+      await api.post('email/sendResetPasswordEmail');
+      setDone(true);
+      await reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const pwMinCharCount = 8;
   const isEnabled = password.length > pwMinCharCount && password2 && !weakPasswordError && !passwordConfirmError;
   const userHasPassword = !!currentUser.password; // This should be "hasPasswordSet" or something else from the API
@@ -90,7 +102,7 @@ const PasswordSettings = () => {
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
-      <form className={styles.passwordForm} onSubmit={handleSubmit}>
+      <form className={styles.passwordForm} onSubmit={updatePassword}>
         {userHasPassword && !userRequestedPWreset && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
@@ -131,6 +143,12 @@ const PasswordSettings = () => {
 
         {done && <Badge type="success">Successfully set new password</Badge>}
       </form>
+      {userHasPassword &&
+        <>
+          <Heading tagName="h2">Reset Password</Heading>
+          <Button type="tertiary" onClick={resetPassword}>Send Reset Password Email</Button>
+        </>
+      }
     </>
   );
 };
