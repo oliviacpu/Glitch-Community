@@ -43,13 +43,14 @@ export function getAvatarStyle({ avatarUrl, color }) {
 
 export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) {
   const customImage = `${CDN_URL}/user-cover/${id}/${size}?${cache}`;
-  const defaultImage = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fdefault-cover-wide.svg?1503518400625';
+  const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-cover.svg';
   return hasCoverImage ? customImage : defaultImage;
 }
 
 export function getProfileStyle(params) {
+  const lightColors = ['rgb(247, 173, 191)', 'rgb(255, 191, 235)', 'rgb(215, 170, 247)', 'rgb(252, 252, 159)', 'rgb(183, 228, 247)'];
   return {
-    backgroundColor: params.coverColor,
+    backgroundColor: 'blue',
     backgroundImage: `url('${getCoverUrl(params)}')`,
   };
 }
