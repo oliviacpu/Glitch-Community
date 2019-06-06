@@ -15,7 +15,8 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
-const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
+const useRestrictKeyBoardFocusToDialog = () => {
+  const [focus, setFocus] = React.useState(0);
   const ref = React.useRef();
 
   React.useEffect(() => {
@@ -44,8 +45,7 @@ const useRestrictKeyBoardFocusToDialog = (focus, setFocus) => {
 };
 
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
-  const [focus, setFocus] = React.useState(0);
-  const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog(focus, setFocus);
+  const newStuffOverlayRef = useRestrictKeyBoardFocusToDialog();
 
   return (
     <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef}>
