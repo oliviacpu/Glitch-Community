@@ -30,7 +30,7 @@ export const getAvatarStyle = ({ id, hasAvatarImage, backgroundColor, cache, siz
 
 export const getCoverUrl = ({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) => {
   const customImage = `${CDN_URL}/team-cover/${id}/${size}?${cache}`;
-  const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fteam-cover.svg';
+  const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fteamcover.svg';
   return hasCoverImage ? customImage : defaultImage;
 };
 
@@ -45,7 +45,7 @@ export const getProfileStyle = ({ id, hasCoverImage, coverColor, cache, size }) 
     size,
   });
   return {
-    backgroundColor: coverColor,
+    backgroundColor: lightColors[id % 5],
     backgroundImage: `url('${image}')`,
   };
 };
