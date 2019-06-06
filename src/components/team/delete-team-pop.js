@@ -21,14 +21,12 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
   async function deleteTeam() {
     if (teamIsDeleting) return;
     setTeamIsDeleting(true);
-    createErrorNotification('Something went wrong, try refreshing?');
     try {
       await api.delete(`teams/${team.id}`);
       history.push('/');
     } catch (error) {
       console.error('deleteTeam', error, error.response);
       createErrorNotification('Something went wrong, try refreshing?');
-      createPersistentNotification('This is a persistent notification');
       setTeamIsDeleting(false);
     }
   }
