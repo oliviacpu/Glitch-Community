@@ -85,9 +85,12 @@ const PasswordSettings = () => {
 
   const resetPassword = async (event) => {
     event.preventDefault();
+    const primaryEmail = currentUser.emails.find((email) => email.primary);
     setDone(false);
     try {
-      await api.post('email/sendResetPasswordEmail');
+      await api.post('email/sendResetPasswordEmail', {
+        emailAddress: primaryEmail.email,
+      });
       setDone(true);
       await reload();
     } catch (error) {
