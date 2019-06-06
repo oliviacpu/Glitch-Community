@@ -27,15 +27,18 @@ const useRestrictKeyboardFocusToDialog = () => {
       const focusableDialogElements = dialog.querySelectorAll(focusableElements);
       const focusableItems = [...focusableDialogElements];
       const keyHandler = (event) => {
+        // user tabs only within the elements of the dialog in a circle (not anything outside of it)
         if (['Tab'].includes(event.key)) {
           event.preventDefault();
           event.stopPropagation();
+
           let newFocus;
-          if (event.shiftKey) {
+          if (event.shiftKey) { // tab backwards
             newFocus = focus - 1 >= 0 ? focus - 1 : focusableItems.length - 1;
-          } else {
+          } else { // tab forwards
             newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
-          } 
+          }
+
           focusableItems[newFocus].focus();
           setFocus(newFocus);
         }
@@ -53,18 +56,23 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff }) => {
   const newStuffOverlayRef = useRestrictKeyboardFocusToDialog();
 
   return (
-    <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef}>
+    <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef} ariaModal={true} ariaLabelledBy="newStuff">
       <OverlaySection type="info">
-        <div className="new-stuff-avatar"><NewStuffPup /></div>
-        <OverlayTitle>New Stuff</OverlayTitle>
+        <div className="new-stuff-avatar">
+          <NewStuffPup />
+        </div>
+        <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
         <div className="new-stuff-toggle">
-          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>Keep showing me these</CheckboxButton>
+          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>
+            Keep showing me these
+          </CheckboxButton>
         </div>
       </OverlaySection>
       <OverlaySection type="actions">
-        {newStuff.map(({ id, ...props }) => <NewStuffArticle key={id} {...props} />)}
-        <button>testing</button>
-        <button>more testing</button>
+        {newStuff.map(({ id, ...props }) => (
+          <NewStuffArticle key={id} {...props} />
+        ))}
+        <button onClick={() => {}}>Back to Glitch</button>
       </OverlaySection>
     </Overlay>
   );
