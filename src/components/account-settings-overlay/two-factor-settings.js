@@ -19,13 +19,12 @@ const TwoFactorSettings = () => {
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
-  const [enabled, setEnabled] = useState(currentUser.twoFactorEnabled);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
+    setDone(false);
     try {
       await api.post('user/tfa/disable');
-      setEnabled(false);
       setDone(true);
       await reload();
     } catch (error) {
@@ -35,10 +34,10 @@ const TwoFactorSettings = () => {
 
   const generateSecret = async (evt) => {
     evt.preventDefault();
+    setDone(false);
     try {
       const response = await api.post('user/tfa/generateSecret');
       const qrcode = await QRCode.toDataURL(response.data.twoFactorKeyUri);
-      setDone(false);
       setSecret(qrcode);
     } catch (error) {
       console.error(error);
@@ -49,8 +48,8 @@ const TwoFactorSettings = () => {
     evt.preventDefault();
     try {
       await api.post('user/tfa/verifyInitialCode', { code });
-      setEnabled(true);
       setDone(true);
+      await reload();
     } catch (error) {
       console.error(error);
     }
@@ -60,8 +59,8 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {enabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
-      {!enabled &&
+      {currentUser.twoFactorEnabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {!currentUser.twoFactorEnabled &&
         <>
           <Button type="tertiary" size="small" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
