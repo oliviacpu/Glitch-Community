@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as assets from '../utils/assets';
+import * as assets from 'Utils/assets';
 
-import { useAPI } from '../state/api';
-import { useCurrentUser } from '../state/current-user';
-import useErrorHandlers from './error-handlers';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
+import useErrorHandlers from './error-handlers';
 import useUploader from './includes/uploader';
 
 const MEMBER_ACCESS_LEVEL = 20;

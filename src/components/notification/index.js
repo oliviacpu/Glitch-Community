@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
 
-const Notification = ({ children, className, remove }) => (
+export default ({ children, className, remove }) => (
   <aside className={`notification ${className}`} onAnimationEnd={remove}>
     {children}
   </aside>

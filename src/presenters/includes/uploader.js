@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { uploadAsset, uploadAssetSizes } from '../../utils/assets';
-import { captureException } from '../../utils/sentry';
-import { useNotifications } from '../notifications';
+import { uploadAsset, uploadAssetSizes } from 'Utils/assets';
+import { captureException } from 'Utils/sentry';
+import { useNotifications } from 'State/notifications';
 
 const NotifyUploading = ({ progress }) => (
   <>

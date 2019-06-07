@@ -1,4 +1,4 @@
-import { useNotifications } from './notifications';
+import { useNotifications } from 'State/notifications';
 
 function handleError(notify, error) {
   console.error(error);

@@ -9,13 +9,13 @@ import TextInput from 'Components/inputs/text-input';
 import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
-
-import useDebouncedValue from '../../hooks/use-debounced-value';
-import { useNotifications, AddProjectToCollectionMsg } from '../../presenters/notifications';
+import { useNotifications } from 'State/notifications';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 function parseQuery(query) {
   query = query.trim();
