@@ -28,7 +28,7 @@ function InvitedUser(props) {
   const { createNotification, createErrorNotification } = useNotifications();
 
   // resend the invite
-  const resendInvite = async (togglePopover) => {
+  const resendInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
       createNotification(`Resent invite to ${props.user.name}!`, 'notifySuccess');
@@ -39,7 +39,7 @@ function InvitedUser(props) {
   };
 
   // revoke the invite
-  const revokeInvite = async (togglePopover) => {
+  const revokeInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
       createNotification(`Removed ${props.user.name} from team`);
@@ -62,8 +62,17 @@ function InvitedUser(props) {
               <PopoverInfo>
                 <UserLink user={props.user}>
                   <UserAvatar user={props.user} />
-                  {props.user.name}@{props.user.login}
                 </UserLink>
+                <div className="info-container">
+                  <p className="name" title={props.user.name}>
+                    {props.user.name || "Anonymous"}
+                  </p>
+                  {this.props.user.login && (
+                    <p className="user-login" title={props.user.login}>
+                      @{props.user.login}
+                    </p>
+                  )}
+                </div>
               </PopoverInfo>
 
               <PopoverActions>
