@@ -8,16 +8,14 @@ import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { useAPI, createAPIHook } from 'State/api';
-import { PopoverWithButton, PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
-import { ProfileItem } from 'Components/profile-list';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import { captureException } from 'Utils/sentry';
-import { useTracker } from 'State/segment-analytics';
 
 import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import styles from './styles.styl';
@@ -32,8 +30,8 @@ function InvitedUser(props) {
   // resend the invite
   const resendInvite = async (togglePopover) => {
     try {
-      const { data } = await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-      createNotification(`Resent invite to ${props.user.name}!`);
+      await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
+      createNotification(`Resent invite to ${props.user.name}!`, 'notifySuccess');
     } catch (error) {
       captureException(error);
       createErrorNotification('Invite not sent, try again later');
@@ -44,15 +42,15 @@ function InvitedUser(props) {
   // revoke the invite
   const revokeInvite = async (togglePopover) => {
     try {
-      const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
+      await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
       createNotification(`Removed ${props.user.name} from team`);
     } catch (error) {
       captureException(error);
-      createErrorNotification('TODO');
+      createErrorNotification("Couldn't revoke invite, Try again later");
     }
     togglePopover();
   };
-  
+
   return (
     <PopoverContainer>
       {({ visible, togglePopover }) => (
@@ -62,24 +60,23 @@ function InvitedUser(props) {
           </TransparentButton>
 
           {visible && (
-            <PopoverDialog align='left'>
+            <PopoverDialog align="left">
               <PopoverInfo>
                 <UserLink user={props.user}>
                   <UserAvatar user={props.user} />
-                  {props.user.name}
-                  @{props.user.login}
+                  {props.user.name}@{props.user.login}
                 </UserLink>
               </PopoverInfo>
 
               <PopoverActions>
-                <Button onClick={() => resendInvite(togglePopover)} type='tertiary' size='small' hasEmoji>
-                  Resend invite <Emoji name='herb' />
+                <Button onClick={() => resendInvite(togglePopover)} type="tertiary" size="small" hasEmoji>
+                  Resend invite <Emoji name="herb" />
                 </Button>
               </PopoverActions>
 
-              <PopoverActions type='dangerZone'>
-                <Button onClick={() => revokeInvite(togglePopover)} type='dangerZone' hasEmoji>
-                  Remove <Emoji name='wave' />
+              <PopoverActions type="dangerZone">
+                <Button onClick={() => revokeInvite(togglePopover)} type="dangerZone" hasEmoji>
+                  Remove <Emoji name="wave" />
                 </Button>
               </PopoverActions>
             </PopoverDialog>
@@ -87,14 +84,13 @@ function InvitedUser(props) {
         </div>
       )}
     </PopoverContainer>
- );
+  );
 }
 
 InvitedUser.propTypes = {
   user: PropTypes.object.isRequired,
   teamId: PropTypes.number.isRequired,
 };
-
 
 // Whitelisted domain icon
 
