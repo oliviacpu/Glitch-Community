@@ -59,7 +59,7 @@ class EditCollectionColorPop extends React.Component {
       }
       const hexIsGoodColorContrast = isGoodColorContrast(query);
       if (!hexIsGoodColorContrast) {
-        this.setState({ error: 'This color might make text hard to read, try another!' });
+        this.setState({ error: 'This color might make text hard to read. Try another!' });
         return;
       }
 
