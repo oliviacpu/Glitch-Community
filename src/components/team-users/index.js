@@ -36,7 +36,6 @@ function InvitedUser(props) {
       captureException(error);
       createErrorNotification('Invite not sent, try again later');
     }
-    togglePopover();
   };
 
   // revoke the invite
@@ -48,7 +47,6 @@ function InvitedUser(props) {
       captureException(error);
       createErrorNotification("Couldn't revoke invite, Try again later");
     }
-    togglePopover();
   };
 
   return (
@@ -69,13 +67,13 @@ function InvitedUser(props) {
               </PopoverInfo>
 
               <PopoverActions>
-                <Button onClick={() => resendInvite(togglePopover)} type="tertiary" size="small" hasEmoji>
+                <Button onClick={resendInvite} type="tertiary" size="small" hasEmoji>
                   Resend invite <Emoji name="herb" />
                 </Button>
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
-                <Button onClick={() => revokeInvite(togglePopover)} type="dangerZone" hasEmoji>
+                <Button onClick={revokeInvite} type="dangerZone" hasEmoji>
                   Remove <Emoji name="wave" />
                 </Button>
               </PopoverActions>
