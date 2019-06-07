@@ -83,10 +83,11 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
 
 const AddTeamProject = ({ addProject, teamProjects }) => (
   <PopoverWithButton
+    buttonProps={{ hasEmoji: true }}
     buttonText={
-      <Button hasEmoji>
+      <>
         Add Project <Emoji name="bentoBox" />
-      </Button>
+      </>
     }
   >
     {({ togglePopover }) => (
