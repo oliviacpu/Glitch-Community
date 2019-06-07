@@ -16,6 +16,7 @@ const TwoFactorSettings = () => {
   const { currentUser, reload } = useCurrentUser();
 
   const api = useAPI();
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(currentUser.twoFactorEnabled);
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
@@ -25,6 +26,7 @@ const TwoFactorSettings = () => {
     setDone(false);
     try {
       await api.post('user/tfa/disable');
+      setTwoFactorEnabled(false);
       setDone(true);
       await reload();
     } catch (error) {
@@ -48,6 +50,7 @@ const TwoFactorSettings = () => {
     evt.preventDefault();
     try {
       await api.post('user/tfa/verifyInitialCode', { code });
+      setTwoFactorEnabled(true);
       setDone(true);
       await reload();
     } catch (error) {
@@ -59,8 +62,8 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {currentUser.twoFactorEnabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
-      {!currentUser.twoFactorEnabled &&
+      {twoFactorEnabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {!twoFactorEnabled &&
         <>
           <Button type="tertiary" size="small" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
@@ -72,7 +75,8 @@ const TwoFactorSettings = () => {
           }
         </>
       }
-      {done && <Badge type="success">Success</Badge>}
+      {done && !twoFactorEnabled && <Badge type="success">Successfully disabled two-factor authentication</Badge>}
+      {done && twoFactorEnabled && <Badge type="success">Successfully enabled two-factor authentication</Badge>}
     </>
   );
 };
