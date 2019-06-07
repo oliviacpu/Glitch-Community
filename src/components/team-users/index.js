@@ -22,61 +22,75 @@ import { useAPI } from 'State/api';
 
 import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import styles from './styles.styl';
-import Notifications from '../../presenters/notifications';
+import useNotifications from '../../presenters/notifications';
 
 // Invited user icon and pop
 
 function InvitedUser(props) {
   const api = useAPI();
+  const { createNotification, createErrorNotification } = useNotifications();
+
   // state
   // done, false by default
 
   // resend the invite
   const resendInvite = async (togglePopover) => {
-    const { data } = await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
+    try {
+      const { data } = await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
+      createNotification(`Resent invite to ${props.user.name}!`);
+    } catch (error) {
+      captureException(error);
+      createErrorNotification('Invite not sent, try again later');
+    }
     togglePopover();
   };
 
   // revoke the invite
   const revokeInvite = async (togglePopover) => {
-    const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
+    try {
+      const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
+      createNotification(`Removed ${props.user.name} from team`);
+    } catch (error) {
+      captureException(error);
+      createErrorNotification('TODO');
+    }
     togglePopover();
   };
   
   return (
-    <PopoverContainer>
-      {({ visible, togglePopover }) => (
-        <div style={{ position: 'relative' }}>
-          <TransparentButton onClick={togglePopover}>
-            <UserAvatar user={props.user} />
-          </TransparentButton>
+//     <PopoverContainer>
+//       {({ visible, togglePopover }) => (
+//         <div style={{ position: 'relative' }}>
+//           <TransparentButton onClick={togglePopover}>
+//             <UserAvatar user={props.user} />
+//           </TransparentButton>
 
-          {visible && (
-            <PopoverDialog align='left'>
-              <PopoverInfo>
-                <UserLink user={props.user}>
-                  <UserAvatar user={props.user} />
-                  {props.user.name}
-                  @{props.user.login}
-                </UserLink>
-              </PopoverInfo>
+//           {visible && (
+//             <PopoverDialog align='left'>
+//               <PopoverInfo>
+//                 <UserLink user={props.user}>
+//                   <UserAvatar user={props.user} />
+//                   {props.user.name}
+//                   @{props.user.login}
+//                 </UserLink>
+//               </PopoverInfo>
 
-              <PopoverActions>
-                <Button onClick={resendInvite} type='tertiary' size='small' hasEmoji>
-                  Resend invite <Emoji name='herb' />
-                </Button>
-              </PopoverActions>
+//               <PopoverActions>
+//                 <Button onClick={() => resendInvite(togglePopover)} type='tertiary' size='small' hasEmoji>
+//                   Resend invite <Emoji name='herb' />
+//                 </Button>
+//               </PopoverActions>
 
-              <PopoverActions type='dangerZone'>
-                <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
-                  Remove <Emoji name='wave' />
-                </Button>
-              </PopoverActions>
-            </PopoverDialog>
-          )}
-        </div>
-      )}
-    </PopoverContainer>
+//               <PopoverActions type='dangerZone'>
+//                 <Button onClick={() => revokeInvite(togglePopover)} type='dangerZone' hasEmoji>
+//                   Remove <Emoji name='wave' />
+//                 </Button>
+//               </PopoverActions>
+//             </PopoverDialog>
+//           )}
+//         </div>
+//       )}
+//     </PopoverContainer>
   )
 }
 
