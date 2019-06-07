@@ -38,15 +38,15 @@ const Banner = () => (
       <h1>
         <Unmarked>Glitch is the</Unmarked>
         <br />
-        <Mark color="blue">friendly community</Mark>
+        <Mark color="#1D9AF9">friendly community</Mark>
         <br />
         <Unmarked>where anyone can</Unmarked>
         <br />
-        <Mark color="green">create the web</Mark>
+        <Mark color="#18B576">create the web</Mark>
       </h1>
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
       <Button type="cta" href="#top-picks">
-        Check out fresh apps <Arrow />
+        Start Creating <Arrow />
       </Button>
     </div>
     <BannerVideo />
