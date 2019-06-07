@@ -22,7 +22,7 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
         <header className="collection">
           <Heading tagName="h1">{category.name}</Heading>
           <div className="collection-image-container">
-            <Image src={category.avatarUrl} />
+            <Image src={category.avatarUrl} alt="" />
           </div>
 
           <p className="description">{category.description}</p>
