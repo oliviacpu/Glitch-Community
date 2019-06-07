@@ -7,8 +7,8 @@ import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
-import { createAPIHook } from 'State/api';
-import { PopoverWithButton, PopoverContainer, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+import { useAPI, createAPIHook } from 'State/api';
+import { PopoverWithButton, PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
@@ -18,20 +18,16 @@ import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
-import { useAPI } from 'State/api';
 
 import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import styles from './styles.styl';
-import useNotifications from '../../presenters/notifications';
+import { useNotifications } from '../../presenters/notifications';
 
 // Invited user icon and pop
 
 function InvitedUser(props) {
   const api = useAPI();
   const { createNotification, createErrorNotification } = useNotifications();
-
-  // state
-  // done, false by default
 
   // resend the invite
   const resendInvite = async (togglePopover) => {
@@ -91,7 +87,7 @@ function InvitedUser(props) {
         </div>
       )}
     </PopoverContainer>
- )
+ );
 }
 
 InvitedUser.propTypes = {
