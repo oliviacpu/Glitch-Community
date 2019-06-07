@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
+import styles from 'styles.styl';
 
 export default function Notification({ children, className, remove }) {
   return (
-    <aside className={`notification ${className}`} onAnimationEnd={remove}>
+    <aside className={`styles.notification ${className}`} onAnimationEnd={remove}>
       {children}
     </aside>
   );
