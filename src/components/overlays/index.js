@@ -4,14 +4,14 @@ import classNames from 'classnames';
 
 import styles from './overlays.styl';
 
-export const Overlay = React.forwardRef(({ children, className, ariaModal, ariaLabelledBy }, ref) => {
+export const Overlay = ({ children, className, ariaModal, ariaLabelledBy }) => {
   const overlayClass = classNames(styles.overlay, className);
   return (
-    <dialog className={overlayClass} open ref={ref} aria-modal={ariaModal} aria-labelledby={ariaLabelledBy}>
+    <dialog className={overlayClass} open aria-modal={ariaModal} aria-labelledby={ariaLabelledBy}>
       {children}
     </dialog>
   );
-});
+};
 Overlay.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
