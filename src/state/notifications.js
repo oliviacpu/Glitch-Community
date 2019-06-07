@@ -10,10 +10,13 @@ export const useNotifications = () => React.useContext(context);
 export const NotificationsProvider = (props) => {
   const [notifications, setNotifications] = useState([]);
 
-  const create = (content, className = '') => {
+  const create = (content, opts={}) => {
+    const {type, inline, persistent} = opts;
     const notification = {
       id: `${Date.now()}{Math.random()}`,
-      className,
+      type: type || 'info',
+      persistent,
+      inline,
       content,
     };
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
@@ -24,12 +27,12 @@ export const NotificationsProvider = (props) => {
     setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
   };
 
-  const createError = (content = 'Something went wrong. Try refreshing?') => {
-    create(content, 'notifyError');
+  const createError = (content = 'Something went wrong. Try refreshing?', opts={}) => {
+    create(content, {type: 'error', ...opts});
   };
 
-  const createPersistent = (content, className = '') => {
-    const id = create(content, `notifyPersistent ${className}`);
+  const createPersistent = (content, opts) => {
+    const id = create(content, {persistent: true, ...opts});
     const updateNotification = (updatedContent) => {
       setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === id ? { ...n, updatedContent } : n)));
     };
