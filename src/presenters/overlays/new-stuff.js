@@ -16,7 +16,7 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
-export function usePreventTabOut() {
+function usePreventTabOut() {
   const first = React.useRef();
   const last = React.useRef();
 
@@ -60,7 +60,6 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <button>testing</button>
         <button onClick={() => setVisible(false)} ref={last}>
           Back to Glitch <Emoji name="carpStreamer" />
         </button>
