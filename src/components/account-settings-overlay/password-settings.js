@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Pluralize from 'react-pluralize';
+import get from 'lodash/get';
 
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
@@ -106,9 +107,8 @@ const PasswordSettings = () => {
 
   useEffect(() => {
     async function hasSetPassword() {
-      const data = await api.get(`/users/${currentUser.id}/hasSetPassword`).data;
-      console.log(data);
-      setUserHasPassword()
+      const response = await api.get(`/users/${currentUser.id}/hasSetPassword`);
+      setUserHasPassword(get(response, 'data.hasSetPassword'));
     }
 
     hasSetPassword();
