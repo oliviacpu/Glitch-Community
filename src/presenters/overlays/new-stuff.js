@@ -16,10 +16,12 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
-functionusePreventTabOut(first, last) {
+export function usePreventTabOut() {
+  const first = React.useRef();
+  const last = React.useRef();
+
   const onKeyDown = (e) => {
     if (e.key === 'Tab') {
-      console.log(document.activeElement);
       if (document.activeElement === first.current && e.shiftKey) {
         last.current.focus();
         e.preventDefault();
@@ -34,13 +36,12 @@ functionusePreventTabOut(first, last) {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [first, last]);
+
+  return { first, last };
 }
 
-export focusOnFirstFocusable()
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-  const first = React.useRef();
-  const last = React.useRef();
-  usePreventTabOut(first, last);
+  const { first, last } = usePreventTabOut();
 
   return (
     <Overlay className="new-stuff-overlay" ariaModal ariaLabelledBy="newStuff">
