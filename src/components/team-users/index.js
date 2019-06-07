@@ -60,9 +60,11 @@ function InvitedUser(props) {
           {visible && (
             <PopoverDialog align="left">
               <PopoverInfo>
-                <UserLink user={props.user}>
-                  <UserAvatar user={props.user} className={styles.avatar} />
-                </UserLink>
+                <div className={styles.avatar}>
+                  <UserLink user={props.user}>
+                    <UserAvatar user={props.user} />
+                  </UserLink>
+                </div>
                 <div className={styles.nameLoginWrap}>
                   <h3 className={styles.name} title={props.user.name}>
                     {props.user.name || 'Anonymous'}
