@@ -11,6 +11,7 @@ import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
+import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -24,6 +25,18 @@ const DeletedProject = ({ id, domain, onClick }) => {
       <div className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
+        <div style={{ margin: '70px' }}>
+          <TooltipContainer
+            type="action"
+            id="a-unique-id"
+            target={
+              <Button size="small" decorative disabled>
+                Undelete
+              </Button>
+            }
+            tooltip="I'm an action tooltip"
+          />
+        </div>
       </div>
     );
   }
