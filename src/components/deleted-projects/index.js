@@ -25,18 +25,18 @@ const DeletedProject = ({ id, domain, onClick }) => {
       <div className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
-        <div style={{ margin: '70px' }}>
-          <TooltipContainer
-            type="action"
-            id="a-unique-id"
-            target={
-              <Button size="small" decorative disabled>
+        <TooltipContainer
+          type="action"
+          id="a-unique-id"
+          target={
+            <div className={styles.buttonWrap}>
+              <Button size="small" disabled decorative>
                 Undelete
               </Button>
-            }
-            tooltip="I'm an action tooltip"
-          />
-        </div>
+            </div>
+          }
+          tooltip="Only admins can undelete a project"
+        />
       </div>
     );
   }
