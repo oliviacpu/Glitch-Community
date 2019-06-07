@@ -64,11 +64,11 @@ function InvitedUser(props) {
                   <UserAvatar user={props.user} />
                 </UserLink>
                 <div className="info-container">
-                  <p className="name" title={props.user.name}>
-                    {props.user.name || "Anonymous"}
-                  </p>
-                  {this.props.user.login && (
-                    <p className="user-login" title={props.user.login}>
+                  <h3 className="name" title={props.user.name}>
+                    {props.user.name || 'Anonymous'}
+                  </h3>
+                  {props.user.login && (
+                    <p className="userLogin" title={props.user.login}>
                       @{props.user.login}
                     </p>
                   )}
