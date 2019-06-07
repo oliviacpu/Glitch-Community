@@ -8,16 +8,73 @@ import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
-import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+import { PopoverWithButton, PopoverContainer, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
+import { UserAvatar } from 'Components/images/avatar';
+import { UserLink } from 'Components/link';
 import { captureException } from 'Utils/sentry';
+import { useTracker } from 'State/segment-analytics';
+import { useAPI } from 'State/api';
 
 import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import styles from './styles.styl';
+import Notifications from '../../presenters/notifications';
+
+// Invited user icon and pop
+
+function InvitedUser(props) {
+  const api = useAPI();
+  // state
+  // done, false by default
+
+  // resend the invite
+  const resendInvite = async () => {
+    const { data } = await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
+  };
+
+  // revoke the invite
+  const revokeInvite = async () => {
+    const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
+  
+  };
+  
+  return (
+    <PopoverContainer>
+      {({ visible, togglePopover }) => (
+        <>
+          <PopoverSection>
+            <UserLink user={props.user}>
+              <UserAvatar user={props.user} />
+              {props.user.name}
+              @{props.user.login}
+            </UserLink>
+          </PopoverSection>
+
+          <PopoverSection>
+            <Button onClick={resendInvite} type='tertiary' hasEmoji>
+              Resend invite <Emoji name='herb' />
+            </Button>
+          </PopoverSection>
+
+          <PopoverSection type='dangerZone'>
+            <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
+              Remove <Emoji name='wave' />
+            </Button>
+          </PopoverSection>
+        </>
+      )}
+    </PopoverContainer>
+  )
+}
+
+InvitedUser.PropTypes = {
+  user: PropTypes.object.isRequired,
+};
+
 
 // Whitelisted domain icon
 
@@ -141,7 +198,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       )}
       {invitees.map((user) => (
         <li key={user.id} className={styles.invitedMember}>
-          <ProfileItem user={user} />
+          <InvitedUser user={user} />
         </li>
       ))}
       {currentUserIsOnTeam && (
