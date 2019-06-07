@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
 
-export default ({ children, className, remove }) => (
-  <aside className={`notification ${className}`} onAnimationEnd={remove}>
-    {children}
-  </aside>
-);
+export default function Notification({ children, className, remove }) {
+  return (
+    <aside className={`notification ${className}`} onAnimationEnd={remove}>
+      {children}
+    </aside>
+  );
+}
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
   <>
