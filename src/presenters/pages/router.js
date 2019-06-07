@@ -96,6 +96,11 @@ const Router = () => (
         exact
         render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
       />
+      <Route
+        path="/login/reset-password"
+        exact
+        render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'loginToken')} />}
+      />
 
       <Route path="/join/@:teamUrl/:joinToken" exact render={({ match }) => <JoinTeamPage key={location.key} {...match.params} />} />
 

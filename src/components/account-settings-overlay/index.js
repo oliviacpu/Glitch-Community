@@ -15,7 +15,8 @@ import styles from './styles.styl';
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
-  const 
+  const api = useAPI();
+
   const [page, setPage] = useState('password');
   const [userHasPassword, setUserHasPassword] = useState(false);
   
@@ -29,6 +30,7 @@ const AccountSettingsOverlay = () => {
 
     hasSetPassword();
   }, []);
+
   return (
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
@@ -48,7 +50,7 @@ const AccountSettingsOverlay = () => {
             </Button>
           </div>
           <div className={styles.accountSettingsContent}>
-            {page === 'password' ? <PasswordSettings /> : null}
+            {page === 'password' ? <PasswordSettings userHasPassword={userHasPassword} /> : null}
             {page === '2fa' ? <TwoFactorSettings /> : null}
           </div>
         </div>

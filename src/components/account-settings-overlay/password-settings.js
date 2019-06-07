@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types'
 import Pluralize from 'react-pluralize';
-import get from 'lodash/get';
 
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
@@ -34,11 +34,9 @@ const weakPWs = [
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
-const PasswordSettings = () => {
+const PasswordSettings = ({ userHasPassword }) => {
   const api = useAPI();
   const { currentUser, reload } = useCurrentUser();
-
-  const [userHasPassword, setUserHasPassword] = useState(false);
 
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
@@ -105,15 +103,6 @@ const PasswordSettings = () => {
   const isEnabled = password.length > pwMinCharCount && password2 && !weakPasswordError && !passwordConfirmError;
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
 
-  useEffect(() => {
-    async function hasSetPassword() {
-      const response = await api.get(`/users/${currentUser.id}/hasSetPassword`);
-      setUserHasPassword(get(response, 'data.hasSetPassword'));
-    }
-
-    hasSetPassword();
-  }, []);
-
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
@@ -166,6 +155,10 @@ const PasswordSettings = () => {
       }
     </>
   );
+};
+
+PasswordSettings.propTypes = {
+  userHasPassword: PropTypes.bool.isRequired,
 };
 
 export default PasswordSettings;
