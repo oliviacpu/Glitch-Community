@@ -24,6 +24,10 @@ try {
     ignoreErrors: SentryHelpers.ignoreErrors,
     whitelistUrls: ['/glitch.com/'],
     beforeSend(event) {
+      const ucBrowser = window.navigator.userAgent.match(/^Mozilla\/5\.0 .+ Gecko\/$/)
+      if (ucBrowser) {
+        
+      }
       try {
         return SentryHelpers.beforeSend(PROJECT_DOMAIN, _env, event);
       } catch (error) {
