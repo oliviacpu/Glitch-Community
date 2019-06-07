@@ -116,25 +116,25 @@ const ProjectOptionsContent = (props) => {
 
       {props.addProjectToCollection && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " buttonProps={{ hasEmoji: true }} emoji="framed-picture" />
         </section>
       )}
 
       {props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
+          <PopoverButton onClick={props.joinTeamProject} text="Join Project " buttonProps={{ hasEmoji: true }} emoji="rainbow" />
         </section>
       )}
 
       {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " buttonProps={{ hasEmoji: true }} emoji="wave" />
         </section>
       )}
 
       {props.leaveProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " buttonProps={{ hasEmoji: true }} emoji="wave" />
         </section>
       )}
 
