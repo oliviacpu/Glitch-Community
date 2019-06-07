@@ -1,9 +1,10 @@
 u05 = 4px
 u1 = 5px
-u2 = 16px
-u3 = 32px
-u4 = 64px
-u5 = 128px
+u2 = 10px
+u3 = 16px
+u4 = 32px
+u5 = 64px
+u6 = 128px
 
 t1 = 12px
 t2 = 14px
@@ -23,11 +24,11 @@ breakpoint = 800px
 
 .h2
   font-size: t5
-  margin: 0 0 u2
+  margin: 0 0 u3
   
 .h3
   font-size: t4
-  margin: 0 0 u2
+  margin: 0 0 u3
 
 
 .mark
@@ -37,7 +38,7 @@ breakpoint = 800px
   left: "-%s" % u1
   z-index: 0
   background-color: var(--mark-color)
-  padding: u05 u1
+  padding: u1 u2
   border-radius: u1
 .markText
   position: relative
@@ -56,17 +57,17 @@ breakpoint = 800px
   background-image: url('https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fbanner-background.svg?1559244211716')
   background-size: cover
   background-position: right
-  border-radius: u2
-  padding: u3
+  border-radius: u3
+  padding: u4
   
 .bannerCopy
   max-width: 400px
-  padding-bottom: u2
+  padding-bottom: u3
   h1
     font-size: t6
     margin: 0
   p
-    margin: u1 0
+    margin: u3 0
   
 .bannerVideoWrap
   width: 100%
@@ -77,6 +78,7 @@ breakpoint = 800px
   background-size: contain
   background-repeat: no-repeat
   box-shadow: 4px 4px #c3c3c3
+  border: 1px solid #c3c3c3
   border-radius: u1
   width: 100%
   height: 0
@@ -87,7 +89,7 @@ breakpoint = 800px
   position: absolute
   width: 100%
   bottom: 0
-  padding: u2
+  padding: u3
 
 .bannerVideo
   background-color: #666
@@ -97,15 +99,15 @@ breakpoint = 800px
   .banner
     flex-direction: row
     justify-content: flex-end
-    margin: u4 0
+    margin: u5 0
   .bannerCopy
     padding-bottom: 0
-    padding-right: u3
+    padding-right: u4
   .bannerVideoWrap
-    margin: "-%s 0" % u4
+    margin: "-%s 0" % u5
     
 .featureCalloutsRow
-  --gap: u3
+  --gap: u4
 
 .plainLink
   color: inherit
@@ -115,7 +117,7 @@ breakpoint = 800px
     
 .featureCalloutsImageWrap
   height: 200px
-  margin: u2 u2 0
+  margin: u3 u3 0
   background-size: contain
   background-repeat: no-repeat
   background-position: center
@@ -127,18 +129,20 @@ breakpoint = 800px
   width: 100%
   max-width: 100%
   max-height: 100%
-  padding: u2 u3 u3
+  padding: u3 u4 u4
   display: block
   
 .featureCalloutsText
-  margin-top: "-%s" % u3
+  margin-top: "-%s" % u4
+  h2
+    font-weight: 600
   
 .unifiedStories
   display: flex
   flex-direction: column
   background-color: bg2
   border-radius: u1
-  padding: u2 u3
+  padding: u3 u4
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -148,20 +152,20 @@ breakpoint = 800px
   background-color: yellow
   font-weight: bold
   font-size: t1
-  margin-bottom: u3
+  margin-bottom: u4
   
 .unifiedStoriesHeadline
   h2
     font-size: t5
     margin: 0
   h2 + h2
-    margin-top: u3
+    margin-top: u4
   img
     width: 100%
-    margin-top: u2
+    margin-top: u3
   
 .unifiedStoriesPreview
-  padding: u2 0
+  padding: u3 0
   h3
     font-size: t5
   p
@@ -175,7 +179,7 @@ breakpoint = 800px
   h3
     text-transform: uppercase
     font-size: t1
-    margin-bottom: u2
+    margin-bottom: u3
   h4
     margin: 0
   p
@@ -189,7 +193,7 @@ breakpoint = 800px
   .unifiedStoriesHeadline
     flex: 0 0 300px
   .unifiedStoriesPreview
-    padding: 0 u3
+    padding: 0 u4
     flex: 1 1 auto
   .unifiedStoriesRelatedContent
     flex: 0 0 180px
@@ -200,10 +204,10 @@ breakpoint = 800px
 .featuredEmbedWrap
   height: 80vh
   max-height: 500px
-  margin-bottom: "-%s" % u2
+  margin-bottom: "-%s" % u3
   
 .featuredEmbedCaption
-  padding: u3 u2 u2
+  padding: u4 u3 u3
   background-color: bg1
   display: flex
   flex-direction: column
@@ -223,7 +227,7 @@ breakpoint = 800px
   .featuredEmbedCaption
     flex-direction: row
   .featuredEmbedProfileWrap
-    flex: 0 0 u4
+    flex: 0 0 u5
 
 .appsWeLoveContainer
   h4
@@ -239,7 +243,7 @@ breakpoint = 800px
 .curatedCollectionContainer
   position: relative
   border-radius: u1
-  padding: u2 u1 u2 u2
+  padding: u3 u1 u3 u3
   overflow: hidden
   display: flex
   height: 100%
@@ -248,7 +252,7 @@ breakpoint = 800px
   position: absolute
   transform: rotate(12deg)
   height: 120%
-  right: u3
+  right: u4
   top: -20px
   
 .curatedCollectionText
@@ -260,7 +264,7 @@ breakpoint = 800px
     white-space: nowrap
   h4
     font-size: t5
-    margin: 0 0 u2
+    margin: 0 0 u3
   p
     font-size: t2
     flex: 1 0 auto
@@ -286,12 +290,12 @@ breakpoint = 800px
   --min-width: 200px
   
 .cultureZineImageWrap
-  padding: 0 u2 53%
+  padding: 0 u3 53%
   height: 0
   
 .cultureZineText
-  margin-top: "-%s" % u3
-  padding: u3 u1 u1
+  margin-top: "-%s" % u4
+  padding: u4 u1 u1
   border-radius: u1
   background-color: bg1
 
@@ -320,7 +324,7 @@ breakpoint = 800px
 
 .previewBanner
   background-color: yellow
-  padding: u3 u2
+  padding: u4 u3
   display: flex
   flex-flow: row wrap
   align-items: center
