@@ -28,7 +28,7 @@ const OfflineNotice = () => {
 
   if (online) {
     return (
-      <PersistentNotification className="notifyError">
+      <PersistentNotification type=''>
         It looks like you're offline
       </PersistentNotification>
     );

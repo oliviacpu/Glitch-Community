@@ -8,7 +8,9 @@ import styles from './styles.styl';
 const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
+  console.log(type);
   const className = cx({
+    notification: true,
     success: type === 'success',
     error: type === 'error',
     persistent,
