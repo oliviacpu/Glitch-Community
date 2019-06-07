@@ -6,12 +6,13 @@ import { kebabCase, orderBy } from 'lodash';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import TextInput from 'Components/inputs/text-input';
 import { getLink, createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
+import { useNotifications } from 'State/notifications';
 
-import { AddProjectToCollectionMsg, useNotifications } from '../notifications';
 import { NestedPopoverTitle } from './popover-nested';
 import Dropdown from './dropdown';
 

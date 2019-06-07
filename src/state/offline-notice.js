@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useNotifications } from '../presenters/notifications';
+import { useNotifications } from 'State/notifications';
 
 const PersistentNotification = ({ children, className }) => {
   const { createPersistentNotification } = useNotifications();

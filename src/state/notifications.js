@@ -7,7 +7,7 @@ const { Provider } = context;
 export const NotificationConsumer = context.Consumer;
 export const useNotifications = () => React.useContext(context);
 
-export function Notifications(props) {
+export function NotificationsProvider(props) {
   const [notifications, setNotifications] = useState([]);
 
   const create = (content, className = '') => {
