@@ -58,40 +58,40 @@ function InvitedUser(props) {
   };
   
   return (
-//     <PopoverContainer>
-//       {({ visible, togglePopover }) => (
-//         <div style={{ position: 'relative' }}>
-//           <TransparentButton onClick={togglePopover}>
-//             <UserAvatar user={props.user} />
-//           </TransparentButton>
+    <PopoverContainer>
+      {({ visible, togglePopover }) => (
+        <div style={{ position: 'relative' }}>
+          <TransparentButton onClick={togglePopover}>
+            <UserAvatar user={props.user} />
+          </TransparentButton>
 
-//           {visible && (
-//             <PopoverDialog align='left'>
-//               <PopoverInfo>
-//                 <UserLink user={props.user}>
-//                   <UserAvatar user={props.user} />
-//                   {props.user.name}
-//                   @{props.user.login}
-//                 </UserLink>
-//               </PopoverInfo>
+          {visible && (
+            <PopoverDialog align='left'>
+              <PopoverInfo>
+                <UserLink user={props.user}>
+                  <UserAvatar user={props.user} />
+                  {props.user.name}
+                  @{props.user.login}
+                </UserLink>
+              </PopoverInfo>
 
-//               <PopoverActions>
-//                 <Button onClick={() => resendInvite(togglePopover)} type='tertiary' size='small' hasEmoji>
-//                   Resend invite <Emoji name='herb' />
-//                 </Button>
-//               </PopoverActions>
+              <PopoverActions>
+                <Button onClick={() => resendInvite(togglePopover)} type='tertiary' size='small' hasEmoji>
+                  Resend invite <Emoji name='herb' />
+                </Button>
+              </PopoverActions>
 
-//               <PopoverActions type='dangerZone'>
-//                 <Button onClick={() => revokeInvite(togglePopover)} type='dangerZone' hasEmoji>
-//                   Remove <Emoji name='wave' />
-//                 </Button>
-//               </PopoverActions>
-//             </PopoverDialog>
-//           )}
-//         </div>
-//       )}
-//     </PopoverContainer>
-  )
+              <PopoverActions type='dangerZone'>
+                <Button onClick={() => revokeInvite(togglePopover)} type='dangerZone' hasEmoji>
+                  Remove <Emoji name='wave' />
+                </Button>
+              </PopoverActions>
+            </PopoverDialog>
+          )}
+        </div>
+      )}
+    </PopoverContainer>
+ )
 }
 
 InvitedUser.propTypes = {
