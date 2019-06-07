@@ -48,11 +48,17 @@ export const NotificationsProvider = (props) => {
     createErrorNotification: createError,
   };
 
+  const notificationsStyles = {
+    zIndex: '11',
+    top: '20px',
+    right: '20px',
+    position: 'fixed',
+  };
   return (
     <>
       <Provider value={funcs}>{props.children}</Provider>
       {!!notifications.length && (
-        <div className="notifications">
+        <div style={notificationsStyles}>
           {notifications.map(({ id, className, content }) => (
             <Notification key={id} className={className} remove={() => remove(id)}>
               {content}

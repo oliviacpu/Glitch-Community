@@ -163,9 +163,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
       {!!invitee && (
         <li>
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-            Invited {invitee}
-          </div>
+          <Notification inline type='success' onAnimationEnd={removeNotifyInvited}>TODO Invited {invitee}</Notification>
         </li>
       )}
     </ul>

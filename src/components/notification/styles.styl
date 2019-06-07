@@ -1,3 +1,4 @@
+
 .notification
   background-color: notification
   color: primary-background
@@ -27,23 +28,18 @@
     height: 19px
     margin: 0
     margin-right: 5px
-  &:hover
-    animation-name: none
-  
-  .notifyPersistent
+  &:hover,
+  &.persistent
     animation: none
-  
-  .notifySuccess
+  &.success
     background-color: success
-
-.notifyPersistent
-  animation: none
-
-.notifyError
-  background-color: error
-
-.notifySuccess
-  background-color: success
+  &.error
+    background-color: error
+  &.inline
+    position: absolute
+    width: max-content
+    left: 2px
+    top: 25px
 
 .notifyUploading
   assets-file-icon-active()
@@ -68,9 +64,3 @@
     opacity: 1
   100%
     opacity: 0
-
-.inline-notification
-  position: absolute
-  width: max-content
-  left: 2px
-  top: 25px

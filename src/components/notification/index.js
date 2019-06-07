@@ -2,14 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
-import styles from 'styles.styl';
+import classNames from 'classnames/bind';
+import styles from './styles.styl';
 
-export default function Notification({ children, className, remove }) {
+const cx = classNames.bind(styles);
+
+const Notification = ({ children, type, persistent, inline, remove }) => {
+  const className = cx({
+    success: type === 'success',
+    error: type === 'error',
+    persistent,
+    inline,
+  });
+
   return (
-    <aside className={`styles.notification ${className}`} onAnimationEnd={remove}>
+    <aside className={className} onAnimationEnd={remove}>
       {children}
     </aside>
   );
+}
+
+Notification.PropTypes = {
+  type: PropTypes.oneOf(['info', 'success', 'error']),
 }
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
@@ -36,3 +50,5 @@ AddProjectToCollectionMsg.defaultProps = {
   url: null,
   collectionName: null,
 };
+
+export default Notification;
