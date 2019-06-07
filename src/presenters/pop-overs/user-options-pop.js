@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
@@ -159,19 +159,12 @@ UserOptionsPop.propTypes = {
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
-class CheckForCreateTeamHash extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { active: window.location.hash === '#create-team' };
-  }
+function CheckForCreateTeamHash(props) {
+  const [active, setActive] = useState(window.location.hash === '#create-team');
 
-  componentDidMount() {
-    this.setState({ active: false });
-  }
+  useEffect(() => setActive(false), []);
 
-  render() {
-    return this.props.children(this.state.active);
-  }
+  return props.children(active);
 }
 
 // Header button and init pop
