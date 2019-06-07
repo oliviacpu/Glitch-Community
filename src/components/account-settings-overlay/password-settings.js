@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 
 import Heading from 'Components/text/heading';
@@ -34,7 +33,7 @@ const weakPWs = [
 const matchErrorMsg = 'Passwords do not match';
 const weakPWErrorMsg = 'Password is too common';
 
-const PasswordSettings = ({ userHasPassword }) => {
+const PasswordSettings = () => {
   const api = useAPI();
   const { currentUser, reload } = useCurrentUser();
 
@@ -101,8 +100,8 @@ const PasswordSettings = ({ userHasPassword }) => {
 
   const pwMinCharCount = 8;
   const isEnabled = password.length > pwMinCharCount && password2 && !weakPasswordError && !passwordConfirmError;
+  const userHasPassword = !!currentUser.password; // This should be "hasPasswordSet" or something else from the API
   const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
-
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
@@ -155,10 +154,6 @@ const PasswordSettings = ({ userHasPassword }) => {
       }
     </>
   );
-};
-
-PasswordSettings.props = {
-  userHasPassword: PropTypes.bool.isRequired,
 };
 
 export default PasswordSettings;

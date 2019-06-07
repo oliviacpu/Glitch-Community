@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { get } from 'lodash/get';
+import React, { useState } from 'react';
 
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
-
 import { useCurrentUser } from 'State/current-user';
-import { useAPI } from 'State/api';
 
 import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import PasswordSettings from './password-settings';
@@ -16,20 +13,7 @@ import styles from './styles.styl';
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
-  const api = useAPI();
-
   const [page, setPage] = useState('password');
-  const [userHasPassword, setUserHasPassword] = useState(false);
-
-  useEffect(() => {
-    async function hasSetPassword() {
-      const response = await api.get(`/users/${currentUser.id}/hasSetPassword`);
-      setUserHasPassword(get(response, 'data.hasSetPassword'));
-    }
-
-    hasSetPassword();
-  }, []);
-
   const primaryEmail = currentUser.emails.find((email) => email.primary);
   return (
     <Overlay className="account-settings-overlay">
@@ -50,7 +34,7 @@ const AccountSettingsOverlay = () => {
             </Button>
           </div>
           <div className={styles.accountSettingsContent}>
-            {page === 'password' ? <PasswordSettings userHasPassword={userHasPassword} /> : null}
+            {page === 'password' ? <PasswordSettings /> : null}
             {page === '2fa' ? <TwoFactorSettings /> : null}
           </div>
         </div>
