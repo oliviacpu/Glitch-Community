@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { UserAvatar } from 'Components/images/avatar';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
+import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo } from 'Components/popover';
 import { UserLink } from 'Components/link';
 
 import { captureException } from 'Utils/sentry';
@@ -29,6 +30,20 @@ function InvitedUserPop(props) {
   
   };
   
+  // user options pop
+  /*
+  <PopoverContainer startOpen={createTeamOpen}>
+    {({ togglePopover, visible, focusFirstElement }) => {
+      const userOptionsButton = (
+        <button className="user" onClick={togglePopover} disabled={!props.user.id} type="button">
+          <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
+          <div className="user-options-dropdown-wrap">
+            <span className="down-arrow icon" />
+          </div>
+        </button>
+      );
+  */
+  
   return (
     <PopoverContainer>
       <UserLink user={props.user}>
@@ -36,6 +51,18 @@ function InvitedUserPop(props) {
         {props.user.name}
         @{props.user.login}
       </UserLink>
+      
+      <section>
+        <Button onClick={resendInvite} type='tertiary' hasEmoji>
+          Resend invite <Emoji name='herb' />
+        </Button>
+      </section>
+      
+      <section>
+        <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
+          Remove <Emoji name='wave' />
+        </Button>
+      </section>
     </PopoverContainer>
   )
 }
