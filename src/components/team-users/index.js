@@ -39,39 +39,46 @@ function InvitedUser(props) {
   // revoke the invite
   const revokeInvite = async () => {
     const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
-  
   };
   
   return (
     <PopoverContainer>
       {({ visible, togglePopover }) => (
-        <>
-          <PopoverSection>
-            <UserLink user={props.user}>
-              <UserAvatar user={props.user} />
-              {props.user.name}
-              @{props.user.login}
-            </UserLink>
-          </PopoverSection>
+        <div>
+          <TransparentButton onClick={togglePopover}>
+            <UserAvatar user={props.user} />
+          </TransparentButton>
 
-          <PopoverSection>
-            <Button onClick={resendInvite} type='tertiary' hasEmoji>
-              Resend invite <Emoji name='herb' />
-            </Button>
-          </PopoverSection>
+          {visible && (
+            <PopoverDialog>
+              <PopoverSection>
+                <UserLink user={props.user}>
+                  <UserAvatar user={props.user} />
+                  {props.user.name}
+                  @{props.user.login}
+                </UserLink>
+              </PopoverSection>
 
-          <PopoverSection type='dangerZone'>
-            <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
-              Remove <Emoji name='wave' />
-            </Button>
-          </PopoverSection>
+              <PopoverSection>
+                <Button onClick={resendInvite} type='tertiary' hasEmoji small>
+                  Resend invite <Emoji name='herb' />
+                </Button>
+              </PopoverSection>
+
+              <PopoverSection type='dangerZone'>
+                <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
+                  Remove <Emoji name='wave' />
+                </Button>
+              </PopoverSection>
+            </PopoverDialog>
+          )}
         </>
       )}
     </PopoverContainer>
   )
 }
 
-InvitedUser.PropTypes = {
+InvitedUser.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
