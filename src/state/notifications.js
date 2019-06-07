@@ -59,8 +59,8 @@ export const NotificationsProvider = (props) => {
       <Provider value={funcs}>{props.children}</Provider>
       {!!notifications.length && (
         <div style={notificationsStyles}>
-          {notifications.map(({ id, className, content }) => (
-            <Notification key={id} className={className} remove={() => remove(id)}>
+          {notifications.map(({ id, content, ...args }) => (
+            <Notification key={id} remove={() => remove(id)} {...args}>
               {content}
             </Notification>
           ))}
