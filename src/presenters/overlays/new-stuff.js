@@ -16,48 +16,10 @@ import newStuffLog from '../../curated/new-stuff-log';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
-const useRestrictKeyboardFocusToDialog = () => {
-  const [focus, setFocus] = React.useState(0);
-  const ref = React.useRef();
-
-  React.useEffect(() => {
-    const dialog = ref.current;
-    if (dialog) {
-      const focusableElements =
-        'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled])';
-      const focusableDialogElements = dialog.querySelectorAll(focusableElements);
-      const focusableItems = [...focusableDialogElements];
-      const keyHandler = (event) => {
-        // user tabs only within the elements of the dialog in a circle (not anything outside of it)
-        if (['Tab'].includes(event.key)) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          let newFocus;
-          if (event.shiftKey) {
-            // tab backwards
-            newFocus = focus - 1 >= 0 ? focus - 1 : focusableItems.length - 1;
-          } else {
-            // tab forwards
-            newFocus = focus + 1 < focusableItems.length ? focus + 1 : 0;
-          }
-
-          focusableItems[newFocus].focus();
-          setFocus(newFocus);
-        }
-      };
-      window.addEventListener('keydown', keyHandler);
-      return () => window.removeEventListener('keydown', keyHandler);
-    }
-    return () => {};
-  }, [focus]);
-
-  return ref;
-};
-
-export function usePreventTabOut(first, last) {
+functionusePreventTabOut(first, last) {
   const onKeyDown = (e) => {
     if (e.key === 'Tab') {
+      console.log(document.activeElement);
       if (document.activeElement === first.current && e.shiftKey) {
         last.current.focus();
         e.preventDefault();
@@ -74,20 +36,21 @@ export function usePreventTabOut(first, last) {
   }, [first, last]);
 }
 
+export focusOnFirstFocusable()
 const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
   const first = React.useRef();
   const last = React.useRef();
   usePreventTabOut(first, last);
-  
+
   return (
-    <Overlay className="new-stuff-overlay" ref={first} ariaModal ariaLabelledBy="newStuff">
+    <Overlay className="new-stuff-overlay" ariaModal ariaLabelledBy="newStuff">
       <OverlaySection type="info">
         <div className="new-stuff-avatar">
           <NewStuffPup />
         </div>
         <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
         <div className="new-stuff-toggle">
-          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff}>
+          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these
           </CheckboxButton>
         </div>
@@ -96,6 +59,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
+        <button>testing</button>
         <button onClick={() => setVisible(false)} ref={last}>
           Back to Glitch <Emoji name="carpStreamer" />
         </button>
