@@ -63,12 +63,12 @@ function InvitedUser(props) {
                 <UserLink user={props.user}>
                   <UserAvatar user={props.user} />
                 </UserLink>
-                <div className="info-container">
-                  <h3 className="name" title={props.user.name}>
+                <div className="nameLoginWrap">
+                  <h3 className={styles.name} title={props.user.name}>
                     {props.user.name || 'Anonymous'}
                   </h3>
                   {props.user.login && (
-                    <p className="userLogin" title={props.user.login}>
+                    <p className={styles.userLogin} title={props.user.login}>
                       @{props.user.login}
                     </p>
                   )}
