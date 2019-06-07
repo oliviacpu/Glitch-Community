@@ -55,11 +55,32 @@ const useRestrictKeyboardFocusToDialog = () => {
   return ref;
 };
 
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
-  const newStuffOverlayRef = useRestrictKeyboardFocusToDialog();
+export function usePreventTabOut(first, last) {
+  const onKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      if (document.activeElement === first.current && e.shiftKey) {
+        last.current.focus();
+        e.preventDefault();
+      } else if (document.activeElement === last.current && !e.shiftKey) {
+        first.current.focus();
+        e.preventDefault();
+      }
+    }
+  };
 
+  React.useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [first, last]);
+}
+
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+  const first = React.useRef();
+  const last = React.useRef();
+  usePreventTabOut(first, last);
+  
   return (
-    <Overlay className="new-stuff-overlay" ref={newStuffOverlayRef} ariaModal ariaLabelledBy="newStuff">
+    <Overlay className="new-stuff-overlay" ref={first} ariaModal ariaLabelledBy="newStuff">
       <OverlaySection type="info">
         <div className="new-stuff-avatar">
           <NewStuffPup />
@@ -75,7 +96,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <button onClick={() => setVisible(false)}>
+        <button onClick={() => setVisible(false)} ref={last}>
           Back to Glitch <Emoji name="carpStreamer" />
         </button>
       </OverlaySection>
