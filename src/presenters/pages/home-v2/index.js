@@ -114,7 +114,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 const TopPicks = ({ children }) => (
   <section id="top-picks">
     <h2 className={styles.h2}>
-      <Mark color="turquoise">Our top picks</Mark>
+      <Mark color="#BCFCFF">Our top picks</Mark>
     </h2>
     <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
     {children}
@@ -144,7 +144,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
 const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
     <h3 className={styles.h3}>
-      <Mark color="salmon">Apps we love</Mark>
+      Apps we love
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
       {({ domain, title, description, img, users }) => (
@@ -164,7 +164,7 @@ const AppsWeLove = ({ content }) => (
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections">
     <h3 className={styles.h3}>
-      <Mark color="skyblue">Curated collections</Mark>
+      Curated collections
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))}>
       {({ title, description, fullUrl, users, count, collectionStyle }) => (
