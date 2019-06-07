@@ -32,47 +32,49 @@ function InvitedUser(props) {
   // done, false by default
 
   // resend the invite
-  const resendInvite = async () => {
+  const resendInvite = async (togglePopover) => {
     const { data } = await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
+    togglePopover();
   };
 
   // revoke the invite
-  const revokeInvite = async () => {
+  const revokeInvite = async (togglePopover) => {
     const { data } = await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
+    togglePopover();
   };
   
   return (
     <PopoverContainer>
       {({ visible, togglePopover }) => (
-        <div>
+        <div style={{ position: 'relative' }}>
           <TransparentButton onClick={togglePopover}>
             <UserAvatar user={props.user} />
           </TransparentButton>
 
           {visible && (
-            <PopoverDialog>
-              <PopoverSection>
+            <PopoverDialog align='left'>
+              <PopoverInfo>
                 <UserLink user={props.user}>
                   <UserAvatar user={props.user} />
                   {props.user.name}
                   @{props.user.login}
                 </UserLink>
-              </PopoverSection>
+              </PopoverInfo>
 
-              <PopoverSection>
-                <Button onClick={resendInvite} type='tertiary' hasEmoji small>
+              <PopoverActions>
+                <Button onClick={resendInvite} type='tertiary' size='small' hasEmoji>
                   Resend invite <Emoji name='herb' />
                 </Button>
-              </PopoverSection>
+              </PopoverActions>
 
-              <PopoverSection type='dangerZone'>
+              <PopoverActions type='dangerZone'>
                 <Button onClick={revokeInvite} type='dangerZone' hasEmoji>
                   Remove <Emoji name='wave' />
                 </Button>
-              </PopoverSection>
+              </PopoverActions>
             </PopoverDialog>
           )}
-        </>
+        </div>
       )}
     </PopoverContainer>
   )
@@ -80,6 +82,7 @@ function InvitedUser(props) {
 
 InvitedUser.propTypes = {
   user: PropTypes.object.isRequired,
+  teamId: PropTypes.number.isRequired,
 };
 
 
@@ -205,7 +208,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       )}
       {invitees.map((user) => (
         <li key={user.id} className={styles.invitedMember}>
-          <InvitedUser user={user} />
+          <InvitedUser user={user} teamId={team.id} />
         </li>
       ))}
       {currentUserIsOnTeam && (
