@@ -4,16 +4,6 @@ import { getAvatarStyle, getDisplayName } from 'Models/user';
 
 import styles from './styles.styl';
 
-const Defs = ({ prefix, users, widths }) => (
-  <defs>
-    {users.slice(0, widths.length + 1).map((user, i) => (
-      <pattern key={user.id} id={`${prefix}-${i}`} height={widths[i]} width={widths[i]}>
-        <image xlinkHref={users[i].avatarUrl} width={widths[i]} />
-      </pattern>
-    ))}
-  </defs>
-);
-
 const UserMask = ({ users, config }) => (
   <div className={styles.userMask} 
     style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
@@ -78,14 +68,15 @@ const collectionStyles = {
   },
 };
 
-const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
-  <div className={styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
+const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
+  <a className={styles.curatedCollectionContainer} href={href}>
+    style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
     <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
-  </div>
+  </a>
 );
 
 export default CuratedCollectionContainer;
