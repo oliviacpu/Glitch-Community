@@ -121,7 +121,7 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
+const FeaturedEmbed = ({ content: { domain, title, description, users, href } }) => (
   <figure className={styles.featuredEmbed}>
     <div className={styles.featuredEmbedWrap}>
       <Embed domain={domain} />
@@ -129,16 +129,14 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
         <h3>
-          <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
+          <a href={href} className={styles.plainLink}>
             {title}
           </a>
         </h3>
         {/* eslint-disable-next-line react/no-danger */}
         <div dangerouslySetInnerHTML={{ __html: description }} />
       </div>
-      <div className={styles.featuredEmbedProfileWrap}>
-        <ProfileList layout="row" users={users} />
-      </div>
+      {/* users are included in the embed now, we don't need them in this block */}
     </figcaption>
   </figure>
 );
