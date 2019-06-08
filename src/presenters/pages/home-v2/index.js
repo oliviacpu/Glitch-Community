@@ -80,7 +80,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
-      {hed.split('\n\n').map((line, i) => (
+      {hed.trim().split('\n').map((line, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <h2 key={i}>
           <Mark color="white">{line}</Mark>
