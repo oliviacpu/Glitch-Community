@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import { getAvatarStyle, getDisplayName } from 'Models/user';
 
@@ -69,7 +70,8 @@ const collectionStyles = {
 };
 
 const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
-  <a className={styles.curatedCollectionContainer} href={href}>
+  <a className={classnames(styles.plainLink, styles.curatedCollectionContainer)}
+    href={href}
     style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
     <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>

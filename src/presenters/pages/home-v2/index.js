@@ -128,11 +128,13 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
     </div>
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
-        <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
-          <h3>{title}</h3>
-          {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: description }} />
-        </a>
+        <h3>
+          <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
+            {title}
+          </a>
+        </h3>
+        {/* eslint-disable-next-line react/no-danger */}
+        <div dangerouslySetInnerHTML={{ __html: description }} />
       </div>
       <div className={styles.featuredEmbedProfileWrap}>
         <ProfileList layout="row" users={users} />
@@ -149,6 +151,7 @@ const AppsWeLove = ({ content }) => (
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
       {({ domain, title, description, img, users }) => (
         <>
+          <div className={styles.appsWeLoveProfile}>
           <ProfileList layout="row" users={users} />
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
