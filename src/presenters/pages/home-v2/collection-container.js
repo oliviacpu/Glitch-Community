@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import classnames from 'classnames';
 
 import { getAvatarStyle, getDisplayName } from 'Models/user';
@@ -69,16 +69,25 @@ const collectionStyles = {
   },
 };
 
-const Texture = ({ collectionStyle }) => (
-  <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
-)
+const MAX_ANGLE = 30;
 
+const Texture = ({ collectionStyle }) => {
+  const { current: angle } = useRef(Math.round((Math.random() - 0.5) * MAX_ANGLE));
+  
+  return (
+    <img src={collectionStyles[collectionStyle].texture} 
+      alt="" 
+      className={styles.curatedCollectionTexture} 
+      style={{ transform: `rotate(${angle}deg)` }}
+      />
+  )
+}
 
 const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
   <a className={classnames(styles.plainLink, styles.curatedCollectionContainer)}
     href={href}
     style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
-    <Texture col
+    <Texture collectionStyle={collectionStyle} />
     <div className={styles.curatedCollectionText}>{children}</div>
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
