@@ -90,7 +90,8 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     </div>
     <div className={styles.unifiedStoriesPreview}>
       <h3>{dek}</h3>
-      <p>{summary}</p>
+      {/* eslint-disable-next-line react/no-danger */}
+      <div dangerouslySetInnerHTML={{ __html: summary }} />
       <Button href={href}>
         {cta} <Arrow />
       </Button>
