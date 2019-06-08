@@ -152,7 +152,8 @@ const AppsWeLove = ({ content }) => (
       {({ domain, title, description, img, users }) => (
         <>
           <div className={styles.appsWeLoveProfile}>
-          <ProfileList layout="row" users={users} />
+            <ProfileList layout="row" users={users} />
+          </div>
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
             <h4>{title}</h4>

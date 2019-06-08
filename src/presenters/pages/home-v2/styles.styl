@@ -29,7 +29,6 @@ breakpoint = 800px
   font-size: t4
   margin: 0 0 u2
 
-
 .mark
   display: inline-block
   transform: rotate(-1deg)
@@ -37,12 +36,12 @@ breakpoint = 800px
   left: "-%s" % u1
   z-index: 0
   background-color: var(--mark-color)
-  padding: u05 u1
+  padding: u1 u1 u05
   border-radius: u1
 .markText
   position: relative
   display: inline-block
-  transform: rotate(1deg)  
+  transform: rotate(1deg)
   
 .unmarked
   position: relative
@@ -223,6 +222,7 @@ breakpoint = 800px
     flex: 0 0 u4
 
 .appsWeLoveContainer
+  position: relative
   h4
     margin: u1 0 u05
     font-size: t3
@@ -232,6 +232,11 @@ breakpoint = 800px
     
 .appsWeLoveRow
   --gap: u1
+  
+.appsWeLoveProfile
+  position: relative
+  z-index: 1
+  padding-bottom: 3px
 
 .curatedCollectionContainer
   position: relative

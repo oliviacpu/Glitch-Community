@@ -69,11 +69,16 @@ const collectionStyles = {
   },
 };
 
+const Texture = ({ collectionStyle }) => (
+  <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
+)
+
+
 const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
   <a className={classnames(styles.plainLink, styles.curatedCollectionContainer)}
     href={href}
     style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
-    <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
+    <Texture col
     <div className={styles.curatedCollectionText}>{children}</div>
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
