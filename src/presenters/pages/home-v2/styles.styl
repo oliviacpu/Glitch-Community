@@ -199,13 +199,21 @@ section
     margin: 0 0 u1
     font-size: t2
 
-@media (min-width: largeViewport)    
+@media (min-width: largeViewport)   
+  .unifiedStories
+    flex-direction: row
+    align-items: flex-start
+    flex-wrap: wrap
+  .unifiedStoriesHeadline
+    flex: 0 0 300px
+    margin-right: u4
   .unifiedStoriesPreview
+    flex: 1 1 100px
     margin-top: u4
   .unifiedStoriesRelatedContent
     margin-top: u5
 
-@media (min-width: mediumViewport)
+@media (min-width: mediumViewport) and (max-width: largeViewport)
   .unifiedStories
     flex-direction: row
     align-items: flex-start
