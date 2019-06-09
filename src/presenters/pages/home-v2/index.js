@@ -143,7 +143,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
 
 const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
-    <h3 className={styles.h3}>
+    <h3>
       Apps we love
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
@@ -162,8 +162,8 @@ const AppsWeLove = ({ content }) => (
 );
 
 const CuratedCollections = ({ content }) => (
-  <section id="curated-collections">
-    <h3 className={styles.h3}>
+  <section id="curated-collections" styles={styles.curatedCollectionsContainer}>
+    <h3>
       Curated collections
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))}>
