@@ -33,6 +33,7 @@ smallViewport = 414px
 .h3
   font-size: t4
   margin: 0 0 u3
+  font-weight: 600
   
 .h4
   font-size: t3
@@ -68,7 +69,11 @@ section
   background-size: cover
   background-position: left
   border-radius: u2
-  padding: u4 u5
+  padding: u4
+  margin-top: u2
+  
+  @media(min-width: mediumViewport)
+    padding: u4 u5
   
 .bannerCopy
   padding-bottom: u3
@@ -330,22 +335,25 @@ section
 .fourBlock
   --gap: u1
   --min-width: 200px
+
+.cultureZineRow
+  --min-width: 180px
   
 .cultureZineImageWrap
-  padding: 0 u3 53%
+  padding: 0 0 53%
   height: 0
   
 .cultureZineText
-  margin-top: -20%
+  margin-top: -15%
   padding: 12px
   padding-top: 20%
-  width: 75%
+  width: 90%
   margin-left: auto
   margin-right: auto  
   border-radius: u1
   background-color: bg1
 
-  h3
+  h4
     margin: u1 0
   p
     margin: 0  
