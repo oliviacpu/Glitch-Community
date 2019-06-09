@@ -123,9 +123,6 @@ const TopPicks = ({ children }) => (
 
 const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
   <figure className={styles.featuredEmbed}>
-    <div className={styles.featuredEmbedWrap}>
-      <Embed domain={domain} />
-    </div>
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
         <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
@@ -134,10 +131,10 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
           <div dangerouslySetInnerHTML={{ __html: description }} />
         </a>
       </div>
-      <div className={styles.featuredEmbedProfileWrap}>
-        <ProfileList layout="row" users={users} />
-      </div>
     </figcaption>
+    <div className={styles.featuredEmbedWrap}>
+      <Embed domain={domain} />
+    </div>
   </figure>
 );
 
