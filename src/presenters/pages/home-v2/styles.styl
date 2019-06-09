@@ -63,7 +63,7 @@ section
 .banner
   display: flex
   flex-direction: column
-  align-items: center
+  align-items: flex-start
   color: white
   background-image: url('https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fbanner-background.svg?v=1560047426711')
   background-size: cover
@@ -86,6 +86,7 @@ section
 .bannerVideoWrap
   width: 120%
   max-width: 600px
+  min-width: 300px
   
 .bannerVideoChrome
   background-image: url("https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fbrowser.svg?v=1559921448670")
@@ -110,15 +111,17 @@ section
   background-color: #666
   padding-bottom: 56%
   
-@media (min-width: mediumViewport)
+@media (min-width: largeViewport)
   .banner
     flex-direction: row
     justify-content: flex-end
+    align-items: center
     margin: u5 0
   .bannerCopy
     padding-bottom: 0
     padding-right: u4
   .bannerVideoWrap
+    min-width: 400px
     width: 80%
     margin: "-%s 0" % u5
     
