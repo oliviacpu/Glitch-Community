@@ -183,21 +183,17 @@ const CultureZine = ({ content }) => (
       <Mark color="#CBC3FF">Enter our universe</Mark>
     </h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
-    <Row count={2} items={[{ id: 'left', items: content.slice(0, 2) }, { id: 'right', items: content.slice(2, 4) }]}>
-      {({ items }) => (
-        <Row count={2} items={items}>
-          {({ title, source, img, url }) => (
-            <a href={`/culture${url}`} className={styles.plainLink}>
-              <div className={styles.cultureZineImageWrap}>
-                <MaskImage src={img} />
-              </div>
-              <div className={styles.cultureZineText}>
-                <h3>{title}</h3>
-                <p>{source}</p>
-              </div>
-            </a>
-          )}
-        </Row>
+    <Row items={content} count={4}>
+      {({ title, source, img, url }) => (
+        <a href={`/culture${url}`} className={styles.plainLink}>
+          <div className={styles.cultureZineImageWrap}>
+            <MaskImage src={img} />
+          </div>
+          <div className={styles.cultureZineText}>
+            <h3>{title}</h3>
+            <p>{source}</p>
+          </div>
+        </a>
       )}
     </Row>
   </section>
