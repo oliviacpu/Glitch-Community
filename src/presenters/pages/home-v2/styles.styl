@@ -22,7 +22,8 @@ bg2 = #e5e5e5
 
 tertiary = #636363
 
-breakpoint = 670px
+mediumViewport = 670px
+largeViewport = 900px
 smallViewport = 414px
 
 .h2
@@ -100,7 +101,7 @@ section
   background-color: #666
   padding-bottom: 56%
   
-@media (min-width: breakpoint)
+@media (min-width: mediumViewport)
   .banner
     flex-direction: row
     justify-content: flex-end
@@ -153,7 +154,7 @@ section
   flex-direction: column
   background-color: bg2
   border-radius: u1
-  padding: u3 u4
+  padding: u4
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -176,14 +177,14 @@ section
     margin: u4 0
   
 .unifiedStoriesPreview
-  padding: u3 0
+  margin-right: u4
   h3
     font-size: t5
   p
     line-height: 1.4
 
 .unifiedStoriesRelatedContent
-  margin-top: t5
+  margin-top: u3
   ul
     margin: 0
     padding: 0
@@ -197,17 +198,22 @@ section
   p
     margin: 0 0 u1
     font-size: t2
-    
-@media (min-width: breakpoint)
+
+@media (min-width: largeViewport)    
+  .unifiedStoriesPreview
+    margin-top: u4
+  .unifiedStoriesRelatedContent
+    margin-top: u5
+
+@media (min-width: mediumViewport)
   .unifiedStories
     flex-direction: row
     align-items: flex-start
     flex-wrap: wrap
   .unifiedStoriesHeadline
-    flex: 0 0 300px
+    margin-right: u4
+    flex: 0 0 100%
   .unifiedStoriesPreview
-    padding: 0 u4
-    padding-top: 25px
     flex: 1 1 300px
   .unifiedStoriesRelatedContent
     flex: 0 0 180px
@@ -237,7 +243,7 @@ section
   p + p
     margin-top: u1
   
-@media (min-width: breakpoint)
+@media (min-width: mediumViewport)
   .featuredEmbedCaption
     flex-direction: row
   .featuredEmbedProfileWrap
@@ -336,7 +342,7 @@ section
   h3
     font-size: t5
 
-@media (min-width: breakpoint)
+@media (min-width: mediumViewport)
   .buildingOnGlitchRow
     flex-direction: row
     a
