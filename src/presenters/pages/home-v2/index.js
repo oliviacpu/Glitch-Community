@@ -183,7 +183,7 @@ const CuratedCollections = ({ content }) => (
 const CultureZine = ({ content }) => (
   <section id="enter-our-universe" className={styles.cultureZine}>
     <h2 className={styles.h2}>
-      <Mark color="lavender">Enter our universe</Mark>
+      <Mark color="#CBC3FF">Enter our universe</Mark>
     </h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
     <Row count={2} items={[{ id: 'left', items: content.slice(0, 2) }, { id: 'right', items: content.slice(2, 4) }]}>
@@ -209,7 +209,7 @@ const CultureZine = ({ content }) => (
 const BuildingOnGlitch = ({ content }) => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
-      <Mark color="yellow">Start building on Glitch</Mark>
+      <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
       {content.map(({ href, img, title, description }) => (
