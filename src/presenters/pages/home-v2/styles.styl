@@ -121,6 +121,8 @@ section
   --gap: u4
   margin-left: auto
   margin-right: auto
+  li
+    margin-bottom: 2em
 
 .plainLink
   color: inherit
@@ -307,8 +309,10 @@ section
 
 .curatedCollectionUsers
   flex: 1 0 35%
+  max-height: 200px
   position: relative
-
+  @media (min-width: mediumViewport)
+    flex: 1 0 40%
   
 .userMask
   height: 100%
