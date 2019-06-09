@@ -262,7 +262,7 @@ section
     flex: 0 0 u5
 
 .appsWeLoveContainer
-    
+  margin-top: 2em
   h4
     margin: u1 0 u05
     font-size: t3
@@ -272,6 +272,9 @@ section
     
 .appsWeLoveRow, .curatedCollectionRow
   --gap: u3
+
+.curatedCollectionsContainer
+  margin-top: 2em
 
 .curatedCollectionContainer
   position: relative
@@ -289,6 +292,7 @@ section
   top: -20px
   
 .curatedCollectionText
+  z-index: 1
   flex: 1 1 100%
   display: flex
   flex-direction: column
@@ -296,14 +300,13 @@ section
   a
     white-space: nowrap
   h4
-    font-size: t5
     margin: 0 0 u3
   p
     font-size: t2
     flex: 1 0 auto
 
 .curatedCollectionUsers
-  flex: 1 0 150px
+  flex: 1 0 35%
   position: relative
 
   
@@ -346,13 +349,13 @@ section
   flex-direction: column
   margin: "-%s" % u1
   img
-    height: 100px
+    height: 25%
     width: auto
   a
     display: block
     margin: u1
   h3
-    font-size: t5
+    font-size: t4
 
 @media (min-width: mediumViewport)
   .buildingOnGlitchRow

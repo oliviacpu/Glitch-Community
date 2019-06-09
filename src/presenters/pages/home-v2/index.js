@@ -212,13 +212,16 @@ const BuildingOnGlitch = ({ content }) => (
       <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
-      {content.map(({ href, img, title, description }) => (
+      {content.map(({ href, img, title, description, cta }) => (
         <a key={href} href={href} className={styles.plainLink}>
           <img src={img} alt="" />
           <h3>
-            {title} <Arrow />
+            {title}
           </h3>
           <p>{description}</p>
+          <Button decorative>
+            {cta} <Arrow />
+          </Button>
         </a>
       ))}
     </div>
