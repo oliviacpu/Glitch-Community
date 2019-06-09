@@ -129,7 +129,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
         <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
-          <h3>{title}</h3>
+          <h4 className={styles.h4}>{title}</h4>
           {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: description }} />
         </a>
@@ -146,13 +146,13 @@ const AppsWeLove = ({ content }) => (
     <h3 className={styles.h3}>
       Apps we love
     </h3>
-    <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
+    <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth={"235px"}>
       {({ domain, title, description, img, users }) => (
         <>
           <ProfileList layout="row" users={users} />
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
-            <h4>{title}</h4>
+            <h4 className={styles.h4}>{title}</h4>
             <p>{description}</p>
           </a>
         </>
@@ -169,7 +169,7 @@ const CuratedCollections = ({ content }) => (
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count, collectionStyle }) => (
         <CuratedCollectionContainer collectionStyle={collectionStyle} users={users}>
-          <h4>{title}</h4>
+          <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <Button href={`/@${fullUrl}`}>
             View <Pluralize count={count} singular="project" /> <Arrow />
