@@ -23,6 +23,7 @@ bg2 = #e5e5e5
 tertiary = #636363
 
 breakpoint = 670px
+smallViewport = 414px
 
 .h2
   font-size: t5
@@ -196,16 +197,18 @@ section
   p
     margin: 0 0 u1
     font-size: t2
-  
+    
 @media (min-width: breakpoint)
   .unifiedStories
     flex-direction: row
     align-items: flex-start
+    flex-wrap: wrap
   .unifiedStoriesHeadline
     flex: 0 0 300px
   .unifiedStoriesPreview
     padding: 0 u4
-    flex: 1 1 auto
+    padding-top: 25px
+    flex: 1 1 300px
   .unifiedStoriesRelatedContent
     flex: 0 0 180px
     
