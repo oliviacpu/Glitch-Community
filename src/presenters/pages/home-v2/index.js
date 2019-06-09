@@ -166,7 +166,7 @@ const CuratedCollections = ({ content }) => (
     <h3 className={styles.h3}>
       Curated collections
     </h3>
-    <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))}>
+    <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count, collectionStyle }) => (
         <CuratedCollectionContainer collectionStyle={collectionStyle} users={users}>
           <h4>{title}</h4>
