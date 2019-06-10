@@ -12,7 +12,6 @@ import { createAPIHook } from 'State/api';
 import TeamAnalyticsTimePop from './team-analytics-time-pop';
 import TeamAnalyticsProjectPop from './team-analytics-project-pop';
 import TeamAnalyticsSummary from './team-analytics-summary';
-
 import TeamAnalyticsActivity from './team-analytics-activity';
 import TeamAnalyticsReferrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
@@ -82,21 +81,21 @@ function TeamAnalytics({ id, projects }) {
 
   if (!analytics) {
     return (
-      <section className="team-analytics">
+      <section className={styles.contianer}>
         <Loader />
       </section>
     );
   }
 
   return (
-    <section className="team-analytics">
+    <section className={styles.contianer}>
       <h2>
         Analytics
         {projects.length === 0 && <aside className="inline-banners team-page">Add projects to see their stats</aside>}
       </h2>
 
       {projects.length > 0 && (
-        <section className="controls">
+        <section className={styles.section}>
           <div className="segmented-buttons-wrap">
             <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setActiveFilter} />
           </div>
@@ -107,7 +106,7 @@ function TeamAnalytics({ id, projects }) {
         </section>
       )}
 
-      <section className="summary">
+      <section className={styles.section}>
         <TeamAnalyticsSummary
           currentProjectDomain={currentProjectDomain}
           currentTimeFrame={currentTimeFrame}
@@ -117,31 +116,33 @@ function TeamAnalytics({ id, projects }) {
         />
       </section>
 
-      <section className="activity">
+      <section className={styles.section}>
         <figure id="chart" className="c3" />
         <TeamAnalyticsActivity activeFilter={activeFilter} analytics={analytics} currentTimeFrame={currentTimeFrame} />
       </section>
 
-      <section className="referrers">
+      <section className={styles.section}>
         <h3>Referrers</h3>
         <TeamAnalyticsReferrers activeFilter={activeFilter} analytics={analytics} totalRemixes={totalRemixes} totalAppViews={totalAppViews} />
       </section>
 
       {currentProjectDomain && (
-        <section className="project-details">
+        <section className={styles.section}>
           <h3>Project Details</h3>
           <TeamAnalyticsProjectDetails currentProjectDomain={currentProjectDomain} id={id} activeFilter={activeFilter} />
         </section>
       )}
 
-      <section className="explanation">
-        <Text>
-          Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
-          uniques by adding Google Analytics to your project.
-        </Text>
+      <section className={styles.section}>
+        <div className={styles.explanation}>
+          <Text>
+            Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
+            uniques by adding Google Analytics to your project.
+          </Text>
+        </div>
       </section>
 
-      {!projects.length && <div className="placeholder-mask" />}
+      {!projects.length && <div className={styles.placeholderMask} />}
     </section>
   );
 }
