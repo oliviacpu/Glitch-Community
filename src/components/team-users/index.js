@@ -174,7 +174,7 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
-  const [setInvitee] = useState('');
+  const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitee, setRemovedInvitee] = useState([]);
   const { createNotification } = useNotifications();
