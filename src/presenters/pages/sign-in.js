@@ -15,7 +15,6 @@ import { captureException } from 'Utils/sentry';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import Notification from 'Components/notification';
-import Text from 'Components/text/text';
 import { NestedPopover, NestedPopoverTitle } from '../pop-overs/popover-nested';
 
 class SignIn extends React.Component {
@@ -69,13 +68,13 @@ class SignIn extends React.Component {
               {this.state.done && this.state.error && (
                 <>
                   <Notification persistent inline type="success">Almost Done</Notification>
-                  <Text>Finish signing in from the email sent to {this.state.email}.</Text>
+                  <div>Finish signing in from the email sent to {this.state.email}.</div>
                 </>
               )}
               {this.state.done && !this.state.error && (
                 <>
                   <Notification persistent inline type="error">Error</Notification>
-                  <Text>Something went wrong, email not sent.</Text>
+                  <div>Something went wrong, email not sent.</div>
                 </>
               )}
             </section>
