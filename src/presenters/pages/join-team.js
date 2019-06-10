@@ -31,7 +31,7 @@ class JoinTeamPageBase extends React.Component {
       if (error && error.response.status !== 401) {
         captureException(error);
       }
-      this.props.createErrorNotification('Invite failed, try asking your teammate to resend the invite');
+      this.props.createNotification('Invite failed, try asking your teammate to resend the invite', { type: 'error' });
     }
     this.setState({ redirect: getLink({ url: this.props.teamUrl }) });
   }

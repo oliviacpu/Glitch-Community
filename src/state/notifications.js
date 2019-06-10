@@ -40,40 +40,12 @@ export const NotificationsProvider = (props) => {
       };
     }
 
-    // setNotifications((prevNotifications) => [...prevNotifications, notification]);
     return notification.id;
   };
   
   const createError = (content='Something went wrong. Try refreshing?', opts) => {
     create(content, ...opts);
   }
-
-  // const create = (content, opts = {}) => {
-  //   const { type, inline, persistent } = opts;
-  //   const notification = {
-  //     id: `${Date.now()}{Math.random()}`,
-  //     type: type || 'info',
-  //     persistent,
-  //     inline,
-  //     content,
-  //   };
-  //   setNotifications((prevNotifications) => [...prevNotifications, notification]);
-  //   return notification.id;
-  // };
-
-  // const createPersistent = (content, opts) => {
-  //   const id = create(content, { persistent: true, ...opts });
-  //   const updateNotification = (updatedContent) => {
-  //     setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === id ? { ...n, updatedContent } : n)));
-  //   };
-  //   const removeNotification = () => {
-  //     remove(id);
-  //   };
-  //   return {
-  //     updateNotification,
-  //     removeNotification,
-  //   };
-  // };
 
   const funcs = {
     createNotification: create,
