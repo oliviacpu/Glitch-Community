@@ -22,11 +22,15 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
       {children}
     </aside>
   );
-}
+};
 
-Notification.PropTypes = {
+Notification.propTypes = {
   type: PropTypes.oneOf(['info', 'success', 'error']),
-}
+};
+
+Notification.defaultProps = {
+  type: 'info',
+};
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
   <>

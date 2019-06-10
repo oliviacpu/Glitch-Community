@@ -12,6 +12,7 @@ import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescr
 import AddTeamUserPop from 'Components/team-users/add-team-user';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
+import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
 import { captureException } from 'Utils/sentry';
@@ -163,7 +164,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
       {!!invitee && (
         <li>
-          <Notification inline type='success' onAnimationEnd={removeNotifyInvited}>TODO Invited {invitee}</Notification>
+          <Notification inline type="success" onAnimationEnd={removeNotifyInvited}>
+            TODO Invited {invitee}
+          </Notification>
         </li>
       )}
     </ul>
