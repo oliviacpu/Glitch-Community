@@ -6,20 +6,15 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import { ProjectLink } from 'Components/link';
 import Loader from 'Components/loader';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from '../../models/project';
-import { useAPI } from '../../state/api';
+import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { createAPIHook } from 'State/api';
 
 const RECENT_REMIXES_COUNT = 100;
 
-const getProjectDetails = async (id, api, currentProjectDomain) => {
-  const path = `analytics/${id}/project/${currentProjectDomain}/overview`;
-  try {
-    return await api.get(path);
-  } catch (error) {
-    console.error('getProjectDetails', error);
-  }
-  return null;
-};
+const useProjectDetails = createAPIHook(async (api, id, currentProjectDomain) => {
+  const { data } = api.get(`analytics/${id}/project/${currentProjectDomain}/overview`);
+  return data;
+});
 
 const addFallbackSrc = (event) => {
   event.target.src = FALLBACK_AVATAR_URL;

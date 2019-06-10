@@ -11,6 +11,9 @@ analytics-remix-color = #23d5e7
 .section + .section
   margin-top: 1rem
   
+.content
+  margin-left: 15px
+  
 .explanation p
   max-width: 600px
   font-size: 14px
@@ -25,41 +28,28 @@ analytics-remix-color = #23d5e7
   background: linear-gradient(to bottom, rgba(255,255,255,0.2), white)
   pointer-events: none
   
-.inline-banners
+.inlineBanner
   background-color: section-line
   max-width: 325px
   border-radius: 5px
   padding: 12px
-  position: relative
-    
-  .description
-    margin-bottom: 12px
+  font-size: medium
+  font-weight: normal
+  display: inline
+  margin-left: 10px
+  padding: 5px 10px
+  border-radius: 3px
+
+.segmentedButtonsWrap
+  margin-bottom: 1rem
   
-  .add-project-container
-    margin-bottom: 0
-    margin-top: 1rem
-    
-  &.team-page
-    position: initial
-    font-size: medium
-    font-weight: normal
-    display: inline
-    margin-left: 10px
-    padding: 5px 10px
-    border-radius: 3px
-  
-  &.add-project-to-empty-team-banner
-    background-color: cta
-    .description-container
-      display: flex
-      align-items: center
-    .project-pals
-      margin-right: 6px
-      width: 90px
-    .description
-      margin-top: 0
-      margin-bottom: 0
-  
+.options
+  margin-left: 15px
+  display: flex
+  :global .down-arrow
+    display: inline-block
+  & > *
+    margin-right: 8px
   
 // ---
 

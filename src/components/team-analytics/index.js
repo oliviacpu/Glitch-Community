@@ -91,56 +91,58 @@ function TeamAnalytics({ id, projects }) {
     <section className={styles.contianer}>
       <h2>
         Analytics
-        {projects.length === 0 && <aside className="inline-banners team-page">Add projects to see their stats</aside>}
+        {projects.length === 0 && <aside className={styles.inlineBanner}>Add projects to see their stats</aside>}
       </h2>
 
       {projects.length > 0 && (
         <section className={styles.section}>
-          <div className="segmented-buttons-wrap">
+          <div className={styles.segmentedButtonsWrap}>
             <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setActiveFilter} />
           </div>
-          <div className="options">
+          <div className={styles.options}>
             <TeamAnalyticsProjectPop updateProjectDomain={setCurrentProjectDomain} currentProjectDomain={currentProjectDomain} projects={projects} />
             <TeamAnalyticsTimePop updateTimeFrame={setCurrentTimeFrame} currentTimeFrame={currentTimeFrame} />
           </div>
         </section>
       )}
 
-      <section className={styles.section}>
-        <TeamAnalyticsSummary
-          currentProjectDomain={currentProjectDomain}
-          currentTimeFrame={currentTimeFrame}
-          activeFilter={activeFilter}
-          totalAppViews={totalAppViews}
-          totalRemixes={totalRemixes}
-        />
-      </section>
-
-      <section className={styles.section}>
-        <figure id="chart" className="c3" />
-        <TeamAnalyticsActivity activeFilter={activeFilter} analytics={analytics} currentTimeFrame={currentTimeFrame} />
-      </section>
-
-      <section className={styles.section}>
-        <h3>Referrers</h3>
-        <TeamAnalyticsReferrers activeFilter={activeFilter} analytics={analytics} totalRemixes={totalRemixes} totalAppViews={totalAppViews} />
-      </section>
-
-      {currentProjectDomain && (
+      <div className={styles.content}>
         <section className={styles.section}>
-          <h3>Project Details</h3>
-          <TeamAnalyticsProjectDetails currentProjectDomain={currentProjectDomain} id={id} activeFilter={activeFilter} />
+          <TeamAnalyticsSummary
+            currentProjectDomain={currentProjectDomain}
+            currentTimeFrame={currentTimeFrame}
+            activeFilter={activeFilter}
+            totalAppViews={totalAppViews}
+            totalRemixes={totalRemixes}
+          />
         </section>
-      )}
 
-      <section className={styles.section}>
-        <div className={styles.explanation}>
-          <Text>
-            Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
-            uniques by adding Google Analytics to your project.
-          </Text>
-        </div>
-      </section>
+        <section className={styles.section}>
+          <figure id="chart" className="c3" />
+          <TeamAnalyticsActivity activeFilter={activeFilter} analytics={analytics} currentTimeFrame={currentTimeFrame} />
+        </section>
+
+        <section className={styles.section}>
+          <h3>Referrers</h3>
+          <TeamAnalyticsReferrers activeFilter={activeFilter} analytics={analytics} totalRemixes={totalRemixes} totalAppViews={totalAppViews} />
+        </section>
+
+        {currentProjectDomain && (
+          <section className={styles.section}>
+            <h3>Project Details</h3>
+            <TeamAnalyticsProjectDetails currentProjectDomain={currentProjectDomain} id={id} activeFilter={activeFilter} />
+          </section>
+        )}
+
+        <section className={styles.section}>
+          <div className={styles.explanation}>
+            <Text>
+              Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
+              uniques by adding Google Analytics to your project.
+            </Text>
+          </div>
+        </section>
+      </div>
 
       {!projects.length && <div className={styles.placeholderMask} />}
     </section>
