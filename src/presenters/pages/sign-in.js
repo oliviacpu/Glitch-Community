@@ -11,9 +11,10 @@
 /* globals API_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { captureException } from '../../utils/sentry';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import { captureException } from 'Utils/sentry';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import Notification from 'Components/notification';
 import { NestedPopover, NestedPopoverTitle } from '../pop-overs/popover-nested';
 
 class SignIn extends React.Component {
@@ -66,14 +67,13 @@ class SignIn extends React.Component {
               )}
               {this.state.done && !this.state.error && (
                 <>
-                  <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-                  <div>Finish signing in from the email sent to {this.state.email}.</div>
+                  <Notification persistent inline type="success">Almost Done</Notification>
+                  <Text>Finish signing in from the email sent to {this.state.email}.</Text>
                 </>
               )}
-              {this.state.done && this.state.error && (
+              {this.state.dane && !!this.state.error && (
                 <>
-                  <div className="notification notifyPersistent notifyError">Error</div>
-                  <div>Something went wrong, email not sent.</div>
+                  <Notification persistent inline type="error">Something went wrong, email not sent</Notification>
                 </>
               )}
             </section>
