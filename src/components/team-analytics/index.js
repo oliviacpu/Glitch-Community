@@ -9,7 +9,7 @@ import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Loader from 'Components/loader';
 import { createAPIHook } from 'State/api';
 
-import TeamAnalyticsTimePop from '../pop-overs/team-analytics-time-pop';
+import TeamAnalyticsTimePop from './team-analytics-time-pop';
 import TeamAnalyticsProjectPop from '../pop-overs/team-analytics-project-pop';
 
 import TeamAnalyticsSummary from './team-analytics-summary';
@@ -17,6 +17,7 @@ import TeamAnalyticsActivity from './team-analytics-activity';
 import TeamAnalyticsReferrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
 
+import styles from './styles.styl';
 
 const dateFromTime = (newTime) => {
   const timeMap = {
@@ -56,7 +57,7 @@ function useAnalytics (props) {
   return useAnalyticsData(memoProps);
 }
 
-function TeamAnalyticsBase ({ id, projects }) {
+function TeamAnalytics ({ id, projects }) {
   const [activeFilter, setActiveFilter] = useState('views');
   
   const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 Weeks');
@@ -162,12 +163,12 @@ function TeamAnalyticsBase ({ id, projects }) {
 }
 
 
-TeamAnalyticsBase.propTypes = {
+TeamAnalytics.propTypes = {
   id: PropTypes.number.isRequired,
   projects: PropTypes.array.isRequired,
 };
 
 export default (props) => {
   if (!props.currentUserIsOnTeam) return null 
-  return <TeamAnalyticsBase {...props} />;
+  return <TeamAnalytics {...props} />;
 };
