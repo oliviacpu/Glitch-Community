@@ -14,7 +14,7 @@ const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a03
 
 const DeleteTeamPop = withRouter(({ history, team }) => {
   const api = useAPI();
-  const { createErrorNotification } = useNotifications();
+  const { createNotification } = useNotifications();
   const [teamIsDeleting, setTeamIsDeleting] = useState(false);
 
   async function deleteTeam() {
@@ -25,7 +25,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
       history.push('/');
     } catch (error) {
       console.error('deleteTeam', error, error.response);
-      createErrorNotification('Something went wrong, try refreshing?');
+      createNotification('Something went wrong, try refreshing?', { type: 'error' });
       setTeamIsDeleting(false);
     }
   }

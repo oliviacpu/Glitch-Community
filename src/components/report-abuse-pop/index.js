@@ -50,7 +50,7 @@ const Success = () => (
   <>
     <PopoverTitle>Report Abuse</PopoverTitle>
     <PopoverActions>
-      <Notification type="success">Report Sent</Notification>
+      <Notification persistent type="success">Report Sent</Notification>
       <InfoDescription>
         Thanks for helping to keep Glitch a safe, friendly community <Emoji name="park" />
       </InfoDescription>
