@@ -43,9 +43,9 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   };
 
   const setRandomColor = () => {
-    const color = randomColor({ luminosity: 'light' });
-    if (isGoodColorContrast(color)) {
-      changeColor(color);
+    const newColor = randomColor({ luminosity: 'light' });
+    if (isGoodColorContrast(newColor)) {
+      changeColor(newColor);
       return;
     }
     setRandomColor();
@@ -55,14 +55,22 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
 
   const onChangeHex = (value) => {
     setHex(value);
+
     const formatted = formatAndValidateHex(value);
-    if (formatted) {
-      setColor(formatted);
-      updateColor(formatted);
-      setError(false);
+    if (!formatted) {
+      setError('Invalid Hex');
       return;
     }
-    setError('Invalid Hex');
+
+    const hexIsGoodColorContrast = isGoodColorContrast(value);
+    if (!hexIsGoodColorContrast) {
+      setError('This color might make text hard to read. Try another!');
+      return;
+    }
+
+    setColor(formatted);
+    updateColor(formatted);
+    setError(false);
   };
 
   const keyPress = (e) => {
@@ -79,15 +87,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
         <div className={styles.colorFormWrap}>
           <ColorInput value={color} onChange={onChangeColorPicker} />
           <div className={styles.hexWrap}>
-            <TextInput
-              opaque
-              value={hex}
-              onChange={onChangeHex}
-              onKeyPress={keyPress}
-              placeholder="Hex"
-              labelText="Custom color hex"
-              error={error}
-            />
+            <TextInput opaque value={hex} onChange={onChangeHex} onKeyPress={keyPress} placeholder="Hex" labelText="Custom color hex" error={error} />
           </div>
         </div>
       </PopoverInfo>
