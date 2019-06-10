@@ -1,15 +1,14 @@
-import React, { useRef } from 'react';
-import classnames from 'classnames';
+import React from 'react';
 
 import { getAvatarStyle, getDisplayName } from 'Models/user';
 
 import styles from './styles.styl';
 
 const UserMask = ({ users, config }) => (
-  <div className={styles.userMask} 
-    style={{ paddingBottom: `${100 * config.height / config.width}%` }}>
-    {config.points.slice(0, users.length).map((point, i)=> (
-      <div key={users[i].id} 
+  <div className={styles.userMask} style={{ paddingBottom: `${(100 * config.height) / config.width}%` }}>
+    {config.points.slice(0, users.length).map((point, i) => (
+      <div
+        key={users[i].id}
         className={styles.userMaskBubbleWrap}
         aria-label={getDisplayName(users[i])}
         style={{
@@ -31,13 +30,13 @@ const collectionStyles = {
     width: 109,
     height: 153,
     points: [
-      {"x":35,"y":0,"d":40},
-      {"x":77,"y":29,"d":32},
-      {"x":10,"y":40,"d":32},
-      {"x":42,"y":65,"d":32},
-      {"x":0,"y":86,"d":42},
-      {"x":49,"y":102,"d":51}
-    ]
+      { x: 35, y: 0, d: 40 },
+      { x: 77, y: 29, d: 32 },
+      { x: 10, y: 40, d: 32 },
+      { x: 42, y: 65, d: 32 },
+      { x: 0, y: 86, d: 42 },
+      { x: 49, y: 102, d: 51 },
+    ],
   },
   diagonal: {
     color: 'yellow',
@@ -69,30 +68,14 @@ const collectionStyles = {
   },
 };
 
-const MAX_ANGLE = 30;
-
-const Texture = ({ collectionStyle }) => {
-  const { current: angle } = useRef(Math.round((Math.random() - 0.5) * MAX_ANGLE));
-  
-  return (
-    <img src={collectionStyles[collectionStyle].texture} 
-      alt="" 
-      className={styles.curatedCollectionTexture} 
-      style={{ transform: `rotate(${angle}deg)` }}
-      />
-  )
-}
-
-const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
-  <a className={classnames(styles.plainLink, styles.curatedCollectionContainer)}
-    href={href}
-    style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
-    <Texture collectionStyle={collectionStyle} />
+const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
+  <div className={styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
+    <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
-  </a>
+  </div>
 );
 
 export default CuratedCollectionContainer;

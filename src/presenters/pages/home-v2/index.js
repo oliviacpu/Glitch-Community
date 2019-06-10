@@ -80,12 +80,15 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
-      {hed.trim().split('\n').map((line, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <h2 key={i}>
-          <Mark color="white">{line}</Mark>
-        </h2>
-      ))}
+      {hed
+        .trim()
+        .split('\n')
+        .map((line, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <h2 key={i}>
+            <Mark color="white">{line}</Mark>
+          </h2>
+        ))}
       <img src={featuredImage} alt={featuredImageDescription} />
     </div>
     <div className={styles.unifiedStoriesPreview}>
@@ -122,7 +125,7 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const FeaturedEmbed = ({ content: { domain, title, description, users, href } }) => (
+const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
   <figure className={styles.featuredEmbed}>
     <div className={styles.featuredEmbedWrap}>
       <Embed domain={domain} />

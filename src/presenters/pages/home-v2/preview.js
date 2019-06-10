@@ -1,12 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { pick } from 'lodash';
 import { withRouter } from 'react-router-dom';
 
 import DataLoader from 'Components/data-loader';
 import Button from 'Components/buttons/button';
 import { useAPI } from 'State/api';
-import { getAllPages, allByKeys } from 'Shared/api';
 
 import Layout from '../../layout';
 import { Home } from './index';
@@ -34,7 +32,7 @@ const PreviewBanner = withRouter(({ history, data }) => {
 
 const HomePreview = () => (
   <Layout>
-    <DataLoader get={() => axios.get('https://ablaze-peacock.glitch.me/home.json').then(res => res.data)}>
+    <DataLoader get={() => axios.get('https://ablaze-peacock.glitch.me/home.json').then((res) => res.data)}>
       {(data) => (
         <>
           <PreviewBanner data={data} />
