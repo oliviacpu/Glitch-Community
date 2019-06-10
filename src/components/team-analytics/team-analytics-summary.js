@@ -13,4 +13,10 @@ const SummaryItem = ({ total, type, label }) => (
   </span>
 );
 
+SummaryItem.propTypes = {
+  total: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
 export default SummaryItem;
