@@ -1,12 +1,12 @@
 // transforms the individual data points (buckets) we get from the api into grouped 'bins' of data
 // each bin is then rendered as a point on the graph
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { isEmpty } from 'lodash';
 import groupByTime from 'group-by-time';
-import { histogram } from 'd3-array';
+import { histogram as d3Histogram } from 'd3-array';
 import { createAPIHook } from 'State/api';
 
 const useC3 = createAPIHook(async () => import(/* webpackChunkName: "c3-bundle" */ 'c3'));
@@ -36,7 +36,7 @@ const createHistogram = (bins) => {
   return histogram;
 };
 
-const groupByRegularIntervals = histogram().value((data) => data['@timestamp']);
+const groupByRegularIntervals = d3Histogram().value((data) => data['@timestamp']);
 
 const createBins = (buckets, currentTimeFrame) => {
   if (currentTimeFrame === 'Last 24 Hours') {
@@ -122,7 +122,7 @@ const renderChart = (activeFilter, c3, analytics, currentTimeFrame) => {
   }
 };
 
-function TeamAnalyticsActivity ({ activeFilter, analytics, currentTimeFrame }) {
+function TeamAnalyticsActivity({ activeFilter, analytics, currentTimeFrame }) {
   const { value: c3 } = useC3();
   useEffect(() => {
     if (!c3) return;

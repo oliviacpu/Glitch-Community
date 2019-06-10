@@ -10,9 +10,9 @@ import Loader from 'Components/loader';
 import { createAPIHook } from 'State/api';
 
 import TeamAnalyticsTimePop from './team-analytics-time-pop';
-import TeamAnalyticsProjectPop from '../pop-overs/team-analytics-project-pop';
-
+import TeamAnalyticsProjectPop from './team-analytics-project-pop';
 import TeamAnalyticsSummary from './team-analytics-summary';
+
 import TeamAnalyticsActivity from './team-analytics-activity';
 import TeamAnalyticsReferrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
@@ -34,7 +34,7 @@ const dateFromTime = (newTime) => {
   return timeMap[newTime];
 };
 
-function getSampleAnalytics () {
+function getSampleAnalytics() {
   const data = cloneDeep(sampleAnalytics);
   // Update timestamps so they're relative to now
   data.buckets.forEach((bucket) => {
@@ -45,38 +45,41 @@ function getSampleAnalytics () {
 
 const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, currentProjectDomain }) => {
   if (!projects.length) return getSampleAnalytics();
-  
+
   const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
   const { data } = await api.get(path);
   return data;
 });
 
-function useAnalytics (props) {
+function useAnalytics(props) {
   // make an object with a stable identity so it can be used as single argumnent to api hook
   const memoProps = useMemo(() => props, Object.values(props));
   return useAnalyticsData(memoProps);
 }
 
-function TeamAnalytics ({ id, projects }) {
+function TeamAnalytics({ id, projects }) {
   const [activeFilter, setActiveFilter] = useState('views');
-  
+
   const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 Weeks');
   const fromDate = useMemo(() => dateFromTime(currentTimeFrame), [currentTimeFrame]);
-  
+
   const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
-  
-  const { status: analyticsStatus, value: analytics, error } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
+
+  const { value: analytics, error } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
   if (error) console.error('getAnalytics', error);
-  
+
   const buckets = analytics ? analytics.buckets : [];
-  const { totalAppViews, totalRemixes } = useMemo(() => ({
-    totalAppViews: sumBy(buckets, (bucket) => bucket.analytics.visits),
-    totalRemixes: sumBy(buckets, (bucket) => bucket.analytics.remixes),
-  }), [buckets]);
-    
+  const { totalAppViews, totalRemixes } = useMemo(
+    () => ({
+      totalAppViews: sumBy(buckets, (bucket) => bucket.analytics.visits),
+      totalRemixes: sumBy(buckets, (bucket) => bucket.analytics.remixes),
+    }),
+    [buckets],
+  );
+
   // segmented button filters
   const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
-  
+
   if (!analytics) {
     return (
       <section className="team-analytics">
@@ -89,9 +92,7 @@ function TeamAnalytics ({ id, projects }) {
     <section className="team-analytics">
       <h2>
         Analytics
-        {projects.length === 0 && (
-          <aside className="inline-banners team-page">Add projects to see their stats</aside>
-        )}
+        {projects.length === 0 && <aside className="inline-banners team-page">Add projects to see their stats</aside>}
       </h2>
 
       {projects.length > 0 && (
@@ -100,11 +101,7 @@ function TeamAnalytics ({ id, projects }) {
             <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setActiveFilter} />
           </div>
           <div className="options">
-            <TeamAnalyticsProjectPop
-              updateProjectDomain={setCurrentProjectDomain}
-              currentProjectDomain={currentProjectDomain}
-              projects={projects}
-            />
+            <TeamAnalyticsProjectPop updateProjectDomain={setCurrentProjectDomain} currentProjectDomain={currentProjectDomain} projects={projects} />
             <TeamAnalyticsTimePop updateTimeFrame={setCurrentTimeFrame} currentTimeFrame={currentTimeFrame} />
           </div>
         </section>
@@ -122,31 +119,18 @@ function TeamAnalytics ({ id, projects }) {
 
       <section className="activity">
         <figure id="chart" className="c3" />
-        <TeamAnalyticsActivity
-          activeFilter={activeFilter}
-          analytics={analytics}
-          currentTimeFrame={currentTimeFrame}
-        />
+        <TeamAnalyticsActivity activeFilter={activeFilter} analytics={analytics} currentTimeFrame={currentTimeFrame} />
       </section>
 
       <section className="referrers">
         <h3>Referrers</h3>
-        <TeamAnalyticsReferrers
-          activeFilter={activeFilter}
-          analytics={analytics}
-          totalRemixes={totalRemixes}
-          totalAppViews={totalAppViews}
-        />
+        <TeamAnalyticsReferrers activeFilter={activeFilter} analytics={analytics} totalRemixes={totalRemixes} totalAppViews={totalAppViews} />
       </section>
-      
+
       {currentProjectDomain && (
         <section className="project-details">
           <h3>Project Details</h3>
-          <TeamAnalyticsProjectDetails
-            currentProjectDomain={currentProjectDomain}
-            id={id}
-            activeFilter={activeFilter}
-          />
+          <TeamAnalyticsProjectDetails currentProjectDomain={currentProjectDomain} id={id} activeFilter={activeFilter} />
         </section>
       )}
 
@@ -162,13 +146,12 @@ function TeamAnalytics ({ id, projects }) {
   );
 }
 
-
 TeamAnalytics.propTypes = {
   id: PropTypes.number.isRequired,
   projects: PropTypes.array.isRequired,
 };
 
 export default (props) => {
-  if (!props.currentUserIsOnTeam) return null 
+  if (!props.currentUserIsOnTeam) return null;
   return <TeamAnalytics {...props} />;
 };

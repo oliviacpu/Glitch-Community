@@ -15,21 +15,9 @@ const AllProjectsItem = ({ active, onClick }) => (
   </ResultItem>
 );
 
-AllProjectsItem.propTypes = {
-  currentProjectDomain: PropTypes.string.isRequired,
-  action: PropTypes.func.isRequired,
-};
-
-const isActive = (currentProjectDomain, project) => {
-  if (currentProjectDomain === project.domain) {
-    return true;
-  }
-  return false;
-};
-
 const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) => {
   const [filter, setFilter] = useState('');
-  
+
   const filteredProjects = useMemo(() => {
     const filtered = projects.filter(({ domain }) => domain.toLowerCase().includes(filter.toLowerCase()));
     filtered.unshift({ id: 'all-projects' });
@@ -46,18 +34,17 @@ const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) 
         onSubmit={(project) => updateProjectDomain(project.domain)}
         label="Filter projects"
         placeholder="Filter projects"
-        renderItem={({ item: project, active }) => project.domain ? (
-          <ProjectResultItem 
-            project={project} 
-            onClick={() => updateProjectDomain(project.domain)}
-            active={active || currentProjectDomain === project.domain}
-          />
-        ) : (
-          <AllProjectsItem  
-            active={active || !currentProjectDomain}
-            onClick={() => updateProjectDomain('')} 
-          />  
-        )}
+        renderItem={({ item: project, active }) =>
+          project.domain ? (
+            <ProjectResultItem
+              project={project}
+              onClick={() => updateProjectDomain(project.domain)}
+              active={active || currentProjectDomain === project.domain}
+            />
+          ) : (
+            <AllProjectsItem active={active || !currentProjectDomain} onClick={() => updateProjectDomain('')} />
+          )
+        }
       />
     </PopoverDialog>
   );
@@ -68,14 +55,20 @@ const Dropdown = () => <div className="down-arrow" aria-label="options" />;
 const TeamAnalyticsProjectPop = ({ projects, updateProjectDomain, currentProjectDomain }) => (
   <PopoverWithButton
     buttonProps={{ size: 'small', type: 'tertiary' }}
-    buttonText={currentProjectDomain ? <>Project: {currentProjectDomain} <Dropdown /></> : <>All Projects <Dropdown /></>}
+    buttonText={
+      currentProjectDomain ? (
+        <>
+          Project: {currentProjectDomain} <Dropdown />
+        </>
+      ) : (
+        <>
+          All Projects <Dropdown />
+        </>
+      )
+    }
   >
     {({ toggleAndCall }) => (
-      <ProjectSearch
-        projects={projects}
-        updateProjectDomain={toggleAndCall(updateProjectDomain)}
-        currentProjectDomain={currentProjectDomain}
-      />
+      <ProjectSearch projects={projects} updateProjectDomain={toggleAndCall(updateProjectDomain)} currentProjectDomain={currentProjectDomain} />
     )}
   </PopoverWithButton>
 );

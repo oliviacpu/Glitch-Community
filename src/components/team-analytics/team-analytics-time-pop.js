@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/popover';
 import ResultsList, { ResultItem, ResultInfo } from 'Components/containers/results-list';
 
-const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours'].map(id => ({ id }));
+const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours'].map((id) => ({ id }));
 
 const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => (
   <PopoverDialog align="left">
