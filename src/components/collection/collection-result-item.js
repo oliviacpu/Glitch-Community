@@ -14,7 +14,10 @@ import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
 
 const CollectionResultItemBase = ({ onClick, collection, active }) => (
-  <div className={classnames(styles.collectionResult, active && styles.active)}>
+  <div 
+    className={classnames(styles.collectionResult, active && styles.active)}
+    aria-label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
+  >
     <TransparentButton onClick={onClick}>
       <div className={styles.resultWrap}>
         <div className={styles.avatarWrap}>

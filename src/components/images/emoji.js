@@ -53,22 +53,24 @@ const EMOJIS = {
  * Emoji Component
  */
 
-const Emoji = ({ name, inTitle }) => {
+const Emoji = ({ name, inTitle, alt }) => {
   const classNameObj = { emoji: true, [name]: true, inTitle };
 
   const className = cx(classNameObj);
 
-  return <img className={className} src={EMOJIS[name]} alt={name} />;
+  return <img className={className} src={EMOJIS[name]} alt={alt} />;
 };
 
 Emoji.propTypes = {
   /** element(s) to display in the button */
   name: PropTypes.oneOf(Object.keys(EMOJIS)).isRequired,
   inTitle: PropTypes.bool,
+  alt: PropTypes.string,
 };
 
 Emoji.defaultProps = {
   inTitle: false,
+  alt: '',
 };
 
 export default Emoji;
