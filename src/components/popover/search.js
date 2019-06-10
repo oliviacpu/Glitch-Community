@@ -80,7 +80,7 @@ function PopoverSearch({
   const { inputRef, activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
 
   return (
-    <form onKeyDown={onKeyDown}>
+    <form onKeyDown={onKeyDown}>{/* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions */}
       <PopoverInfo>
         <TextInput
           ref={inputRef}
