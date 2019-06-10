@@ -174,7 +174,7 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
-  const [invitee, setInvitee] = useState('');
+  const [setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitee, setRemovedInvitee] = useState([]);
   const { createNotification } = useNotifications();
@@ -192,7 +192,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     try {
       await inviteUser(user);
       setInvitee(getDisplayName(user));
-      createNotification(`Invited ${invitee}!`, 'notifySuccess');
+      createNotification(`Invited ${getDisplayName(user)}!`, 'notifySuccess');
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
@@ -203,13 +203,10 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     setInvitee(email);
     try {
       await inviteEmail(email);
+      createNotification(`Invited ${email}!`, 'notifySuccess');
     } catch (error) {
       captureException(error);
     }
-  };
-
-  const removeNotifyInvited = () => {
-    setInvitee('');
   };
 
   return (
@@ -243,12 +240,6 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       {currentUserCanJoinTeam && (
         <li className={styles.joinButtonWrap}>
           <JoinTeam onClick={joinTeam} />
-        </li>
-      )}
-
-      {!!invitee && (
-        <li>
-          
         </li>
       )}
     </ul>
