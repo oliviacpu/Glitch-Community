@@ -557,5 +557,4 @@ storiesOf('Notification', module)
   ))
   .add('persistent', () => <Notification persistent>This notification will be here forever</Notification>)
   .add('success', () => <Notification type="success">Success!</Notification>)
-  .add('error', () => <Notification type="error">Something went wrong</Notification>)
-  .add('uploader', () => <Notification uploading />);
+  .add('error', () => <Notification type="error">Something went wrong</Notification>);
