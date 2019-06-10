@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo, createRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { mapValues, keyBy } from 'lodash';
 
 import Loader from 'Components/loader';
 import Emoji from 'Components/images/emoji';
@@ -10,28 +9,20 @@ import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './
 
 function useActiveIndex(items, onSelect) {
   const inputRef = useRef();
-  // map of all item ids -> ref, so they can be focused
-  const resultsListRefs = useMemo(
-    () => mapValues(keyBy(items, (item) => item.id), () => createRef()),
-    [items]);
-
   const [activeIndex, setActiveIndex] = useState(-1);
   // reset activeIndex when text changes
   useEffect(() => {
     setActiveIndex(-1);
   }, [items]);
-  
-  // focus item at active index (or input) when it changes
+
+  // focus input when there's no active index
   useEffect(() => {
     if (activeIndex === -1) {
       inputRef.current.focus();
-    } else {
-      const activeItem = items[activeIndex];
-      resultsListRefs[activeItem.id].current.focus();
     }
   }, [activeIndex]);
-  
-  
+
+
   const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -56,7 +47,7 @@ function useActiveIndex(items, onSelect) {
       }
     }
   };
-  return { inputRef, resultsListRefs, onKeyDown };
+  return { inputRef, activeIndex, onKeyDown };
 }
 
 const PopoverLoader = () => (
@@ -86,7 +77,7 @@ function PopoverSearch({
   labelText,
   placeholder,
 }) {
-  const { inputRef, resultsListRefs, onKeyDown } = useActiveIndex(results, onSubmit);
+  const { inputRef, activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
 
   return (
     <form onKeyDown={onKeyDown}>
@@ -105,7 +96,7 @@ function PopoverSearch({
       {results.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={results}>
-            {(item) => renderItem({ item, onSubmit, ref: resultsListRefs[item.id] })}
+            {(item, i) => renderItem({ item, onSubmit, active: i === activeIndex })}
           </ResultsList>
         </PopoverSection>
       )}

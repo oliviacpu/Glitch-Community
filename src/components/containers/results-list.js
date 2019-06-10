@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -33,17 +33,15 @@ ResultsList.defaultProps = {
 
 export default ResultsList;
 
-export const ResultItem = forwardRef(({ className, onClick, href, children }, ref) => {
+export const ResultItem = ({ className, onClick, href, children, active }) => {
   const buttonRef = useRef();
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      buttonRef.current.focus();
-    }
-  }), [buttonRef]);
-  
+  useEffect(() => {
+    if (active) buttonRef.current.focus();
+  }, [active]);
+
   return (
     <div className={classnames(className, styles.resultItem, href && styles.withLink)}>
-      <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={ref}>
+      <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={buttonRef}>
         <div className={styles.resultWrap}>
           {children}
         </div>
@@ -57,8 +55,8 @@ export const ResultItem = forwardRef(({ className, onClick, href, children }, re
       )}
     </div>
   );
-});
-  
+};
+
 const withClass = (Component, baseClassName) => ({ children, className, ...props }) => (
   <Component className={classnames(className, baseClassName)} {...props}>
     {children}

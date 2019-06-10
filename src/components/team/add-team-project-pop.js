@@ -2,10 +2,8 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
-import ResultsList from 'Components/containers/results-list';
 import ProjectResultItem from 'Components/project/project-result-item';
 import Emoji from 'Components/images/emoji';
-import TextInput from 'Components/inputs/text-input';
 import { useCurrentUser } from 'State/current-user';
 
 const filterProjects = (query, projects, teamProjects) => {
@@ -48,8 +46,8 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
         labelText="Project name"
         placeholder="Filter my projects"
         renderItem={
-          ({ item: project, ref }) => (
-            <ProjectResultItem ref={ref} onClick={() => addProject(project)} project={project} />
+          ({ item: project, active }) => (
+            <ProjectResultItem active={active} onClick={() => addProject(project)} project={project} />
           )
         }
       />
