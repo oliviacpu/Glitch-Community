@@ -11,7 +11,7 @@ import { createAPIHook } from 'State/api';
 
 import TeamAnalyticsTimePop from './team-analytics-time-pop';
 import TeamAnalyticsProjectPop from './team-analytics-project-pop';
-import TeamAnalyticsSummary from './team-analytics-summary';
+import SummaryItem from './team-analytics-summary';
 import TeamAnalyticsActivity from './team-analytics-activity';
 import Referrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
@@ -108,13 +108,8 @@ function TeamAnalytics({ id, projects }) {
 
       <div className={styles.content}>
         <section className={styles.section}>
-          <TeamAnalyticsSummary
-            currentProjectDomain={currentProjectDomain}
-            currentTimeFrame={currentTimeFrame}
-            activeFilter={activeFilter}
-            totalAppViews={totalAppViews}
-            totalRemixes={totalRemixes}
-          />
+          {activeFilter === 'views' && <SummaryItem total={totalAppViews} type="requests" label="App Views" />}
+          {activeFilter === 'remixes' && <SummaryItem total={totalRemixes} type="remixes" label="Remixes" />}
         </section>
 
         <section className={styles.section}>

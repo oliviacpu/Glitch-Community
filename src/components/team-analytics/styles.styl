@@ -50,6 +50,10 @@ analytics-remix-color = #23d5e7
     display: inline-block
   & > *
     margin-right: 8px
+    
+.bentoBox
+  width: 35px
+  height: 35px
 
 .projectDetails
   font-size: 14px
@@ -113,61 +117,11 @@ analytics-remix-color = #23d5e7
   list-style-type: none
   font-size: 14px
     
-    
-// ---
-
-.team-analytics
-  position: relative
-  section
-    margin-top: 1rem    
-    
-  .segmented-buttons-wrap
-    margin-bottom: 1rem
-
-  .controls
-    margin: 0
-    
-    .options
-      margin-left: 15px
-      .down-arrow
-        display: inline-block
-    
-    .button-wrap
-      margin-right: 0.5rem
-      
-  .summary, .activity, .referrers, .project-details, .explanation, .project-remixes-container
-    margin-left: 15px
-    
-  .total
-    border-radius: 3px
-    padding: 3px 5px
-    color: primary-background
-    &.app-views    
-      background-color: analytics-app-views-color
-    &.remixes
-      background-color: analytics-remix-color
-    
-  .activity
-    margin-bottom: 0
-
-  
-  .referrers
-    margin-top: 1rem
-    
-  h3
-    margin-top: 0
-
-  h4
-    margin: 0
-    margin-left: 1rem
-
-  .project-details
-    
-      
-  .controls,
-  .project-details
-    button
-      margin-left: 0
-  
-  .project-remixes a
-    display: inline-block
+.summaryItem .total
+  border-radius: 3px
+  padding: 3px 5px
+  color: primary-background
+  &.requests    
+    background-color: analytics-app-views-color
+  &.remixes
+    background-color: analytics-remix-color
