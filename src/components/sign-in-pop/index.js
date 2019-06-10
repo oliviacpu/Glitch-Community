@@ -277,9 +277,9 @@ const LoginSection = ({ showForgotPassword }) => {
       // leave working=true because logging in will hide the sign in pop
       login(data);
     } catch (error) {
-      const message = error.response && error.response.data && error.response.data.message;
-      if (message.status === 401) {
-        
+      let message = error.response && error.response.data && error.response.data.message;
+      if (error.response.status === 401) {
+        message = "Failed to sign in, try again?";
       }
       setErrorMessage(message || 'Failed to sign in, try again?');
       setWorking(false);
