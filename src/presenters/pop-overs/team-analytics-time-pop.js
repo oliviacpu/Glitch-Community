@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PopoverWithButton from './popover-with-button';
+import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/popover';
 
 const TimeFrameItem = ({ selectTimeFrame, isActive, timeFrame }) => {
   let resultClass = 'result button-unstyled';
@@ -31,8 +31,9 @@ const TeamAnalyticsTimePop = (props) => {
   };
 
   return (
-    <dialog className="pop-over analytics-time-pop" ref={props.focusFirstElement}>
-      <section className="pop-over-actions last-section results-list">
+    <PopoverDialog align="left">
+      <PopoverSection>
+        <ResultsList items={ime}
         <div className="results">
           {timeFrames.map((timeFrame) => (
             <TimeFrameItem
@@ -43,7 +44,7 @@ const TeamAnalyticsTimePop = (props) => {
             />
           ))}
         </div>
-      </section>
+      </PopoverSection>
     </dialog>
   );
 };
@@ -58,19 +59,18 @@ const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => {
   const dropdown = <div className="down-arrow" aria-label="options" />;
   return (
     <PopoverWithButton
-      buttonClass="button-small button-tertiary button-select"
+      buttonProps={{ size: 'small', type: 'tertiary' }}
       buttonText={
         <>
           {currentTimeFrame} {dropdown}
         </>
       }
     >
-      {({ togglePopover, focusFirstElement }) => (
+      {({ togglePopover }) => (
         <TeamAnalyticsTimePop
           updateTimeFrame={updateTimeFrame}
           currentTimeFrame={currentTimeFrame}
           togglePopover={togglePopover}
-          focusFirstElement={focusFirstElement}
         />
       )}
     </PopoverWithButton>

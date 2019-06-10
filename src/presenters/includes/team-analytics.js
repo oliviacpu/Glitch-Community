@@ -46,7 +46,8 @@ const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, cur
   if (!projects.length) return getSampleAnalytics();
   
   const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
-  return api.get(path);
+  const { data } = await api.get(path);
+  return data;
 });
 
 function useAnalytics (props) {
@@ -127,7 +128,7 @@ function TeamAnalyticsBase ({ id, projects }) {
         />
       </section>
 
-      {/*<section className="referrers">
+      <section className="referrers">
         <h3>Referrers</h3>
         <TeamAnalyticsReferrers
           activeFilter={activeFilter}
@@ -135,7 +136,7 @@ function TeamAnalyticsBase ({ id, projects }) {
           totalRemixes={totalRemixes}
           totalAppViews={totalAppViews}
         />
-      </section>*/}
+      </section>
       
       {currentProjectDomain && (
         <section className="project-details">
