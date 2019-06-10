@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
-import TransparentButton from 'Components/buttons/transparent-button';
-import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
-import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/results-list';
+import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import VisibilityContainer from 'Components/visibility-container';
 import { createAPIHook } from 'State/api';
 import { getSingleItem } from 'Shared/api';
@@ -43,12 +40,13 @@ const ProfileItemWrap = ({ collection }) => (
   </div>
 );
 
-const CollectionResultItem = ({ onClick, collection, active, label }) => (
+const CollectionResultItem = ({ onClick, collection, active }) => (
   <ResultItem
     active={active}
+    onClick={onClick}
     href={`/@${collection.fullUrl}`}
     label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
-    >
+  >
     <div className={styles.avatarWrap}>
       <CollectionAvatar color={collection.coverColor} />
     </div>

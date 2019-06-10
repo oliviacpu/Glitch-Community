@@ -5,7 +5,6 @@ import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
-import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import {
   PopoverWithButton,
@@ -42,10 +41,6 @@ const collectionTypeOptions = [
   },
 ];
 
-const NoSearchResultsPlaceholder = () => <InfoDescription>No matching collections found – add to a new one?</InfoDescription>;
-
-const NoCollectionPlaceholder = () => <InfoDescription>Create collections to organize your favorite projects.</InfoDescription>;
-
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
     <div className={styles.popoverTitleWrap}>
@@ -70,7 +65,7 @@ const AddProjectToCollectionResultItem = ({ onClick, collection, active }) => {
 };
 
 const AlreadyInCollection = ({ project, collections }) => (
-  <PopoverInfo>
+  <InfoDescription>
     <strong>{project.domain}</strong> is already in <Pluralize count={collections.length} showCount={false} singular="collection" />{' '}
     {collections
       .slice(0, 3)
@@ -89,8 +84,18 @@ const AlreadyInCollection = ({ project, collections }) => (
         <Pluralize count={collections.length - 3} singular="other" showCount={false} />
       </>
     )}
-  </PopoverInfo>
+  </InfoDescription>
 );
+
+const NoResults = ({ project, collectionsWithProject, query }) => {
+  if (collectionsWithProject.length) {
+    return <AlreadyInCollection project={project} collections={collectionsWithProject} />;
+  }
+  if (query.length > 0) {
+    return <InfoDescription>No matching collections found – add to a new one?</InfoDescription>;
+  }
+  return <InfoDescription>Create collections to organize your favorite projects.</InfoDescription>;
+};
 
 function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
@@ -147,24 +152,10 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         renderItem={
           ({ item: collection, active, onClick }) => <AddProjectToCollectionResultItem active={active} onClick={onClick} collection={collection} />
         }
-        renderError={
-          
-        }
+        renderNoResults={() => (
+          <PopoverInfo><NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} /></PopoverInfo>
+        )}
       />
-
-      {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
-
-      {collections.length === 0 && collectionsWithProject.length === 0 && query.length > 0 && (
-        <PopoverInfo>
-          <NoSearchResultsPlaceholder />
-        </PopoverInfo>
-      )}
-
-      {collections.length === 0 && collectionsWithProject.length === 0 && query.length === 0 && (
-        <PopoverInfo>
-          <NoCollectionPlaceholder />
-        </PopoverInfo>
-      )}
 
       <PopoverActions>
         <Button size="small" type="tertiary" onClick={createCollectionPopover}>
