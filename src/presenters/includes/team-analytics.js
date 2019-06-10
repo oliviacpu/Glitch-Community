@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import _ from 'lodash';
@@ -16,7 +16,7 @@ import TeamAnalyticsActivity from './team-analytics-activity';
 import TeamAnalyticsReferrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
 
-import { useAPI } from '../../state/api';
+import { createAPIHook } from 'State/api';
 
 const dateFromTime = (newTime) => {
   const timeMap = {
@@ -33,12 +33,8 @@ const dateFromTime = (newTime) => {
   return timeMap[newTime];
 };
 
-const getAnalytics = async ({ id, api, projects, fromDate, currentProjectDomain }) => {
-  
-};
-
-const useAnalytics = createAPIHook(async (api, id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam) => {
-  
+const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam }) => {
+  if (!currentUserIsOnTeam) return null
   
   if (!projects.length) {
     const data = _.cloneDeep(sampleAnalytics);
@@ -61,9 +57,21 @@ const useAnalytics = createAPIHook(async (api, id, projects, fromDate, currentPr
   return null;
 });
 
+function useAnalytics (props) {
+  // make an object with a stable identity so it can be used as single argumnent to api hook
+  const memoProps = useMemo(() => props, Object.values(props));
+  return useAnalyticsData(memoProps);
+}
+
+function TeamAnalytics ({ id, projects, currentUserIsOnTeam }) {
+  const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 weeks');
+  const fromDate = dateFromTime(currentTimeFrame)
+  
+  const { status, value } = useAnalytics({ id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam });
+}
 
 
-class TeamAnalytics extends React.Component {
+class _TeamAnalytics extends React.Component {
   constructor(props) {
     super(props);
     const currentTimeFrame = 'Last 2 Weeks';
@@ -83,7 +91,7 @@ class TeamAnalytics extends React.Component {
 
   componentDidMount() {
     // eslint-disable-next-line
-    import(/* webpackChunkName: "c3-bundle" */ 'c3').then((c3) => {
+    _import(/* webpackChunkName: "c3-bundle" */ 'c3').then((c3) => {
       this.setState({
         c3,
         isGettingC3: false,
