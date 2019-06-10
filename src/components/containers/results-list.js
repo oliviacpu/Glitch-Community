@@ -6,7 +6,6 @@ import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 import styles from './results-list.styl';
 
-
 const ResultsList = ({ scroll, items, className, children }) => (
   <div className={classnames(scroll && styles.scrollContainer, className)}>
     <ul className={styles.resultsList}>
@@ -36,7 +35,11 @@ export default ResultsList;
 export const ResultItem = ({ className, onClick, href, children, active }) => {
   const buttonRef = useRef();
   useEffect(() => {
-    if (active) buttonRef.current.focus();
+    if (active) {
+      setTimeout(() => {
+        buttonRef.current.focus();
+      }, 0);
+    }
   }, [active]);
 
   return (

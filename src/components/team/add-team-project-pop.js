@@ -45,6 +45,7 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
         results={filteredProjects}
         labelText="Project name"
         placeholder="Filter my projects"
+        status="ready"
         renderItem={
           ({ item: project, active }) => (
             <ProjectResultItem active={active} onClick={() => addProject(project)} project={project} />

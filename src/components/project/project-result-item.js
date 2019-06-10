@@ -28,11 +28,13 @@ const ProfileListWithData = ({ project }) => {
 };
 
 const ProfileListWrap = ({ project }) => (
-  <VisibilityContainer>
-    {({ wasEverVisible }) => (
-      wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" size="small" />
-    )}
-  </VisibilityContainer>
+  <div className={styles.profileListWrap}>
+    <VisibilityContainer>
+      {({ wasEverVisible }) => (
+        wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" size="small" />
+      )}
+    </VisibilityContainer>
+  </div>
 );
 
 const ProjectResultItem = ({ project, active, onClick }) => (
