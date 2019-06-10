@@ -89,7 +89,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       <img src={featuredImage} alt={featuredImageDescription} />
     </div>
     <div className={styles.unifiedStoriesPreview}>
-      <h3>{dek}</h3>
+      <h3 className={styles.h3}>{dek}</h3>
       <p>{summary}</p>
       <Button href={href}>
         {cta} <Arrow />
