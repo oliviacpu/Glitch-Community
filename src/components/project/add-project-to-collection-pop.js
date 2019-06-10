@@ -15,11 +15,10 @@ import {
   InfoDescription,
   PopoverInfo,
   PopoverActions,
-  PopoverSection,
+  PopoverSearch,
 } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
-import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -105,13 +104,13 @@ function useCollectionSearch(query, project, collectionType) {
     [searchResults.collection, project.id, collectionType],
   );
 
-  return { collections, collectionsWithProject };
+  return { status: searchResults.status, collections, collectionsWithProject };
 }
 
 export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
   const [collectionType, setCollectionType] = useState('user');
   const [query, setQuery] = useState('');
-  const { collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
+  const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
 
@@ -126,8 +125,6 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     togglePopover();
   };
 
-  const { activeIndex, onKeyDown } = useActiveIndex(collections, addProjectTo);
-
   return (
     <PopoverDialog wide align="right">
       {/* Only show this nested popover title from project-options */}
@@ -139,30 +136,21 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         </PopoverActions>
       )}
 
-      <PopoverInfo>
-        <TextInput
-          autoFocus
-          value={query}
-          onChange={setQuery}
-          onKeyDown={onKeyDown}
-          placeholder="Filter collections"
-          labelText="Filter collections"
-          opaque
-          type="search"
-        />
-      </PopoverInfo>
-
-      {collections.length > 0 && (
-        <PopoverSection>
-          <ResultsList items={collections} scroll>
-            {(collection, i) => (
-              <ScrollResult active={activeIndex === i}>
-                <AddProjectToCollectionResultItem active={activeIndex === i} onClick={() => addProjectTo(collection)} collection={collection} />
-              </ScrollResult>
-            )}
-          </ResultsList>
-        </PopoverSection>
-      )}
+      <PopoverSearch
+        value={query}
+        onChange={setQuery}
+        status={status}
+        results={collections}
+        onSubmit={addProjectTo}
+        placeholder="Filter collections"
+        labelText="Filter collections"
+        renderItem={
+          ({ item: collection, active, onClick }) => <AddProjectToCollectionResultItem active={active} onClick={onClick} collection={collection} />
+        }
+        renderError={
+          
+        }
+      />
 
       {collectionsWithProject.length > 0 && <AlreadyInCollection project={project} collections={collectionsWithProject} />}
 

@@ -6,7 +6,7 @@ import Markdown from 'Components/text/markdown';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
-import { ResultItem, ResultName, ResultDescription } from 'Components/results-list';
+import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/results-list';
 import VisibilityContainer from 'Components/visibility-container';
 import { createAPIHook } from 'State/api';
 import { getSingleItem } from 'Shared/api';
@@ -33,56 +33,35 @@ const ProfileItemWithData = ({ collection }) => {
   return <ProfileItem {...curator} size="small" />;
 };
 
-const ProfileItemWrap = ({ project }) => (
+const ProfileItemWrap = ({ collection }) => (
   <div className={styles.profileItemWrap}>
     <VisibilityContainer>
       {({ wasEverVisible }) => (
-        wasEverVisible ? <ProfileItemWithData project={project} /> : <ProfileItem size="small" />
+        wasEverVisible ? <ProfileItemWithData collection={collection} /> : <ProfileItem size="small" />
       )}
     </VisibilityContainer>
   </div>
 );
 
-
-const CollectionResultItem = ({ onClick, collection, active }) => (
+const CollectionResultItem = ({ onClick, collection, active, label }) => (
   <ResultItem
-    active={styles.active}
-    href={href={`/@${collection.fullUrl}`}}
+    active={active}
+    href={`/@${collection.fullUrl}`}
     label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
     >
     <div className={styles.avatarWrap}>
       <CollectionAvatar color={collection.coverColor} />
     </div>
-    
+    <ResultInfo>
+      <ResultName>{collection.name}</ResultName>
+      {collection.description.length > 0 && (
+        <ResultDescription>
+          <Markdown renderAsPlaintext>{collection.description}</Markdown>
+        </ResultDescription>
+      )}
+      <ProfileItemWrap collection={collection} />
+    </ResultInfo>
   </ResultItem>
-  
-  
-  <div 
-    className={classnames(styles.collectionResult, active && styles.active)}
-    aria-label=
-  >
-    <TransparentButton onClick={onClick}>
-      <div className={styles.resultWrap}>
-        
-        <div className={styles.resultInfo}>
-          <div className={styles.resultName}>{collection.name}</div>
-          {collection.description.length > 0 && (
-            <div className={styles.resultDescription}>
-              <Markdown renderAsPlaintext>{collection.description}</Markdown>
-            </div>
-          )}
-          <div className={styles.profileListWrap}>
-            <ProfileItem team={collection.team} user={collection.user} size="small" />
-          </div>
-        </div>
-      </div>
-    </TransparentButton>
-    <div className={styles.linkButtonWrap}>
-      <Button size="small" href={`/@${collection.fullUrl}`} newTab>
-        View →
-      </Button>
-    </div>
-  </div>
 );
 
 CollectionResultItem.propTypes = {
