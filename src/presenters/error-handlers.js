@@ -16,7 +16,7 @@ function handleErrorForInput(notify, error) {
 function handleCustomError(notify, error) {
   console.error(error);
   if (error && error.response && error.response.data) {
-    notify(error.response.data.message, 'notifyError');
+    notify(error.response.data.message, { type: 'error' });
   }
   return Promise.reject(error);
 }
