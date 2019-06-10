@@ -177,12 +177,13 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitee, setRemovedInvitee] = useState([]);
+  const { createNotification } = useNotifications();
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = (value || []).concat(newlyInvited).filter(removedInvitee);
+  const invitees = (value || []).concat(newlyInvited).filter((el) => (el !== removedInvitee));
 
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
@@ -191,6 +192,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     try {
       await inviteUser(user);
       setInvitee(getDisplayName(user));
+      createNotification(`Invited ${invitee}!`, 'notifySuccess');
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
@@ -246,9 +248,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
       {!!invitee && (
         <li>
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
-            Invited {invitee}
-          </div>
+          
         </li>
       )}
     </ul>
