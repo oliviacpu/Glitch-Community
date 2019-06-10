@@ -7,6 +7,10 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import groupByTime from 'group-by-time';
 import * as d3Array from 'd3-array';
+import { createAPIHook } from 'State/api';
+
+const useC3 = createAPIHook(async () => _import(/* webpackChunkName: "c3-bundle" */ 'c3'));
+
 
 const createHistogram = (bins) => {
   const histogram = [];

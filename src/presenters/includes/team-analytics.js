@@ -46,6 +46,7 @@ const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, cur
   if (!projects.length) return getSampleAnalytics();
   
   const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
+  return api.get(path);
 
   try {
     const { data } = await api.get(path);
@@ -62,8 +63,6 @@ function useAnalytics (props) {
   return useAnalyticsData(memoProps);
 }
 
-const useC3 = createAPIHook(async () => _import(/* webpackChunkName: "c3-bundle" */ 'c3'));
-
 function TeamAnalyticsBase ({ id, projects }) {
   const [activeFilter, setActiveFilter] = useState('views');
   
@@ -72,119 +71,104 @@ function TeamAnalyticsBase ({ id, projects }) {
   
   const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
   
-  const { status: analyticsStatus, value: analytics } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
+  const { status: analyticsStatus, value: analytics, error } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
+  if (error) console.error('getAnalytics', error);
+  
   const { totalAppViews, totalRemixes } = useMemo(() => ({
     totalAppViews: sumBy(analytics.buckets, (bucket) => bucket.analytics.visits),
     totalRemixes: sumBy(analytics.buckets, (bucket) => bucket.analytics.remixes),
   }), [analytics]);
-  
-  const { status: c3Status, value: c3 } = useC3();
-}
+    
+  // segmented button filters
+  const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
 
-
-
-
-class _TeamAnalytics extends React.Component {
-  
-
-  render() {
-    if (!this.props.currentUserIsOnTeam) {
-      return null;
-    }
-
-    // segmented button filters
-    const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
-
-    return (
-      <section className="team-analytics">
-        <h2>
-          Analytics
-          {this.props.projects.length === 0 && !this.state.isGettingData && (
-            <aside className="inline-banners team-page">Add projects to see their stats</aside>
-          )}
-        </h2>
-
-        {!!this.props.projects.length && (
-          <section className="controls">
-            <div className="segmented-buttons-wrap">
-              <SegmentedButtons value={this.state.activeFilter} buttons={buttons} onChange={this.setFilter.bind(this)} />
-            </div>
-            <div className="options">
-              <TeamAnalyticsProjectPop
-                updateProjectDomain={this.updateProjectDomain.bind(this)}
-                currentProjectDomain={this.state.currentProjectDomain}
-                projects={this.props.projects}
-              />
-              <TeamAnalyticsTimePop updateTimeFrame={this.updateTimeFrame.bind(this)} currentTimeFrame={this.state.currentTimeFrame} />
-            </div>
-          </section>
+  return (
+    <section className="team-analytics">
+      <h2>
+        Analytics
+        {projects.length === 0 && analyticsStatus === 'ready' && (
+          <aside className="inline-banners team-page">Add projects to see their stats</aside>
         )}
+      </h2>
 
-        <section className="summary">
-          {this.state.isGettingData ? (
-            <Loader />
-          ) : (
-            <TeamAnalyticsSummary
-              currentProjectDomain={this.state.currentProjectDomain}
-              currentTimeFrame={this.state.currentTimeFrame}
-              activeFilter={this.state.activeFilter}
-              totalAppViews={this.state.totalAppViews}
-              totalRemixes={this.state.totalRemixes}
+      {projects.length > 0 && (
+        <section className="controls">
+          <div className="segmented-buttons-wrap">
+            <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setActiveFilter} />
+          </div>
+          <div className="options">
+            <TeamAnalyticsProjectPop
+              updateProjectDomain={setCurrentProjectDomain}
+              currentProjectDomain={currentProjectDomain}
+              projects={projects}
             />
-          )}
+            <TeamAnalyticsTimePop updateTimeFrame={setCurrentTimeFrame} currentTimeFrame={currentTimeFrame} />
+          </div>
         </section>
+      )}
 
-        <section className="activity">
-          <figure id="chart" className="c3" />
-          {(this.state.isGettingData || this.state.isGettingC3) && <Loader />}
-          {!this.state.isGettingC3 && (
-            <TeamAnalyticsActivity
-              activeFilter={this.state.activeFilter}
-              c3={this.state.c3}
-              analytics={this.state.analytics}
-              isGettingData={this.state.isGettingData}
-              currentTimeFrame={this.state.currentTimeFrame}
-            />
-          )}
-        </section>
-
-        <section className="referrers">
-          <h3>Referrers</h3>
-          {(this.state.isGettingData && <Loader />) || (
-            <TeamAnalyticsReferrers
-              activeFilter={this.state.activeFilter}
-              analytics={this.state.analytics}
-              totalRemixes={this.state.totalRemixes}
-              totalAppViews={this.state.totalAppViews}
-            />
-          )}
-        </section>
-
-        {this.state.currentProjectDomain && (
-          <section className="project-details">
-            <h3>Project Details</h3>
-            <TeamAnalyticsProjectDetails
-              currentProjectDomain={this.state.currentProjectDomain}
-              id={this.props.id}
-              activeFilter={this.state.activeFilter}
-            />
-          </section>
+      <section className="summary">
+        {analyticsStatus === 'loading' ? (
+          <Loader />
+        ) : (
+          <TeamAnalyticsSummary
+            currentProjectDomain={currentProjectDomain}
+            currentTimeFrame={currentTimeFrame}
+            activeFilter={activeFilter}
+            totalAppViews={totalAppViews}
+            totalRemixes={totalRemixes}
+          />
         )}
-
-        <section className="explanation">
-          <Text>
-            Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
-            uniques by adding Google Analytics to your project.
-          </Text>
-        </section>
-
-        {!this.props.projects.length && <div className="placeholder-mask" />}
       </section>
-    );
-  }
+
+      <section className="activity">
+        <figure id="chart" className="c3" />
+        <TeamAnalyticsActivity
+          activeFilter={activeFilter}
+          analytics={analytics}
+          currentTimeFrame={currentTimeFrame}
+        />
+      </section>
+
+      <section className="referrers">
+        <h3>Referrers</h3>
+        {analyticsStatus === 'loading' ? (
+          <Loader /> 
+        ) : (
+          <TeamAnalyticsReferrers
+            activeFilter={activeFilter}
+            analytics={analytics}
+            totalRemixes={totalRemixes}
+            totalAppViews={totalAppViews}
+          />
+        )}
+      </section>
+
+      {currentProjectDomain && (
+        <section className="project-details">
+          <h3>Project Details</h3>
+          <TeamAnalyticsProjectDetails
+            currentProjectDomain={currentProjectDomain}
+            id={id}
+            activeFilter={activeFilter}
+          />
+        </section>
+      )}
+
+      <section className="explanation">
+        <Text>
+          Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
+          uniques by adding Google Analytics to your project.
+        </Text>
+      </section>
+
+      {!projects.length && <div className="placeholder-mask" />}
+    </section>
+  );
 }
 
-TeamAnalytics.propTypes = {
+
+TeamAnalyticsBase.propTypes = {
   id: PropTypes.number.isRequired,
   projects: PropTypes.array.isRequired,
 };
