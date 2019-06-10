@@ -9,6 +9,8 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
+import Text from 'Components/text/text';
+import Notification from 'Components/notification';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
@@ -142,15 +144,18 @@ const EmailHandler = ({ showView }) => {
         )}
         {status === 'done' && (
           <>
-            TODO figure out what's going on here
-            <div className="notification notifyPersistent notifySuccess">Almost Done</div>
-            <div>Finish signing in from the email sent to {email}.</div>
+            <Notification persistent type="success">
+              Almost Done
+            </Notification>
+            <Text>Finish signing in from the email sent to {this.state.email}.</Text>
           </>
         )}
         {status === 'error' && (
           <>
-            <div className="notification notifyPersistent notifyError">Error</div>
-            <div>{submitError}</div>
+            <Notification persisten type="error">
+              Error
+            </Notification>
+            <Text>Something went wrong, email not sent.</Text>
           </>
         )}
       </PopoverActions>

@@ -15,6 +15,7 @@ import { captureException } from 'Utils/sentry';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import Notification from 'Components/notification';
+import Text from 'Components/text/text';
 import { NestedPopover, NestedPopoverTitle } from '../pop-overs/popover-nested';
 
 class SignIn extends React.Component {
