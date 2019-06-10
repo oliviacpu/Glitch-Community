@@ -5,15 +5,12 @@ import Markdown from 'Components/text/markdown';
 import { ProfileItem } from 'Components/profile-list';
 import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import VisibilityContainer from 'Components/visibility-container';
+import VisuallyHidden from 'Components/containers/visually-hidden';
 import { createAPIHook } from 'State/api';
 import { getSingleItem } from 'Shared/api';
 
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
-
-const VisuallyHidden = ({ children, as: Component }) => (
-  <div></div>
-);
 
 const useCurator = createAPIHook(async (api, collection) => {
   if (collection.userIDs.length) {
@@ -33,7 +30,7 @@ const ProfileItemWithData = ({ collection }) => {
   const { value: curator } = useCurator(collection);
   return (
     <>
-      {curator.team || curator.user ? (<VisuallyHidden>by</VisuallyHidden>) : null}
+      {curator ? (<VisuallyHidden>by</VisuallyHidden>) : null}
       <ProfileItem {...curator} size="small" />
     </>
   )
@@ -54,7 +51,6 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
     active={active}
     onClick={onClick}
     href={`/@${collection.fullUrl}`}
-    //label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
   >
     <div className={styles.avatarWrap}>
       <CollectionAvatar color={collection.coverColor} />
@@ -64,7 +60,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
       <ResultName>{collection.name}</ResultName>
       {collection.description.length > 0 && (
         <ResultDescription>
-          <VisuallyHidden>with descripttion</VisuallyHidden>
+          <VisuallyHidden>with description</VisuallyHidden>
           <Markdown renderAsPlaintext>{collection.description}</Markdown>
         </ResultDescription>
       )}

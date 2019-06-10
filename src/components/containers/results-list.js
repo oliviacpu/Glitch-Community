@@ -43,7 +43,7 @@ export const ResultItem = ({ className, onClick, href, children, active, label }
   }, [active]);
 
   return (
-    <div 
+    <div
       className={classnames(className, styles.resultItem, href && styles.withLink)}
       aria-label={label}
     >
