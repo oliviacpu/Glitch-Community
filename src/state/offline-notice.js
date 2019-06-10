@@ -7,7 +7,8 @@ const PersistentNotification = ({ children }) => {
 
   useEffect(
     () => {
-      const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
+      // const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
+      const { removeNotification } = createNotification(<><span>test</span> <progress value=".3"/></>, { uploading: true, persistent: true });
       return removeNotification;
     },
     [children],
@@ -28,8 +29,8 @@ const OfflineNotice = () => {
       window.removeEventListener('online', onNetwork);
     };
   }, []);
-
-  if (!online) {
+  
+  if (online) {
     return <PersistentNotification>It looks like you're offline</PersistentNotification>;
   }
   return null;
