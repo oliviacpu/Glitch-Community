@@ -7,14 +7,14 @@ import styles from './styles.styl';
 
 const cx = classNames.bind(styles);
 
-const Notification = ({ children, type, persistent, inline, remove }) => {
-  console.log(type);
+const Notification = ({ children, type, persistent, inline, remove, uploading }) => {
   const className = cx({
     notification: true,
     success: type === 'success',
     error: type === 'error',
     persistent,
     inline,
+    uploading,
   });
 
   return (
@@ -26,10 +26,16 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
 Notification.propTypes = {
   type: PropTypes.oneOf(['info', 'success', 'error']),
+  persistent: PropTypes.boolean,
+  inline: PropTypes.boolean,
+  uploading: PropTypes.boolean,
 };
 
 Notification.defaultProps = {
   type: 'info',
+  persistent: false,
+  inline: false,
+  uploading: false,
 };
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (

@@ -20,10 +20,10 @@ const NotifyError = ({ error }) => {
 async function uploadWrapper(notifications, upload) {
   let result = null;
   let progress = 0;
-  const { updateNotification, removeNotification } = notifications.createPersistentNotification(
-    <NotifyUploading progress={progress} />,
-    'notifyUploading',
-  );
+  const { updateNotification, removeNotification } = notifications.createNotification(<NotifyUploading progress={progress} />, {
+    persistent: true,
+    uploading: true,
+  });
   try {
     result = await upload(({ lengthComputable, loaded, total }) => {
       if (lengthComputable) {
@@ -35,7 +35,7 @@ async function uploadWrapper(notifications, upload) {
     });
   } catch (error) {
     captureException(error);
-    notifications.createErrorNotification(<NotifyError error={error} />);
+    notifications.createNotification(<NotifyError error={error} />, { type: 'error' });
     removeNotification();
     return result;
   }

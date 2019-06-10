@@ -10,16 +10,23 @@ export const useNotifications = () => React.useContext(context);
 export const NotificationsProvider = (props) => {
   const [notifications, setNotifications] = useState([]);
 
+  const remove = (id) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
+  };
+
   const create = (content, opts = {}) => {
-    const { type, inline, persistent } = opts;
+    const { type, inline, persistent, uploading } = opts;
     const notification = {
       id: `${Date.now()}{Math.random()}`,
       type: type || 'info',
       persistent,
       inline,
       content,
+      uploading,
     };
-
+    
+    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+    
     if (notification.persistent) {
       const updateNotification = (updatedContent) => {
         setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, updatedContent } : n)));
@@ -33,7 +40,7 @@ export const NotificationsProvider = (props) => {
       };
     }
 
-    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+    // setNotifications((prevNotifications) => [...prevNotifications, notification]);
     return notification.id;
   };
 
@@ -49,10 +56,6 @@ export const NotificationsProvider = (props) => {
   //   setNotifications((prevNotifications) => [...prevNotifications, notification]);
   //   return notification.id;
   // };
-
-  const remove = (id) => {
-    setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
-  };
 
   // const createPersistent = (content, opts) => {
   //   const id = create(content, { persistent: true, ...opts });
