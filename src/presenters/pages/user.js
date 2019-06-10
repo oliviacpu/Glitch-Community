@@ -126,6 +126,7 @@ const UserPage = ({
             description={user.description}
             update={updateDescription}
             placeholder="Tell us about yourself"
+            onBlur={}
           />
         </UserProfileContainer>
       </section>
