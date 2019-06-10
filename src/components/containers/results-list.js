@@ -32,7 +32,7 @@ ResultsList.defaultProps = {
 
 export default ResultsList;
 
-export const ResultItem = ({ className, onClick, href, children, active }) => {
+export const ResultItem = ({ className, onClick, href, children, active, label }) => {
   const buttonRef = useRef();
   useEffect(() => {
     if (active) {
@@ -43,7 +43,10 @@ export const ResultItem = ({ className, onClick, href, children, active }) => {
   }, [active]);
 
   return (
-    <div className={classnames(className, styles.resultItem, href && styles.withLink)}>
+    <div 
+      className={classnames(className, styles.resultItem, href && styles.withLink)}
+      aria-label={label}
+    >
       <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={buttonRef}>
         <div className={styles.resultWrap}>
           {children}

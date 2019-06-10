@@ -11,6 +11,10 @@ import { getSingleItem } from 'Shared/api';
 import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
 
+const VisuallyHidden = ({ children, as: Component }) => (
+  <div></div>
+);
+
 const useCurator = createAPIHook(async (api, collection) => {
   if (collection.userIDs.length) {
     const id = collection.userIDs[0];
@@ -27,7 +31,12 @@ const useCurator = createAPIHook(async (api, collection) => {
 
 const ProfileItemWithData = ({ collection }) => {
   const { value: curator } = useCurator(collection);
-  return <ProfileItem {...curator} size="small" />;
+  return (
+    <>
+      {curator.team || curator.user ? (<VisuallyHidden>by</VisuallyHidden>) : null}
+      <ProfileItem {...curator} size="small" />
+    </>
+  )
 };
 
 const ProfileItemWrap = ({ collection }) => (
@@ -51,9 +60,11 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
       <CollectionAvatar color={collection.coverColor} />
     </div>
     <ResultInfo>
+      <VisuallyHidden>Add to collection</VisuallyHidden>
       <ResultName>{collection.name}</ResultName>
       {collection.description.length > 0 && (
         <ResultDescription>
+          <VisuallyHidden>with descripttion</VisuallyHidden>
           <Markdown renderAsPlaintext>{collection.description}</Markdown>
         </ResultDescription>
       )}
