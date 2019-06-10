@@ -13,7 +13,7 @@ const addProject = (addProjectToCollection, project, collection, collectionPath,
   addProjectToCollection(project, collection).then(() => {
     // show notification
     const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={collectionPath} />;
-    notification(content, { type: 'success' });
+    notification(content, { type: 'success', persistent: true });
   });
 
   togglePopover();
