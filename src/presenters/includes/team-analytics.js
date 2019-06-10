@@ -34,6 +34,12 @@ const dateFromTime = (newTime) => {
 };
 
 const getAnalytics = async ({ id, api, projects, fromDate, currentProjectDomain }) => {
+  
+};
+
+const useAnalytics = createAPIHook(async (api, id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam) => {
+  
+  
   if (!projects.length) {
     const data = _.cloneDeep(sampleAnalytics);
     // Update timestamps so they're relative to now
@@ -53,7 +59,9 @@ const getAnalytics = async ({ id, api, projects, fromDate, currentProjectDomain 
     console.error('getAnalytics', error);
   }
   return null;
-};
+});
+
+
 
 class TeamAnalytics extends React.Component {
   constructor(props) {
