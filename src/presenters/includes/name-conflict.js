@@ -20,13 +20,16 @@ NameConflictWarning.propTypes = {
 
 export function useNameConflict() {
   const { currentUser } = useCurrentUser();
-  const { createPersistentNotification } = useNotifications();
-  useEffect(() => {
-    const notification = createPersistentNotification(<NameConflictWarning id={currentUser.id} />);
-    return () => {
-      notification.removeNotification();
-    };
-  }, [currentUser.id]);
+  const { createNotification } = useNotifications();
+  useEffect(
+    () => {
+      const notification = createNotification(<NameConflictWarning id={currentUser.id} />, { persistent: true });
+      return () => {
+        notification.removeNotification();
+      };
+    },
+    [currentUser.id],
+  );
 }
 
 function NameConflict() {

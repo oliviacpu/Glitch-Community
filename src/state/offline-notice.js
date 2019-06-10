@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useNotifications } from 'State/notifications';
 
 const PersistentNotification = ({ children }) => {
-  const { createPersistentNotification } = useNotifications();
+  const { createNotification } = useNotifications();
 
   useEffect(
     () => {
-      const { removeNotification } = createPersistentNotification(children, { type: 'error' });
+      const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
       return removeNotification;
     },
     [children],
