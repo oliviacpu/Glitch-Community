@@ -16,12 +16,12 @@ function useActiveIndex(items, onSelect) {
     [items]);
 
   const [activeIndex, setActiveIndex] = useState(-1);
-  // reset
+  // reset activeIndex when text changes
   useEffect(() => {
     setActiveIndex(-1);
   }, [items]);
   
-  // set 
+  // focus item at active index (or input) when it changes
   useEffect(() => {
     if (activeIndex === -1) {
       inputRef.current.focus();
@@ -56,7 +56,7 @@ function useActiveIndex(items, onSelect) {
       }
     }
   };
-  return { activeIndex, onKeyDown };
+  return { inputRef, resultsListRefs, onKeyDown };
 }
 
 const PopoverLoader = () => (
@@ -86,7 +86,7 @@ function PopoverSearch({
   labelText,
   placeholder,
 }) {
-  const { inputRef, resultsListRefs } = useActiveIndex(results, onSubmit);
+  const { inputRef, resultsListRefs, onKeyDown } = useActiveIndex(results, onSubmit);
 
   return (
     <form onKeyDown={onKeyDown}>
