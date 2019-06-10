@@ -10,7 +10,7 @@ import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './
 function useActiveIndex(items, onSelect) {
   const inputRef = useRef();
   const [activeIndex, setActiveIndex] = useState(-1);
-  // reset activeIndex when text changes
+  // reset activeIndex when items change
   useEffect(() => {
     setActiveIndex(-1);
   }, [items]);
@@ -22,38 +22,38 @@ function useActiveIndex(items, onSelect) {
     }
   }, [activeIndex]);
 
-
-  const onKeyDown = (e) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActiveIndex((prev) => {
-        if (prev < 0) {
-          return items.length - 1;
-        }
-        return prev - 1;
-      });
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActiveIndex((prev) => {
-        if (prev === items.length - 1) {
-          return -1;
-        }
-        return prev + 1;
-      });
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (items[activeIndex]) {
-        onSelect(items[activeIndex]);
-      }
-    }
-  };
-
   useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex((prev) => {
+          if (prev < 0) {
+            return items.length - 1;
+          }
+          return prev - 1;
+        });
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex((prev) => {
+          if (prev === items.length - 1) {
+            return -1;
+          }
+          return prev + 1;
+        });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (items[activeIndex]) {
+          onSelect(items[activeIndex]);
+        }
+      }
+    };
+
+    // TODO: should these be bound to a container instead of the window?
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, []);
+  }, [items]);
 
   return { inputRef, activeIndex };
 }
@@ -86,7 +86,6 @@ function PopoverSearch({
   placeholder,
 }) {
   const { inputRef, activeIndex } = useActiveIndex(results, onSubmit);
-
   return (
     <>
       <PopoverInfo>
