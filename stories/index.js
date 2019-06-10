@@ -295,7 +295,7 @@ storiesOf('TeamItem', module).add('base', () => (
 ));
        
 storiesOf('TeamUsers', module)
-  .add('Maybe logged in?', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
+  .add('base', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
 
 storiesOf('SearchResultCoverBar', module)
   .add('user', () => (
