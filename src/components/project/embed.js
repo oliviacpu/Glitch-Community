@@ -44,7 +44,7 @@ const Embed = ({ domain }) => (
       // Error message if JS not supported
       // TODO(sheridan): Refactor this once we have a true error component
       <div>
-        <Image src={telescopeImageUrl} width="35%" />
+        <Image src={telescopeImageUrl} width="35%" alt="" />
         <div>
           <h2>The web browser you're using is missing some important Javascript features</h2>
           <p>To use this app, please try applying your latest system updates, or try again with a different web browser.</p>
