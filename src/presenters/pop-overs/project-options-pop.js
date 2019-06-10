@@ -110,44 +110,44 @@ const ProjectOptionsContent = (props) => {
 
       {props.displayNewNote && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiral_note_pad" />
+          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" buttonProps={{ hasEmoji: true }} emoji="spiral_note_pad" />
         </section>
       )}
 
       {props.addProjectToCollection && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " buttonProps={{ hasEmoji: true }} emoji="framed-picture" />
         </section>
       )}
 
       {props.joinTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={props.joinTeamProject} text="Join Project " emoji="rainbow" />
+          <PopoverButton onClick={props.joinTeamProject} text="Join Project " buttonProps={{ hasEmoji: true }} emoji="rainbow" />
         </section>
       )}
 
       {props.leaveTeamProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveTeamProject} text="Leave Project " buttonProps={{ hasEmoji: true }} emoji="wave" />
         </section>
       )}
 
       {props.leaveProject && (
         <section className="pop-over-actions collaborator-actions">
-          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " emoji="wave" />
+          <PopoverButton onClick={onClickLeaveProject} text="Leave Project " buttonProps={{ hasEmoji: true }} emoji="wave" />
         </section>
       )}
 
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
           {props.removeProjectFromTeam && (
-            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} buttonProps={{ hasEmoji: true }} text="Remove Project " emoji="thumbs_down" />
           )}
 
-          {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
+          {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} buttonProps={{ hasEmoji: true }} text="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
-            <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbs_down" />
+            <PopoverButton onClick={props.removeProjectFromCollection} buttonProps={{ hasEmoji: true }} text="Remove from Collection" emoji="thumbs_down" />
           )}
         </section>
       )}
