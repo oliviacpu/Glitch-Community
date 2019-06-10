@@ -74,6 +74,19 @@ analytics-remix-color = #23d5e7
   height: 16px
   margin-right: 3px
   vertical-align: text-bottom
+
+.referrersContent
+  display: flex
+  @media (max-width: smallViewport)
+    display: block
+  
+  progress
+    display: block
+    width: 100%
+    margin-top: 2px
+    margin-bottom: 0.5rem
+    height: 5px
+    
     
 // ---
 
@@ -111,20 +124,11 @@ analytics-remix-color = #23d5e7
   .activity
     margin-bottom: 0
 
-  progress
-    display: block
-    width: 100%
-    margin-top: 2px
-    margin-bottom: 0.5rem
-    height: 5px
-    
+  
   .referrers
     margin-top: 1rem
 
-  .referrers-content
-    display: flex
-    @media (max-width: smallViewport)
-      display: block
+  
     
   .referrers-column
     width: calc(50% - 20px) // change to 33% when new col added
