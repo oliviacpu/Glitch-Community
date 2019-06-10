@@ -19,9 +19,9 @@ const AccountSettingsOverlay = () => {
 
   const [page, setPage] = useState('password');
   const [userHasPassword, setUserHasPassword] = useState(false);
-  
+
   const primaryEmail = currentUser.emails.find((email) => email.primary);
-  
+
   useEffect(() => {
     async function hasSetPassword() {
       const response = await api.get(`/users/${currentUser.id}/hasSetPassword`);
