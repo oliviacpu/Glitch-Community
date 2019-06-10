@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Text from 'Components/text/text';
+import Button from 'Components/buttons/button';
 import classNames from 'classnames/bind';
 import styles from './styles.styl';
 
@@ -42,9 +43,9 @@ export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }
       {collectionName && `to collection ${collectionName}`}
     </Text>
     {url && (
-      <a href={url} rel="noopener noreferrer" className="button button-small button-tertiary button-in-notification-container notify-collection-link">
+      <Button href={url} rel="noopener noreferrer" size="small" type="tertiary">
         Take me there
-      </a>
+      </Button>
     )}
   </>
 );
