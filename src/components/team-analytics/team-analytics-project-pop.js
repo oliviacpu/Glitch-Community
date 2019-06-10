@@ -32,7 +32,7 @@ const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) 
         status="ready"
         results={filteredProjects}
         onSubmit={(project) => updateProjectDomain(project.domain)}
-        label="Filter projects"
+        labelText="Filter projects"
         placeholder="Filter projects"
         renderItem={({ item: project, active }) =>
           project.domain ? (

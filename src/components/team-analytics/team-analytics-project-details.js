@@ -10,6 +10,7 @@ import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { createAPIHook } from 'State/api';
 
 import ProjectAvatar from '../../presenters/includes/project-avatar';
+import styles from './styles.styl';
 
 const RECENT_REMIXES_COUNT = 100;
 
@@ -17,54 +18,54 @@ const RECENT_REMIXES_COUNT = 100;
 // That requires the relativeTime plugin
 // Which is added to dayjs elsewhere
 const ProjectDetails = ({ projectDetails }) => (
-  <article className="project-details">
+  <article className={styles.projectDetails}>
     <ProjectLink project={projectDetails}>
       <ProjectAvatar {...projectDetails} />
     </ProjectLink>
-    <table>
+    <table className={styles.projectDetailsTable}>
       <tbody>
         <tr>
-          <td className="label">Name</td>
+          <th>Name</th>
           <td>{projectDetails.domain}</td>
         </tr>
         <tr>
-          <td className="label">Created</td>
+          <th>Created</th>
           <td>{dayjs(projectDetails.createdAt).fromNow()}</td>
         </tr>
         <tr>
-          <td className="label">Last viewed</td>
+          <th>Last viewed</th>
           <td>{dayjs(projectDetails.lastAccess).fromNow()}</td>
         </tr>
         <tr>
-          <td className="label">Last edited</td>
+          <th>Last edited</th>
           <td>{dayjs(projectDetails.lastEditedAt).fromNow()}</td>
         </tr>
         <tr>
-          <td className="label">Last remixed</td>
+          <th>Last remixed</th>
           <td>{projectDetails.lastRemixedAt ? dayjs(projectDetails.lastRemixedAt).fromNow() : 'never'}</td>
         </tr>
         <tr>
-          <td className="label">Total app views</td>
+          <th>Total app views</th>
           <td>{projectDetails.numAppVisits}</td>
         </tr>
         <tr>
-          <td className="label">Total code views</td>
+          <th>Total code views</th>
           <td>{projectDetails.numEditorVisits}</td>
         </tr>
         <tr>
-          <td className="label">Total direct remixes</td>
+          <th>Total direct remixes</th>
           <td>{projectDetails.numDirectRemixes}</td>
         </tr>
         <tr>
-          <td className="label">Total remixes</td>
+          <th>Total remixes</th>
           <td>{projectDetails.numTotalRemixes}</td>
         </tr>
         {projectDetails.baseProject.domain && (
           <tr>
-            <td className="label">Originally remixed from</td>
+            <th>Originally remixed from</th>
             <td>
               <ProjectLink project={projectDetails.baseProject}>
-                <ProjectAvatar project={projectDetails.baseProject} className="baseproject-avatar" />
+                <ProjectAvatar {...projectDetails.baseProject} className={styles.baseProjectAvatar} />
                 {projectDetails.baseProject.domain}
               </ProjectLink>
             </td>
@@ -79,7 +80,7 @@ const ProjectRemixItem = ({ remix }) => (
   <ProjectLink project={remix}>
     <TooltipContainer
       id={`project-remix-tooltip-${remix.domain}`}
-      target={<ProjectAvatar project={remix} />}
+      target={<ProjectAvatar {...remix} />}
       align={['left']}
       type="action"
       tooltip={remix.domain}
@@ -102,7 +103,7 @@ function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain })
       <ProjectDetails projectDetails={projectDetails} />
       {activeFilter === 'remixes' && (
         <article className="project-remixes">
-          <h4>Latest Remixes</h4>
+          <h4 className={styles.projectDetailsTitle}>Latest Remixes</h4>
           <div className="project-remixes-container">
             {projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
             {projectRemixes.map((remix) => (
