@@ -13,6 +13,7 @@ const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, plac
     setFocused(false);
     outerOnBlur(event);
   };
+  console.log(value, !value)
   if (error || focused || !value) {
     return (
       <TextArea
