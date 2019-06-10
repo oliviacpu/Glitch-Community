@@ -149,9 +149,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         onSubmit={addProjectTo}
         placeholder="Filter collections"
         labelText="Filter collections"
-        renderItem={
-          ({ item: collection, active, onClick }) => <AddProjectToCollectionResultItem active={active} onClick={onClick} collection={collection} />
-        }
+        renderItem={({ item: collection, active }) => (
+          <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
+        )}
         renderNoResults={() => (
           <PopoverInfo><NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} /></PopoverInfo>
         )}

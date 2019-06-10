@@ -45,7 +45,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
     active={active}
     onClick={onClick}
     href={`/@${collection.fullUrl}`}
-    label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
+    //label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
   >
     <div className={styles.avatarWrap}>
       <CollectionAvatar color={collection.coverColor} />
