@@ -288,9 +288,9 @@ const LoginSection = ({ showForgotPassword }) => {
 
   return (
     <PopoverActions>
-      <form onSubmit={handleSubmit}>
-        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} />
-        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} />
+      <form data-cy="sign-in-form" onSubmit={handleSubmit}>
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email"/>
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password"/>
         <Button size="small" disabled={emailValidationError || working} submit>Sign in</Button>
       </form>
       {!!errorMessage && <p>{errorMessage}</p>}
