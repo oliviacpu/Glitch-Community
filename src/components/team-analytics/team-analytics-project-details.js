@@ -9,31 +9,9 @@ import Loader from 'Components/loader';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { createAPIHook } from 'State/api';
 
+import ProjectAvatar from '../../presenters/includes/project-avatar';
+
 const RECENT_REMIXES_COUNT = 100;
-
-const useProjectDetails = createAPIHook(async (api, id, currentProjectDomain) => {
-  const { data } = api.get(`analytics/${id}/project/${currentProjectDomain}/overview`);
-  return data;
-});
-
-const addFallbackSrc = (event) => {
-  event.target.src = FALLBACK_AVATAR_URL;
-};
-
-const ProjectAvatar = ({ project, className = '' }) => (
-  <img src={getAvatarUrl(project.id)} className={`avatar ${className}`} alt={project.domain} onError={addFallbackSrc} />
-);
-ProjectAvatar.propTypes = {
-  project: PropTypes.shape({
-    domain: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  className: PropTypes.string,
-};
-
-ProjectAvatar.defaultProps = {
-  className: '',
-};
 
 // This uses dayjs().fromNow() a bunch of times
 // That requires the relativeTime plugin
@@ -41,7 +19,7 @@ ProjectAvatar.defaultProps = {
 const ProjectDetails = ({ projectDetails }) => (
   <article className="project-details">
     <ProjectLink project={projectDetails}>
-      <ProjectAvatar project={projectDetails} />
+      <ProjectAvatar {...projectDetails} />
     </ProjectLink>
     <table>
       <tbody>
@@ -96,6 +74,7 @@ const ProjectDetails = ({ projectDetails }) => (
     </table>
   </article>
 );
+
 const ProjectRemixItem = ({ remix }) => (
   <ProjectLink project={remix}>
     <TooltipContainer
@@ -108,61 +87,32 @@ const ProjectRemixItem = ({ remix }) => (
   </ProjectLink>
 );
 
-class TeamAnalyticsProjectDetails extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isGettingData: true,
-      projectDetails: {},
-      projectRemixes: [],
-    };
-  }
+const useProjectDetails = createAPIHook(async (api, id, currentProjectDomain) => {
+  const { data } = await api.get(`analytics/${id}/project/${currentProjectDomain}/overview`);
+  return data;
+});
 
-  componentDidMount() {
-    this.updateProjectDetails();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.currentProjectDomain !== prevProps.currentProjectDomain) {
-      this.updateProjectDetails();
-    }
-  }
-
-  updateProjectDetails() {
-    this.setState({
-      isGettingData: true,
-    });
-    getProjectDetails(this.props.id, this.props.api, this.props.currentProjectDomain).then(({ data }) => {
-      this.setState({
-        isGettingData: false,
-        projectDetails: data,
-        projectRemixes: data.remixes.slice(0, RECENT_REMIXES_COUNT),
-      });
-    });
-  }
-
-  render() {
-    if (this.state.isGettingData) {
-      return <Loader />;
-    }
-
-    return (
-      <>
-        <ProjectDetails projectDetails={this.state.projectDetails} />
-        {this.props.activeFilter === 'remixes' && (
-          <article className="project-remixes">
-            <h4>Latest Remixes</h4>
-            <div className="project-remixes-container">
-              {this.state.projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
-              {this.state.projectRemixes.map((remix) => (
-                <ProjectRemixItem key={remix.id} remix={remix} />
-              ))}
-            </div>
-          </article>
-        )}
-      </>
-    );
-  }
+function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain }) {
+  const { value: projectDetails } = useProjectDetails(id, currentProjectDomain);
+  if (!projectDetails) return <Loader />;
+  
+  const projectRemixes = projectDetails.remixes.slice(0, RECENT_REMIXES_COUNT);
+  return (
+    <>
+      <ProjectDetails projectDetails={projectDetails} />
+      {activeFilter === 'remixes' && (
+        <article className="project-remixes">
+          <h4>Latest Remixes</h4>
+          <div className="project-remixes-container">
+            {projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
+            {projectRemixes.map((remix) => (
+              <ProjectRemixItem key={remix.id} remix={remix} />
+            ))}
+          </div>
+        </article>
+      )}
+    </>
+  );
 }
 
 TeamAnalyticsProjectDetails.propTypes = {
@@ -171,7 +121,4 @@ TeamAnalyticsProjectDetails.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-export default (props) => {
-  const api = useAPI();
-  return <TeamAnalyticsProjectDetails {...props} api={api} />;
-};
+export default TeamAnalyticsProjectDetails;
