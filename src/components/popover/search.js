@@ -47,7 +47,15 @@ function useActiveIndex(items, onSelect) {
       }
     }
   };
-  return { inputRef, activeIndex, onKeyDown };
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+
+  return { inputRef, activeIndex };
 }
 
 const PopoverLoader = () => (
@@ -77,10 +85,10 @@ function PopoverSearch({
   labelText,
   placeholder,
 }) {
-  const { inputRef, activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
+  const { inputRef, activeIndex } = useActiveIndex(results, onSubmit);
 
   return (
-    <form onKeyDown={onKeyDown}>{/* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions */}
+    <>
       <PopoverInfo>
         <TextInput
           ref={inputRef}
@@ -103,7 +111,7 @@ function PopoverSearch({
       {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
       {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
       {status === 'error' && renderError()}
-    </form>
+    </>
   );
 }
 
