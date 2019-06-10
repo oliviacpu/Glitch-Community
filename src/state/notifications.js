@@ -51,7 +51,6 @@ export const NotificationsProvider = (props) => {
     createErrorNotification: createError,
   };
 
-  // TODO this is probably not the place for this
   const notificationsStyles = {
     zIndex: '11',
     top: '20px',
