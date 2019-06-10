@@ -176,12 +176,13 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const { currentUser } = useCurrentUser();
   const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
+  const [removedInvitee, setRemovedInvitee] = useState([]);
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = (value || []).concat(newlyInvited);
+  const invitees = (value || []).concat(newlyInvited).filter(removedInvitee);
 
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
