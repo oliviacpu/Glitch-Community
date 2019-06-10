@@ -7,7 +7,7 @@ import styles from './styles.styl';
 
 const cx = classNames.bind(styles);
 
-const Notification = ({ children, type, persistent, inline, remove, uploading }) => {
+const Notification = ({ children, type, persistent, inline, remove }) => {
   const className = cx({
     notification: true,
     success: type === 'success',

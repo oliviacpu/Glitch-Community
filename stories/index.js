@@ -550,12 +550,12 @@ storiesOf('Recent Projects', module)
   .add('logged-in user', provideContext({ currentUser: { ...users.modernserf, projects: Object.values(projects) } }, () => <RecentProjects />));
 
 storiesOf('Notification', module)
-  .add('info', () => <Notification>This is a base notification</Notification>)
+  .add('info', () => (
+    <Notification>
+      Uploading image <progress value="0" />
+    </Notification>
+  ))
   .add('persistent', () => <Notification persistent>This notification will be here forever</Notification>)
   .add('success', () => <Notification type="success">Success!</Notification>)
   .add('error', () => <Notification type="error">Something went wrong</Notification>)
-  .add('uploader', () => (
-    <Notification uploading>
-      Uploading image <progress value="33" />
-    </Notification>
-  ));
+  .add('uploader', () => <Notification uploading />);

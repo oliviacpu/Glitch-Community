@@ -22,7 +22,6 @@ async function uploadWrapper(notifications, upload) {
   let progress = 0;
   const { updateNotification, removeNotification } = notifications.createNotification(<NotifyUploading progress={progress} />, {
     persistent: true,
-    uploading: true,
   });
   try {
     result = await upload(({ lengthComputable, loaded, total }) => {
