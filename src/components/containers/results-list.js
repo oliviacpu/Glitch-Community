@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -74,23 +74,32 @@ ResultsList.defaultProps = {
 
 export default ResultsList;
 
-export const ResultItem = ({ active, className, onClick, href, children }) => (
-  <div className={classnames(className, styles.resultItem, active && styles.active, href && styles.withLink)}>
-    <TransparentButton className={styles.resultItemButton} onClick={onClick}>
-      <div className={styles.resultWrap}>
-        {children}
-      </div>
-    </TransparentButton>
-    {href && (
-      <div className={styles.linkButtonWrap}>
-        <Button size="small" href={href} newTab>
-          View →
-        </Button>
-      </div>
-    )}
-  </div>
-);
-
+export const ResultItem = forwardRef(({ className, onClick, href, children }, ref) => {
+  const buttonRef = useRef();
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      buttonRef.current.focus();
+    }
+  }), [buttonRef]);
+  
+  return (
+    <div className={classnames(className, styles.resultItem, href && styles.withLink)}>
+      <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={ref}>
+        <div className={styles.resultWrap}>
+          {children}
+        </div>
+      </TransparentButton>
+      {href && (
+        <div className={styles.linkButtonWrap}>
+          <Button size="small" href={href} newTab>
+            View <span aria-hidden="true">→</span>
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+});
+  
 const withClass = (Component, baseClassName) => ({ children, className, ...props }) => (
   <Component className={classnames(className, baseClassName)} {...props}>
     {children}
