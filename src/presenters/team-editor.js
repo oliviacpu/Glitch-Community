@@ -124,7 +124,7 @@ class TeamEditor extends React.Component {
 
   async updateUserPermissions(id, accessLevel) {
     if (accessLevel === MEMBER_ACCESS_LEVEL && this.state.adminIds.length <= 1) {
-      this.props.createErrorNotification('A team must have at least one admin');
+      this.props.createNotification('A team must have at least one admin', { type: 'error' });
       return false;
     }
     await this.props.api.patch(`teams/${this.state.id}/users/${id}`, {
@@ -254,10 +254,16 @@ const TeamEditorContainer = ({ children, initialTeam }) => {
   const api = useAPI();
   const { currentUser, update } = useCurrentUser();
   const uploadFuncs = useUploader();
-  const notificationFuncs = useNotifications();
+  const { createNotification } = useNotifications();
   const errorFuncs = useErrorHandlers();
   return (
-    <TeamEditor {...{ api, currentUser, initialTeam }} updateCurrentUser={update} {...uploadFuncs} {...notificationFuncs} {...errorFuncs}>
+    <TeamEditor
+      {...{ api, currentUser, initialTeam }}
+      updateCurrentUser={update}
+      {...uploadFuncs}
+      createNotification={createNotification}
+      {...errorFuncs}
+    >
       {children}
     </TeamEditor>
   );

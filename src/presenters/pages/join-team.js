@@ -47,7 +47,6 @@ JoinTeamPageBase.propTypes = {
   api: PropTypes.any.isRequired,
   teamUrl: PropTypes.string.isRequired,
   joinToken: PropTypes.string.isRequired,
-  createErrorNotification: PropTypes.func.isRequired,
   createNotification: PropTypes.func.isRequired,
   replaceCurrentUser: PropTypes.func.isRequired,
 };

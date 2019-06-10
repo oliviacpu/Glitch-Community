@@ -43,6 +43,10 @@ export const NotificationsProvider = (props) => {
     // setNotifications((prevNotifications) => [...prevNotifications, notification]);
     return notification.id;
   };
+  
+  const createError = (content='Something went wrong. Try refreshing?', opts) => {
+    create(content, ...opts);
+  }
 
   // const create = (content, opts = {}) => {
   //   const { type, inline, persistent } = opts;
@@ -73,8 +77,7 @@ export const NotificationsProvider = (props) => {
 
   const funcs = {
     createNotification: create,
-    // createPersistentNotification: createPersistent,
-    // createErrorNotification: createError,
+    createErrorNotification: createError,
   };
 
   // TODO this is probably not the place for this
