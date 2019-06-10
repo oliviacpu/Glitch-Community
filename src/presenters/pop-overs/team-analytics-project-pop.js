@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ProjectResultItem from 'Components/project/project-result-item';
+import { ResultItem, ResultInfo, ResultName } from 'Components/containers/results-list';
 import { PopoverWithButton, PopoverDialog, PopoverSearch } from 'Components/popover';
 
-const AllProjectsItem = ({ currentProjectDomain, action }) => {
-  const BENTO_BOX = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png?1502469566743';
-  let resultsClass = 'button-unstyled result result-project';
-  if (!currentProjectDomain) {
-    resultsClass += ' active';
-  }
-  return (
-    <button className={resultsClass} onClick={action} type="button">
-      <img className="avatar" src={BENTO_BOX} alt="" />
-      <div className="result-name" title="All Projects">
-        All Projects
-      </div>
-    </button>
-  );
-};
+const Bento = () => <img src="https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png?1502469566743" alt="" />;
+
+const AllProjectsItem = ({ active, onClick }) => (
+  <ResultItem onClick={onClick} active={active}>
+    <Bento />
+    <ResultInfo>
+      <ResultName>All Projects</ResultName>
+    </ResultInfo>
+  </ResultItem>
+);
 
 AllProjectsItem.propTypes = {
   currentProjectDomain: PropTypes.string.isRequired,
@@ -31,66 +27,51 @@ const isActive = (currentProjectDomain, project) => {
   return false;
 };
 
-const ProjectSearch = ({ projects, togglePopover, setFilter, filter, updateProjectDomain, currentProjectDomain }) => {
-  const onSubmit = (project) => {
-    togglePopover();
-    updateProjectDomain(project.domain);
-    setFilter('');
-  };
-
+const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) => {
+  const [filter, setFilter] = useState('');
+  
   const filteredProjects = useMemo(() => {
-    return projects.filter(({ domain }) => domain.toLowerCase().includes(filter.toLowerCase()));
+    const filtered = projects.filter(({ domain }) => domain.toLowerCase().includes(filter.toLowerCase()));
+    filtered.unshift({ id: 'all-projects' });
+    return filtered;
   }, [projects, filter]);
 
   return (
-    <PopoverDialog align="left">
+    <PopoverDialog align="left" wide>
       <PopoverSearch
         value={filter}
         onChange={setFilter}
         status="ready"
         results={filteredProjects}
-        onSubmit={onSubmit}
+        onSubmit={(project) => updateProjectDomain(project.domain)}
         label="Filter projects"
         placeholder="Filter projects"
-        renderItems={({ item: project, active }) => (
+        renderItem={({ item: project, active }) => project.domain ? (
           <ProjectResultItem 
             project={project} 
-            onClick={() => onSubmit(project)}
+            onClick={() => updateProjectDomain(project.domain)}
             active={active || currentProjectDomain === project.domain}
           />
+        ) : (
+          <AllProjectsItem  
+            active={active || !currentProjectDomain}
+            onClick={() => updateProjectDomain('')} 
+          />  
         )}
-      >
-        <AllProjectsItem currentProjectDomain={currentProjectDomain} action={() => onClick('')} />
-      </PopoverSearch>
+      />
     </PopoverDialog>
   );
 };
 
-ProjectSearch.propTypes = {
-  projects: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      domain: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  togglePopover: PropTypes.func, // required but added dynamically
-  setFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
-  updateProjectDomain: PropTypes.func.isRequired,
-  currentProjectDomain: PropTypes.string.isRequired,
-};
-
-
 const Dropdown = () => <div className="down-arrow" aria-label="options" />;
 
-const TeamAnalyticsProjectPop = ({ updateProjectDomain, currentProjectDomain }) => (
+const TeamAnalyticsProjectPop = ({ projects, updateProjectDomain, currentProjectDomain }) => (
   <PopoverWithButton
     buttonProps={{ size: 'small', type: 'tertiary' }}
     buttonText={currentProjectDomain ? <>Project: {currentProjectDomain} <Dropdown /></> : <>All Projects <Dropdown /></>}
   >
     {({ toggleAndCall }) => (
-      <PopOver
+      <ProjectSearch
         projects={projects}
         updateProjectDomain={toggleAndCall(updateProjectDomain)}
         currentProjectDomain={currentProjectDomain}
@@ -100,6 +81,13 @@ const TeamAnalyticsProjectPop = ({ updateProjectDomain, currentProjectDomain }) 
 );
 
 TeamAnalyticsProjectPop.propTypes = {
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      domain: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   updateProjectDomain: PropTypes.func.isRequired,
   currentProjectDomain: PropTypes.string.isRequired,
 };
