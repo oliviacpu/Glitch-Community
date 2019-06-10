@@ -52,14 +52,13 @@ const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, cur
 function useAnalytics (props) {
   // make an object with a stable identity so it can be used as single argumnent to api hook
   const memoProps = useMemo(() => props, Object.values(props));
-  console.log(props, memoProps);
   return useAnalyticsData(memoProps);
 }
 
 function TeamAnalyticsBase ({ id, projects }) {
   const [activeFilter, setActiveFilter] = useState('views');
   
-  const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 weeks');
+  const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 Weeks');
   const fromDate = useMemo(() => dateFromTime(currentTimeFrame), [currentTimeFrame]);
   
   const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
@@ -75,6 +74,15 @@ function TeamAnalyticsBase ({ id, projects }) {
     
   // segmented button filters
   const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
+  
+  if (!analytics) {
+    return (
+      <section className="team-analytics">
+        <Loader />
+      </section>
+    );
+  }
+  
 
   return (
     <section className="team-analytics">
@@ -117,11 +125,11 @@ function TeamAnalyticsBase ({ id, projects }) {
 
       <section className="activity">
         <figure id="chart" className="c3" />
-        <TeamAnalyticsActivity
+        {analytics && <TeamAnalyticsActivity
           activeFilter={activeFilter}
           analytics={analytics}
           currentTimeFrame={currentTimeFrame}
-        />
+        />}
       </section>
 
       <section className="referrers">
