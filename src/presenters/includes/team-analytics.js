@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import _ from 'lodash';
+import { cloneDeep, sumBy } from 'lodash';
 import sampleAnalytics, { sampleAnalyticsTime } from 'Curated/sample-analytics';
 
 import Text from 'Components/text/text';
@@ -33,28 +33,27 @@ const dateFromTime = (newTime) => {
   return timeMap[newTime];
 };
 
-const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam }) => {
-  if (!currentUserIsOnTeam) return null
+function getSampleAnalytics () {
+  const data = cloneDeep(sampleAnalytics);
+  // Update timestamps so they're relative to now
+  data.buckets.forEach((bucket) => {
+    bucket['@timestamp'] += Date.now() - sampleAnalyticsTime;
+  });
+  return data;
+}
+
+const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, currentProjectDomain }) => {
+  if (!projects.length) return getSampleAnalytics();
   
-  if (!projects.length) {
-    const data = _.cloneDeep(sampleAnalytics);
-    // Update timestamps so they're relative to now
-    data.buckets.forEach((bucket) => {
-      bucket['@timestamp'] += Date.now() - sampleAnalyticsTime;
-    });
-    return data;
-  }
-  let path = `analytics/${id}/team?from=${fromDate}`;
-  if (currentProjectDomain) {
-    path = `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}`;
-  }
+  const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
+
   try {
     const { data } = await api.get(path);
     return data;
   } catch (error) {
     console.error('getAnalytics', error);
+    return null;
   }
-  return null;
 });
 
 function useAnalytics (props) {
@@ -63,117 +62,30 @@ function useAnalytics (props) {
   return useAnalyticsData(memoProps);
 }
 
-function TeamAnalytics ({ id, projects, currentUserIsOnTeam }) {
-  const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 weeks');
-  const fromDate = dateFromTime(currentTimeFrame)
+const useC3 = createAPIHook(async () => _import(/* webpackChunkName: "c3-bundle" */ 'c3'));
+
+function TeamAnalyticsBase ({ id, projects }) {
+  const [activeFilter, setActiveFilter] = useState('views');
   
-  const { status, value } = useAnalytics({ id, projects, fromDate, currentProjectDomain, currentUserIsOnTeam });
+  const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 weeks');
+  const fromDate = dateFromTime(currentTimeFrame);
+  
+  const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
+  
+  const { status: analyticsStatus, value: analytics } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
+  const { totalAppViews, totalRemixes } = useMemo(() => ({
+    totalAppViews: sumBy(analytics.buckets, (bucket) => bucket.analytics.visits),
+    totalRemixes: sumBy(analytics.buckets, (bucket) => bucket.analytics.remixes),
+  }), [analytics]);
+  
+  const { status: c3Status, value: c3 } = useC3();
 }
 
 
+
+
 class _TeamAnalytics extends React.Component {
-  constructor(props) {
-    super(props);
-    const currentTimeFrame = 'Last 2 Weeks';
-    this.state = {
-      activeFilter: 'views',
-      currentTimeFrame,
-      fromDate: dateFromTime(currentTimeFrame),
-      currentProjectDomain: '', // empty string means all projects
-      analytics: {},
-      c3: {},
-      isGettingData: true,
-      isGettingC3: true,
-      totalRemixes: 0,
-      totalAppViews: 0,
-    };
-  }
-
-  componentDidMount() {
-    // eslint-disable-next-line
-    _import(/* webpackChunkName: "c3-bundle" */ 'c3').then((c3) => {
-      this.setState({
-        c3,
-        isGettingC3: false,
-      });
-      if (this.props.currentUserIsOnTeam) {
-        this.updateAnalytics();
-      }
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.currentUserIsOnTeam === false && this.props.currentUserIsOnTeam === true && this.state.isGettingC3 === false) {
-      this.updateAnalytics();
-    } else if (prevProps.projects.length !== this.props.projects.length && this.state.isGettingC3 === false) {
-      this.updateAnalytics();
-      // using setState in componentDidUpdate can cause bugs but hopefully it's fine here
-      // eslint-disable-next-line
-      this.setState({
-        currentProjectDomain: '',
-      });
-    }
-  }
-
-  setFilter(filter) {
-    this.setState({ activeFilter: filter });
-  }
-
-  updateTotals() {
-    let totalAppViews = 0;
-    let totalRemixes = 0;
-    this.state.analytics.buckets.forEach((bucket) => {
-      totalAppViews += bucket.analytics.visits;
-      totalRemixes += bucket.analytics.remixes;
-    });
-    this.setState({
-      totalAppViews,
-      totalRemixes,
-    });
-  }
-
-  updateAnalytics() {
-    this.setState({
-      isGettingData: true,
-    });
-
-    const { id, api, projects } = this.props;
-    const { fromDate, currentProjectDomain } = this.state;
-    getAnalytics({ id, api, projects, fromDate, currentProjectDomain }).then((data) => {
-      this.setState(
-        {
-          isGettingData: false,
-          analytics: data,
-        },
-        () => {
-          this.updateTotals();
-        },
-      );
-    });
-  }
-
-  updateTimeFrame(newTime) {
-    this.setState(
-      {
-        currentTimeFrame: newTime,
-        fromDate: dateFromTime(newTime),
-      },
-      () => {
-        this.updateAnalytics();
-      },
-    );
-  }
-
-  updateProjectDomain(newDomain) {
-    this.setState(
-      {
-        currentProjectDomain: newDomain,
-      },
-      () => {
-        this.updateAnalytics();
-      },
-    );
-  }
+  
 
   render() {
     if (!this.props.currentUserIsOnTeam) {
@@ -273,13 +185,11 @@ class _TeamAnalytics extends React.Component {
 }
 
 TeamAnalytics.propTypes = {
-  api: PropTypes.any.isRequired,
   id: PropTypes.number.isRequired,
   projects: PropTypes.array.isRequired,
-  currentUserIsOnTeam: PropTypes.bool.isRequired,
 };
 
 export default (props) => {
-  const api = useAPI();
-  return <TeamAnalytics {...props} api={api} />;
+  if (!props.currentUserIsOnTeam) return null 
+  return <TeamAnalyticsBase {...props} />;
 };
