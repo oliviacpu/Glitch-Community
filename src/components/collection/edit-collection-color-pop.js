@@ -87,7 +87,16 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
         <div className={styles.colorFormWrap}>
           <ColorInput value={color} onChange={onChangeColorPicker} />
           <div className={styles.hexWrap}>
-            <TextInput opaque value={hex} onChange={onChangeHex} onKeyPress={keyPress} placeholder="Hex" labelText="Custom color hex" error={error} />
+            <TextInput
+              autoFocus
+              opaque
+              value={hex}
+              onChange={onChangeHex}
+              onKeyPress={keyPress}
+              placeholder="Hex"
+              labelText="Custom color hex"
+              error={error}
+            />
           </div>
         </div>
       </PopoverInfo>
