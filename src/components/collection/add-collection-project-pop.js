@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { partition, uniqBy } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
-import Loader from 'Components/loader';
 import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
 import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
@@ -85,11 +84,12 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       <PopoverSearch
         value={query}
         onChange={setQuery}
+        results={visibleProjects}
         labelText="Project name or URL"
         placeholder="Search by project name or URL"
-        renderItem={({ item: project, active }) => }
+        renderItem={
+          ({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onClick(project)} />}
       />
-
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
