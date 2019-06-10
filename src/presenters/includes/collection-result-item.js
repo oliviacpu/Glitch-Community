@@ -13,7 +13,7 @@ const addProject = (addProjectToCollection, project, collection, collectionPath,
   addProjectToCollection(project, collection).then(() => {
     // show notification
     const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={collectionPath} />;
-    notification(content, 'notifySuccess');
+    notification(content, { type: 'success' });
   });
 
   togglePopover();
@@ -34,7 +34,9 @@ const CollectionResultItem = ({ onClick, project, collection, isActive, togglePo
         className={resultClass}
         onClick={() => addProject(onClick, project, collection, collectionPath, createNotification, togglePopover)}
         data-project-id={project.id}
-        aria-label={`Add to collection: ${collection.name} by ${collection.team ? collection.team.name : collection.user.name}, collection description: ${collection.description}`}
+        aria-label={`Add to collection: ${collection.name} by ${
+          collection.team ? collection.team.name : collection.user.name
+        }, collection description: ${collection.description}`}
       >
         <div className="avatar" id={`avatar-collection-${collection.id}`}>
           <CollectionAvatar color={collection.coverColor} />

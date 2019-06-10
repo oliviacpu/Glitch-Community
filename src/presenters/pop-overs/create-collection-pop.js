@@ -116,11 +116,11 @@ class CreateCollectionPop extends React.Component {
           const content = (
             <AddProjectToCollectionMsg projectDomain={this.props.project.domain} collectionName={collection.name} url={newCollectionUrl} />
           );
-          createNotification(content, 'notifySuccess');
+          createNotification(content, { type: 'success' });
         }
         this.props.togglePopover();
       } catch (error) {
-        createNotification('Unable to add project to collection.', 'notifyError');
+        createNotification('Unable to add project to collection.', { type: 'error' });
         this.props.togglePopover();
       }
     } else {

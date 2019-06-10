@@ -142,6 +142,7 @@ const EmailHandler = ({ showView }) => {
         )}
         {status === 'done' && (
           <>
+            TODO figure out what's going on here
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>
             <div>Finish signing in from the email sent to {email}.</div>
           </>
