@@ -24,9 +24,9 @@ export const NotificationsProvider = (props) => {
       content,
       uploading,
     };
-    
+
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
-    
+
     if (notification.persistent) {
       const updateNotification = (updatedContent) => {
         setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, updatedContent } : n)));
@@ -42,10 +42,10 @@ export const NotificationsProvider = (props) => {
 
     return notification.id;
   };
-  
-  const createError = (content='Something went wrong. Try refreshing?', opts) => {
+
+  const createError = (content = 'Something went wrong. Try refreshing?', opts) => {
     create(content, ...opts);
-  }
+  };
 
   const funcs = {
     createNotification: create,

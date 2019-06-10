@@ -26,9 +26,9 @@ const Notification = ({ children, type, persistent, inline, remove, uploading })
 
 Notification.propTypes = {
   type: PropTypes.oneOf(['info', 'success', 'error']),
-  persistent: PropTypes.boolean,
-  inline: PropTypes.boolean,
-  uploading: PropTypes.boolean,
+  persistent: PropTypes.bool,
+  inline: PropTypes.bool,
+  uploading: PropTypes.bool,
 };
 
 Notification.defaultProps = {
