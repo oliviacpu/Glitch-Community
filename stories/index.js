@@ -290,9 +290,12 @@ storiesOf('UserItem', module).add('base', () => (
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
     <TeamItem team={teams['example-team']} />
-    <TeamUsers team={teams['example-team']} />
+    
   </div>
 ));
+       
+storiesOf('TeamUsers', module)
+  .add('Maybe logged in?', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
 
 storiesOf('SearchResultCoverBar', module)
   .add('user', () => (
