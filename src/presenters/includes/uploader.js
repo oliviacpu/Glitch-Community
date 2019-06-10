@@ -26,6 +26,7 @@ async function uploadWrapper(notifications, upload) {
   );
   try {
     result = await upload(({ lengthComputable, loaded, total }) => {
+      console.log('lengthComputable', lengthComputable);
       if (lengthComputable) {
         progress = loaded / total;
       } else {
