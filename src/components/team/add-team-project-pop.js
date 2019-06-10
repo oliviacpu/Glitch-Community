@@ -1,11 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDescription } from 'Components/popover';
-import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
+import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
 import ProjectResultItem from 'Components/project/project-result-item';
 import Emoji from 'Components/images/emoji';
-import TextInput from 'Components/inputs/text-input';
 import { useCurrentUser } from 'State/current-user';
 
 const filterProjects = (query, projects, teamProjects) => {
@@ -37,41 +35,23 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
   const myProjects = currentUser.projects;
 
   const filteredProjects = useMemo(() => filterProjects(query, myProjects, teamProjects), [query, myProjects, teamProjects]);
-  const { activeIndex, onKeyDown } = useActiveIndex(filteredProjects, addProject);
 
   return (
     <PopoverDialog wide align="left">
-      <PopoverInfo>
-        <TextInput
-          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-          labelText="Project name"
-          value={query}
-          onChange={setQuery}
-          onKeyDown={onKeyDown}
-          opaque
-          placeholder="Filter my projects"
-          type="search"
-        />
-      </PopoverInfo>
-
-      <PopoverSection>
-        {filteredProjects.length > 0 && (
-          <ResultsList items={filteredProjects} scroll>
-            {(project, i) => (
-              <ScrollResult active={i === activeIndex}>
-                <ProjectResultItem active={i === activeIndex} onClick={() => addProject(project)} project={project} />
-              </ScrollResult>
-            )}
-          </ResultsList>
-        )}
-      </PopoverSection>
-      {filteredProjects.length === 0 && query.length > 0 && (
-        <PopoverInfo>
-          <InfoDescription>
-            nothing found <Emoji name="sparkles" />
-          </InfoDescription>
-        </PopoverInfo>
-      )}
+      <PopoverSearch
+        value={query}
+        onChange={setQuery}
+        onSubmit={addProject}
+        results={filteredProjects}
+        labelText="Project name"
+        placeholder="Filter my projects"
+        status="ready"
+        renderItem={
+          ({ item: project, active }) => (
+            <ProjectResultItem active={active} onClick={() => addProject(project)} project={project} />
+          )
+        }
+      />
       {filteredProjects.length === 0 && query.length === 0 && (
         <PopoverInfo>
           <InfoDescription>Create or Join projects to add them to the team</InfoDescription>
