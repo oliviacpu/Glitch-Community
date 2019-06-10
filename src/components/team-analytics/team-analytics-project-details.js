@@ -6,7 +6,6 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import { ProjectLink } from 'Components/link';
 import Loader from 'Components/loader';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { createAPIHook } from 'State/api';
 
 import ProjectAvatar from '../../presenters/includes/project-avatar';
@@ -98,7 +97,7 @@ const useProjectDetails = createAPIHook(async (api, id, currentProjectDomain) =>
 function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain }) {
   const { value: projectDetails } = useProjectDetails(id, currentProjectDomain);
   if (!projectDetails) return <Loader />;
-  
+
   const projectRemixes = projectDetails.remixes.slice(0, RECENT_REMIXES_COUNT);
   return (
     <>

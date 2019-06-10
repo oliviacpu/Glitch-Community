@@ -1,7 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TeamAnalyticsSummary = ({ activeFilter, totalAppViews, totalRemixes }) => {
+import styles from './styles.styl';
+
+const depluralize = (str) => str.replace(/e?s$/, '')
+
+export const SummaryItem = ({ total, type, label }) => (
+  <span className={style.summaryItem}>
+    <span className={classnames(styles.total, styles[type])}>{total.toLocaleString('en')}</span>
+    {' '}
+    <div className={styles.summaryLabel}>{total === 1 ? depluralize(label) : label}</div>
+  </span>
+);
+
+const TeamAnalyticsSummary = ({ activeFilter, totalAppViews, totalRemixes }) => (
+  <>
+    {activeFilter === 'views' && <SummaryItem total={totalAppViews} type="requests" label="App Views" />}
+    {activeFilter === 'remixes' && <SummaryItem total={totalAppViews} type="remixes" label="App Views" />}
+  </>
+) {
   if (activeFilter === 'views') {
     return (
       <span className="summary-item">

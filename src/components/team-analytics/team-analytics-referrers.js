@@ -19,49 +19,25 @@ const ReferrerItem = ({ count, total, description }) => {
   );
 };
 
-const ReferrersColumn = ({ total, referrers, name, label }) => {
-  const totalDirect = total - sumBy(referrers, (referrer) => referrer[name]);
-  return (
-    <article className={classnames(styles.referrersColumn, styles[name])}>
-      {total === 0 && 'none'}
-      <ul className={styles.referrersList}>
-        <ReferrerItem count={totalDirect} total={total} description={`direct ${label}`} />
-        {referrers.map((referrer) => (
-          <ReferrerItem key={referrer.domain} count={referrer[name]} total={total} description={referrer.domain} />
-        ))}
-      </ul>
-    </article>
-  )
-}
-
 const filterReferrers = (referrers) => referrers.filter((referrer) => !referrer.self).slice(0, MAX_REFERRERS);
 
-const  TeamAnalyticsReferrers = ({ activeFilter, analytics, totalRemixes, totalAppViews }) => (
-  <div className={styles.referrersContent}>
-    {activeFilter === 'views' && (
-      <ReferrersColumn 
-        name="requests"
-        total={totalAppViews}
-        referrers={filterReferrers(analytics.referrers)}
-        label="views"
-      />
-    )}
-    {activeFilter === 'remixes' && (
-      <ReferrersColumn 
-        name="remixes"
-        total={totalRemixes}
-        referrers={filterReferrers(analytics.remixReferrers)}
-        label="remixes"
-      />
-    )}
-  </div>
+const ReferrersColumn = ({ total, referrers, name, label }) => (
+  <article className={classnames(styles.referrersColumn, styles[name])}>
+    {total === 0 && 'none'}
+    <ul className={styles.referrersList}>
+      <ReferrerItem count={total - sumBy(referrers, (referrer) => referrer[name])} total={total} description={`direct ${label}`} />
+      {filterReferrers(referrers).map((referrer) => (
+        <ReferrerItem key={referrer.domain} count={referrer[name]} total={total} description={referrer.domain} />
+      ))}
+    </ul>
+  </article>
 );
 
-TeamAnalyticsReferrers.propTypes = {
-  activeFilter: PropTypes.string.isRequired,
-  analytics: PropTypes.object.isRequired,
-  totalRemixes: PropTypes.number.isRequired,
-  totalAppViews: PropTypes.number.isRequired,
+ReferrersColumn.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  referrers: PropTypes.array.isRequired,
+  total: PropTypes.number.isRequired,
 };
 
-export default TeamAnalyticsReferrers;
+export default ReferrersColumn;

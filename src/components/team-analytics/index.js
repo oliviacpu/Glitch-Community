@@ -13,7 +13,7 @@ import TeamAnalyticsTimePop from './team-analytics-time-pop';
 import TeamAnalyticsProjectPop from './team-analytics-project-pop';
 import TeamAnalyticsSummary from './team-analytics-summary';
 import TeamAnalyticsActivity from './team-analytics-activity';
-import TeamAnalyticsReferrers from './team-analytics-referrers';
+import Referrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
 
 import styles from './styles.styl';
@@ -124,7 +124,22 @@ function TeamAnalytics({ id, projects }) {
 
         <section className={styles.section}>
           <h3>Referrers</h3>
-          <TeamAnalyticsReferrers activeFilter={activeFilter} analytics={analytics} totalRemixes={totalRemixes} totalAppViews={totalAppViews} />
+          {activeFilter === 'views' && (
+            <Referrers 
+              name="requests"
+              total={totalAppViews}
+              referrers={analytics.referrers}
+              label="views"
+            />
+          )}
+          {activeFilter === 'remixes' && (
+            <Referrers 
+              name="remixes"
+              total={totalRemixes}
+              referrers={analytics.remixReferrers}
+              label="remixes"
+            />
+          )}
         </section>
 
         {currentProjectDomain && (
