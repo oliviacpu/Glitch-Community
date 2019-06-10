@@ -7,6 +7,7 @@ import sampleAnalytics, { sampleAnalyticsTime } from 'Curated/sample-analytics';
 import Text from 'Components/text/text';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Loader from 'Components/loader';
+import { createAPIHook } from 'State/api';
 
 import TeamAnalyticsTimePop from '../pop-overs/team-analytics-time-pop';
 import TeamAnalyticsProjectPop from '../pop-overs/team-analytics-project-pop';
@@ -16,7 +17,6 @@ import TeamAnalyticsActivity from './team-analytics-activity';
 import TeamAnalyticsReferrers from './team-analytics-referrers';
 import TeamAnalyticsProjectDetails from './team-analytics-project-details';
 
-import { createAPIHook } from 'State/api';
 
 const dateFromTime = (newTime) => {
   const timeMap = {
@@ -47,19 +47,12 @@ const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, cur
   
   const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
   return api.get(path);
-
-  try {
-    const { data } = await api.get(path);
-    return data;
-  } catch (error) {
-    console.error('getAnalytics', error);
-    return null;
-  }
 });
 
 function useAnalytics (props) {
   // make an object with a stable identity so it can be used as single argumnent to api hook
   const memoProps = useMemo(() => props, Object.values(props));
+  console.log(props, memoProps);
   return useAnalyticsData(memoProps);
 }
 
@@ -67,17 +60,18 @@ function TeamAnalyticsBase ({ id, projects }) {
   const [activeFilter, setActiveFilter] = useState('views');
   
   const [currentTimeFrame, setCurrentTimeFrame] = useState('Last 2 weeks');
-  const fromDate = dateFromTime(currentTimeFrame);
+  const fromDate = useMemo(() => dateFromTime(currentTimeFrame), [currentTimeFrame]);
   
   const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
   
   const { status: analyticsStatus, value: analytics, error } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
   if (error) console.error('getAnalytics', error);
   
+  const buckets = analytics ? analytics.buckets : [];
   const { totalAppViews, totalRemixes } = useMemo(() => ({
-    totalAppViews: sumBy(analytics.buckets, (bucket) => bucket.analytics.visits),
-    totalRemixes: sumBy(analytics.buckets, (bucket) => bucket.analytics.remixes),
-  }), [analytics]);
+    totalAppViews: sumBy(buckets, (bucket) => bucket.analytics.visits),
+    totalRemixes: sumBy(buckets, (bucket) => bucket.analytics.remixes),
+  }), [buckets]);
     
   // segmented button filters
   const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
@@ -108,7 +102,7 @@ function TeamAnalyticsBase ({ id, projects }) {
       )}
 
       <section className="summary">
-        {analyticsStatus === 'loading' ? (
+        {!analytics ? (
           <Loader />
         ) : (
           <TeamAnalyticsSummary
@@ -132,7 +126,7 @@ function TeamAnalyticsBase ({ id, projects }) {
 
       <section className="referrers">
         <h3>Referrers</h3>
-        {analyticsStatus === 'loading' ? (
+        {!analytics ? (
           <Loader /> 
         ) : (
           <TeamAnalyticsReferrers
