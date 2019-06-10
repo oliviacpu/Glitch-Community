@@ -1,5 +1,5 @@
 @import '../constants.styl';
-analytics-app-views-color-color = #9588ea
+analytics-app-views-color = #9588ea
 analytics-remix-color = #23d5e7
 
 .container
@@ -79,13 +79,39 @@ analytics-remix-color = #23d5e7
   display: flex
   @media (max-width: smallViewport)
     display: block
-  
+    
+.referrersColumn
+  width: calc(50% - 20px) // change to 33% when new col added
+  margin: 0
+  margin-right: 20px
   progress
     display: block
     width: 100%
     margin-top: 2px
     margin-bottom: 0.5rem
     height: 5px
+  &.requests    
+    progress
+      &::-webkit-progress-value
+        background-color: analytics-app-views-color
+      &::-moz-progress-bar
+        background-color: analytics-app-views-color
+  &.remixes
+    progress
+      &::-webkit-progress-value
+        background-color: analytics-remix-color
+      &::-moz-progress-bar
+        background-color: analytics-remix-color
+  // @media (max-width: mediumSmallViewport)
+  //   width: calc(50% - 20px)
+  @media (max-width: smallViewport)
+    width: 100%
+
+.referrersList
+  padding: 0
+  margin: 1rem
+  list-style-type: none
+  font-size: 14px
     
     
 // ---
@@ -127,38 +153,6 @@ analytics-remix-color = #23d5e7
   
   .referrers
     margin-top: 1rem
-
-  
-    
-  .referrers-column
-    width: calc(50% - 20px) // change to 33% when new col added
-    margin: 0
-    margin-right: 20px
-    &.app-views    
-      progress
-        &::-webkit-progress-value
-          background-color: analytics-app-views-color
-        &::-moz-progress-bar
-          background-color: analytics-app-views-color
-    &.remixes
-      progress
-        &::-webkit-progress-value
-          background-color: analytics-remix-color
-        &::-moz-progress-bar
-          background-color: analytics-remix-color
-    // @media (max-width: mediumSmallViewport)
-    //   width: calc(50% - 20px)
-    @media (max-width: smallViewport)
-      width: 100%
-
-  .referrers ul
-    padding: 0
-    margin: 1rem
-
-  li
-    list-style-type: none
-    font-size: 14px
-
     
   h3
     margin-top: 0

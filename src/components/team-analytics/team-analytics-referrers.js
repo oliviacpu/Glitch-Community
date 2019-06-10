@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { sumBy } from 'lodash';
 
 import styles from './styles.styl';
@@ -7,7 +8,7 @@ import styles from './styles.styl';
 const MAX_REFERRERS = 4;
 
 const ReferrerItem = ({ count, total, description }) => {
-  if (count <= 0) return <li>none</li>;
+  if (count <= 0) return null;
 
   const progress = Math.max(Math.round((count / total) * 100), 3);
   return (
@@ -18,19 +19,12 @@ const ReferrerItem = ({ count, total, description }) => {
   );
 };
 
-ReferrerItem.propTypes = {
-  count: PropTypes.number.isRequired,
-  total: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired,
-};
-
-const filterReferrers = (referrers) => referrers.filter((referrer) => !referrer.self).slice(0, MAX_REFERRERS);
-
-const ReferrerColumn = ({ total, referrers, name, label }) => {
+const ReferrersColumn = ({ total, referrers, name, label }) => {
   const totalDirect = total - sumBy(referrers, (referrer) => referrer[name]);
   return (
-    <article className="referrers-column app-views">
-      <ul>
+    <article className={classnames(styles.referrersColumn, styles[name])}>
+      {total === 0 && 'none'}
+      <ul className={styles.referrersList}>
         <ReferrerItem count={totalDirect} total={total} description={`direct ${label}`} />
         {referrers.map((referrer) => (
           <ReferrerItem key={referrer.domain} count={referrer[name]} total={total} description={referrer.domain} />
@@ -40,10 +34,12 @@ const ReferrerColumn = ({ total, referrers, name, label }) => {
   )
 }
 
+const filterReferrers = (referrers) => referrers.filter((referrer) => !referrer.self).slice(0, MAX_REFERRERS);
+
 const  TeamAnalyticsReferrers = ({ activeFilter, analytics, totalRemixes, totalAppViews }) => (
-  <div className="referrers-content">
+  <div className={styles.referrersContent}>
     {activeFilter === 'views' && (
-      <ReferrerColumn 
+      <ReferrersColumn 
         name="requests"
         total={totalAppViews}
         referrers={filterReferrers(analytics.referrers)}
@@ -51,7 +47,7 @@ const  TeamAnalyticsReferrers = ({ activeFilter, analytics, totalRemixes, totalA
       />
     )}
     {activeFilter === 'remixes' && (
-      <ReferrerColumn 
+      <ReferrersColumn 
         name="remixes"
         total={totalRemixes}
         referrers={filterReferrers(analytics.remixReferrers)}
