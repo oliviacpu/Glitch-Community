@@ -290,9 +290,7 @@ const LoginSection = ({ showForgotPassword }) => {
         <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} />
         <Button size="small" disabled={working} submit>Sign in</Button>
       </form>
-
       {!!errorMessage && <p>{errorMessage}</p>}
-
       <Button size="small" type="tertiary" onClick={showForgotPassword}>
         Forgot Password
       </Button>
