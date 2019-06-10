@@ -131,7 +131,6 @@ function TeamAnalyticsActivity({ activeFilter, analytics, currentTimeFrame }) {
   return null;
 }
 
-
 TeamAnalyticsActivity.propTypes = {
   activeFilter: PropTypes.string.isRequired,
   analytics: PropTypes.object.isRequired,

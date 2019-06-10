@@ -4,12 +4,11 @@ import classnames from 'classnames';
 
 import styles from './styles.styl';
 
-const depluralize = (str) => str.replace(/e?s$/, '')
+const depluralize = (str) => str.replace(/e?s$/, '');
 
 const SummaryItem = ({ total, type, label }) => (
   <span className={styles.summaryItem}>
-    <span className={classnames(styles.total, styles[type])}>{total.toLocaleString('en')}</span>
-    {' '}
+    <span className={classnames(styles.total, styles[type])}>{total.toLocaleString('en')}</span>{' '}
     <span className={styles.summaryLabel}>{total === 1 ? depluralize(label) : label}</span>
   </span>
 );

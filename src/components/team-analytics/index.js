@@ -119,22 +119,8 @@ function TeamAnalytics({ id, projects }) {
 
         <section className={styles.section}>
           <h3>Referrers</h3>
-          {activeFilter === 'views' && (
-            <Referrers 
-              name="requests"
-              total={totalAppViews}
-              referrers={analytics.referrers}
-              label="views"
-            />
-          )}
-          {activeFilter === 'remixes' && (
-            <Referrers 
-              name="remixes"
-              total={totalRemixes}
-              referrers={analytics.remixReferrers}
-              label="remixes"
-            />
-          )}
+          {activeFilter === 'views' && <Referrers name="requests" total={totalAppViews} referrers={analytics.referrers} label="views" />}
+          {activeFilter === 'remixes' && <Referrers name="remixes" total={totalRemixes} referrers={analytics.remixReferrers} label="remixes" />}
         </section>
 
         {currentProjectDomain && (

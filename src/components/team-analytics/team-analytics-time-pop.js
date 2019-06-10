@@ -9,14 +9,11 @@ const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => (
   <PopoverDialog align="left">
     <PopoverSection>
       <ResultsList items={timeFrames}>
-        {(({ id: timeFrame }) => (
-          <ResultItem
-            onClick={() => updateTimeFrame(timeFrame)}
-            active={currentTimeFrame === timeFrame}
-          >
+        {({ id: timeFrame }) => (
+          <ResultItem onClick={() => updateTimeFrame(timeFrame)} active={currentTimeFrame === timeFrame}>
             <ResultInfo>{timeFrame}</ResultInfo>
           </ResultItem>
-        ))}
+        )}
       </ResultsList>
     </PopoverSection>
   </PopoverDialog>
@@ -31,15 +28,9 @@ const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => (
       </>
     }
   >
-    {({ toggleAndCall }) => (
-      <TeamAnalyticsTimePop
-        updateTimeFrame={toggleAndCall(updateTimeFrame)}
-        currentTimeFrame={currentTimeFrame}
-      />
-    )}
+    {({ toggleAndCall }) => <TeamAnalyticsTimePop updateTimeFrame={toggleAndCall(updateTimeFrame)} currentTimeFrame={currentTimeFrame} />}
   </PopoverWithButton>
 );
-
 
 TeamAnalyticsTimePopButton.propTypes = {
   updateTimeFrame: PropTypes.func.isRequired,
