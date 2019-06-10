@@ -65,15 +65,16 @@ class SignIn extends React.Component {
                   </button>
                 </form>
               )}
-              {this.state.done && !this.state.error && (
+              {this.state.done && this.state.error && (
                 <>
                   <Notification persistent inline type="success">Almost Done</Notification>
                   <Text>Finish signing in from the email sent to {this.state.email}.</Text>
                 </>
               )}
-              {this.state.dane && !!this.state.error && (
+              {this.state.done && !this.state.error && (
                 <>
-                  <Notification persistent inline type="error">Something went wrong, email not sent</Notification>
+                  <Notification persistent inline type="error">Error</Notification>
+                  <Text>Something went wrong, email not sent.</Text>
                 </>
               )}
             </section>
