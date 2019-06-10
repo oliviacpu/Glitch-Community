@@ -10,8 +10,8 @@ const Bento = () => (
   <img src="https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png?1502469566743" alt="" className={styles.bento} />
 );
 
-const AllProjectsItem = ({ active, onClick }) => (
-  <ResultItem onClick={onClick} active={active}>
+const AllProjectsItem = ({ active, selected, onClick }) => (
+  <ResultItem onClick={onClick} active={active} selected={selected}>
     <Bento />
     <ResultInfo>
       <ResultName>All Projects</ResultName>
@@ -24,7 +24,9 @@ const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) 
 
   const filteredProjects = useMemo(() => {
     const filtered = projects.filter(({ domain }) => domain.toLowerCase().includes(filter.toLowerCase()));
-    filtered.unshift({ id: 'all-projects' });
+    if (!filter) {
+      filtered.unshift({ id: 'all-projects', domain: '' });
+    }
     return filtered;
   }, [projects, filter]);
 
@@ -43,10 +45,11 @@ const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) 
             <ProjectResultItem
               project={project}
               onClick={() => updateProjectDomain(project.domain)}
-              active={active || currentProjectDomain === project.domain}
+              active={active}
+              selected={currentProjectDomain === project.domain}
             />
           ) : (
-            <AllProjectsItem active={active || !currentProjectDomain} onClick={() => updateProjectDomain('')} />
+            <AllProjectsItem active={active} selected={currentProjectDomain === ''} onClick={() => updateProjectDomain('')} />
           )
         }
       />
