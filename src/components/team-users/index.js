@@ -31,10 +31,10 @@ function InvitedUser(props) {
   const resendInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-      createNotification(`Resent invite to ${props.user.name}!`, 'notifySuccess');
+      createNotification(`Resent invite to ${props.user.name}!`, 'notifySuccess inline-notification');
     } catch (error) {
       captureException(error);
-      createErrorNotification('Invite not sent, try again later');
+      createErrorNotification('Invite not sent, try again later', 'inline-notification');
     }
   };
 
@@ -42,10 +42,10 @@ function InvitedUser(props) {
   const revokeInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
-      createNotification(`Removed ${props.user.name} from team`);
+      createNotification(`Removed ${props.user.name} from team`, 'inline-notification');
     } catch (error) {
       captureException(error);
-      createErrorNotification("Couldn't revoke invite, Try again later");
+      createErrorNotification("Couldn't revoke invite, Try again later", 'inline-notification');
     }
   };
 
