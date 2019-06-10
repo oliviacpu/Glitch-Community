@@ -112,7 +112,6 @@ const EmailHandler = ({ showView }) => {
         captureException(error);
         setStatus({ status: 'error', submitError: 'Something went wrong, email not sent.' });
       }
-      console.log(error);
     }
   }
 
@@ -155,7 +154,7 @@ const EmailHandler = ({ showView }) => {
             <Notification persistent type="error">
               Error
             </Notification>
-            <div>Something went wrong, email not sent.</div>
+            <div>{submitError}</div>
           </>
         )}
       </PopoverActions>
