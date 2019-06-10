@@ -138,12 +138,12 @@ class SignInCodeHandler extends React.Component {
           )}
           {this.state.done && !this.state.error && (
             <>
-              <div className="notification notifyPersistent notifySuccess">Success!</div>
+              <Notification persistent type="success">Success!</Notification>
             </>
           )}
           {this.state.done && this.state.error && (
             <>
-              <div className="notification notifyPersistent notifyError">Error</div>
+              <Notification persistent type="error">Error</Notification>
               <div>Code not found or already used. Try signing in with email.</div>
             </>
           )}

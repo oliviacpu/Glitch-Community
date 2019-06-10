@@ -15,14 +15,13 @@ export const NotificationsProvider = (props) => {
   };
 
   const create = (content, opts = {}) => {
-    const { type, inline, persistent, uploading } = opts;
+    const { type, inline, persistent } = opts;
     const notification = {
       id: `${Date.now()}{Math.random()}`,
       type: type || 'info',
       persistent,
       inline,
       content,
-      uploading,
     };
 
     setNotifications((prevNotifications) => [...prevNotifications, notification]);

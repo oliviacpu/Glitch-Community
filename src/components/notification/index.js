@@ -14,7 +14,6 @@ const Notification = ({ children, type, persistent, inline, remove, uploading })
     error: type === 'error',
     persistent,
     inline,
-    uploading,
   });
 
   return (
@@ -28,14 +27,12 @@ Notification.propTypes = {
   type: PropTypes.oneOf(['info', 'success', 'error']),
   persistent: PropTypes.bool,
   inline: PropTypes.bool,
-  uploading: PropTypes.bool,
 };
 
 Notification.defaultProps = {
   type: 'info',
   persistent: false,
   inline: false,
-  uploading: false,
 };
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
