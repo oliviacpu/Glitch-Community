@@ -1,11 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useMemo, createRef } from 'react';
 import PropTypes from 'prop-types';
+import { mapValues, keyBy } from 'lodash';
 
 import Loader from 'Components/loader';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
-import ResultsList, { useActiveIndex, ScrollResult } from 'Components/containers/results-list';
+import ResultsList from 'Components/containers/results-list';
 import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './base';
+
+function useActiveIndex(items, onSelect) {
+  const inputRef = useRef();
+  // map of all item ids -> ref, so they can be focused
+  const resultsListRefs = useMemo(
+    () => mapValues(keyBy(items, (item) => item.id), () => createRef()),
+    [items]);
+
+  const [activeIndex, setActiveIndex] = useState(-1);
+  // reset
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [items]);
+  
+  // set 
+  useEffect(() => {
+    if (activeIndex === -1) {
+      inputRef.current.focus();
+    } else {
+      const activeItem = items[activeIndex];
+      resultsListRefs[activeItem.id].current.focus();
+    }
+  }, [activeIndex]);
+  
+  
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((prev) => {
+        if (prev < 0) {
+          return items.length - 1;
+        }
+        return prev - 1;
+      });
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((prev) => {
+        if (prev === items.length - 1) {
+          return -1;
+        }
+        return prev + 1;
+      });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (items[activeIndex]) {
+        onSelect(items[activeIndex]);
+      }
+    }
+  };
+  return { activeIndex, onKeyDown };
+}
 
 const PopoverLoader = () => (
   <PopoverActions>
@@ -34,17 +86,17 @@ function PopoverSearch({
   labelText,
   placeholder,
 }) {
-  const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
+  const { inputRef, resultsListRefs } = useActiveIndex(results, onSubmit);
 
   return (
-    <>
+    <form onKeyDown={onKeyDown}>
       <PopoverInfo>
         <TextInput
+          ref={inputRef}
           autoFocus
           labelText={labelText}
           value={value}
           onChange={onChange}
-          onKeyDown={onKeyDown}
           opaque
           placeholder={placeholder}
           type="search"
@@ -53,14 +105,14 @@ function PopoverSearch({
       {results.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={results}>
-            {(item, i) => <ScrollResult active={i === activeIndex}>{renderItem({ item, onSubmit, active: i === activeIndex })}</ScrollResult>}
+            {(item) => renderItem({ item, onSubmit, ref: resultsListRefs[item.id] })}
           </ResultsList>
         </PopoverSection>
       )}
       {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
       {status === 'ready' && value.length > 0 && results.length === 0 && renderNoResults()}
       {status === 'error' && renderError()}
-    </>
+    </form>
   );
 }
 
