@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
 
+import { getContrastWithDarkText, getContrastWithLightText } from 'Models/collection';
 import TextInput from 'Components/inputs/text-input';
 import ColorInput from 'Components/inputs/color';
 import Emoji from 'Components/images/emoji';
@@ -28,10 +29,12 @@ const formatAndValidateHex = (hex) => {
   return null;
 };
 
+const isGoodColorContrast = (hex) => getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
+
 function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   const [color, setColor] = useState(initialColor);
   const [hex, setHex] = useState(initialColor);
-  const [hexInvalid, setHexInvalid] = useState(false);
+  const [error, setError] = useState(false);
 
   const changeColor = (value) => {
     setColor(value);
@@ -40,28 +43,41 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   };
 
   const setRandomColor = () => {
-    changeColor(randomColor({ luminosity: 'light' }));
+    const newColor = randomColor({ luminosity: 'light' });
+    if (isGoodColorContrast(newColor)) {
+      changeColor(newColor);
+      return;
+    }
+    setRandomColor();
   };
 
   const onChangeColorPicker = useMemo(() => throttle(changeColor, 100), []);
 
   const onChangeHex = (value) => {
     setHex(value);
+
     const formatted = formatAndValidateHex(value);
-    if (formatted) {
-      setColor(formatted);
-      updateColor(formatted);
-      setHexInvalid(false);
+    if (!formatted) {
+      setError('Invalid Hex');
       return;
     }
-    setHexInvalid(true);
+
+    const hexIsGoodColorContrast = isGoodColorContrast(value);
+    if (!hexIsGoodColorContrast) {
+      setError('This color might make text hard to read. Try another!');
+      return;
+    }
+
+    setColor(formatted);
+    updateColor(formatted);
+    setError(false);
   };
 
   const keyPress = (e) => {
     if (e.key === 'Enter') {
       togglePopover();
     } else {
-      setHexInvalid(false);
+      setError(false);
     }
   };
 
@@ -71,15 +87,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
         <div className={styles.colorFormWrap}>
           <ColorInput value={color} onChange={onChangeColorPicker} />
           <div className={styles.hexWrap}>
-            <TextInput
-              opaque
-              value={hex}
-              onChange={onChangeHex}
-              onKeyPress={keyPress}
-              placeholder="Hex"
-              labelText="Custom color hex"
-              error={hexInvalid ? 'Invalid Hex' : null}
-            />
+            <TextInput opaque value={hex} onChange={onChangeHex} onKeyPress={keyPress} placeholder="Hex" labelText="Custom color hex" error={error} />
           </div>
         </div>
       </PopoverInfo>
