@@ -7,7 +7,7 @@ import { useNotifications } from 'State/notifications';
 const NotifyUploading = ({ progress }) => (
   <>
     Uploading asset
-    <progress className="notify-progress" value={progress} />
+    <progress value={progress} />
   </>
 );
 const NotifyError = ({ error }) => {
