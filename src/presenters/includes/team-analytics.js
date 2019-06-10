@@ -82,13 +82,12 @@ function TeamAnalyticsBase ({ id, projects }) {
       </section>
     );
   }
-  
 
   return (
     <section className="team-analytics">
       <h2>
         Analytics
-        {projects.length === 0 && analyticsStatus === 'ready' && (
+        {projects.length === 0 && (
           <aside className="inline-banners team-page">Add projects to see their stats</aside>
         )}
       </h2>
@@ -110,42 +109,34 @@ function TeamAnalyticsBase ({ id, projects }) {
       )}
 
       <section className="summary">
-        {!analytics ? (
-          <Loader />
-        ) : (
-          <TeamAnalyticsSummary
-            currentProjectDomain={currentProjectDomain}
-            currentTimeFrame={currentTimeFrame}
-            activeFilter={activeFilter}
-            totalAppViews={totalAppViews}
-            totalRemixes={totalRemixes}
-          />
-        )}
+        <TeamAnalyticsSummary
+          currentProjectDomain={currentProjectDomain}
+          currentTimeFrame={currentTimeFrame}
+          activeFilter={activeFilter}
+          totalAppViews={totalAppViews}
+          totalRemixes={totalRemixes}
+        />
       </section>
 
       <section className="activity">
         <figure id="chart" className="c3" />
-        {analytics && <TeamAnalyticsActivity
+        <TeamAnalyticsActivity
           activeFilter={activeFilter}
           analytics={analytics}
           currentTimeFrame={currentTimeFrame}
-        />}
+        />
       </section>
 
-      <section className="referrers">
+      {/*<section className="referrers">
         <h3>Referrers</h3>
-        {!analytics ? (
-          <Loader /> 
-        ) : (
-          <TeamAnalyticsReferrers
-            activeFilter={activeFilter}
-            analytics={analytics}
-            totalRemixes={totalRemixes}
-            totalAppViews={totalAppViews}
-          />
-        )}
-      </section>
-
+        <TeamAnalyticsReferrers
+          activeFilter={activeFilter}
+          analytics={analytics}
+          totalRemixes={totalRemixes}
+          totalAppViews={totalAppViews}
+        />
+      </section>*/}
+      
       {currentProjectDomain && (
         <section className="project-details">
           <h3>Project Details</h3>
