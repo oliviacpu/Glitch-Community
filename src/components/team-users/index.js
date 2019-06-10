@@ -43,6 +43,7 @@ function InvitedUser(props) {
     try {
       await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
       createNotification(`Removed ${props.user.name} from team`);
+      // remove user avatar from invitees list
     } catch (error) {
       captureException(error);
       createErrorNotification("Couldn't revoke invite, Try again later");
