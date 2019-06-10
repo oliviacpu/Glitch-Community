@@ -1,44 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import TransparentButton from 'Components/buttons/transparent-button';
-import Button from 'Components/buttons/button';
 import Markdown from 'Components/text/markdown';
 import ProfileList from 'Components/profile-list';
 import VisibilityContainer from 'Components/visibility-container';
+import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
+
 import { getLink } from 'Models/project';
 import { createAPIHook } from 'State/api';
 import { getAllPages } from 'Shared/api';
 
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './project-result-item.styl';
-
-const ProjectResultItemBase = ({ project, active, onClick, teams, users }) => (
-  <div className={classnames(styles.projectResult, project.isPrivate && styles.private, active && styles.active)}>
-    <TransparentButton onClick={onClick}>
-      <div className={styles.resultWrap}>
-        <ProjectAvatar {...project} />
-        <div className={styles.resultInfo}>
-          <div className={styles.resultName}>{project.domain}</div>
-          {project.description.length > 0 && (
-            <div className={styles.resultDescription}>
-              <Markdown renderAsPlaintext>{project.description}</Markdown>
-            </div>
-          )}
-          <div className={styles.profileListWrap}>
-            <ProfileList teams={teams} users={users} layout="row" size="small" />
-          </div>
-        </div>
-      </div>
-    </TransparentButton>
-    <div className={styles.linkButtonWrap}>
-      <Button size="small" href={getLink(project)} newTab>
-        View →
-      </Button>
-    </div>
-  </div>
-);
 
 const useMembers = createAPIHook(async (api, project) => {
   const [users, teams] = await Promise.all([
@@ -48,29 +22,49 @@ const useMembers = createAPIHook(async (api, project) => {
   return { users, teams };
 });
 
-const ProjectResultWithData = (props) => {
-  const { value: members } = useMembers(props.project);
-  return <ProjectResultItemBase {...props} {...members} />;
+const ProfileListWithData = ({ project }) => {
+  const { value: members } = useMembers(project);
+  return <ProfileList {...members} layout="row" size="small" />;
 };
 
-const ProjectResultItem = (props) => {
-  // IntersectionObserver behaves strangely with element.scrollIntoView, so we'll assume if something is active it is also visible.
-  const [wasEverActive, setWasEverActive] = useState(false);
-  useEffect(() => {
-    if (props.active) setWasEverActive(true);
-  }, [props.active]);
-  return (
+const ProfileListWrap = ({ project }) => (
+  <div className={styles.profileListWrap}>
     <VisibilityContainer>
-      {({ wasEverVisible }) => (wasEverVisible || wasEverActive ? <ProjectResultWithData {...props} /> : <ProjectResultItemBase {...props} />)}
+      {({ wasEverVisible }) => (
+        wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" size="small" />
+      )}
     </VisibilityContainer>
-  );
-};
+  </div>
+);
+
+const ProjectResultItem = ({ project, active, onClick }) => (
+  <ResultItem
+    className={classnames(project.private && styles.private)}
+    href={getLink(project)}
+    onClick={onClick}
+    active={active}
+  >
+    <div>
+      <ProjectAvatar {...project} />
+    </div>
+    <ResultInfo>
+      <ResultName>{project.domain}</ResultName>
+      {project.description.length > 0 && (
+        <ResultDescription>
+          <Markdown renderAsPlaintext>{project.description}</Markdown>
+        </ResultDescription>
+      )}
+      <ProfileListWrap project={project} />
+    </ResultInfo>
+  </ResultItem>
+);
+
 ProjectResultItem.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    isPrivate: PropTypes.bool,
+    private: PropTypes.bool,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
 };

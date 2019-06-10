@@ -1,11 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Loader from 'Components/loader';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
-import ResultsList, { useActiveIndex, ScrollResult } from 'Components/containers/results-list';
+import ResultsList from 'Components/containers/results-list';
 import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './base';
+
+function useActiveIndex(items, onSelect) {
+  const inputRef = useRef();
+  const [activeIndex, setActiveIndex] = useState(-1);
+  // reset activeIndex when items change
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [items]);
+
+  // focus input when there's no active index
+  useEffect(() => {
+    if (activeIndex === -1) {
+      inputRef.current.focus();
+    }
+  }, [activeIndex]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex((prev) => {
+          if (prev < 0) {
+            return items.length - 1;
+          }
+          return prev - 1;
+        });
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex((prev) => {
+          if (prev === items.length - 1) {
+            return -1;
+          }
+          return prev + 1;
+        });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (items[activeIndex]) {
+          onSelect(items[activeIndex]);
+        }
+      }
+    };
+
+    // TODO: should these be bound to a container instead of the window?
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [items]);
+
+  return { inputRef, activeIndex };
+}
 
 const PopoverLoader = () => (
   <PopoverActions>
@@ -34,17 +85,16 @@ function PopoverSearch({
   labelText,
   placeholder,
 }) {
-  const { activeIndex, onKeyDown } = useActiveIndex(results, onSubmit);
-
+  const { inputRef, activeIndex } = useActiveIndex(results, onSubmit);
   return (
     <>
       <PopoverInfo>
         <TextInput
+          ref={inputRef}
           autoFocus
           labelText={labelText}
           value={value}
           onChange={onChange}
-          onKeyDown={onKeyDown}
           opaque
           placeholder={placeholder}
           type="search"
@@ -53,7 +103,7 @@ function PopoverSearch({
       {results.length > 0 && (
         <PopoverSection>
           <ResultsList scroll items={results}>
-            {(item, i) => <ScrollResult active={i === activeIndex}>{renderItem({ item, onSubmit, active: i === activeIndex })}</ScrollResult>}
+            {(item, i) => renderItem({ item, onSubmit, active: i === activeIndex })}
           </ResultsList>
         </PopoverSection>
       )}

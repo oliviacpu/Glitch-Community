@@ -91,7 +91,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
 
   const results = useMemo(() => {
     const memberSet = new Set(members);
-    const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id));
+    const filteredUsers = retrievedUsers.filter((user) => !memberSet.has(user.id)).slice(0, 10);
     const out = [];
 
     const email = parseOneAddress(debouncedValue);
