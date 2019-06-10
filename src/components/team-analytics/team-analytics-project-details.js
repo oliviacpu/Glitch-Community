@@ -65,7 +65,9 @@ const ProjectDetails = ({ projectDetails }) => (
             <th>Originally remixed from</th>
             <td>
               <ProjectLink project={projectDetails.baseProject}>
-                <ProjectAvatar {...projectDetails.baseProject} className={styles.baseProjectAvatar} />
+                <span className={styles.baseProjectAvatar}>
+                  <ProjectAvatar {...projectDetails.baseProject} />
+                </span>
                 {projectDetails.baseProject.domain}
               </ProjectLink>
             </td>
@@ -102,14 +104,12 @@ function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain })
     <>
       <ProjectDetails projectDetails={projectDetails} />
       {activeFilter === 'remixes' && (
-        <article className="project-remixes">
-          <h4 className={styles.projectDetailsTitle}>Latest Remixes</h4>
-          <div className="project-remixes-container">
-            {projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
-            {projectRemixes.map((remix) => (
-              <ProjectRemixItem key={remix.id} remix={remix} />
-            ))}
-          </div>
+        <article>
+          <h4>Latest Remixes</h4>
+          {projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
+          {projectRemixes.map((remix) => (
+            <ProjectRemixItem key={remix.id} remix={remix} />
+          ))}
         </article>
       )}
     </>
