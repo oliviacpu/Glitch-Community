@@ -33,7 +33,7 @@ const ProfileItemWithData = ({ collection }) => {
       {curator ? (<VisuallyHidden>by</VisuallyHidden>) : null}
       <ProfileItem {...curator} size="small" />
     </>
-  )
+  );
 };
 
 const ProfileItemWrap = ({ collection }) => (
