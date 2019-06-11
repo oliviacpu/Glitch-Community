@@ -95,14 +95,14 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
 
     dispatchState('next');
   };
-  
+
   const onPreviousButtonClick = () => {
     if (state.page - 1 === 1) {
       nextButtonRef.current.focus();
     }
 
     dispatchState('previous');
-  }
+  };
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * projectsPerPage;
@@ -125,7 +125,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button data-cy="show-all"  type="tertiary" onClick={() => dispatchState('expand')}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState('expand')}>
             Show all <Badge>{numProjects}</Badge>
           </Button>
         </div>
