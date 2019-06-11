@@ -112,6 +112,7 @@ const ForgotPasswordHandler = () => {
               placeholder="your@email.com"
               error={validationError}
               disabled={isWorking}
+              testingId="sign-in-email"
             />
             <Button size="small" disabled={!isEnabled} submit>
               Send Reset Password Link
