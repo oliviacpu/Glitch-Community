@@ -112,7 +112,7 @@ const ForgotPasswordHandler = () => {
               placeholder="your@email.com"
               error={validationError}
               disabled={isWorking}
-              testingId="sign-in-email"
+              testingId="reset-password-email"
             />
             <Button size="small" disabled={!isEnabled} submit>
               Send Reset Password Link
@@ -185,6 +185,7 @@ const EmailHandler = ({ showView }) => {
               placeholder="new@user.com"
               error={isEnabled && !isFocused && validationError}
               autoFocus
+              testingId="sign-in-email"
             />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
@@ -238,9 +239,9 @@ const SignInWithCode = () => {
       <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
-          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
+          <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
             Paste your temporary sign in code below
-            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus />
+            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus testingId="sign-in-code" />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Sign In
@@ -280,7 +281,7 @@ const LoginSection = ({ showForgotPassword }) => {
     } catch (error) {
       let message = error.response && error.response.data && error.response.data.message;
       if (error.response.status === 401) {
-        message = "Failed to sign in, try again?";
+        message = 'Failed to sign in, try again?';
       }
       setErrorMessage(message || 'Failed to sign in, try again?');
       setWorking(false);
@@ -290,8 +291,8 @@ const LoginSection = ({ showForgotPassword }) => {
   return (
     <PopoverActions>
       <form data-cy="sign-in-form" onSubmit={handleSubmit}>
-        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email"/>
-        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password"/>
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
         <Button size="small" disabled={emailValidationError || working} submit>Sign in</Button>
       </form>
       {!!errorMessage && <p>{errorMessage}</p>}
