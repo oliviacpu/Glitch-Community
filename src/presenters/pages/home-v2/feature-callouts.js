@@ -4,8 +4,6 @@ const styles = {};
 
 export const Discover = () => (
   <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290">
-    <title id="title2">discover-animation</title>
-    <desc id="desc4">Created with Sketch.</desc>
     <defs id="defs10">
       <ellipse id="path-1" cx="16.799999" cy="14.954068" rx="16.799999" ry="7.8000002" />
       <path
@@ -21,13 +19,13 @@ export const Discover = () => (
         id="path-4"
       />
     </defs>
-    <g id="Page-1" data-style="fill:none;fillRule:evenodd;stroke:none;strokeWidth:1">
+    <g id="Page-1" style={{ fill: 'none', fillRule: 'evenodd', stroke: 'none', strokeWidth: '1' }}>
       <g id="05-29-19-xlarge">
         <g id="Group-36">
           <g id="discover-animation">
-            <g id="react" className={styles.animation} data-style="fillRule:nonzero">
+            <g id="react" className={styles.animation} style={{ fillRule: 'nonzero' }}>
               <g id="Group-13">
-                <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" data-style="fill:#61dafb;stroke:#000000;strokeWidth:1.69705629" />
+                <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" style={{ fill: '#61dafb', stroke: '#000000', strokeWidth: '1.69705629' }} />
                 <g id="Group-2">
                   <g id="g17">
                     <ellipse
@@ -37,7 +35,7 @@ export const Discover = () => (
                       rx="15.9"
                       ry="6.9000001"
                       id="ellipse13"
-                      data-style="stroke:#61dafb;strokeWidth:2.54558444"
+                      style={{ stroke: '#61dafb', strokeWidth: '2.54558444' }}
                     />
                     <ellipse
                       cx="48"
@@ -45,7 +43,7 @@ export const Discover = () => (
                       rx="17.799999"
                       ry="8.8000002"
                       id="ellipse15"
-                      data-style="stroke:#000000;strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
+                      style={{ stroke: '#000000', strokeWidth: '2.5', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                     />
                   </g>
                   <g id="Oval-Copy">
@@ -53,12 +51,12 @@ export const Discover = () => (
                       d="m 54.020359,31.651781 c 4.943444,-7.328957 6.173824,-15.014569 3.170808,-17.040128 -3.003015,-2.02556 -9.668082,1.994309 -14.611526,9.323266 -4.943444,7.328957 -6.173824,15.014569 -3.170808,17.040129 3.003015,2.025559 9.668082,-1.99431 14.611526,-9.323267 0,0 0,0 0,0"
                       strokeLinejoin="square"
                       id="path19"
-                      data-style="stroke:#61dafb;strokeWidth:1.79999995"
+                      style={{ stroke: '#61dafb', strokeWidth: '1.79999995' }}
                     />
                     <path
                       d="M 55.595531,32.714248 C 50.134944,40.809901 42.54919,45.385059 38.346366,42.550219 34.143543,39.715379 35.543882,30.968106 41.004469,22.872453 46.465056,14.7768 54.05081,10.201641 58.253634,13.036481 c 4.202823,2.834841 2.802484,11.582114 -2.658103,19.677767 0,0 0,0 0,0"
                       id="path21"
-                      data-style="stroke:#000000;strokeWidth:2"
+                      style={{ stroke: '#000000', strokeWidth: '2' }}
                     />
                   </g>
                   <g id="Oval-Copy-2">
@@ -66,61 +64,93 @@ export const Discover = () => (
                       d="M 54.214454,24.239587 C 49.661353,16.661955 43.215804,12.298772 40.110895,14.16439 c -3.10491,1.865618 -2.27845,9.60509 2.274651,17.182723 4.553101,7.577632 10.99865,11.940815 14.103559,10.075197 3.10491,-1.865618 2.27845,-9.60509 -2.274651,-17.182723 0,0 0,0 0,0"
                       strokeLinejoin="square"
                       id="path24"
-                      data-style="stroke:#61dafb;strokeWidth:1.79999995"
+                      style={{ stroke: '#61dafb', strokeWidth: '1.79999995' }}
                     />
                     <path
                       d="m 55.843072,23.261015 c 5.02941,8.370343 5.970033,17.178917 1.624606,19.789913 -4.345428,2.610996 -11.681341,-2.3549 -16.71075,-10.725243 -5.02941,-8.370343 -5.970033,-17.178916 -1.624606,-19.789913 4.345428,-2.6109961 11.681341,2.3549 16.71075,10.725243 0,0 0,0 0,0"
                       id="path26"
-                      data-style="stroke:#000000;strokeWidth:2"
+                      style={{ stroke: '#000000', strokeWidth: '2' }}
                     />
                   </g>
                 </g>
               </g>
             </g>
-            <g id="music-notes" data-style="stroke:#000000;strokeWidth:2.5">
+            <g id="music-notes" style={{ stroke: '#000000', strokeWidth: '2.5' }}>
               <path
                 d="m 92.233138,26.995718 c -3.174716,0.276626 -2.315134,2.643345 -2.293235,2.697574 1.060012,2.661256 3.084382,7.755435 4.164427,10.408606 0.205054,0.506134 0.411111,1.01126 0.617166,1.517391 -0.752945,0.174531 -1.478156,0.480673 -2.106527,0.894152 -1.776879,1.169838 -3.056612,3.364819 -2.263643,5.493945 0.01,0.02611 0.02793,0.04115 0.03989,0.06424 0.007,0.0231 0.0049,0.04422 0.01487,0.06731 1.869269,4.203354 8.406989,2.453175 9.843044,-1.217671 0.37033,-0.944624 -0.0843,-3.591125 -0.23656,-3.965703 -0.477803,-1.173943 -0.954612,-2.346884 -1.432419,-3.520827 -0.733638,-1.80058 -2.858963,-5.997349 -3.590599,-7.797934 -0.439252,-0.884246 1.440761,-1.203817 3.198085,1.445744 1.575724,2.375757 2.172913,4.913214 4.072873,3.912784 1.89996,-1.000431 0.69575,-4.302484 -1.92667,-7.539107 -2.62243,-3.236622 -6.340472,-2.613882 -8.100697,-2.460506 0,0 0,0 0,0"
                 id="note-1"
                 className={styles.animation}
-                data-style="fill:#db96ff"
+                style={{ fill: '#db96ff' }}
               />
               <path
                 d="m 133.80886,8.5875898 c 0,0 -6.22757,-3.4201793 -6.22757,-3.4201793 -0.65085,-0.3574739 -1.29367,-0.7418017 -1.95736,-1.0754747 -0.59839,-0.3006449 -1.26737,-0.4326311 -1.93512,-0.3817883 -1.06704,-0.1185008 -2.09641,0.4342612 -2.58702,1.3892074 -1.45789,2.6028206 -2.87258,5.2304251 -4.30875,7.8457711 0,0 -0.86714,1.578922 -0.86714,1.578922 -1.52453,-1.173585 -3.48946,-1.614163 -5.36914,-1.203873 -1.96449,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38872,2.183082 1.92095,3.988687 4.01169,4.727442 2.22705,0.861872 4.97885,0.459851 6.26647,-1.721748 0.0799,-0.158378 0.15109,-0.321021 0.2132,-0.487195 0.12589,-0.165329 0.23972,-0.339506 0.3406,-0.521182 0,0 1.91271,-3.48293 1.91271,-3.48293 0,0 3.09159,-5.629293 3.09159,-5.629293 0.60609,0.338584 1.22817,0.642403 1.77632,0.943456 0,0 4.84512,2.661189 4.84512,2.661189 -0.87195,1.591052 -1.74311,3.182403 -2.61348,4.774052 0,0 -0.86316,1.571668 -0.86316,1.571668 -1.53599,-1.218148 -3.53725,-1.683416 -5.45308,-1.267777 -1.96448,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38871,2.183103 1.92093,3.988742 4.01167,4.727539 2.22705,0.861872 4.97885,0.459851 6.26637,-1.721772 0.0239,-0.0468 0.042,-0.09343 0.064,-0.140274 0.22138,-0.2416 0.41266,-0.509133 0.56967,-0.796751 0,0 1.91281,-3.482906 1.91281,-3.482906 0,0 4.64358,-8.455791 4.64358,-8.455791 0.53707,-0.767963 0.71029,-1.73285 0.47387,-2.63967 -0.31469,-1.1154217 -1.10336,-2.0363628 -2.15711,-2.5188722 0,0 0,0 0,0"
                 id="note-2"
                 className={styles.animation}
-                data-style="fill:#fcf3b0"
+                style={{ fill: '#fcf3b0' }}
               />
             </g>
             <g id="tetris" className={styles.animation}>
               <polygon
                 id="polygon37"
                 points="15.288363,81.335333 25.637968,81.425652 25.548434,91.685262 15.198828,91.594942 "
-                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
+                style={{
+                  fill: '#8958fb',
+                  stroke: '#222222',
+                  strokeWidth: '2.5',
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  strokeMiterlimit: '4',
+                  strokeDasharray: 'none',
+                }}
               />
               <polygon
                 id="polygon39"
                 points="15.198828,91.594942 25.548434,91.685262 25.4589,101.94487 15.109294,101.85455 "
-                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
+                style={{
+                  fill: '#8958fb',
+                  stroke: '#222222',
+                  strokeWidth: '2.5',
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  strokeMiterlimit: '4',
+                  strokeDasharray: 'none',
+                }}
               />
               <polygon
                 id="polygon41"
                 points="15.377897,71.075723 25.727502,71.166043 25.637968,81.425652 15.288363,81.335333 "
-                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
+                style={{
+                  fill: '#8958fb',
+                  stroke: '#222222',
+                  strokeWidth: '2.5',
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  strokeMiterlimit: '4',
+                  strokeDasharray: 'none',
+                }}
               />
               <polygon
                 id="polygon35"
                 points="25.637968,81.425652 35.987574,81.515972 35.89804,91.775581 25.548434,91.685262 "
-                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
+                style={{
+                  fill: '#8958fb',
+                  stroke: '#222222',
+                  strokeWidth: '2.5',
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  strokeMiterlimit: '4',
+                  strokeDasharray: 'none',
+                }}
               />
               <g id="Group">
-                <rect id="Rectangle" x="17.700001" y="73.199997" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
-                <rect id="center-rect" x="17.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
-                <rect id="rect46" x="17.700001" y="93.900002" width="5.4000034" height="5.4473724" rx="0.54000038" data-style="fill:#ffffff" />
-                <rect id="rect48" x="27.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
+                <rect id="Rectangle" x="17.700001" y="73.199997" width="5.4000015" height="5.4473705" rx="0.5400002" style={{ fill: '#ffffff' }} />
+                <rect id="center-rect" x="17.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" style={{ fill: '#ffffff' }} />
+                <rect id="rect46" x="17.700001" y="93.900002" width="5.4000034" height="5.4473724" rx="0.54000038" style={{ fill: '#ffffff' }} />
+                <rect id="rect48" x="27.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" style={{ fill: '#ffffff' }} />
               </g>
             </g>
-            <g id="cat" className={styles.animation} data-style="fill:none;fillRule:evenodd;stroke:none;strokeWidth:2">
-              <g id="05-29-19-xlarge-90" data-style="fillRule:nonzero">
+            <g id="cat" className={styles.animation} style={{ fill: 'none', fillRule: 'evenodd', stroke: 'none', strokeWidth: '2' }}>
+              <g id="05-29-19-xlarge-90" style={{ fillRule: 'nonzero' }}>
                 <g id="Group-36-2">
                   <g id="discover-animation-3">
                     <g id="illustrations-9">
@@ -128,47 +158,47 @@ export const Discover = () => (
                         <path
                           id="Combined-Shape"
                           d="m 91.925634,85.0196 c 1.449556,1.837538 2.395881,3.97262 2.683178,6.312465 1.043252,8.496606 -6.998586,16.475725 -17.961948,17.821855 -10.963362,1.34613 -20.696646,-4.45048 -21.739898,-12.947082 -0.253415,-2.0639 0.02923,-4.097267 0.759603,-6.012446 0,0 -1.859529,-9.564449 -1.859529,-9.564449 -0.263505,-1.355334 0.621597,-2.667663 1.976931,-2.931168 0.430841,-0.08376 0.876141,-0.05263 1.291131,0.09029 0,0 8.122933,2.797305 8.122933,2.797305 2.30254,-1.093333 4.892922,-1.860289 7.670879,-2.201379 2.257102,-0.277137 4.462066,-0.251528 6.549798,0.03806 0,0 8.129659,-5.279914 8.129659,-5.279914 0.368091,-0.239061 0.792631,-0.377002 1.230938,-0.399956 1.378822,-0.07221 2.555115,0.987014 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587"
-                          data-style="fill:#ffffff;stroke:#000000;strokeWidth:2.48136544"
+                          style={{ fill: '#ffffff', stroke: '#000000', strokeWidth: '2.48136544' }}
                         />
-                        <g id="Oval-7" data-style="fill:#f8a5a5">
+                        <g id="Oval-7" style={{ fill: '#f8a5a5' }}>
                           <path
                             id="path1295"
                             d="m 94.459242,90.468839 c -1.561688,0.961575 -3.350452,1.61034 -5.289865,1.84847 -7.212522,0.885586 -13.777336,-4.243408 -14.662922,-11.45593 -0.11328,-0.922589 -0.128148,-1.834581 -0.05283,-2.725443 1.693166,-0.101789 3.347203,-0.03416 4.933554,0.185883 0,0 8.129661,-5.279915 8.129661,-5.279915 0.368089,-0.239061 0.792629,-0.377002 1.230937,-0.399956 1.378822,-0.07221 2.555114,0.987015 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587 1.290651,1.636101 2.182355,3.508089 2.565141,5.550467 0,0 0,0 0,0"
                           />
                         </g>
-                        <g id="mouth" data-style="stroke:#000000;strokeWidth:3.47391152">
+                        <g id="mouth" style={{ stroke: '#000000', strokeWidth: '3.47391152' }}>
                           <path
                             id="Triangle"
                             d="m 74.567428,95.51634 c 0,0 -1.502991,-1.620944 -1.502991,-1.620944 -0.375511,-0.404981 -0.351621,-1.037696 0.05336,-1.413207 0.154144,-0.142927 0.34941,-0.233645 0.558054,-0.259263 0,0 2.569194,-0.315457 2.569194,-0.315457 0.548169,-0.06731 1.047109,0.322509 1.114416,0.870677 0.02562,0.208644 -0.01516,0.420055 -0.116556,0.604198 0,0 -1.066204,1.936402 -1.066204,1.936402 -0.266383,0.483796 -0.874523,0.660044 -1.358319,0.39366 -0.09359,-0.05153 -0.178313,-0.117725 -0.250954,-0.196066 0,0 0,0 0,0"
-                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
+                            style={{ strokeWidth: '2.5', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                           />
                           <path
                             id="Path-2"
                             d="m 75.523641,96.65203 c 0.100996,2.170537 -0.767172,3.3686 -2.604504,3.5942 -1.837331,0.2256 -3.053055,-0.21767 -3.647172,-1.3298"
-                            data-style="strokeWidth:2.5;strokeLinecap:round;strokeMiterlimit:4;strokeDasharray:none"
+                            style={{ strokeWidth: '2.5', strokeLinecap: 'round', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                           />
                           <path
                             id="Path-2-Copy"
                             d="m 75.523642,96.65203 c 0.427105,2.130496 1.559323,3.082946 3.396655,2.85735 1.837331,-0.225596 2.909707,-0.949806 3.217128,-2.17263"
-                            data-style="strokeWidth:2.5;strokeLinecap:round;strokeMiterlimit:4;strokeDasharray:none"
+                            style={{ strokeWidth: '2.5', strokeLinecap: 'round', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                           />
                         </g>
-                        <g id="eyes" data-style="stroke:#000000;strokeWidth:3.47391152;strokeLinecap:round">
+                        <g id="eyes" style={{ stroke: '#000000', strokeWidth: '3.47391152', strokeLinecap: 'round' }}>
                           <path
                             id="Path-4"
                             d="m 82.398219,86.114405 c 0,0 -2.704572,2.185359 -2.704572,2.185359 -0.214787,0.173553 -0.248214,0.488366 -0.07466,0.703154 0.04467,0.05529 0.100628,0.100418 0.164122,0.132375 0,0 3.182712,1.601864 3.182712,1.601864"
-                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
+                            style={{ strokeWidth: '2.5', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                           />
                           <path
                             id="Path-4-Copy"
                             d="m 65.263195,88.395161 c 0,0 3.15292,1.466149 3.15292,1.466149 0.250394,0.116437 0.358988,0.413812 0.242551,0.664206 -0.02997,0.06446 -0.07334,0.121779 -0.127222,0.168148 0,0 -2.700647,2.324249 -2.700647,2.324249"
-                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
+                            style={{ strokeWidth: '2.5', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                           />
                         </g>
                         <path
                           id="Combined-Shape-Copy"
                           d="m 91.925634,85.0196 c 1.449556,1.837538 2.395881,3.97262 2.683178,6.312465 1.043252,8.496606 -6.998586,16.475725 -17.961948,17.821855 -10.963362,1.34613 -20.696646,-4.45048 -21.739898,-12.947082 -0.253415,-2.0639 0.02923,-4.097267 0.759603,-6.012446 0,0 -1.859529,-9.564449 -1.859529,-9.564449 -0.263505,-1.355334 0.621597,-2.667663 1.976931,-2.931168 0.430841,-0.08376 0.876141,-0.05263 1.291131,0.09029 0,0 8.122933,2.797305 8.122933,2.797305 2.30254,-1.093333 4.892922,-1.860289 7.670879,-2.201379 2.257102,-0.277137 4.462066,-0.251528 6.549798,0.03806 0,0 8.129659,-5.279914 8.129659,-5.279914 0.368091,-0.239061 0.792631,-0.377002 1.230938,-0.399956 1.378822,-0.07221 2.555115,0.987014 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587"
-                          data-style="stroke:#000000;strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
+                          style={{ stroke: '#000000', strokeWidth: '2.5', strokeMiterlimit: '4', strokeDasharray: 'none' }}
                         />
                       </g>
                     </g>
@@ -176,97 +206,112 @@ export const Discover = () => (
                 </g>
               </g>
             </g>
-            <g id="webpage3" transform="translate(142.59436,23.943831)" data-style="stroke:#000000;strokeWidth:2.5">
-              <rect id="rect71" x="11.193075" y="0" width="96.304031" height="72.038452" rx="4.5" data-style="fill:#77ffc8" />
+            <g id="webpage3" transform="translate(142.59436,23.943831)" style={{ stroke: '#000000', strokeWidth: '2.5' }}>
+              <rect id="rect71" x="11.193075" y="0" width="96.304031" height="72.038452" rx="4.5" style={{ fill: '#77ffc8' }} />
               <path
                 d="m 15.595093,0.22895923 h 87.499997 c 2.48528,0 4.5,2.01471867 4.5,4.49999997 V 13.053387 H 11.095093 V 4.7289592 c 0,-2.4852813 2.014718,-4.49999997 4.5,-4.49999997 z"
                 id="Rectangle-Copy-4"
-                data-style="fill:#ffffff"
+                style={{ fill: '#ffffff' }}
               />
               <path
                 d="M 4.8861511,10.228959 H 92.386151 c 2.485281,0 4.5,2.014719 4.5,4.5 v 8.324428 H 0.38615109 v -8.324428 c 0,-2.485281 2.01471861,-4.5 4.50000001,-4.5 z"
                 id="path74"
-                data-style="fill:#eaeaea"
+                style={{ fill: '#eaeaea' }}
               />
             </g>
-            <g id="webpage2" transform="translate(142.46103,33.802164)" data-style="stroke:#000000;strokeWidth:2.5">
-              <rect id="rect77" x="0.5194844" y="0.37062588" width="96.304031" height="72.038452" rx="5.8479533" data-style="fill:#ff9696" />
+            <g id="webpage2" transform="translate(142.46103,33.802164)" style={{ stroke: '#000000', strokeWidth: '2.5' }}>
+              <rect id="rect77" x="0.5194844" y="0.37062588" width="96.304031" height="72.038452" rx="5.8479533" style={{ fill: '#ff9696' }} />
               <path
                 d="M 5.0194844,0.37062589 H 92.519484 c 2.485282,0 4.5,2.01471861 4.5,4.50000001 V 13.195053 H 0.51948442 V 4.8706259 c 0,-2.4852814 2.01471868,-4.50000001 4.49999998,-4.50000001 z"
                 id="path79"
-                data-style="fill:#ffffff"
+                style={{ fill: '#ffffff' }}
               />
             </g>
             <g id="webpage-1" transform="translate(129.08369,54.902164)">
               <path
                 d="M 0.41631245,0.37062589 H 96.416313 V 55.170077 c 0,2.485281 -2.014719,4.5 -4.5,4.5 H 4.9163125 c -2.4852814,0 -4.50000005,-2.014719 -4.50000005,-4.5 z"
                 id="path82"
-                data-style="fill:#bfb5ff"
+                style={{ fill: '#bfb5ff' }}
               />
-              <g id="g94" transform="translate(27.208156,10.370626)" data-style="fillRule:nonzero;stroke:#000000">
+              <g id="g94" transform="translate(27.208156,10.370626)" style={{ fillRule: 'nonzero', stroke: '#000000' }}>
                 <g id="Group-41" transform="rotate(-1,87.351138,-54.606199)">
                   <g id="gem" transform="translate(0.241231,0.06197)">
                     <polygon
                       id="Path-7"
                       transform="rotate(-15,19.15199,17.576896)"
                       points="35.100855,11.676184 19.229607,31.349105 3.203125,11.676184 9.4571439,3.8046875 29.5316,3.8046875 "
-                      data-style="fill:#fcf3b0;strokeWidth:2"
+                      style={{ fill: '#fcf3b0', strokeWidth: '2' }}
                     />
                     <polygon
                       id="Path-10"
                       transform="rotate(-15,16.744939,8.293771)"
                       points="16.430463,4.5775943 24.004981,12.009948 9.4848977,12.009948 "
-                      data-style="fill:#ffffff;strokeWidth:1.25"
+                      style={{ fill: '#ffffff', strokeWidth: '1.25' }}
                     />
                     <polygon
                       id="Path-11"
                       transform="rotate(19,28.376397,7.080684)"
                       points="25.870487,11.035599 32.590331,6.8292112 24.162463,3.1257687 "
-                      data-style="fill:#ffffff;strokeWidth:1.25"
+                      style={{ fill: '#ffffff', strokeWidth: '1.25' }}
                     />
                     <polygon
                       id="Path-12"
                       transform="rotate(19,7.619252,12.518679)"
                       points="3.9030751,16.960109 11.335429,12.385297 4.647103,8.0772493 "
-                      data-style="fill:#ffffff;strokeWidth:1.25"
+                      style={{ fill: '#ffffff', strokeWidth: '1.25' }}
                     />
                     <polygon
                       id="Path-13"
                       transform="rotate(19,18.181138,18.535577)"
                       points="21.585687,8.3404262 26.410331,28.730727 9.951945,16.266244 "
-                      data-style="fill:#ffffff;strokeWidth:1.25"
+                      style={{ fill: '#ffffff', strokeWidth: '1.25' }}
                     />
                   </g>
-                  <path d="m 1.921875,11.948102 h 32.03125" id="Line" transform="rotate(-15,17.9375,11.948102)" data-style="strokeWidth:1.25" />
+                  <path d="m 1.921875,11.948102 h 32.03125" id="Line" transform="rotate(-15,17.9375,11.948102)" style={{ strokeWidth: '1.25' }} />
                   <path
                     d="M 19.601752,32.405466 9.8292885,5.1155549"
                     id="Path-8"
                     transform="rotate(-15,14.71552,18.76051)"
-                    data-style="strokeWidth:1.25"
+                    style={{ strokeWidth: '1.25' }}
                   />
                   <polyline
                     id="Path-9"
                     transform="rotate(-15,24.406187,16.295646)"
                     points="19.2163825 30.0678553 26.7405276 10.1009964 29.5959919 2.5234375"
-                    data-style="strokeWidth:1.25"
+                    style={{ strokeWidth: '1.25' }}
                   />
                 </g>
               </g>
-              <rect id="rect96" x="0.056139201" y="-12" width="96.304031" height="72.038452" rx="4.5" data-style="stroke:#000000;strokeWidth:2.5" />
+              <rect
+                id="rect96"
+                x="0.056139201"
+                y="-12"
+                width="96.304031"
+                height="72.038452"
+                rx="4.5"
+                style={{ stroke: '#000000', strokeWidth: '2.5' }}
+              />
               <path
                 d="M 4.7081562,-12 H 91.708156 c 2.485282,0 4.5,2.0147186 4.5,4.5 V 0.82442748 H 0.20815622 V -7.5 c 0,-2.4852814 2.01471868,-4.5 4.49999998,-4.5 z"
                 id="Rectangle-Copy"
-                data-style="fill:#ffffff;stroke:#000000;strokeWidth:2.5"
+                style={{ fill: '#ffffff', stroke: '#000000', strokeWidth: '2.5' }}
               />
               <polygon
                 id="mouse"
                 points="66.468669,42.516009 85.101147,52.411237 81.257079,56.009976 88.45935,64.085787 84.349254,67.786645 77.154559,59.857795 73.282747,63.479673 "
-                data-style="fill:#ffffff;fillRule:nonzero;stroke:#222222;strokeWidth:2.6405642;strokeLinecap:round;strokeLinejoin:round"
+                style={{
+                  fill: '#ffffff',
+                  fillRule: 'nonzero',
+                  stroke: '#222222',
+                  strokeWidth: '2.6405642',
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                }}
               />
             </g>
             <path
               id="mouse-path"
-              data-style="strokeWidth:1.25"
+              style={{ strokeWidth: '1.25' }}
               d="M18.525489,86.679012L48.5,27.839282L110.14167,34.17279L201.93946,109.17279L86.448204,97.980126"
             />
           </g>
@@ -278,8 +323,6 @@ export const Discover = () => (
 
 export const Dreams = () => (
   <svg width="184px" height="119px" viewBox="0 0 184 119">
-    <title>creators-animation</title>
-    <desc>Created with Sketch.</desc>
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-29-19-xlarge-banner" transform="translate(-535.000000, -620.000000)">
         <g id="Group-32" transform="translate(489.000000, 605.267418)">
@@ -438,14 +481,7 @@ export const Dreams = () => (
 );
 
 export const Teams = () => (
-  <svg
-    id="teams"
-    width="194px"
-    height="115px"
-    viewBox="0 0 194 115"
-  >
-    <title>team-animation</title>
-    <desc>Created with Sketch.</desc>
+  <svg id="teams" width="194px" height="115px" viewBox="0 0 194 115">
     <g id="Design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-21-19" transform="translate(-517.000000, -627.000000)">
         <g id="team-animation" transform="translate(518.852039, 628.307670)">
