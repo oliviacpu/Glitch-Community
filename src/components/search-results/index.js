@@ -58,7 +58,11 @@ function TeamWithDataLoading({ team }) {
 }
 
 const TeamResult = ({ result }) => {
-  console.log({result})
+  // filter our team that don't have urls (
+  // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
+  if (!result.url) {
+    return null;
+  }
   if (!result.users) {
     return <TeamWithDataLoading team={result} />;
   }
@@ -145,7 +149,6 @@ const resultComponents = {
 };
 
 const ResultComponent = ({ result }) => {
-  console.log("resultcomponent", result)
   const Component = resultComponents[result.type];
   return <Component result={result} />;
 };
