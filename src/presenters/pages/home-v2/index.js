@@ -9,7 +9,7 @@ import MaskImage from 'Components/images/mask-image';
 
 import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
-import { }
+import { Discover, Dreams, Teams } from './feature-callouts';
 import compiledData from '../../../curated/home.json';
 import styles from './styles.styl';
 
@@ -59,9 +59,10 @@ const FeatureCallouts = ({ content }) => (
     <Row items={content} className={styles.featureCalloutsRow} minWidth="190px">
       {({ label, description, cta, imgSrc, backgroundSrc, href, color }) => (
         <a href={href} className={styles.plainLink}>
-          <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
+          {/* <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
             <img src={imgSrc} alt="" className={styles.featureCalloutsImage} />
-          </div>
+          </div> */}
+          <Discover />
           <div className={styles.featureCalloutsText}>
             <h2>
               <Mark color={color}>{label}</Mark>

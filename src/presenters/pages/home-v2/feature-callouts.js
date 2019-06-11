@@ -1,52 +1,9 @@
 import React from 'react';
 
+const styles = {};
+
 export const Discover = () => (
-  <svg
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:cc="http://creativecommons.org/ns#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:svg="http://www.w3.org/2000/svg"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-    inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-    sodipodi:docname="discover-animation-transforms-removed.svg"
-    id="svg106"
-    version="1.1"
-    viewBox="0 0 280 125"
-    height="125"
-    width="290"
-  >
-    <sodipodi:namedview
-      inkscape:current-layer="svg106"
-      inkscape:window-maximized="0"
-      inkscape:window-y="0"
-      inkscape:window-x="27"
-      inkscape:cy="16.270985"
-      inkscape:cx="168.16341"
-      inkscape:zoom="2.162828"
-      showgrid="false"
-      id="namedview108"
-      inkscape:window-height="1010"
-      inkscape:window-width="1659"
-      inkscape:pageshadow="2"
-      inkscape:pageopacity="0"
-      guidetolerance="10"
-      gridtolerance="10"
-      objecttolerance="10"
-      borderopacity="1"
-      bordercolor="#666666"
-      pagecolor="#ffffff"
-    />
-    <metadata id="metadata110">
-      <rdf:RDF>
-        <cc:Work rdf:about="">
-          <dc:format>image/svg+xml</dc:format>
-          <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-          <dc:title>discover-animation</dc:title>
-        </cc:Work>
-      </rdf:RDF>
-    </metadata>
+  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290">
     <title id="title2">discover-animation</title>
     <desc id="desc4">Created with Sketch.</desc>
     <defs id="defs10">
@@ -54,36 +11,33 @@ export const Discover = () => (
       <path
         d="M 23.266493,19.315773 C 28.454899,11.623644 29.765786,3.4351399 26.194441,1.0262369 22.623095,-1.382666 15.521913,2.9002347 10.333507,10.592363 5.1451006,18.284492 3.8342137,26.472996 7.4055592,28.881899 10.976905,31.290802 18.078087,27.007902 23.266493,19.315773 Z"
         id="path-2"
-        inkscape:connector-curvature="0"
       />
       <path
         d="M 23.485905,10.936771 C 18.707184,2.983644 11.839884,-1.6650344 8.1473603,0.5536575 4.454837,2.7723494 5.3353741,11.018238 10.114095,18.971365 14.892816,26.924492 21.760116,31.573171 25.45264,29.354479 29.145163,27.135787 28.264626,18.889898 23.485905,10.936771 Z"
         id="path-3"
-        inkscape:connector-curvature="0"
       />
       <path
         d="M 38.106118,12.803274 C 39.32093,14.803772 40,17.038268 40,19.395684 c 0,8.560414 -8.954305,15.5 -20,15.5 -11.045695,0 -20,-6.939586 -20,-15.5 0,-2.0794 0.52834606,-4.063164 1.4866736,-5.875058 L 0.80661902,3.8008489 C 0.71025161,2.4235041 1.7486889,1.2288244 3.1260337,1.132457 3.5638713,1.1018232 4.0020577,1.186998 4.396538,1.379418 l 7.72148,3.7663909 C 14.536639,4.3412345 17.201182,3.895684 20,3.895684 c 2.274052,0 4.459461,0.2941361 6.496338,0.8359962 l 8.712523,-4.24980269 c 0.39448,-0.19241998 0.832666,-0.27759479 1.270504,-0.24696102 1.377345,0.0963674 2.415782,1.29104721 2.319415,2.66839191 z"
         id="path-4"
-        inkscape:connector-curvature="0"
       />
     </defs>
-    <g id="Page-1" style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
+    <g id="Page-1" data-style="fill:none;fillRule:evenodd;stroke:none;strokeWidth:1">
       <g id="05-29-19-xlarge">
         <g id="Group-36">
           <g id="discover-animation">
-            <g id="react" class="animation" style="fill-rule:nonzero">
+            <g id="react" className={styles.animation} data-style="fillRule:nonzero">
               <g id="Group-13">
-                <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" style="fill:#61dafb;stroke:#000000;stroke-width:1.69705629" />
+                <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" data-style="fill:#61dafb;stroke:#000000;strokeWidth:1.69705629" />
                 <g id="Group-2">
                   <g id="g17">
                     <ellipse
-                      stroke-linejoin="square"
+                      strokeLinejoin="square"
                       cx="47.745792"
                       cy="28.015997"
                       rx="15.9"
                       ry="6.9000001"
                       id="ellipse13"
-                      style="stroke:#61dafb;stroke-width:2.54558444"
+                      data-style="stroke:#61dafb;strokeWidth:2.54558444"
                     />
                     <ellipse
                       cx="48"
@@ -91,88 +45,82 @@ export const Discover = () => (
                       rx="17.799999"
                       ry="8.8000002"
                       id="ellipse15"
-                      style="stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none"
+                      data-style="stroke:#000000;strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
                     />
                   </g>
                   <g id="Oval-Copy">
                     <path
                       d="m 54.020359,31.651781 c 4.943444,-7.328957 6.173824,-15.014569 3.170808,-17.040128 -3.003015,-2.02556 -9.668082,1.994309 -14.611526,9.323266 -4.943444,7.328957 -6.173824,15.014569 -3.170808,17.040129 3.003015,2.025559 9.668082,-1.99431 14.611526,-9.323267 0,0 0,0 0,0"
-                      stroke-linejoin="square"
+                      strokeLinejoin="square"
                       id="path19"
-                      inkscape:connector-curvature="0"
-                      style="stroke:#61dafb;stroke-width:1.79999995"
+                      data-style="stroke:#61dafb;strokeWidth:1.79999995"
                     />
                     <path
                       d="M 55.595531,32.714248 C 50.134944,40.809901 42.54919,45.385059 38.346366,42.550219 34.143543,39.715379 35.543882,30.968106 41.004469,22.872453 46.465056,14.7768 54.05081,10.201641 58.253634,13.036481 c 4.202823,2.834841 2.802484,11.582114 -2.658103,19.677767 0,0 0,0 0,0"
                       id="path21"
-                      inkscape:connector-curvature="0"
-                      style="stroke:#000000;stroke-width:2"
+                      data-style="stroke:#000000;strokeWidth:2"
                     />
                   </g>
                   <g id="Oval-Copy-2">
                     <path
                       d="M 54.214454,24.239587 C 49.661353,16.661955 43.215804,12.298772 40.110895,14.16439 c -3.10491,1.865618 -2.27845,9.60509 2.274651,17.182723 4.553101,7.577632 10.99865,11.940815 14.103559,10.075197 3.10491,-1.865618 2.27845,-9.60509 -2.274651,-17.182723 0,0 0,0 0,0"
-                      stroke-linejoin="square"
+                      strokeLinejoin="square"
                       id="path24"
-                      inkscape:connector-curvature="0"
-                      style="stroke:#61dafb;stroke-width:1.79999995"
+                      data-style="stroke:#61dafb;strokeWidth:1.79999995"
                     />
                     <path
                       d="m 55.843072,23.261015 c 5.02941,8.370343 5.970033,17.178917 1.624606,19.789913 -4.345428,2.610996 -11.681341,-2.3549 -16.71075,-10.725243 -5.02941,-8.370343 -5.970033,-17.178916 -1.624606,-19.789913 4.345428,-2.6109961 11.681341,2.3549 16.71075,10.725243 0,0 0,0 0,0"
                       id="path26"
-                      inkscape:connector-curvature="0"
-                      style="stroke:#000000;stroke-width:2"
+                      data-style="stroke:#000000;strokeWidth:2"
                     />
                   </g>
                 </g>
               </g>
             </g>
-            <g id="music-notes" style="stroke:#000000;stroke-width:2.5">
+            <g id="music-notes" data-style="stroke:#000000;strokeWidth:2.5">
               <path
                 d="m 92.233138,26.995718 c -3.174716,0.276626 -2.315134,2.643345 -2.293235,2.697574 1.060012,2.661256 3.084382,7.755435 4.164427,10.408606 0.205054,0.506134 0.411111,1.01126 0.617166,1.517391 -0.752945,0.174531 -1.478156,0.480673 -2.106527,0.894152 -1.776879,1.169838 -3.056612,3.364819 -2.263643,5.493945 0.01,0.02611 0.02793,0.04115 0.03989,0.06424 0.007,0.0231 0.0049,0.04422 0.01487,0.06731 1.869269,4.203354 8.406989,2.453175 9.843044,-1.217671 0.37033,-0.944624 -0.0843,-3.591125 -0.23656,-3.965703 -0.477803,-1.173943 -0.954612,-2.346884 -1.432419,-3.520827 -0.733638,-1.80058 -2.858963,-5.997349 -3.590599,-7.797934 -0.439252,-0.884246 1.440761,-1.203817 3.198085,1.445744 1.575724,2.375757 2.172913,4.913214 4.072873,3.912784 1.89996,-1.000431 0.69575,-4.302484 -1.92667,-7.539107 -2.62243,-3.236622 -6.340472,-2.613882 -8.100697,-2.460506 0,0 0,0 0,0"
                 id="note-1"
-                class="animation"
-                inkscape:connector-curvature="0"
-                style="fill:#db96ff"
+                className={styles.animation}
+                data-style="fill:#db96ff"
               />
               <path
                 d="m 133.80886,8.5875898 c 0,0 -6.22757,-3.4201793 -6.22757,-3.4201793 -0.65085,-0.3574739 -1.29367,-0.7418017 -1.95736,-1.0754747 -0.59839,-0.3006449 -1.26737,-0.4326311 -1.93512,-0.3817883 -1.06704,-0.1185008 -2.09641,0.4342612 -2.58702,1.3892074 -1.45789,2.6028206 -2.87258,5.2304251 -4.30875,7.8457711 0,0 -0.86714,1.578922 -0.86714,1.578922 -1.52453,-1.173585 -3.48946,-1.614163 -5.36914,-1.203873 -1.96449,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38872,2.183082 1.92095,3.988687 4.01169,4.727442 2.22705,0.861872 4.97885,0.459851 6.26647,-1.721748 0.0799,-0.158378 0.15109,-0.321021 0.2132,-0.487195 0.12589,-0.165329 0.23972,-0.339506 0.3406,-0.521182 0,0 1.91271,-3.48293 1.91271,-3.48293 0,0 3.09159,-5.629293 3.09159,-5.629293 0.60609,0.338584 1.22817,0.642403 1.77632,0.943456 0,0 4.84512,2.661189 4.84512,2.661189 -0.87195,1.591052 -1.74311,3.182403 -2.61348,4.774052 0,0 -0.86316,1.571668 -0.86316,1.571668 -1.53599,-1.218148 -3.53725,-1.683416 -5.45308,-1.267777 -1.96448,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38871,2.183103 1.92093,3.988742 4.01167,4.727539 2.22705,0.861872 4.97885,0.459851 6.26637,-1.721772 0.0239,-0.0468 0.042,-0.09343 0.064,-0.140274 0.22138,-0.2416 0.41266,-0.509133 0.56967,-0.796751 0,0 1.91281,-3.482906 1.91281,-3.482906 0,0 4.64358,-8.455791 4.64358,-8.455791 0.53707,-0.767963 0.71029,-1.73285 0.47387,-2.63967 -0.31469,-1.1154217 -1.10336,-2.0363628 -2.15711,-2.5188722 0,0 0,0 0,0"
                 id="note-2"
-                class="animation"
-                inkscape:connector-curvature="0"
-                style="fill:#fcf3b0"
+                className={styles.animation}
+                data-style="fill:#fcf3b0"
               />
             </g>
-            <g id="tetris" class="animation">
+            <g id="tetris" className={styles.animation}>
               <polygon
                 id="polygon37"
                 points="15.288363,81.335333 25.637968,81.425652 25.548434,91.685262 15.198828,91.594942 "
-                style="fill:#8958fb;stroke:#222222;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
               />
               <polygon
                 id="polygon39"
                 points="15.198828,91.594942 25.548434,91.685262 25.4589,101.94487 15.109294,101.85455 "
-                style="fill:#8958fb;stroke:#222222;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
               />
               <polygon
                 id="polygon41"
                 points="15.377897,71.075723 25.727502,71.166043 25.637968,81.425652 15.288363,81.335333 "
-                style="fill:#8958fb;stroke:#222222;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
               />
               <polygon
                 id="polygon35"
                 points="25.637968,81.425652 35.987574,81.515972 35.89804,91.775581 25.548434,91.685262 "
-                style="fill:#8958fb;stroke:#222222;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+                data-style="fill:#8958fb;stroke:#222222;strokeWidth:2.5;strokeLinecap:round;strokeLinejoin:round;strokeMiterlimit:4;strokeDasharray:none"
               />
               <g id="Group">
-                <rect id="Rectangle" x="17.700001" y="73.199997" width="5.4000015" height="5.4473705" rx="0.5400002" style="fill:#ffffff" />
-                <rect id="center-rect" x="17.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" style="fill:#ffffff" />
-                <rect id="rect46" x="17.700001" y="93.900002" width="5.4000034" height="5.4473724" rx="0.54000038" style="fill:#ffffff" />
-                <rect id="rect48" x="27.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" style="fill:#ffffff" />
+                <rect id="Rectangle" x="17.700001" y="73.199997" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
+                <rect id="center-rect" x="17.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
+                <rect id="rect46" x="17.700001" y="93.900002" width="5.4000034" height="5.4473724" rx="0.54000038" data-style="fill:#ffffff" />
+                <rect id="rect48" x="27.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" data-style="fill:#ffffff" />
               </g>
             </g>
-            <g id="cat" class="animation" style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:2">
-              <g id="05-29-19-xlarge-90" style="fill-rule:nonzero">
+            <g id="cat" className={styles.animation} data-style="fill:none;fillRule:evenodd;stroke:none;strokeWidth:2">
+              <g id="05-29-19-xlarge-90" data-style="fillRule:nonzero">
                 <g id="Group-36-2">
                   <g id="discover-animation-3">
                     <g id="illustrations-9">
@@ -180,55 +128,47 @@ export const Discover = () => (
                         <path
                           id="Combined-Shape"
                           d="m 91.925634,85.0196 c 1.449556,1.837538 2.395881,3.97262 2.683178,6.312465 1.043252,8.496606 -6.998586,16.475725 -17.961948,17.821855 -10.963362,1.34613 -20.696646,-4.45048 -21.739898,-12.947082 -0.253415,-2.0639 0.02923,-4.097267 0.759603,-6.012446 0,0 -1.859529,-9.564449 -1.859529,-9.564449 -0.263505,-1.355334 0.621597,-2.667663 1.976931,-2.931168 0.430841,-0.08376 0.876141,-0.05263 1.291131,0.09029 0,0 8.122933,2.797305 8.122933,2.797305 2.30254,-1.093333 4.892922,-1.860289 7.670879,-2.201379 2.257102,-0.277137 4.462066,-0.251528 6.549798,0.03806 0,0 8.129659,-5.279914 8.129659,-5.279914 0.368091,-0.239061 0.792631,-0.377002 1.230938,-0.399956 1.378822,-0.07221 2.555115,0.987014 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587"
-                          style="fill:#ffffff;stroke:#000000;stroke-width:2.48136544"
-                          inkscape:connector-curvature="0"
+                          data-style="fill:#ffffff;stroke:#000000;strokeWidth:2.48136544"
                         />
-                        <g id="Oval-7" style="fill:#f8a5a5">
+                        <g id="Oval-7" data-style="fill:#f8a5a5">
                           <path
                             id="path1295"
                             d="m 94.459242,90.468839 c -1.561688,0.961575 -3.350452,1.61034 -5.289865,1.84847 -7.212522,0.885586 -13.777336,-4.243408 -14.662922,-11.45593 -0.11328,-0.922589 -0.128148,-1.834581 -0.05283,-2.725443 1.693166,-0.101789 3.347203,-0.03416 4.933554,0.185883 0,0 8.129661,-5.279915 8.129661,-5.279915 0.368089,-0.239061 0.792629,-0.377002 1.230937,-0.399956 1.378822,-0.07221 2.555114,0.987015 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587 1.290651,1.636101 2.182355,3.508089 2.565141,5.550467 0,0 0,0 0,0"
-                            inkscape:connector-curvature="0"
                           />
                         </g>
-                        <g id="mouth" style="stroke:#000000;stroke-width:3.47391152">
+                        <g id="mouth" data-style="stroke:#000000;strokeWidth:3.47391152">
                           <path
                             id="Triangle"
                             d="m 74.567428,95.51634 c 0,0 -1.502991,-1.620944 -1.502991,-1.620944 -0.375511,-0.404981 -0.351621,-1.037696 0.05336,-1.413207 0.154144,-0.142927 0.34941,-0.233645 0.558054,-0.259263 0,0 2.569194,-0.315457 2.569194,-0.315457 0.548169,-0.06731 1.047109,0.322509 1.114416,0.870677 0.02562,0.208644 -0.01516,0.420055 -0.116556,0.604198 0,0 -1.066204,1.936402 -1.066204,1.936402 -0.266383,0.483796 -0.874523,0.660044 -1.358319,0.39366 -0.09359,-0.05153 -0.178313,-0.117725 -0.250954,-0.196066 0,0 0,0 0,0"
-                            style="stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none"
-                            inkscape:connector-curvature="0"
+                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
                           />
                           <path
                             id="Path-2"
                             d="m 75.523641,96.65203 c 0.100996,2.170537 -0.767172,3.3686 -2.604504,3.5942 -1.837331,0.2256 -3.053055,-0.21767 -3.647172,-1.3298"
-                            style="stroke-width:2.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
-                            inkscape:connector-curvature="0"
+                            data-style="strokeWidth:2.5;strokeLinecap:round;strokeMiterlimit:4;strokeDasharray:none"
                           />
                           <path
                             id="Path-2-Copy"
                             d="m 75.523642,96.65203 c 0.427105,2.130496 1.559323,3.082946 3.396655,2.85735 1.837331,-0.225596 2.909707,-0.949806 3.217128,-2.17263"
-                            style="stroke-width:2.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
-                            inkscape:connector-curvature="0"
+                            data-style="strokeWidth:2.5;strokeLinecap:round;strokeMiterlimit:4;strokeDasharray:none"
                           />
                         </g>
-                        <g id="eyes" style="stroke:#000000;stroke-width:3.47391152;stroke-linecap:round">
+                        <g id="eyes" data-style="stroke:#000000;strokeWidth:3.47391152;strokeLinecap:round">
                           <path
                             id="Path-4"
                             d="m 82.398219,86.114405 c 0,0 -2.704572,2.185359 -2.704572,2.185359 -0.214787,0.173553 -0.248214,0.488366 -0.07466,0.703154 0.04467,0.05529 0.100628,0.100418 0.164122,0.132375 0,0 3.182712,1.601864 3.182712,1.601864"
-                            style="stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none"
-                            inkscape:connector-curvature="0"
+                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
                           />
                           <path
                             id="Path-4-Copy"
                             d="m 65.263195,88.395161 c 0,0 3.15292,1.466149 3.15292,1.466149 0.250394,0.116437 0.358988,0.413812 0.242551,0.664206 -0.02997,0.06446 -0.07334,0.121779 -0.127222,0.168148 0,0 -2.700647,2.324249 -2.700647,2.324249"
-                            style="stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none"
-                            inkscape:connector-curvature="0"
+                            data-style="strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
                           />
                         </g>
                         <path
                           id="Combined-Shape-Copy"
                           d="m 91.925634,85.0196 c 1.449556,1.837538 2.395881,3.97262 2.683178,6.312465 1.043252,8.496606 -6.998586,16.475725 -17.961948,17.821855 -10.963362,1.34613 -20.696646,-4.45048 -21.739898,-12.947082 -0.253415,-2.0639 0.02923,-4.097267 0.759603,-6.012446 0,0 -1.859529,-9.564449 -1.859529,-9.564449 -0.263505,-1.355334 0.621597,-2.667663 1.976931,-2.931168 0.430841,-0.08376 0.876141,-0.05263 1.291131,0.09029 0,0 8.122933,2.797305 8.122933,2.797305 2.30254,-1.093333 4.892922,-1.860289 7.670879,-2.201379 2.257102,-0.277137 4.462066,-0.251528 6.549798,0.03806 0,0 8.129659,-5.279914 8.129659,-5.279914 0.368091,-0.239061 0.792631,-0.377002 1.230938,-0.399956 1.378822,-0.07221 2.555115,0.987014 2.627321,2.365837 0,0 0.519004,9.910587 0.519004,9.910587"
-                          style="stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none"
-                          inkscape:connector-curvature="0"
+                          data-style="stroke:#000000;strokeWidth:2.5;strokeMiterlimit:4;strokeDasharray:none"
                         />
                       </g>
                     </g>
@@ -236,109 +176,97 @@ export const Discover = () => (
                 </g>
               </g>
             </g>
-            <g id="webpage3" transform="translate(142.59436,23.943831)" style="stroke:#000000;stroke-width:2.5">
-              <rect id="rect71" x="11.193075" y="0" width="96.304031" height="72.038452" rx="4.5" style="fill:#77ffc8" />
+            <g id="webpage3" transform="translate(142.59436,23.943831)" data-style="stroke:#000000;strokeWidth:2.5">
+              <rect id="rect71" x="11.193075" y="0" width="96.304031" height="72.038452" rx="4.5" data-style="fill:#77ffc8" />
               <path
                 d="m 15.595093,0.22895923 h 87.499997 c 2.48528,0 4.5,2.01471867 4.5,4.49999997 V 13.053387 H 11.095093 V 4.7289592 c 0,-2.4852813 2.014718,-4.49999997 4.5,-4.49999997 z"
                 id="Rectangle-Copy-4"
-                inkscape:connector-curvature="0"
-                style="fill:#ffffff"
+                data-style="fill:#ffffff"
               />
               <path
                 d="M 4.8861511,10.228959 H 92.386151 c 2.485281,0 4.5,2.014719 4.5,4.5 v 8.324428 H 0.38615109 v -8.324428 c 0,-2.485281 2.01471861,-4.5 4.50000001,-4.5 z"
                 id="path74"
-                inkscape:connector-curvature="0"
-                style="fill:#eaeaea"
+                data-style="fill:#eaeaea"
               />
             </g>
-            <g id="webpage2" transform="translate(142.46103,33.802164)" style="stroke:#000000;stroke-width:2.5">
-              <rect id="rect77" x="0.5194844" y="0.37062588" width="96.304031" height="72.038452" rx="5.8479533" style="fill:#ff9696" />
+            <g id="webpage2" transform="translate(142.46103,33.802164)" data-style="stroke:#000000;strokeWidth:2.5">
+              <rect id="rect77" x="0.5194844" y="0.37062588" width="96.304031" height="72.038452" rx="5.8479533" data-style="fill:#ff9696" />
               <path
                 d="M 5.0194844,0.37062589 H 92.519484 c 2.485282,0 4.5,2.01471861 4.5,4.50000001 V 13.195053 H 0.51948442 V 4.8706259 c 0,-2.4852814 2.01471868,-4.50000001 4.49999998,-4.50000001 z"
                 id="path79"
-                inkscape:connector-curvature="0"
-                style="fill:#ffffff"
+                data-style="fill:#ffffff"
               />
             </g>
             <g id="webpage-1" transform="translate(129.08369,54.902164)">
               <path
                 d="M 0.41631245,0.37062589 H 96.416313 V 55.170077 c 0,2.485281 -2.014719,4.5 -4.5,4.5 H 4.9163125 c -2.4852814,0 -4.50000005,-2.014719 -4.50000005,-4.5 z"
                 id="path82"
-                inkscape:connector-curvature="0"
-                style="fill:#bfb5ff"
+                data-style="fill:#bfb5ff"
               />
-              <g id="g94" transform="translate(27.208156,10.370626)" style="fill-rule:nonzero;stroke:#000000">
+              <g id="g94" transform="translate(27.208156,10.370626)" data-style="fillRule:nonzero;stroke:#000000">
                 <g id="Group-41" transform="rotate(-1,87.351138,-54.606199)">
                   <g id="gem" transform="translate(0.241231,0.06197)">
                     <polygon
                       id="Path-7"
                       transform="rotate(-15,19.15199,17.576896)"
                       points="35.100855,11.676184 19.229607,31.349105 3.203125,11.676184 9.4571439,3.8046875 29.5316,3.8046875 "
-                      style="fill:#fcf3b0;stroke-width:2"
+                      data-style="fill:#fcf3b0;strokeWidth:2"
                     />
                     <polygon
                       id="Path-10"
                       transform="rotate(-15,16.744939,8.293771)"
                       points="16.430463,4.5775943 24.004981,12.009948 9.4848977,12.009948 "
-                      style="fill:#ffffff;stroke-width:1.25"
+                      data-style="fill:#ffffff;strokeWidth:1.25"
                     />
                     <polygon
                       id="Path-11"
                       transform="rotate(19,28.376397,7.080684)"
                       points="25.870487,11.035599 32.590331,6.8292112 24.162463,3.1257687 "
-                      style="fill:#ffffff;stroke-width:1.25"
+                      data-style="fill:#ffffff;strokeWidth:1.25"
                     />
                     <polygon
                       id="Path-12"
                       transform="rotate(19,7.619252,12.518679)"
                       points="3.9030751,16.960109 11.335429,12.385297 4.647103,8.0772493 "
-                      style="fill:#ffffff;stroke-width:1.25"
+                      data-style="fill:#ffffff;strokeWidth:1.25"
                     />
                     <polygon
                       id="Path-13"
                       transform="rotate(19,18.181138,18.535577)"
                       points="21.585687,8.3404262 26.410331,28.730727 9.951945,16.266244 "
-                      style="fill:#ffffff;stroke-width:1.25"
+                      data-style="fill:#ffffff;strokeWidth:1.25"
                     />
                   </g>
-                  <path
-                    d="m 1.921875,11.948102 h 32.03125"
-                    id="Line"
-                    transform="rotate(-15,17.9375,11.948102)"
-                    inkscape:connector-curvature="0"
-                    style="stroke-width:1.25"
-                  />
+                  <path d="m 1.921875,11.948102 h 32.03125" id="Line" transform="rotate(-15,17.9375,11.948102)" data-style="strokeWidth:1.25" />
                   <path
                     d="M 19.601752,32.405466 9.8292885,5.1155549"
                     id="Path-8"
                     transform="rotate(-15,14.71552,18.76051)"
-                    inkscape:connector-curvature="0"
-                    style="stroke-width:1.25"
+                    data-style="strokeWidth:1.25"
                   />
                   <polyline
                     id="Path-9"
                     transform="rotate(-15,24.406187,16.295646)"
                     points="19.2163825 30.0678553 26.7405276 10.1009964 29.5959919 2.5234375"
-                    style="stroke-width:1.25"
+                    data-style="strokeWidth:1.25"
                   />
                 </g>
               </g>
-              <rect id="rect96" x="0.056139201" y="-12" width="96.304031" height="72.038452" rx="4.5" style="stroke:#000000;stroke-width:2.5" />
+              <rect id="rect96" x="0.056139201" y="-12" width="96.304031" height="72.038452" rx="4.5" data-style="stroke:#000000;strokeWidth:2.5" />
               <path
                 d="M 4.7081562,-12 H 91.708156 c 2.485282,0 4.5,2.0147186 4.5,4.5 V 0.82442748 H 0.20815622 V -7.5 c 0,-2.4852814 2.01471868,-4.5 4.49999998,-4.5 z"
                 id="Rectangle-Copy"
-                inkscape:connector-curvature="0"
-                style="fill:#ffffff;stroke:#000000;stroke-width:2.5"
+                data-style="fill:#ffffff;stroke:#000000;strokeWidth:2.5"
               />
               <polygon
                 id="mouse"
                 points="66.468669,42.516009 85.101147,52.411237 81.257079,56.009976 88.45935,64.085787 84.349254,67.786645 77.154559,59.857795 73.282747,63.479673 "
-                style="fill:#ffffff;fill-rule:nonzero;stroke:#222222;stroke-width:2.6405642;stroke-linecap:round;stroke-linejoin:round"
+                data-style="fill:#ffffff;fillRule:nonzero;stroke:#222222;strokeWidth:2.6405642;strokeLinecap:round;strokeLinejoin:round"
               />
             </g>
             <path
               id="mouse-path"
-              style="stroke-width:1.25"
+              data-style="strokeWidth:1.25"
               d="M18.525489,86.679012L48.5,27.839282L110.14167,34.17279L201.93946,109.17279L86.448204,97.980126"
             />
           </g>
@@ -349,10 +277,10 @@ export const Discover = () => (
 );
 
 export const Dreams = () => (
-  <svg width="184px" height="119px" viewBox="0 0 184 119" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg width="184px" height="119px" viewBox="0 0 184 119">
     <title>creators-animation</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-29-19-xlarge-banner" transform="translate(-535.000000, -620.000000)">
         <g id="Group-32" transform="translate(489.000000, 605.267418)">
           <g id="creators" transform="translate(27.897463, 0.000000)">
@@ -360,14 +288,14 @@ export const Dreams = () => (
               <path
                 d="M35.1951425,65.6991631 C38.1701297,63.782537 41.5165998,57.8375178 45.2345527,47.8641055 C50.8114821,32.9039871 49.7855081,15.9637175 42.9031116,15.9637175 C36.0207151,15.9637175 34.3695698,19.9241136 35.1951425,26.6567869 C36.0207151,33.3894601 57.2295267,55.8310171 68.3942095,45.4720208 C79.5588922,35.1130245 81.7109878,9.386841 100.731556,1.5154684 C113.411936,-3.73211333 126.147637,4.64832615 138.93866,26.6567869"
                 id="animation-path"
-                class="animation"
+                className={styles.animation}
                 stroke="#FFFFFF"
-                stroke-width="3.5"
-                fill-rule="nonzero"
+                strokeWidth="3.5"
+                fillRule="nonzero"
               />
               <g id="brain" transform="translate(0.000000, 50.847099)">
-                <g id="Group-20" fill-rule="nonzero">
-                  <g id="brain" stroke="#000000" stroke-width="2.5">
+                <g id="Group-20" fillRule="nonzero">
+                  <g id="brain" stroke="#000000" strokeWidth="2.5">
                     <g id="Group-17">
                       <path
                         d="M4.85255944,16.8014358 C4.52181024,12.3379043 5.9040264,9.11366337 8.99920792,7.12871287 C12.0943894,5.14376238 15.0329599,5.00785477 17.8149192,6.72099004 C21.3485714,2.24033001 25.0829998,0 29.0182047,0 C32.9534095,0 36.417741,1.5723019 39.4111991,4.7169057 C44.5967767,2.79365756 48.6804506,2.79365756 51.6622209,4.7169057 C54.6439911,6.64015383 56.0129963,9.95557551 55.7692363,14.6631707 C60.8339699,16.2188806 63.334904,18.7887202 63.2720387,22.3726897 C63.2091733,25.9566592 61.6311809,27.9666528 58.5380614,28.4026703 C59.3806739,29.749865 59.8019802,32.1337009 59.8019802,35.5541778 C59.8019802,40.6848933 53.2048903,51.0007202 43.2870117,51.0007202 C33.369133,51.0007202 28.2228264,45.9714166 26.9697915,44.8352697 C25.7167566,43.6991229 15.7867327,44.1716036 10.4879208,41.7563394 C5.18910891,39.3410753 0.203084155,33.6953155 0.407666496,26.9306931 C0.544054722,22.4209448 2.0256857,19.0445257 4.85255944,16.8014358 Z"
@@ -377,23 +305,23 @@ export const Dreams = () => (
                       <path
                         d="M4.35643564,17.3429925 C6.45914191,15.4599522 8.99920792,15.000552 11.9766337,15.9647917"
                         id="Path-38"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                     </g>
                     <path
                       d="M39.4111991,4.7169057 C35.1886869,7.32129175 33.0774308,9.94361678 33.0774308,12.5838808"
                       id="Path-24"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M58.0818684,27.8930156 C55.8671316,25.1930373 52.6157368,24.2025201 48.327684,24.921464"
                       id="Path-30"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M27.3267327,44.8352697 C25.8062046,43.0849178 25.5421782,40.5714185 26.5346535,37.2947719"
                       id="Path-36"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                   </g>
                   <g id="dots" opacity="0.337169829" transform="translate(4.356436, 7.128713)" fill="#D26E7B">
@@ -422,7 +350,7 @@ export const Dreams = () => (
                 <g id="eyeballs" transform="translate(15.445545, 11.791802)">
                   <g id="Oval_1_">
                     <circle id="Oval" fill="#FFFFFF" cx="7.52475248" cy="8.15841584" r="6.25742574" />
-                    <g id="Group-19" transform="translate(0.079208, 0.712871)" fill="#222222" fill-rule="nonzero">
+                    <g id="Group-19" transform="translate(0.079208, 0.712871)" fill="#222222" fillRule="nonzero">
                       <path
                         d="M7.44554455,14.8910891 C3.32673267,14.8910891 -1.77635684e-14,11.5643564 -1.77635684e-14,7.44554455 C-1.77635684e-14,3.32673267 3.32673267,9.05941988e-14 7.44554455,9.05941988e-14 C11.5643564,9.05941988e-14 14.8910891,3.32673267 14.8910891,7.44554455 C14.8910891,11.5643564 11.4851485,14.8910891 7.44554455,14.8910891 Z M7.44554455,2.37623762 C4.67326733,2.37623762 2.37623762,4.67326733 2.37623762,7.44554455 C2.37623762,10.2178218 4.67326733,12.5148515 7.44554455,12.5148515 C10.2178218,12.5148515 12.5148515,10.2178218 12.5148515,7.44554455 C12.5148515,4.67326733 10.2178218,2.37623762 7.44554455,2.37623762 Z"
                         id="Shape"
@@ -440,14 +368,14 @@ export const Dreams = () => (
                         d="M7.52475248,15.6039604 C3.40594059,15.6039604 0.0792079208,12.2772277 0.0792079208,8.15841584 C0.0792079208,4.03960396 3.40594059,0.712871287 7.52475248,0.712871287 C11.6435644,0.712871287 14.970297,4.03960396 14.970297,8.15841584 C14.970297,12.2772277 11.5643564,15.6039604 7.52475248,15.6039604 Z M7.52475248,3.08910891 C4.75247525,3.08910891 2.45544554,5.38613861 2.45544554,8.15841584 C2.45544554,10.9306931 4.75247525,13.2277228 7.52475248,13.2277228 C10.2970297,13.2277228 12.5940594,10.9306931 12.5940594,8.15841584 C12.5940594,5.38613861 10.2970297,3.08910891 7.52475248,3.08910891 Z"
                         id="Shape"
                         fill="#222222"
-                        fill-rule="nonzero"
+                        fillRule="nonzero"
                       />
                     </g>
                     <path
                       d="M9.34646337,14.5134028 C7.36626535,14.5134028 5.78210693,12.7708285 5.78210693,10.5530067 C5.78210693,8.33518495 7.36626535,6.59261069 9.34646337,6.59261069 C11.3266614,6.59261069 12.9108198,8.33518495 12.9108198,10.5530067 C12.9108198,12.7708285 11.2474535,14.5134028 9.34646337,14.5134028 Z"
                       id="Shape-Copy"
                       fill="#222222"
-                      fill-rule="nonzero"
+                      fillRule="nonzero"
                     />
                   </g>
                 </g>
@@ -456,7 +384,7 @@ export const Dreams = () => (
                 <g id="computer">
                   <rect
                     id="Rectangle"
-                    stroke-width="2.5"
+                    strokeWidth="2.5"
                     fill="#F692AB"
                     x="5.94059406"
                     y="65.3465347"
@@ -466,7 +394,7 @@ export const Dreams = () => (
                   />
                   <rect
                     id="Rectangle"
-                    stroke-width="2.5"
+                    strokeWidth="2.5"
                     fill="#F692AB"
                     x="-1.70530257e-13"
                     y="-7.10542736e-15"
@@ -474,11 +402,11 @@ export const Dreams = () => (
                     height="69.8594059"
                     rx="6.25"
                   />
-                  <rect id="Rectangle" stroke-width="2.5" fill="#000000" x="5.94059406" y="7.52475248" width="63.3147525" height="51.060297" rx="5" />
-                  <path d="M17.8217822,78.7128713 L43.4545545,78.7128713" id="Path" stroke-width="3.125" fill="#939598" />
-                  <circle id="Oval" stroke-width="2" fill="#2BD451" cx="53.3351485" cy="79.0777228" r="3.83019802" />
+                  <rect id="Rectangle" strokeWidth="2.5" fill="#000000" x="5.94059406" y="7.52475248" width="63.3147525" height="51.060297" rx="5" />
+                  <path d="M17.8217822,78.7128713 L43.4545545,78.7128713" id="Path" strokeWidth="3.125" fill="#939598" />
+                  <circle id="Oval" strokeWidth="2" fill="#2BD451" cx="53.3351485" cy="79.0777228" r="3.83019802" />
                 </g>
-                <g id="browser" class="animation" transform="translate(5.940594, 7.524752)" stroke-width="2.5">
+                <g id="browser" className={styles.animation} transform="translate(5.940594, 7.524752)" strokeWidth="2.5">
                   <rect id="Rectangle-Copy-8" fill="#A2D7FF" x="1.77635684e-14" y="7.81597009e-14" width="63.3147525" height="51.060297" rx="5" />
                   <path
                     d="M5,0 L58.3147525,0 C61.0761762,-5.07265313e-16 63.3147525,2.23857625 63.3147525,5 L63.3147525,9.5 L1.77635684e-14,9.5 L1.77635684e-14,5 C1.74253915e-14,2.23857625 2.23857625,5.07265313e-16 5,0 Z"
@@ -486,7 +414,7 @@ export const Dreams = () => (
                     fill="#FFFFFF"
                   />
                 </g>
-                <g id="sparkles" class="animation" transform="translate(19.257426, 22.257426)" stroke-width="2">
+                <g id="sparkles" className={styles.animation} transform="translate(19.257426, 22.257426)" strokeWidth="2">
                   <path
                     d="M8.41832871,9.36295446 C6.2892198,11.4920634 0.626566337,12.062598 0.626566337,12.3603406 L0.626566337,12.3603406 C0.626566337,12.6591921 6.24486337,13.8695683 8.41888317,16.0435881 L8.41888317,16.0435881 C10.592903,18.2176079 11.9640713,24.1042614 12.3699327,24.1042614 L12.3699327,24.1042614 C12.7757941,24.1042614 13.2603881,18.0451723 15.2625267,16.0435881 L15.2625267,16.0435881 C17.2635564,14.0425584 24.1121901,12.6891327 24.1121901,12.362004 L24.1121901,12.362004 C24.1121901,12.0343208 17.0589624,11.1610535 15.2619723,9.36350891 L15.2619723,9.36350891 C13.4644277,7.56651881 12.7009426,0.618637624 12.3688238,0.618637624 L12.3688238,0.618637624 C12.0372594,0.618637624 10.5468832,7.23384554 8.41832871,9.36295446"
                     id="Clip-817"
@@ -496,7 +424,7 @@ export const Dreams = () => (
                     d="M31.9699388,21.120378 L28.5924993,15.9195771 C28.4421013,15.6879847 28.5079225,15.3783203 28.739515,15.2279223 C28.8871483,15.1320482 29.0743208,15.120871 29.2323147,15.1984943 L38.5032372,19.7533552 C38.7510823,19.875123 38.8532882,20.1747535 38.7315204,20.4225986 C38.710903,20.464563 38.6845014,20.5034281 38.6530873,20.5380582 L31.370514,28.5661567 C31.1849796,28.7706845 30.8687717,28.7860816 30.664244,28.6005472 C30.5329756,28.481469 30.4745535,28.3017982 30.5106834,28.1282885 L31.9699388,21.120378 Z"
                     id="Path-5"
                     fill="#83FFCD"
-                    fill-rule="nonzero"
+                    fillRule="nonzero"
                     transform="translate(33.352149, 22.162931) rotate(33.000000) translate(-33.352149, -22.162931) "
                   />
                 </g>
@@ -515,13 +443,10 @@ export const Teams = () => (
     width="194px"
     height="115px"
     viewBox="0 0 194 115"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
   >
     <title>team-animation</title>
     <desc>Created with Sketch.</desc>
-    <g id="Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-21-19" transform="translate(-517.000000, -627.000000)">
         <g id="team-animation" transform="translate(518.852039, 628.307670)">
           <g id="Group" transform="translate(63.117557, 5.557252)">
@@ -529,28 +454,28 @@ export const Teams = () => (
               d="M68.7844293,12.9994197 L126.494353,12.9994197 L126.494353,89.1478059 C126.494353,92.3775413 123.876135,94.9957591 120.6464,94.9957591 L68.7844293,94.9957591 L68.7844293,12.9994197 Z"
               id="Rectangle-Copy-2"
               fill="#EAEAEA"
-              fill-rule="nonzero"
+              fillRule="nonzero"
             />
-            <g id="code-editor" transform="translate(0.000000, 12.999420)" fill-rule="nonzero">
+            <g id="code-editor" transform="translate(0.000000, 12.999420)" fillRule="nonzero">
               <path
                 d="M0,-2.34479103e-13 L70.5343511,-2.34479103e-13 L70.5343511,81.9963394 L4.5,81.9963394 C2.01471863,81.9963394 3.04359188e-16,79.9816208 0,77.4963394 L0,-2.34479103e-13 Z"
                 id="Rectangle-Copy-3"
                 fill="#484848"
               />
-              <g id="user3-lines" transform="translate(8.067819, 65.657069)" stroke="#FFCD00" stroke-linecap="round" stroke-width="3.75">
-                <path d="M1.21374046,0.49997768 L32.923491,0.49997768" id="user3-line1" class="animation" />
+              <g id="user3-lines" transform="translate(8.067819, 65.657069)" stroke="#FFCD00" strokeLinecap="round" strokeWidth="3.75">
+                <path d="M1.21374046,0.49997768 L32.923491,0.49997768" id="user3-line1" className={styles.animation} />
               </g>
-              <g id="user2-lines" transform="translate(10.124010, 43.874032)" stroke="#83FFCD" stroke-linecap="round" stroke-width="3.75">
-                <path d="M11.4732824,8.99959823 L43.183033,8.99959823" id="user2-line2" class="animation" />
-                <path d="M0.865648855,0.49997768 L33.9977806,0.49997768" id="user2-line1" class="animation" />
+              <g id="user2-lines" transform="translate(10.124010, 43.874032)" stroke="#83FFCD" strokeLinecap="round" strokeWidth="3.75">
+                <path d="M11.4732824,8.99959823 L43.183033,8.99959823" id="user2-line2" className={styles.animation} />
+                <path d="M0.865648855,0.49997768 L33.9977806,0.49997768" id="user2-line1" className={styles.animation} />
               </g>
               <g
                 id="user1-lines"
-                class="animation"
+                className={styles.animation}
                 transform="translate(10.124010, 10.499531)"
                 stroke="#FFFFFF"
-                stroke-linecap="round"
-                stroke-width="3"
+                strokeLinecap="round"
+                strokeWidth="3"
               >
                 <path d="M6.77047059,19.4366323 L24.964303,19.4366323" id="user1-line3" />
                 <path d="M6.77047059,9.96830499 L24.964303,9.96830499" id="user1-line2" />
@@ -559,11 +484,11 @@ export const Teams = () => (
             </g>
             <rect
               id="user1-shape"
-              class="animation"
+              className={styles.animation}
               stroke="#626262"
-              stroke-width="3.50877193"
+              strokeWidth="3.50877193"
               fill="#FFFFFF"
-              fill-rule="nonzero"
+              fillRule="nonzero"
               x="80.5885252"
               y="33.0957596"
               width="14.4904245"
@@ -572,11 +497,11 @@ export const Teams = () => (
             />
             <rect
               id="user2-shape"
-              class="animation"
+              className={styles.animation}
               stroke="#626262"
-              stroke-width="3.50877193"
+              strokeWidth="3.50877193"
               fill="#83FFCD"
-              fill-rule="nonzero"
+              fillRule="nonzero"
               x="89.5881234"
               y="38.2849823"
               width="26.4898888"
@@ -586,23 +511,23 @@ export const Teams = () => (
             <path
               d="M101.041184,38.2849823 L94.8512813,38.2849823 C91.9445194,38.2849823 89.5881234,40.6413784 89.5881234,43.5481402 L89.5881234,54.8678134 L95.7780256,54.8678134 C98.6847875,54.8678134 101.041184,52.5114174 101.041184,49.6046555 L101.041184,38.2849823 Z"
               id="user3-shape"
-              class="animation"
+              className={styles.animation}
               stroke="#626262"
-              stroke-width="3.50877193"
+              strokeWidth="3.50877193"
               fill="#FFCD00"
-              fill-rule="nonzero"
+              fillRule="nonzero"
             />
-            <rect id="Rectangle" stroke="#000000" stroke-width="2.5" x="0" y="0" width="126.994331" height="94.9957591" rx="5.84795322" />
+            <rect id="Rectangle" stroke="#000000" strokeWidth="2.5" x="0" y="0" width="126.994331" height="94.9957591" rx="5.84795322" />
             <path
               d="M4.5,0 L122.494331,0 C124.979612,-9.28603192e-15 126.994331,2.01471863 126.994331,4.5 L126.994331,12.8244275 L0,12.8244275 L0,4.5 C-3.04359188e-16,2.01471863 2.01471863,4.56538782e-16 4.5,0 Z"
               id="Rectangle-Copy"
               stroke="#000000"
-              stroke-width="2.5"
+              strokeWidth="2.5"
               fill="#EAEAEA"
             />
           </g>
-          <g id="user-1" transform="translate(5.984733, 0.000000)" fill-rule="nonzero">
-            <circle id="Oval" stroke="#000000" stroke-width="2.5" fill="#FFFFFF" cx="15.1393853" cy="15.1393853" r="15.1393853" />
+          <g id="user-1" transform="translate(5.984733, 0.000000)" fillRule="nonzero">
+            <circle id="Oval" stroke="#000000" strokeWidth="2.5" fill="#FFFFFF" cx="15.1393853" cy="15.1393853" r="15.1393853" />
             <g id="anon-face" transform="translate(6.675263, 10.907324)" fill="#222222">
               <ellipse id="Oval-138" cx="2.29354621" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
               <ellipse id="Oval-138-Copy" cx="14.6346981" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
@@ -612,8 +537,8 @@ export const Teams = () => (
               />
             </g>
           </g>
-          <g id="user-2" class="animation" transform="translate(21.374046, 40.610687)" fill-rule="nonzero">
-            <circle id="Oval-Copy" stroke="#000000" stroke-width="2.5" fill="#B5FFE1" cx="15.1393853" cy="15.1393853" r="15.1393853" />
+          <g id="user-2" className={styles.animation} transform="translate(21.374046, 40.610687)" fillRule="nonzero">
+            <circle id="Oval-Copy" stroke="#000000" strokeWidth="2.5" fill="#B5FFE1" cx="15.1393853" cy="15.1393853" r="15.1393853" />
             <g id="anon-face-copy" transform="translate(6.162286, 10.650836)" fill="#222222">
               <ellipse id="Oval-138" cx="2.29354621" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
               <ellipse id="Oval-138-Copy" cx="14.6346981" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
@@ -623,8 +548,8 @@ export const Teams = () => (
               />
             </g>
           </g>
-          <g id="user-3" class="animation" transform="translate(0.000000, 81.221374)" fill-rule="nonzero">
-            <circle id="Oval-Copy" stroke="#000000" stroke-width="2.5" fill="#FFCD00" cx="15.1393853" cy="15.1393853" r="15.1393853" />
+          <g id="user-3" className={styles.animation} transform="translate(0.000000, 81.221374)" fillRule="nonzero">
+            <circle id="Oval-Copy" stroke="#000000" strokeWidth="2.5" fill="#FFCD00" cx="15.1393853" cy="15.1393853" r="15.1393853" />
             <g id="anon-face-copy" transform="translate(6.162286, 10.650836)" fill="#222222">
               <ellipse id="Oval-138" cx="2.29354621" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
               <ellipse id="Oval-138-Copy" cx="14.6346981" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
