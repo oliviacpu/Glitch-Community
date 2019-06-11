@@ -22,7 +22,6 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     tertiary: ['tertiary', 'dangerZone'].includes(type),
     dangerZone: type === 'dangerZone',
     unstyled: type === 'dropDown',
-    hasEmoji: React.Children.toArray(children).some((child) => child.type && child.type === Emoji),
     matchBackground: matchBackground === true,
     active,
     hover,

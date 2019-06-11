@@ -60,9 +60,9 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <button onClick={() => setVisible(false)} ref={last}>
-          Back to Glitch <Emoji name="carpStreamer" />
-        </button>
+        <Button emoji="carpStreamer" onClick={() => setVisible(false)} ref={last}>
+          Back to Glitch
+        </Button>
       </OverlaySection>
     </Overlay>
   );

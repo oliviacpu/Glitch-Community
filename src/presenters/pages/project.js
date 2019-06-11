@@ -6,7 +6,6 @@ import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -132,12 +131,8 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
     <section>
       <PopoverWithButton
         buttonClass="button-small button-tertiary danger-zone"
-        buttonText={
-          <>
-            Delete Project
-            <Emoji name="bomb" />
-          </>
-        }
+        buttonText="Delete Project"
+        buttonEmoji="bomb"
       >
         {({ togglePopover, focusFirstElement }) => (
           <>
@@ -152,6 +147,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
                   <Button
                     type="tertiary"
                     size="small"
+                    emoji="bomb"
                     onClick={() => {
                       setLoading(true);
                       deleteProject().then(() => {
@@ -160,7 +156,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
                       });
                     }}
                   >
-                    Delete {projectDomain} <Emoji name="bomb" />
+                    Delete {projectDomain}
                   </Button>
                 )}
               </section>

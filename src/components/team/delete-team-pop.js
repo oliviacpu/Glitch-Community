@@ -41,8 +41,8 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" onClick={deleteTeam} hasEmoji>
-          Delete {team.name} <Emoji name="bomb" />
+        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteTeam}>
+          Delete {team.name}
           {teamIsDeleting && <Loader />}
         </Button>
       </PopoverActions>
