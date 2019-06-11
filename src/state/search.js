@@ -43,9 +43,9 @@ const getTopResults = (resultsByType, query) =>
 const filterOutBadData = (payload) => {
   let filteredData = { ...payload };
   // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
-  filteredData.team = filteredData.team.filter(t => !!t.url);
+  filteredData.team = filteredData.team.filter((t) => !!t.url);
   return filteredData;
-}
+};
 
 // search provider logic -- shared between algolia & legacy API
 function useSearchProvider(provider, query, params, deps) {
@@ -57,7 +57,6 @@ function useSearchProvider(provider, query, params, deps) {
     topResults: [],
     ...emptyResults,
   };
-
   const reducer = (state, action) => {
     switch (action.type) {
       case 'clearQuery':
@@ -65,7 +64,6 @@ function useSearchProvider(provider, query, params, deps) {
       case 'loading':
         return { ...state, status: 'loading' };
       case 'ready': {
-        
         const resultsWithEmpties = { ...emptyResults, ...filterOutBadData(action.payload) };
         return {
           status: 'ready',
