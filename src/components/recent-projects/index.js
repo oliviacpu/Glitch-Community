@@ -47,7 +47,7 @@ const RecentProjects = () => {
   const isAnonymousUser = !currentUser.login;
 
   return (
-    <section>
+    <section data-cy="recent-projects">
       <Heading tagName="h2">
         <UserLink user={currentUser}>Your Projects →</UserLink>
       </Heading>
