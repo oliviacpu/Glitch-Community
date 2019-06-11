@@ -176,7 +176,7 @@ const CollectionPageContents = ({
                 fetchMembers
               />
             )}
-            {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or tab to focus a project then press space and use the arrow keys</div>}
+            {currentUserIsAuthor && projects.length > 1 && <div>Drag to reorder, or move focus</div>}
           </div>
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
