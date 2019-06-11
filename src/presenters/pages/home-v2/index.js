@@ -9,6 +9,7 @@ import MaskImage from 'Components/images/mask-image';
 
 import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
+import { }
 import compiledData from '../../../curated/home.json';
 import styles from './styles.styl';
 
