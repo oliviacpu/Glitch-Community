@@ -32,7 +32,7 @@ const PreviewBanner = withRouter(({ history, data }) => {
 
 const HomePreview = () => (
   <Layout>
-    <DataLoader get={() => axios.get('https://sequoia-measure.glitch.me/home.json').then((res) => res.data)}>
+    <DataLoader get={() => axios.get('https://community-home-editor.glitch.me/home.json').then((res) => res.data)}>
       {(data) => (
         <>
           <PreviewBanner data={data} />

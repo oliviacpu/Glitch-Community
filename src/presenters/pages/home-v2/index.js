@@ -6,6 +6,7 @@ import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
+import Markdown from 'Components/text/markdown';
 
 import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
@@ -100,8 +101,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
     </div>
     <div className={styles.unifiedStoriesPreview}>
       <h3 className={styles.h3}>{dek}</h3>
-      {/* eslint-disable-next-line react/no-danger */}
-      <div dangerouslySetInnerHTML={{ __html: summary }} />
+      <Markdown>{summary}</Markdown>
       <Button href={href}>
         {cta} <Arrow />
       </Button>
@@ -138,8 +138,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
       <div className={styles.featuredEmbedText}>
         <a href={href} className={styles.plainLink}>
           <h4 className={styles.h4}>{title}</h4>
-          {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: description }} />
+          <Markdown>{description}</Markdown>
         </a>
       </div>
     </figcaption>
