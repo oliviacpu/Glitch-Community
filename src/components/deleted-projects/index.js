@@ -27,7 +27,7 @@ const DeletedProject = ({ id, domain, onClick }) => {
         <div className={styles.projectName}>{domain}</div>
         <TooltipContainer
           type="action"
-          id="deleted-project-tooltip-container"
+          id="undelete-project"
           target={
             <div className={styles.buttonWrap}>
               <Button size="small" disabled decorative>
