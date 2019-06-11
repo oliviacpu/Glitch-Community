@@ -40,7 +40,7 @@ class CollectionEditor extends React.Component {
       }));
     }
     await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
-    if (collection.id === this.state.id && this.state.projects.length > 1) {
+    if (collection.id === this.state.id) {
       await this.props.api.post(`collections/${collection.id}/project/${project.id}/index/0`);
     }
   }
