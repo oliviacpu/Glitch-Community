@@ -325,7 +325,7 @@ iteration-count | direction | fill-mode | play-state | name */
 /* For > large displays, only show animations on hover
 */
 @media(min-width: 900px)
-  .feature:not(:hover) .animation
+  a:not(:hover) .animation
     animation: none !important
     -webkit-animation: none !important
    
@@ -341,7 +341,7 @@ iteration-count | direction | fill-mode | play-state | name */
     opacity: 1
   
   .user2Line1, .user2Line2, .user3Line1
-    transform: scale(1,1)    
+    transform: scale(1,1)
 
 /* Don't animate SVGs if the user has turned on prefers reduced motion in system-wide preferences
 https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
