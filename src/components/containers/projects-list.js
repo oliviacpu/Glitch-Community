@@ -97,7 +97,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   };
   
   const onPreviousButtonClick = () => {
-    if (state.page - 1 === 0) {
+    if (state.page - 1 === 1) {
       nextButtonRef.current.focus();
     }
 
@@ -118,8 +118,6 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
               <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
             </Button>
             {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
-            <div className={styles.pageNumbers}>
-              {state.page} / {numPages}
             <div data-cy="page-numbers" className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
@@ -130,7 +128,6 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
           <Button data-cy="show-all"  type="tertiary" onClick={() => dispatchState('expand')}>
             Show all <Badge>{numProjects}</Badge>
           </Button>
-        </div>
         </div>
       )}
     </>
