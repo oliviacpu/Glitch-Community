@@ -14,7 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji }) => {
+const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji, emojiPosition }) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -29,7 +29,16 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     decorative,
   });
   
-  const emojiEl = emoji ? <Emoji name={emoji} /> : null;
+  const emojiClassName = cx({
+    emojiContainer: true,
+    left: emojiPosition === 'left',
+  });
+  
+  const content = (
+    <>
+    </>
+  )
+  const emojiEl = emoji ? <div className={styles.emojiContainer}><Emoji name={emoji} /></div>: null;
 
   if (href) {
     let targetProps = {};
@@ -48,7 +57,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   if (decorative) {
-    return <span className={className}>{children}</span>;
+    return <span className={className}>{children}{emojiEl}</span>;
   }
 
   return (
@@ -93,6 +102,8 @@ Button.propTypes = {
   newTab: PropTypes.bool,
   /** Emoji name */
   emoji: PropTypes.string,
+  /** Whether Emoji is to left or right of other content */
+  emojiPosition: PropTypes.oneOf(['left', 'right']),
 };
 
 Button.defaultProps = {
@@ -107,6 +118,7 @@ Button.defaultProps = {
   decorative: false,
   newTab: false,
   emoji: null,
+  emojiPosition: 'right',
 };
 
 export default Button;
