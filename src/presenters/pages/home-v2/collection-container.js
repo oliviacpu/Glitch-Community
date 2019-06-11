@@ -68,14 +68,14 @@ const collectionStyles = {
   },
 };
 
-const CuratedCollectionContainer = ({ collectionStyle, users, children }) => (
-  <div className={styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
+const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
+  <a href={href} className={classNames(styles.curatedCollectionContainer} style={{ backgroundColor: collectionStyles[collectionStyle].color }}>
     <img src={collectionStyles[collectionStyle].texture} alt="" className={styles.curatedCollectionTexture} />
     <div className={styles.curatedCollectionText}>{children}</div>
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
-  </div>
+  </a>
 );
 
 export default CuratedCollectionContainer;
