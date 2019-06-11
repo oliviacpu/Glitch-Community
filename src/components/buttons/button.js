@@ -28,17 +28,13 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     hover,
     decorative,
   });
-  
-  const emojiClassName = cx({
-    emojiContainer: true,
-    left: emojiPosition === 'left',
-  });
-  
+
   const content = (
     <>
+      {children}
+      {emojiEl}
     </>
-  )
-  const emojiEl = emoji ? <div className={styles.emojiContainer}><Emoji name={emoji} /></div>: null;
+  );
 
   if (href) {
     let targetProps = {};
@@ -51,18 +47,18 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
 
     return (
       <Link to={href} onClick={onClick} className={className} {...targetProps}>
-        {children}{emojiEl}
+        {content}
       </Link>
     );
   }
 
   if (decorative) {
-    return <span className={className}>{children}{emojiEl}</span>;
+    return <span className={className}>{content}</span>;
   }
 
   return (
     <button onClick={onClick} className={className} disabled={disabled}>
-      {children}{emojiEl}
+      {content}
     </button>
   );
 };
@@ -119,6 +115,17 @@ Button.defaultProps = {
   newTab: false,
   emoji: null,
   emojiPosition: 'right',
+};
+
+const ButtonEmoji = (emoji, position) => (
+  <div style={{ '--position': position }} className={styles.emojiContainer}>
+    <Emoji name={emoji} />
+  </div>
+);
+
+ButtonEmoji.propTypes = {
+  emoji: PropTypes.string.isRequired,
+  emojiPosition: PropTypes.oneOf(['right', 'left']).isRequired,
 };
 
 export default Button;

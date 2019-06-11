@@ -5,7 +5,7 @@ import Button, { SIZES } from 'Components/buttons/button';
 import { getShowUrl, getEditorUrl, getRemixUrl } from '../../models/project';
 
 export const ShowButton = ({ name, size }) => (
-  <Button href={getShowUrl(name)} size={size} emoji="sunglasses">
+  <Button href={getShowUrl(name)} size={size} emoji="sunglasses" emojiPosition="left">
     Show
   </Button>
 );
