@@ -18,7 +18,9 @@ const ProfileAvatar = ({ team }) => <Image className={styles.avatar} src={getAva
 
 const getTeamThanksCount = (team) => sumBy(team.users, (user) => user.thanksCount);
 
-const TeamItem = ({ team }) => (
+const TeamItem = ({ team }) => {
+  console.log(team)
+  return (
   <WrappingLink className={styles.container} href={getLink(team)}>
     <Cover type="team" item={team} size="medium" />
     <div className={styles.mainContent}>
@@ -38,7 +40,7 @@ const TeamItem = ({ team }) => (
       </div>
     </div>
   </WrappingLink>
-);
+)};
 
 TeamItem.propTypes = {
   team: PropTypes.shape({
