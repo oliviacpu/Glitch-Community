@@ -1,6 +1,7 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const styles = {};
+import styles from './animations.styl';
 
 export const Discover = () => (
   <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290">
@@ -23,7 +24,7 @@ export const Discover = () => (
       <g id="05-29-19-xlarge">
         <g id="Group-36">
           <g id="discover-animation">
-            <g id="react" className={styles.animation} style={{ fillRule: 'nonzero' }}>
+            <g className={styles.animation} style={{ fillRule: 'nonzero' }}>
               <g id="Group-13">
                 <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" style={{ fill: '#61dafb', stroke: '#000000', strokeWidth: '1.69705629' }} />
                 <g id="Group-2">
@@ -89,7 +90,7 @@ export const Discover = () => (
                 style={{ fill: '#fcf3b0' }}
               />
             </g>
-            <g id="tetris" className={styles.animation}>
+            <g className={classnames(styles.animation, styles.tetris)}>
               <polygon
                 id="polygon37"
                 points="15.288363,81.335333 25.637968,81.425652 25.548434,91.685262 15.198828,91.594942 "
@@ -149,7 +150,7 @@ export const Discover = () => (
                 <rect id="rect48" x="27.700001" y="83.5" width="5.4000015" height="5.4473705" rx="0.5400002" style={{ fill: '#ffffff' }} />
               </g>
             </g>
-            <g id="cat" className={styles.animation} style={{ fill: 'none', fillRule: 'evenodd', stroke: 'none', strokeWidth: '2' }}>
+            <g className={classnames(styles.cat, styles.animation)} style={{ fill: 'none', fillRule: 'evenodd', stroke: 'none', strokeWidth: '2' }}>
               <g id="05-29-19-xlarge-90" style={{ fillRule: 'nonzero' }}>
                 <g id="Group-36-2">
                   <g id="discover-animation-3">
