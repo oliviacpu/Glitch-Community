@@ -41,7 +41,7 @@ const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
 const filterOutBadData = (payload) => {
-  let filteredData = { ...payload };
+  const filteredData = { ...payload };
   // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
   filteredData.team = filteredData.team.filter((t) => !!t.url);
   return filteredData;
