@@ -22,11 +22,14 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     tertiary: ['tertiary', 'dangerZone'].includes(type),
     dangerZone: type === 'dangerZone',
     unstyled: type === 'dropDown',
+    hasEmoji: emoji,
     matchBackground: matchBackground === true,
     active,
     hover,
     decorative,
   });
+  
+  const emojiEl = emoji ? <Emoji name={emoji} /> : null;
 
   if (href) {
     let targetProps = {};
@@ -39,7 +42,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
 
     return (
       <Link to={href} onClick={onClick} className={className} {...targetProps}>
-        {children}
+        {children}{emojiEl}
       </Link>
     );
   }
@@ -50,7 +53,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
 
   return (
     <button onClick={onClick} className={className} disabled={disabled}>
-      {children}
+      {children}{emojiEl}
     </button>
   );
 };
@@ -88,6 +91,8 @@ Button.propTypes = {
   active: PropTypes.bool,
   /** whether the link opens in a new tab or the same window */
   newTab: PropTypes.bool,
+  /** Emoji name */
+  emoji: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -101,6 +106,7 @@ Button.defaultProps = {
   active: false,
   decorative: false,
   newTab: false,
+  emoji: null,
 };
 
 export default Button;
