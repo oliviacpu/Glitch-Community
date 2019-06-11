@@ -47,8 +47,8 @@ const useTeamUsers = createAPIHook(async (api, teamID) => {
     const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
     return res.data.items;
   } catch (e) {
-    console.log("error", e)
-    return []
+    captureException(e);
+    return [];
   }
 });
 
