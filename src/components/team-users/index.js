@@ -10,7 +10,6 @@ import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
@@ -44,8 +43,8 @@ const WhitelistedDomain = ({ domain, setDomain }) => (
             </PopoverInfo>
             {!!setDomain && (
               <PopoverActions type="dangerZone">
-                <Button type="dangerZone" size="small" onClick={() => setDomain(null)}>
-                  Remove {domain} <Emoji name="bomb" />
+                <Button type="dangerZone" size="small" emoji="bomb" onClick={() => setDomain(null)}>
+                  Remove {domain}
                 </Button>
               </PopoverActions>
             )}

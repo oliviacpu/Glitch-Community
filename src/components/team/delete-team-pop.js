@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Loader from 'Components/loader';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import Image from 'Components/images/image';
 import { useAPI } from 'State/api';
 // import { teamAdmins } from 'Models/team';
@@ -61,14 +60,7 @@ DeleteTeamPop.propTypes = {
 };
 
 const DeleteTeam = ({ team }) => (
-  <PopoverWithButton
-    buttonProps={{ size: 'small', type: 'dangerZone' }}
-    buttonText={
-      <>
-        Delete {team.name} <Emoji name="bomb" />
-      </>
-    }
-  >
+  <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone' }} buttonEmoji="bomb" buttonText={<>Delete {team.name}</>}>
     {() => <DeleteTeamPop team={team} />}
   </PopoverWithButton>
 );
