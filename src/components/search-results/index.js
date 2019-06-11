@@ -58,6 +58,7 @@ function TeamWithDataLoading({ team }) {
 }
 
 const TeamResult = ({ result }) => {
+  console.log({result})
   if (!result.users) {
     return <TeamWithDataLoading team={result} />;
   }
@@ -144,6 +145,7 @@ const resultComponents = {
 };
 
 const ResultComponent = ({ result }) => {
+  console.log("resultcomponent", result)
   const Component = resultComponents[result.type];
   return <Component result={result} />;
 };
