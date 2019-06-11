@@ -159,7 +159,6 @@ class CreateCollectionPop extends React.Component {
 
         <section className="pop-over-actions">
           <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
-<<<<<<< HEAD
             <TextInput
               autoFocus
               value={query}
@@ -168,10 +167,6 @@ class CreateCollectionPop extends React.Component {
               error={error || queryError}
               labelText={placeholder}
             />
-=======
-            <TextInput value={query} onChange={this.handleChange} placeholder={placeholder} error={error || queryError} labelText={placeholder} />
->>>>>>> origin/north-passive-1
-
             {teams && teams.length > 0 && (
               <div>
                 {'for '}

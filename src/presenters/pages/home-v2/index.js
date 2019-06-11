@@ -145,19 +145,6 @@ const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
 const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
     <h3 className={styles.h3}>
-<<<<<<< HEAD
-      <Mark color="salmon">Apps we love</Mark>
-    </h3>
-    <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
-      {({ domain, title, description, img, users }) => (
-        <>
-          <div className={styles.appsWeLoveProfile}>
-            <ProfileList layout="row" users={users} />
-          </div>
-          <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
-            <MaskImage maskClass="speechBubble" src={img} alt="" />
-            <h4>{title}</h4>
-=======
       Apps we love
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
@@ -169,7 +156,7 @@ const AppsWeLove = ({ content }) => (
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
             <h4 className={styles.h4}>{title}</h4>
->>>>>>> origin/north-passive-1
+
             <p>{description}</p>
           </a>
         </>
@@ -179,29 +166,16 @@ const AppsWeLove = ({ content }) => (
 );
 
 const CuratedCollections = ({ content }) => (
-<<<<<<< HEAD
-  <section id="curated-collections">
-    <h3 className={styles.h3}>
-      <Mark color="skyblue">Curated collections</Mark>
-    </h3>
-    <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))}>
-      {({ title, description, fullUrl, users, count, collectionStyle }) => (
-        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users} href={`/@${fullUrl}`}>
-          <h4>{title}</h4>
-          <p>{description}</p>
-          <Button decorative>
-=======
-  <section id="curated-collections" styles={styles.curatedCollectionsContainer}>
+  <section id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>
       Curated collections
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count, collectionStyle }) => (
-        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users}>
+        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users} href={`/@${fullUrl}`}>
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
-          <Button href={`/@${fullUrl}`}>
->>>>>>> origin/north-passive-1
+          <Button decorative>
             View <Pluralize count={count} singular="project" /> <Arrow />
           </Button>
         </CuratedCollectionContainer>
@@ -213,8 +187,7 @@ const CuratedCollections = ({ content }) => (
 const CultureZine = ({ content }) => (
   <section id="enter-our-universe" className={styles.cultureZine}>
     <h2 className={styles.h2}>
-<<<<<<< HEAD
-      <Mark color="lavender">Enter our universe</Mark>
+      <Mark color="#CBC3FF">Enter our universe</Mark>
     </h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
     <Row count={2} items={[{ id: 'left', items: content.slice(0, 2) }, { id: 'right', items: content.slice(2, 4) }]}>
@@ -226,28 +199,12 @@ const CultureZine = ({ content }) => (
                 <MaskImage src={img} />
               </div>
               <div className={styles.cultureZineText}>
-                <h3>{title}</h3>
+                <h4 className={styles.h4}>{title}</h4>
                 <p>{source}</p>
               </div>
             </a>
           )}
         </Row>
-=======
-      <Mark color="#CBC3FF">Enter our universe</Mark>
-    </h2>
-    <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
-    <Row items={content} count={4} className={styles.cultureZineRow}>
-      {({ title, source, img, url }) => (
-        <a href={`/culture${url}`} className={styles.plainLink}>
-          <div className={styles.cultureZineImageWrap}>
-            <MaskImage src={img} />
-          </div>
-          <div className={styles.cultureZineText}>
-            <h4 className={styles.h4}>{title}</h4>
-            <p>{source}</p>
-          </div>
-        </a>
->>>>>>> origin/north-passive-1
       )}
     </Row>
   </section>
@@ -256,18 +213,6 @@ const CultureZine = ({ content }) => (
 const BuildingOnGlitch = ({ content }) => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
-<<<<<<< HEAD
-      <Mark color="yellow">Start building on Glitch</Mark>
-    </h2>
-    <div className={styles.buildingOnGlitchRow}>
-      {content.map(({ href, img, title, description }) => (
-        <a key={href} href={href} className={styles.plainLink}>
-          <img src={img} alt="" />
-          <h3>
-            {title} <Arrow />
-          </h3>
-          <p>{description}</p>
-=======
       <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
@@ -281,7 +226,6 @@ const BuildingOnGlitch = ({ content }) => (
           <Button decorative>
             {cta} <Arrow />
           </Button>
->>>>>>> origin/north-passive-1
         </a>
       ))}
     </div>
