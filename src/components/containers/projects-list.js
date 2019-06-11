@@ -111,12 +111,14 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
             {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
             <div className={styles.pageNumbers}>
               {state.page} / {numPages}
+            <div data-cy="page-numbers" className={styles.pageNumbers}>
+              {page} / {numPages}
             </div>
             <Button type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button type="tertiary" onClick={() => dispatchState('expand')}>
+          <Button data-cy="show-all"  type="tertiary" onClick={() => dispatchState('expand')}>
             Show all <Badge>{numProjects}</Badge>
           </Button>
         </div>
@@ -148,9 +150,11 @@ const FilterController = ({ enabled, placeholder, projects, children }) => {
 
   const filtering = validFilter && isDoneFiltering;
   const displayedProjects = filtering ? filteredProjects : projects;
+
   return children({
     filterInput: enabled && (
       <TextInput
+        data-cy="projects-filter"
         className={styles.headerSearch}
         name="filter"
         onChange={setFilter}
@@ -191,11 +195,12 @@ function ProjectsList({
   collection,
   noteOptions,
   projectOptions,
+  ...props
 }) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article className={classNames(styles.projectsContainer)}>
+        <article {...props} className={classNames(styles.projectsContainer)}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}

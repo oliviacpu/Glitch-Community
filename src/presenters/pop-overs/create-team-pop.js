@@ -135,6 +135,7 @@ class CreateTeamPopBase extends React.Component {
         <section className="pop-over-actions">
           <form onSubmit={this.handleSubmit}>
             <TextInput
+              autoFocus
               labelText={placeholder}
               value={this.state.teamName}
               onChange={this.handleChange}
@@ -155,7 +156,7 @@ class CreateTeamPopBase extends React.Component {
 }
 
 CreateTeamPopBase.propTypes = {
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   focusFirstElement: PropTypes.func.isRequired,
 };
 

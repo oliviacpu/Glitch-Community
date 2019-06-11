@@ -7,22 +7,21 @@ import useUniqueId from '../../hooks/use-unique-id';
 import styles from './button.styl';
 import checkboxStyles from './checkbox-button.styl';
 
-const CheckboxButton = ({ children, onChange, value, matchBackground, type }) => {
+const CheckboxButton = React.forwardRef(({ children, onChange, value, matchBackground, type }, ref) => {
   const id = useUniqueId();
-  const className = classNames({ [styles.matchBackground]: matchBackground, [styles.tertiary]: type === 'tertiary' }, styles.btn, styles.small, checkboxStyles.label);
+  const className = classNames(
+    { [styles.matchBackground]: matchBackground, [styles.tertiary]: type === 'tertiary' },
+    styles.btn,
+    styles.small,
+    checkboxStyles.label,
+  );
   return (
     <label className={className} htmlFor={id}>
-      <input
-        id={id}
-        className={checkboxStyles.input}
-        type="checkbox"
-        checked={value}
-        onChange={(evt) => onChange(evt.target.checked)}
-      />
+      <input id={id} className={checkboxStyles.input} type="checkbox" checked={value} onChange={(evt) => onChange(evt.target.checked)} ref={ref} />
       {children}
     </label>
   );
-};
+});
 
 CheckboxButton.propTypes = {
   children: PropTypes.node.isRequired,

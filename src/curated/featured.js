@@ -14,18 +14,18 @@ Example:
 // make sure image urls use https
 export default [
   {
-    title: 'Draw Your Own Magic Eye Art',
-    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fmagic-eye_GLITCH.png?1543234498314',
-    link: 'https://glitch.com/~magic-eye'
+    title: 'A Vera Molnár Painting Comes to Life',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_hearing-vera-molnar.png',
+    link: 'https://glitch.com/~hearing-vera-molnar'
   },  
   {
-    title: 'Take On Another Project?',
-    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2Fshould-i-do-it.jpg?1538392879435',
-    link: 'https://glitch.com/~shouldidoit'
+    title: 'Learn About Material Components',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_adopt-a-pup.png',
+    link: 'https://glitch.com/~adopt-a-pup'
   },
   {
-    title: 'Turn Off Retweets',
-    img: 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fturn-off-retweets.png?1535971899505',
-    link: 'https://glitch.com/~turn-off-retweets'  
+    title: 'Create Chord Patterns',
+    img: 'https://cdn.glitch.com/02863ac1-a499-4a41-ac9c-41792950000f%2F1201_chord-machine.png',
+    link: 'https://glitch.com/~chordmachine'  
   }
 ];

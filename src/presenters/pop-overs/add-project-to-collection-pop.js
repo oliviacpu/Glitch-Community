@@ -204,7 +204,7 @@ const UserOrTeamSegmentedButtons = ({ activeType, setType }) => {
 };
 
 export const AddProjectToCollectionBase = (props) => {
-  const { project, togglePopover, focusFirstElement } = props;
+  const { project, togglePopover } = props;
 
   const api = useAPI();
   const { currentUser } = useCurrentUser();
@@ -261,7 +261,7 @@ export const AddProjectToCollectionBase = (props) => {
   return (
     <NestedPopover
       alternateContent={() => (
-        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />
+        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} />
       )}
       startAlternateVisible={false}
     >

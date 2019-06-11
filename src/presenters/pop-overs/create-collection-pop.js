@@ -160,6 +160,7 @@ class CreateCollectionPop extends React.Component {
         <section className="pop-over-actions">
           <form onSubmit={(event) => this.handleSubmit(event, createNotification)}>
             <TextInput
+              autoFocus
               value={query}
               onChange={this.handleChange}
               placeholder={placeholder}
@@ -188,7 +189,7 @@ class CreateCollectionPop extends React.Component {
 
 CreateCollectionPop.propTypes = {
   addProjectToCollection: PropTypes.func,
-  api: PropTypes.func.isRequired,
+  api: PropTypes.any.isRequired,
   currentUser: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   togglePopover: PropTypes.func.isRequired,
