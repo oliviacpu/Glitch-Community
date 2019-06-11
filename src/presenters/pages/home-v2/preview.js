@@ -1,10 +1,18 @@
 import React from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
+=======
+import { pick } from 'lodash';
+>>>>>>> origin/north-passive-1
 import { withRouter } from 'react-router-dom';
 
 import DataLoader from 'Components/data-loader';
 import Button from 'Components/buttons/button';
 import { useAPI } from 'State/api';
+<<<<<<< HEAD
+=======
+import { getAllPages, allByKeys } from 'Shared/api';
+>>>>>>> origin/north-passive-1
 
 import Layout from '../../layout';
 import { Home } from './index';

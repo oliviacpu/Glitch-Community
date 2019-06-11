@@ -25,8 +25,8 @@ const UserMask = ({ users, config }) => (
 
 const collectionStyles = {
   wavey: {
-    color: 'lightblue',
-    texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fwavey.svg?1559249088863',
+    color: '#87E0FF',
+    texture: 'https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fwavey.svg?v=1560090452140',
     width: 109,
     height: 153,
     points: [
@@ -39,8 +39,8 @@ const collectionStyles = {
     ],
   },
   diagonal: {
-    color: 'yellow',
-    texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdiagonal.svg?1559249088716',
+    color: '#FCF3B0',
+    texture: 'https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fdiagonal.svg?v=1560090452540',
     width: 116,
     height: 178,
     points: [
@@ -53,8 +53,8 @@ const collectionStyles = {
     ],
   },
   triangle: {
-    color: 'salmon',
-    texture: 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftriangle.svg?1559249088542',
+    color: '#FFB0B0',
+    texture: 'https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Ftriangle.svg?v=1560090452969',
     width: 102,
     height: 161,
     points: [

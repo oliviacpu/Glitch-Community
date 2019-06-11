@@ -38,6 +38,7 @@ const Banner = () => (
       <h1>
         <Unmarked>Glitch is the</Unmarked>
         <br />
+<<<<<<< HEAD
         <Mark color="blue">friendly community</Mark>
         <br />
         <Unmarked>where anyone can</Unmarked>
@@ -47,6 +48,17 @@ const Banner = () => (
       <p>The easiest way to build, ship, and share apps on the web, for free.</p>
       <Button type="cta" href="#top-picks">
         Check out fresh apps <Arrow />
+=======
+        <Mark color="#1D9AF9">friendly community</Mark>
+        <br />
+        <Unmarked>where anyone can</Unmarked>
+        <br />
+        <Mark color="#18B576">create the web</Mark>
+      </h1>
+      <p>The easiest way to build, ship, and share apps on the web, for free.</p>
+      <Button type="cta" href="#top-picks">
+        Start Creating <Arrow />
+>>>>>>> origin/north-passive-1
       </Button>
     </div>
     <BannerVideo />
@@ -55,7 +67,11 @@ const Banner = () => (
 
 const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
+<<<<<<< HEAD
     <Row items={content} className={styles.featureCalloutsRow}>
+=======
+    <Row items={content} className={styles.featureCalloutsRow} minWidth="190px">
+>>>>>>> origin/north-passive-1
       {({ label, description, cta, imgSrc, backgroundSrc, href, color }) => (
         <a href={href} className={styles.plainLink}>
           <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
@@ -80,6 +96,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesHeadline}>
       <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
+<<<<<<< HEAD
       {hed
         .trim()
         .split('\n')
@@ -95,6 +112,19 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       <h3>{dek}</h3>
       {/* eslint-disable-next-line react/no-danger */}
       <div dangerouslySetInnerHTML={{ __html: summary }} />
+=======
+      {hed.split('\n\n').map((line, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <h2 key={i}>
+          <Mark color="white">{line}</Mark>
+        </h2>
+      ))}
+      <img src={featuredImage} alt={featuredImageDescription} />
+    </div>
+    <div className={styles.unifiedStoriesPreview}>
+      <h3 className={styles.h3}>{dek}</h3>
+      <p>{summary}</p>
+>>>>>>> origin/north-passive-1
       <Button href={href}>
         {cta} <Arrow />
       </Button>
@@ -118,13 +148,18 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 const TopPicks = ({ children }) => (
   <section id="top-picks">
     <h2 className={styles.h2}>
+<<<<<<< HEAD
       <Mark color="turquoise">Our top picks</Mark>
+=======
+      <Mark color="#BCFCFF">Our top picks</Mark>
+>>>>>>> origin/north-passive-1
     </h2>
     <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
     {children}
   </section>
 );
 
+<<<<<<< HEAD
 const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
   <figure className={styles.featuredEmbed}>
     <div className={styles.featuredEmbedWrap}>
@@ -142,12 +177,29 @@ const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
       </div>
       {/* users are included in the embed now, we don't need them in this block */}
     </figcaption>
+=======
+const FeaturedEmbed = ({ content: { domain, title, description, users } }) => (
+  <figure className={styles.featuredEmbed}>
+    <figcaption className={styles.featuredEmbedCaption}>
+      <div className={styles.featuredEmbedText}>
+        <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
+          <h4 className={styles.h4}>{title}</h4>
+          {/* eslint-disable-next-line react/no-danger */}
+          <div dangerouslySetInnerHTML={{ __html: description }} />
+        </a>
+      </div>
+    </figcaption>
+    <div className={styles.featuredEmbedWrap}>
+      <Embed domain={domain} />
+    </div>
+>>>>>>> origin/north-passive-1
   </figure>
 );
 
 const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
     <h3 className={styles.h3}>
+<<<<<<< HEAD
       <Mark color="salmon">Apps we love</Mark>
     </h3>
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow}>
@@ -159,6 +211,17 @@ const AppsWeLove = ({ content }) => (
           <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
             <MaskImage maskClass="speechBubble" src={img} alt="" />
             <h4>{title}</h4>
+=======
+      Apps we love
+    </h3>
+    <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth={"235px"}>
+      {({ domain, title, description, img, users }) => (
+        <>
+          <ProfileList layout="row" users={users} />
+          <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
+            <MaskImage maskClass="speechBubble" src={img} alt="" />
+            <h4 className={styles.h4}>{title}</h4>
+>>>>>>> origin/north-passive-1
             <p>{description}</p>
           </a>
         </>
@@ -168,6 +231,7 @@ const AppsWeLove = ({ content }) => (
 );
 
 const CuratedCollections = ({ content }) => (
+<<<<<<< HEAD
   <section id="curated-collections">
     <h3 className={styles.h3}>
       <Mark color="skyblue">Curated collections</Mark>
@@ -178,6 +242,18 @@ const CuratedCollections = ({ content }) => (
           <h4>{title}</h4>
           <p>{description}</p>
           <Button decorative>
+=======
+  <section id="curated-collections" styles={styles.curatedCollectionsContainer}>
+    <h3 className={styles.h3}>
+      Curated collections
+    </h3>
+    <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
+      {({ title, description, fullUrl, users, count, collectionStyle }) => (
+        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users}>
+          <h4 className={styles.h4}>{title}</h4>
+          <p>{description}</p>
+          <Button href={`/@${fullUrl}`}>
+>>>>>>> origin/north-passive-1
             View <Pluralize count={count} singular="project" /> <Arrow />
           </Button>
         </CuratedCollectionContainer>
@@ -189,6 +265,7 @@ const CuratedCollections = ({ content }) => (
 const CultureZine = ({ content }) => (
   <section id="enter-our-universe" className={styles.cultureZine}>
     <h2 className={styles.h2}>
+<<<<<<< HEAD
       <Mark color="lavender">Enter our universe</Mark>
     </h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
@@ -207,6 +284,22 @@ const CultureZine = ({ content }) => (
             </a>
           )}
         </Row>
+=======
+      <Mark color="#CBC3FF">Enter our universe</Mark>
+    </h2>
+    <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
+    <Row items={content} count={4} className={styles.cultureZineRow}>
+      {({ title, source, img, url }) => (
+        <a href={`/culture${url}`} className={styles.plainLink}>
+          <div className={styles.cultureZineImageWrap}>
+            <MaskImage src={img} />
+          </div>
+          <div className={styles.cultureZineText}>
+            <h4 className={styles.h4}>{title}</h4>
+            <p>{source}</p>
+          </div>
+        </a>
+>>>>>>> origin/north-passive-1
       )}
     </Row>
   </section>
@@ -215,6 +308,7 @@ const CultureZine = ({ content }) => (
 const BuildingOnGlitch = ({ content }) => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
+<<<<<<< HEAD
       <Mark color="yellow">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
@@ -225,6 +319,21 @@ const BuildingOnGlitch = ({ content }) => (
             {title} <Arrow />
           </h3>
           <p>{description}</p>
+=======
+      <Mark color="#FCF3B0">Start building on Glitch</Mark>
+    </h2>
+    <div className={styles.buildingOnGlitchRow}>
+      {content.map(({ href, img, title, description, cta }) => (
+        <a key={href} href={href} className={styles.plainLink}>
+          <img src={img} alt="" />
+          <h3>
+            {title}
+          </h3>
+          <p>{description}</p>
+          <Button decorative>
+            {cta} <Arrow />
+          </Button>
+>>>>>>> origin/north-passive-1
         </a>
       ))}
     </div>
