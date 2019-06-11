@@ -14,7 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }) => {
+const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji }) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
