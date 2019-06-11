@@ -206,7 +206,6 @@ module.exports = function(external) {
   app.post('/api/home', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
-    console.log({ persistentToken, data });
     try {
       await saveHomeDataToFile({ persistentToken, data });
       res.sendStatus(200);
