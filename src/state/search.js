@@ -41,9 +41,10 @@ const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
 const filterOutBadData = (payload) => {
-  let fileredData = { ...payload };
-  filteredData.team
-  return payload
+  let filteredData = { ...payload };
+  // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
+  filteredData.team = filteredData.team.filter(t => !!t.url);
+  return filteredData;
 }
 
 // search provider logic -- shared between algolia & legacy API
