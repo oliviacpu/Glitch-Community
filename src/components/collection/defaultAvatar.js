@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DefaultAvatar = ({ backgroundFillColor, alt }) => (
-  <svg width={159} height={147} viewBox="0 0 159 147" alt={alt}>
+const DefaultAvatar = ({ backgroundFillColor }) => (
+  <svg width={159} height={147} viewBox="0 0 159 147" alt="">
     <g data-svg="collection-avatar">
       <polygon data-svg="frame" fill="#FFFB98" points="0 147 159 147 159 16 0 16" />
       <polygon data-svg="sky" fill={backgroundFillColor} points="17 132 141 132 141 30 17 30" />
@@ -54,7 +54,6 @@ DefaultAvatar.propTypes = {
 };
 DefaultAvatar.defaultProps = {
   backgroundFillColor: '#45C1F7',
-  alt: ""
 };
 
 export default DefaultAvatar;

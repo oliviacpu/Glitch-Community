@@ -25,6 +25,7 @@ const CollectionWide = ({ collection }) => {
       <header className={`collection ${dark}`}>
         <CollectionLink className="collection-image-container" collection={collection}>
           <CollectionAvatar color={collection.coverColor} />
+          <span className="screen-reader-text">{collection.name}</span>
         </CollectionLink>
         <CollectionLink className="collection-name" collection={collection}>
           <Heading tagName="h2">{collection.name}</Heading>
