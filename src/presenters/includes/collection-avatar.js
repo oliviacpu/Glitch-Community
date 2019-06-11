@@ -18,7 +18,7 @@ const hexToRgbA = (hex) => {
 };
 /* eslint-enable no-bitwise */
 
-const CollectionAvatar = (props) => <DefaultAvatar backgroundFillColor={hexToRgbA(props.color)} />;
+const CollectionAvatar = (props) => <DefaultAvatar backgroundFillColor={hexToRgbA(props.color)} alt={props.alt} />;
 
 CollectionAvatar.propTypes = {
   color: PropTypes.string.isRequired,
