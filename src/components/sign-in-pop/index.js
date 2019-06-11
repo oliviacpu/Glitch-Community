@@ -9,7 +9,11 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
+<<<<<<< HEAD
 import Notification from 'Components/notification';
+=======
+import Loader from 'Components/loader';
+>>>>>>> e65ab6401b45ee7bb6a5c7c2828804c4333e5d8a
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
@@ -141,6 +145,7 @@ const EmailHandler = ({ showView }) => {
             </div>
           </form>
         )}
+        {status === 'loading' && <Loader />}
         {status === 'done' && (
           <>
             <Notification persistent type="success">

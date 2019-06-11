@@ -46,7 +46,11 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   }
 
   if (decorative) {
-    return <span className={className}>{children}</span>;
+    return (
+      <span className={className} disabled={disabled}>
+        {children}
+      </span>
+    );
   }
 
   return (
