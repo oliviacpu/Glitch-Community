@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './animations.styl';
 
 export const Discover = () => (
-  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290">
+  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290" className={styles.feature}>
     <defs id="defs10">
       <ellipse id="path-1" cx="16.799999" cy="14.954068" rx="16.799999" ry="7.8000002" />
       <path
@@ -24,7 +24,7 @@ export const Discover = () => (
       <g id="05-29-19-xlarge">
         <g id="Group-36">
           <g id="discover-animation">
-            <g className={styles.animation} style={{ fillRule: 'nonzero' }}>
+            <g className={classnames(styles.animation, styles.react)} style={{ fillRule: 'nonzero' }}>
               <g id="Group-13">
                 <circle id="Oval" cx="48.5" cy="27.839281" r="3.5999999" style={{ fill: '#61dafb', stroke: '#000000', strokeWidth: '1.69705629' }} />
                 <g id="Group-2">
@@ -79,14 +79,12 @@ export const Discover = () => (
             <g id="music-notes" style={{ stroke: '#000000', strokeWidth: '2.5' }}>
               <path
                 d="m 92.233138,26.995718 c -3.174716,0.276626 -2.315134,2.643345 -2.293235,2.697574 1.060012,2.661256 3.084382,7.755435 4.164427,10.408606 0.205054,0.506134 0.411111,1.01126 0.617166,1.517391 -0.752945,0.174531 -1.478156,0.480673 -2.106527,0.894152 -1.776879,1.169838 -3.056612,3.364819 -2.263643,5.493945 0.01,0.02611 0.02793,0.04115 0.03989,0.06424 0.007,0.0231 0.0049,0.04422 0.01487,0.06731 1.869269,4.203354 8.406989,2.453175 9.843044,-1.217671 0.37033,-0.944624 -0.0843,-3.591125 -0.23656,-3.965703 -0.477803,-1.173943 -0.954612,-2.346884 -1.432419,-3.520827 -0.733638,-1.80058 -2.858963,-5.997349 -3.590599,-7.797934 -0.439252,-0.884246 1.440761,-1.203817 3.198085,1.445744 1.575724,2.375757 2.172913,4.913214 4.072873,3.912784 1.89996,-1.000431 0.69575,-4.302484 -1.92667,-7.539107 -2.62243,-3.236622 -6.340472,-2.613882 -8.100697,-2.460506 0,0 0,0 0,0"
-                id="note-1"
-                className={styles.animation}
+                className={classnames(styles.animation, styles.note1)}
                 style={{ fill: '#db96ff' }}
               />
               <path
                 d="m 133.80886,8.5875898 c 0,0 -6.22757,-3.4201793 -6.22757,-3.4201793 -0.65085,-0.3574739 -1.29367,-0.7418017 -1.95736,-1.0754747 -0.59839,-0.3006449 -1.26737,-0.4326311 -1.93512,-0.3817883 -1.06704,-0.1185008 -2.09641,0.4342612 -2.58702,1.3892074 -1.45789,2.6028206 -2.87258,5.2304251 -4.30875,7.8457711 0,0 -0.86714,1.578922 -0.86714,1.578922 -1.52453,-1.173585 -3.48946,-1.614163 -5.36914,-1.203873 -1.96449,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38872,2.183082 1.92095,3.988687 4.01169,4.727442 2.22705,0.861872 4.97885,0.459851 6.26647,-1.721748 0.0799,-0.158378 0.15109,-0.321021 0.2132,-0.487195 0.12589,-0.165329 0.23972,-0.339506 0.3406,-0.521182 0,0 1.91271,-3.48293 1.91271,-3.48293 0,0 3.09159,-5.629293 3.09159,-5.629293 0.60609,0.338584 1.22817,0.642403 1.77632,0.943456 0,0 4.84512,2.661189 4.84512,2.661189 -0.87195,1.591052 -1.74311,3.182403 -2.61348,4.774052 0,0 -0.86316,1.571668 -0.86316,1.571668 -1.53599,-1.218148 -3.53725,-1.683416 -5.45308,-1.267777 -1.96448,0.484747 -3.26252,2.354065 -3.03039,4.364115 0.38871,2.183103 1.92093,3.988742 4.01167,4.727539 2.22705,0.861872 4.97885,0.459851 6.26637,-1.721772 0.0239,-0.0468 0.042,-0.09343 0.064,-0.140274 0.22138,-0.2416 0.41266,-0.509133 0.56967,-0.796751 0,0 1.91281,-3.482906 1.91281,-3.482906 0,0 4.64358,-8.455791 4.64358,-8.455791 0.53707,-0.767963 0.71029,-1.73285 0.47387,-2.63967 -0.31469,-1.1154217 -1.10336,-2.0363628 -2.15711,-2.5188722 0,0 0,0 0,0"
-                id="note-2"
-                className={styles.animation}
+                className={classnames(styles.animation, styles.note2)}
                 style={{ fill: '#fcf3b0' }}
               />
             </g>
@@ -323,7 +321,7 @@ export const Discover = () => (
 );
 
 export const Dreams = () => (
-  <svg width="184px" height="119px" viewBox="0 0 184 119">
+  <svg width="184px" height="119px" viewBox="0 0 184 119" className={styles.feature}>
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-29-19-xlarge-banner" transform="translate(-535.000000, -620.000000)">
         <g id="Group-32" transform="translate(489.000000, 605.267418)">
@@ -331,8 +329,7 @@ export const Dreams = () => (
             <g id="creators-animation" transform="translate(19.864079, 17.000000)">
               <path
                 d="M35.1951425,65.6991631 C38.1701297,63.782537 41.5165998,57.8375178 45.2345527,47.8641055 C50.8114821,32.9039871 49.7855081,15.9637175 42.9031116,15.9637175 C36.0207151,15.9637175 34.3695698,19.9241136 35.1951425,26.6567869 C36.0207151,33.3894601 57.2295267,55.8310171 68.3942095,45.4720208 C79.5588922,35.1130245 81.7109878,9.386841 100.731556,1.5154684 C113.411936,-3.73211333 126.147637,4.64832615 138.93866,26.6567869"
-                id="animation-path"
-                className={styles.animation}
+                className={classnames(styles.animation, styles.animationPath)}
                 stroke="#FFFFFF"
                 strokeWidth="3.5"
                 fillRule="nonzero"
@@ -450,7 +447,7 @@ export const Dreams = () => (
                   <path d="M17.8217822,78.7128713 L43.4545545,78.7128713" id="Path" strokeWidth="3.125" fill="#939598" />
                   <circle id="Oval" strokeWidth="2" fill="#2BD451" cx="53.3351485" cy="79.0777228" r="3.83019802" />
                 </g>
-                <g id="browser" className={styles.animation} transform="translate(5.940594, 7.524752)" strokeWidth="2.5">
+                <g className={classnames(styles.animation, styles.browser)} transform="translate(5.940594, 7.524752)" strokeWidth="2.5">
                   <rect id="Rectangle-Copy-8" fill="#A2D7FF" x="1.77635684e-14" y="7.81597009e-14" width="63.3147525" height="51.060297" rx="5" />
                   <path
                     d="M5,0 L58.3147525,0 C61.0761762,-5.07265313e-16 63.3147525,2.23857625 63.3147525,5 L63.3147525,9.5 L1.77635684e-14,9.5 L1.77635684e-14,5 C1.74253915e-14,2.23857625 2.23857625,5.07265313e-16 5,0 Z"
@@ -458,7 +455,7 @@ export const Dreams = () => (
                     fill="#FFFFFF"
                   />
                 </g>
-                <g id="sparkles" className={styles.animation} transform="translate(19.257426, 22.257426)" strokeWidth="2">
+                <g className={classnames(styles.animation, styles.sparkles)} transform="translate(19.257426, 22.257426)" strokeWidth="2">
                   <path
                     d="M8.41832871,9.36295446 C6.2892198,11.4920634 0.626566337,12.062598 0.626566337,12.3603406 L0.626566337,12.3603406 C0.626566337,12.6591921 6.24486337,13.8695683 8.41888317,16.0435881 L8.41888317,16.0435881 C10.592903,18.2176079 11.9640713,24.1042614 12.3699327,24.1042614 L12.3699327,24.1042614 C12.7757941,24.1042614 13.2603881,18.0451723 15.2625267,16.0435881 L15.2625267,16.0435881 C17.2635564,14.0425584 24.1121901,12.6891327 24.1121901,12.362004 L24.1121901,12.362004 C24.1121901,12.0343208 17.0589624,11.1610535 15.2619723,9.36350891 L15.2619723,9.36350891 C13.4644277,7.56651881 12.7009426,0.618637624 12.3688238,0.618637624 L12.3688238,0.618637624 C12.0372594,0.618637624 10.5468832,7.23384554 8.41832871,9.36295446"
                     id="Clip-817"
@@ -482,7 +479,7 @@ export const Dreams = () => (
 );
 
 export const Teams = () => (
-  <svg id="teams" width="194px" height="115px" viewBox="0 0 194 115">
+  <svg id="teams" width="194px" height="115px" viewBox="0 0 194 115" className={styles.feature}>
     <g id="Design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-21-19" transform="translate(-517.000000, -627.000000)">
         <g id="team-animation" transform="translate(518.852039, 628.307670)">
@@ -500,15 +497,14 @@ export const Teams = () => (
                 fill="#484848"
               />
               <g id="user3-lines" transform="translate(8.067819, 65.657069)" stroke="#FFCD00" strokeLinecap="round" strokeWidth="3.75">
-                <path d="M1.21374046,0.49997768 L32.923491,0.49997768" id="user3-line1" className={styles.animation} />
+                <path d="M1.21374046,0.49997768 L32.923491,0.49997768" className={classnames(styles.animation, styles.user3Line1)} />
               </g>
               <g id="user2-lines" transform="translate(10.124010, 43.874032)" stroke="#83FFCD" strokeLinecap="round" strokeWidth="3.75">
-                <path d="M11.4732824,8.99959823 L43.183033,8.99959823" id="user2-line2" className={styles.animation} />
-                <path d="M0.865648855,0.49997768 L33.9977806,0.49997768" id="user2-line1" className={styles.animation} />
+                <path d="M11.4732824,8.99959823 L43.183033,8.99959823" className={classnames(styles.animation, styles.user2Line2)} />
+                <path d="M0.865648855,0.49997768 L33.9977806,0.49997768" className={classnames(styles.animation, styles.user2Line1)} />
               </g>
               <g
-                id="user1-lines"
-                className={styles.animation}
+                className={classnames(styles.animation, styles.user1Lines)}
                 transform="translate(10.124010, 10.499531)"
                 stroke="#FFFFFF"
                 strokeLinecap="round"
@@ -520,8 +516,7 @@ export const Teams = () => (
               </g>
             </g>
             <rect
-              id="user1-shape"
-              className={styles.animation}
+              className={classnames(styles.animation, styles.user1Shape)}
               stroke="#626262"
               strokeWidth="3.50877193"
               fill="#FFFFFF"
@@ -533,8 +528,7 @@ export const Teams = () => (
               rx="7.01754386"
             />
             <rect
-              id="user2-shape"
-              className={styles.animation}
+              className={classnames(styles.animation, styles.user2Shape)}
               stroke="#626262"
               strokeWidth="3.50877193"
               fill="#83FFCD"
@@ -547,8 +541,7 @@ export const Teams = () => (
             />
             <path
               d="M101.041184,38.2849823 L94.8512813,38.2849823 C91.9445194,38.2849823 89.5881234,40.6413784 89.5881234,43.5481402 L89.5881234,54.8678134 L95.7780256,54.8678134 C98.6847875,54.8678134 101.041184,52.5114174 101.041184,49.6046555 L101.041184,38.2849823 Z"
-              id="user3-shape"
-              className={styles.animation}
+              className={classnames(styles.animation, styles.user3Shape)}
               stroke="#626262"
               strokeWidth="3.50877193"
               fill="#FFCD00"
@@ -574,7 +567,7 @@ export const Teams = () => (
               />
             </g>
           </g>
-          <g id="user-2" className={styles.animation} transform="translate(21.374046, 40.610687)" fillRule="nonzero">
+          <g className={classnames(styles.animation, styles.user2)} transform="translate(21.374046, 40.610687)" fillRule="nonzero">
             <circle id="Oval-Copy" stroke="#000000" strokeWidth="2.5" fill="#B5FFE1" cx="15.1393853" cy="15.1393853" r="15.1393853" />
             <g id="anon-face-copy" transform="translate(6.162286, 10.650836)" fill="#222222">
               <ellipse id="Oval-138" cx="2.29354621" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
@@ -585,7 +578,7 @@ export const Teams = () => (
               />
             </g>
           </g>
-          <g id="user-3" className={styles.animation} transform="translate(0.000000, 81.221374)" fillRule="nonzero">
+          <g className={classnames(styles.animation, styles.user3)} transform="translate(0.000000, 81.221374)" fillRule="nonzero">
             <circle id="Oval-Copy" stroke="#000000" strokeWidth="2.5" fill="#FFCD00" cx="15.1393853" cy="15.1393853" r="15.1393853" />
             <g id="anon-face-copy" transform="translate(6.162286, 10.650836)" fill="#222222">
               <ellipse id="Oval-138" cx="2.29354621" cy="2.29966794" rx="2.1277848" ry="2.16755995" />
