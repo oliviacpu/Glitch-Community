@@ -19,7 +19,7 @@ const ProfileAvatar = ({ team }) => <Image className={styles.avatar} src={getAva
 const getTeamThanksCount = (team) => sumBy(team.users, (user) => user.thanksCount);
 
 const TeamItem = ({ team }) => {
-  console.log(team)
+  console.log(team.url, team)
   return (
   <WrappingLink className={styles.container} href={getLink(team)}>
     <Cover type="team" item={team} size="medium" />
