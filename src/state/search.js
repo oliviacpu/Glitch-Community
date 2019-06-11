@@ -40,6 +40,12 @@ const findTop = {
 const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
+const filterOutBadData = (payload) => {
+  let fileredData = { ...payload };
+  filteredData.team
+  return payload
+}
+
 // search provider logic -- shared between algolia & legacy API
 function useSearchProvider(provider, query, params, deps) {
   const { handleError } = useErrorHandlers();
@@ -50,6 +56,7 @@ function useSearchProvider(provider, query, params, deps) {
     topResults: [],
     ...emptyResults,
   };
+
   const reducer = (state, action) => {
     switch (action.type) {
       case 'clearQuery':
@@ -57,7 +64,8 @@ function useSearchProvider(provider, query, params, deps) {
       case 'loading':
         return { ...state, status: 'loading' };
       case 'ready': {
-        const resultsWithEmpties = { ...emptyResults, ...action.payload };
+        
+        const resultsWithEmpties = { ...emptyResults, ...filterOutBadData(action.payload) };
         return {
           status: 'ready',
           totalHits: sumBy(Object.values(action.payload), (items) => items.length),
