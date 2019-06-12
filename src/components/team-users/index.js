@@ -26,7 +26,6 @@ import { useNotifications } from '../../presenters/notifications';
 
 function InvitedUser(props) {
   const api = useAPI();
-  
   const { createNotification, createErrorNotification } = useNotifications();
 
   // resend the invite
@@ -37,18 +36,6 @@ function InvitedUser(props) {
     } catch (error) {
       captureException(error);
       createErrorNotification('Invite not sent, try again later');
-    }
-  };
-
-  // revoke the invite
-  const revokeInvite = async () => {
-    try {
-      await api.post(`/teams/${props.teamId}/revokeTeamJoinToken/${props.user.id}`);
-      createNotification(`Removed ${props.user.name} from team`);
-      // remove user avatar from invitees list
-    } catch (error) {
-      captureException(error);
-      createErrorNotification("Couldn't revoke invite, Try again later");
     }
   };
 
@@ -180,7 +167,8 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitee, setRemovedInvitee] = useState([]);
-  const { createNotification } = useNotifications();
+  const { createNotification, createErrorNotification } = useNotifications();
+  const api = useAPI();
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
@@ -226,7 +214,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       )}
       {invitees.map((user) => (
         <li key={user.id} className={styles.invitedMember}>
-          <InvitedUser user={user} teamId={team.id}
+          <InvitedUser
+            user={user}
+            teamId={team.id}
             onRevokeInvite={async () => {
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
@@ -236,7 +226,8 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
                 captureException(error);
                 createErrorNotification("Couldn't revoke invite, Try again later");
               }
-            }}/>
+            }}
+          />
         </li>
       ))}
       {currentUserIsOnTeam && (
