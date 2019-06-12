@@ -222,6 +222,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
                 createNotification(`Removed ${user.name} from team`);
                 setRemovedInvitee((removed) => [...removed, user]);
+                console.log(removedInvitees);
               } catch (error) {
                 captureException(error);
                 createErrorNotification("Couldn't revoke invite, Try again later");
