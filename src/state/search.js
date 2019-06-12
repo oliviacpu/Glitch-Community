@@ -40,6 +40,13 @@ const findTop = {
 const getTopResults = (resultsByType, query) =>
   [findTop.project(resultsByType.project, query), findTop.team(resultsByType.team, query), findTop.user(resultsByType.user, query)].filter(Boolean);
 
+const filterOutBadData = (payload) => {
+  const filteredData = { ...payload };
+  // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
+  filteredData.team = filteredData.team.filter((t) => !!t.url);
+  return filteredData;
+};
+
 // search provider logic -- shared between algolia & legacy API
 function useSearchProvider(provider, query, params, deps) {
   const { handleError } = useErrorHandlers();
@@ -57,7 +64,7 @@ function useSearchProvider(provider, query, params, deps) {
       case 'loading':
         return { ...state, status: 'loading' };
       case 'ready': {
-        const resultsWithEmpties = { ...emptyResults, ...action.payload };
+        const resultsWithEmpties = { ...emptyResults, ...filterOutBadData(action.payload) };
         return {
           status: 'ready',
           totalHits: sumBy(Object.values(action.payload), (items) => items.length),
