@@ -8,6 +8,8 @@ import { UserLink } from 'Components/link';
 import { UserAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
 import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -28,52 +30,40 @@ const adminStatusDisplay = (adminIds, user) => {
 
 // Remove from Team 👋
 
-const RemoveFromTeam = ({ onClick }) => {
-  const onClickTracked = useTrackedFunc(onClick, 'Remove from Team clicked');
-  return (
-    <section className="pop-over-actions danger-zone">
-      <button className="button-small has-emoji button-tertiary button-on-secondary-background" onClick={onClickTracked}>
-        Remove from Team <span className="emoji wave" role="img" aria-label="" />
-      </button>
-    </section>
-  );
-};
+const RemoveFromTeam = ({ onRemove }) => (
+  <PopoverActions type="dangerZone">
+    <Button type="dangerZone" onClick={onRemove}>
+      Remove from Team <Emoji name="wave" />
+    </Button>
+  </PopoverActions>
+);
 
 // Admin Actions Section ⏫⏬
 
-const AdminActions = ({ user, team, updateUserPermissions }) => {
-  const onClickRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
-  const onClickMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
-  if (userIsOnlyTeamAdmin({ user, team })) return null;
-
-  return (
-    <section className="pop-over-actions admin-actions">
-      <p className="action-description">Admins can update team info, billing, and remove users</p>
-      {userIsTeamAdmin({ user, team }) ? (
-        <button className="button-small button-tertiary has-emoji" onClick={onClickRemoveAdmin}>
-          Remove Admin Status <span className="emoji fast-down" />
-        </button>
-      ) : (
-        <button className="button-small button-tertiary has-emoji" onClick={onClickMakeAdmin}>
-          Make an Admin <span className="emoji fast-up" />
-        </button>
-      )}
-    </section>
-  );
-};
-
-AdminActions.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-  team: PropTypes.object.isRequired,
-  updateUserPermissions: PropTypes.func.isRequired,
-};
+const AdminActions = ({ isTeamAdmin, onClickRemoveAdmin, onClickMakeAdmin }) => (
+  <PopoverActions>
+    <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
+    {isTeamAdmin ? (
+      <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
+        Remove Admin Status <Emoji name="fast-down"/>
+      </Button>
+    ) : (
+      <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
+        Make an Admin <Emoji name="fast-up" />
+      </Button>
+    )}
+  </PopoverActions>
+);
 
 // Team User Info 😍
 
-const TeamUserInfo = ({ , user, team, updateUserPermissions, removeUser, userTeamProjects }) => {
+const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
   const { currentUser } = useCurrentUser();
+  const onRemoveTracked = useTrackedFunc(onRemove, 'Remove from Team clicked');
+  const onClickRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
+  const onClickMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
+
+
   const userAvatarStyle = { backgroundColor: user.color };
 
   const currentUserIsTeamAdmin = userIsTeamAdmin({ user: currentUser, team });
@@ -116,8 +106,8 @@ const TeamUserInfo = ({ , user, team, updateUserPermissions, removeUser, userTea
           <ThanksCount count={user.thanksCount} />
         </PopoverInfo>
       )}
-      {currentUserIsTeamAdmin && <AdminActions user={user} team={team} updateUserPermissions={updateUserPermissions} />}
-      {canCurrentUserRemoveUser && <RemoveFromTeam onClick={onRemove} />}
+      {currentUserIsTeamAdmin && !selectedUserIsOnlyAdmin && <AdminActions isTeamAdmin={selectedUserIsTeamAdmin} onClickRemoveAdmin={onClickRemoveAdmin} onClickMakeAdmin={onClickMakeAdmin} />}
+      {canCurrentUserRemoveUser && <RemoveFromTeam onRemove={onRemoveTracked} />}
     </PopoverDialog>
   );
 };
@@ -171,8 +161,7 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
           user={user}
           team={team}
           updateUserPermissions={updateUserPermissions}
-          removeUser={() => onRemove(showViews.remove)}
-          userTeamProjects={userTeamProjects}
+          onRemove={() => onRemove(showViews.remove)}
           showRemove={showViews.remove}
         />
       )}
