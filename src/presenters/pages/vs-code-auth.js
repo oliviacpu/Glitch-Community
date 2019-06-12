@@ -7,6 +7,7 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { captureException } from '../../utils/sentry';
 
+import PopoverContainer from 'Components/popover/container';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 
 
@@ -27,7 +28,7 @@ const VSCodeAuth = ({ insiders }) => {
     </div>;
   }
 
-  return <div><SignInPop align='right' /></div>
+  return <PopoverContainer children={() => <SignInPop align='left' />}/>
 };
 
 VSCodeAuth.propTypes = {
