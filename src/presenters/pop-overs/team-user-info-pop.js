@@ -10,10 +10,12 @@ import Thanks from 'Components/thanks';
 import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import { ProfileItem } from 'Components/profile-list';
 
 import { useTrackedFunc } from 'State/segment-analytics';
-import { useAPI } from 'State/api';
+import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { getAllPages } from 'Shared/api';
 
 import { useNotifications } from '../notifications';
 import TeamUserRemovePop from './team-user-remove-pop';
@@ -28,33 +30,6 @@ const adminStatusDisplay = (adminIds, user) => {
   return '';
 };
 
-// Remove from Team 👋
-
-const RemoveFromTeam = ({ onRemove }) => (
-  <PopoverActions type="dangerZone">
-    <Button type="dangerZone" onClick={onRemove}>
-      Remove from Team <Emoji name="wave" />
-    </Button>
-  </PopoverActions>
-);
-
-// Admin Actions Section ⏫⏬
-
-const AdminActions = ({ isTeamAdmin, onClickRemoveAdmin, onClickMakeAdmin }) => (
-  <PopoverActions>
-    <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
-    {isTeamAdmin ? (
-      <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
-        Remove Admin Status <Emoji name="fast-down"/>
-      </Button>
-    ) : (
-      <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
-        Make an Admin <Emoji name="fast-up" />
-      </Button>
-    )}
-  </PopoverActions>
-);
-
 // Team User Info 😍
 
 const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
@@ -62,9 +37,6 @@ const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
   const onRemoveTracked = useTrackedFunc(onRemove, 'Remove from Team clicked');
   const onClickRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
   const onClickMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
-
-
-  const userAvatarStyle = { backgroundColor: user.color };
 
   const currentUserIsTeamAdmin = userIsTeamAdmin({ user: currentUser, team });
   const selectedUserIsTeamAdmin = userIsTeamAdmin({ user, team });
@@ -77,9 +49,7 @@ const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
   return (
     <PopoverDialog align="left">
       <PopoverInfo>
-        <UserLink user={user}>
-          <img className="avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={userAvatarStyle} />
-        </UserLink>
+        <ProfileItem user={user} />
         <div className="info-container">
           <p className="name" title={user.name}>
             {user.name || 'Anonymous'}
@@ -106,8 +76,27 @@ const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
           <ThanksCount count={user.thanksCount} />
         </PopoverInfo>
       )}
-      {currentUserIsTeamAdmin && !selectedUserIsOnlyAdmin && <AdminActions isTeamAdmin={selectedUserIsTeamAdmin} onClickRemoveAdmin={onClickRemoveAdmin} onClickMakeAdmin={onClickMakeAdmin} />}
-      {canCurrentUserRemoveUser && <RemoveFromTeam onRemove={onRemoveTracked} />}
+      {currentUserIsTeamAdmin && !selectedUserIsOnlyAdmin && (
+        <PopoverActions>
+          <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
+          {selectedUserIsTeamAdmin ? (
+            <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
+              Remove Admin Status <Emoji name="fast-down"/>
+            </Button>
+          ) : (
+            <Button size="small" type="tertiary" onClick={onClickRemoveAdmin}>
+              Make an Admin <Emoji name="fast-up" />
+            </Button>
+          )}
+        </PopoverActions>
+      )}
+      {canCurrentUserRemoveUser && (
+        <PopoverActions type="dangerZone">
+          <Button type="dangerZone" onClick={onRemove}>
+            Remove from Team <Emoji name="wave" />
+          </Button>
+        </PopoverActions>
+      )}
     </PopoverDialog>
   );
 };
@@ -115,21 +104,17 @@ const TeamUserInfo = ({ user, team, updateUserPermissions, onRemove }) => {
 // Team User Remove 💣
 
 // Team User Info or Remove
-// uses removeTeamUserVisible state to toggle between showing user info and remove views
+
+
+const useProjects = createAPIHook(async (api, userID, team) => {
+  const userProjects = await getAllPages(api, `/v1/users/by/id/projects?id=${userID}&limit=100`)
+  return userProjects.filter((userProj) => team.projects.some((teamProj) => teamProj.id === userProj.id))
+})
 
 const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPermissions }) => {
-  const api = useAPI();
   const { createNotification } = useNotifications();
-  const [userTeamProjects, setUserTeamProjects] = useState({ status: 'loading', data: null });
-  useEffect(() => {
-    api.get(`users/${user.id}`).then(({ data }) => {
-      setUserTeamProjects({
-        status: 'ready',
-        data: data.projects.filter((userProj) => team.projects.some((teamProj) => teamProj.id === userProj.id)),
-      });
-    });
-  }, [user.id]);
-
+  const userTeamProjects = useProjects(user.id, team);
+  
   async function removeUser(selectedProjects = []) {
     await removeUserFromTeam(user.id, Array.from(selectedProjects));
     createNotification(`${getDisplayName(user)} removed from Team`);
@@ -187,12 +172,12 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
   <PopoverWithButton
     buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
   >
-    {({ toggleAndCall, focusFirstElement }) => (
+    {({ toggleAndCall }) => (
       <TeamUserInfoAndRemovePop
         team={team}
-        removeUserFromTeam={removeUserFromTeam}
         user={user}
-        updateUserPermissions={updateUserPermissions}
+        removeUserFromTeam={toggleAndCall(removeUserFromTeam)}
+        updateUserPermissions={toggleAndCall(updateUserPermissions)}
       />
     )}
   </PopoverWithButton>
