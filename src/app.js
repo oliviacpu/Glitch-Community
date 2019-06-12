@@ -8,6 +8,7 @@ import { UserPrefsProvider } from 'State/user-prefs';
 import { DevTogglesProvider } from 'State/dev-toggles';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
+import { LiveAnnouncer } from 'react-aria-live';
 
 import ErrorBoundary from './presenters/includes/error-boundary';
 import { Notifications } from './presenters/notifications';
@@ -19,17 +20,19 @@ const App = () => (
       <Notifications>
         <UserPrefsProvider>
           <DevTogglesProvider>
-            <AnalyticsContext context={{ groupId: '0' }}>
-              <CurrentUserProvider>
-                <APIContextProvider>
-                  <>
-                    <SuperUserBanner />
-                    <OfflineNotice />
-                    <Router />
-                  </>
-                </APIContextProvider>
-              </CurrentUserProvider>
-            </AnalyticsContext>
+            <LiveAnnouncer>
+              <AnalyticsContext context={{ groupId: '0' }}>
+                <CurrentUserProvider>
+                  <APIContextProvider>
+                    <>
+                      <SuperUserBanner />
+                      <OfflineNotice />
+                      <Router />
+                    </>
+                  </APIContextProvider>
+                </CurrentUserProvider>
+              </AnalyticsContext>
+            </LiveAnnouncer>
           </DevTogglesProvider>
         </UserPrefsProvider>
       </Notifications>
