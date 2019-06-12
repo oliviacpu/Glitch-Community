@@ -145,6 +145,7 @@ module.exports = smp.wrap({
     new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
     new StatsPlugin('stats.json', {
       all: false,
+      assets: true,
       entrypoints: true,
       hash: true,
       publicPath: true,
