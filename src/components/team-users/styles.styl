@@ -46,9 +46,10 @@
   // shrink avatars if there are more than 10 projects
   label:nth-last-child(n+10) // every label at least ten from the end
     &, & ~ label // will style itself and all following labels
-      .projectAvatarWrap
+      .projectAvatarWrap img
         width: 20px
         height: 20px
         
-.tinyAvatar
-  width: 20px
+.tinyAvatar img
+  width: 18px
+  height: 18px

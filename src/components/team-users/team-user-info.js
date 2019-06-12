@@ -27,7 +27,10 @@ const ADMIN_ACCESS_LEVEL = 30;
 const ProjectsList = ({ options, value, onChange }) => (
   <div className={styles.projectsList}>
     {options.map((project) => (
+      // NOTE: label is implicitly linked to nested input https://www.w3.org/WAI/tutorials/forms/labels/#associating-labels-implicitly
+      // eslint-disable-next-li=ne jsx-a11y/label-has-associated-control
       <label key={project.id}>
+        foo
         <input
           type="checkbox"
           checked={value.includes(project.id)}
