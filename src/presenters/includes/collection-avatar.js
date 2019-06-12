@@ -23,4 +23,5 @@ const CollectionAvatar = (props) => <DefaultAvatar backgroundFillColor={hexToRgb
 CollectionAvatar.propTypes = {
   color: PropTypes.string.isRequired,
 };
+
 export default CollectionAvatar;
