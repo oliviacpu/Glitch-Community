@@ -29,15 +29,34 @@ const adminStatusDisplay = (adminIds, user) => {
   return '';
 };
 
-// Team Userr Remove 💣
+// Team User Remove 💣
 
 const TeamUserRemoveButton = ({ user, removeUser }) => (
-  <button className="button-small has-emoji" onClick={removeUser} type="button">
+  <Button  type={dangerZone}  onClick={removeUser}>
     Remove <img className="emoji avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={{ backgroundColor: user.color }} />
-  </button>
+  </Button>
 );
 
-const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelectedProjects }) => {
+const ProjectsList = ({ options, value, onChange }) => (
+  <div className="projects-list">
+    {options.map((project) => (
+      <label key={project.id}>
+        <input
+          className="checkbox-project"
+          type="checkbox"
+          checked={value.has(project.id)}
+          value={project.id}
+          onChange={onChange}
+        />
+        <ProjectAvatar {...project} />
+        {project.domain}
+      </label>
+    ))}
+  </div>
+)
+
+function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
+  const [selectedProjects, setSelectedProjects] = useState(new Set());
   function selectAllProjects() {
     setSelectedProjects(new Set(userTeamProjects.map((p) => p.id)));
   }
@@ -60,48 +79,23 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
   const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.has(p.id));
 
   return (
-    <>
-      <p className="action-description">Also remove them from these projects</p>
-      <div className="projects-list">
-        {userTeamProjects.map((project) => (
-          <label key={project.id} htmlFor={`remove-user-project-${project.id}`}>
-            <input
-              className="checkbox-project"
-              type="checkbox"
-              id={`remove-user-project-${project.id}`}
-              checked={selectedProjects.has(project.id)}
-              value={project.id}
-              onChange={handleCheckboxChange}
-            />
-            <ProjectAvatar {...project} />
-            {project.domain}
-          </label>
-        ))}
-      </div>
-      {userTeamProjects.length > 1 && (
-        <button className="button-small" type="button" onClick={allProjectsSelected ? unselectAllProjects : selectAllProjects}>
-          {allProjectsSelected ? 'Unselect All' : 'Select All'}
-        </button>
-      )}
-    </>
-  );
-};
-
-function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects: userTeamProjectsResponse }) {
-  const [selectedProjects, setSelectedProjects] = useState(new Set());
-
-  return (
     <PopoverDialog align="left" focusOnPopover>
       <MultiPopoverTitle>Remove {getDisplayName(user)}</MultiPopoverTitle>
 
-      {userTeamProjectsResponse.status === 'loading' && (
+      {!userTeamProjects && (
         <PopoverActions>
           <Loader />
         </PopoverActions>
       )}
-      {userTeamProjectsResponse.value && userTeamProjectsResponse.value.length > 0 && (
+      {userTeamProjects && userTeamProjects.length > 0 && (
         <PopoverActions>
-          <TeamUserProjectsToggle userTeamProjects={userTeamProjectsResponse.value} selectedProjects={selectedProjects} setSelectedProjects={setSelectedProjects} />
+          <ActionDescription>Also remove them from these projects</ActionDescription>
+          <ProjectsList options={userTeamProjects} value={selectedProjects} onChange={handleCheckboxChange} />
+        {userTeamProjects.length > 1 && (
+          <Button size="small" onClick={allProjectsSelected ? unselectAllProjects : selectAllProjects}>
+            {allProjectsSelected ? 'Unselect All' : 'Select All'}
+          </Button>
+        )}
         </PopoverActions>
       )}
       
@@ -186,7 +180,7 @@ const useProjects = createAPIHook(async (api, userID, team) => {
 const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) => {
   const { createNotification } = useNotifications();
   const userTeamProjectsResponse = useProjects(user.id, team);
-  const userTeamProjects = userTeamProjectsResponse.status === 'ready' && userTeamProjectsResponse.value
+  const userTeamProjects = userTeamProjectsResponse.status === 'ready' ? userTeamProjectsResponse.value : null;
   
   const removeUser = useTrackedFunc(async (selectedProjects = []) => {
     await removeUserFromTeam(user.id, Array.from(selectedProjects));
