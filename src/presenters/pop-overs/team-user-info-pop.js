@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { UserLink } from 'Components/link';
 import { UserAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
 import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover } from 'Components/popover';
@@ -29,14 +28,6 @@ const adminStatusDisplay = (adminIds, user) => {
   return '';
 };
 
-// Team User Remove 💣
-
-const TeamUserRemoveButton = ({ user, removeUser }) => (
-  <Button  type={dangerZone}  onClick={removeUser}>
-    Remove <img className="emoji avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={{ backgroundColor: user.color }} />
-  </Button>
-);
-
 const ProjectsList = ({ options, value, onChange }) => (
   <div className="projects-list">
     {options.map((project) => (
@@ -44,9 +35,18 @@ const ProjectsList = ({ options, value, onChange }) => (
         <input
           className="checkbox-project"
           type="checkbox"
-          checked={value.has(project.id)}
+          checked={value.includes(project.id)}
           value={project.id}
-          onChange={onChange}
+          onChange={(e) => {
+            const next = new Set(value)
+            
+            if (checked) {
+              next.add(e.target.value)
+            } else {
+              next.delete(e.target.value)
+            }
+            onChange(Array.from(next))
+          }}
         />
         <ProjectAvatar {...project} />
         {project.domain}
@@ -55,28 +55,19 @@ const ProjectsList = ({ options, value, onChange }) => (
   </div>
 )
 
+// Team User Remove 💣
+
 function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
-  const [selectedProjects, setSelectedProjects] = useState(new Set());
+  const [selectedProjects, setSelectedProjects] = useState([]);
   function selectAllProjects() {
-    setSelectedProjects(new Set(userTeamProjects.map((p) => p.id)));
+    setSelectedProjects(userTeamProjects.map((p) => p.id));
   }
 
   function unselectAllProjects() {
-    setSelectedProjects(new Set());
+    setSelectedProjects([]);
   }
 
-  function handleCheckboxChange({ target: { checked, value } }) {
-    setSelectedProjects((nextSelectedProjects) => {
-      nextSelectedProjects = new Set(nextSelectedProjects);
-      if (checked) {
-        nextSelectedProjects.add(value);
-      } else {
-        nextSelectedProjects.delete(value);
-      }
-      return nextSelectedProjects;
-    });
-  }
-  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.has(p.id));
+  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.includes(p.id));
 
   return (
     <PopoverDialog align="left" focusOnPopover>
@@ -90,17 +81,24 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
       {userTeamProjects && userTeamProjects.length > 0 && (
         <PopoverActions>
           <ActionDescription>Also remove them from these projects</ActionDescription>
-          <ProjectsList options={userTeamProjects} value={selectedProjects} onChange={handleCheckboxChange} />
-        {userTeamProjects.length > 1 && (
-          <Button size="small" onClick={allProjectsSelected ? unselectAllProjects : selectAllProjects}>
-            {allProjectsSelected ? 'Unselect All' : 'Select All'}
-          </Button>
-        )}
+          <ProjectsList options={userTeamProjects} value={selectedProjects} onChange={setSelectedProjects} />
+          {userTeamProjects.length > 1 && allProjectsSelected && (
+            <Button size="small" onClick={unselectAllProjects}>
+              Unselect All
+            </Button>
+          )}
+          {userTeamProjects.length > 1 && !allProjectsSelected && (
+            <Button size="small" onClick={selectAllProjects}>
+              Select All
+            </Button>
+          )}
         </PopoverActions>
       )}
       
       <PopoverActions type="dangerZone">
-        <TeamUserRemoveButton user={user} removeUser={() => onRemoveUser(Array.from(selectedProjects))} />
+        <Button type="dangerZone"  onClick={() => onRemoveUser(selectedProjects)}>
+          Remove <span className="tiny-avatar"><UserAvatar user={user} /></span>
+        </Button>
       </PopoverActions>
     </PopoverDialog>
   );
