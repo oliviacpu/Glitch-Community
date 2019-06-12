@@ -17,18 +17,3 @@ export const TeamMarketing = () => {
     </section>
   );
 };
-
-// temp
-export const AdminOnlyBadge = ({ ...props }) => (
-  <>
-    {props.currentUserIsTeamAdmin === false && (
-      <div className="status-badge">
-        <span className="status admin">Admin</span>
-      </div>
-    )}
-  </>
-);
-
-AdminOnlyBadge.propTypes = {
-  currentUserIsTeamAdmin: PropTypes.bool.isRequired,
-};

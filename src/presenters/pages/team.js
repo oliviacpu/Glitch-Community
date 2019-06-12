@@ -29,7 +29,6 @@ import ErrorBoundary from '../includes/error-boundary';
 import NameConflictWarning from '../includes/name-conflict';
 import ProjectsLoader from '../projects-loader';
 import TeamAnalytics from '../includes/team-analytics';
-import { TeamMarketing } from '../includes/team-elements';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
@@ -64,6 +63,21 @@ const ProjectPals = () => (
     </div>
   </aside>
 );
+
+const forPlatformsIcon = 'https://cdn.glitch.com/be1ad2d2-68ab-404a-82f4-6d8e98d28d93%2Ffor-platforms-icon.svg?1506442305188';
+
+const TeamMarketing = () => (
+  <section className={styles.teamMarketing}>
+    <Text>
+      <img className="for-platforms-icon" src={forPlatformsIcon} alt="fishing emoji" />
+      Want your own team page, complete with detailed app analytics?
+    </Text>
+    <Button href="/teams" hasEmoji>
+      About Teams <Emoji name="fishingPole"/>
+    </Button>
+  </section>
+);
+
 
 // Team Page
 
