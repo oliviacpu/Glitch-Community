@@ -174,14 +174,12 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = (value || []).concat(newlyInvited).filter((el) => (el !== removedInvitees));
+  const invitees = (value || []).concat(newlyInvited).filter((el) => (!removedInvitees.includes(el)));
 
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
   const onInviteUser = async (user) => {
     setNewlyInvited((invited) => [...invited, user]);
-    console.log('invitee', invitee);
-    console.log('newlyInvited', newlyInvited);
     try {
       await inviteUser(user);
       setInvitee(getDisplayName(user));
@@ -189,6 +187,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
+      createErrorNotification(`Couldn't invite ${getDisplayName(user)}, Try again later`);
     }
   };
 
@@ -199,6 +198,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       createNotification(`Invited ${email}!`, 'notifySuccess');
     } catch (error) {
       captureException(error);
+      createErrorNotification(`Couldn't invite ${email}, Try again later`);
     }
   };
 
@@ -222,11 +222,8 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             onRevokeInvite={async () => {
               setRemovedInvitee((removed) => [...removed, user]);
               try {
-                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
-                setInvitee(invitee.filter((el) => (el !== getDisplayName(user))));
+                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);                
                 createNotification(`Removed ${user.name} from team`);
-                console.log('removedInvitees', removedInvitees);
-                console.log('invitee', invitee);
               } catch (error) {
                 captureException(error);
                 createErrorNotification("Couldn't revoke invite, Try again later");
