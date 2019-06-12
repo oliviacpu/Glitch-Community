@@ -117,7 +117,7 @@ Button.defaultProps = {
   emojiPosition: 'right',
 };
 
-const ButtonEmoji = (emoji, position) => {
+const ButtonEmoji = ({ emoji, position }) => {
   const className = cx({
     emojiContainer: true,
     alignLeft: position === 'left',
@@ -126,7 +126,7 @@ const ButtonEmoji = (emoji, position) => {
   console.log('emoji', emoji);
 
   return (
-    <div className={styles.emojiContainer}>
+    <div className={className}>
       <Emoji name={emoji} />
     </div>
   );
