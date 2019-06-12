@@ -25,7 +25,14 @@ const smp = new SpeedMeasurePlugin({ outputFormat: 'humanVerbose' });
 
 console.log(`Starting Webpack in ${mode} mode.`);
 
-const lastBuildAssets = fs.readFileSync()
+let prevBuildAssets = [];
+try {
+  const prevBuildStats = JSON.parse(fs.readFileSync(path.resolve(BUILD, 'stats.json')));
+  const prevBuildAssetLists = Object.values(prevBuildStats.entrypoints).map((entrypoint) => entrypoint.assets);
+  prevBuildAssets = ['stats.json'].concat(...prevBuildAssetLists).map((file) => `!${file}`);
+} catch (error) {
+  // Don't worry about it, there's probably just no stats.json
+}
 
 module.exports = smp.wrap({
   mode,
@@ -148,11 +155,12 @@ module.exports = smp.wrap({
     new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
     new StatsPlugin('stats.json', {
       all: false,
+      assets: true,
       entrypoints: true,
       hash: true,
       publicPath: true,
     }),
-    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**']}),
+    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets]}),
   ],
   watchOptions: {
     ignored: /node_modules/,
