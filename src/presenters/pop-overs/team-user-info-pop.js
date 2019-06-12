@@ -12,7 +12,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
 
-import { useTrackedFunc } from 'State/segment-analytics';
+import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { getAllPages } from 'Shared/api';
@@ -73,7 +73,7 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
               value={project.id}
               onChange={handleCheckboxChange}
             />
-            <img className="avatar" src={getProjectAvatarUrl(project.id)} alt="" />
+            <ProjectAvatar {...project} />
             {project.domain}
           </label>
         ))}
@@ -87,24 +87,8 @@ const TeamUserProjectsToggle = ({ userTeamProjects, selectedProjects, setSelecte
   );
 };
 
-function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProjectsResponse, togglePopover, focusFirstElement }) {
+function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects: userTeamProjectsResponse }) {
   const [selectedProjects, setSelectedProjects] = useState(new Set());
-
-  const onRemoveUser = useTrackedFunc(() => {
-    togglePopover();
-    removeUser(Array.from(selectedProjects));
-  }, 'Remove from Team submitted');
-
-  const userTeamProjects = userTeamProjectsResponse.data || [];
-
-  let projects = null;
-  if (userTeamProjectsResponse.status === 'loading') {
-    projects = <Loader />;
-  } else if (userTeamProjects.length > 0) {
-    projects = (
-      <TeamUserProjectsToggle userTeamProjects={userTeamProjects} selectedProjects={selectedProjects} setSelectedProjects={setSelectedProjects} />
-    );
-  }
 
   return (
     <PopoverDialog align="left" focusOnPopover>
@@ -115,15 +99,14 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
           <Loader />
         </PopoverActions>
       )}
-      {userTeamProjectsRespons.value && }
-      
+      {userTeamProjectsResponse.value && userTeamProjectsResponse.value.length > 0 && (
         <PopoverActions>
-          
+          <TeamUserProjectsToggle userTeamProjects={userTeamProjectsResponse.value} selectedProjects={selectedProjects} setSelectedProjects={setSelectedProjects} />
         </PopoverActions>
       )}
-
+      
       <PopoverActions type="dangerZone">
-        <TeamUserRemoveButton user={user} removeUser={onRemoveUser} />
+        <TeamUserRemoveButton user={user} removeUser={() => onRemoveUser(Array.from(selectedProjects))} />
       </PopoverActions>
     </PopoverDialog>
   );
@@ -131,7 +114,7 @@ function TeamUserRemovePop({ user, removeUser, userTeamProjects: userTeamProject
 
 // Team User Info 😍
 
-const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemove }) => {
+const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) => {
   const { currentUser } = useCurrentUser();
   const currentUserIsTeamAdmin = userIsTeamAdmin({ user: currentUser, team });
   const selectedUserIsTeamAdmin = userIsTeamAdmin({ user, team });
@@ -186,7 +169,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemove }) => {
       )}
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
-          <Button type="dangerZone" onClick={onRemove}>
+          <Button type="dangerZone" onClick={onRemoveUser}>
             Remove from Team <Emoji name="wave" />
           </Button>
         </PopoverActions>
@@ -202,20 +185,24 @@ const useProjects = createAPIHook(async (api, userID, team) => {
 
 const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) => {
   const { createNotification } = useNotifications();
-  const userTeamProjects = useProjects(user.id, team);
+  const userTeamProjectsResponse = useProjects(user.id, team);
+  const userTeamProjects = userTeamProjectsResponse.status === 'ready' && userTeamProjectsResponse.value
   
-  async function removeUser(selectedProjects = []) {
+  const removeUser = useTrackedFunc(async (selectedProjects = []) => {
     await removeUserFromTeam(user.id, Array.from(selectedProjects));
     createNotification(`${getDisplayName(user)} removed from Team`);
-  }
+  }, 'Remove from Team submitted');
+  
+  const trackRemoveClicked = useTracker('Remove from Team clicked');
   
   // TODO: is the correct part being tracked here?
   // if user is a member of no projects, skip the confirm step
-  const onOrShowRemove = useTrackedFunc((showRemove) => {
-    if (userTeamProjects.status === 'ready' && userTeamProjects.data.length === 0) {
+  const onOrShowRemoveUser = useTrackedFunc((showRemove) => {
+    if (userTeamProjects && userTeamProjects.length === 0) {
       removeUser();
     } else {
       showRemove();
+      trackRemoveClicked();
     }
   }, 'Remove from Team clicked');
   
@@ -232,7 +219,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
             remove: () => (
               <TeamUserRemovePop
                 user={user}
-                removeUser={removeUser}
+                onRemoveUser={removeUser}
                 userTeamProjects={userTeamProjects}
               />
             )
@@ -244,7 +231,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
               team={team}
               onRemoveAdmin={onRemoveAdmin}
               onMakeAdmin={onMakeAdmin}
-              onRemove={() => onOrShowRemove(showViews.remove)}
+              onRemoveUser={() => onOrShowRemoveUser(showViews.remove)}
             />
           )}
         </MultiPopover>
