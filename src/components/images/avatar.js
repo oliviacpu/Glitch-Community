@@ -97,14 +97,13 @@ UserAvatar.defaultProps = {
   withinButton: false,
 };
 
-export const ProjectAvatar = ({ project, withinButton }) => (
+export const ProjectAvatar = ({ project, hasAlt }) => (
   <Avatar
-    name={project.domain}
+    name={hasAlt ? project.domain : ''}
     src={getProjectAvatarUrl(project.id)}
     srcFallback={FALLBACK_AVATAR_URL}
     type="team"
     hideTooltip
-    withinButton={withinButton}
   />
 );
 
@@ -113,9 +112,9 @@ ProjectAvatar.propTypes = {
     id: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
   }).isRequired,
-  withinButton: PropTypes.bool,
+  hasAlt: PropTypes.bool,
 };
 
 ProjectAvatar.defaultProps = {
-  withinButton: false,
+  hasAlt: false,
 };
