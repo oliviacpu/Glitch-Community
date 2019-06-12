@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
-import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover } from 'Components/popover';
+import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover, MultiPopoverTitle, ActionDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import Loader from 'Components/loader';
 import { ProfileItem } from 'Components/profile-list';
 
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
@@ -16,17 +17,11 @@ import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { getAllPages } from 'Shared/api';
 
+import ProjectAvatar from '../includes/project-avatar';
 import { useNotifications } from '../notifications';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
-
-const adminStatusDisplay = (adminIds, user) => {
-  if (adminIds.includes(user.id)) {
-    return ' (admin)';
-  }
-  return '';
-};
 
 const ProjectsList = ({ options, value, onChange }) => (
   <div className="projects-list">
@@ -38,14 +33,8 @@ const ProjectsList = ({ options, value, onChange }) => (
           checked={value.includes(project.id)}
           value={project.id}
           onChange={(e) => {
-            const next = new Set(value)
-            
-            if (checked) {
-              next.add(e.target.value)
-            } else {
-              next.delete(e.target.value)
-            }
-            onChange(Array.from(next))
+            const next = new Set(value);
+            onChange(Array.from(e.target.checked ? next.add(e.target.value) : next.delete(e.target.value)));
           }}
         />
         <ProjectAvatar {...project} />
@@ -53,7 +42,7 @@ const ProjectsList = ({ options, value, onChange }) => (
       </label>
     ))}
   </div>
-)
+);
 
 // Team User Remove 💣
 
@@ -94,10 +83,13 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
           )}
         </PopoverActions>
       )}
-      
+
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone"  onClick={() => onRemoveUser(selectedProjects)}>
-          Remove <span className="tiny-avatar"><UserAvatar user={user} /></span>
+        <Button type="dangerZone" onClick={() => onRemoveUser(selectedProjects)}>
+          Remove{' '}
+          <span className="tiny-avatar">
+            <UserAvatar user={user} />
+          </span>
         </Button>
       </PopoverActions>
     </PopoverDialog>
@@ -142,7 +134,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       </PopoverInfo>
       {user.thanksCount > 0 && (
         <PopoverInfo>
-          <ThanksCount count={user.thanksCount} />
+          <Thanks count={user.thanksCount} />
         </PopoverInfo>
       )}
       {currentUserIsTeamAdmin && !selectedUserIsOnlyAdmin && (
@@ -150,7 +142,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
           <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
           {selectedUserIsTeamAdmin ? (
             <Button size="small" type="tertiary" onClick={onRemoveAdmin}>
-              Remove Admin Status <Emoji name="fast-down"/>
+              Remove Admin Status <Emoji name="fast-down" />
             </Button>
           ) : (
             <Button size="small" type="tertiary" onClick={onMakeAdmin}>
@@ -171,22 +163,29 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
 };
 
 const useProjects = createAPIHook(async (api, userID, team) => {
-  const userProjects = await getAllPages(api, `/v1/users/by/id/projects?id=${userID}&limit=100`)
-  return userProjects.filter((userProj) => team.projects.some((teamProj) => teamProj.id === userProj.id))
-})
+  const userProjects = await getAllPages(api, `/v1/users/by/id/projects?id=${userID}&limit=100`);
+  return userProjects.filter((userProj) => team.projects.some((teamProj) => teamProj.id === userProj.id));
+});
+
+const adminStatusDisplay = (adminIds, user) => {
+  if (adminIds.includes(user.id)) {
+    return ' (admin)';
+  }
+  return '';
+};
 
 const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) => {
   const { createNotification } = useNotifications();
   const userTeamProjectsResponse = useProjects(user.id, team);
   const userTeamProjects = userTeamProjectsResponse.status === 'ready' ? userTeamProjectsResponse.value : null;
-  
+
   const removeUser = useTrackedFunc(async (selectedProjects = []) => {
     await removeUserFromTeam(user.id, Array.from(selectedProjects));
     createNotification(`${getDisplayName(user)} removed from Team`);
   }, 'Remove from Team submitted');
-  
+
   const trackRemoveClicked = useTracker('Remove from Team clicked');
-  
+
   // TODO: is the correct part being tracked here?
   // if user is a member of no projects, skip the confirm step
   const onOrShowRemoveUser = useTrackedFunc((showRemove) => {
@@ -197,41 +196,33 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
       trackRemoveClicked();
     }
   }, 'Remove from Team clicked');
-  
+
   const onRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
   const onMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
-  
+
   return (
-    <PopoverWithButton
-      buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
-    >
+    <PopoverWithButton buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}>
       {({ toggleAndCall }) => (
         <MultiPopover
           views={{
-            remove: () => (
-              <TeamUserRemovePop
-                user={user}
-                onRemoveUser={removeUser}
-                userTeamProjects={userTeamProjects}
-              />
-            )
+            remove: () => <TeamUserRemovePop user={user} userTeamProjects={userTeamProjects} onRemoveUser={toggleAndCall(removeUser)} />,
           }}
         >
           {(showViews) => (
             <TeamUserInfo
               user={user}
               team={team}
-              onRemoveAdmin={onRemoveAdmin}
-              onMakeAdmin={onMakeAdmin}
-              onRemoveUser={() => onOrShowRemoveUser(showViews.remove)}
+              onRemoveAdmin={toggleAndCall(onRemoveAdmin)}
+              onMakeAdmin={toggleAndCall(onMakeAdmin)}
+              onRemoveUser={toggleAndCall(() => onOrShowRemoveUser(showViews.remove))}
             />
           )}
         </MultiPopover>
       )}
     </PopoverWithButton>
   );
-}
-  
+};
+
 TeamUserPop.propTypes = {
   team: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
