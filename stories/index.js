@@ -295,6 +295,7 @@ storiesOf('TeamItem', module).add('base', () => (
 ));
        
 storiesOf('TeamUsers', module)
+  // only partially implemented due to notifications not working in storybook
   .add('base', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
 
 storiesOf('SearchResultCoverBar', module)

@@ -164,7 +164,6 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
-  const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitees, setRemovedInvitee] = useState([]);
   const { createNotification, createErrorNotification } = useNotifications();
@@ -182,7 +181,6 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
-      setInvitee(getDisplayName(user));
       createNotification(`Invited ${getDisplayName(user)}!`, 'notifySuccess');
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
@@ -192,7 +190,6 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   const onInviteEmail = async (email) => {
-    setInvitee(email);
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, 'notifySuccess');
@@ -222,7 +219,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             onRevokeInvite={async () => {
               setRemovedInvitee((removed) => [...removed, user]);
               try {
-                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);                
+                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
                 createNotification(`Removed ${user.name} from team`);
               } catch (error) {
                 captureException(error);
