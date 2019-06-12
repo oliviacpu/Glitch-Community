@@ -26,8 +26,6 @@ import { useNotifications } from '../../presenters/notifications';
 
 function InvitedUser(props) {
   const api = useAPI();
-  console.log(useNotifications)
-  console.log(useNotifications)
   
   const { createNotification, createErrorNotification } = useNotifications();
 
@@ -89,7 +87,7 @@ function InvitedUser(props) {
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
-                <Button onClick={revokeInvite} type="dangerZone" hasEmoji>
+                <Button onClick={props.onRevokeInvite} type="dangerZone" hasEmoji>
                   Remove <Emoji name="wave" />
                 </Button>
               </PopoverActions>
@@ -228,7 +226,17 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       )}
       {invitees.map((user) => (
         <li key={user.id} className={styles.invitedMember}>
-          <InvitedUser user={user} teamId={team.id} />
+          <InvitedUser user={user} teamId={team.id}
+            onRevokeInvite={async () => {
+              try {
+                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
+                createNotification(`Removed ${user.name} from team`);
+                // remove user avatar from invitees list
+              } catch (error) {
+                captureException(error);
+                createErrorNotification("Couldn't revoke invite, Try again later");
+              }
+            }}/>
         </li>
       ))}
       {currentUserIsOnTeam && (
