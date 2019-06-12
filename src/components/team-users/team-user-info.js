@@ -17,18 +17,18 @@ import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { getAllPages } from 'Shared/api';
 
-import ProjectAvatar from '../includes/project-avatar';
-import { useNotifications } from '../notifications';
+import ProjectAvatar from '../../presenters/includes/project-avatar';
+import { useNotifications } from '../../presenters/notifications';
+import styles from './styles.styl';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
 const ProjectsList = ({ options, value, onChange }) => (
-  <div className="projects-list">
+  <div className={styles.projectsList}>
     {options.map((project) => (
       <label key={project.id}>
         <input
-          className="checkbox-project"
           type="checkbox"
           checked={value.includes(project.id)}
           value={project.id}
@@ -37,7 +37,9 @@ const ProjectsList = ({ options, value, onChange }) => (
             onChange(Array.from(e.target.checked ? next.add(e.target.value) : next.delete(e.target.value)));
           }}
         />
-        <ProjectAvatar {...project} />
+        <div className={styles.projectAvatarWrap}> 
+          <ProjectAvatar {...project} />
+        </div>
         {project.domain}
       </label>
     ))}
@@ -87,7 +89,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
       <PopoverActions type="dangerZone">
         <Button type="dangerZone" onClick={() => onRemoveUser(selectedProjects)}>
           Remove{' '}
-          <span className="tiny-avatar">
+          <span className={styles.tinyAvatar}>
             <UserAvatar user={user} />
           </span>
         </Button>
@@ -142,11 +144,11 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
           <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
           {selectedUserIsTeamAdmin ? (
             <Button size="small" type="tertiary" onClick={onRemoveAdmin}>
-              Remove Admin Status <Emoji name="fast-down" />
+              Remove Admin Status <Emoji name="fastDown" />
             </Button>
           ) : (
             <Button size="small" type="tertiary" onClick={onMakeAdmin}>
-              Make an Admin <Emoji name="fast-up" />
+              Make an Admin <Emoji name="fastUp" />
             </Button>
           )}
         </PopoverActions>
