@@ -19,7 +19,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <LiveMessage>
+    <LiveMessage aria-live="polite" message={children}>
       <aside className={className} onAnimationEnd={remove}>
         {children}
       </aside>
