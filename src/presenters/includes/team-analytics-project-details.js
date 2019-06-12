@@ -6,7 +6,7 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import { ProjectLink } from 'Components/link';
 import Loader from 'Components/loader';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from '../../models/project';
+import { ProjectAvatar } from 'Components/images/avatar';
 import { useAPI } from '../../state/api';
 
 const RECENT_REMIXES_COUNT = 100;
@@ -19,25 +19,6 @@ const getProjectDetails = async (id, api, currentProjectDomain) => {
     console.error('getProjectDetails', error);
   }
   return null;
-};
-
-const addFallbackSrc = (event) => {
-  event.target.src = FALLBACK_AVATAR_URL;
-};
-
-const ProjectAvatar = ({ project, className = '' }) => (
-  <img src={getAvatarUrl(project.id)} className={`avatar ${className}`} alt={project.domain} onError={addFallbackSrc} />
-);
-ProjectAvatar.propTypes = {
-  project: PropTypes.shape({
-    domain: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  className: PropTypes.string,
-};
-
-ProjectAvatar.defaultProps = {
-  className: '',
 };
 
 // This uses dayjs().fromNow() a bunch of times

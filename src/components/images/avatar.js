@@ -103,10 +103,10 @@ export const ProjectAvatar = ({ project, withinButton }) => (
     src={getProjectAvatarUrl(project.id)}
     srcFallback={FALLBACK_AVATAR_URL}
     type="team"
-    hideTooltip={true}
+    hideTooltip
     withinButton={withinButton}
   />
-)
+);
 
 ProjectAvatar.propTypes = {
   project: PropTypes.shape({
