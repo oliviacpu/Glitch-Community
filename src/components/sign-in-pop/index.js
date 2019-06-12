@@ -209,7 +209,7 @@ const SignInWithCode = () => {
   );
 };
 
-const SignInPopBase = withRouter(({ location, align }) => {
+export const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
