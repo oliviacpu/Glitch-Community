@@ -31,9 +31,23 @@ EditButton.defaultProps = {
 };
 
 export const RemixButton = ({ name, isMember }) => (
+  <>
   <Button href={getRemixUrl(name)} size="small" emoji="microphone">
     {isMember ? 'Remix This' : 'Remix your own'}
   </Button>
+  <Button href={getRemixUrl(name)} size="small" emoji="sunglasses">
+    {isMember ? 'Remix This' : 'Remix your own'}
+  </Button>
+  <Button href={getRemixUrl(name)} size="small" emoji="horizontalTrafficLight">
+    {isMember ? 'Remix This' : 'Remix your own'}
+  </Button>
+  <Button href={getRemixUrl(name)} size="small" emoji="eyes">
+    {isMember ? 'Remix This' : 'Remix your own'}
+  </Button>
+  <Button href={getRemixUrl(name)} size="small" emoji="email">
+    {isMember ? 'Remix This' : 'Remix your own'}
+  </Button>
+  </>
 );
 RemixButton.propTypes = {
   name: PropTypes.string.isRequired,
