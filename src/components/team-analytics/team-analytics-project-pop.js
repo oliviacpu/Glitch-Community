@@ -11,7 +11,7 @@ const Bento = () => (
 );
 
 const AllProjectsItem = ({ active, selected, onClick }) => (
-  <ResultItem onClick={onClick} active={active} selected={selected}>
+  <ResultItem onClick={onClick} active={active} selected={selected} className={"aaaaa"}>
     <Bento />
     <ResultInfo>
       <ResultName>All Projects</ResultName>

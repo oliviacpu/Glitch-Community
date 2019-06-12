@@ -23,13 +23,16 @@ const filterReferrers = (referrers) => referrers.filter((referrer) => !referrer.
 
 const ReferrersColumn = ({ total, referrers, name, label }) => (
   <article className={classnames(styles.referrersColumn, styles[name])}>
-    {total === 0 ? 'none' : ''}
-    <ul className={styles.referrersList}>
-      <ReferrerItem count={total - sumBy(referrers, (referrer) => referrer[name])} total={total} description={`direct ${label}`} />
-      {filterReferrers(referrers).map((referrer) => (
-        <ReferrerItem key={referrer.domain} count={referrer[name]} total={total} description={referrer.domain} />
-      ))}
-    </ul>
+    {total === 0 ? (
+      'none'
+    ) : (
+      <ul className={styles.referrersList}>
+        <ReferrerItem count={total - sumBy(referrers, (referrer) => referrer[name])} total={total} description={`direct ${label}`} />
+        {filterReferrers(referrers).map((referrer) => (
+          <ReferrerItem key={referrer.domain} count={referrer[name]} total={total} description={referrer.domain} />
+        ))}
+      </ul>
+    )}
   </article>
 );
 
