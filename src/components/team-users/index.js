@@ -220,11 +220,11 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             user={user}
             teamId={team.id}
             onRevokeInvite={async () => {
+              setRemovedInvitee((removed) => [...removed, user]);
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
                 setInvitee(invitee.filter((el) => (el !== getDisplayName(user))));
                 createNotification(`Removed ${user.name} from team`);
-                setRemovedInvitee((removed) => [...removed, user]);
                 console.log('removedInvitees', removedInvitees);
                 console.log('invitee', invitee);
               } catch (error) {
