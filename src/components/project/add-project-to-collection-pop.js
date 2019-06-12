@@ -23,9 +23,9 @@ import { CreateCollectionWithProject } from 'Components/collection/create-collec
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
+import { AddProjectToCollectionMsg, useNotifications } from 'State/notifications';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
 
 import styles from './popover.styl';
@@ -123,7 +123,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        'notifySuccess',
+        { type: 'success' }
       );
     });
 
