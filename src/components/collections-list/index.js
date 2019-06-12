@@ -7,7 +7,6 @@ import Grid from 'Components/containers/grid';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { useNotifications } from 'State/notifications';
 
 import styles from './styles.styl';
 

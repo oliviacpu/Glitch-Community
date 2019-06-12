@@ -20,10 +20,11 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
-import { AddProjectToCollectionMsg, useNotifications } from 'State/notifications';
+import { useNotifications } from 'State/notifications';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import ProjectAvatar from '../../presenters/includes/project-avatar';
@@ -123,7 +124,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        { type: 'success' }
+        { type: 'success' },
       );
     });
 
@@ -153,7 +154,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
         )}
         renderNoResults={() => (
-          <PopoverInfo><NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} /></PopoverInfo>
+          <PopoverInfo>
+            <NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} />
+          </PopoverInfo>
         )}
       />
 
