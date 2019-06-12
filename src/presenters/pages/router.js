@@ -155,7 +155,7 @@ const Router = () => (
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
-      <Route path="/vs-code-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} />} />
+      <Route path="/vs-code-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />

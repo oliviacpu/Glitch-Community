@@ -11,7 +11,7 @@ import PopoverContainer from 'Components/popover/container';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 
 
-const VSCodeAuth = ({ insiders }) => {
+const VSCodeAuth = ({ insiders, openProject }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
@@ -19,7 +19,7 @@ const VSCodeAuth = ({ insiders }) => {
   
   if (isSignedIn) {
     const scheme = insiders ? 'vscode-insiders' : 'vscode';
-    window.location.assign(`${scheme}://glitch.glitch/token/${persistentToken}`);
+    window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
     
     return <div>
       <p>
@@ -33,10 +33,12 @@ const VSCodeAuth = ({ insiders }) => {
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,
+  openProject: PropTypes.bool,
 };
 
 VSCodeAuth.defaultProps = {
   insiders: false,
+  openProject: false,
 }
 
 export default VSCodeAuth;
