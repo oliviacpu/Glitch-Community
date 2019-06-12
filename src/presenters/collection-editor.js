@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
+import { captureException } from 'Utils/sentry';
 
 class CollectionEditor extends React.Component {
   constructor(props) {
@@ -26,10 +27,17 @@ class CollectionEditor extends React.Component {
   }
 
   async updateFields(changes) {
-    // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
-    // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
-    this.setState(changes);
-    await this.props.api.patch(`collections/${this.state.id}`, changes);
+    try {
+      const { status } = await this.props.api.patch(`collections/${this.state.id}`, changes);
+      throw new Error("Testing")
+      if (status === 200) {
+      // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
+      // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
+        this.setState(changes);
+      }
+    } catch (e) {
+      captureException(e);
+    }
   }
 
   async addProjectToCollection(project, collection) {
