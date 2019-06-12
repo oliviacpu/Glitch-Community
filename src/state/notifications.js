@@ -18,7 +18,7 @@ export const NotificationsProvider = (props) => {
     const { type, inline, persistent } = opts;
     const notification = {
       id: `${Date.now()}{Math.random()}`,
-      type: type || 'info',
+      type,
       persistent,
       inline,
       content,
