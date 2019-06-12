@@ -17,14 +17,17 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   const redirectMessage = "You are being redirected. (If you aren't sent back to VS Code, try the \"Glitch: Sign In With Email\" command.)";
   const signInMessage = 'Please Sign In to continue.';
-
+  
+  if (isSignedIn) {
+   setTimeout(() => {
+      const scheme = insiders ? 'vscode-insiders' : 'vscode';
+      window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
+    }, 3000) 
+  }
+  
   return (
     <div className={styles.content}>
       <p>{isSignedIn ? redirectMessage : signInMessage}</p>
-      {isSignedIn && setTimeout(() => {
-        const scheme = insiders ? 'vscode-insiders' : 'vscode';
-        window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
-      }, 3000)}
       {!isSignedIn &&
         <PopoverContainer>
           {() => <SignInPop align="none" />}
