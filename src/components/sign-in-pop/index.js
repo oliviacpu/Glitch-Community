@@ -9,6 +9,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
+import Notification from 'Components/notification';
 import Loader from 'Components/loader';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from 'State/local-storage';
@@ -144,13 +145,17 @@ const EmailHandler = ({ showView }) => {
         {status === 'loading' && <Loader />}
         {status === 'done' && (
           <>
-            <div className="notification notifyPersistent notifySuccess">Almost Done</div>
+            <Notification persistent type="success">
+              Almost Done
+            </Notification>
             <div>Finish signing in from the email sent to {email}.</div>
           </>
         )}
         {status === 'error' && (
           <>
-            <div className="notification notifyPersistent notifyError">Error</div>
+            <Notification persistent type="error">
+              Error
+            </Notification>
             <div>{submitError}</div>
           </>
         )}
@@ -197,10 +202,10 @@ const SignInWithCode = () => {
             </div>
           </form>
         )}
-        {status === 'done' && <div className="notification notifyPersistent notifySuccess">Success!</div>}
+        {status === 'done' && <Notification persistent type="success">Success!</Notification>}
         {status === 'error' && (
           <>
-            <div className="notification notifyPersistent notifyError">Error</div>
+            <Notification persistent type="error">Error</Notification>
             <div>Code not found or already used. Try signing in with email.</div>
           </>
         )}

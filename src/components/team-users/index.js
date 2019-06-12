@@ -11,6 +11,7 @@ import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
+import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
 import { captureException } from 'Utils/sentry';
@@ -163,9 +164,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
       {!!invitee && (
         <li>
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+          <Notification inline type="success" onAnimationEnd={removeNotifyInvited}>
             Invited {invitee}
-          </div>
+          </Notification>
         </li>
       )}
     </ul>

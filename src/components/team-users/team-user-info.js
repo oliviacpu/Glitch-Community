@@ -22,10 +22,10 @@ import Loader from 'Components/loader';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
 import ProjectAvatar from '../../presenters/includes/project-avatar';
-import { useNotifications } from '../../presenters/notifications';
 import styles from './styles.styl';
 
 const MEMBER_ACCESS_LEVEL = 20;
