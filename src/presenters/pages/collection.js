@@ -38,6 +38,7 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     <Button
       type="dangerZone"
       size="small"
+      emoji="bomb"
       onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
@@ -46,7 +47,7 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
         setDone(true);
       }}
     >
-      Delete Collection <Emoji name="bomb" />
+      Delete Collection
     </Button>
   );
 }
