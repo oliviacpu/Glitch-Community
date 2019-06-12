@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -23,6 +24,8 @@ if (process.env.NODE_ENV === 'production') {
 const smp = new SpeedMeasurePlugin({ outputFormat: 'humanVerbose' });
 
 console.log(`Starting Webpack in ${mode} mode.`);
+
+const lastBuildAssets = fs.readFileSync()
 
 module.exports = smp.wrap({
   mode,
@@ -145,7 +148,6 @@ module.exports = smp.wrap({
     new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
     new StatsPlugin('stats.json', {
       all: false,
-      assets: true,
       entrypoints: true,
       hash: true,
       publicPath: true,
