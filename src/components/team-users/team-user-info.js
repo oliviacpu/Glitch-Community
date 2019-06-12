@@ -6,11 +6,18 @@ import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
-import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover, MultiPopoverTitle, ActionDescription } from 'Components/popover';
+import {
+  PopoverDialog,
+  PopoverWithButton,
+  PopoverActions,
+  PopoverInfo,
+  MultiPopover,
+  MultiPopoverTitle,
+  ActionDescription,
+} from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Loader from 'Components/loader';
-import { ProfileItem } from 'Components/profile-list';
 
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
@@ -27,8 +34,6 @@ const ADMIN_ACCESS_LEVEL = 30;
 const ProjectsList = ({ options, value, onChange }) => (
   <div className={styles.projectsList}>
     {options.map((project) => (
-      // NOTE: label is implicitly linked to nested input https://www.w3.org/WAI/tutorials/forms/labels/#associating-labels-implicitly
-      // eslint-disable-next-li=ne jsx-a11y/label-has-associated-control
       <label key={project.id}>
         <input
           type="checkbox"
@@ -39,7 +44,7 @@ const ProjectsList = ({ options, value, onChange }) => (
             onChange(Array.from(e.target.checked ? next.add(e.target.value) : next.delete(e.target.value)));
           }}
         />
-        <div className={styles.projectAvatarWrap}> 
+        <div className={styles.projectAvatarWrap}>
           <ProjectAvatar {...project} />
         </div>
         {project.domain}
@@ -57,7 +62,7 @@ const AdminBadge = () => (
       tooltip="Can edit team info and billing"
     />
   </div>
-)
+);
 
 // Team User Remove 💣
 
@@ -125,17 +130,13 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
   return (
     <PopoverDialog align="left">
       <PopoverInfo>
-        <ProfileItem user={user} />
-        <div className="info-container">
-          <p className="name" title={user.name}>
-            {user.name || 'Anonymous'}
-          </p>
-          {user.login && (
-            <p className="user-login" title={user.login}>
-              @{user.login}
-            </p>
-          )}
-          {selectedUserIsTeamAdmin && <AdminBadge />}
+        <div className={styles.userProfile}>
+          <UserAvatar user={user} />
+          <div className={styles.userInfo}>
+            <div className={styles.userName}>{user.name || 'Anonymous'}</div>
+            {user.login && <div className={styles.userLogin}>@{user.login}</div>}
+            {selectedUserIsTeamAdmin && <AdminBadge />}
+          </div>
         </div>
       </PopoverInfo>
       {user.thanksCount > 0 && (
@@ -201,14 +202,14 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
       trackRemoveClicked();
       showRemove();
     }
-  }
+  };
 
   const onRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
   const onMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
 
   return (
-    <PopoverWithButton 
-      buttonProps={{ type: 'dropDown' }} 
+    <PopoverWithButton
+      buttonProps={{ type: 'dropDown' }}
       buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
     >
       {({ togglePopover, toggleAndCall }) => (
