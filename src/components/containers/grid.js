@@ -32,7 +32,9 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
   if (sortable) {
     const onDragStart = (event) => event.preventDefault();
     const onSortStart = () => setSortingItems(items);
-    const onSortOver = ({ oldIndex, newIndex }) => onReorder(sortingItems[oldIndex], newIndex);
+    const onSortOver = ({ oldIndex, newIndex, isKeySorting }) => {
+      if (isKeySorting) onReorder(items[oldIndex], newIndex);
+    };
     const onSortEnd = ({ oldIndex, newIndex }) => {
       onReorder(sortingItems[oldIndex], newIndex);
       setSortingItems(null);
