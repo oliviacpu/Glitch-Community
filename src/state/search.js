@@ -43,7 +43,9 @@ const getTopResults = (resultsByType, query) =>
 const filterOutBadData = (payload) => {
   const filteredData = { ...payload };
   // sometimes search results are out of sync with db, ensures we don't show teams that don't exist)
-  filteredData.team = filteredData.team.filter((t) => !!t.url);
+  if (filteredData.team) {
+    filteredData.team = filteredData.team.filter((t) => !!t.url);
+  }
   return filteredData;
 };
 
@@ -170,11 +172,13 @@ function createAlgoliaProvider(api) {
   return {
     ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
     collection: (query, { teamIDs, userIDs }) =>
-      searchIndices.collection.search({
-        query,
-        hitsPerPage: 100,
-        filters: buildCollectionFilters({ teamIDs, userIDs }),
-      }).then(formatAlgoliaResult('collection')),
+      searchIndices.collection
+        .search({
+          query,
+          hitsPerPage: 100,
+          filters: buildCollectionFilters({ teamIDs, userIDs }),
+        })
+        .then(formatAlgoliaResult('collection')),
     project: (query, { notSafeForKids }) =>
       searchIndices.project
         .search({
