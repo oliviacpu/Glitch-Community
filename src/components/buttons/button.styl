@@ -56,8 +56,15 @@
     padding: 5px 8px 3px
     margin-bottom: 10px
     &.hasEmoji
-      padding-top: 3px;
-      padding-bottom: 3px;
+      padding-right: 30px
+      .emojiContainer
+        right: 2px
+      &.alignLeft
+        padding-right: 8px
+        padding-left: 30px
+        .emojiContainer
+          right: initial
+          left: 2px
 
   &.tertiary
     color: tertiary
