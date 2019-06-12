@@ -186,23 +186,26 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
 
   const trackRemoveClicked = useTracker('Remove from Team clicked');
 
-  // TODO: is the correct part being tracked here?
   // if user is a member of no projects, skip the confirm step
-  const onOrShowRemoveUser = useTrackedFunc((showRemove) => {
+  const onOrShowRemoveUser = (showRemove, togglePopover) => {
     if (userTeamProjects && userTeamProjects.length === 0) {
       removeUser();
+      togglePopover();
     } else {
-      showRemove();
       trackRemoveClicked();
+      showRemove();
     }
-  }, 'Remove from Team clicked');
+  }
 
   const onRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
   const onMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
 
   return (
-    <PopoverWithButton buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}>
-      {({ toggleAndCall }) => (
+    <PopoverWithButton 
+      buttonProps={{ type: 'dropDown' }} 
+      buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
+    >
+      {({ togglePopover, toggleAndCall }) => (
         <MultiPopover
           views={{
             remove: () => <TeamUserRemovePop user={user} userTeamProjects={userTeamProjects} onRemoveUser={toggleAndCall(removeUser)} />,
@@ -214,7 +217,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
               team={team}
               onRemoveAdmin={toggleAndCall(onRemoveAdmin)}
               onMakeAdmin={toggleAndCall(onMakeAdmin)}
-              onRemoveUser={toggleAndCall(() => onOrShowRemoveUser(showViews.remove))}
+              onRemoveUser={() => onOrShowRemoveUser(showViews.remove, togglePopover)}
             />
           )}
         </MultiPopover>

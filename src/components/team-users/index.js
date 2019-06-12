@@ -9,14 +9,15 @@ import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
-import AddTeamUserPop from 'Components/team-users/add-team-user';
+
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
 import { captureException } from 'Utils/sentry';
 
-import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
+import AddTeamUserPop from './add-team-user';
+import TeamUserPop from './team-user-info';
 import styles from './styles.styl';
 
 // Whitelisted domain icon
