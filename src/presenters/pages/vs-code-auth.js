@@ -93,24 +93,7 @@ const VSCodeAuth = ({ insiders }) => {
     </div>;
   }
 
-  return <div>
-        <div focusOnDialog>
-          <div>
-            <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
-          </div>
-          <div>
-            <div>
-              By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
-              <Link to="/legal/#privacy">Privacy Statement</Link>
-            </div>
-          </div>
-          <div>
-            <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-            <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-            <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-          </div>
-        </div>
-    </div>
+  return <SignInPop align={true} />
 };
 
 VSCodeAuth.propTypes = {
