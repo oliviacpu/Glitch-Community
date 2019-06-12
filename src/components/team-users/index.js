@@ -166,7 +166,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const { currentUser } = useCurrentUser();
   const [invitee, setInvitee] = useState('');
   const [newlyInvited, setNewlyInvited] = useState([]);
-  const [removedInvitee, setRemovedInvitee] = useState([]);
+  const [removedInvitees, setRemovedInvitee] = useState([]);
   const { createNotification, createErrorNotification } = useNotifications();
   const api = useAPI();
 
@@ -174,7 +174,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
   const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = (value || []).concat(newlyInvited).filter((el) => (el !== removedInvitee));
+  const invitees = (value || []).concat(newlyInvited).filter((el) => (el !== removedInvitees));
 
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
@@ -221,7 +221,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
                 createNotification(`Removed ${user.name} from team`);
-                setRemovedInvitee(user);
+                setRemovedInvitee((removed) => [...removed, user]);
               } catch (error) {
                 captureException(error);
                 createErrorNotification("Couldn't revoke invite, Try again later");
