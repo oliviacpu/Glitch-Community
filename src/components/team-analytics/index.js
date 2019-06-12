@@ -8,6 +8,7 @@ import Text from 'Components/text/text';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Loader from 'Components/loader';
 import { createAPIHook } from 'State/api';
+import { captureException } from 'Utils/sentry';
 
 import TeamAnalyticsTimePop from './team-analytics-time-pop';
 import TeamAnalyticsProjectPop from './team-analytics-project-pop';
@@ -46,8 +47,13 @@ const useAnalyticsData = createAPIHook(async (api, { id, projects, fromDate, cur
   if (!projects.length) return getSampleAnalytics();
 
   const path = currentProjectDomain ? `analytics/${id}/project/${currentProjectDomain}?from=${fromDate}` : `analytics/${id}/team?from=${fromDate}`;
-  const { data } = await api.get(path);
-  return data;
+  try {
+    const { data } = await api.get(path);
+    return data;
+  } catch (e) {
+    captureException(e);
+    return null;
+  }
 });
 
 function useAnalytics(props) {
@@ -64,8 +70,7 @@ function TeamAnalytics({ id, projects }) {
 
   const [currentProjectDomain, setCurrentProjectDomain] = useState(''); // empty string means all projects
 
-  const { value: analytics, error } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
-  if (error) console.error('getAnalytics', error);
+  const { value: analytics } = useAnalytics({ id, projects, fromDate, currentProjectDomain });
 
   const buckets = analytics ? analytics.buckets : [];
   const { totalAppViews, totalRemixes } = useMemo(
