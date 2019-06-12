@@ -28,8 +28,7 @@ console.log(`Starting Webpack in ${mode} mode.`);
 let prevBuildAssets = [];
 try {
   const prevBuildStats = JSON.parse(fs.readFileSync(path.resolve(BUILD, 'stats.json')));
-  const prevBuildAssetLists = Object.values(prevBuildStats.entrypoints).map((entrypoint) => entrypoint.assets);
-  prevBuildAssets = ['stats.json'].concat(...prevBuildAssetLists).map((file) => `!${file}`);
+  prevBuildAssets = ['!stats.json'].concat(...prevBuildStats.assets.map((asset) => `!${asset.name}`));
 } catch (error) {
   // Don't worry about it, there's probably just no stats.json
 }
