@@ -7,14 +7,14 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import { UserAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
+import { PopoverDialog, PopoverWithButton, PopoverActions, PopoverInfo, MultiPopover } from 'Components/popover';
+
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
-import { NestedPopover } from './popover-nested';
 import { useNotifications } from '../notifications';
 import TeamUserRemovePop from './team-user-remove-pop';
-import PopoverWithButton from './popover-with-button';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -70,18 +70,9 @@ AdminActions.propTypes = {
   updateUserPermissions: PropTypes.func.isRequired,
 };
 
-// Thanks 💖
-
-const ThanksCount = ({ count }) =>
-  count > 0 ? (
-    <section className="pop-over-info">
-      <Thanks count={count} />
-    </section>
-  ) : null;
-
 // Team User Info 😍
 
-const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUser, userTeamProjects, focusFirstElement }) => {
+const TeamUserInfo = ({ , user, team, updateUserPermissions, removeUser, userTeamProjects }) => {
   const { currentUser } = useCurrentUser();
   const userAvatarStyle = { backgroundColor: user.color };
 
@@ -93,18 +84,9 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
   const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || (currentUser && currentUser.id === user.id);
   const canCurrentUserRemoveUser = currentUserHasRemovePriveleges && !teamHasOnlyOneMember && !selectedUserIsOnlyAdmin;
 
-  // if user is a member of no projects, skip the confirm step
-  function onRemove() {
-    if (userTeamProjects.status === 'ready' && userTeamProjects.data.length === 0) {
-      removeUser();
-    } else {
-      showRemove();
-    }
-  }
-
   return (
-    <dialog className="pop-over team-user-info-pop" ref={focusFirstElement}>
-      <section className="pop-over-info user-info">
+    <PopoverDialog align="left">
+      <PopoverInfo>
         <UserLink user={user}>
           <img className="avatar" src={getAvatarThumbnailUrl(user)} alt={user.login} style={userAvatarStyle} />
         </UserLink>
@@ -128,11 +110,15 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
             </div>
           )}
         </div>
-      </section>
-      <ThanksCount count={user.thanksCount} />
+      </PopoverInfo>
+      {user.thanksCount > 0 && (
+        <PopoverInfo>
+          <ThanksCount count={user.thanksCount} />
+        </PopoverInfo>
+      )}
       {currentUserIsTeamAdmin && <AdminActions user={user} team={team} updateUserPermissions={updateUserPermissions} />}
       {canCurrentUserRemoveUser && <RemoveFromTeam onClick={onRemove} />}
-    </dialog>
+    </PopoverDialog>
   );
 };
 
@@ -141,7 +127,7 @@ const TeamUserInfo = ({ showRemove, user, team, updateUserPermissions, removeUse
 // Team User Info or Remove
 // uses removeTeamUserVisible state to toggle between showing user info and remove views
 
-const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPermissions, togglePopover, focusFirstElement }) => {
+const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPermissions }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [userTeamProjects, setUserTeamProjects] = useState({ status: 'loading', data: null });
@@ -158,31 +144,39 @@ const TeamUserInfoAndRemovePop = ({ user, team, removeUserFromTeam, updateUserPe
     await removeUserFromTeam(user.id, Array.from(selectedProjects));
     createNotification(`${getDisplayName(user)} removed from Team`);
   }
+  
+  // if user is a member of no projects, skip the confirm step
+  const onRemove = (showRemove) => {
+    if (userTeamProjects.status === 'ready' && userTeamProjects.data.length === 0) {
+      removeUser();
+    } else {
+      showRemove();
+    }
+  }
 
   return (
-    <NestedPopover
-      alternateContent={() => (
-        <TeamUserRemovePop
-          user={user}
-          removeUser={removeUser}
-          userTeamProjects={userTeamProjects}
-          togglePopover={togglePopover}
-          focusFirstElement={focusFirstElement}
-        />
-      )}
+    <MultiPopover
+      views={{
+        remove: () => (
+          <TeamUserRemovePop
+            user={user}
+            removeUser={removeUser}
+            userTeamProjects={userTeamProjects}
+          />
+        )
+      }}
     >
-      {(showRemove) => (
+      {(showViews) => (
         <TeamUserInfo
           user={user}
           team={team}
           updateUserPermissions={updateUserPermissions}
-          removeUser={removeUser}
+          removeUser={() => onRemove(showViews.remove)}
           userTeamProjects={userTeamProjects}
-          showRemove={showRemove}
-          focusFirstElement={focusFirstElement}
+          showRemove={showViews.remove}
         />
       )}
-    </NestedPopover>
+    </MultiPopover>
   );
 };
 
@@ -198,23 +192,18 @@ TeamUserInfoAndRemovePop.propTypes = {
   team: PropTypes.shape({
     projects: PropTypes.array.isRequired,
   }).isRequired,
-  togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) => (
   <PopoverWithButton
-    buttonClass="user button-unstyled tooltip-container-button"
     buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
   >
-    {({ togglePopover, focusFirstElement }) => (
+    {({ toggleAndCall, focusFirstElement }) => (
       <TeamUserInfoAndRemovePop
         team={team}
         removeUserFromTeam={removeUserFromTeam}
         user={user}
         updateUserPermissions={updateUserPermissions}
-        togglePopover={togglePopover}
-        focusFirstElement={focusFirstElement}
       />
     )}
   </PopoverWithButton>
