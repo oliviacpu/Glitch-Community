@@ -180,6 +180,8 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
   const onInviteUser = async (user) => {
     setNewlyInvited((invited) => [...invited, user]);
+    console.log('invitee', invitee);
+    console.log('newlyInvited', newlyInvited);
     try {
       await inviteUser(user);
       setInvitee(getDisplayName(user));
@@ -220,9 +222,11 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             onRevokeInvite={async () => {
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
+                setInvitee(invitee.filter((el) => (el !== getDisplayName(user))));
                 createNotification(`Removed ${user.name} from team`);
                 setRemovedInvitee((removed) => [...removed, user]);
-                console.log(removedInvitees);
+                console.log('removedInvitees', removedInvitees);
+                console.log('invitee', invitee);
               } catch (error) {
                 captureException(error);
                 createErrorNotification("Couldn't revoke invite, Try again later");
