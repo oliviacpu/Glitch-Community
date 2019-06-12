@@ -17,6 +17,7 @@ import ReportButton from 'Components/report-abuse-pop';
 import DeleteTeam from 'Components/team/delete-team-pop';
 import AddTeamProject from 'Components/team/add-team-project-pop';
 import TeamUsers from 'Components/team-users';
+import Button from 'Components/buttons/button';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -64,20 +65,21 @@ const ProjectPals = () => (
   </aside>
 );
 
-const forPlatformsIcon = 'https://cdn.glitch.com/be1ad2d2-68ab-404a-82f4-6d8e98d28d93%2Ffor-platforms-icon.svg?1506442305188';
-
 const TeamMarketing = () => (
   <section className={styles.teamMarketing}>
     <Text>
-      <img className="for-platforms-icon" src={forPlatformsIcon} alt="fishing emoji" />
+      <img
+        className={styles.forPlatformsIcon}
+        src="https://cdn.glitch.com/be1ad2d2-68ab-404a-82f4-6d8e98d28d93%2Ffor-platforms-icon.svg?1506442305188"
+        alt=""
+      />
       Want your own team page, complete with detailed app analytics?
     </Text>
     <Button href="/teams" hasEmoji>
-      About Teams <Emoji name="fishingPole"/>
+      About Teams <Emoji name="fishingPole" />
     </Button>
   </section>
 );
-
 
 // Team Page
 
