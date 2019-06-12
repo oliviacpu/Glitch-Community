@@ -7,6 +7,21 @@ import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 import { captureException } from '../../utils/sentry';
 
+import { withRouter } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { parseOneAddress } from 'email-addresses';
+import { debounce } from 'lodash';
+
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
+import TextInput from 'Components/inputs/text-input';
+import Link from 'Components/link';
+import Loader from 'Components/loader';
+import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
+import useLocalStorage from 'State/local-storage';
+import useDevToggle from 'State/dev-toggles';
+
+import styles from './styles.styl';
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 
 function githubAuthLink() {
@@ -81,16 +96,36 @@ const VSCodeAuth = ({ insiders }) => {
     </div>;
   }
 
-  return <div>
-    <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-    <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-    <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-    {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-    <Button size="small" onClick={setDestinationAnd(showView.email)}>
-      Sign in with Email <Emoji name="email" />
-    </Button>
-    <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />
-  </div>;
+  return <MultiPopover
+      views={{
+        email: (showView) => <EmailHandler showView={showView} />,
+        signInCode: () => <SignInWithCode />,
+      }}
+    >
+      {(showView) => (
+        <PopoverDialog focusOnDialog>
+          <PopoverInfo>
+            <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
+          </PopoverInfo>
+          <PopoverInfo>
+            <div className={styles.termsAndConditions}>
+              By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
+              <Link to="/legal/#privacy">Privacy Statement</Link>
+            </div>
+          </PopoverInfo>
+          <PopoverActions>
+            <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
+            <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
+            <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
+            {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+            <Button size="small" onClick={setDestinationAnd(showView.email)}>
+              Sign in with Email <Emoji name="email" />
+            </Button>
+          </PopoverActions>
+          <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />
+        </PopoverDialog>
+      )}
+    </MultiPopover>
 };
 
 VSCodeAuth.propTypes = {
