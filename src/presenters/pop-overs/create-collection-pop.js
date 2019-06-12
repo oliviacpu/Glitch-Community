@@ -175,7 +175,11 @@ class CreateCollectionPop extends React.Component {
               </div>
             )}
 
-            {!this.state.loading ? <SubmitButton disabled={!!queryError || !submitEnabled} /> : <Loader />}
+            {!this.state.loading ? (
+              <SubmitButton disabled={!!queryError || !submitEnabled} />
+            ) : (
+              <Loader />
+            )}
           </form>
         </section>
       </dialog>

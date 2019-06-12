@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import OptimisticWrappingTextInput from './optimistic-wrapping-text-input';
 
 const CollectionNameInput = ({ name, onChange }) => (
-  <OptimisticWrappingTextInput labelText="Collection Name" value={name} onChange={onChange} placeholder="Name your collection" />
+  <OptimisticWrappingTextInput
+    labelText="Collection Name"
+    value={name}
+    onChange={onChange}
+    placeholder="Name your collection"
+  />
 );
 
 CollectionNameInput.propTypes = {

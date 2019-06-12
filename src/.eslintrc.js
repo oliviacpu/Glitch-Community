@@ -35,8 +35,7 @@ module.exports = {
     'function-paren-newline': OFF,
     // allow for focusing on pop-overs
     'jsx-a11y/no-noninteractive-tabindex': [
-      'error',
-      {
+      'error', {
         tags: ['dialog'],
       },
     ],
@@ -79,7 +78,7 @@ module.exports = {
     // React hooks config
     'react-hooks/rules-of-hooks': 'error',
     'react/jsx-one-expression-per-line': [OFF],
-    'react/jsx-filename-extension': [ERROR, { extensions: ['.js'] }],
+    'react/jsx-filename-extension': [ERROR, { extensions: ['.js'] }]
   },
   settings: {
     'import/ignore': ['sentry'],

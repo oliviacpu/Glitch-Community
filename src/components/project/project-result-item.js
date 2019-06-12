@@ -30,13 +30,20 @@ const ProfileListWithData = ({ project }) => {
 const ProfileListWrap = ({ project }) => (
   <div className={styles.profileListWrap}>
     <VisibilityContainer>
-      {({ wasEverVisible }) => (wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" size="small" />)}
+      {({ wasEverVisible }) => (
+        wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" size="small" />
+      )}
     </VisibilityContainer>
   </div>
 );
 
 const ProjectResultItem = ({ project, active, onClick }) => (
-  <ResultItem className={classnames(project.private && styles.private)} href={getLink(project)} onClick={onClick} active={active}>
+  <ResultItem
+    className={classnames(project.private && styles.private)}
+    href={getLink(project)}
+    onClick={onClick}
+    active={active}
+  >
     <div>
       <ProjectAvatar {...project} />
     </div>

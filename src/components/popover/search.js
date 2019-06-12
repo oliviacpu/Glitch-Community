@@ -89,7 +89,16 @@ function PopoverSearch({
   return (
     <>
       <PopoverInfo>
-        <TextInput ref={inputRef} autoFocus labelText={labelText} value={value} onChange={onChange} opaque placeholder={placeholder} type="search" />
+        <TextInput
+          ref={inputRef}
+          autoFocus
+          labelText={labelText}
+          value={value}
+          onChange={onChange}
+          opaque
+          placeholder={placeholder}
+          type="search"
+        />
       </PopoverInfo>
       {results.length > 0 && (
         <PopoverSection>

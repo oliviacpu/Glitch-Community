@@ -260,7 +260,9 @@ export const AddProjectToCollectionBase = (props) => {
 
   return (
     <NestedPopover
-      alternateContent={() => <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} />}
+      alternateContent={() => (
+        <CreateCollectionPop {...props} collections={maybeCollections || []} togglePopover={togglePopover} />
+      )}
       startAlternateVisible={false}
     >
       {(createCollectionPopover) => (

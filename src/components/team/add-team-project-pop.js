@@ -46,7 +46,11 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
         labelText="Project name"
         placeholder="Filter my projects"
         status="ready"
-        renderItem={({ item: project, active }) => <ProjectResultItem active={active} onClick={() => addProject(project)} project={project} />}
+        renderItem={
+          ({ item: project, active }) => (
+            <ProjectResultItem active={active} onClick={() => addProject(project)} project={project} />
+          )
+        }
       />
       {filteredProjects.length === 0 && query.length === 0 && (
         <PopoverInfo>
