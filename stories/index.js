@@ -290,7 +290,6 @@ storiesOf('UserItem', module).add('base', () => (
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
     <TeamItem team={teams['example-team']} />
-    
   </div>
 ));
        
