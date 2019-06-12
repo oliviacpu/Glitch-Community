@@ -13,7 +13,7 @@ import { LiveAnnouncer } from 'react-aria-live';
 import ErrorBoundary from './presenters/includes/error-boundary';
 import { Notifications } from './presenters/notifications';
 import Router from './presenters/pages/router';
-console.log('asdf');
+
 const App = () => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <BrowserRouter>
