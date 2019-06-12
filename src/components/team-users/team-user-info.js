@@ -30,7 +30,6 @@ const ProjectsList = ({ options, value, onChange }) => (
       // NOTE: label is implicitly linked to nested input https://www.w3.org/WAI/tutorials/forms/labels/#associating-labels-implicitly
       // eslint-disable-next-li=ne jsx-a11y/label-has-associated-control
       <label key={project.id}>
-        foo
         <input
           type="checkbox"
           checked={value.includes(project.id)}
@@ -48,6 +47,17 @@ const ProjectsList = ({ options, value, onChange }) => (
     ))}
   </div>
 );
+
+const AdminBadge = () => (
+  <div className={styles.statusBadge}>
+    <TooltipContainer
+      id="admin-badge-tooltip"
+      type="info"
+      target={<span className={styles.adminStatus}>Team Admin</span>}
+      tooltip="Can edit team info and billing"
+    />
+  </div>
+)
 
 // Team User Remove 💣
 
@@ -125,16 +135,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
               @{user.login}
             </p>
           )}
-          {selectedUserIsTeamAdmin && (
-            <div className="status-badge">
-              <TooltipContainer
-                id={`admin-badge-tooltip-${user.login}`}
-                type="info"
-                target={<span className="status admin">Team Admin</span>}
-                tooltip="Can edit team info and billing"
-              />
-            </div>
-          )}
+          {selectedUserIsTeamAdmin && <AdminBadge />}
         </div>
       </PopoverInfo>
       {user.thanksCount > 0 && (
