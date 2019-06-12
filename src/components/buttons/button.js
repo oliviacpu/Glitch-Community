@@ -32,7 +32,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
   const content = (
     <>
       {children}
-      {emojiEl}
+      {emoji && <ButtonEmoji emoji={emoji} position={emojiPosition} />}
     </>
   );
 
@@ -122,14 +122,19 @@ const ButtonEmoji = (emoji, position) => {
     emojiContainer: true,
     alignLeft: position === 'left',
   });
-  <div className={styles.emojiContainer}>
-    <Emoji name={emoji} />
-  </div>
-);
+
+  console.log('emoji', emoji);
+
+  return (
+    <div className={styles.emojiContainer}>
+      <Emoji name={emoji} />
+    </div>
+  );
+};
 
 ButtonEmoji.propTypes = {
   emoji: PropTypes.string.isRequired,
-  emojiPosition: PropTypes.oneOf(['right', 'left']).isRequired,
+  position: PropTypes.oneOf(['right', 'left']).isRequired,
 };
 
 export default Button;
