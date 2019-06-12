@@ -6,13 +6,10 @@ import { PopoverWithButton, PopoverDialog, PopoverSearch } from 'Components/popo
 
 import styles from './styles.styl';
 
-const Bento = () => (
-  <img src="https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png?1502469566743" alt="" className={styles.bentoBox} />
-);
 
 const AllProjectsItem = ({ active, selected, onClick }) => (
-  <ResultItem onClick={onClick} active={active} selected={selected} className={"aaaaa"}>
-    <Bento />
+  <ResultItem onClick={onClick} active={active} selected={selected} className={styles.allProjects}>
+    <img src="https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png?1502469566743" alt="" className={styles.bentoBox} />
     <ResultInfo>
       <ResultName>All Projects</ResultName>
     </ResultInfo>

@@ -133,7 +133,7 @@ function TeamAnalytics({ id, projects }) {
         <section className={styles.section}>
           <div className={styles.explanation}>
             <Text>
-              Because Glitch doesn't inject code or cookies into your projects, we don't collect the data required for unique app views. 
+              Because Glitch doesn't inject code or cookies into your projects, we don't collect the data required for unique app views.
               You can get uniques by adding Google Analytics to your project.
             </Text>
           </div>
