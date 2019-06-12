@@ -81,14 +81,14 @@ function TeamAnalytics({ id, projects }) {
 
   if (!analytics) {
     return (
-      <section className={styles.contianer}>
+      <section className={styles.container}>
         <Loader />
       </section>
     );
   }
 
   return (
-    <section className={styles.contianer}>
+    <section className={styles.container}>
       <h2>
         Analytics
         {projects.length === 0 && <aside className={styles.inlineBanner}>Add projects to see their stats</aside>}
@@ -133,8 +133,8 @@ function TeamAnalytics({ id, projects }) {
         <section className={styles.section}>
           <div className={styles.explanation}>
             <Text>
-              Because Glitch doesn't inject code or cookies into your projects we don't collect the data required for unique app views. You can get
-              uniques by adding Google Analytics to your project.
+              Because Glitch doesn't inject code or cookies into your projects, we don't collect the data required for unique app views. 
+              You can get uniques by adding Google Analytics to your project.
             </Text>
           </div>
         </section>

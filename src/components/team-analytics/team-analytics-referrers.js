@@ -23,7 +23,7 @@ const filterReferrers = (referrers) => referrers.filter((referrer) => !referrer.
 
 const ReferrersColumn = ({ total, referrers, name, label }) => (
   <article className={classnames(styles.referrersColumn, styles[name])}>
-    {total === 0 && 'none'}
+    {total === 0 ? 'none' : ''}
     <ul className={styles.referrersList}>
       <ReferrerItem count={total - sumBy(referrers, (referrer) => referrer[name])} total={total} description={`direct ${label}`} />
       {filterReferrers(referrers).map((referrer) => (

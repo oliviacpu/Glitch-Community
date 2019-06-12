@@ -105,7 +105,7 @@ function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain })
       {activeFilter === 'remixes' && (
         <article>
           <h4>Latest Remixes</h4>
-          {projectRemixes.length === 0 && <Text>No remixes yet (／_^)／ ●</Text>}
+          {projectRemixes.length === 0 && <Text>No remixes yet <span aria-hidden="true">(／_^)／ ●</span></Text>}
           {projectRemixes.map((remix) => (
             <ProjectRemixItem key={remix.id} remix={remix} />
           ))}
