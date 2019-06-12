@@ -17,14 +17,18 @@ import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import { captureException } from 'Utils/sentry';
 
-import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import styles from './styles.styl';
+
+import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import { useNotifications } from '../../presenters/notifications';
 
 // Invited user icon and pop
 
 function InvitedUser(props) {
   const api = useAPI();
+  console.log(useNotifications)
+  console.log(useNotifications)
+  
   const { createNotification, createErrorNotification } = useNotifications();
 
   // resend the invite
