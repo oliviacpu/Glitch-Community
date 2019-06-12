@@ -7,13 +7,14 @@ import { withRouter } from 'react-router-dom';
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import { PopoverDialog, MultiPopoverTitle, PopoverActions, PopoverWithButton } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import { createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { AddProjectToCollectionMsg, useNotifications } from 'State/notifications';
+import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
 import Dropdown from '../../presenters/pop-overs/dropdown';
