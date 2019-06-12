@@ -18,6 +18,7 @@ import {
 } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import { ProjectAvatar } from 'Components/images/avatar';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -26,7 +27,6 @@ import { useCurrentUser } from 'State/current-user';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
-import ProjectAvatar from '../../presenters/includes/project-avatar';
 
 import styles from './popover.styl';
 
@@ -44,7 +44,7 @@ const collectionTypeOptions = [
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
     <div className={styles.popoverTitleWrap}>
-      <ProjectAvatar {...project} /> Add {project.domain} to collection
+      <ProjectAvatar project={project} /> Add {project.domain} to collection
     </div>
   </MultiPopoverTitle>
 );

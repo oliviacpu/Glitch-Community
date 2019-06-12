@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import ProfileList from 'Components/profile-list';
 import Markdown from 'Components/text/markdown';
+import { ProjectAvatar } from 'Components/images/avatar';
 import { ProjectLink } from 'Components/link';
-import ProjectAvatar from './project-avatar';
 
 const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
   const activeClass = isActive ? 'active' : '';
@@ -15,7 +15,7 @@ const ProjectResultItem = ({ onClick, isActive, isPrivate, ...project }) => {
   return (
     <div>
       <button className={resultClass} onClick={onClick} data-project-id={id} type="button">
-        <ProjectAvatar domain={domain} id={id} />
+        <ProjectAvatar project={project} />
         <div className="results-info">
           <div className="result-name" title={domain}>
             {domain}

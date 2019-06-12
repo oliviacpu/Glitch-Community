@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Image from 'Components/images/image';
 
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from '../../models/project';
 

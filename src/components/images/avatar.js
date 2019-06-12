@@ -6,6 +6,7 @@ import Image from 'Components/images/image';
 
 import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import styles from './avatar.styl';
 
 // UserAvatar
@@ -93,5 +94,28 @@ UserAvatar.propTypes = {
 UserAvatar.defaultProps = {
   suffix: '',
   hideTooltip: false,
+  withinButton: false,
+};
+
+export const ProjectAvatar = ({ project, withinButton }) => (
+  <Avatar
+    name={project.domain}
+    src={getProjectAvatarUrl(project.id)}
+    srcFallback={FALLBACK_AVATAR_URL}
+    type="team"
+    hideTooltip={true}
+    withinButton={withinButton}
+  />
+)
+
+ProjectAvatar.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+  }).isRequired,
+  withinButton: PropTypes.bool,
+};
+
+ProjectAvatar.defaultProps = {
   withinButton: false,
 };
