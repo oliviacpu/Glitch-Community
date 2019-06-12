@@ -19,9 +19,12 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   const isSignedIn = persistentToken && login;
   
   if (isSignedIn) {
-    const scheme = insiders ? 'vscode-insiders' : 'vscode';
-    window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
+    setTimeout(() => {
+      const scheme = insiders ? 'vscode-insiders' : 'vscode';
+      window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
     
+    }, 3000);
+
     return <div className={styles.content}>
       <p>
         <span>You are being redirected. (If you aren't sent back to VS Code, try the "Glitch: Sign In With Email" command.)</span>
