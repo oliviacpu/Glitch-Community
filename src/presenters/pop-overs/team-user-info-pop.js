@@ -227,5 +227,4 @@ TeamUserPop.propTypes = {
   updateUserPermissions: PropTypes.func.isRequired,
 };
 
-
 export default TeamUserPop;

@@ -59,7 +59,6 @@ ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
 
-
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
     {(animateAndDeleteCollection) => (

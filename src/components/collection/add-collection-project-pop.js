@@ -88,9 +88,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
         labelText="Project name or URL"
         placeholder="Search by project name or URL"
         status={status}
-        renderItem={
-          ({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onClick(project)} />
-        }
+        renderItem={({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onClick(project)} />}
       />
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>

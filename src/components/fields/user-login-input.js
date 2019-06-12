@@ -4,13 +4,7 @@ import PropTypes from 'prop-types';
 import OptimisticTextInput from './optimistic-text-input';
 
 const UserLoginInput = ({ login, onChange }) => (
-  <OptimisticTextInput
-    labelText="User Login"
-    value={login}
-    onChange={onChange}
-    placeholder="Nickname?"
-    prefix="@"
-  />
+  <OptimisticTextInput labelText="User Login" value={login} onChange={onChange} placeholder="Nickname?" prefix="@" />
 );
 
 UserLoginInput.propTypes = {

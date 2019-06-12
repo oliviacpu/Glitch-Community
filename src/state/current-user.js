@@ -153,9 +153,7 @@ class CurrentUserManager extends React.Component {
       const api = this.api();
       const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
       const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
-      const {
-        baseUser, emails, projects, teams, collections,
-      } = await allByKeys({
+      const { baseUser, emails, projects, teams, collections } = await allByKeys({
         baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
         emails: getAllPages(api, makeUrl('emails')),
         projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
@@ -258,7 +256,8 @@ class CurrentUserManager extends React.Component {
         window.scrollTo(0, 0);
         window.location.reload();
       },
-      canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
+      canBecomeSuperUser:
+        cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
       superUserFeature,
     };
   }

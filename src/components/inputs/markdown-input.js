@@ -15,15 +15,7 @@ const MarkdownInput = ({ allowImages, error, onBlur: outerOnBlur, onChange, plac
   };
   if (error || focused || !value.trim()) {
     return (
-      <TextArea
-        autoFocus={focused}
-        error={error}
-        onBlur={onBlur}
-        onChange={onChange}
-        onFocus={onFocus}
-        placeholder={placeholder}
-        value={value}
-      />
+      <TextArea autoFocus={focused} error={error} onBlur={onBlur} onChange={onChange} onFocus={onFocus} placeholder={placeholder} value={value} />
     );
   }
   return (

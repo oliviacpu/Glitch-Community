@@ -109,18 +109,12 @@ const Router = () => (
         render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
       />
 
-      <Route
-        path="/@:name"
-        exact
-        render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />}
-      />
+      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => (
-          <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />
-        )}
+        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
       />
 
       <Route
@@ -155,7 +149,13 @@ const Router = () => (
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
-      <Route path="/vs-code-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
+      <Route
+        path="/vs-code-auth"
+        exact
+        render={({ location }) => (
+          <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />
+        )}
+      />
 
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
