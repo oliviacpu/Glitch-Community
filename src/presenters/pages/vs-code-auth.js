@@ -15,14 +15,18 @@ import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
-const SignInPop = () => {
+const VSCodeAuth = () => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
+  window.location.assign(`vscode://glitch.glitch/token/${persistentToken}`);
+  
   if (isSignedIn) {
-    return <div>signed in</div>;
+    return <div>
+      <p><span>You are being redirected. (If you aren't sent back to VS Code, try the "Glitch: Sign In With Email" command.)</span></p>
+    </div>;
   }
 
   return (
@@ -30,4 +34,4 @@ const SignInPop = () => {
   );
 };
 
-export default SignInPop;
+export default VSCodeAuth;
