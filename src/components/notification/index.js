@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { LiveMessage } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -18,9 +19,11 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <aside className={className} onAnimationEnd={remove}>
-      {children}
-    </aside>
+    <LiveMessage>
+      <aside className={className} onAnimationEnd={remove}>
+        {children}
+      </aside>
+    </LiveMessage>
   );
 };
 
