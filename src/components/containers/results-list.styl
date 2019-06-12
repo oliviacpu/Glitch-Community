@@ -2,7 +2,7 @@
 
 .scrollContainer
   overflow-y: scroll
-  max-height: 357px
+  max-height: 225px
 
 .resultsList
   margin: 0
@@ -19,9 +19,8 @@
   padding: 12px 6px
   &.withLink
     padding: 12px 70px 12px 6px
-  &.active,
   &:hover,
-  &:focus
+  &:focus-within
     color: white
     background-color: general-link
     .resultDescription
@@ -47,3 +46,9 @@
   font-size: 12px
   line-height: 18px
   padding-top: 6px
+  
+.linkButtonWrap
+  position: absolute
+  top: 0
+  right: 0
+  padding: 12px 6px

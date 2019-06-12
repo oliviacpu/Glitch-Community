@@ -159,19 +159,8 @@ UserOptionsPop.propTypes = {
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
-class CheckForCreateTeamHash extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { active: window.location.hash === '#create-team' };
-  }
-
-  componentDidMount() {
-    this.setState({ active: false });
-  }
-
-  render() {
-    return this.props.children(this.state.active);
-  }
+function CheckForCreateTeamHash(props) {
+  return props.children(window.location.hash === '#create-team');
 }
 
 // Header button and init pop

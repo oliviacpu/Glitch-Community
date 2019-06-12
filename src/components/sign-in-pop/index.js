@@ -9,6 +9,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
+import Loader from 'Components/loader';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
@@ -140,6 +141,7 @@ const EmailHandler = ({ showView }) => {
             </div>
           </form>
         )}
+        {status === 'loading' && <Loader />}
         {status === 'done' && (
           <>
             <div className="notification notifyPersistent notifySuccess">Almost Done</div>

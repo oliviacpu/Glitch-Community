@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { partition, uniqBy } from 'lodash';
 
 import { getAllPages } from 'Shared/api';
-import Loader from 'Components/loader';
-import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverInfo, InfoDescription } from 'Components/popover';
-import TextInput from 'Components/inputs/text-input';
-import ResultsList, { ScrollResult, useActiveIndex } from 'Components/containers/results-list';
+import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
 import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -82,50 +79,23 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     return { visibleProjects, excludingExactMatch };
   }, [parsedQuery, initialProjects, topResults, retrievedProjects]);
 
-  const { activeIndex, onKeyDown } = useActiveIndex(visibleProjects, onClick);
-
   return (
     <PopoverDialog wide align="left">
-      <PopoverInfo>
-        <TextInput
-          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-          labelText="Project name or URL"
-          value={query}
-          onChange={setQuery}
-          onKeyDown={onKeyDown}
-          opaque
-          placeholder="Search by project name or URL"
-          type="search"
-        />
-      </PopoverInfo>
-
-      {status === 'loading' && (
-        <PopoverInfo>
-          <Loader />
-        </PopoverInfo>
-      )}
+      <PopoverSearch
+        value={query}
+        onChange={setQuery}
+        results={visibleProjects}
+        labelText="Project name or URL"
+        placeholder="Search by project name or URL"
+        status={status}
+        renderItem={
+          ({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onClick(project)} />
+        }
+      />
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
             {parsedQuery} is already in this collection <Emoji name="sparkles" />
-          </InfoDescription>
-        </PopoverInfo>
-      )}
-      {visibleProjects.length > 0 && (
-        <PopoverSection>
-          <ResultsList scroll items={visibleProjects}>
-            {(project, i) => (
-              <ScrollResult active={i === activeIndex}>
-                <ProjectResultItem project={project} active={i === activeIndex} onClick={() => onClick(project)} />
-              </ScrollResult>
-            )}
-          </ResultsList>
-        </PopoverSection>
-      )}
-      {status === 'ready' && visibleProjects.length === 0 && !excludingExactMatch && (
-        <PopoverInfo>
-          <InfoDescription>
-            nothing found <Emoji name="sparkles" />
           </InfoDescription>
         </PopoverInfo>
       )}
