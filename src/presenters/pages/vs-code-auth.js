@@ -11,27 +11,33 @@
 /* globals API_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
+import { captureException } from '../../utils/sentry';
 
-const VSCodeAuth = () => {
+const VSCodeAuth = ({ insiders }) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
-
-  window.location.assign(`vscode://glitch.glitch/token/${persistentToken}`);
+  
   
   if (isSignedIn) {
+    const scheme = insiders ? 'vscode-insiders' : 'vscode';
+    window.location.assign(`${scheme}://glitch.glitch/token/${persistentToken}`);
+    
     return <div>
-      <p><span>You are being redirected. (If you aren't sent back to VS Code, try the "Glitch: Sign In With Email" command.)</span></p>
+      <p>
+        <span>You are being redirected. (If you aren't sent back to VS Code, try the "Glitch: Sign In With Email" command.)</span>
+      </p>
     </div>;
   }
 
-  return (
-    <div>not signed in</div>
-  );
+  return <div>not signed in</div>;
+};
+
+VSCodeAuth.propTypes = {
+  insiders: PropTypes.bool.isRequired,
 };
 
 export default VSCodeAuth;
