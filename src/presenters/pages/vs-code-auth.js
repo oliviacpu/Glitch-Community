@@ -19,9 +19,7 @@ import Link from 'Components/link';
 import Loader from 'Components/loader';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useLocalStorage from 'State/local-storage';
-import useDevToggle from 'State/dev-toggles';
 
-import styles from './styles.styl';
 /* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
 
 function githubAuthLink() {
@@ -66,7 +64,6 @@ const VSCodeAuth = ({ insiders }) => {
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
   
-  const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   
   const onClick = () =>
@@ -108,7 +105,7 @@ const VSCodeAuth = ({ insiders }) => {
             <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
           <PopoverInfo>
-            <div className={styles.termsAndConditions}>
+            <div>
               By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and{' '}
               <Link to="/legal/#privacy">Privacy Statement</Link>
             </div>
@@ -117,7 +114,6 @@ const VSCodeAuth = ({ insiders }) => {
             <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
             <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
             <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-            {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
             <Button size="small" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email <Emoji name="email" />
             </Button>
