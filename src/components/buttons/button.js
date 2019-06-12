@@ -23,6 +23,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     dangerZone: type === 'dangerZone',
     unstyled: type === 'dropDown',
     hasEmoji: emoji,
+    padLeft: emoji && emojiPosition === 'left',
     matchBackground: matchBackground === true,
     active,
     hover,
