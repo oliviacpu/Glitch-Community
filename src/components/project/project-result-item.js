@@ -36,12 +36,13 @@ const ProfileListWrap = ({ project }) => (
   </div>
 );
 
-const ProjectResultItem = ({ project, active, onClick }) => (
+const ProjectResultItem = ({ project, selected, active, onClick }) => (
   <ResultItem
     className={classnames(project.private && styles.private)}
     href={getLink(project)}
     onClick={onClick}
     active={active}
+    selected={selected}
   >
     <div>
       <ProjectAvatar project={project} />

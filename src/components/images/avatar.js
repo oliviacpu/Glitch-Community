@@ -113,7 +113,7 @@ ProjectAvatar.propTypes = {
     domain: PropTypes.string.isRequired,
   }).isRequired,
   hasAlt: PropTypes.bool,
-    };
+};
 
 ProjectAvatar.defaultProps = {
   hasAlt: false,
