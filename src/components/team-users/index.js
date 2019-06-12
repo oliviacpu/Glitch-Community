@@ -9,7 +9,6 @@ import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
-
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
