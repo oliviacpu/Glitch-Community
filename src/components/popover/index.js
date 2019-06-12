@@ -134,7 +134,7 @@ PopoverMenu.defaultProps = {
 // Use with PopoverMenu so that popover can correctly adjust to fit the content
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
   <div className={styles.menuButtonWrap}>
-    <Button size="small" type="tertiary" onClick={onClick}>
+    <Button size="small" type="tertiary" onClick={onClick} hasEmoji>
       <div className={styles.popoverButtonContent}>
         {label} <Emoji name={emoji} />
       </div>
