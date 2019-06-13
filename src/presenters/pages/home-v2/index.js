@@ -196,7 +196,8 @@ const CultureZine = ({ content }) => (
       <Mark color="#CBC3FF">Enter our universe</Mark>
     </h2>
     <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
-    <Row items={content} count={4} className={styles.cultureZineRow}>
+    <Row
+    <Row items={content} count={2} className={styles.cultureZineRow}>
       {({ title, source, img, url }) => (
         <a href={`/culture${url}`} className={styles.plainLink}>
           <div className={styles.cultureZineImageWrap}>
