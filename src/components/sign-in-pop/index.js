@@ -264,6 +264,8 @@ const SignInWithCode = () => {
 const LoginSection = ({ showForgotPassword }) => {
   const [emailAddress, setEmail, emailValidationError] = useEmail();
   const [password, setPassword] = useState('');
+  const [tfaCode, setTfaCode] = useState('');
+  const [tfaToken, setTfaToken] = useState('');
   const [working, setWorking] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -278,7 +280,8 @@ const LoginSection = ({ showForgotPassword }) => {
       const { data } = await api.post('user/login', { emailAddress, password });
       // leave working=true because logging in will hide the sign in pop
       if (data.tfaToken) {
-        console.log('tfa enabled');
+        setWorking(false);
+        setTfaToken(data.tfaToken);
       } else {
         login(data);
       }
@@ -299,6 +302,10 @@ const LoginSection = ({ showForgotPassword }) => {
         <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
         <Button size="small" disabled={emailValidationError || working} submit>Sign in</Button>
       </form>
+      {tfaToken && <form data-cy="tfa-code-form" onSubmit={() => {}}>
+        <TextInput placeholder="12345" labelText="code" value={tfaCode} onChange={setTfaCode} disabled={working} testingId="tfa-code" />
+        <Button size="small" disabled={working} submit>Submit code</Button>
+      </form>}
       {!!errorMessage && <p>{errorMessage}</p>}
       <Button size="small" type="tertiary" onClick={showForgotPassword}>
         Forgot Password
