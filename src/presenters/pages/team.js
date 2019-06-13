@@ -168,6 +168,7 @@ function TeamPage (props) {
           }
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
+          fetchMembers
           projectOptions={{
             removePin: props.removePin,
             ...projectOptions,
@@ -182,6 +183,7 @@ function TeamPage (props) {
           title="Recent Projects"
           projects={recentProjects}
           isAuthorized={currentUserIsOnTeam}
+          fetchMembers
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
@@ -318,7 +320,7 @@ const TeamPageEditor = ({ initialTeam, children }) => (
 const TeamPageContainer = ({ team }) => {
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-      <TeamPageEditor initialTeam={team}>
+      <TeamEditor initialTeam={team}>
         {(teamFromEditor, funcs) => (
           <>
             <Helmet title={teamFromEditor.name} />
@@ -329,7 +331,7 @@ const TeamPageContainer = ({ team }) => {
             <TeamNameConflict team={teamFromEditor} />
           </>
         )}
-      </TeamPageEditor>
+      </TeamEditor>
     </AnalyticsContext>
   );
 };
