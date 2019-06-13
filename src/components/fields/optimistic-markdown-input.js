@@ -11,16 +11,17 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
     setState({ status: "loading" });
     if (onChange) {
       return onChange(change).then(({status}) => {
-        
         if (status === 200) {
-          setState({ lastSavedResponse: change })
+          setState({ status: "loaded", lastSavedResponse: change })
         } else {
-          
+          setState({ status: "error", inputState: state.lastSavedResponse })
         }
+      }, (error) => {
+        setState({ status: "error", inputState: state.lastSavedResponse })
       });
     }
   }
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(value, onChangeWithSavedGoodResponse);
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
   
   const onBlur = () => {
     if (state.status === "loading") {
@@ -31,7 +32,7 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
   }
   
   
-  return <MarkdownInput {...props} value={state.inputState} error={optimisticError} onChange={optimisticOnChange} />;
+  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} />;
 };
 
 OptimisticMarkdownInput.propTypes = {
