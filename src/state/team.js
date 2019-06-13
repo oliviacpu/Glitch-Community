@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
@@ -24,7 +25,7 @@ function useMergeState(initialValue) {
   return [state, mergeState];
 }
 
-function useTeamEditor(initialTeam) {
+export function useTeamEditor(initialTeam) {
   const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAssetSizes } = useUploader();
@@ -233,5 +234,3 @@ function useTeamEditor(initialTeam) {
   };
   return [team, funcs];
 }
-
-export default useTeamEditor;
