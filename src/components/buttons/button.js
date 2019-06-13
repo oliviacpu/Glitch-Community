@@ -10,9 +10,6 @@ const cx = classNames.bind(styles);
 export const TYPES = ['tertiary', 'cta', 'dangerZone', 'dropDown'];
 export const SIZES = ['small'];
 
-// non-square emoji that are taller than they are wide
-const NARROW_EMOJI = ['balloon', 'index', 'policeOfficer'];
-
 /**
  * Button Component
  */
@@ -26,7 +23,7 @@ const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, c
     dangerZone: type === 'dangerZone',
     unstyled: type === 'dropDown',
     hasEmoji: emoji,
-    hasNarrowEmoji: emoji && NARROW_EMOJI.includes(emoji),
+    hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
     hasSunglassesEmoji: emoji === 'sunglasses',
     padLeft: emoji && emojiPosition === 'left',
     matchBackground: matchBackground === true,
