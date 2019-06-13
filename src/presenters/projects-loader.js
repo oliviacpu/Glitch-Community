@@ -27,15 +27,10 @@ class ProjectsLoader extends React.Component {
     this.ensureProjects(this.props.projects);
   }
 
-  async loadProjects(projectIds, cacheID) {
+  async loadProjects(...projectIds) {
     if (!projectIds.length) return;
 
-    let url = `v1/projects/by/id?${joinIdsToQueryString(projectIds)}`
-    if (cacheID) {
-      url = `${url}&cache=${cacheID}`
-    }
-    
-    let projects = await getFromApi(this.props.api, url);
+    let projects = await getFromApi(this.props.api, `v1/projects/by/id?${joinIdsToQueryString(projectIds)}`);
     // Convert projects from the format state expects to an array
     projects = Object.values(projects);
 
@@ -59,11 +54,6 @@ class ProjectsLoader extends React.Component {
     projects = keyBy(projects, 'id');
     this.setState(projects);
   }
-  
-  //
-  reloadProjects (...projectIds) {
-    return this.loadProjects(projectIds, Date.now());
-  }
 
   ensureProjects(projects) {
     const ids = projects.map(({ id }) => id);
@@ -76,14 +66,14 @@ class ProjectsLoader extends React.Component {
     const unloadedProjects = ids.filter((id) => this.state[id] === undefined);
     if (unloadedProjects.length) {
       this.setState(listToObject(unloadedProjects, null));
-      chunk(unloadedProjects, 100).forEach((currentChunk) => this.loadProjects(currentChunk));
+      chunk(unloadedProjects, 100).forEach((currentChunk) => this.loadProjects(...currentChunk));
     }
   }
 
   render() {
     const { children, projects, currentUser } = this.props;
     const loadedProjects = projects.map((project) => this.state[project.id] || project);
-    return children(normalizeProjects(loadedProjects, currentUser), this.reloadProjects.bind(this));
+    return children(normalizeProjects(loadedProjects, currentUser), this.loadProjects.bind(this));
   }
 }
 
