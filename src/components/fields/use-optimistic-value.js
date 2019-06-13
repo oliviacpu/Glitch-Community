@@ -14,15 +14,14 @@ const useOptimisticValue = (realValue, setValueAsync) => {
       // if the value changes during the async action then ignore the result
       const setStateIfMatches = (newState) => {
         setState((prevState) => {
-          console.log({ prevStateValue: prevState.value, debouncedValue, newState, prevState })
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
+      const beforeAsyncCall = realValue
       // this scope can't be async/await because it's an effect
       setValueAsync(debouncedValue).then(
         () => setStateIfMatches({ value: undefined, error: null }),
         (error) => {
-          console.log("here", realValue, debouncedValue)
           const message = error && error.response && error.response.data && error.response.data.message;
           setStateIfMatches({ value: debouncedValue, error: message });
         },
