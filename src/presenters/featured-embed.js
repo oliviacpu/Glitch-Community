@@ -8,12 +8,12 @@ import Link, { WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
-    <div className="featured-embed">
-      <div className="mask-container">
-        <WrappingLink href={`culture${blogUrl}`}>
-          <MaskImage maskClass={mask} src={image} />
-        </WrappingLink>
-      </div>
+  <div className="featured-embed">
+    <div className="mask-container">
+      <WrappingLink href={`culture${blogUrl}`}>
+        <MaskImage maskClass={mask} src={image} />
+      </WrappingLink>
+    </div>
 
     <div className="content" style={{ backgroundColor: color }}>
       <Link to={`culture${blogUrl}`}>
@@ -21,8 +21,12 @@ const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) 
           <Heading tagName="h2">{title}</Heading>
           {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: body }} />
-          <Button decorative size="small">Learn More <span aria-hidden="true">→</span></Button>
-        </div>      
+          <div className="button-wrap">
+            <Button decorative size="small">
+              Learn More <span aria-hidden="true">→</span>
+            </Button>
+          </div>
+        </div>
       </Link>
       <div className="glitch-embed-wrap">
         <Embed domain={appDomain} />
