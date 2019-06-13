@@ -142,7 +142,7 @@ function useUserEditor(initialUser) {
     featureProject: (id) => featureProject(id).catch(handleError),
     unfeatureProject: (id) => unfeatureProject(id).catch(handleError),
   };
-  return [user, funcs, isCurrentUser];
+  return [user, funcs];
 }
 
 export default useUserEditor;
