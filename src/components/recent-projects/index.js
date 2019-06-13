@@ -8,6 +8,7 @@ import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import SignInPop from 'Components/sign-in-pop';
+import VisuallyHidden from 'Components/containers/visually-hidden';
 import { getAvatarStyle } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
@@ -49,7 +50,7 @@ const RecentProjects = () => {
   return (
     <section>
       <Heading tagName="h2">
-        <UserLink user={currentUser}>Your Projects →</UserLink>
+        <UserLink user={currentUser}>Your Projects <span aria-hidden="true">→</span></UserLink>
       </Heading>
       {isAnonymousUser && <SignInNotice />}
       <CoverContainer type="user" item={currentUser}>
@@ -57,6 +58,7 @@ const RecentProjects = () => {
           <div className={styles.avatarWrap}>
             <UserLink user={currentUser}>
               <div className={styles.userAvatar} style={getAvatarStyle(currentUser)} />
+              <VisuallyHidden>Your profile page</VisuallyHidden>
             </UserLink>
           </div>
           <div className={styles.projectsWrap}>
