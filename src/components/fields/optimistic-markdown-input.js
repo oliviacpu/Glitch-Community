@@ -12,6 +12,7 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
     setState({ status: "loading" });
     if (onChange) {
       return onChange(change).then(({status}) => {
+        console.log("first success", status)
         if (status === 200) {
           setState({ status: "loaded", lastSavedResponse: change, inputState: change })
         } else {
@@ -19,18 +20,20 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
         }
       }, (error) => {
         setState({ ...state, status: "error", inputState: state.lastSavedResponse })
+        throw error
       });
     }
   }
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
-  
   const onBlur = () => {
     if (state.status === "loading") {
       onBlur()
     } else {
+      console.log("in the blur", state)
       setState({ ...state, inputState: state.lastSavedResponse })
     }
   }
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
+  
   
   return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
 };
