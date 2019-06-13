@@ -18,6 +18,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
       // if the value changes during the async action then ignore the result
       const setStateIfMatches = (newState) => {
         setState((prevState) => {
+          console.log(prevState.value === debouncedValue, newState, prevState, debouncedValue)
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
