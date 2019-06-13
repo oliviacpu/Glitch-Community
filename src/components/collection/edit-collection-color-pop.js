@@ -6,7 +6,6 @@ import { throttle } from 'lodash';
 import { getContrastWithDarkText, getContrastWithLightText } from 'Models/collection';
 import TextInput from 'Components/inputs/text-input';
 import ColorInput from 'Components/inputs/color';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover';
 import styles from './edit-collection-color-pop.styl';

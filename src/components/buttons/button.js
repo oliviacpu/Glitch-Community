@@ -120,13 +120,14 @@ Button.defaultProps = {
   emojiPosition: 'right',
 };
 
+const EMOJI_UP_1 = ['bomb'];
+
 const ButtonEmoji = ({ emoji, position }) => {
   const className = cx({
     emojiContainer: true,
     alignLeft: position === 'left',
+    up1: EMOJI_UP_1.includes(emoji),
   });
-
-  console.log('emoji', emoji);
 
   return (
     <div className={className}>
