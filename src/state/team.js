@@ -13,26 +13,13 @@ import useUploader from '../presenters/includes/uploader';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
-// "legacy" setState behavior
-function useMergeState(initialValue) {
-  const [state, setState] = useState(initialValue);
-  const mergeState = (fnOrValue) => {
-    if (typeof fnOrValue === 'function') {
-      setState((prev) => ({ ...prev, ...fnOrValue(prev) }));
-    } else {
-      setState((prev) => ({ ...prev, ...fnOrValue }));
-    }
-  };
-  return [state, mergeState];
-}
-
 export function useTeamEditor(initialTeam) {
   const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-  const [team, mergeTeam] = useMergeState({
+  const [team, setTeam] = useState({
     ...initialTeam,
     _cacheAvatar: Date.now(),
     _cacheCover: Date.now(),
@@ -40,7 +27,7 @@ export function useTeamEditor(initialTeam) {
 
   async function updateFields(changes) {
     const { data } = await api.patch(`teams/${team.id}`, changes);
-    mergeTeam(data);
+    setTeam((prev) => ({ ...prev, ...data }));
     if (currentUser) {
       const teamIndex = currentUser.teams.findIndex(({ id }) => id === team.id);
       if (teamIndex >= 0) {
@@ -61,7 +48,7 @@ export function useTeamEditor(initialTeam) {
       hasAvatarImage: true,
       backgroundColor: color,
     });
-    mergeTeam({ _cacheAvatar: Date.now() });
+    setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
   }
 
   async function uploadCover(blob) {
@@ -74,13 +61,14 @@ export function useTeamEditor(initialTeam) {
       hasCoverImage: true,
       coverColor: color,
     });
-    mergeTeam({ _cacheCover: Date.now() });
+    setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
   }
 
   async function joinTeam() {
     await api.post(`teams/${team.id}/join`);
-    mergeTeam(({ users }) => ({
-      users: [...users, currentUser],
+    setTeam((prev) => ({
+      ...prev,
+      users: [...prev.users, currentUser],
     }));
     if (currentUser) {
       const { teams } = currentUser;
@@ -105,8 +93,9 @@ export function useTeamEditor(initialTeam) {
   function removeUserAdmin(id) {
     const index = team.adminIds.indexOf(id);
     if (index !== -1) {
-      mergeTeam((prevState) => ({
-        counter: prevState.adminIds.splice(index, 1),
+      setTeam((prev) => ({
+        ...prev,
+        counter: prev.adminIds.splice(index, 1),
       }));
     }
   }
@@ -123,8 +112,9 @@ export function useTeamEditor(initialTeam) {
     // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
     await api.delete(`teams/${team.id}/users/${userId}`);
     removeUserAdmin(userId);
-    mergeTeam(({ users }) => ({
-      users: users.filter((u) => u.id !== userId),
+    setTeam((prev) => ({
+      ...prev,
+      users: prev.users.filter((u) => u.id !== userId),
     }));
     if (currentUser && currentUser.id === userId) {
       const teams = currentUser.teams.filter(({ id }) => id !== team.id);
@@ -141,8 +131,9 @@ export function useTeamEditor(initialTeam) {
       access_level: accessLevel,
     });
     if (accessLevel === ADMIN_ACCESS_LEVEL) {
-      mergeTeam((prevState) => ({
-        counter: prevState.adminIds.push(id),
+      setTeam((prev) => ({
+        ...prev,
+        counter: prev.adminIds.push(id),
       }));
     } else {
       removeUserAdmin(id);
@@ -152,36 +143,41 @@ export function useTeamEditor(initialTeam) {
 
   async function addProject(project) {
     await api.post(`teams/${team.id}/projects/${project.id}`);
-    mergeTeam(({ projects }) => ({
-      projects: [project, ...projects],
+    setTeam((prev) => ({
+      ...prev,
+      projects: [project, ...prev.projects],
     }));
   }
 
   async function removeProject(id) {
     await api.delete(`teams/${team.id}/projects/${id}`);
-    mergeTeam(({ projects }) => ({
-      projects: projects.filter((p) => p.id !== id),
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((p) => p.id !== id),
     }));
   }
 
   async function deleteProject(id) {
     await api.delete(`/projects/${id}`);
-    mergeTeam(({ projects }) => ({
-      projects: projects.filter((p) => p.id !== id),
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.filter((p) => p.id !== id),
     }));
   }
 
   async function addPin(id) {
     await api.post(`teams/${team.id}/pinned-projects/${id}`);
-    mergeTeam(({ teamPins }) => ({
-      teamPins: [...teamPins, { projectId: id }],
+    setTeam((prev) => ({
+      ...prev,
+      teamPins: [...prev.teamPins, { projectId: id }],
     }));
   }
 
   async function removePin(id) {
     await api.delete(`teams/${team.id}/pinned-projects/${id}`);
-    mergeTeam(({ teamPins }) => ({
-      teamPins: teamPins.filter((p) => p.projectId !== id),
+    setTeam((prev) => ({
+      ...prev,
+      teamPins: prev.teamPins.filter((p) => p.projectId !== id),
     }));
   }
 
