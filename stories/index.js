@@ -71,8 +71,8 @@ storiesOf('Button', module)
   ))
   .add('link (click to a different page)', () => <Button href="https://support.glitch.com">Support</Button>)
   .add('with emoji', () => (
-    <Button onClick={helloAlert}>
-      <Emoji name="sunglasses" /> Show
+    <Button onClick={helloAlert} emoji="sunglasses" emojiPosition="left">
+      Show
     </Button>
   ))
   .add(`match background`, () => (
