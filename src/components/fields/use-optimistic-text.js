@@ -8,7 +8,7 @@ import useOptimisticValue from './use-optimistic-value';
 */
 
 const useOptimisticText = (realValue, setRealValueAsync) => {
-  const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync);
+  const [optimisticValue, setOptimisticValue, errorMessage, promisedAsyncResult] = useOptimisticValue(realValue, setRealValueAsync);
   const [untrimmedValue, setUntrimmedValue] = useState(realValue);
 
   const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
@@ -16,7 +16,7 @@ const useOptimisticText = (realValue, setRealValueAsync) => {
     setUntrimmedValue(value);
     setOptimisticValue(value.trim());
   };
-  return [inputValue, setInputValue, errorMessage];
+  return [inputValue, setInputValue, errorMessage, promisedAsyncResult];
 };
 
 export default useOptimisticText;
