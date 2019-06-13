@@ -123,7 +123,8 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
   const selectedUserIsTeamAdmin = userIsTeamAdmin({ user, team });
   const selectedUserIsOnlyAdmin = userIsOnlyTeamAdmin({ user, team });
   const teamHasOnlyOneMember = team.users.length === 1;
-  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || (currentUser && currentUser.id === user.id);
+  const isCurrentUser = currentUser && currentUser.id === user.id;
+  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || isCurrentUser;
   const canCurrentUserRemoveUser = currentUserHasRemovePriveleges && !teamHasOnlyOneMember && !selectedUserIsOnlyAdmin;
 
   return (
@@ -160,7 +161,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
           <Button type="dangerZone" onClick={onRemoveUser}>
-            Remove from Team <Emoji name="wave" />
+            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Emoji name="wave" />
           </Button>
         </PopoverActions>
       )}
