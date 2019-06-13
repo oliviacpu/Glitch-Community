@@ -32,7 +32,9 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
       setState({ ...state, inputState: state.lastSavedResponse })
     }
   }
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
+  
+  const revertState = state.status == "error" ? state.inputState : null; //makes me wonder if we need inputstate in this situation? also state.inputState is a stupid name
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse, revertState);
   
   
   return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;

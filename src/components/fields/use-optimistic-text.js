@@ -7,8 +7,8 @@ import useOptimisticValue from './use-optimistic-value';
   - but we pass the trimmed value to server
 */
 
-const useOptimisticText = (realValue, setRealValueAsync) => {
-  const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync);
+const useOptimisticText = (realValue, setRealValueAsync, revertState) => {
+  const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync, revertState);
   const [untrimmedValue, setUntrimmedValue] = useState(realValue);
   const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
   const setInputValue = (value) => {
