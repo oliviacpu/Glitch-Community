@@ -60,7 +60,7 @@ DeleteTeamPop.propTypes = {
 };
 
 const DeleteTeam = ({ team }) => (
-  <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone' }} buttonEmoji="bomb" buttonText={<>Delete {team.name}</>}>
+  <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={<>Delete {team.name}</>}>
     {() => <DeleteTeamPop team={team} />}
   </PopoverWithButton>
 );

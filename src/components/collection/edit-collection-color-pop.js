@@ -102,8 +102,8 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
       </PopoverInfo>
 
       <PopoverActions type="secondary">
-        <Button size="small" type="tertiary" onClick={setRandomColor}>
-          Random <Emoji name="bouquet" />
+        <Button size="small" type="tertiary" emoji="bouquet" onClick={setRandomColor}>
+          Random
         </Button>
       </PopoverActions>
     </PopoverDialog>

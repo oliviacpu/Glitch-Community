@@ -63,7 +63,7 @@ function AddTeamProjectPop({ teamProjects, addProject }) {
 const AddTeamProject = ({ addProject, teamProjects }) => (
   <PopoverWithButton
     buttonText="Add Project"
-    buttonEmoji="bentoBox"
+    buttonProps={{ emoji: 'bentoBox' }}
   >
     {({ togglePopover }) => (
       <AddTeamProjectPop

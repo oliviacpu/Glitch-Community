@@ -132,7 +132,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
       <PopoverWithButton
         buttonClass="button-small button-tertiary danger-zone"
         buttonText="Delete Project"
-        buttonEmoji="bomb"
+        buttonProps={{ emoji: 'bomb' }}
       >
         {({ togglePopover, focusFirstElement }) => (
           <>
