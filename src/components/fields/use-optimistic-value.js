@@ -17,7 +17,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
     if (debouncedValue !== undefined) {
       // if the value changes during the async action then ignore the result
       const setStateIfMatches = (newState) => {
-        return setState((prevState) => {
+        setState((prevState) => {
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
