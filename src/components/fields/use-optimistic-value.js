@@ -4,7 +4,8 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 
 /*
   What this does:
-  
+  - limit server calls to everytime state changes and it's been at least 500 ms
+  - 
 */
 
 const useOptimisticValue = (realValue, setValueAsync) => {
