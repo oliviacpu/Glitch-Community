@@ -85,7 +85,7 @@ function useEmail() {
   return [email, setEmail, validationError];
 }
 
-const EmailHandler = ({ showView }) => {
+const EmailHandler = ({ align, showView }) => {
   const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
   const [isFocused, setIsFocused] = useState(true);
@@ -117,7 +117,7 @@ const EmailHandler = ({ showView }) => {
   }
 
   return (
-    <PopoverDialog align="right">
+    <PopoverDialog align={align}>
       <MultiPopoverTitle>
         Email Sign In <Emoji name="email" />
       </MultiPopoverTitle>
@@ -165,7 +165,7 @@ const EmailHandler = ({ showView }) => {
   );
 };
 
-const SignInWithCode = () => {
+const SignInWithCode = ({ align }) => {
   const { login } = useCurrentUser();
   const api = useAPI();
   const [code, setCode] = useState('');
@@ -188,7 +188,7 @@ const SignInWithCode = () => {
   }
 
   return (
-    <PopoverDialog align="right">
+    <PopoverDialog align={align}>
       <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -214,7 +214,7 @@ const SignInWithCode = () => {
   );
 };
 
-const SignInPopBase = withRouter(({ location, align }) => {
+export const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const onClick = () =>
@@ -236,8 +236,8 @@ const SignInPopBase = withRouter(({ location, align }) => {
   return (
     <MultiPopover
       views={{
-        email: (showView) => <EmailHandler showView={showView} />,
-        signInCode: () => <SignInWithCode />,
+        email: (showView) => <EmailHandler align={align} showView={showView} />,
+        signInCode: () => <SignInWithCode align={align} />,
       }}
     >
       {(showView) => (
