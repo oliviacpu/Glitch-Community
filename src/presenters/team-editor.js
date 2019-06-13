@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import * as assets from 'Utils/assets';
 
@@ -13,19 +12,19 @@ const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
 // "legacy" setState behavior
-function useMergeState (initialValue) {
-  const [state, setState] = useState(initialValue)
+function useMergeState(initialValue) {
+  const [state, setState] = useState(initialValue);
   const mergeState = (fnOrValue) => {
     if (typeof fnOrValue === 'function') {
-      setState((prev) => ({ ...prev, ...fnOrValue(prev) }))
+      setState((prev) => ({ ...prev, ...fnOrValue(prev) }));
     } else {
-      setState((prev) => ({ ...prev, ...fnOrValue }))
+      setState((prev) => ({ ...prev, ...fnOrValue }));
     }
-  }
-  return [state, mergeState]
+  };
+  return [state, mergeState];
 }
 
-function useTeamEditor (initialTeam) {
+function useTeamEditor(initialTeam) {
   const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAssetSizes } = useUploader();
@@ -35,8 +34,8 @@ function useTeamEditor (initialTeam) {
     ...initialTeam,
     _cacheAvatar: Date.now(),
     _cacheCover: Date.now(),
-  })
-  
+  });
+
   async function updateFields(changes) {
     const { data } = await api.patch(`teams/${team.id}`, changes);
     mergeTeam(data);
@@ -101,6 +100,15 @@ function useTeamEditor (initialTeam) {
     });
   }
 
+  function removeUserAdmin(id) {
+    const index = team.adminIds.indexOf(id);
+    if (index !== -1) {
+      mergeTeam((prevState) => ({
+        counter: prevState.adminIds.splice(index, 1),
+      }));
+    }
+  }
+
   async function removeUserFromTeam(userId, projectIds) {
     // Kick them out of every project at once, and wait until it's all done
     await Promise.all(
@@ -119,15 +127,6 @@ function useTeamEditor (initialTeam) {
     if (currentUser && currentUser.id === userId) {
       const teams = currentUser.teams.filter(({ id }) => id !== team.id);
       updateCurrentUser({ teams });
-    }
-  }
-
-  function removeUserAdmin(id) {
-    const index = team.adminIds.indexOf(id);
-    if (index !== -1) {
-      mergeTeam((prevState) => ({
-        counter: prevState.adminIds.splice(index, 1),
-      }));
     }
   }
 

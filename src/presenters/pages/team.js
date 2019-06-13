@@ -23,7 +23,7 @@ import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
-import TeamEditor from '../team-editor';
+import useTeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
@@ -82,17 +82,15 @@ const TeamMarketing = () => (
 
 // Team Page
 
-function TeamPage (props) {
+function TeamPage(props) {
   const { currentUser } = useCurrentUser();
   const { team } = props;
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
-  
+
   const pinnedSet = new Set(team.teamPins.map(({ projectId }) => projectId));
   // filter featuredProject out of both pinned & recent projects
-  const [pinnedProjects, recentProjects] = partition(team.projects.filter(({ id }) => id !== team.featuredProjectId), ({ id }) =>
-    pinnedSet.has(id),
-  );
+  const [pinnedProjects, recentProjects] = partition(team.projects.filter(({ id }) => id !== team.featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
   const updateUrl = (url) => props.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
@@ -105,7 +103,7 @@ function TeamPage (props) {
     joinTeamProject: props.joinTeamProject,
     featureProject: props.featureProject,
     isAuthorized: currentUserIsOnTeam,
-  };    
+  };
 
   return (
     <main className={styles.container}>
@@ -143,9 +141,7 @@ function TeamPage (props) {
         </TeamProfileContainer>
       </section>
 
-      <ErrorBoundary>
-        {currentUserIsOnTeam && <AddTeamProject addProject={props.addProject} teamProjects={team.projects} />}
-      </ErrorBoundary>
+      <ErrorBoundary>{currentUserIsOnTeam && <AddTeamProject addProject={props.addProject} teamProjects={team.projects} />}</ErrorBoundary>
 
       {featuredProject && (
         <FeaturedProject
@@ -277,59 +273,54 @@ const TeamNameConflict = ({ team }) => {
   const { currentUser } = useCurrentUser();
   return teamConflictsWithUser(team, currentUser) && <NameConflictWarning />;
 };
-const TeamPageEditor = ({ initialTeam, children }) => (
-  <TeamEditor initialTeam={initialTeam}>
-    {(team, funcs) => (
-      <ProjectsLoader projects={team.projects}>
-        {(projects, reloadProjects) => {
-          // Inject page specific changes to the editor
-          // Mainly url updating and calls to reloadProjects
-
-          const removeUserFromTeam = async (user, projectIds) => {
-            await funcs.removeUserFromTeam(user, projectIds);
-            reloadProjects(...projectIds);
-          };
-
-          const joinTeamProject = async (projectId) => {
-            await funcs.joinTeamProject(projectId);
-            reloadProjects(projectId);
-          };
-
-          const leaveTeamProject = async (projectId) => {
-            await funcs.leaveTeamProject(projectId);
-            reloadProjects(projectId);
-          };
-
-          return children(
-            { ...team, projects },
-            {
-              ...funcs,
-              removeUserFromTeam,
-              joinTeamProject,
-              leaveTeamProject,
-            },
-          );
-        }}
-      </ProjectsLoader>
-    )}
-  </TeamEditor>
-);
-const TeamPageContainer = ({ team }) => {
+const TeamPageEditor = ({ initialTeam, children }) => {
+  const [team, funcs] = useTeamEditor(initialTeam);
   return (
-    <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-      <TeamPageEditor initialTeam={team}>
-        {(teamFromEditor, funcs) => (
-          <>
-            <Helmet title={teamFromEditor.name} />
-            <TeamPage
-              team={teamFromEditor}
-              {...funcs}
-            />
-            <TeamNameConflict team={teamFromEditor} />
-          </>
-        )}
-      </TeamPageEditor>
-    </AnalyticsContext>
+    <ProjectsLoader projects={team.projects}>
+      {(projects, reloadProjects) => {
+        // Inject page specific changes to the editor
+        // Mainly url updating and calls to reloadProjects
+
+        const removeUserFromTeam = async (user, projectIds) => {
+          await funcs.removeUserFromTeam(user, projectIds);
+          reloadProjects(...projectIds);
+        };
+
+        const joinTeamProject = async (projectId) => {
+          await funcs.joinTeamProject(projectId);
+          reloadProjects(projectId);
+        };
+
+        const leaveTeamProject = async (projectId) => {
+          await funcs.leaveTeamProject(projectId);
+          reloadProjects(projectId);
+        };
+
+        return children(
+          { ...team, projects },
+          {
+            ...funcs,
+            removeUserFromTeam,
+            joinTeamProject,
+            leaveTeamProject,
+          },
+        );
+      }}
+    </ProjectsLoader>
   );
 };
+const TeamPageContainer = ({ team }) => (
+  <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
+    <TeamPageEditor initialTeam={team}>
+      {(teamFromEditor, funcs) => (
+        <>
+          <Helmet title={teamFromEditor.name} />
+          <TeamPage team={teamFromEditor} {...funcs} />
+          <TeamNameConflict team={teamFromEditor} />
+        </>
+      )}
+    </TeamPageEditor>
+  </AnalyticsContext>
+);
+
 export default TeamPageContainer;
