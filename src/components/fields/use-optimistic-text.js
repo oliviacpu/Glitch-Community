@@ -4,7 +4,7 @@ import useOptimisticValue from './use-optimistic-value';
 /*
   what this does:
   - ensures we don't update input with trimmed value (so spaces don't disappear when typing)
-  - 
+  - but we pass the trimmed value to server
 */
 
 const useOptimisticText = (realValue, setRealValueAsync) => {
