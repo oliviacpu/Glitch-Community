@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useState, useEffect } from 'react';
 
 import * as assets from 'Utils/assets';
@@ -5,7 +6,7 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import useErrorHandlers from '../../presenters/error-handlers';
-import useUploader from './includes/uploader';
+import useUploader from '../../presenters/includes/uploader';
 
 export function useUserEditor(initialUser) {
   const [user, setState] = useState({
