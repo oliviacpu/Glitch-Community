@@ -6,8 +6,9 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
-import useErrorHandlers from './error-handlers';
-import useUploader from './includes/uploader';
+
+import useErrorHandlers from '../presenters/error-handlers';
+import useUploader from '../presenters/includes/uploader';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;

@@ -22,8 +22,8 @@ import TeamAnalytics from 'Components/team-analytics';
 import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useTeamEditor } from 'State/team';
 
-import useTeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
