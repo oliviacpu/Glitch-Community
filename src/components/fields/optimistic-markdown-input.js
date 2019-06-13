@@ -7,6 +7,7 @@ import useOptimisticText from './use-optimistic-text';
 //todo change onchange to async update
 const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
   const [optimisticValue, optimisticOnChange, optimisticError, promisedAsyncResult] = useOptimisticText(value, onChange);
+  console.log("inside optimistic markdownInput", promisedAsyncResult)
   const [state, setState] = React.useState({ status: "loaded", lastSavedResponse: undefined, inputState: undefined });
   
   React.useEffect(() => {
@@ -18,7 +19,7 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
       })
       
     }
-  }, [optimisticValue]) //when do you run??
+  }, [optimisticValue, promisedAsyncResult]) //when do you run??
   
   // value before blur = untrimmed value
   // value after blur = last valid value, untrimmed doesn't matter

@@ -9,6 +9,7 @@ import useOptimisticValue from './use-optimistic-value';
 
 const useOptimisticText = (realValue, setRealValueAsync) => {
   const [optimisticValue, setOptimisticValue, errorMessage, promisedAsyncResult] = useOptimisticValue(realValue, setRealValueAsync);
+  console.log("inside use optimistictext", promisedAsyncResult)
   const [untrimmedValue, setUntrimmedValue] = useState(realValue);
 
   const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;

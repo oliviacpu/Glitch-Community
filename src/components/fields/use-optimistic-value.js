@@ -10,26 +10,26 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null });
-  let promisedAsyncResult;
+  const [state, setState] = React.useState({ value: undefined, error: null, promisedAsyncResult: null });
   // debounce our stored value and send the async updates when it is not undefined
   const debouncedValue = useDebouncedValue(state.value, 500);
   React.useEffect(() => {
     if (debouncedValue !== undefined) {
       // if the value changes during the async action then ignore the result
       const setStateIfMatches = (newState) => {
-        setState((prevState) => {
+        return setState((prevState) => {
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
       // this scope can't be async/await because it's an effect
-      promisedAsyncResult = setValueAsync(debouncedValue).then(
+      const promisedAsyncResult = setValueAsync(debouncedValue).then(
         () => setStateIfMatches({ value: undefined, error: null }),
         (error) => {
           const message = error && error.response && error.response.data && error.response.data.message;
           setStateIfMatches({ value: debouncedValue, error: message });
         },
       );
+      setState({ promisedAsyncResult })
     }
   }, [debouncedValue]);
 
@@ -38,8 +38,7 @@ const useOptimisticValue = (realValue, setValueAsync) => {
   const setOptimisticValue = (newValue) => {
     setState((prevState) => ({ ...prevState, value: newValue }));
   };
-
-  return [optimisticValue, setOptimisticValue, state.error, promisedAsyncResult];
+  return [optimisticValue, setOptimisticValue, state.error, state.promisedAsyncResult];
 };
 
 export default useOptimisticValue;
