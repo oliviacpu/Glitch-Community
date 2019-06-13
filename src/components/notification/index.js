@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { LiveMessage } from 'react-aria-live';
 
@@ -10,6 +10,11 @@ import styles from './styles.styl';
 const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
+  const el = useRef(null);
+  useEffect(() => {
+    console.log(el.innerText);
+  }, []);
+
   const className = cx({
     notification: true,
     success: type === 'success',
@@ -21,7 +26,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   return (
     <>
       <LiveMessage aria-live="polite" message={children} />
-      <aside className={className} onAnimationEnd={remove}>
+      <aside ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
     </>
