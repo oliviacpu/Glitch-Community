@@ -277,6 +277,9 @@ const LoginSection = ({ showForgotPassword }) => {
     try {
       const { data } = await api.post('user/login', { emailAddress, password });
       // leave working=true because logging in will hide the sign in pop
+      if (data.tfaToken) {
+        console.log('tfa enabled');
+      }
       login(data);
     } catch (error) {
       let message = error.response && error.response.data && error.response.data.message;
