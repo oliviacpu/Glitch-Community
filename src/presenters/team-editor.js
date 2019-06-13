@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import * as assets from 'Utils/assets';
@@ -25,10 +25,10 @@ function useMergeState (initialValue) {
   return [state, mergeState]
 }
 
-function TeamEditor ({ children, initialTeam }) {
+function useTeamEditor (initialTeam) {
   const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
-  const uploadFuncs = useUploader();
+  const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const [team, mergeTeam] = useMergeState({
@@ -52,7 +52,7 @@ function TeamEditor ({ children, initialTeam }) {
 
   async function uploadAvatar(blob) {
     const { data: policy } = await assets.getTeamAvatarImagePolicy(api, team.id);
-    await this.props.uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
+    await uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
 
     const image = await assets.blobToImage(blob);
     const color = assets.getDominantColor(image);
@@ -65,7 +65,7 @@ function TeamEditor ({ children, initialTeam }) {
 
   async function uploadCover(blob) {
     const { data: policy } = await assets.getTeamCoverImagePolicy(api, team.id);
-    await this.props.uploadAssetSizes(blob, policy, assets.COVER_SIZES);
+    await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
 
     const image = await assets.blobToImage(blob);
     const color = assets.getDominantColor(image);
@@ -112,7 +112,7 @@ function TeamEditor ({ children, initialTeam }) {
     );
     // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
     await api.delete(`teams/${team.id}/users/${userId}`);
-    this.removeUserAdmin(userId);
+    removeUserAdmin(userId);
     mergeTeam(({ users }) => ({
       users: users.filter((u) => u.id !== userId),
     }));
@@ -144,7 +144,7 @@ function TeamEditor ({ children, initialTeam }) {
         counter: prevState.adminIds.push(id),
       }));
     } else {
-      this.removeUserAdmin(id);
+      removeUserAdmin(id);
     }
     return null;
   }
@@ -212,39 +212,27 @@ function TeamEditor ({ children, initialTeam }) {
     updateName: (name) => updateFields({ name }).catch(handleErrorForInput),
     updateUrl: (url) => updateFields({ url }).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
-    joinTeam: () => this.joinTeam().catch(handleError),
-    inviteEmail: (email) => this.inviteEmail(email).catch(handleError),
-    inviteUser: (id) => this.inviteUser(id).catch(handleError),
-    removeUserFromTeam: (id, projectIds) => this.removeUserFromTeam(id, projectIds).catch(handleError),
-    uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
-    uploadCover: () => assets.requestFile((blob) => this.uploadCover(blob).catch(handleError)),
+    joinTeam: () => joinTeam().catch(handleError),
+    inviteEmail: (email) => inviteEmail(email).catch(handleError),
+    inviteUser: (id) => inviteUser(id).catch(handleError),
+    removeUserFromTeam: (id, projectIds) => removeUserFromTeam(id, projectIds).catch(handleError),
+    uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
+    uploadCover: () => assets.requestFile((blob) => uploadCover(blob).catch(handleError)),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
-    addProject: (project) => this.addProject(project).catch(handleError),
-    removeProject: (id) => this.removeProject(id).catch(handleError),
-    deleteProject: (id) => this.deleteProject(id).catch(handleError),
-    addPin: (id) => this.addPin(id).catch(handleError),
-    removePin: (id) => this.removePin(id).catch(handleError),
+    addProject: (project) => addProject(project).catch(handleError),
+    removeProject: (id) => removeProject(id).catch(handleError),
+    deleteProject: (id) => deleteProject(id).catch(handleError),
+    addPin: (id) => addPin(id).catch(handleError),
+    removePin: (id) => removePin(id).catch(handleError),
     updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
-    updateUserPermissions: (id, accessLevel) => this.updateUserPermissions(id, accessLevel).catch(handleError),
-    joinTeamProject: (projectId) => this.joinTeamProject(projectId).catch(handleError),
-    leaveTeamProject: (projectId) => this.leaveTeamProject(projectId).catch(handleError),
-    addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
-    featureProject: (id) => this.featureProject(id).catch(handleError),
-    unfeatureProject: (id) => this.unfeatureProject(id).catch(handleError),
+    updateUserPermissions: (id, accessLevel) => updateUserPermissions(id, accessLevel).catch(handleError),
+    joinTeamProject: (projectId) => joinTeamProject(projectId).catch(handleError),
+    leaveTeamProject: (projectId) => leaveTeamProject(projectId).catch(handleError),
+    addProjectToCollection: (project, collection) => addProjectToCollection(project, collection).catch(handleCustomError),
+    featureProject: (id) => featureProject(id).catch(handleError),
+    unfeatureProject: (id) => unfeatureProject(id).catch(handleError),
   };
-  return children(team, funcs);
+  return [team, funcs];
 }
-TeamEditor.propTypes = {
-  api: PropTypes.any.isRequired,
-  children: PropTypes.func.isRequired,
-  currentUser: PropTypes.object,
-  updateCurrentUser: PropTypes.func.isRequired,
-  initialTeam: PropTypes.object.isRequired,
-  uploadAssetSizes: PropTypes.func.isRequired,
-};
 
-TeamEditor.defaultProps = {
-  currentUser: null,
-};
-
-export default TeamEditor;
+export default useTeamEditor;
