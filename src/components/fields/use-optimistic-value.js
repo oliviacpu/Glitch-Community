@@ -2,6 +2,11 @@ import React from 'react';
 
 import useDebouncedValue from 'Hooks/use-debounced-value';
 
+/*
+  What this does:
+  - 
+*/
+
 const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message
   // value undefined means that the field is unchanged from the 'real' value
