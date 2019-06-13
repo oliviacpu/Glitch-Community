@@ -279,8 +279,9 @@ const LoginSection = ({ showForgotPassword }) => {
       // leave working=true because logging in will hide the sign in pop
       if (data.tfaToken) {
         console.log('tfa enabled');
+      } else {
+        login(data);
       }
-      login(data);
     } catch (error) {
       let message = error.response && error.response.data && error.response.data.message;
       if (error.response.status === 401) {
