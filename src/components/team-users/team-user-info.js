@@ -10,7 +10,6 @@ import Thanks from 'Components/thanks';
 import {
   PopoverContainer,
   PopoverDialog,
-  PopoverWithButton,
   PopoverActions,
   PopoverInfo,
   MultiPopover,
@@ -216,7 +215,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
     <PopoverContainer>
       {({ visible, togglePopover, toggleAndCall }) => (
         <div style={{ position: 'relative' }}>
-          <TransparentButton onClick={togglePopover}>        
+          <TransparentButton onClick={togglePopover}>
             <UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />
           </TransparentButton>
 
