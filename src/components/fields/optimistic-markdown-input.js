@@ -6,13 +6,14 @@ import useOptimisticText from './use-optimistic-text';
 
 //todo change onchange to async update
 const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
-  const [state, setState] = React.useState({ status: "loaded", lastSavedResponse: undefined, inputState: value });
+  const [state, setState] = React.useState({ status: "loaded", lastSavedResponse: value, inputState: value });
   const onChangeWithSavedGoodResponse = (change) => {
     setState({ status: "loading" });
     if (onChange) {
       return onChange(change).then(({status}) => {
         if (status === 200) {
-          setState({ status: "loaded", lastSavedResponse: change })
+          console.log("does this happen?")
+          setState({ status: "loaded", lastSavedResponse: change, inputState: change })
         } else {
           setState({ status: "error", inputState: state.lastSavedResponse })
         }
@@ -32,7 +33,7 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
   }
   
   
-  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} />;
+  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
 };
 
 OptimisticMarkdownInput.propTypes = {
