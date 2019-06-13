@@ -30,8 +30,8 @@ class CollectionEditor extends React.Component {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
     
+    // this.setState(changes);
     throw new Error("test")
-    this.setState(changes);
     return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
@@ -114,7 +114,7 @@ class CollectionEditor extends React.Component {
       displayNewNote: (projectId) => this.displayNewNote(projectId),
       updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       hideNote: (projectId) => this.hideNote(projectId),
-      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
+      updateDescription: (description) => this.updateFields({ description }),
       updateColor: (color) => this.updateFields({ coverColor: color }),
       updateProjectOrder: (project, index) => this.updateProjectOrder(project, index).catch(handleError),
       featureProject: (id) => this.featureProject(id).catch(handleError),
