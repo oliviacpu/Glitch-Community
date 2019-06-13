@@ -5,8 +5,8 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
-import useErrorHandlers from '../../presenters/error-handlers';
-import useUploader from '../../presenters/includes/uploader';
+import useErrorHandlers from '../presenters/error-handlers';
+import useUploader from '../presenters/includes/uploader';
 
 export function useUserEditor(initialUser) {
   const [user, setState] = useState({
