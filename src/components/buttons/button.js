@@ -120,7 +120,7 @@ Button.defaultProps = {
   emojiPosition: 'right',
 };
 
-const EMOJI_UP_1 = ['bomb'];
+const EMOJI_UP_1 = ['bentoBox', 'bomb'];
 
 const ButtonEmoji = ({ emoji, position }) => {
   const className = cx({
