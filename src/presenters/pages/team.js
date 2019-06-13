@@ -168,7 +168,6 @@ function TeamPage (props) {
           }
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
-          fetchMembers
           projectOptions={{
             removePin: props.removePin,
             ...projectOptions,
@@ -183,7 +182,6 @@ function TeamPage (props) {
           title="Recent Projects"
           projects={recentProjects}
           isAuthorized={currentUserIsOnTeam}
-          fetchMembers
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
@@ -281,7 +279,7 @@ const TeamNameConflict = ({ team }) => {
 };
 const TeamPageEditor = ({ initialTeam, children }) => (
   <TeamEditor initialTeam={initialTeam}>
-    {(team, funcs, ...args) => (
+    {(team, funcs) => (
       <ProjectsLoader projects={team.projects}>
         {(projects, reloadProjects) => {
           // Inject page specific changes to the editor
@@ -310,7 +308,6 @@ const TeamPageEditor = ({ initialTeam, children }) => (
               joinTeamProject,
               leaveTeamProject,
             },
-            ...args,
           );
         }}
       </ProjectsLoader>
@@ -320,7 +317,7 @@ const TeamPageEditor = ({ initialTeam, children }) => (
 const TeamPageContainer = ({ team }) => {
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-      <TeamEditor initialTeam={team}>
+      <TeamPageEditor initialTeam={team}>
         {(teamFromEditor, funcs) => (
           <>
             <Helmet title={teamFromEditor.name} />
@@ -331,7 +328,7 @@ const TeamPageContainer = ({ team }) => {
             <TeamNameConflict team={teamFromEditor} />
           </>
         )}
-      </TeamEditor>
+      </TeamPageEditor>
     </AnalyticsContext>
   );
 };
