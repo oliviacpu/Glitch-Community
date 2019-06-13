@@ -248,7 +248,7 @@ const SignInPopBase = withRouter(({ location, align }) => {
           </PopoverInfo>
           <PopoverActions>
             <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-            <SignInPopButton href={githubAuthLink()} company="GiteHub" emoji="octocat" onClick={onClick} />
+            <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
             <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
             {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
             <Button size="small" onClick={setDestinationAnd(showView.email)}>

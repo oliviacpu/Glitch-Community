@@ -120,13 +120,11 @@ Button.defaultProps = {
   emojiPosition: 'right',
 };
 
-const EMOJI_UP_1 = ['bentoBox', 'bomb'];
-
 const ButtonEmoji = ({ emoji, position }) => {
   const className = cx({
     emojiContainer: true,
     alignLeft: position === 'left',
-    up1: EMOJI_UP_1.includes(emoji),
+    up1: ['bentoBox', 'bomb'].includes(emoji),
   });
 
   return (
