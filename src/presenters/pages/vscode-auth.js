@@ -9,7 +9,7 @@ import Text from 'Components/text/text';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
 
-import styles from './vs-code-auth.styl';
+import styles from './vscode-auth.styl';
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();

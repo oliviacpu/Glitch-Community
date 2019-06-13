@@ -19,7 +19,7 @@ import { NotFoundPage, ProjectNotFoundPage } from './error';
 import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
-import VSCodeAuth from './vs-code-auth';
+import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
 const parse = (search, name) => {
