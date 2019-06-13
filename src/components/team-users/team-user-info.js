@@ -5,6 +5,7 @@ import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserAvatar, ProjectAvatar } from 'Components/images/avatar';
+import { UserLink } from 'Components/link';
 import Thanks from 'Components/thanks';
 import {
   PopoverDialog,
@@ -131,7 +132,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
     <PopoverDialog align="left">
       <PopoverInfo>
         <div className={styles.userProfile}>
-          <UserAvatar user={user} />
+          <UserLink user={user}><UserAvatar user={user} /></UserLink>
           <div className={styles.userInfo}>
             <div className={styles.userName}>{user.name || 'Anonymous'}</div>
             {user.login && <div className={styles.userLogin}>@{user.login}</div>}
@@ -209,7 +210,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
 
   return (
     <PopoverWithButton
-      buttonProps={{ type: 'dropDown' }}
+      buttonProps={{ type: 'transparent' }}
       buttonText={<UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />}
     >
       {({ togglePopover, toggleAndCall }) => (
