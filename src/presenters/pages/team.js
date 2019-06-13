@@ -19,9 +19,8 @@ import AddTeamProject from 'Components/team/add-team-project-pop';
 import TeamUsers from 'Components/team-users';
 import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
-import { getLink } from 'Models/team';
+import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
-import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import TeamEditor from '../team-editor';
@@ -88,7 +87,6 @@ function TeamPage (props) {
   const { team } = props;
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
-  
   
   const pinnedSet = new Set(team.teamPins.map(({ projectId }) => projectId));
   // filter featuredProject out of both pinned & recent projects
@@ -255,9 +253,6 @@ TeamPage.propTypes = {
   inviteEmail: PropTypes.func.isRequired,
   inviteUser: PropTypes.func.isRequired,
   clearCover: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
-  currentUserIsOnTeam: PropTypes.bool.isRequired,
-  currentUserIsTeamAdmin: PropTypes.bool.isRequired,
   removeUserFromTeam: PropTypes.func.isRequired,
   removePin: PropTypes.func.isRequired,
   removeProject: PropTypes.func.isRequired,
@@ -320,7 +315,7 @@ const TeamPageEditor = ({ initialTeam, children }) => (
     )}
   </TeamEditor>
 );
-const TeamPageContainer = ({ team, ...props }) => {
+const TeamPageContainer = ({ team }) => {
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
       <TeamPageEditor initialTeam={team}>
@@ -330,7 +325,6 @@ const TeamPageContainer = ({ team, ...props }) => {
             <TeamPage
               team={teamFromEditor}
               {...funcs}
-              {...props}
             />
             <TeamNameConflict team={teamFromEditor} />
           </>
