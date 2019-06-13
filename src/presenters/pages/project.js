@@ -73,21 +73,25 @@ const PrivateBadge = () => (
     type="info"
     id="private-project-badge-tooltip"
     tooltip={PrivateTooltip}
-    target={<span className="project-badge private-project-badge" />}
+    target={<span className="project-badge private-project-badge" label={PrivateTooltip} />}
   />
 );
 
 const PrivateToggle = ({ isPrivate, setPrivate }) => {
-  const tooltip = isPrivate ? PrivateTooltip : PublicTooltip;
+  const label = isPrivate ? PrivateTooltip : PublicTooltip;
   const classBase = 'button-tertiary button-on-secondary-background project-badge';
   const className = isPrivate ? 'private-project-badge' : 'public-project-badge';
+  
+  const target = (
+    <button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" aria-label={label} />
+  )
 
   return (
     <TooltipContainer
       type="action"
       id="toggle-private-button-tooltip"
-      target={<button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" />}
-      tooltip={tooltip}
+      target={target}
+      tooltip={label}
     />
   );
 };
