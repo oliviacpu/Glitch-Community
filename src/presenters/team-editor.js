@@ -12,73 +12,91 @@ import useUploader from './includes/uploader';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
-function TeamEditor (props) {
-  const [state, setState] = useState({
-    ...props.initialTeam,
+// "legacy" setState behavior
+function useMergeState (initialValue) {
+  const [state, setState] = useState(initialValue)
+  const mergeState = (fnOrValue) => {
+    if (typeof fnOrValue === 'function') {
+      setState((prev) => ({ ...prev, ...fnOrValue(prev) }))
+    } else {
+      setState((prev) => ({ ...prev, ...fnOrValue }))
+    }
+  }
+  return [state, mergeState]
+}
+
+function TeamEditor ({ children, initialTeam }) {
+  const api = useAPI();
+  const { currentUser, update: updateCurrentUser } = useCurrentUser();
+  const uploadFuncs = useUploader();
+  const { createNotification } = useNotifications();
+  const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const [team, mergeTeam] = useMergeState({
+    ...initialTeam,
     _cacheAvatar: Date.now(),
     _cacheCover: Date.now(),
   })
   
   async function updateFields(changes) {
-    const { data } = await this.props.api.patch(`teams/${this.state.id}`, changes);
-    this.setState(data);
-    if (this.props.currentUser) {
-      const teamIndex = this.props.currentUser.teams.findIndex(({ id }) => id === this.state.id);
+    const { data } = await api.patch(`teams/${team.id}`, changes);
+    mergeTeam(data);
+    if (currentUser) {
+      const teamIndex = currentUser.teams.findIndex(({ id }) => id === team.id);
       if (teamIndex >= 0) {
-        const teams = [...this.props.currentUser.teams];
-        teams[teamIndex] = this.state;
-        this.props.updateCurrentUser({ teams });
+        const teams = [...currentUser.teams];
+        teams[teamIndex] = team;
+        updateCurrentUser({ teams });
       }
     }
   }
 
   async function uploadAvatar(blob) {
-    const { data: policy } = await assets.getTeamAvatarImagePolicy(this.props.api, this.state.id);
+    const { data: policy } = await assets.getTeamAvatarImagePolicy(api, team.id);
     await this.props.uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
 
     const image = await assets.blobToImage(blob);
     const color = assets.getDominantColor(image);
-    await this.updateFields({
+    await updateFields({
       hasAvatarImage: true,
       backgroundColor: color,
     });
-    this.setState({ _cacheAvatar: Date.now() });
+    mergeTeam({ _cacheAvatar: Date.now() });
   }
 
   async function uploadCover(blob) {
-    const { data: policy } = await assets.getTeamCoverImagePolicy(this.props.api, this.state.id);
+    const { data: policy } = await assets.getTeamCoverImagePolicy(api, team.id);
     await this.props.uploadAssetSizes(blob, policy, assets.COVER_SIZES);
 
     const image = await assets.blobToImage(blob);
     const color = assets.getDominantColor(image);
-    await this.updateFields({
+    await updateFields({
       hasCoverImage: true,
       coverColor: color,
     });
-    this.setState({ _cacheCover: Date.now() });
+    mergeTeam({ _cacheCover: Date.now() });
   }
 
   async function joinTeam() {
-    await this.props.api.post(`teams/${this.state.id}/join`);
-    this.setState(({ users }) => ({
-      users: [...users, this.props.currentUser],
+    await api.post(`teams/${team.id}/join`);
+    mergeTeam(({ users }) => ({
+      users: [...users, currentUser],
     }));
-    if (this.props.currentUser) {
-      const { teams } = this.props.currentUser;
-      this.props.updateCurrentUser({ teams: [...teams, this.state] });
+    if (currentUser) {
+      const { teams } = currentUser;
+      updateCurrentUser({ teams: [...teams, team] });
     }
   }
 
   async function inviteEmail(emailAddress) {
     console.log('💣 inviteEmail', emailAddress);
-    await this.props.api.post(`teams/${this.state.id}/sendJoinTeamEmail`, {
+    await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
       emailAddress,
     });
   }
 
   async function inviteUser(user) {
     console.log('💣 inviteUser', user);
-    await this.props.api.post(`teams/${this.state.id}/sendJoinTeamEmail`, {
+    await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
       userId: user.id,
     });
   }
@@ -87,42 +105,42 @@ function TeamEditor (props) {
     // Kick them out of every project at once, and wait until it's all done
     await Promise.all(
       projectIds.map((projectId) =>
-        this.props.api.delete(`projects/${projectId}/authorization`, {
+        api.delete(`projects/${projectId}/authorization`, {
           data: { targetUserId: userId },
         }),
       ),
     );
     // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
-    await this.props.api.delete(`teams/${this.state.id}/users/${userId}`);
+    await api.delete(`teams/${team.id}/users/${userId}`);
     this.removeUserAdmin(userId);
-    this.setState(({ users }) => ({
+    mergeTeam(({ users }) => ({
       users: users.filter((u) => u.id !== userId),
     }));
-    if (this.props.currentUser && this.props.currentUser.id === userId) {
-      const teams = this.props.currentUser.teams.filter(({ id }) => id !== this.state.id);
-      this.props.updateCurrentUser({ teams });
+    if (currentUser && currentUser.id === userId) {
+      const teams = currentUser.teams.filter(({ id }) => id !== team.id);
+      updateCurrentUser({ teams });
     }
   }
 
   function removeUserAdmin(id) {
-    const index = this.state.adminIds.indexOf(id);
+    const index = team.adminIds.indexOf(id);
     if (index !== -1) {
-      this.setState((prevState) => ({
+      mergeTeam((prevState) => ({
         counter: prevState.adminIds.splice(index, 1),
       }));
     }
   }
 
   async function updateUserPermissions(id, accessLevel) {
-    if (accessLevel === MEMBER_ACCESS_LEVEL && this.state.adminIds.length <= 1) {
-      this.props.createNotification('A team must have at least one admin', { type: 'error' });
+    if (accessLevel === MEMBER_ACCESS_LEVEL && team.adminIds.length <= 1) {
+      createNotification('A team must have at least one admin', { type: 'error' });
       return false;
     }
-    await this.props.api.patch(`teams/${this.state.id}/users/${id}`, {
+    await api.patch(`teams/${team.id}/users/${id}`, {
       access_level: accessLevel,
     });
     if (accessLevel === ADMIN_ACCESS_LEVEL) {
-      this.setState((prevState) => ({
+      mergeTeam((prevState) => ({
         counter: prevState.adminIds.push(id),
       }));
     } else {
@@ -132,82 +150,81 @@ function TeamEditor (props) {
   }
 
   async function addProject(project) {
-    await this.props.api.post(`teams/${this.state.id}/projects/${project.id}`);
-    this.setState(({ projects }) => ({
+    await api.post(`teams/${team.id}/projects/${project.id}`);
+    mergeTeam(({ projects }) => ({
       projects: [project, ...projects],
     }));
   }
 
   async function removeProject(id) {
-    await this.props.api.delete(`teams/${this.state.id}/projects/${id}`);
-    this.setState(({ projects }) => ({
+    await api.delete(`teams/${team.id}/projects/${id}`);
+    mergeTeam(({ projects }) => ({
       projects: projects.filter((p) => p.id !== id),
     }));
   }
 
   async function deleteProject(id) {
-    await this.props.api.delete(`/projects/${id}`);
-    this.setState(({ projects }) => ({
+    await api.delete(`/projects/${id}`);
+    mergeTeam(({ projects }) => ({
       projects: projects.filter((p) => p.id !== id),
     }));
   }
 
   async function addPin(id) {
-    await this.props.api.post(`teams/${this.state.id}/pinned-projects/${id}`);
-    this.setState(({ teamPins }) => ({
+    await api.post(`teams/${team.id}/pinned-projects/${id}`);
+    mergeTeam(({ teamPins }) => ({
       teamPins: [...teamPins, { projectId: id }],
     }));
   }
 
   async function removePin(id) {
-    await this.props.api.delete(`teams/${this.state.id}/pinned-projects/${id}`);
-    this.setState(({ teamPins }) => ({
+    await api.delete(`teams/${team.id}/pinned-projects/${id}`);
+    mergeTeam(({ teamPins }) => ({
       teamPins: teamPins.filter((p) => p.projectId !== id),
     }));
   }
 
   async function joinTeamProject(projectId) {
-    await this.props.api.post(`/teams/${this.state.id}/projects/${projectId}/join`);
+    await api.post(`/teams/${team.id}/projects/${projectId}/join`);
   }
 
   async function leaveTeamProject(projectId) {
-    await this.props.api.delete(`/projects/${projectId}/authorization`, {
+    await api.delete(`/projects/${projectId}/authorization`, {
       data: {
-        targetUserId: this.props.currentUser.id,
+        targetUserId: currentUser.id,
       },
     });
   }
 
   async function addProjectToCollection(project, collection) {
-    await this.props.api.patch(`collections/${collection.id}/add/${project.id}`);
+    await api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
   async function unfeatureProject() {
-    await this.updateFields({ featured_project_id: null });
+    await updateFields({ featured_project_id: null });
   }
 
   async function featureProject(id) {
-    await this.updateFields({ featured_project_id: id });
+    await updateFields({ featured_project_id: id });
   }
 
-  const { handleError, handleErrorForInput, handleCustomError } = this.props;
   const funcs = {
-    updateName: (name) => this.updateFields({ name }).catch(handleErrorForInput),
-    updateUrl: (url) => this.updateFields({ url }).catch(handleErrorForInput),
-    updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
+    updateName: (name) => updateFields({ name }).catch(handleErrorForInput),
+    updateUrl: (url) => updateFields({ url }).catch(handleErrorForInput),
+    updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     joinTeam: () => this.joinTeam().catch(handleError),
     inviteEmail: (email) => this.inviteEmail(email).catch(handleError),
     inviteUser: (id) => this.inviteUser(id).catch(handleError),
     removeUserFromTeam: (id, projectIds) => this.removeUserFromTeam(id, projectIds).catch(handleError),
     uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
     uploadCover: () => assets.requestFile((blob) => this.uploadCover(blob).catch(handleError)),
-    clearCover: () => this.updateFields({ hasCoverImage: false }).catch(handleError),
+    clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
     addProject: (project) => this.addProject(project).catch(handleError),
     removeProject: (id) => this.removeProject(id).catch(handleError),
     deleteProject: (id) => this.deleteProject(id).catch(handleError),
     addPin: (id) => this.addPin(id).catch(handleError),
     removePin: (id) => this.removePin(id).catch(handleError),
-    updateWhitelistedDomain: (whitelistedDomain) => this.updateFields({ whitelistedDomain }).catch(handleError),
+    updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
     updateUserPermissions: (id, accessLevel) => this.updateUserPermissions(id, accessLevel).catch(handleError),
     joinTeamProject: (projectId) => this.joinTeamProject(projectId).catch(handleError),
     leaveTeamProject: (projectId) => this.leaveTeamProject(projectId).catch(handleError),
@@ -215,7 +232,7 @@ function TeamEditor (props) {
     featureProject: (id) => this.featureProject(id).catch(handleError),
     unfeatureProject: (id) => this.unfeatureProject(id).catch(handleError),
   };
-  return this.props.children(this.state, funcs);
+  return children(team, funcs);
 }
 TeamEditor.propTypes = {
   api: PropTypes.any.isRequired,
@@ -230,27 +247,4 @@ TeamEditor.defaultProps = {
   currentUser: null,
 };
 
-const TeamEditorContainer = ({ children, initialTeam }) => {
-  const api = useAPI();
-  const { currentUser, update: updateCurrentUser } = useCurrentUser();
-  const uploadFuncs = useUploader();
-  const { createNotification } = useNotifications();
-  const errorFuncs = useErrorHandlers();
-  return (
-    <TeamEditor
-      {...{ api, currentUser, initialTeam }}
-      updateCurrentUser={updateCurrentUser}
-      {...uploadFuncs}
-      createNotification={createNotification}
-      {...errorFuncs}
-    >
-      {children}
-    </TeamEditor>
-  );
-};
-TeamEditorContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-  initialTeam: PropTypes.object.isRequired,
-};
-
-export default TeamEditorContainer;
+export default TeamEditor;
