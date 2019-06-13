@@ -14,7 +14,7 @@ const useOptimisticText = (realValue, setRealValueAsync) => {
   const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
   const setInputValue = (value) => {
     setUntrimmedValue(value);
-    setOptimisticValue(value.trim());
+    return setOptimisticValue(value.trim());
   };
   return [inputValue, setInputValue, errorMessage];
 };

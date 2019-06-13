@@ -32,7 +32,7 @@ class CollectionEditor extends React.Component {
     
     // throw new Error("test")
     this.setState(changes);
-    await this.props.api.patch(`collections/${this.state.id}`, changes);
+    return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
   async addProjectToCollection(project, collection) {
