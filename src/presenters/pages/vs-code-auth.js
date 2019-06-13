@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import PopoverContainer from 'Components/popover/container';
-import Text from 'Components/popover/container';
+import Text from 'Components/text/text';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
 
@@ -28,7 +28,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   return (
     <div className={styles.content}>
-      <p>{isSignedIn ? redirectMessage : signInMessage}</p>
+      <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
       {!isSignedIn &&
         <PopoverContainer>
           {() => <SignInPop align="none" />}
