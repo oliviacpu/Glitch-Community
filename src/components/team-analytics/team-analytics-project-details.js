@@ -5,10 +5,10 @@ import dayjs from 'dayjs';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
 import { ProjectLink } from 'Components/link';
+import { ProjectAvatar } from 'Components/images/avatar';
 import Loader from 'Components/loader';
 import { createAPIHook } from 'State/api';
 
-import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './styles.styl';
 
 const RECENT_REMIXES_COUNT = 100;
@@ -19,7 +19,7 @@ const RECENT_REMIXES_COUNT = 100;
 const ProjectDetails = ({ projectDetails }) => (
   <article className={styles.projectDetails}>
     <ProjectLink project={projectDetails}>
-      <ProjectAvatar {...projectDetails} />
+      <ProjectAvatar project={projectDetails} hasAlt />
     </ProjectLink>
     <table className={styles.projectDetailsTable}>
       <tbody>
@@ -65,7 +65,7 @@ const ProjectDetails = ({ projectDetails }) => (
             <td>
               <ProjectLink project={projectDetails.baseProject}>
                 <span className={styles.baseProjectAvatar}>
-                  <ProjectAvatar {...projectDetails.baseProject} />
+                  <ProjectAvatar project={projectDetails.baseProject} />
                 </span>
                 {projectDetails.baseProject.domain}
               </ProjectLink>
@@ -81,7 +81,7 @@ const ProjectRemixItem = ({ remix }) => (
   <ProjectLink project={remix}>
     <TooltipContainer
       id={`project-remix-tooltip-${remix.domain}`}
-      target={<ProjectAvatar {...remix} />}
+      target={<ProjectAvatar project={remix} hasAlt />}
       align={['left']}
       type="action"
       tooltip={remix.domain}

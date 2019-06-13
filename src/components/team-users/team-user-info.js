@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { UserAvatar } from 'Components/images/avatar';
+import { UserAvatar, ProjectAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
 import {
   PopoverDialog,
@@ -25,7 +25,6 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
-import ProjectAvatar from '../../presenters/includes/project-avatar';
 import styles from './styles.styl';
 
 const MEMBER_ACCESS_LEVEL = 20;
@@ -45,7 +44,7 @@ const ProjectsList = ({ options, value, onChange }) => (
           }}
         />
         <div className={styles.projectAvatarWrap}>
-          <ProjectAvatar {...project} />
+          <ProjectAvatar project={project} />
         </div>
         {project.domain}
       </label>
