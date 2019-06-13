@@ -8,9 +8,13 @@ import useErrorHandlers from './error-handlers';
 import useUploader from './includes/uploader';
 
 function useUserEditor(initialUser) {
-  const [user, setState] = useState(initialUser)
+  const [user, setState] = useState({
+    ...initialUser,
+    _cacheCover: Date.now(),
+    _deletedProjects: [],
+  });
   const api = useAPI();
-  const { currentUser, updateCurrentUser } = useCurrentUser();
+  const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAsset, uploadAssetSizes } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
 
@@ -46,7 +50,7 @@ function useUserEditor(initialUser) {
       hasCoverImage: true,
       coverColor: color,
     });
-    this.setState((prev) => { _cacheCover: Date.now() });
+    setState((prev) => ({ ...prev, _cacheCover: Date.now() }));
   }
 
   async function addPin(id) {
@@ -83,7 +87,7 @@ function useUserEditor(initialUser) {
     setState((prev) => ({
       ...prev,
       projects: prev.projects.filter((p) => p.id !== id),
-      _deletedProjects: [data, ...prev._deletedProjects],
+      _deletedProjects: [data, ...prev._deletedProjects], // eslint-disable-line no-underscore-dangle
     }));
   }
 
@@ -95,7 +99,7 @@ function useUserEditor(initialUser) {
     setState((prev) => ({
       ...prev,
       projects: [data, ...prev.projects],
-      _deletedProjects: prev._deletedProjects.filter((p) => p.id !== id),
+      _deletedProjects: prev._deletedProjects.filter((p) => p.id !== id), // eslint-disable-line no-underscore-dangle
     }));
   }
 
@@ -103,7 +107,7 @@ function useUserEditor(initialUser) {
     const { data } = await api.get(`collections?userId=${user.id}`);
     setState((prev) => ({ ...prev, collections: data }));
   }
-  
+
   async function addProjectToCollection(project, collection) {
     await api.patch(`collections/${collection.id}/add/${project.id}`);
     reloadCollections();
@@ -116,27 +120,29 @@ function useUserEditor(initialUser) {
   async function unfeatureProject() {
     await updateFields({ featured_project_id: null });
   }
-   
+
   useEffect(() => {
-    reloadCollections()
-  }, [])
+    reloadCollections();
+  }, []);
 
   const funcs = {
     updateName: (name) => updateFields({ name }).catch(handleErrorForInput),
     updateLogin: (login) => updateFields({ login }).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
-    uploadAvatar: () => assets.requestFile((blob) => this.uploadAvatar(blob).catch(handleError)),
-    uploadCover: () => assets.requestFile((blob) => this.uploadCover(blob).catch(handleError)),
+    uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
+    uploadCover: () => assets.requestFile((blob) => uploadCover(blob).catch(handleError)),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
-    addPin: (id) => this.addPin(id).catch(handleError),
-    removePin: (id) => this.removePin(id).catch(handleError),
-    leaveProject: (id) => this.leaveProject(id).catch(handleError),
-    deleteProject: (id) => this.deleteProject(id).catch(handleError),
-    undeleteProject: (id) => this.undeleteProject(id).catch(handleError),
-    setDeletedProjects: (_deletedProjects) => this.setState({ _deletedProjects }),
-    addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
-    featureProject: (id) => this.featureProject(id).catch(handleError),
-    unfeatureProject: (id) => this.unfeatureProject(id).catch(handleError),
+    addPin: (id) => addPin(id).catch(handleError),
+    removePin: (id) => removePin(id).catch(handleError),
+    leaveProject: (id) => leaveProject(id).catch(handleError),
+    deleteProject: (id) => deleteProject(id).catch(handleError),
+    undeleteProject: (id) => undeleteProject(id).catch(handleError),
+    setDeletedProjects: (_deletedProjects) => setState((prev) => ({ ...prev, _deletedProjects })),
+    addProjectToCollection: (project, collection) => addProjectToCollection(project, collection).catch(handleCustomError),
+    featureProject: (id) => featureProject(id).catch(handleError),
+    unfeatureProject: (id) => unfeatureProject(id).catch(handleError),
   };
-  return [user, funcs, isCurrentUser]
+  return [user, funcs, isCurrentUser];
 }
+
+export default useUserEditor;
