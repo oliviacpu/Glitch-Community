@@ -125,7 +125,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
   const selectedUserIsOnlyAdmin = userIsOnlyTeamAdmin({ user, team });
   const teamHasOnlyOneMember = team.users.length === 1;
   const isCurrentUser = currentUser && currentUser.id === user.id;
-  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin ||  isCurrentUser;
+  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || isCurrentUser;
   const canCurrentUserRemoveUser = currentUserHasRemovePriveleges && !teamHasOnlyOneMember && !selectedUserIsOnlyAdmin;
 
   return (
