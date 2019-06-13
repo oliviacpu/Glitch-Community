@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import PopoverContainer from 'Components/popover/container';
+import Text from 'Components/popover/container';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
 
@@ -15,7 +16,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VS Code, try the \"Glitch: Sign In With Email\" command.)";
+  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try the \"Glitch: Sign In With Email\" command.)";
   const signInMessage = 'Please Sign In to continue.';
 
   if (isSignedIn) {
