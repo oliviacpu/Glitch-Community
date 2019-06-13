@@ -4,12 +4,11 @@ import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
 import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
-import { UserLink } from 'Components/link';
+import { UserLink, WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import SignInPop from 'Components/sign-in-pop';
-import VisuallyHidden from 'Components/containers/visually-hidden';
-import { getAvatarStyle } from 'Models/user';
+import { getAvatarStyle, getLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
 import ProjectsLoader from '../../presenters/projects-loader';
@@ -56,10 +55,9 @@ const RecentProjects = () => {
       <CoverContainer type="user" item={currentUser}>
         <div className={styles.coverWrap}>
           <div className={styles.avatarWrap}>
-            <UserLink user={currentUser}>
+            <WrappingLink user={currentUser} href={getLink(currentUser)}>
               <div className={styles.userAvatar} style={getAvatarStyle(currentUser)} />
-              <VisuallyHidden>Your profile page</VisuallyHidden>
-            </UserLink>
+            </WrappingLink>
           </div>
           <div className={styles.projectsWrap}>
             {fetched ? (
