@@ -4,7 +4,7 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 
 /*
   What this does:
-  - 
+  
 */
 
 const useOptimisticValue = (realValue, setValueAsync) => {
@@ -22,7 +22,6 @@ const useOptimisticValue = (realValue, setValueAsync) => {
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
-      const beforeAsyncCall = realValue
       // this scope can't be async/await because it's an effect
       setValueAsync(debouncedValue).then(
         () => setStateIfMatches({ value: undefined, error: null }),
