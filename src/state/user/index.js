@@ -4,10 +4,10 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
-import useErrorHandlers from './error-handlers';
+import useErrorHandlers from '../../presenters/error-handlers';
 import useUploader from './includes/uploader';
 
-function useUserEditor(initialUser) {
+export function useUserEditor(initialUser) {
   const [user, setState] = useState({
     ...initialUser,
     _cacheCover: Date.now(),
@@ -144,5 +144,3 @@ function useUserEditor(initialUser) {
   };
   return [user, funcs];
 }
-
-export default useUserEditor;
