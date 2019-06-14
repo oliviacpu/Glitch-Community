@@ -171,18 +171,19 @@ function CheckForCreateTeamHash(props) {
 export default function UserOptionsAndCreateTeamPopContainer(props) {
   const avatarUrl = getUserAvatarUrl(props.user);
   const avatarStyle = { backgroundColor: props.user.color };
+
   return (
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
           {({ togglePopover, visible, focusFirstElement }) => {
             const userOptionsButton = (
-              <button className="user" onClick={togglePopover} disabled={!props.user.id} type="button">
+              <Button type="dropdown" onClick={togglePopover} disabled={!props.user.id} type="button">
                 <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
                 <div className="user-options-dropdown-wrap">
                   <span className="down-arrow icon" />
                 </div>
-              </button>
+              </Button>
             );
 
             return (
@@ -195,12 +196,13 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                 align={['right']}
               >
                 {visible && (
-                  <NestedPopover
-                    alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />}
-                    startAlternateVisible={createTeamOpen}
+                  <MultiPopover
+                    views={{
+                      createTeam: (showCreateTeam) => <CreateTeamPop />,
+                    }}
                   >
                     {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
-                  </NestedPopover>
+                  </MultiPopover>
                 )}
               </TooltipContainer>
             );
