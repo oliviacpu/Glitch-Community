@@ -41,7 +41,7 @@ const getIncludedCollections = async (api, projectId) => {
   const populatedCollections = await Promise.all(
     selectedCollections.map(async (collection) => {
       const { projects, user, team } = await allByKeys({
-        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=projectOrder&orderDirection=ASC`),
         user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
         team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
       });

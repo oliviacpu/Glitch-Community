@@ -86,6 +86,7 @@
     "quantize": "^1.0.2",
     "randomcolor": "^0.5.4",
     "react": "^16.8.4",
+    "react-aria-live": "^2.0.5",
     "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
     "react-is": "^16.8.4",

@@ -9,13 +9,19 @@ import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+<<<<<<< HEAD
 import AddTeamUserPop from 'Components/team-users/add-team-user';
+=======
+import Emoji from 'Components/images/emoji';
+>>>>>>> 015199f9bdc59aa81690319f2ce960f816f6f542
 import Button from 'Components/buttons/button';
+import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { ProfileItem } from 'Components/profile-list';
 import { captureException } from 'Utils/sentry';
 
-import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
+import AddTeamUserPop from './add-team-user';
+import TeamUserPop from './team-user-info';
 import styles from './styles.styl';
 
 // Whitelisted domain icon
@@ -162,9 +168,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
 
       {!!invitee && (
         <li>
-          <div className="notification notifySuccess inline-notification" onAnimationEnd={removeNotifyInvited}>
+          <Notification inline type="success" onAnimationEnd={removeNotifyInvited}>
             Invited {invitee}
-          </div>
+          </Notification>
         </li>
       )}
     </ul>
