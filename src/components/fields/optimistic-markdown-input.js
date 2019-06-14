@@ -12,7 +12,7 @@ function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
   const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
   const wrapAsyncUpdateWithTrimmedValue = (value) => {
     setUntrimmedValue(value);
-    asyncUpdate(value.trim());
+    return asyncUpdate(value.trim());
   };
   return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
 };
@@ -38,10 +38,10 @@ on blur:
 
 const OptmisticMarkdownInput = ({ value, onChange, ...props }) => {
   const {
-    optimisticValue, optimisticOnChange, optimisticError, wrappedOnBlur,
+    inputValue, wrappedOnChange, optimisticError, wrappedOnBlur,
   } = useOptimistValueOnChangeAndBlur({ value, asyncUpdate: onChange });
   
-  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} optimisticError={optimisticError} onBlur={wrappedOnBlur} />;
+  return <MarkdownInput {...props} value={inputValue} error={optimisticError} onChange={wrappedOnChange} optimisticError={optimisticError} onBlur={wrappedOnBlur} />;
 };
 
 OptmisticMarkdownInput.propTypes = {
@@ -53,15 +53,15 @@ export default OptmisticMarkdownInput;
 
 function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
   const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate)
-  const [revertValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value: nonAggressivelyTrimmedInputValue, asyncUpdate: onChangeWrappedWithTrimmedValue });
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(revertValue, wrappedOnChange);
-  console.log({ revertValue, optimisticValue })
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
+  const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError(optimisticValue, optimisticOnChange);
+  
   return {
-    optimisticValue, optimisticOnChange, optimisticError, wrappedOnBlur, revertValue
+    inputValue, wrappedOnChange,  wrappedOnBlur, optimisticError,
   };
 }
 
-function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
+function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
   const [state, setState] = React.useState({ 
     status: null, 
     lastSavedResponse: value, 
@@ -69,10 +69,12 @@ function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
   });
 
   const wrappedOnChange = async (change) => {
+    console.log("wrappedOnChange getting called")
     setState({ status: "loading" });
     if (asyncUpdate) {
       try {
         const response = await asyncUpdate(change);
+        console.log("got a response", response)
         if (response.status === 200) {
           console.log("saving")
           setState({ status: "loaded", lastSavedResponse: change, inputState: change });
@@ -109,6 +111,7 @@ function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
 */
 
 function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setValueAsync) {
+  console.log({ rawValueFromOnChange, setValueAsync })
   // store what is being typed in, along with an error message
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined, error: null });
@@ -121,7 +124,9 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
       const setStateIfLastServerCallIsStillRelevant = (newState) => setState((prevState) => prevState.updateToSave === debouncedUpdateToSave ? newState : prevState );
       // this scope can't be async/await because it's an effect
       setValueAsync(debouncedUpdateToSave).then(
-        () => setStateIfLastServerCallIsStillRelevant({ updateToSave: undefined, error: null }),
+        (response) => {
+          setStateIfLastServerCallIsStillRelevant({ updateToSave: undefined, error: null })
+        },
         (error) => {
           const message = error && error.response && error.response.data && error.response.data.message; // should there always be a default error here?
           setStateIfLastServerCallIsStillRelevant({ updateToSave: debouncedUpdateToSave, error: message });
