@@ -21,12 +21,12 @@ import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useProjectEditor } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { addBreadcrumb } from 'Utils/sentry';
 
 import PopoverWithButton from '../pop-overs/popover-with-button';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
-import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
@@ -180,7 +180,6 @@ DeleteProjectButton.propTypes = {
 const ProjectPage = ({
   project,
   addProjectToCollection,
-  currentUser,
   isAuthorized,
   updateDomain,
   updateDescription,
@@ -188,6 +187,7 @@ const ProjectPage = ({
   deleteProject,
   uploadAvatar,
 }) => {
+  const { currentUser } = useCurrentUser();
   const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
@@ -284,21 +284,17 @@ async function getProject(api, domain) {
   return { ...project, ...rest };
 }
 
-const ProjectPageLoader = ({ domain, ...props }) => {
-  const { currentUser } = useCurrentUser();
+const ProjectPageLoader = ({ domain }) => {
+  
 
   return (
     <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
       {(project) =>
         project ? (
-          <ProjectEditor initialProject={project}>
-            {(currentProject, funcs, userIsMember) => (
               <>
-                <Helmet title={currentProject.domain} />
-                <ProjectPage project={currentProject} {...funcs} isAuthorized={userIsMember} currentUser={currentUser} {...props} />
+                <Helmet title={project.domain} />
+                <ProjectPage project={project} />
               </>
-            )}
-          </ProjectEditor>
         ) : (
           <NotFound name={domain} />
         )
