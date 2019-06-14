@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useOptimisticText from './use-optimistic-text';
+// import useOptimisticText from './use-optimistic-text';
 
 /*
 
@@ -22,30 +22,35 @@ on blur:
 
 */
 
-const OptimisticWrapper = ({ passedStateValue, asyncUpdate, ...props }) => {
-  const [state, setState] = React.useState({ status: "loaded", lastSavedResponse: value, inputState: value });
+const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
+  const [state, setState] = React.useState({ 
+    status: null, 
+    lastSavedResponse: value, 
+    inputValue: value 
+  });
 
-  const onChangeWithSavedGoodResponse = (change) => {
+  const onChange = async (change) => {
     setState({ status: "loading" });
-    if (onChange) {
-      return onChange(change).then(({status}) => {
-        console.log("first success", status)
-        if (status === 200) {
-          setState({ status: "loaded", lastSavedResponse: change, inputState: change })
+    if (asyncUpdate) {
+      try {
+        const response = await asyncUpdate(change);
+        if (response.status === 200) {
+          setState({ status: "loaded", lastSavedResponse: change, inputState: change });
         } else {
-          setState({ ...state, status: "error" })
+          setState({ ...state, status: "error" });
         }
-      }, (error) => {
-        setState({ ...state, status: "error" })
-        throw error
-      });
+        return response // return response so other funcs can use it later if necessary
+      } catch (error) {
+        setState({ ...state, status: "error" });
+        throw error; // rethrow error so other funcs can use it later if necessary
+      }
     }
   }
   const onBlur = () => {
+    // if we're still waiting for a response from the server, keep running this func
     if (state.status === "loading") {
-      onBlur()
+      onBlur();
     } else {
-      console.log("in the blur", state)
       setState({ ...state, inputState: state.lastSavedResponse })
     }
   }
@@ -67,3 +72,67 @@ OptimisticMarkdownInput.propTypes = {
 };
 
 export default OptimisticMarkdownInput;
+
+
+function useOptimisticText(realValue, setRealValueAsync) {
+  const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync);
+  const [untrimmedValue, setUntrimmedValue] = useState(realValue);
+  
+  const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
+  const setInputValue = (value) => {
+    setUntrimmedValue(value);
+    setOptimisticValue(value.trim());
+  };
+  return [inputValue, setInputValue, errorMessage];
+};
+
+
+import useDebouncedValue from 'Hooks/use-debounced-value';
+
+/*
+  What this does:
+  - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
+*/
+
+const useOptimisticValue = (realValue, setValueAsync) => {
+  // store what is being typed in, along with an error message
+  // value undefined means that the field is unchanged from the 'real' value
+  const [state, setState] = React.useState({ value: undefined, error: null });
+  // debounce our stored value and send the async updates when it is not undefined
+  const debouncedValue = useDebouncedValue(state.value, 500);
+  React.useEffect(() => {
+    if (debouncedValue !== undefined) {
+      // if the value changes during the async action then ignore the result
+      const setStateIfMatches = (newState) => {
+        setState((prevState) => {
+          console.log({prevState, debouncedValue, newState})
+          if (prevState.value === debouncedValue) {
+            console.log("Setting state because it matches the debounced value setting state to", newState)
+          }
+          return prevState.value === debouncedValue ? newState : prevState
+        });
+      };
+      // this scope can't be async/await because it's an effect
+      setValueAsync(debouncedValue).then(
+        () => {
+          console.log("success")
+          return setStateIfMatches({ value: undefined, error: null })
+        },
+        (error) => {
+          console.log("error", error)
+          const message = (error && error.response && error.response.data && error.response.data.message) || "test";
+          setStateIfMatches({ value: debouncedValue, error: message });
+        },
+      );
+    }
+  }, [debouncedValue]);
+
+  const optimisticValue = state.value !== undefined ? state.value : realValue;
+  
+  const setOptimisticValue = (newValue) => {
+    setState((prevState) => ({ ...prevState, value: newValue }));
+  };
+  return [optimisticValue, setOptimisticValue, state.error];
+};
+
+export default useOptimisticValue;
