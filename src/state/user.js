@@ -82,11 +82,11 @@ export function useUserEditor(initialUser) {
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
-    addPin: withErrorHandler(async (id) => {
-      await api.post(`users/${user.id}/pinned-projects/${id}`);
+    addPin: withErrorHandler(async (projectId) => {
+      await api.post(`users/${user.id}/pinned-projects/${projectId}`);
       setState((prev) => ({
         ...prev,
-        pins: [...prev.pins, { id }],
+        pins: [...prev.pins, { id: projectId }],
       }));
     }, handleError),
     removePin: withErrorHandler(async (id) => {
