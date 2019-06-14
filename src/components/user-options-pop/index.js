@@ -42,17 +42,22 @@ const TeamList = ({ teams, showCreateTeam }) => {
   return (
     <PopoverActions>
       {orderedTeams.map((team) => (
-        <div>
-          <Button href={getTeamLink(team)} size="small" type="tertiary" hasEmoji key={team.id}>
+        <div className={styles.buttonWrap} key={team.id}>
+          <Button
+            href={getTeamLink(team)}
+            size="small"
+            type="tertiary"
+            image={
+              <Image
+                className={`${styles.teamAvatar} ${emojiStyles.emoji}`}
+                src={getTeamAvatarUrl({ ...team, size: 'small' })}
+                alt=""
+                width={16}
+                height={16}
+              />
+            }
+          >
             {team.name}
-            &nbsp;
-            <Image
-              className={`${styles.teamAvatar} ${emojiStyles.emoji}`}
-              src={getTeamAvatarUrl({ ...team, size: 'small' })}
-              alt=""
-              width="16"
-              height="16"
-            />
           </Button>
         </div>
       ))}
@@ -130,12 +135,16 @@ Are you sure you want to sign out?`)
             </CheckboxButton>
           </div>
         )}
-        <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
-          New Stuff
-        </Button>
-        <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
-          Support
-        </Button>
+        <div className={styles.buttonWrap}>
+          <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
+            New Stuff
+          </Button>
+        </div>
+        <div className={styles.buttonWrap}>
+          <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
+            Support
+          </Button>
+        </div>
         <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
           Sign Out
         </Button>
