@@ -6,17 +6,6 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 import MarkdownInput from '../inputs/markdown-input';
 
 
-function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
-  const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
-  
-  const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
-  const wrapAsyncUpdateWithTrimmedValue = (value) => {
-    setUntrimmedValue(value);
-    return asyncUpdate(value.trim());
-  };
-  return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
-};
-
 /*
 
 - takes in an initial state value 
@@ -37,6 +26,7 @@ on blur:
 */
 
 const OptmisticMarkdownInput = ({ value, onChange, ...props }) => {
+  console.log({onChange})
   const {
     inputValue, wrappedOnChange, optimisticError, wrappedOnBlur,
   } = useOptimistValueOnChangeAndBlur({ value, asyncUpdate: onChange });
@@ -52,14 +42,31 @@ export default OptmisticMarkdownInput;
 
 
 function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
-  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate)
+  console.log({ value, asyncUpdate })
+  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate);
+  console.log({ nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue })
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
+  console.log({ optimisticValue, optimisticOnChange, })
   const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError(optimisticValue, optimisticOnChange);
+  console.log({ inputValue, wrappedOnChange })
 
   return {
     inputValue, wrappedOnChange, wrappedOnBlur, optimisticError,
   };
 }
+
+function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
+  const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
+  
+  const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
+  const wrapAsyncUpdateWithTrimmedValue = (value) => {
+    console.log("inside wrapAsyncWithTrimmedValue", value)
+    setUntrimmedValue(value);
+    console.log("asyncUpdate(value.trim())", asyncUpdate(value.trim()))
+    return asyncUpdate(value.trim());
+  };
+  return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
+};
 
 function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
   const [state, setState] = React.useState({ 
@@ -73,6 +80,7 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     setState({ status: "loading" });
     if (asyncUpdate) {
       try {
+        console.log("about to call asyncUpdate in useRevertOnBlurWhenError")
         const response = await asyncUpdate(change);
         console.log("got a response", response)
         if (response.status === 200) {
@@ -81,7 +89,6 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
         } else {
           setState({ ...state, status: "error" });
         }
-        
         return response // return response so other funcs can use it later if necessary
       } catch (error) {
         setState({ ...state, status: "error" });
@@ -105,7 +112,7 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     setState({ ...state, inputValue: value })
   }, [value]);
   
-  return [state.inputValue, wrappedOnChange, wrappedOnBlur];
+  return [state.inputValue || value, wrappedOnChange, wrappedOnBlur];
 }
 
 

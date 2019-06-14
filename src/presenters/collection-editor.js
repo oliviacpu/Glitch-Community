@@ -38,6 +38,7 @@ class CollectionEditor extends React.Component {
     if (this.state.errorCount % 3 === 0) {
       throw new Error("test")
     }
+    console.log("inside updateFields hitting the backend")
     return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
