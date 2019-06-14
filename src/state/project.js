@@ -1,10 +1,9 @@
-import React, { useState, useMemo, createContext } from 'react';
-import { keyBy, mapValues } from 'lodash';
+import React, { useState, useMemo, useContext, createContext } from 'react';
 
 import { useAPI } from 'State/api';
 import { getAllPages } from 'Shared/api';
 
-const ProjectContect = createContext();
+export const ProjectContext = createContext();
 
 async function getMembers(api, projectId) {
   const [users, teams] = await Promise.all([
@@ -13,6 +12,8 @@ async function getMembers(api, projectId) {
   ]);
   return { users, teams };
 }
+
+const loadingResponse = { status: 'loading' };
 
 function loadProjectMembers(api, projectIds, setProjectResponses) {
   // set selected projects to 'loading'
@@ -36,15 +37,13 @@ function loadProjectMembers(api, projectIds, setProjectResponses) {
   });
 }
 
-const loadingResponse = { status: 'loading' };
-
-const ProjectContextProvider = ({ children }) => {
+export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
   const api = useAPI();
 
   const value = useMemo(
     () => ({
-      getMembers: (projectId) => {
+      getProjectMembers: (projectId) => {
         if (projectResponses[projectId] && projectResponses[projectId].members) {
           return projectResponses[projectId].members;
         }
@@ -55,17 +54,18 @@ const ProjectContextProvider = ({ children }) => {
         loadProjectMembers(api, projectIds, setProjectResponses);
       },
     }),
-    [projectResponses],
+    [projectResponses, api],
   );
 
   return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
 };
 
-export function useProjectMembers (projectId) {
-  const { getMembers } = useContext(ProjectContext);
-  const 
+export function useProjectMembers(projectId) {
+  const { getProjectMembers } = useContext(ProjectContext);
+  return getProjectMembers(projectId);
 }
 
-
-
-export default ProjectContextProvider;
+export function useProjectReload() {
+  const { reloadProjectMembers } = useContext(ProjectContext);
+  return reloadProjectMembers;
+}
