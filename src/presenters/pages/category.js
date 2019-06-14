@@ -77,7 +77,7 @@ const CategoryPage = ({ category }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'category' }}>
       <DataLoader get={(api) => loadCategory(api, category.id)}>
-        {(category) => <CategoryPageWrap category={category} userIsAuthor={false} />}
+        {(loadedCategory) => <CategoryPageWrap category={loadedCategory} userIsAuthor={false} />}
       </DataLoader>
     </AnalyticsContext>
   </Layout>

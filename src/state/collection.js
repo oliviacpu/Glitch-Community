@@ -1,31 +1,30 @@
 import { useState } from 'react';
 
 import { useAPI } from 'State/api';
-import { useCurrentUser } from 'State/current-user';
 import useErrorHandlers from '../presenters/error-handlers';
 
 export const addProjectToCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/add/${projectId}`);
-export const orderProjectInCollection = (api, projectId, collection, index) => api.post(`collections/${collection.id}/project/${projectId}/index/${index}`);
+export const orderProjectInCollection = (api, projectId, collection, index) =>
+  api.post(`collections/${collection.id}/project/${projectId}/index/${index}`);
 export const updateProjectInCollection = (api, projectId, collection, patch) => api.patch(`collections/${collection.id}/project/${projectId}`, patch);
 export const removeProjectFromCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/remove/${projectId}`);
 
 export const updateCollection = (api, collection, changes) => api.patch(`collections/${collection.id}`, changes);
 export const deleteCollection = (api, collection) => api.delete(`/collections/${collection.id}`);
 
-export function currentUserIsAuthor(currentUser, collection) {
-  if (!currentUser) return false;
+export function userOrTeamIsAuthor({ collection, user }) {
+  if (!user) return false;
   if (collection.teamId > 0) {
-    return currentUser.teams.some((team) => team.id === collection.teamId);
+    return user.teams ? user.teams.some((team) => team.id === collection.teamId) : false;
   }
   if (collection.userId > 0) {
-    return currentUser.id === collection.userId;
+    return user.id === collection.userId;
   }
   return false;
 }
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
-  const { currentUser } = useCurrentUser();
   const api = useAPI();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
 
@@ -59,14 +58,14 @@ export function useCollectionEditor(initialCollection) {
           projects: [project, ...prev.projects],
         }));
       }
-      await addProjectToCollection(api, project.id, selectedCollection)
+      await addProjectToCollection(api, project.id, selectedCollection);
       if (selectedCollection.id === collection.id) {
-        await orderProjectInCollection(api, project.id, collection, 0)
+        await orderProjectInCollection(api, project.id, collection, 0);
       }
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project) => {
-      await removeProjectFromCollection(api, project.id, collection)
+      await removeProjectFromCollection(api, project.id, collection);
       setCollection((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
@@ -113,5 +112,5 @@ export function useCollectionEditor(initialCollection) {
 
     unfeatureProject: () => updateFields({ featuredProjectId: null }).catch(handleError),
   };
-  return [collection, funcs, currentUserIsAuthor(currentUser, collection)];
+  return [collection, funcs];
 }

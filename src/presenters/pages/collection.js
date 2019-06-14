@@ -22,7 +22,7 @@ import EditCollectionColor from 'Components/collection/edit-collection-color-pop
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor } from 'State/collection';
+import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
@@ -60,13 +60,11 @@ DeleteCollectionBtn.propTypes = {
   deleteCollection: PropTypes.func.isRequired,
 };
 
-const CollectionPageContents = ({
-  collection: initialCollection,
-}) => {
-  const { currentUser } = useCurrentUser()
-  const [collection, funcs] = useCollectionEditor(initialCollection)
-  const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser })
-  
+const CollectionPageContents = ({ collection: initialCollection }) => {
+  const { currentUser } = useCurrentUser();
+  const [collection, funcs] = useCollectionEditor(initialCollection);
+  const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
+
   const collectionHasProjects = !!collection && !!collection.projects && collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -122,7 +120,12 @@ const CollectionPageContents = ({
             </div>
             {!collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
-                <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
+                <Image
+                  src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934"
+                  alt="psst"
+                  width=""
+                  height=""
+                />
                 <Text>You can add any project, created by any user</Text>
               </div>
             )}
@@ -165,10 +168,7 @@ const CollectionPageContents = ({
               />
             )}
             {currentUserIsAuthor && projects.length > 1 && (
-              <div>
-                Drag to reorder, or move focus to a project and press space.
-                Move it with the arrow keys and press space again to save.
-              </div>
+              <div>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</div>
             )}
           </div>
         </article>
@@ -181,7 +181,6 @@ const CollectionPageContents = ({
 };
 
 CollectionPageContents.propTypes = {
-  addProjectToCollection: PropTypes.func.isRequired,
   collection: PropTypes.shape({
     avatarUrl: PropTypes.string,
     coverColor: PropTypes.string,
@@ -193,10 +192,16 @@ CollectionPageContents.propTypes = {
 
 async function loadCollection(api, ownerName, collectionName) {
   try {
-    const collection = await getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`, `${ownerName}/${collectionName}`);
+    const collection = await getSingleItem(
+      api,
+      `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`,
+      `${ownerName}/${collectionName}`,
+    );
     collection.projects = await getAllPages(
       api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
+      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(
+        ownerName,
+      )}/${collectionName}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
@@ -214,29 +219,25 @@ async function loadCollection(api, ownerName, collectionName) {
   }
 }
 
-const CollectionPage = ({ ownerName, name }) => {
-  const { currentUser } = useCurrentUser();
-  return (
-    <Layout>
-      <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
-        {(collection) =>
-          collection ? (
-            <AnalyticsContext
-              properties={{ origin: 'collection' }}
-              context={{
-                groupId: collection.team ? collection.team.id.toString() : '0',
-              }}
-            >
-                  <CollectionPageContents
-                    collection={collection}
-                  />
-            </AnalyticsContext>
-          ) : (
-            <NotFound name={name} />
-          )
-        }
-      </DataLoader>
-    </Layout>
-  );
-};
+const CollectionPage = ({ ownerName, name }) => (
+  <Layout>
+    <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
+      {(collection) =>
+        collection ? (
+          <AnalyticsContext
+            properties={{ origin: 'collection' }}
+            context={{
+              groupId: collection.team ? collection.team.id.toString() : '0',
+            }}
+          >
+            <CollectionPageContents collection={collection} />
+          </AnalyticsContext>
+        ) : (
+          <NotFound name={name} />
+        )
+      }
+    </DataLoader>
+  </Layout>
+);
+
 export default CollectionPage;
