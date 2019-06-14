@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import { TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { TeamLink, UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
@@ -54,10 +54,10 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <TeamLink key={team.id} team={team} className="button button-small has-emoji button-tertiary">
-            {team.name}
-            &nbsp;
-            <img className="emoji avatar" src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width="16px" height="16px" />
+          <TeamLink key={team.id} team={team}>
+            <Button type="tertiary" size="small" image={<TeamAvatar team={team} />}>
+              {team.name}
+            </Button>
           </TeamLink>
         </div>
       ))}

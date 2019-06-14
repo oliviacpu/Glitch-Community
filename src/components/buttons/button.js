@@ -15,7 +15,7 @@ export const SIZES = ['small'];
  */
 
 const Button = React.forwardRef(
-  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, image, emoji, emojiPosition }, ref) => {
+  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji }, ref) => {
     const className = cx({
       btn: true,
       cta: type === 'cta',
@@ -26,7 +26,7 @@ const Button = React.forwardRef(
       hasImage: emoji || image,
       hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
       hasSunglassesEmoji: emoji === 'sunglasses',
-      padLeft: emoji && emojiPosition === 'left',
+      padLeft: (image || emoji) && imagePosition === 'left',
       matchBackground: matchBackground === true,
       active,
       hover,
@@ -36,7 +36,8 @@ const Button = React.forwardRef(
     const content = (
       <>
         {children}
-        {emoji && <ButtonEmoji emoji={emoji} position={emojiPosition} />}
+        {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
+        {image && <ButtonImage image={image} position={imagePosition} />}
       </>
     );
 
@@ -105,12 +106,12 @@ Button.propTypes = {
   active: PropTypes.bool,
   /** whether the link opens in a new tab or the same window */
   newTab: PropTypes.bool,
-  /** An 
+  /** an image node to display within the button */
   image: PropTypes.node,
-  /** Emoji name */
-  emoji: PropTypes.string,
   /** Whether Emoji is to left or right of other content */
-  emojiPosition: PropTypes.oneOf(['left', 'right']),
+  imagePosition: PropTypes.oneOf(['left', 'right']),
+  /** emoji name */
+  emoji: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -125,37 +126,31 @@ Button.defaultProps = {
   decorative: false,
   newTab: false,
   image: null,
+  imagePosition: 'right',
   emoji: null,
-  emojiPosition: 'right',
 };
 
-const ButtonImage = ({ image, position, classNames }) => {
+const ButtonImage = ({ image, position, classes }) => {
   const className = cx({
     imageContainer: true,
     alignLeft: position === 'left',
-    ...classNames
+    ...classes,
   });
-  
-  return (
-    <div className={className}>
-      {image}
-    </div>
-  );
+
+  return <div className={className}>{image}</div>;
 };
 
 ButtonImage.propTypes = {
-  image: PropTypes
+  image: PropTypes.node.isRequired,
   position: PropTypes.oneOf(['right', 'left']).isRequired,
-}
+};
 
 const ButtonEmoji = ({ emoji, ...props }) => {
   const className = cx({
     up1: ['bentoBox', 'bomb'].includes(emoji),
   });
 
-  return (
-    <ButtonImage image={<Emoji name={emoji} />} className={className} {...props }/>
-  );
+  return <ButtonImage image={<Emoji name={emoji} />} className={className} {...props} />;
 };
 
 ButtonEmoji.propTypes = {

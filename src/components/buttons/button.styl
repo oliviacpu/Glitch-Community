@@ -19,7 +19,7 @@
   text-decoration: none
   &.matchBackground
     background-color: inherit
-  &.hasEmoji
+  &.hasImage
     padding-right: 35px
     &.padLeft
       padding-left: 35px
@@ -29,7 +29,7 @@
     padding-right: 45px
     &.padLeft
       padding-left: 45px
-    .emojiContainer img
+    .imageContainer img
       width: auto
       height: 15px
   &.dangerZone
@@ -68,12 +68,12 @@
     margin-bottom: 10px
     &.hasEmoji
       padding-right: 28px
-      .emojiContainer
+      .imageContainer
         right: 8px
       &.alignLeft
         padding-right: 8px
         padding-left: 28px
-        .emojiContainer
+        .imageContainer
           right: initial
           left: 8px
     // we display the sunglasses wider than the other emoji, so we need to add extra padding
@@ -81,17 +81,17 @@
       padding-right: 38px
       &.padLeft
         padding-left: 38px
-      .emojiContainer img
+      .imageContainer img
         width: auto
         height: 13px
     &.hasNarrowEmoji
       padding-right: 22px
-      .emojiContainer
+      .imageContainer
         right: 5px
       &.alignLeft
         padding-right: 8px
         padding-left: 22px
-        .emojiContainer
+        .imageContainer
           right: initial
           left: 5px
 
@@ -133,7 +133,7 @@ a:hover .btn.decorative,
 button:hover .btn.decorative
   background-color: secondary-background
   
-.emojiContainer
+.imageContainer
   position: absolute
   right: 12px
   top: 0
