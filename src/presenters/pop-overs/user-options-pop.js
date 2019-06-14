@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import { getLink as getTeamLink } from 'Models/team';
 import { TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { TeamLink, UserLink } from 'Components/link';
+import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
@@ -54,11 +55,9 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <TeamLink key={team.id} team={team}>
-            <Button type="tertiary" size="small" image={<TeamAvatar team={team} />}>
-              {team.name}
-            </Button>
-          </TeamLink>
+          <Button href={getTeamLink(team)} type="tertiary" size="small" image={<TeamAvatar team={team} />}>
+            {team.name}
+          </Button>
         </div>
       ))}
       <CreateTeamButton showCreateTeam={showCreateTeam} userIsAnon={userIsAnon} />
