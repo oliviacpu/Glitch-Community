@@ -3,18 +3,18 @@ import useOptimisticValue from './use-optimistic-value';
 
 /*
   what this does:
-  - ensures we don't update input with trimmed value (so spaces don't disappear when typing)
-  - but we pass the trimmed value to server
+  - trims input that we send to the server
+  - BUT it returns the untrimmed value so you don't lose spaces as you type
 */
 
 const useOptimisticText = (realValue, setRealValueAsync) => {
   const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync);
-  console.log({ optimisticValue })
   const [untrimmedValue, setUntrimmedValue] = useState(realValue);
+  
   const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
   const setInputValue = (value) => {
     setUntrimmedValue(value);
-    return setOptimisticValue(value.trim());
+    setOptimisticValue(value.trim());
   };
   return [inputValue, setInputValue, errorMessage];
 };
