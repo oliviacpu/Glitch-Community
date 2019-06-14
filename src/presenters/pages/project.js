@@ -23,7 +23,7 @@ import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
 import { addBreadcrumb } from 'Utils/sentry';
 
-import PopoverWithButton from '../pop-overs/popover-with-button';
+import { PopoverWithButton } from 'Components/popover';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
@@ -130,9 +130,8 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   return (
     <section>
       <PopoverWithButton
-        buttonClass="button-small button-tertiary danger-zone"
         buttonText="Delete Project"
-        buttonProps={{ emoji: 'bomb' }}
+        buttonProps={{ emoji: 'bomb', type: 'dangerZone', size: 'small' }}
       >
         {({ togglePopover, focusFirstElement }) => (
           <>
