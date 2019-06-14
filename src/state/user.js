@@ -8,7 +8,13 @@ import useErrorHandlers from '../presenters/error-handlers';
 import useUploader from '../presenters/includes/uploader';
 
 export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
-export const removePin = (api, projectId, user) =>  api.delete(`users/${user.id}/pinned-projects/${projectId}`);
+export const removePin = (api, projectId, user) => api.delete(`users/${user.id}/pinned-projects/${projectId}`);
+export const leaveProject = (api, projectId, user) =>
+  api.delete(`/projects/${projectId}/authorization`, {
+    data: {
+      targetUserId: user.id,
+    },
+  });
 
 export const getProject = (api, projectId) => api.get(`projects/${projectId}`);
 export const getDeletedProject = (api, projectId) => api.get(`projects/${projectId}?showDeleted=true`);
@@ -48,7 +54,7 @@ export function useUserEditor(initialUser) {
     reloadCollections();
   }, []);
 
-  const withErrorHandler = (fn, handler) => (...args) => fn(args).catch(handler);
+  const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
     updateName: (name) => updateFields({ name }).catch(handleErrorForInput),
@@ -85,28 +91,24 @@ export function useUserEditor(initialUser) {
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
     addPin: withErrorHandler(async (projectId) => {
-      await addPin(api, projectId, user)
+      await addPin(api, projectId, user);
       setUser((prev) => ({
         ...prev,
         pins: [...prev.pins, { id: projectId }],
       }));
     }, handleError),
     removePin: withErrorHandler(async (projectId) => {
-      await removePin(api, projectId, user)
+      await removePin(api, projectId, user);
       setUser((prev) => ({
         ...prev,
         pins: prev.pins.filter((p) => p.id !== projectId),
       }));
     }, handleError),
-    leaveProject: withErrorHandler(async (id) => {
-      await api.delete(`/projects/${id}/authorization`, {
-        data: {
-          targetUserId: currentUser.id,
-        },
-      });
+    leaveProject: withErrorHandler(async (projectId) => {
+      await leaveProject(api, projectId, currentUser);
       setUser((prev) => ({
         ...prev,
-        projects: prev.projects.filter((p) => p.id !== id),
+        projects: prev.projects.filter((p) => p.id !== projectId),
       }));
     }, handleError),
     deleteProject: withErrorHandler(async (projectId) => {
