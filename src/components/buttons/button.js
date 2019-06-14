@@ -15,7 +15,7 @@ export const SIZES = ['small'];
  */
 
 const Button = React.forwardRef(
-  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji, emojiPosition }, ref) => {
+  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, image, emoji, emojiPosition }, ref) => {
     const className = cx({
       btn: true,
       cta: type === 'cta',
@@ -23,7 +23,7 @@ const Button = React.forwardRef(
       tertiary: ['tertiary', 'dangerZone'].includes(type),
       dangerZone: type === 'dangerZone',
       unstyled: type === 'dropDown',
-      hasEmoji: emoji,
+      hasImage: emoji || image,
       hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
       hasSunglassesEmoji: emoji === 'sunglasses',
       padLeft: emoji && emojiPosition === 'left',
@@ -105,6 +105,8 @@ Button.propTypes = {
   active: PropTypes.bool,
   /** whether the link opens in a new tab or the same window */
   newTab: PropTypes.bool,
+  /** An 
+  image: PropTypes.node,
   /** Emoji name */
   emoji: PropTypes.string,
   /** Whether Emoji is to left or right of other content */
@@ -122,6 +124,7 @@ Button.defaultProps = {
   active: false,
   decorative: false,
   newTab: false,
+  image: null,
   emoji: null,
   emojiPosition: 'right',
 };
