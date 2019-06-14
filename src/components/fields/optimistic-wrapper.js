@@ -1,7 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 
 // import useOptimisticText from './use-optimistic-text';
+
+
+function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
+  const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
+  
+  const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
+  const wrapAsyncUpdateWithTrimmedValue = (value) => {
+    setUntrimmedValue(value);
+    asyncUpdate(value.trim());
+  };
+  return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
+};
 
 /*
 
@@ -56,34 +69,29 @@ const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
     }
   }
   
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
+  const debouncedValue = useDebouncedValue(value, 500);
+  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, onChange)
   
-  React.useEffect(() => {
-    setState({ ...state, inputState: optimisticValue })
-  }, [optimisticValue])
+  
+//   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
+  
+//   React.useEffect(() => {
+//     setState({ ...state, inputState: optimisticValue })
+//   }, [optimisticValue])
   
   
   return <MarkdownInput {...props} value={state.inputState} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
 };
 
-OptimisticMarkdownInput.propTypes = {
+OptimisticWrapper.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default OptimisticMarkdownInput;
+export default OptimisticWrapper;
 
 
-function useNonAggressiveTrimInputs(rawInput, asyncUpdate) {
-  const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
-  
-  const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
-  const asyncUpdateWithTrimmedValue = (value) => {
-    setUntrimmedValue(value);
-    asyncUpdate(value.trim());
-  };
-  return [displayedInputValue, ;
-};
+
 
 
 import useDebouncedValue from 'Hooks/use-debounced-value';
