@@ -129,15 +129,25 @@ Button.defaultProps = {
   emojiPosition: 'right',
 };
 
+const ButtonImage = ({ image, position }) => {
+  const className = cx({
+    imageContainer: true,
+    alignLeft: position === 'left',
+    up1: ['bentoBox', 'bomb'].includes(emoji),
+  });
+  <div className=
+    
+}
+
 const ButtonEmoji = ({ emoji, position }) => {
   const className = cx({
-    emojiContainer: true,
+    imageContainer: true,
     alignLeft: position === 'left',
     up1: ['bentoBox', 'bomb'].includes(emoji),
   });
 
   return (
-    <div className={className}>
+    <ButtonImage className={className}>
       <Emoji name={emoji} />
     </div>
   );
