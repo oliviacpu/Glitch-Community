@@ -120,7 +120,7 @@ function CreateTeamPopBase(props) {
   const placeholder = 'Your Team Name';
 
     return (
-      <PopoverDialog ref={props.focusFirstElement}>
+      <PopoverDialog align="right">
         <MultiPopoverTitle>
           Create Team <Emoji name="herb" />
         </MultiPopoverTitle>
@@ -153,7 +153,6 @@ function CreateTeamPopBase(props) {
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.any.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
 };
 
 const CreateTeamPop = withRouter((props) => {
