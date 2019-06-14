@@ -16,12 +16,14 @@ const PasswordSettings = ({ userHasPassword }) => {
   const { currentUser, reload } = useCurrentUser();
 
   const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setPassword] = useState(null);
+  const [newPassword, setNewPassword] = useState(null);
+  const [passwordVersion, setPasswordVersion] = useState(1);
 
-  const [done, setDone] = useState(false);
-  const andClearDone = (func) => (...args) => {
+  const [state, setState] = useState('idle');
+  const andClearS = (func) => (...args) => {
     func(...args);
     setDone(false);
+    setError(false);
   };
 
   const updatePassword = async (event) => {
@@ -30,13 +32,15 @@ const PasswordSettings = ({ userHasPassword }) => {
     try {
       await api.post('user/updatePassword', {
         oldPassword,
-        newPassword: password,
+        newPassword,
       });
       setDone(true);
       setOldPassword('');
+      setPasswordVersion((v) => v + 1);
       await reload();
     } catch (error) {
       console.error(error);
+      setError(true);
     }
   };
 
@@ -65,13 +69,14 @@ const PasswordSettings = ({ userHasPassword }) => {
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
 
-        <NewPasswordInput onChange={andClearDone(setPassword)} />
+        <NewPasswordInput key={passwordVersion} onChange={andClearDone(setNewPassword)} />
 
-        <Button type="tertiary" size="small" disabled={!password} submit>
+        <Button type="tertiary" size="small" disabled={!oldPassword || !newPassword} submit>
           Set Password
         </Button>
 
         {done && <Badge type="success">Successfully set new password</Badge>}
+        {error && <Badge type="error">We couldn't set the password</Badge>}
       </form>
       {userHasPassword &&
         <>
