@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './new-password-input.styl';
@@ -30,8 +30,8 @@ const weakPWErrorMsg = 'Password is too common';
 const pwMinCharCount = 8;
 
 const NewPasswordInput = ({ disabled, onChange }) => {
-  const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [password, setPassword] = React.useState('');
+  const [password2, setPassword2] = React.useState('');
   
   const passwordConfirmError = useDebouncedValue(password && password2 && password !== password2, 500);
 
@@ -50,6 +50,14 @@ const NewPasswordInput = ({ disabled, onChange }) => {
   } else {
     weakPasswordError = true;
   }
+  
+  React.useEffect(() => {
+    if (password.length > pwMinCharCount && !weakPasswordError && password === password2) {
+      onChange(password);
+    } else {
+      onChange(null);
+    }
+  }, [password, password2, weakPasswordError]);
 
   return (
     <>
