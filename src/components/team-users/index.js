@@ -8,10 +8,10 @@ import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { useAPI, createAPIHook } from 'State/api';
+import { useNotifications } from 'State/notifications';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
-import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
@@ -25,17 +25,16 @@ import styles from './styles.styl';
 
 function InvitedUser(props) {
   const api = useAPI();
+  const { createNotification } = useNotifications();
 
   // resend the invite
   const resendInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-      createNotification(<Notification>Resent invite to ${props.user.name}! </Notification>, { type: 'success' });
+      createNotification(`Resent invite to ${props.user.name}!`, { type: 'success' });
     } catch (error) {
       captureException(error);
-      <Notification type="error">
-        Invite not sent, try again later
-      </Notification>
+      createNotification('Invite not sent, try again later', { type: 'error' });
     }
   };
 
@@ -167,6 +166,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitees, setRemovedInvitee] = useState([]);
   const api = useAPI();
+  const { createNotification } = useNotifications();
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
@@ -180,29 +180,21 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
-      <Notification type="success">
-        Invited ${getDisplayName(user)}!
-      </Notification>
+      createNotification(`Invited ${getDisplayName(user)}!`, { type: 'success' });
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
-      <Notification type="error">
-        Couldn't invite ${getDisplayName(user)}, Try again later
-      </Notification>
+      createNotification(`Couldn't invite ${getDisplayName(user)}, Try again later`, { type: 'error' });
     }
   };
 
   const onInviteEmail = async (email) => {
     try {
       await inviteEmail(email);
-      <Notification type="success">
-        Invited ${email}!
-      </Notification>
+      createNotification(`Invited ${email}!`, { type: 'success' });
     } catch (error) {
       captureException(error);
-      <Notification type="error">
-        Couldn't invite ${email}, Try again later
-      </Notification>
+      createNotification(`Couldn't invite ${email}, Try again later`, { type: 'error' });
     }
   };
 
@@ -227,14 +219,10 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
               setRemovedInvitee((removed) => [...removed, user]);
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
-                <Notification>
-                  Removed ${user.name} from team
-                </Notification>
+                createNotification(`Removed ${user.name} from team`);
               } catch (error) {
                 captureException(error);
-                <Notification type="error">
-                  Couldn't revoke invite, Try again later
-                </Notification>
+                createNotification("Couldn't revoke invite, Try again later", { type: 'error' });
               }
             }}
           />
