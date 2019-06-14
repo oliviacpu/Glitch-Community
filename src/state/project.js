@@ -2,11 +2,25 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as assets from '../utils/assets';
-import { useAPI } from '../state/api';
-import { useCurrentUser } from '../state/current-user';
-import useErrorHandlers from './error-handlers';
-import useUploader from './includes/uploader';
+import * as assets from 'Utils/assets';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+
+import useErrorHandlers from '../presenters/error-handlers';
+import useUploader from '../presenters/includes/uploader';
+
+
+const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
+
+const addProjectToCollection = (api, project, collection) => 
+  api.patch(`collections/${collection.id}/add/${project.id}`);
+
+const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
+
+const updateProjectDomain = (api, project, domain) => {
+  
+} 
+
 
 export function useProjectEditor(initialProject) {
   const [project, setProject] = useState({
@@ -18,14 +32,8 @@ export function useProjectEditor(initialProject) {
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const api = useAPI();
 
-  function userIsMember() {
-    if (!currentUser) return false;
-    // TODO: use permissions
-    return project.users.some(({ id }) => currentUser.id === id);
-  }
-
   async function updateFields(changes) {
-    await api.patch(`projects/${project.id}`, changes);
+    await updateProject(api, project, changes);
     setProject((prev) => ({
       ...prev,
       ...changes,
@@ -48,14 +56,6 @@ export function useProjectEditor(initialProject) {
     );
   }
 
-  async function addProjectToCollection(project, collection) {
-    await api.patch(`collections/${collection.id}/add/${project.id}`);
-  }
-
-  async function deleteProject() {
-    await api.delete(`projects/${project.id}`);
-  }
-
   async function uploadAvatar(blob) {
     const { data: policy } = await assets.getProjectAvatarImagePolicy(api, project.id);
     await uploadAsset(blob, policy, '', { cacheControl: 60 });
@@ -66,12 +66,12 @@ export function useProjectEditor(initialProject) {
   }
 
   const funcs = {
-    addProjectToCollection: (project, collection) => addProjectToCollection(project, collection).catch(handleCustomError),
-    deleteProject: () => deleteProject().catch(handleError),
+    addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
+    deleteProject: () => deleteProject(api, project).catch(handleError),
     updateDomain: (domain) => updateDomain(domain).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     updatePrivate: (isPrivate) => updateFields({ private: isPrivate }).catch(handleError),
     uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
   };
-  return [project, funcs, userIsMember()];
+  return [project, funcs];
 }

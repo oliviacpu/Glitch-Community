@@ -39,3 +39,8 @@ export function sortProjectsByLastAccess(projects) {
     return Date.parse(b.lastAccess) - Date.parse(a.lastAccess);
   });
 }
+
+export function userIsMember({ project, user }) {
+  if (!user) return false;
+  return project.permissions.some(({ userId }) => user.id === userId);
+}

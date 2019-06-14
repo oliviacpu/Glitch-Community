@@ -177,16 +177,13 @@ DeleteProjectButton.propTypes = {
   deleteProject: PropTypes.func.isRequired,
 };
 
-const ProjectPage = ({
-  project,
-  addProjectToCollection,
-  isAuthorized,
-  updateDomain,
-  updateDescription,
-  updatePrivate,
-  deleteProject,
-  uploadAvatar,
-}) => {
+const ProjectPage = ({ project: initialProject }) => {
+  const [
+    project,
+    { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar },
+    isAuthorized,
+  ] = useProjectEditor(initialProject);
+
   const { currentUser } = useCurrentUser();
   const { domain, users, teams, suspendedReason } = project;
   return (
@@ -253,8 +250,6 @@ const ProjectPage = ({
   );
 };
 ProjectPage.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -263,10 +258,6 @@ ProjectPage.propTypes = {
     teams: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
   }).isRequired,
-  updateDomain: PropTypes.func.isRequired,
-  updateDescription: PropTypes.func.isRequired,
-  updatePrivate: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired,
 };
 
 async function getProject(api, domain) {
@@ -284,32 +275,21 @@ async function getProject(api, domain) {
   return { ...project, ...rest };
 }
 
-const ProjectPageLoader = ({ domain }) => {
-  
-
-  return (
-    <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
-      {(project) =>
-        project ? (
-              <>
-                <Helmet title={project.domain} />
-                <ProjectPage project={project} />
-              </>
-        ) : (
-          <NotFound name={domain} />
-        )
-      }
-    </DataLoader>
-  );
-};
-ProjectPageLoader.propTypes = {
-  domain: PropTypes.string.isRequired,
-};
-
-const ProjectPageContainer = ({ name }) => (
+const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
-      <ProjectPageLoader domain={name} />
+      <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
+        {(project) =>
+          project ? (
+            <>
+              <Helmet title={project.domain} />
+              <ProjectPage project={project} />
+            </>
+          ) : (
+            <NotFound name={domain} />
+          )
+        }
+      </DataLoader>
     </AnalyticsContext>
   </Layout>
 );
