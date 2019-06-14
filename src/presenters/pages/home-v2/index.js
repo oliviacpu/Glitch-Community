@@ -141,13 +141,13 @@ const TopPicks = ({ children }) => (
 
 const FeaturedEmbed = ({ content: { domain, title, description, href, image } }) => (
   <figure className={styles.featuredEmbed}>
-    <img className={styles.featuredEmbedImg} src={image} alt="" />
+    <a href={href} className={styles.plainLink}>
+      <img className={styles.featuredEmbedImg} src={image} alt="" />
+    </a>
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
-        <a href={href} className={styles.plainLink}>
-          <h4 className={styles.h4}>{title}</h4>
-          <Markdown>{description}</Markdown>
-        </a>
+        <h4 className={styles.h4}>{title}</h4>
+        <Markdown>{description}</Markdown>
       </div>
     </figcaption>
     <div className={styles.featuredEmbedWrap}>
