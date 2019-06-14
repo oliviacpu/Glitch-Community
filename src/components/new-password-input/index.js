@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import styles from './new-password-input.styl';
+import Pluralize from 'react-pluralize';
 
 import useDebouncedValue from 'Hooks/use-debounced-value';
-import PasswordStrength from 'Components/password-strength';
+import TextInput from 'Components/inputs/text-input';
+import PasswordStrength from './password-strength';
+
+import styles from './new-password-input.styl';
 
 // top worst passwords from Splashdata (https://en.wikipedia.org/wiki/List_of_the_most_common_passwords#cite_note-splashdata2018-10)
 // edited to only include those with at least 8-character
@@ -32,7 +34,7 @@ const pwMinCharCount = 8;
 const NewPasswordInput = ({ disabled, onChange }) => {
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
-  
+
   const passwordConfirmError = useDebouncedValue(password && password2 && password !== password2, 500);
 
   // if password is part of weak pw list, show it as weak
@@ -50,7 +52,7 @@ const NewPasswordInput = ({ disabled, onChange }) => {
   } else {
     weakPasswordError = true;
   }
-  
+
   React.useEffect(() => {
     if (password.length > pwMinCharCount && !weakPasswordError && password === password2) {
       onChange(password);
@@ -67,6 +69,7 @@ const NewPasswordInput = ({ disabled, onChange }) => {
         labelText="password"
         placeholder="new password"
         onChange={setPassword}
+        disabled={disabled}
         error={weakPasswordError ? weakPWErrorMsg : null}
       />
 
@@ -88,6 +91,7 @@ const NewPasswordInput = ({ disabled, onChange }) => {
         labelText="confirm new password"
         placeholder="confirm new password"
         onChange={setPassword2}
+        disabled={disabled}
         error={passwordConfirmError ? matchErrorMsg : null}
       />
     </>

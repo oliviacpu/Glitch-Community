@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Pluralize from 'react-pluralize';
 
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
@@ -17,7 +16,7 @@ const PasswordSettings = ({ userHasPassword }) => {
   const { currentUser, reload } = useCurrentUser();
 
   const [oldPassword, setOldPassword] = useState('');
-  const [password, setPassword] = useState(null);
+  const [newPassword, setPassword] = useState(null);
 
   const [done, setDone] = useState(false);
   const andClearDone = (func) => (...args) => {
@@ -66,7 +65,7 @@ const PasswordSettings = ({ userHasPassword }) => {
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
         )}
 
-        <NewPasswordInput onChange={setPassword} />
+        <NewPasswordInput onChange={andClearDone(setPassword)} />
 
         <Button type="tertiary" size="small" disabled={!password} submit>
           Set Password
