@@ -37,59 +37,6 @@ export function useUserEditor(initialUser) {
     }
   }
 
-  async function uploadAvatar(blob) {
-    const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
-    const url = await uploadAsset(blob, policy, 'temporary-user-avatar');
-
-    const image = await assets.blobToImage(blob);
-    const color = assets.getDominantColor(image);
-    await updateFields({
-      avatarUrl: url,
-      color,
-    });
-  }
-
-  async function uploadCover(blob) {
-    const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
-    await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
-
-    const image = await assets.blobToImage(blob);
-    const color = assets.getDominantColor(image);
-    await updateFields({
-      hasCoverImage: true,
-      coverColor: color,
-    });
-    setState((prev) => ({ ...prev, _cacheCover: Date.now() }));
-  }
-
-  async function addPin(id) {
-    await api.post(`users/${user.id}/pinned-projects/${id}`);
-    setState((prev) => ({
-      ...prev,
-      pins: [...prev.pins, { id }],
-    }));
-  }
-
-  async function removePin(id) {
-    await api.delete(`users/${user.id}/pinned-projects/${id}`);
-    setState((prev) => ({
-      ...prev,
-      pins: prev.pins.filter((p) => p.id !== id),
-    }));
-  }
-
-  async function leaveProject(id) {
-    await api.delete(`/projects/${id}/authorization`, {
-      data: {
-        targetUserId: currentUser.id,
-      },
-    });
-    setState((prev) => ({
-      ...prev,
-      projects: prev.projects.filter((p) => p.id !== id),
-    }));
-  }
-
   async function reloadCollections() {
     const { data } = await getUserCollections(api, user);
     setState((prev) => ({ ...prev, collections: data }));
@@ -105,15 +52,64 @@ export function useUserEditor(initialUser) {
     updateName: (name) => updateFields({ name }).catch(handleErrorForInput),
     updateLogin: (login) => updateFields({ login }).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
-    uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
-    uploadCover: () => assets.requestFile((blob) => uploadCover(blob).catch(handleError)),
+    uploadAvatar: () =>
+      assets.requestFile(
+        withErrorHandler(async (blob) => {
+          const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
+          const url = await uploadAsset(blob, policy, 'temporary-user-avatar');
+
+          const image = await assets.blobToImage(blob);
+          const color = assets.getDominantColor(image);
+          await updateFields({
+            avatarUrl: url,
+            color,
+          });
+        }, handleError),
+      ),
+    uploadCover: () =>
+      assets.requestFile(
+        withErrorHandler(async (blob) => {
+          const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
+          await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
+
+          const image = await assets.blobToImage(blob);
+          const color = assets.getDominantColor(image);
+          await updateFields({
+            hasCoverImage: true,
+            coverColor: color,
+          });
+          setState((prev) => ({ ...prev, _cacheCover: Date.now() }));
+        }, handleError),
+      ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
-    addPin: (id) => addPin(id).catch(handleError),
-    removePin: (id) => removePin(id).catch(handleError),
-    leaveProject: (id) => leaveProject(id).catch(handleError),
+    addPin: withErrorHandler(async (id) => {
+      await api.post(`users/${user.id}/pinned-projects/${id}`);
+      setState((prev) => ({
+        ...prev,
+        pins: [...prev.pins, { id }],
+      }));
+    }, handleError),
+    removePin: withErrorHandler(async (id) => {
+      await api.delete(`users/${user.id}/pinned-projects/${id}`);
+      setState((prev) => ({
+        ...prev,
+        pins: prev.pins.filter((p) => p.id !== id),
+      }));
+    }, handleError),
+    leaveProject: withErrorHandler(async (id) => {
+      await api.delete(`/projects/${id}/authorization`, {
+        data: {
+          targetUserId: currentUser.id,
+        },
+      });
+      setState((prev) => ({
+        ...prev,
+        projects: prev.projects.filter((p) => p.id !== id),
+      }));
+    }, handleError),
     deleteProject: withErrorHandler(async (projectId) => {
-      await deleteProject(api, projectId)
-      const { data } = await getDeletedProject(api, projectId)
+      await deleteProject(api, projectId);
+      const { data } = await getDeletedProject(api, projectId);
       setState((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== projectId),
@@ -137,7 +133,7 @@ export function useUserEditor(initialUser) {
       reloadCollections();
     }, handleCustomError),
     featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
-    unfeatureProject: (id) => updateFields({ featured_project_id: null }).catch(handleError),
+    unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
   return [user, funcs];
 }
