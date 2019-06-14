@@ -46,6 +46,7 @@ const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
       }
     }
   }
+  
   const onBlur = () => {
     // if we're still waiting for a response from the server, keep running this func
     if (state.status === "loading") {
@@ -58,7 +59,6 @@ const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
   
   React.useEffect(() => {
-    console.log("setting inputState as optimisticValue", optimisticValue)
     setState({ ...state, inputState: optimisticValue })
   }, [optimisticValue])
   
@@ -74,16 +74,15 @@ OptimisticMarkdownInput.propTypes = {
 export default OptimisticMarkdownInput;
 
 
-function useOptimisticText(realValue, setRealValueAsync) {
-  const [optimisticValue, setOptimisticValue, errorMessage] = useOptimisticValue(realValue, setRealValueAsync);
-  const [untrimmedValue, setUntrimmedValue] = useState(realValue);
+function useNonAggressiveTrimInputs(rawInput, asyncUpdate) {
+  const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
   
-  const inputValue = optimisticValue === untrimmedValue.trim() ? untrimmedValue : optimisticValue;
-  const setInputValue = (value) => {
+  const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
+  const asyncUpdateWithTrimmedValue = (value) => {
     setUntrimmedValue(value);
-    setOptimisticValue(value.trim());
+    asyncUpdate(value.trim());
   };
-  return [inputValue, setInputValue, errorMessage];
+  return [displayedInputValue, ;
 };
 
 
@@ -135,4 +134,3 @@ const useOptimisticValue = (realValue, setValueAsync) => {
   return [optimisticValue, setOptimisticValue, state.error];
 };
 
-export default useOptimisticValue;
