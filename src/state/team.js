@@ -12,6 +12,18 @@ import useUploader from '../presenters/includes/uploader';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
+const updateUserAccessLevel = (api, userId, team, accessLevel) => api.patch(`teams/${team.id}/users/${userId}`, {
+  access_level: accessLevel,
+});
+const removeUserFromTeam = (api, userId, team) => api.delete(`teams/${team.id}/users/${userId}`);
+
+const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
+
+const addProjectToTeam = (api, project, team) => api.post(`teams/${team.id}/projects/${project.id}`);
+const removeProjectFromTeam = (api, projectId, team) => api.delete(`teams/${team.id}/projects/${projectId}`);
+
+const addPinnedProject = (api, projectId, team) => api.post(`teams/${team.id}/pinned-projects/${projectId}`);
+const removePinnedProject = (api, projectId, team) => api.delete(`teams/${team.id}/pinned-projects/${projectId}`);
 
 async function addProjectToCollection(api, project, collection) {
   await api.patch(`collections/${collection.id}/add/${project.id}`);
@@ -21,7 +33,7 @@ async function joinTeamProject(api, projectId, team) {
   await api.post(`/teams/${team.id}/projects/${projectId}/join`);
 }
 
-async function leaveTeamProject(api, projectId, user) {
+async function removeUserFromProject(api, projectId, user) {
   await api.delete(`/projects/${projectId}/authorization`, {
     data: {
       targetUserId: user.id,
@@ -93,14 +105,12 @@ export function useTeamEditor(initialTeam) {
   }
 
   async function inviteEmail(emailAddress) {
-    console.log('💣 inviteEmail', emailAddress);
     await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
       emailAddress,
     });
   }
 
   async function inviteUser(user) {
-    console.log('💣 inviteUser', user);
     await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
       userId: user.id,
     });
@@ -116,7 +126,7 @@ export function useTeamEditor(initialTeam) {
     }
   }
 
-  async function removeUserFromTeam(userId, projectIds) {
+  async function removeUser(userId, projectIds) {
     // Kick them out of every project at once, and wait until it's all done
     await Promise.all(
       projectIds.map((projectId) =>
@@ -126,7 +136,7 @@ export function useTeamEditor(initialTeam) {
       ),
     );
     // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
-    await api.delete(`teams/${team.id}/users/${userId}`);
+    await removeUserFromTeam(api, userId, team);
     removeUserAdmin(userId);
     setTeam((prev) => ({
       ...prev,
@@ -138,43 +148,41 @@ export function useTeamEditor(initialTeam) {
     }
   }
 
-  async function updateUserPermissions(id, accessLevel) {
+  async function updateUserPermissions(userId, accessLevel) {
     if (accessLevel === MEMBER_ACCESS_LEVEL && team.adminIds.length <= 1) {
       createNotification('A team must have at least one admin', { type: 'error' });
       return false;
     }
-    await api.patch(`teams/${team.id}/users/${id}`, {
-      access_level: accessLevel,
-    });
+    await updateUserAccessLevel(api, userId, team, accessLevel);
     if (accessLevel === ADMIN_ACCESS_LEVEL) {
       setTeam((prev) => ({
         ...prev,
-        counter: prev.adminIds.push(id),
+        counter: prev.adminIds.push(userId),
       }));
     } else {
-      removeUserAdmin(id);
+      removeUserAdmin(userId);
     }
     return null;
   }
 
   async function addProject(project) {
-    await api.post(`teams/${team.id}/projects/${project.id}`);
+    await addProjectToTeam(api, project, team);
     setTeam((prev) => ({
       ...prev,
       projects: [project, ...prev.projects],
     }));
   }
 
-  async function removeProject(id) {
-    await api.delete(`teams/${team.id}/projects/${id}`);
+  async function removeProject(projectId) {
+    await removeProjectFromTeam(api, projectId, team);
     setTeam((prev) => ({
       ...prev,
-      projects: prev.projects.filter((p) => p.id !== id),
+      projects: prev.projects.filter((p) => p.id !== projectId),
     }));
   }
 
   async function deleteProject(projectId) {
-    await api.delete(`/projects/${projectId}`);
+    await deleteProject(api, projectId);
     setTeam((prev) => ({
       ...prev,
       projects: prev.projects.filter((p) => p.id !== projectId),
@@ -182,7 +190,7 @@ export function useTeamEditor(initialTeam) {
   }
 
   async function addPin(projectId) {
-    await api.post(`teams/${team.id}/pinned-projects/${projectId}`);
+    await addPinnedProject(api, projectId, team);
     setTeam((prev) => ({
       ...prev,
       teamPins: [...prev.teamPins, { projectId }],
@@ -190,7 +198,7 @@ export function useTeamEditor(initialTeam) {
   }
 
   async function removePin(projectId) {
-    await removePinnedPro
+    await removePinnedProject(api, projectId, team);
     setTeam((prev) => ({
       ...prev,
       teamPins: prev.teamPins.filter((p) => p.projectId !== projectId),
@@ -212,7 +220,7 @@ export function useTeamEditor(initialTeam) {
     joinTeam: () => joinTeam().catch(handleError),
     inviteEmail: (email) => inviteEmail(email).catch(handleError),
     inviteUser: (id) => inviteUser(id).catch(handleError),
-    removeUserFromTeam: (id, projectIds) => removeUserFromTeam(id, projectIds).catch(handleError),
+    removeUserFromTeam: (id, projectIds) => removeUser(id, projectIds).catch(handleError),
     uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
     uploadCover: () => assets.requestFile((blob) => uploadCover(blob).catch(handleError)),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
@@ -223,8 +231,8 @@ export function useTeamEditor(initialTeam) {
     removePin: (id) => removePin(id).catch(handleError),
     updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
     updateUserPermissions: (id, accessLevel) => updateUserPermissions(id, accessLevel).catch(handleError),
-    joinTeamProject: (projectId) => joinTeamProject(api, projectId, team).catch(handleError),
-    leaveTeamProject: (projectId) => leaveTeamProject(api, projectId, currentUser).catch(handleError),
+    joinTeamProject: (projectId) => addUserToProject(api, projectId, team).catch(handleError),
+    leaveTeamProject: (projectId) => removeUserFromProject(api, projectId, currentUser).catch(handleError),
     addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
     featureProject: (id) => featureProject(id).catch(handleError),
     unfeatureProject: (id) => unfeatureProject(id).catch(handleError),
