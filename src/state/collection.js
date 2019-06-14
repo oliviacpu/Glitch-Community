@@ -4,6 +4,11 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useErrorHandlers from '../presenters/error-handlers';
 
+export const addProjectToCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/add/${projectId}`);
+export const orderProjectInCollection = (api, projectId, collection, index) => api.post(`collections/${collection.id}/project/${projectId}/index/${index}`);
+export const updateProjectInCollection = (api, projectId, collection, patch) => api.patch(`collections/${collection.id}/project/${projectId}`, patch);
+export const removeProjectFromCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/remove/${projectId}`);
+
 export const updateCollection = (api, collection, changes) => api.patch(`collections/${collection.id}`, changes);
 export const deleteCollection = (api, collection) => api.delete(`/collections/${collection.id}`);
 
@@ -54,14 +59,14 @@ export function useCollectionEditor(initialCollection) {
           projects: [project, ...prev.projects],
         }));
       }
-      await api.patch(`collections/${selectedCollection.id}/add/${project.id}`);
+      await addProjectToCollection(api, project.id, selectedCollection)
       if (selectedCollection.id === collection.id) {
-        await api.post(`collections/${selectedCollection.id}/project/${project.id}/index/0`);
+        await orderProjectInCollection(api, project.id, collection, 0)
       }
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project) => {
-      await api.patch(`collections/${collection.id}/remove/${project.id}`);
+      await removeProjectFromCollection(api, project.id, collection)
       setCollection((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
@@ -76,7 +81,7 @@ export function useCollectionEditor(initialCollection) {
 
     updateNote: async ({ note, projectId }) => {
       note = (note || '').trim();
-      await api.patch(`collections/${collection.id}/project/${projectId}`, { annotation: note });
+      await updateProjectInCollection(api, projectId, collection, { annotation: note });
       updateProject({ note, isAddingANewNote: true }, projectId);
     },
 
@@ -95,7 +100,7 @@ export function useCollectionEditor(initialCollection) {
         sortedProjects.splice(index, 0, project);
         return { ...prev, projects: sortedProjects };
       });
-      await api.post(`collections/${collection.id}/project/${project.id}/index/${index}`);
+      await orderProjectInCollection(api, project.id, collection, index);
     }, handleError),
 
     featureProject: withErrorHandler(async (projectId) => {
