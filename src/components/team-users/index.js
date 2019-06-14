@@ -30,10 +30,16 @@ function InvitedUser(props) {
   const resendInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-        <Notification type="success">Resent invite to ${props.user.name}!</Notification>;
+      return (
+        <Notification type="success">
+          Resent invite to ${props.user.name}!
+        </Notification>
+      );
     } catch (error) {
       captureException(error);
-        <Notification type="error">Invite not sent, try again later</Notification>;
+      <Notification type="error">
+        Invite not sent, try again later
+      </Notification>
     }
   };
 
@@ -178,21 +184,29 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
-        <Notification type="success">Invited ${getDisplayName(user)}!</Notification>;
+      <Notification type="success">
+        Invited ${getDisplayName(user)}!
+      </Notification>
     } catch (error) {
       setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
-      <Notification type="error">Couldn't invite ${getDisplayName(user)}, Try again later</Notification>;
+      <Notification type="error">
+        Couldn't invite ${getDisplayName(user)}, Try again later
+      </Notification>
     }
   };
 
   const onInviteEmail = async (email) => {
     try {
       await inviteEmail(email);
-      <Notification type="success">Invited ${email}!</Notification>;
+      <Notification type="success">
+        Invited ${email}!
+      </Notification>
     } catch (error) {
       captureException(error);
-      <Notification type="error">Couldn't invite ${email}, Try again later</Notification>;
+      <Notification type="error">
+        Couldn't invite ${email}, Try again later
+      </Notification>
     }
   };
 
@@ -217,10 +231,14 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
               setRemovedInvitee((removed) => [...removed, user]);
               try {
                 await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
-                <Notification>`Removed ${user.name} from team`</Notification>;
+                <Notification>
+                  Removed ${user.name} from team
+                </Notification>
               } catch (error) {
                 captureException(error);
-                <Notification type="error">"Couldn't revoke invite, Try again later"</Notification>;
+                <Notification type="error">
+                  Couldn't revoke invite, Try again later
+                </Notification>
               }
             }}
           />
