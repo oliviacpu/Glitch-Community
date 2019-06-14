@@ -12,43 +12,43 @@ import useUploader from '../presenters/includes/uploader';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
-const updateTeam = (api, team, changes) => api.patch(`teams/${team.id}`, changes);
-const joinTeam = (api, team) => api.post(`teams/${team.id}/join`);
+export const updateTeam = (api, team, changes) => api.patch(`teams/${team.id}`, changes);
+export const joinTeam = (api, team) => api.post(`teams/${team.id}/join`);
 
-async function inviteEmail(api, emailAddress, team) {
+export async function inviteEmail(api, emailAddress, team) {
   await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
     emailAddress,
   });
 }
 
-async function inviteUserToTeam(api, user, team) {
+export async function inviteUserToTeam(api, user, team) {
   await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
     userId: user.id,
   });
 }
-const updateUserAccessLevel = (api, userId, team, accessLevel) =>
+export const updateUserAccessLevel = (api, userId, team, accessLevel) =>
   api.patch(`teams/${team.id}/users/${userId}`, {
     access_level: accessLevel,
   });
-const removeUserFromTeam = (api, userId, team) => api.delete(`teams/${team.id}/users/${userId}`);
+export const removeUserFromTeam = (api, userId, team) => api.delete(`teams/${team.id}/users/${userId}`);
 
-const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
+export const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
 
-const addProjectToTeam = (api, project, team) => api.post(`teams/${team.id}/projects/${project.id}`);
-const removeProjectFromTeam = (api, projectId, team) => api.delete(`teams/${team.id}/projects/${projectId}`);
+export const addProjectToTeam = (api, project, team) => api.post(`teams/${team.id}/projects/${project.id}`);
+export const removeProjectFromTeam = (api, projectId, team) => api.delete(`teams/${team.id}/projects/${projectId}`);
 
-const addPinnedProject = (api, projectId, team) => api.post(`teams/${team.id}/pinned-projects/${projectId}`);
-const removePinnedProject = (api, projectId, team) => api.delete(`teams/${team.id}/pinned-projects/${projectId}`);
+export const addPinnedProject = (api, projectId, team) => api.post(`teams/${team.id}/pinned-projects/${projectId}`);
+export const removePinnedProject = (api, projectId, team) => api.delete(`teams/${team.id}/pinned-projects/${projectId}`);
 
-async function addProjectToCollection(api, project, collection) {
+export async function addProjectToCollection(api, project, collection) {
   await api.patch(`collections/${collection.id}/add/${project.id}`);
 }
 
-async function addUserToProject(api, projectId, team) {
+export async function addUserToProject(api, projectId, team) {
   await api.post(`/teams/${team.id}/projects/${projectId}/join`);
 }
 
-async function removeUserFromProject(api, projectId, userId) {
+export async function removeUserFromProject(api, projectId, userId) {
   await api.delete(`/projects/${projectId}/authorization`, {
     data: {
       targetUserId: userId,
