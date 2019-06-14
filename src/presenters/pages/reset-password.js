@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import dayjs from 'dayjs';
 
+import { useAPI } from 'State/api';
 import useLocalStorage from 'State/local-storage';
 import Button from 'Components/buttons/button';
 import NewPasswordInput from 'Components/new-password-input';
@@ -16,7 +18,7 @@ const ResetPasswordLogin = ({ loginToken, resetPasswordToken }) => {
         .add(10, 'minutes')
         .toISOString(),
       to: {
-        pathname: '/reset-password',
+        pathname: '/login/reset-password',
         search: `resetPasswordToken=${resetPasswordToken}`,
       },
     });
@@ -26,17 +28,34 @@ const ResetPasswordLogin = ({ loginToken, resetPasswordToken }) => {
 };
 
 const ResetPasswordForm = ({ resetPasswordToken }) => {
+  const api = useAPI();
   const [password, setPassword] = React.useState(null);
+  const [state, setState] = React.useState(null);
+  const isWorking = state === 'working';
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(password, resetPasswordToken);
+    setState('working');
+    try {
+      await api.post('/user/updatePasswordWithToken', {
+        token: resetPasswordToken,
+        password,
+      });
+      setState('done');
+    } catch (error) {
+      console.error(error);
+      setState('error');
+    }
   };
+
+  if (state === 'done') {
+    return <Redirect to="/" />;
+  }
 
   return (
     <form onSubmit={onSubmit}>
-      <NewPasswordInput onChange={setPassword} />
-      <Button size="small" disabled={!password} submit>Set Password</Button>
+      <NewPasswordInput disabled={isWorking} onChange={setPassword} />
+      <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
     </form>
   );
 };
