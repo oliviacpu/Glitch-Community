@@ -40,7 +40,7 @@ export function sortProjectsByLastAccess(projects) {
   });
 }
 
-export function userIsMember({ project, user }) {
+export function userIsProjectMember({ project, user }) {
   if (!user) return false;
   return project.permissions.some(({ userId }) => user.id === userId);
 }

@@ -23,10 +23,11 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
+import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
 import PopoverWithButton from '../pop-overs/popover-with-button';
-import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
@@ -178,13 +179,12 @@ DeleteProjectButton.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
-  const [
-    project,
-    { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar },
-    isAuthorized,
-  ] = useProjectEditor(initialProject);
+  const [project, { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
+    initialProject,
+  );
 
   const { currentUser } = useCurrentUser();
+  const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
