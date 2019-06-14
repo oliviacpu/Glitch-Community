@@ -118,6 +118,7 @@ const formatByType = {
     users: null,
     teams: null,
     permissions: project.members.map((userId) => ({ userId })),
+    teamIds: project.teams,
     private: project.isPrivate,
   }),
   collection: (collection) => ({

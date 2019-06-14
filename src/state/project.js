@@ -5,28 +5,31 @@ import { getAllPages } from 'Shared/api';
 
 export const ProjectContext = createContext();
 
-async function getMembers(api, projectId) {
+async function getMembers(api, projectId, withCacheBust) {
+  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
   const [users, teams] = await Promise.all([
-    getAllPages(api, `/v1/projects/by/id/users?id=${projectId}`),
-    getAllPages(api, `/v1/projects/by/id/teams?id=${projectId}`),
+    getAllPages(api, `/v1/projects/by/id/users?id=${projectId}${cacheBust}`),
+    getAllPages(api, `/v1/projects/by/id/teams?id=${projectId}${cacheBust}`),
   ]);
   return { users, teams };
 }
 
 const loadingResponse = { status: 'loading' };
 
-function loadProjectMembers(api, projectIds, setProjectResponses) {
-  // set selected projects to 'loading'
+function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust) {
+  // set selected projects to 'loading' if they haven't been initialized yet
   setProjectResponses((prev) => {
     const next = { ...prev };
     for (const projectId of projectIds) {
-      next[projectId] = { ...next[projectId], members: loadingResponse };
+      if (!next[projectId] || !next[projectId].members) {
+        next[projectId] = { ...next[projectId], members: loadingResponse };  
+      }
     }
     return next;
   });
   // update each project as it loads
   projectIds.forEach(async (projectId) => {
-    const members = await getMembers(api, projectId);
+    const members = await getMembers(api, projectId, withCacheBust);
     setProjectResponses((prev) => ({
       ...prev,
       [projectId]: {
@@ -51,7 +54,7 @@ export const ProjectContextProvider = ({ children }) => {
         return loadingResponse;
       },
       reloadProjectMembers: (projectIds) => {
-        loadProjectMembers(api, projectIds, setProjectResponses);
+        loadProjectMembers(api, projectIds, setProjectResponses, true);
       },
     }),
     [projectResponses, api],
