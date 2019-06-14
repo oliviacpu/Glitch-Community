@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
@@ -12,6 +11,23 @@ import useUploader from '../presenters/includes/uploader';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
+
+
+async function addProjectToCollection(api, project, collection) {
+  await api.patch(`collections/${collection.id}/add/${project.id}`);
+}
+
+async function joinTeamProject(api, projectId, team) {
+  await api.post(`/teams/${team.id}/projects/${projectId}/join`);
+}
+
+async function leaveTeamProject(api, projectId, user) {
+  await api.delete(`/projects/${projectId}/authorization`, {
+    data: {
+      targetUserId: user.id,
+    },
+  });
+}
 
 export function useTeamEditor(initialTeam) {
   const api = useAPI();
@@ -157,44 +173,28 @@ export function useTeamEditor(initialTeam) {
     }));
   }
 
-  async function deleteProject(id) {
-    await api.delete(`/projects/${id}`);
+  async function deleteProject(projectId) {
+    await api.delete(`/projects/${projectId}`);
     setTeam((prev) => ({
       ...prev,
-      projects: prev.projects.filter((p) => p.id !== id),
+      projects: prev.projects.filter((p) => p.id !== projectId),
     }));
   }
 
-  async function addPin(id) {
-    await api.post(`teams/${team.id}/pinned-projects/${id}`);
+  async function addPin(projectId) {
+    await api.post(`teams/${team.id}/pinned-projects/${projectId}`);
     setTeam((prev) => ({
       ...prev,
-      teamPins: [...prev.teamPins, { projectId: id }],
+      teamPins: [...prev.teamPins, { projectId }],
     }));
   }
 
-  async function removePin(id) {
-    await api.delete(`teams/${team.id}/pinned-projects/${id}`);
+  async function removePin(projectId) {
+    await removePinnedPro
     setTeam((prev) => ({
       ...prev,
-      teamPins: prev.teamPins.filter((p) => p.projectId !== id),
+      teamPins: prev.teamPins.filter((p) => p.projectId !== projectId),
     }));
-  }
-
-  async function joinTeamProject(projectId) {
-    await api.post(`/teams/${team.id}/projects/${projectId}/join`);
-  }
-
-  async function leaveTeamProject(projectId) {
-    await api.delete(`/projects/${projectId}/authorization`, {
-      data: {
-        targetUserId: currentUser.id,
-      },
-    });
-  }
-
-  async function addProjectToCollection(project, collection) {
-    await api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
   async function unfeatureProject() {
@@ -223,9 +223,9 @@ export function useTeamEditor(initialTeam) {
     removePin: (id) => removePin(id).catch(handleError),
     updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
     updateUserPermissions: (id, accessLevel) => updateUserPermissions(id, accessLevel).catch(handleError),
-    joinTeamProject: (projectId) => joinTeamProject(projectId).catch(handleError),
-    leaveTeamProject: (projectId) => leaveTeamProject(projectId).catch(handleError),
-    addProjectToCollection: (project, collection) => addProjectToCollection(project, collection).catch(handleCustomError),
+    joinTeamProject: (projectId) => joinTeamProject(api, projectId, team).catch(handleError),
+    leaveTeamProject: (projectId) => leaveTeamProject(api, projectId, currentUser).catch(handleError),
+    addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
     featureProject: (id) => featureProject(id).catch(handleError),
     unfeatureProject: (id) => unfeatureProject(id).catch(handleError),
   };
