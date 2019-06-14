@@ -62,7 +62,7 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {twoFactorEnabled && <Button type="tertiary" size="small" disabled={!done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {twoFactorEnabled && <Button type="tertiary" size="small" onClick={disableTwoFactor}>Disable Authenticator App</Button>}
       {!twoFactorEnabled &&
         <>
           <Button type="tertiary" size="small" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>

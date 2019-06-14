@@ -202,6 +202,7 @@ class CurrentUserManager extends React.Component {
     }
 
     const newCachedUser = await this.getCachedUser();
+    console.log(newCachedUser);
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
