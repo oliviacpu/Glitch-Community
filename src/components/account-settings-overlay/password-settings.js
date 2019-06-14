@@ -20,63 +20,59 @@ const PasswordSettings = ({ userHasPassword }) => {
   const [passwordVersion, setPasswordVersion] = useState(1);
 
   const [state, setState] = useState('idle');
-  const andClearS = (func) => (...args) => {
+  const andClearState = (func) => (...args) => {
     func(...args);
-    setDone(false);
-    setError(false);
+    setState('idle');
   };
 
   const updatePassword = async (event) => {
     event.preventDefault();
-    setDone(false);
+    setState('working');
     try {
       await api.post('user/updatePassword', {
         oldPassword,
         newPassword,
       });
-      setDone(true);
+      setState('done');
       setOldPassword('');
       setPasswordVersion((v) => v + 1);
       await reload();
     } catch (error) {
       console.error(error);
-      setError(true);
+      setState('error');
     }
   };
 
   const resetPassword = async (event) => {
     event.preventDefault();
     const primaryEmail = currentUser.emails.find((email) => email.primary);
-    setDone(false);
     try {
       await api.post('email/sendResetPasswordEmail', {
         emailAddress: primaryEmail.email,
       });
-      setDone(true);
-      await reload();
     } catch (error) {
       console.error(error);
     }
   };
 
-  const userRequestedPWreset = false; // placeholder for if user has requested to reset their password
+  const isWorking = state === 'working';
 
   return (
     <>
       <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
       <form className={styles.passwordForm} onSubmit={updatePassword}>
-        {userHasPassword && !userRequestedPWreset && (
-          <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} onChange={setOldPassword} />
+        {userHasPassword && (
+          <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} disabled={isWorking} onChange={setOldPassword} />
         )}
 
-        <NewPasswordInput key={passwordVersion} onChange={andClearDone(setNewPassword)} />
+        <NewPasswordInput key={passwordVersion} disabled={isWorking} onChange={andClearState(setNewPassword)} />
 
-        <Button type="tertiary" size="small" disabled={!oldPassword || !newPassword} submit>
+        <Button type="tertiary" size="small" disabled={!oldPassword || !newPassword || isWorking} submit>
           Set Password
         </Button>
 
-        {done && <Badge type="success">Successfully set new password</Badge>}
-        {error && <Badge type="error">We couldn't set the password</Badge>}
+        {state === 'done' && <Badge type="success">Successfully set new password</Badge>}
+        {state === 'error' && <Badge type="error">We couldn't set the password</Badge>}
       </form>
       {userHasPassword &&
         <>
