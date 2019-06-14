@@ -35,7 +35,7 @@ class CollectionEditor extends React.Component {
     var count = this.state.errorCount
     this.setState({ errorCount: count + 1 })
     console.log("this.state.errorCount", this.state.errorCount)
-    if (this.state.errorCount % 2 === 0) {
+    if (this.state.errorCount % 3 === 0) {
       throw new Error("test")
     }
     return await this.props.api.patch(`collections/${this.state.id}`, changes);

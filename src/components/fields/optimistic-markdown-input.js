@@ -33,11 +33,15 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
     }
   }
   
-  const revertState = state.status == "error" ? state.inputState : null; //makes me wonder if we need inputstate in this situation? also state.inputState is a stupid name
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse, revertState);
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
+  
+  React.useEffect(() => {
+    console.log("setting optimistic value")
+    setState({ ...state, inputState: optimisticValue })
+  }, [optimisticValue])
   
   
-  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
+  return <MarkdownInput {...props} value={state.inputState} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
 };
 
 OptimisticMarkdownInput.propTypes = {

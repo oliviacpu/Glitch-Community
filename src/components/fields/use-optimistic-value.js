@@ -7,7 +7,7 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
   - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
 */
 
-const useOptimisticValue = (realValue, setValueAsync, revertState) => {
+const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message
   // value undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ value: undefined, error: null });
@@ -40,8 +40,7 @@ const useOptimisticValue = (realValue, setValueAsync, revertState) => {
     }
   }, [debouncedValue]);
 
-  const optimisticValue = revertState ? revertState : (state.value !== undefined ? state.value : realValue);
-  
+  const optimisticValue = state.value !== undefined ? state.value : realValue;
   
   const setOptimisticValue = (newValue) => {
     setState((prevState) => ({ ...prevState, value: newValue }));
