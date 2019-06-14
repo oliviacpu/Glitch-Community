@@ -9,6 +9,7 @@ import { useCurrentUser } from '../../state/current-user';
 
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
+import ResetPasswordPage from './reset-password';
 import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
 import ProjectPage from './project';
