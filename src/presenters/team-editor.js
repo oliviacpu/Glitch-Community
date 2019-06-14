@@ -112,15 +112,7 @@ class TeamEditor extends React.Component {
       const teams = this.props.currentUser.teams.filter(({ id }) => id !== this.state.id);
       this.props.updateCurrentUser({ teams });
     }
-    this.setState(({ projects }) => ({
-      projects: projects.map((p) => {
-        if (!projectIds.includes(p.id)) return p;
-        return {
-          ...p,
-          permissions: p.permissions.filter((perm) => perm.userId !== this.props.currentUser.id),
-        };
-      }),
-    }));
+    this.removePermissions(projectIds);
     this.props.reloadProjectMembers(projectIds);
   }
 
@@ -131,6 +123,18 @@ class TeamEditor extends React.Component {
         counter: prevState.adminIds.splice(index, 1),
       }));
     }
+  }
+
+  removePermissions(projectIds) {
+    this.setState(({ projects }) => ({
+      projects: projects.map((p) => {
+        if (!projectIds.includes(p.id)) return p;
+        return {
+          ...p,
+          permissions: p.permissions.filter((perm) => perm.userId !== this.props.currentUser.id),
+        };
+      }),
+    }));
   }
 
   async updateUserPermissions(id, accessLevel) {
@@ -187,13 +191,13 @@ class TeamEditor extends React.Component {
   }
 
   async joinTeamProject(projectId) {
-    const updatedProject = await this.props.api.post(`/teams/${this.state.id}/projects/${projectId}/join`);
+    const { data: updatedProject } = await this.props.api.post(`/teams/${this.state.id}/projects/${projectId}/join`);
     this.setState(({ projects }) => ({
       projects: projects.map((p) => {
         if (p.id !== projectId) return p;
         return {
           ...p,
-          permissions: [...p.permissions, { userId: this.props.currentUser.id }],
+          permissions: updatedProject.users.map((user) => user.projectPermission),
         };
       }),
     }));
@@ -206,15 +210,7 @@ class TeamEditor extends React.Component {
         targetUserId: this.props.currentUser.id,
       },
     });
-    this.setState(({ projects }) => ({
-      projects: projects.map((p) => {
-        if (p.id !== projectId) return p;
-        return {
-          ...p,
-          permissions: p.permissions.filter((perm) => perm.userId !== this.props.currentUser.id),
-        };
-      }),
-    }));
+    this.removePermissions([projectId]);
     this.props.reloadProjectMembers([projectId]);
   }
 
