@@ -30,11 +30,7 @@ function InvitedUser(props) {
   const resendInvite = async () => {
     try {
       await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-      return (
-        <Notification type="success">
-          Resent invite to ${props.user.name}!
-        </Notification>
-      );
+      createNotification(<Notification>Resent invite to ${props.user.name}! </Notification>, { type: 'success' });
     } catch (error) {
       captureException(error);
       <Notification type="error">
