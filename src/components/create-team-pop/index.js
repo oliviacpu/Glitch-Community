@@ -5,9 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopoverTitle } from 'Components/popover';
-import { PopoverInfo, PopoverActions } from 'Components/popover/base';
-import PopoverDialog from 'Components/popover/dialog';
+import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -119,37 +117,57 @@ function CreateTeamPopBase(props) {
 
   const placeholder = 'Your Team Name';
 
-    return (
-      <PopoverDialog align="right">
-        <MultiPopoverTitle>
-          Create Team <Emoji name="herb" />
-        </MultiPopoverTitle>
+  return (
+    // <MultiPopover
+    //     views={{
+    //       createCollectionPopover: () => (
+    //         <CreateCollectionWithProject
+    //           addProjectToCollection={(...args) => {
+    //             addProjectToCollection(...args);
+    //             togglePopover();
+    //           }}
+    //           project={project}
+    //         />
+    //       ),
+    //     }}
+    //   >
+    //     {({ createCollectionPopover }) => (
+    //       <AddProjectToCollectionBase
+    //         addProjectToCollection={addProjectToCollection}
+    //         fromProject={false}
+    //         project={project}
+    //         togglePopover={togglePopover}
+    //         createCollectionPopover={createCollectionPopover}
+    //       />
+    //     )}
+    //   </MultiPopover>
+      <MultiPopover views={{
+        createTeamPopover: () => (
+          <PopoverDialog align="right">
+            <MultiPopoverTitle>
+              Create Team <Emoji name="herb" />
+            </MultiPopoverTitle>
 
-        <PopoverInfo>
-          <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
-        </PopoverInfo>
+            <PopoverInfo>
+              <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
+            </PopoverInfo>
 
-        <PopoverActions>
-          <form onSubmit={handleSubmit}>
-            <TextInput
-              autoFocus
-              labelText={placeholder}
-              value={state.teamName}
-              onChange={handleChange}
-              placeholder={placeholder}
-              error={state.error}
-            />
-            <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
+            <PopoverActions>
+              <form onSubmit={handleSubmit}>
+                <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
+                <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
 
-            {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
-          </form>
-        </PopoverActions>
-        <PopoverInfo>
-          <Text>You can change this later</Text>
-        </PopoverInfo>
-      </PopoverDialog>
-   );
-};
+                {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
+              </form>
+            </PopoverActions>
+            <PopoverInfo>
+              <Text>You can change this later</Text>
+            </PopoverInfo>
+          </PopoverDialog>
+        ),
+      }} />
+  );
+}
 
 CreateTeamPopBase.propTypes = {
   api: PropTypes.any.isRequired,
