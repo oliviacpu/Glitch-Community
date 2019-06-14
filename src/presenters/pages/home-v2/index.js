@@ -43,19 +43,17 @@ const Banner = () => (
           <br />
           <Mark color="#1D9AF9">friendly community</Mark>
           <br />
-          <Unmarked>where anyone can</Unmarked>
+          <Unmarked>where everyone can</Unmarked>
           <br />
           <Mark color="#18B576">create the web</Mark>
         </h1>
-        <p>The easiest way to build, ship, and share apps on the web, for free.</p>
+        <p>Discover, build, and share millions of apps, bots, and websites —for free</p>
         <div className={styles.bannerBtnWrap}>
           <Button type="cta" href="#top-picks">
             Start Creating <Arrow />
           </Button>
           <div className={styles.watchVideoBtnWrap}>
-            <Button type="decorative">
-              Watch video
-            </Button>
+            <Button type="decorative">Watch video</Button>
           </div>
         </div>
       </div>
@@ -134,7 +132,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 const TopPicks = ({ children }) => (
   <section id="top-picks">
     <h2 className={styles.h2}>
-      <Mark color="#BCFCFF">Our top picks</Mark>
+      <Mark color="#BCFCFF">Today's top picks</Mark>
     </h2>
     <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
     {children}
@@ -159,9 +157,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
 
 const AppsWeLove = ({ content }) => (
   <section id="apps-we-love" className={styles.appsWeLoveContainer}>
-    <h3 className={styles.h3}>
-      Apps we love
-    </h3>
+    <h3 className={styles.h3}>Apps we love</h3>
     <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
       {({ domain, title, description, img, users }) => (
         <>
@@ -182,9 +178,7 @@ const AppsWeLove = ({ content }) => (
 
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections" className={styles.curatedCollectionsContainer}>
-    <h3 className={styles.h3}>
-      Curated collections
-    </h3>
+    <h3 className={styles.h3}>Curated collections</h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count, collectionStyle }) => (
         <CuratedCollectionContainer collectionStyle={collectionStyle} users={users} href={`/@${fullUrl}`}>
@@ -200,21 +194,14 @@ const CuratedCollections = ({ content }) => (
 );
 
 const CultureZine = ({ content }) => (
-  <section id="enter-our-universe" className={styles.cultureZine}>
+  <section id="culture-zine" className={styles.cultureZine}>
     <h2 className={styles.h2}>
-      <Mark color="#CBC3FF">Enter our universe</Mark>
+      <Mark color="#CBC3FF">Where tech meets culture</Mark>
     </h2>
-    <p>Our thoughts on the intersection of tech and culture — on Glitch and beyond.</p>
-    <Row 
-      
-      count={2}
-      items={[
-        { id: 0, content: content.slice(0, 2) },
-        { id: 1, content: content.slice(2, 4) }
-      ]}>
+    <p>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+    <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
       {({ content }) => (
-        <Row items={content} count={2}
-          className={styles.cultureZineRow}>
+        <Row items={content} count={2} className={styles.cultureZineRow}>
           {({ title, source, img, url }) => (
             <a href={`/culture${url}`} className={styles.plainLink}>
               <div className={styles.cultureZineImageWrap}>
@@ -241,9 +228,7 @@ const BuildingOnGlitch = ({ content }) => (
       {content.map(({ href, img, title, description, cta }) => (
         <a key={href} href={href} className={styles.plainLink}>
           <img src={img} alt="" />
-          <h3>
-            {title}
-          </h3>
+          <h3>{title}</h3>
           <p>{description}</p>
           <Button decorative>
             {cta} <Arrow />
