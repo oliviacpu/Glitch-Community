@@ -14,61 +14,63 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = React.forwardRef(({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji,  emojiPosition }, ref) => {
-  const className = cx({
-    btn: true,
-    cta: type === 'cta',
-    small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
-    tertiary: ['tertiary', 'dangerZone'].includes(type),
-    dangerZone: type === 'dangerZone',
-    unstyled: type === 'dropDown',
-    hasEmoji: emoji,
-    hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
-    hasSunglassesEmoji: emoji === 'sunglasses',
-    padLeft: emoji && emojiPosition === 'left',
-    matchBackground: matchBackground === true,
-    active,
-    hover,
-    decorative,
-  });
+const Button = React.forwardRef(
+  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji, emojiPosition }, ref) => {
+    const className = cx({
+      btn: true,
+      cta: type === 'cta',
+      small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
+      tertiary: ['tertiary', 'dangerZone'].includes(type),
+      dangerZone: type === 'dangerZone',
+      unstyled: type === 'dropDown',
+      hasEmoji: emoji,
+      hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
+      hasSunglassesEmoji: emoji === 'sunglasses',
+      padLeft: emoji && emojiPosition === 'left',
+      matchBackground: matchBackground === true,
+      active,
+      hover,
+      decorative,
+    });
 
-  const content = (
-    <>
-      {children}
-      {emoji && <ButtonEmoji emoji={emoji} position={emojiPosition} />}
-    </>
-  );
+    const content = (
+      <>
+        {children}
+        {emoji && <ButtonEmoji emoji={emoji} position={emojiPosition} />}
+      </>
+    );
 
-  if (href) {
-    let targetProps = {};
-    if (newTab) {
-      targetProps = {
-        target: '_blank',
-        rel: 'noopener noreferrer',
-      };
+    if (href) {
+      let targetProps = {};
+      if (newTab) {
+        targetProps = {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        };
+      }
+
+      return (
+        <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
+          {content}
+        </Link>
+      );
+    }
+
+    if (decorative) {
+      return (
+        <span className={className} disabled={disabled}>
+          {content}
+        </span>
+      );
     }
 
     return (
-      <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
+      <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
         {content}
-      </Link>
+      </button>
     );
-  }
-  
-  if (decorative) {
-    return (
-      <span className={className} disabled={disabled}>
-        {content}
-      </span>
-    );
-  }
-
-  return (
-    <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
-      {content}
-    </button>
-  );
-});
+  },
+);
 
 Button.propTypes = {
   /** element(s) to display in the button */

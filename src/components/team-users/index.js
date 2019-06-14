@@ -10,7 +10,6 @@ import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
@@ -69,9 +68,9 @@ WhitelistedDomain.defaultProps = {
 // Join Team
 
 const JoinTeam = ({ onClick }) => (
-  <button className="button button-small button-cta join-team-button" onClick={onClick}>
+  <Button size="small" type="cta" onClick={onClick}>
     Join Team
-  </button>
+  </Button>
 );
 
 const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
