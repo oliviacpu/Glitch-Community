@@ -53,8 +53,8 @@ function slackAuthLink() {
 }
 
 const SignInPopButton = ({ company, emoji, href, onClick }) => (
-  <Button href={href} onClick={onClick} size="small">
-    Sign in with {company} <Emoji name={emoji} />
+  <Button href={href} onClick={onClick} size="small" emoji={emoji}>
+    Sign in with {company}
   </Button>
 );
 
