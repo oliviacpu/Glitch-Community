@@ -55,12 +55,7 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <Button
-            href={getTeamLink(team)}
-            type="tertiary"
-            size="small"
-            image={<Image alt="" src={getTeamAvatarUrl({ id: team.id, size: 'small' })} />}
-          >
+          <Button key={team.id} href={getTeamLink(team)} type="tertiary" size="small" image={<Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} />}>
             {team.name}
           </Button>
         </div>
