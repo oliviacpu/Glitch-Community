@@ -330,7 +330,6 @@ const TeamPageEditor = ({ initialTeam, reloadProjectMembers, children }) => (
 const TeamPageContainer = ({ team, ...props }) => {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
-  const reloadProjectMembers = useProjectReload();
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
       <TeamPageEditor initialTeam={team} reloadProjectMembers={reloadProjectMembers}>
