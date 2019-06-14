@@ -19,6 +19,9 @@ const useOptimisticValue = (realValue, setValueAsync, revertState) => {
       const setStateIfMatches = (newState) => {
         setState((prevState) => {
           console.log({prevState, debouncedValue, newState})
+          if (prevState.value === debouncedValue) {
+            console.log("Setting state because it matches the debounced value setting state to", newState)
+          }
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
@@ -30,7 +33,7 @@ const useOptimisticValue = (realValue, setValueAsync, revertState) => {
         },
         (error) => {
           console.log("error", error)
-          const message = error && error.response && error.response.data && error.response.data.message;
+          const message = (error && error.response && error.response.data && error.response.data.message) || "test";
           setStateIfMatches({ value: debouncedValue, error: message });
         },
       );

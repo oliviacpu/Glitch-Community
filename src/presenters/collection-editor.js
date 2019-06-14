@@ -12,6 +12,7 @@ class CollectionEditor extends React.Component {
     super(props);
     this.state = {
       ...props.initialCollection,
+      errorCount: 0
     };
   }
 
@@ -31,7 +32,12 @@ class CollectionEditor extends React.Component {
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
     
     // this.setState(changes);
-    throw new Error("test")
+    var count = this.state.errorCount
+    this.setState({ errorCount: count + 1 })
+    console.log("this.state.errorCount", this.state.errorCount)
+    if (this.state.errorCount % 2 === 0) {
+      throw new Error("test")
+    }
     return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
