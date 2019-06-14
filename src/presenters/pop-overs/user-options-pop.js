@@ -5,7 +5,8 @@ import { orderBy } from 'lodash';
 import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Link, { TeamLink, UserLink } from 'Components/link';
+import { TeamLink, UserLink } from 'Components/link';
+import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
@@ -26,16 +27,16 @@ const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
           </button>{' '}
           to create teams
         </p>
-        <button className="button button-small has-emoji" disabled type="button">
-          Create Team <span className="emoji herb" />
-        </button>
+        <Button size="small" emoji="herb" disabled>
+          Create Team
+        </Button>
       </>
     );
   }
   return (
-    <button type="button" onClick={onClickCreateTeam} className="button button-small has-emoji">
-      Create Team <span className="emoji herb" />
-    </button>
+    <Button size="small" onClick={onClickCreateTeam} emoji="herb">
+      Create Team
+    </Button>
   );
 };
 
@@ -136,15 +137,15 @@ Are you sure you want to sign out?`)
             </CheckboxButton>
           </div>
         )}
-        <button type="button" onClick={clickNewStuff} className="button-small has-emoji button-tertiary button-on-secondary-background">
-          New Stuff <span className="emoji dog-face" />
-        </button>
-        <Link to="https://support.glitch.com" className="button button-small has-emoji button-tertiary button-on-secondary-background">
-          Support <span className="emoji ambulance" />
-        </Link>
-        <button type="button" onClick={clickSignout} className="button-small has-emoji button-tertiary button-on-secondary-background">
-          Sign Out <span className="emoji balloon" />
-        </button>
+        <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
+          New Stuff
+        </Button>
+        <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
+          Support
+        </Button>
+        <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
+          Sign Out
+        </Button>
       </section>
     </dialog>
   );

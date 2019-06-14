@@ -5,6 +5,7 @@ import Pluralize from 'react-pluralize';
 import { flatten, orderBy, partition } from 'lodash';
 import Loader from 'Components/loader';
 import Badge from 'Components/badges/badge';
+import Button from 'Components/buttons/button';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
@@ -162,9 +163,9 @@ const AddProjectToCollectionPopContents = ({
       ) : null}
 
       <section className="pop-over-actions">
-        <button className="create-new-collection button-small button-tertiary" onClick={createCollectionPopover}>
+        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
           Add to a new collection
-        </button>
+        </Button>
       </section>
     </dialog>
   );
