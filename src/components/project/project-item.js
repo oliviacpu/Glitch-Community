@@ -15,7 +15,8 @@ import { createAPIHook } from 'State/api';
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
 
-const PrivateIcon = () => <div style={{ background: 'yellow', borderRadius: '3px' }}><Image width={20} height={14} alt="private" src="https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fprivate.svg?1496253541539" /></div>
+
+const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
