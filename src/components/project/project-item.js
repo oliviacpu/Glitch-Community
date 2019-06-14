@@ -15,7 +15,6 @@ import { createAPIHook } from 'State/api';
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
 
-
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
