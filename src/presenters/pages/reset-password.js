@@ -29,7 +29,7 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
 const ResetPasswordPage = ({ loginToken, resetPasswordToken }) => {
   return loginToken
     ? <ResetPasswordLogin loginToken={loginToken} resetPasswordToken={resetPasswordToken} />
-    : <ResetPasswordForm loginToken={loginToken} resetPasswordToken={resetPasswordToken} />;
+    : <ResetPasswordForm resetPasswordToken={resetPasswordToken} />;
 };
 
 ResetPasswordPage.propTypes = {
