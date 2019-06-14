@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { useState, useEffect } from 'react';
 
 import * as assets from 'Utils/assets';
@@ -8,16 +7,19 @@ import { useCurrentUser } from 'State/current-user';
 import useErrorHandlers from '../presenters/error-handlers';
 import useUploader from '../presenters/includes/uploader';
 
-const getProject = (api, projectId) => api.get(`projects/${projectId}`);
-const getDeletedProject = (api, projectId) => api.get(`projects/${projectId}?showDeleted=true`);
-const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
-const undeleteProject = (api, projectId) => api.post(`/projects/${projectId}/undelete`);
+export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
+export const removePin = (api, projectId, user) =>  api.delete(`users/${user.id}/pinned-projects/${projectId}`);
 
-const getUserCollections = (api, user) => api.get(`collections?userId=${user.id}`);
-const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+export const getProject = (api, projectId) => api.get(`projects/${projectId}`);
+export const getDeletedProject = (api, projectId) => api.get(`projects/${projectId}?showDeleted=true`);
+export const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
+export const undeleteProject = (api, projectId) => api.post(`/projects/${projectId}/undelete`);
+
+export const getUserCollections = (api, user) => api.get(`collections?userId=${user.id}`);
+export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
 export function useUserEditor(initialUser) {
-  const [user, setState] = useState({
+  const [user, setUser] = useState({
     ...initialUser,
     _cacheCover: Date.now(),
     _deletedProjects: [],
@@ -31,7 +33,7 @@ export function useUserEditor(initialUser) {
 
   async function updateFields(changes) {
     const { data } = await api.patch(`users/${user.id}`, changes);
-    setState((prev) => ({ ...prev, ...data }));
+    setUser((prev) => ({ ...prev, ...data }));
     if (isCurrentUser) {
       updateCurrentUser(data);
     }
@@ -39,7 +41,7 @@ export function useUserEditor(initialUser) {
 
   async function reloadCollections() {
     const { data } = await getUserCollections(api, user);
-    setState((prev) => ({ ...prev, collections: data }));
+    setUser((prev) => ({ ...prev, collections: data }));
   }
 
   useEffect(() => {
@@ -78,22 +80,22 @@ export function useUserEditor(initialUser) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setState((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setUser((prev) => ({ ...prev, _cacheCover: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
     addPin: withErrorHandler(async (projectId) => {
-      await api.post(`users/${user.id}/pinned-projects/${projectId}`);
-      setState((prev) => ({
+      await addPin(api, projectId, user)
+      setUser((prev) => ({
         ...prev,
         pins: [...prev.pins, { id: projectId }],
       }));
     }, handleError),
-    removePin: withErrorHandler(async (id) => {
-      await api.delete(`users/${user.id}/pinned-projects/${id}`);
-      setState((prev) => ({
+    removePin: withErrorHandler(async (projectId) => {
+      await removePin(api, projectId, user)
+      setUser((prev) => ({
         ...prev,
-        pins: prev.pins.filter((p) => p.id !== id),
+        pins: prev.pins.filter((p) => p.id !== projectId),
       }));
     }, handleError),
     leaveProject: withErrorHandler(async (id) => {
@@ -102,7 +104,7 @@ export function useUserEditor(initialUser) {
           targetUserId: currentUser.id,
         },
       });
-      setState((prev) => ({
+      setUser((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== id),
       }));
@@ -110,7 +112,7 @@ export function useUserEditor(initialUser) {
     deleteProject: withErrorHandler(async (projectId) => {
       await deleteProject(api, projectId);
       const { data } = await getDeletedProject(api, projectId);
-      setState((prev) => ({
+      setUser((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== projectId),
         _deletedProjects: [data, ...prev._deletedProjects], // eslint-disable-line no-underscore-dangle
@@ -121,13 +123,13 @@ export function useUserEditor(initialUser) {
       const { data } = await getProject(api, projectId);
       // temp set undeleted project updatedAt to now, while it's actually updating behind the scenes
       data.updatedAt = Date.now();
-      setState((prev) => ({
+      setUser((prev) => ({
         ...prev,
         projects: [data, ...prev.projects],
         _deletedProjects: prev._deletedProjects.filter((p) => p.id !== projectId), // eslint-disable-line no-underscore-dangle
       }));
     }, handleError),
-    setDeletedProjects: (_deletedProjects) => setState((prev) => ({ ...prev, _deletedProjects })),
+    setDeletedProjects: (_deletedProjects) => setUser((prev) => ({ ...prev, _deletedProjects })),
     addProjectToCollection: withErrorHandler(async (project, collection) => {
       await addProjectToCollection(api, project, collection);
       reloadCollections();
