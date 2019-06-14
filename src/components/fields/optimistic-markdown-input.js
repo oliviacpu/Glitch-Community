@@ -55,9 +55,9 @@ function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
   const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate)
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
   const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError(optimisticValue, optimisticOnChange);
-  
+
   return {
-    inputValue, wrappedOnChange,  wrappedOnBlur, optimisticError,
+    inputValue, wrappedOnChange, wrappedOnBlur, optimisticError,
   };
 }
 
@@ -69,7 +69,7 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
   });
 
   const wrappedOnChange = async (change) => {
-    console.log("wrappedOnChange getting called")
+    console.log("wrappedOnChange getting called with change:", change)
     setState({ status: "loading" });
     if (asyncUpdate) {
       try {
@@ -77,10 +77,11 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
         console.log("got a response", response)
         if (response.status === 200) {
           console.log("saving")
-          setState({ status: "loaded", lastSavedResponse: change, inputState: change });
+          setState({ status: "loaded", lastSavedResponse: change, inputValue: change });
         } else {
           setState({ ...state, status: "error" });
         }
+        
         return response // return response so other funcs can use it later if necessary
       } catch (error) {
         setState({ ...state, status: "error" });
@@ -94,10 +95,15 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     if (state.status === "loading") {
       wrappedOnBlur();
     } else {
-      setState({ ...state, inputState: state.lastSavedResponse });
+      setState({ ...state, inputValue: state.lastSavedResponse });
       if (onBlur) { onBlur(); }
     }
   }
+  
+  React.useEffect(() => {
+    console.log("setting inputstate from", state.inputValue, "to", value)
+    setState({ ...state, inputValue: value })
+  }, [value]);
   
   return [state.inputValue, wrappedOnChange, wrappedOnBlur];
 }
@@ -111,7 +117,6 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
 */
 
 function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setValueAsync) {
-  console.log({ rawValueFromOnChange, setValueAsync })
   // store what is being typed in, along with an error message
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined, error: null });
@@ -123,11 +128,15 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
       // if the updateToSave changes during the async action then ignore the result
       const setStateIfLastServerCallIsStillRelevant = (newState) => setState((prevState) => prevState.updateToSave === debouncedUpdateToSave ? newState : prevState );
       // this scope can't be async/await because it's an effect
+      console.log("130??")
       setValueAsync(debouncedUpdateToSave).then(
         (response) => {
+          console.log("response??", response)
           setStateIfLastServerCallIsStillRelevant({ updateToSave: undefined, error: null })
+          return response
         },
         (error) => {
+          console.log("errrrrrr")
           const message = error && error.response && error.response.data && error.response.data.message; // should there always be a default error here?
           setStateIfLastServerCallIsStillRelevant({ updateToSave: debouncedUpdateToSave, error: message });
         },
