@@ -14,11 +14,7 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-<<<<<<< HEAD
-const Button = ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji, emojiPosition }) => {
-=======
-const Button = React.forwardRef(({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab }, ref) => {
->>>>>>> 015199f9bdc59aa81690319f2ce960f816f6f542
+const Button = React.forwardRef(({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, emoji,  emojiPosition }, ref) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -53,37 +49,23 @@ const Button = React.forwardRef(({ onClick, href, disabled, type, size, matchBac
     }
 
     return (
-<<<<<<< HEAD
-      <Link to={href} onClick={onClick} className={className} {...targetProps}>
-        {content}
-=======
       <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
-        {children}
->>>>>>> 015199f9bdc59aa81690319f2ce960f816f6f542
+        {content}
       </Link>
     );
   }
-
+  
   if (decorative) {
-<<<<<<< HEAD
-    return <span className={className}>{content}</span>;
-  }
-
-  return (
-    <button onClick={onClick} className={className} disabled={disabled}>
-      {content}
-=======
     return (
       <span className={className} disabled={disabled}>
-        {children}
+        {content}
       </span>
     );
   }
 
   return (
     <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
-      {children}
->>>>>>> 015199f9bdc59aa81690319f2ce960f816f6f542
+      {content}
     </button>
   );
 });

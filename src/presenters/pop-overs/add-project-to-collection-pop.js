@@ -8,6 +8,7 @@ import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import TextInput from 'Components/inputs/text-input';
 import { CollectionLink } from 'Components/link';
+import { PopoverWithButton } from 'Components/popover';
 import { getAvatarUrl } from 'Models/project';
 import { getAllPages } from 'Shared/api';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -19,7 +20,6 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 import CreateCollectionPop from './create-collection-pop';
 import CollectionResultItem from '../includes/collection-result-item';
 import { NestedPopover, NestedPopoverTitle } from './popover-nested';
-import PopoverWithButton from './popover-with-button';
 
 const filterTypes = ['Your collections', 'Team collections'];
 
@@ -295,12 +295,8 @@ AddProjectToCollectionBase.defaultProps = {
 
 const AddProjectToCollection = ({ project, ...props }) => (
   <PopoverWithButton
-    buttonClass="button-small has-emoji add-project"
-    buttonText={
-      <>
-        Add to Collection <span className="emoji framed-picture" role="presentation" />
-      </>
-    }
+    buttonProps={{ size: 'small', emoji: 'framedPicture' }}
+    buttonText="Add to Collection"
   >
     {({ togglePopover, focusFirstElement }) => (
       <AddProjectToCollectionBase {...props} project={project} togglePopover={togglePopover} focusFirstElement={focusFirstElement} />

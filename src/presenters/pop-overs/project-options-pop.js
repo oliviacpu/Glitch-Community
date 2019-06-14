@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'Components/buttons/button';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
@@ -74,10 +75,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
 };
 
 const PopoverButton = ({ onClick, text, emoji }) => (
-  <button className="button-small has-emoji button-tertiary" onClick={onClick} type="button">
-    <span>{`${text} `}</span>
-    <span className={`emoji ${emoji}`} />
-  </button>
+  <Button type="tertiary" size="small" emoji={emoji} onClick={onClick}>{text}</Button>
 );
 PopoverButton.propTypes = {
   onClick: PropTypes.func.isRequired,
@@ -110,13 +108,13 @@ const ProjectOptionsContent = (props) => {
 
       {props.displayNewNote && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiral_note_pad" />
+          <PopoverButton onClick={() => toggleAndCB(props.displayNewNote)} text="Add Note" emoji="spiralNotePpad" />
         </section>
       )}
 
       {props.addProjectToCollection && (
         <section className="pop-over-actions">
-          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framed-picture" />
+          <PopoverButton onClick={props.addToCollectionPopover} text="Add to Collection " emoji="framedPicture" />
         </section>
       )}
 
@@ -141,13 +139,13 @@ const ProjectOptionsContent = (props) => {
       {showDangerZone && (
         <section className="pop-over-actions danger-zone last-section">
           {props.removeProjectFromTeam && (
-            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbs_down" />
+            <PopoverButton onClick={() => toggleAndCB(props.removeProjectFromTeam)} text="Remove Project " emoji="thumbsDown" />
           )}
 
           {props.deleteProject && <PopoverButton onClick={onClickDeleteProject} text="Delete Project " emoji="bomb" />}
 
           {props.removeProjectFromCollection && (
-            <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbs_down" />
+            <PopoverButton onClick={props.removeProjectFromCollection} text="Remove from Collection" emoji="thumbsDown" />
           )}
         </section>
       )}
