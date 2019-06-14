@@ -41,6 +41,9 @@ largeViewport = 900px
 
 section
   margin-top: 5em 
+  .subtitle
+    margin-left: u3
+    margin-bottom: 2.5em
   
 .mark
   display: inline-block
@@ -83,7 +86,7 @@ section
 .bannerCopy
   padding-bottom: u3
   position: absolute
-  top: 50px
+  top: 35px
   left: 65px
   width: 360px
   
@@ -171,8 +174,18 @@ section
     display: block
     margin: u3 0
 @media(max-width: smallViewport)
+  .bannerCopyContainer
+    width: 375px
+    height: 375px
+    .bannerCopy
+      p
+        margin: u3 u5
+        width: 180px
   .watchVideoChrome
     display: none
+  .watchVideoBtnWrap
+    display: block
+    margin: u3 0
     
 .featureCalloutsRow
   --gap: u4

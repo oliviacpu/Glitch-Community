@@ -134,7 +134,7 @@ const TopPicks = ({ children }) => (
     <h2 className={styles.h2}>
       <Mark color="#BCFCFF">Today's top picks</Mark>
     </h2>
-    <p>Apps you’ll only find here on Glitch, built by our community of creators.</p>
+    <p className={styles.subtitle}>Apps you’ll only find here on Glitch, built by our community of creators.</p>
     {children}
   </section>
 );
@@ -198,7 +198,7 @@ const CultureZine = ({ content }) => (
     <h2 className={styles.h2}>
       <Mark color="#CBC3FF">Where tech meets culture</Mark>
     </h2>
-    <p>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+    <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
     <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
       {({ content }) => (
         <Row items={content} count={2} className={styles.cultureZineRow}>
