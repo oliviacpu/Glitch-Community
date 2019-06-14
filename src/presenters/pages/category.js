@@ -11,7 +11,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
 import Layout from '../layout';
-import ProjectsLoader from '../projects-loader';
 import CollectionEditor from '../collection-editor';
 
 const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => (
@@ -28,27 +27,24 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
           <p className="description">{category.description}</p>
         </header>
 
-        <ProjectsLoader projects={category.projects}>
-          {(projects) => (
-            <div className="collection-contents">
-              <div className="collection-project-container-header">
-                <Heading tagName="h3">Projects ({category.projects.length})</Heading>
-              </div>
+        <div className="collection-contents">
+          <div className="collection-project-container-header">
+            <Heading tagName="h3">Projects ({category.projects.length})</Heading>
+          </div>
 
-              {currentUser.login ? (
-                <ProjectsList
-                  layout="gridCompact"
-                  projects={projects}
-                  projectOptions={{
-                    addProjectToCollection,
-                  }}
-                />
-              ) : (
-                <ProjectsList layout="gridCompact" projects={projects} />
-              )}
-            </div>
+          {currentUser.login ? (
+            <ProjectsList
+              layout="gridCompact"
+              projects={category.projects}
+              fetchMembers
+              projectOptions={{
+                addProjectToCollection,
+              }}
+            />
+          ) : (
+            <ProjectsList layout="gridCompact" projects={category.projects} fetchMembers />
           )}
-        </ProjectsLoader>
+        </div>
       </article>
     </main>
     <MoreIdeas />
