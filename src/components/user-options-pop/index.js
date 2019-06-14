@@ -10,7 +10,7 @@ import { UserLink } from 'Components/link';
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import { PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle } from 'Components/popover';
+import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 

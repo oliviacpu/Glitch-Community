@@ -116,56 +116,29 @@ function CreateTeamPopBase(props) {
   };
 
   const placeholder = 'Your Team Name';
-
+    
   return (
-    // <MultiPopover
-    //     views={{
-    //       createCollectionPopover: () => (
-    //         <CreateCollectionWithProject
-    //           addProjectToCollection={(...args) => {
-    //             addProjectToCollection(...args);
-    //             togglePopover();
-    //           }}
-    //           project={project}
-    //         />
-    //       ),
-    //     }}
-    //   >
-    //     {({ createCollectionPopover }) => (
-    //       <AddProjectToCollectionBase
-    //         addProjectToCollection={addProjectToCollection}
-    //         fromProject={false}
-    //         project={project}
-    //         togglePopover={togglePopover}
-    //         createCollectionPopover={createCollectionPopover}
-    //       />
-    //     )}
-    //   </MultiPopover>
-      <MultiPopover views={{
-        createTeamPopover: () => (
-          <PopoverDialog align="right">
-            <MultiPopoverTitle>
-              Create Team <Emoji name="herb" />
-            </MultiPopoverTitle>
+      <PopoverDialog align="right">
+        <MultiPopoverTitle>
+          Create Team <Emoji name="herb" />
+        </MultiPopoverTitle>
 
-            <PopoverInfo>
-              <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
-            </PopoverInfo>
+        <PopoverInfo>
+          <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
+        </PopoverInfo>
 
-            <PopoverActions>
-              <form onSubmit={handleSubmit}>
-                <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
-                <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
+        <PopoverActions>
+          <form onSubmit={handleSubmit}>
+            <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
+            <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
 
-                {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
-              </form>
-            </PopoverActions>
-            <PopoverInfo>
-              <Text>You can change this later</Text>
-            </PopoverInfo>
-          </PopoverDialog>
-        ),
-      }} />
+            {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
+          </form>
+        </PopoverActions>
+        <PopoverInfo>
+          <Text>You can change this later</Text>
+        </PopoverInfo>
+      </PopoverDialog>
   );
 }
 
@@ -175,7 +148,10 @@ CreateTeamPopBase.propTypes = {
 
 const CreateTeamPop = withRouter((props) => {
   const api = useAPI();
-  return <CreateTeamPopBase api={api} {...props} />;
+  
+  return (
+    <CreateTeamPopBase api={api} {...props} />
+  );
 });
 
 export default CreateTeamPop;
