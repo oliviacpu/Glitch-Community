@@ -35,26 +35,30 @@ on blur:
 
 */
 
-const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
+const useOptimistValueOnChangeAndBlur = ({ value, asyncUpdate }) => {
   const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, wrappedOnChange)
-  const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value: nonAggressivelyTrimmedInputValue, asyncUpdate: onChangeWrappedWithTrimmedValue })
+  const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value: nonAggressivelyTrimmedInputValue, asyncUpdate: onChangeWrappedWithTrimmedValue });
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(inputValue, wrappedOnChange);
+
+  return {
+    optimisticValue, optimisticOnChange, optimisticError, wrappedOnBlur
+  };
+}
+
+const OptmisticMarkdownInput = ({ value, onChange: asyncUpdate }) => {
+  const {
+    optimisticValue, optimisticOnChange, optimisticError, wrappedOnBlur,
+  } = useOptimistValueOnChangeAndBlur({ value, : asyncUpdate onChange });
   
-  
-  
-//   React.useEffect(() => {
-//     setState({ ...state, inputState: optimisticValue })
-//   }, [optimisticValue])
-  
-  return <MarkdownInput {...props} value={state.inputState} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
+  return <MarkdownInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} optimisticError={optimisticError} onBlur={wrappedOnBlur} />;
 };
 
-OptimisticWrapper.propTypes = {
+useOptimistValueOnChangeAndBlur.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default OptimisticWrapper;
+export default useOptimistValueOnChangeAndBlur;
 
 function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
   const [state, setState] = React.useState({ 
@@ -102,7 +106,7 @@ function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
   - returns an error message to be displayed to the user in case of error
 */
 
-function useOptimisticValueAndDebounceCallsToServer (rawValueFromOnChange, setValueAsync) {
+function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setValueAsync) {
   // store what is being typed in, along with an error message
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined, error: null });
