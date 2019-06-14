@@ -1,4 +1,6 @@
 import  React, { useState, useMemo, createContext } from 'react'
+
+import { useAPI } from 'State/api'
 import { getAllPages } from 'Shared/api'
 
 const ProjectContect = createContext()
@@ -15,26 +17,47 @@ const loadingResponse = { status: 'loading' }
 
 const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({})
+  const api = useAPI()
   
-  const value = useMemo(() => {
-  
-    return {
-      getMembers: (projectId) => {
-        if (projectResponses[projectId] && projectResponses[projectId].members) {
-          return projectResponses[projectId].members;
+  function loadProjectMembers(projectIDs) {
+    setProjectResponses((prev) => ({
+      ...prev,
+      ...mapValues(keyBy(projectIDs),  () => loadingResponse)
+    })
+    
+          
+      setProjectResponses((prev) => ({
+        ...prev,
+        [projectId]: {
+          ...prev[projectId],
+          members: loadingResponse,
         }
-        setProjectResponse((prev) => ({
+      }));
+      getMembers(api, projectId).then(members => {
+        setProjectResponses((prev) => ({
           ...prev,
           [projectId]: {
             ...prev[projectId],
-            members: loadingResponse,
+            members: { status: 'ready', value: members }
           }
-        }))
-        
-        return loadingResponse;
-      }  
-    } 
-  }, [projectResponses]);
+        }));
+      })
+
+
+  }
+  
+  const value = useMemo(() => ({
+    getMembers: (projectId) => {
+      if (projectResponses[projectId] && projectResponses[projectId].members) {
+        return projectResponses[projectId].members;
+      }
+      loadProjectMembers([projectId]);
+      return loadingResponse;
+    },
+    reloadProjectMembers: (projectIds) => {
+      loadProjectMembers(projectIds)
+    }
+  }), [projectResponses]);
   
   return (
     <ProjectContext.Provider value={value}>
