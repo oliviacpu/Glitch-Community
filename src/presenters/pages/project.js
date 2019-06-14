@@ -232,7 +232,12 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className="project-embed-wrap">
-        <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+        <ProjectEmbed
+          project={project}
+          isAuthorized={isAuthorized}
+          currentUser={currentUser}
+          addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
+        />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
