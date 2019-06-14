@@ -21,7 +21,6 @@ import AddTeamUserPop from './add-team-user';
 import TeamUserPop from './team-user-info';
 import styles from './styles.styl';
 
-import TeamUserPop from '../../presenters/pop-overs/team-user-info-pop';
 import { useNotifications } from '../../presenters/notifications';
 
 // Invited user icon and pop
