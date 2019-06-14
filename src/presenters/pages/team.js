@@ -23,7 +23,6 @@ import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { useProjectReload } from 'State/project';
 
 import TeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
@@ -293,46 +292,13 @@ const TeamNameConflict = ({ team }) => {
   const { currentUser } = useCurrentUser();
   return teamConflictsWithUser(team, currentUser) && <NameConflictWarning />;
 };
-const TeamPageEditor = ({ initialTeam, reloadProjectMembers, children }) => (
-  <TeamEditor initialTeam={initialTeam}>
-    {(team, funcs, ...args) => {
-      // Inject page specific changes to the editor
-      // Mainly url updating and calls to reloadProjects
 
-      const removeUserFromTeam = async (user, projectIds) => {
-        await funcs.removeUserFromTeam(user, projectIds);
-        reloadProjectMembers(projectIds);
-      };
-
-      const joinTeamProject = async (projectId) => {
-        await funcs.joinTeamProject(projectId);
-        reloadProjectMembers([projectId]);
-      };
-
-      const leaveTeamProject = async (projectId) => {
-        await funcs.leaveTeamProject(projectId);
-        reloadProjectMembers([projectId]);
-      };
-
-      return children(
-        team,
-        {
-          ...funcs,
-          removeUserFromTeam,
-          joinTeamProject,
-          leaveTeamProject,
-        },
-        ...args,
-      );
-    }}
-  </TeamEditor>
-);
 const TeamPageContainer = ({ team, ...props }) => {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-      <TeamPageEditor initialTeam={team} reloadProjectMembers={reloadProjectMembers}>
+      <TeamEditor initialTeam={team}>
         {(teamFromEditor, funcs, currentUserIsOnTeam, currentUserIsTeamAdmin) => (
           <>
             <Helmet title={teamFromEditor.name} />
@@ -348,7 +314,7 @@ const TeamPageContainer = ({ team, ...props }) => {
             <TeamNameConflict team={teamFromEditor} />
           </>
         )}
-      </TeamPageEditor>
+      </TeamEditor>
     </AnalyticsContext>
   );
 };

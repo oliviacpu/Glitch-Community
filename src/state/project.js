@@ -22,7 +22,7 @@ function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust)
     const next = { ...prev };
     for (const projectId of projectIds) {
       if (!next[projectId] || !next[projectId].members) {
-        next[projectId] = { ...next[projectId], members: loadingResponse };  
+        next[projectId] = { ...next[projectId], members: loadingResponse };
       }
     }
     return next;

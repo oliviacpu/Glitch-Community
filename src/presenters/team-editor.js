@@ -6,6 +6,7 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
+import { useProjectReload } from 'State/project';
 import useErrorHandlers from './error-handlers';
 import useUploader from './includes/uploader';
 
@@ -111,6 +112,15 @@ class TeamEditor extends React.Component {
       const teams = this.props.currentUser.teams.filter(({ id }) => id !== this.state.id);
       this.props.updateCurrentUser({ teams });
     }
+    this.setState(({ projects }) => ({
+      projects: projects.map((p) => {
+        if (!projectIds.includes(p.id)) return p;
+        return {
+          ...p,
+          permissions: p.permissions.filter((perm) => perm.userId !== this.props.currentUser.id),
+        };
+      }),
+    }));
     this.props.reloadProjectMembers(projectIds);
   }
 
@@ -177,17 +187,17 @@ class TeamEditor extends React.Component {
   }
 
   async joinTeamProject(projectId) {
-    await this.props.api.post(`/teams/${this.state.id}/projects/${projectId}/join`);
-    this.setState(({ projects }) => {
-      projects: projects.map(p => {
-        if (p.id !== projectId) return p
+    const updatedProject = await this.props.api.post(`/teams/${this.state.id}/projects/${projectId}/join`);
+    this.setState(({ projects }) => ({
+      projects: projects.map((p) => {
+        if (p.id !== projectId) return p;
         return {
           ...p,
-          permissions: [...p.permissions, { userId: this.props.currentUser.id }]
-        }
-      })
-    })
-    this.props.reloadProjectMembers([projectId])
+          permissions: [...p.permissions, { userId: this.props.currentUser.id }],
+        };
+      }),
+    }));
+    this.props.reloadProjectMembers([projectId]);
   }
 
   async leaveTeamProject(projectId) {
@@ -196,16 +206,16 @@ class TeamEditor extends React.Component {
         targetUserId: this.props.currentUser.id,
       },
     });
-    this.setState(({ projects }) => {
-      projects: projects.map(p => {
-        if (p.id !== projectId) return p
+    this.setState(({ projects }) => ({
+      projects: projects.map((p) => {
+        if (p.id !== projectId) return p;
         return {
           ...p,
-          permissions: p.permissions.filter(perm => perm.)
-        }
-      })
-    })
-    this.props.reloadProjectMembers([projectId])
+          permissions: p.permissions.filter((perm) => perm.userId !== this.props.currentUser.id),
+        };
+      }),
+    }));
+    this.props.reloadProjectMembers([projectId]);
   }
 
   async addProjectToCollection(project, collection) {
@@ -277,8 +287,8 @@ const TeamEditorContainer = ({ children, initialTeam }) => {
   const uploadFuncs = useUploader();
   const { createNotification } = useNotifications();
   const errorFuncs = useErrorHandlers();
-  const reloadProjectMembers = useProjectsReload();
-  
+  const reloadProjectMembers = useProjectReload();
+
   return (
     <TeamEditor
       {...{ api, currentUser, initialTeam }}
