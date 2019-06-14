@@ -143,22 +143,23 @@ const ButtonImage = ({ image, position, classNames }) => {
   );
 };
 
-const ButtonEmoji = ({ emoji, position }) => {
+ButtonImage.propTypes = {
+  image: PropTypes
+  position: PropTypes.oneOf(['right', 'left']).isRequired,
+}
+
+const ButtonEmoji = ({ emoji, ...props }) => {
   const className = cx({
-    alignLeft: position === 'left',
     up1: ['bentoBox', 'bomb'].includes(emoji),
   });
 
   return (
-    <ButtonImage className={className}>
-      <Emoji name={emoji} />
-    </div>
+    <ButtonImage image={<Emoji name={emoji} />} className={className} {...props }/>
   );
 };
 
 ButtonEmoji.propTypes = {
   emoji: PropTypes.string.isRequired,
-  position: PropTypes.oneOf(['right', 'left']).isRequired,
 };
 
 export default Button;
