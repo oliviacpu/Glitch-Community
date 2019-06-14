@@ -97,34 +97,32 @@ export default OptimisticWrapper;
   - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
 */
 
-const useOptimisticValue = (realValue, setValueAsync) => {
+const useOptimisticValue = (rawValueFromOnChange, setValueAsync) => {
   // store what is being typed in, along with an error message
   // update undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ update: undefined, error: null });
-  const debouncedUpdate = useDebouncedValue(state.update, 500);
+  const [state, setState] = React.useState({ updateToSave: undefined, error: null });
+  const debouncedUpdateToSave = useDebouncedValue(state.updateToSave, 500);
   
   React.useEffect(() => {
-    const textHasUpdated = debouncedUpdate !== undefined
-    if (textHasUpdated) {
-      // if the update changes during the async action then ignore the result
-      const setStateIfMatches = (newState) => setState((prevState) => prevState.update === debouncedUpdate ? newState : prevState );
+    const textHasUpdatedSinceSave = debouncedUpdateToSave !== undefined;
+    if (textHasUpdatedSinceSave) {
+      // if the updateToSave changes during the async action then ignore the result
+      const setStateIfLastServerCallIsStillRelevant = (newState) => setState((prevState) => prevState.updateToSave === debouncedUpdateToSave ? newState : prevState );
       // this scope can't be async/await because it's an effect
-      setValueAsync(debouncedUpdate).then(
-        () => {
-          return setStateIfMatches({ update: undefined, error: null })
-        },
+      setValueAsync(debouncedUpdateToSave).then(
+        () => setStateIfLastServerCallIsStillRelevant({ updateToSave: undefined, error: null }),
         (error) => {
-          const message = (error && error.response && error.response.data && error.response.data.message) || "test";
-          setStateIfMatches({ update: debouncedUpdate, error: message });
+          const message = error && error.response && error.response.data && error.response.data.message; // should there always be a default error here?
+          setStateIfLastServerCallIsStillRelevant({ updateToSave: debouncedUpdateToSave, error: message });
         },
       );
     }
-  }, [debouncedUpdate]);
+  }, [debouncedUpdateToSave]);
 
-  const optimisticValue = state.update !== undefined ? state.update : realValue;
+  const optimisticValue = state.updateToSave !== undefined ? state.updateToSave : rawValueFromOnChange;
   
   const setOptimisticValue = (newValue) => {
-    setState((prevState) => ({ ...prevState, update: newValue }));
+    setState((prevState) => ({ ...prevState, updateToSave: newValue }));
   };
   return [optimisticValue, setOptimisticValue, state.error];
 };
