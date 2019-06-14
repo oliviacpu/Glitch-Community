@@ -50,6 +50,8 @@ const TwoFactorSettings = () => {
     try {
       await api.post('user/tfa/verifyInitialCode', { code });
       await reload();
+      setSecret(undefined);
+      setCode('');
       setDone(true);
     } catch (error) {
       console.error(error);
@@ -60,7 +62,7 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {twoFactorEnabled && <Button type="tertiary" size="small" disabled={done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
+      {twoFactorEnabled && <Button type="tertiary" size="small" disabled={!done} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
       {!twoFactorEnabled &&
         <>
           <Button type="tertiary" size="small" disabled={!!secret} onClick={generateSecret}>Enable Authenticator App</Button>
