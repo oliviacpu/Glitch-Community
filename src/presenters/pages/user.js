@@ -20,7 +20,6 @@ import { useCurrentUser } from 'State/current-user';
 
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
-import ProjectsLoader from '../projects-loader';
 import styles from './user.styl';
 
 function syncPageToLogin(login) {
@@ -97,7 +96,8 @@ const UserPage = ({
 }) => {
   const pinnedSet = new Set(user.pins.map(({ id }) => id));
   // filter featuredProject out of both pinned & recent projects
-  const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
+  const sortedProjects = orderBy(user.projects, (project) => project.updatedAt, ['desc']);
+  const [pinnedProjects, recentProjects] = partition(sortedProjects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
@@ -150,6 +150,7 @@ const UserPage = ({
               Pinned Projects <Emoji inTitle name="pushpin" />
             </>
           }
+          fetchMembers
           projects={pinnedProjects}
           projectOptions={{
             removePin,
@@ -180,6 +181,7 @@ const UserPage = ({
           data-cy="recent-projects"
           layout="grid"
           title="Recent Projects"
+          fetchMembers
           projects={recentProjects}
           enablePagination
           enableFiltering={recentProjects.length > 6}
@@ -252,9 +254,7 @@ const UserPageContainer = ({ user }) => {
         {(userFromEditor, funcs, isAuthorized) => (
           <>
             <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
-            <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser, isSupport }} user={{ ...userFromEditor, projects }} {...funcs} />}
-            </ProjectsLoader>
+            <UserPage {...{ isAuthorized, maybeCurrentUser, isSupport }} user={userFromEditor} {...funcs} />
           </>
         )}
       </UserEditor>
