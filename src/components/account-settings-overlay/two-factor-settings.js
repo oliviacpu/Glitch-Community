@@ -14,9 +14,9 @@ import styles from './styles.styl';
 
 const TwoFactorSettings = () => {
   const { currentUser, reload } = useCurrentUser();
+  const { twoFactorEnabled } = currentUser;
 
   const api = useAPI();
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(currentUser.twoFactorEnabled);
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
@@ -26,9 +26,8 @@ const TwoFactorSettings = () => {
     setDone(false);
     try {
       await api.post('user/tfa/disable');
-      setTwoFactorEnabled(false);
-      setDone(true);
       await reload();
+      setDone(true);
     } catch (error) {
       console.error(error);
     }
@@ -50,9 +49,8 @@ const TwoFactorSettings = () => {
     evt.preventDefault();
     try {
       await api.post('user/tfa/verifyInitialCode', { code });
-      setTwoFactorEnabled(true);
-      setDone(true);
       await reload();
+      setDone(true);
     } catch (error) {
       console.error(error);
     }

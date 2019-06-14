@@ -302,10 +302,12 @@ const LoginSection = ({ showForgotPassword }) => {
         <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
         <Button size="small" disabled={emailValidationError || working} submit>Sign in</Button>
       </form>
-      {tfaToken && <form data-cy="tfa-code-form" onSubmit={() => {}}>
-        <TextInput placeholder="12345" labelText="code" value={tfaCode} onChange={setTfaCode} disabled={working} testingId="tfa-code" />
-        <Button size="small" disabled={working} submit>Submit code</Button>
-      </form>}
+      {tfaToken && (
+        <form data-cy="tfa-code-form" onSubmit={() => {}}>
+          <TextInput placeholder="12345" labelText="code" value={tfaCode} onChange={setTfaCode} disabled={working} testingId="tfa-code" />
+          <Button size="small" disabled={working} submit>Submit code</Button>
+        </form>
+      )}
       {!!errorMessage && <p>{errorMessage}</p>}
       <Button size="small" type="tertiary" onClick={showForgotPassword}>
         Forgot Password
