@@ -5,7 +5,10 @@ import dayjs from 'dayjs';
 
 import { useAPI } from 'State/api';
 import useLocalStorage from 'State/local-storage';
+
 import Button from 'Components/buttons/button';
+import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+
 import NewPasswordInput from 'Components/new-password-input';
 import { EmailTokenLoginPage } from './login';
 
@@ -52,11 +55,22 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
     return <Redirect to="/" />;
   }
 
+  if (state === 'error') {
+    return <>Something went wrong :(</>;
+  }
+
   return (
-    <form onSubmit={onSubmit}>
-      <NewPasswordInput disabled={isWorking} onChange={setPassword} />
-      <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
-    </form>
+    <Overlay>
+      <OverlaySection type="info">
+        <OverlayTitle>Reset Password</OverlayTitle>
+      </OverlaySection>
+      <OverlaySection type="actions">
+        <form onSubmit={onSubmit}>
+          <NewPasswordInput disabled={isWorking} onChange={setPassword} />
+          <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
+        </form>
+      </OverlaySection>
+    </Overlay>
   );
 };
 
