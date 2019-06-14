@@ -7,7 +7,7 @@ import useErrorHandlers from '../presenters/error-handlers';
 export const updateCollection = (api, collection, changes) => api.patch(`collections/${collection.id}`, changes);
 export const deleteCollection = (api, collection) => api.delete(`/collections/${collection.id}`);
 
-function currentUserIsAuthor(currentUser, collection) {
+export function currentUserIsAuthor(currentUser, collection) {
   if (!currentUser) return false;
   if (collection.teamId > 0) {
     return currentUser.teams.some((team) => team.id === collection.teamId);
@@ -31,22 +31,10 @@ export function useCollectionEditor(initialCollection) {
     await updateCollection(api, collection, changes);
   }
 
-  async function addProjectToCollection(project, selectedCollection) {
-    if (selectedCollection.id === collection.id) {
-      // add project to collection page
-      this.setState(({ projects }) => ({
-        projects: [project, ...projects],
-      }));
-    }
-    await api.patch(`collections/${selectedCollection.id}/add/${project.id}`);
-    if (selectedCollection.id === collection.id) {
-      await api.post(`collections/${selectedCollection.id}/project/${project.id}/index/0`);
-    }
-  }
-
   function updateProject(projectUpdates, projectId) {
-    this.setState(({ projects }) => ({
-      projects: projects.map((project) => {
+    setCollection((prev) => ({
+      ...prev,
+      projects: prev.projects.map((project) => {
         if (project.id === projectId) {
           return { ...project, ...projectUpdates };
         }
@@ -58,13 +46,25 @@ export function useCollectionEditor(initialCollection) {
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
-    addProjectToCollection: (project, collection) => this.addProjectToCollection(project, collection).catch(handleCustomError),
+    addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
+      if (selectedCollection.id === collection.id) {
+        // add project to collection page
+        setCollection((prev) => ({
+          ...prev,
+          projects: [project, ...prev.projects],
+        }));
+      }
+      await api.patch(`collections/${selectedCollection.id}/add/${project.id}`);
+      if (selectedCollection.id === collection.id) {
+        await api.post(`collections/${selectedCollection.id}/project/${project.id}/index/0`);
+      }
+    }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project) => {
       await api.patch(`collections/${collection.id}/remove/${project.id}`);
       setCollection((prev) => ({
         ...prev,
-        projects: prrev.projects.filter((p) => p.id !== project.id),
+        projects: prev.projects.filter((p) => p.id !== project.id),
       }));
     }, handleError),
 
