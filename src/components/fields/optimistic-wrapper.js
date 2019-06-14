@@ -36,17 +36,15 @@ on blur:
 */
 
 const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
-  const [wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value, asyncUpdate })
+  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, wrappedOnChange)
+  const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value: nonAggressivelyTrimmedInputValue, asyncUpdate: onChangeWrappedWithTrimmedValue })
+  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(inputValue, wrappedOnChange);
   
-  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, onChange)
   
-  
-//   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
   
 //   React.useEffect(() => {
 //     setState({ ...state, inputState: optimisticValue })
 //   }, [optimisticValue])
-  
   
   return <MarkdownInput {...props} value={state.inputState} error={optimisticError} onChange={optimisticOnChange} onBlur={onBlur} />;
 };
@@ -58,7 +56,7 @@ OptimisticWrapper.propTypes = {
 
 export default OptimisticWrapper;
 
-function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur=() }) {
+function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur }) {
   const [state, setState] = React.useState({ 
     status: null, 
     lastSavedResponse: value, 
@@ -89,11 +87,11 @@ function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur=() }) {
       wrappedOnBlur();
     } else {
       setState({ ...state, inputState: state.lastSavedResponse });
-      onBlur();
+      if (onBlur) { onBlur(); }
     }
   }
   
-  return [wrappedOnChange, wrappedOnBlur];
+  return [state.inputValue, wrappedOnChange, wrappedOnBlur];
 }
 
 
@@ -101,10 +99,12 @@ function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur=() }) {
 
 /*
   What this does:
-  - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
+  - limit server calls to everytime state changes and it's been at least 500 ms
+  - but shows whatever the latest is as you type even if it hasn't saved yet
+  - returns an error message to be displayed to the user in case of error
 */
 
-const useOptimisticValue = (rawValueFromOnChange, setValueAsync) => {
+function useOptimisticValueAndDebounceCallsToServer (rawValueFromOnChange, setValueAsync) {
   // store what is being typed in, along with an error message
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined, error: null });
