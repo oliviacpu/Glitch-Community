@@ -13,29 +13,17 @@ import { PopoverContainer, PopoverActions, PopoverInfo, PopoverSection } from 'C
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
-import { NestedPopover } from './popover-nested';
+import { NestedPopover } from '../../presenters/pop-overs/popover-nested';
+
+import styles from './styles.styl';
+import emojiStyles from '../images/emoji.styl';
 
 // Create Team button
 
-const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
+const CreateTeamButton = ({ showCreateTeam }) => {
   const onClickCreateTeam = useTrackedFunc(showCreateTeam, 'Create Team clicked');
-  if (userIsAnon) {
-    return (
-      <>
-        <p className="description action-description">
-          <button onClick={showCreateTeam} className="button-unstyled link" type="button">
-            Sign in
-          </button>{' '}
-          to create teams
-        </p>
-        <Button size="small" emoji="herb" disabled>
-          Create Team
-        </Button>
-      </>
-    );
-  }
   return (
-    <Button size="small" onClick={onClickCreateTeam} emoji="herb">
+    <Button size="small" emoji="herb" onClick={onClickCreateTeam}>
       Create Team
     </Button>
   );
@@ -43,7 +31,6 @@ const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
 
 CreateTeamButton.propTypes = {
   showCreateTeam: PropTypes.func.isRequired,
-  userIsAnon: PropTypes.bool.isRequired,
 };
 
 // Team List
@@ -52,26 +39,18 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
   const orderedTeams = orderBy(teams, (team) => team.name.toLowerCase());
 
   return (
-    <section className="pop-over-actions">
+    <PopoverActions>
       {orderedTeams.map((team) => (
-        <div className="button-wrap" key={team.id}>
-          <Button
-            key={team.id}
-            href={getTeamLink(team)}
-            type="tertiary"
-            size="small"
-            image={
-              <div style={{ width: '16px', height: '16px', borderRadius: '3px', overflow: 'hidden' }}>
-                <Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} style={{ borderRadius: '3px' }} width={16} height={16} />
-              </div>
-            }
-          >
+        <div>
+          <Button href={getTeamLink(team)} size="small" type="tertiary" hasEmoji key={team.id}>
             {team.name}
+            &nbsp;
+            <Image className={`${styles.teamAvatar} ${emojiStyles.emoji}`}src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width="16" height="16" />
           </Button>
         </div>
       ))}
-      <CreateTeamButton showCreateTeam={showCreateTeam} userIsAnon={userIsAnon} />
-    </section>
+      <CreateTeamButton showCreateTeam={showCreateTeam} />
+    </PopoverActions>
   );
 };
 
@@ -117,48 +96,51 @@ Are you sure you want to sign out?`)
     signOut();
   };
 
-  const userName = user.name || 'Anonymous';
-  const userAvatarStyle = { backgroundColor: user.color };
 
   return (
-    <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
-      <UserLink user={user} className="user-info">
-        <section className="pop-over-actions user-info">
-          <img className="avatar" src={getUserAvatarUrl(user)} alt="Your avatar" style={userAvatarStyle} />
-          <div className="info-container">
-            <p className="name" title={userName}>
-              {userName}
-            </p>
+    <PopoverDialog className={styles.userOptionsPop} ref={focusFirstElement}>
+      <PopoverTitle>
+        <UserLink user={user}>
+          <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
+            <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
+          </div>
+          <div className={styles.userInfo}>
+            <Text>{user.name || 'Anonymous'}</Text>
             {user.login && (
-              <p className="user-login" title={user.login}>
-                @{user.login}
-              </p>
+              <div className={styles.userLogin}>
+                <Text>@{user.login}</Text>
+              </div>
             )}
           </div>
-        </section>
-      </UserLink>
+        </UserLink>
+      </PopoverTitle>
+      
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
-      <section className="pop-over-info">
-        {(canBecomeSuperUser || !!superUserFeature) && (
+      
+      <PopoverInfo>
+        {(!canBecomeSuperUser || !superUserFeature) && (
           <div className="user-options-pop-checkbox">
             <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
               Super User
             </CheckboxButton>
           </div>
         )}
-        <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
+        <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
           New Stuff
         </Button>
-        <div className="button-wrap">
-          <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
-            Support
-          </Button>
-        </div>
-        <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
+        <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
+          Support
+        </Button>
+        <Button
+          type="tertiary"
+          size="small"
+          emoji="balloon"
+          onClick={clickSignout}
+        >
           Sign Out
         </Button>
-      </section>
-    </dialog>
+      </PopoverInfo>
+    </PopoverDialog>
   );
 };
 
