@@ -36,40 +36,9 @@ on blur:
 */
 
 const OptimisticWrapper = ({ value, asyncUpdate, ...props }) => {
-  const [state, setState] = React.useState({ 
-    status: null, 
-    lastSavedResponse: value, 
-    inputValue: value 
-  });
-
-  const onChange = async (change) => {
-    setState({ status: "loading" });
-    if (asyncUpdate) {
-      try {
-        const response = await asyncUpdate(change);
-        if (response.status === 200) {
-          setState({ status: "loaded", lastSavedResponse: change, inputState: change });
-        } else {
-          setState({ ...state, status: "error" });
-        }
-        return response // return response so other funcs can use it later if necessary
-      } catch (error) {
-        setState({ ...state, status: "error" });
-        throw error; // rethrow error so other funcs can use it later if necessary
-      }
-    }
-  }
+  const [wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError({ value, asyncUpdate })
   
-  const onBlur = () => {
-    // if we're still waiting for a response from the server, keep running this func
-    if (state.status === "loading") {
-      onBlur();
-    } else {
-      setState({ ...state, inputState: state.lastSavedResponse })
-    }
-  }
-  
-  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(debouncedValue, onChange)
+  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, onChange)
   
   
 //   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
@@ -88,6 +57,44 @@ OptimisticWrapper.propTypes = {
 };
 
 export default OptimisticWrapper;
+
+function useRevertOnBlurWhenError({ value, asyncUpdate, onBlur=() }) {
+  const [state, setState] = React.useState({ 
+    status: null, 
+    lastSavedResponse: value, 
+    inputValue: value 
+  });
+
+  const wrappedOnChange = async (change) => {
+    setState({ status: "loading" });
+    if (asyncUpdate) {
+      try {
+        const response = await asyncUpdate(change);
+        if (response.status === 200) {
+          setState({ status: "loaded", lastSavedResponse: change, inputState: change });
+        } else {
+          setState({ ...state, status: "error" });
+        }
+        return response // return response so other funcs can use it later if necessary
+      } catch (error) {
+        setState({ ...state, status: "error" });
+        throw error; // rethrow error so other funcs can use it later if necessary
+      }
+    }
+  }
+  
+  const wrappedOnBlur = () => {
+    // if we're still waiting for a response from the server, keep running this func
+    if (state.status === "loading") {
+      wrappedOnBlur();
+    } else {
+      setState({ ...state, inputState: state.lastSavedResponse });
+      onBlur();
+    }
+  }
+  
+  return [wrappedOnChange, wrappedOnBlur];
+}
 
 
 
