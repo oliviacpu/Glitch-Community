@@ -130,11 +130,11 @@ Button.defaultProps = {
   emoji: null,
 };
 
-const ButtonImage = ({ image, position, classes }) => {
-  console.log('classes', classes);
+const ButtonImage = ({ image, position, up1 }) => {
   const className = cx({
     imageContainer: true,
     alignLeft: position === 'left',
+    up1,
   });
 
   return <div className={className}>{image}</div>;
@@ -146,13 +146,13 @@ ButtonImage.propTypes = {
   up1: PropTypes.bool,
 };
 
-const ButtonEmoji = ({ emoji, ...props }) => {
-  const className = cx({
-    up1: ['bentoBox', 'bomb', 'clapper'].includes(emoji),
-  });
-
-  return <ButtonImage image={<Emoji name={emoji} />} up1={'bentoBox', 'bomb', 'clapper'].includes(emoji)} {...props} />;
+ButtonImage.defaultProps = {
+  up1: false,
 };
+
+const ButtonEmoji = ({ emoji, ...props }) => (
+  <ButtonImage image={<Emoji name={emoji} />} up1={['bentoBox', 'bomb', 'clapper'].includes(emoji)} {...props} />
+);
 
 ButtonEmoji.propTypes = {
   emoji: PropTypes.string.isRequired,
