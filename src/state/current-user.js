@@ -306,19 +306,3 @@ CurrentUserProvider.propTypes = {
 };
 
 export const useCurrentUser = () => React.useContext(Context);
-
-export function normalizeUser(user, currentUser) {
-  return user.id === (currentUser && currentUser.id) ? currentUser : user;
-}
-
-export function normalizeUsers(users, currentUser) {
-  return users.map((user) => normalizeUser(user, currentUser));
-}
-
-export function normalizeProject({ users, ...project }, currentUser) {
-  return { users: users ? normalizeUsers(users, currentUser) : [], ...project };
-}
-
-export function normalizeProjects(projects, currentUser) {
-  return projects.map((project) => normalizeProject(project, currentUser));
-}
