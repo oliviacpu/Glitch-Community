@@ -55,7 +55,17 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <Button key={team.id} href={getTeamLink(team)} type="tertiary" size="small" image={<Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} />}>
+          <Button
+            key={team.id}
+            href={getTeamLink(team)}
+            type="tertiary"
+            size="small"
+            image={
+              <div style={{ width: '16px', height: '16px', borderRadius: '3px', overflow: 'hidden' }}>
+                <Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} style={{ borderRadius: '3px' }} width={16} height={16} />
+              </div>
+            }
+          >
             {team.name}
           </Button>
         </div>
@@ -139,9 +149,11 @@ Are you sure you want to sign out?`)
         <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
           New Stuff
         </Button>
-        <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
-          Support
-        </Button>
+        <div className="button-wrap">
+          <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
+            Support
+          </Button>
+        </div>
         <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
           Sign Out
         </Button>
