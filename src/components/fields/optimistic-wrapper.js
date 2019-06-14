@@ -92,9 +92,6 @@ export default OptimisticWrapper;
 
 
 
-
-import useDebouncedValue from 'Hooks/use-debounced-value';
-
 /*
   What this does:
   - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
@@ -102,38 +99,32 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 
 const useOptimisticValue = (realValue, setValueAsync) => {
   // store what is being typed in, along with an error message
-  // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null });
-  // debounce our stored value and send the async updates when it is not undefined
-  const debouncedValue = useDebouncedValue(state.value, 500);
+  // update undefined means that the field is unchanged from the 'real' value
+  const [state, setState] = React.useState({ update: undefined, error: null });
+  const debouncedUpdate = useDebouncedValue(state.update, 500);
+  
   React.useEffect(() => {
-    if (debouncedValue !== undefined) {
-      // if the value changes during the async action then ignore the result
-      const setStateIfMatches = (newState) => {
-        setState((prevState) => {
-          if (prevState.value === debouncedValue) {
-            console.log("Setting state because it matches the debounced value setting state to", newState)
-          }
-          return prevState.value === debouncedValue ? newState : prevState
-        });
-      };
+    const textHasUpdated = debouncedUpdate !== undefined
+    if (textHasUpdated) {
+      // if the update changes during the async action then ignore the result
+      const setStateIfMatches = (newState) => setState((prevState) => prevState.update === debouncedUpdate ? newState : prevState );
       // this scope can't be async/await because it's an effect
-      setValueAsync(debouncedValue).then(
+      setValueAsync(debouncedUpdate).then(
         () => {
-          return setStateIfMatches({ value: undefined, error: null })
+          return setStateIfMatches({ update: undefined, error: null })
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "test";
-          setStateIfMatches({ value: debouncedValue, error: message });
+          setStateIfMatches({ update: debouncedUpdate, error: message });
         },
       );
     }
-  }, [debouncedValue]);
+  }, [debouncedUpdate]);
 
-  const optimisticValue = state.value !== undefined ? state.value : realValue;
+  const optimisticValue = state.update !== undefined ? state.update : realValue;
   
   const setOptimisticValue = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue }));
+    setState((prevState) => ({ ...prevState, update: newValue }));
   };
   return [optimisticValue, setOptimisticValue, state.error];
 };
