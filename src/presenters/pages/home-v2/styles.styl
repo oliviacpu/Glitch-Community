@@ -200,6 +200,15 @@ section
       img
         margin-left: 60px
 
+@media(min-width: mediumViewport) and (max-width: largeViewport)
+  .featureCalloutsRow
+    width: 80%
+    text-align: center
+@media(min-width: smallViewport) and (max-width: mediumViewport)
+  .featureCalloutsRow
+    width: 80%
+    text-align: center
+    
 .plainLink
   color: inherit
   text-decoration: none
@@ -304,20 +313,45 @@ section
 
 .featuredEmbed
   margin: 0
+  background-color: bg1
+  border-radius: u1
+  position: relative
+  
+.featuredEmbedImg
+  max-height: 150px
+  position: absolute
+  right: 0
+  top: "-%s" % u4
+  -webkit-mask-image: url(https://cdn.glitch.com/3cef6b25-69ba-4fa9-aa32-cff0fedce195%2Fmask-4.svg)
+  object-fit: contain
+  mask-size: contain
+  mask-repeat: no-repeat
+  mask-position: center
+  mask-type: luminance
+  @media(max-width: mediumViewport)
+    left: 0
     
 .featuredEmbedWrap
   height: 80vh
   max-height: 500px
   margin-bottom: "-%s" % u3
+  padding: 0px u3 u3 u3
   
 .featuredEmbedCaption
-  padding: u4 u3 u3
-  background-color: bg1
+  width: 55%
+  margin-top: u4
+  padding: u3
   display: flex
   flex-direction: column
   border-radius: u1
+  @media(max-width: mediumViewport)
+    width: 100%
+    padding-top: 140px
+  @media(min-width: largeViewport)
+    width: 70%
 
 .featuredEmbedText
+  max-width: 100%
   flex: 1 0 auto
   margin-bottom: u3
   h4
@@ -385,19 +419,27 @@ section
 
 .curatedCollectionUsers
   flex: 1 0 40%
-  max-width: 200px
-  max-height: 150px
   position: relative
+  @media(max-width: mediumViewport)
+    max-width: 200px
+    max-height: 150px
   @media (min-width: mediumViewport)
     flex: 1 0 30%
+    max-height: 150px
   
 .userMask
   height: 100%
   max-height: 200px
   position: relative
+  @media(max-width: mediumViewport)
+    width: 90%
+  @media(min-width: largeViewport)
+    height: 250%
 .userMaskBubbleWrap
   position: absolute
 .userMaskBubble
+  min-width: 45px
+  min-height: 45px
   border-radius: 50%
   background-size: cover
   padding-bottom: 100%

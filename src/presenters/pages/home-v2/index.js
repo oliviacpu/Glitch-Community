@@ -139,8 +139,9 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const FeaturedEmbed = ({ content: { domain, title, description, href } }) => (
+const FeaturedEmbed = ({ content: { domain, title, description, href, image } }) => (
   <figure className={styles.featuredEmbed}>
+    <img className={styles.featuredEmbedImg} src={image} alt="" />
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
         <a href={href} className={styles.plainLink}>
