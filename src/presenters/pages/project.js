@@ -21,7 +21,7 @@ import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useProjectEditor } from 'State/project';
+import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { addBreadcrumb } from 'Utils/sentry';
 
@@ -265,25 +265,19 @@ ProjectPage.propTypes = {
   }).isRequired,
 };
 
-async function getProject(api, domain) {
-  const data = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
-    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
-    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
-  });
-
-  const { project, ...rest } = data;
+async function addProjectBreadcrumb(projectWithMembers) {
+  const { users, teams, ...project } = projectWithMembers;
   addBreadcrumb({
     level: 'info',
     message: `project: ${JSON.stringify(project)}`,
   });
-  return { ...project, ...rest };
+  return projectWithMembers;
 }
 
 const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
-      <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
+      <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
         {(project) =>
           project ? (
             <>

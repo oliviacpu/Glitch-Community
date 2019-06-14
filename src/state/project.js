@@ -1,19 +1,28 @@
-/* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
+import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
 
 import useErrorHandlers from '../presenters/error-handlers';
 import useUploader from '../presenters/includes/uploader';
 
-const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
+export async function getProjectByDomain(api, domain) {
+  const { project, teams, users } = await allByKeys({
+    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
+    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
+  });
+  return { ...project, teams, users };
+}
 
-const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+export const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
 
-const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
+export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
-const updateProjectDomain = (api, project) =>
+export const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
+
+export const updateProjectDomain = (api, project) =>
   api.post(
     `project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
     {},
