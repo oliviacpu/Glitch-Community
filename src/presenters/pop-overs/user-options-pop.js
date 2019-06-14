@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
-import { getLink as getTeamLink } from 'Models/team';
-import { TeamAvatar } from 'Components/images/avatar';
+import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
+import Image from 'Components/images/image';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
@@ -55,7 +55,12 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <Button href={getTeamLink(team)} type="tertiary" size="small" image={<TeamAvatar team={team} />}>
+          <Button
+            href={getTeamLink(team)}
+            type="tertiary"
+            size="small"
+            image={<Image alt="" src={getTeamAvatarUrl({ id: team.id, size: 'small' })} />}
+          >
             {team.name}
           </Button>
         </div>
