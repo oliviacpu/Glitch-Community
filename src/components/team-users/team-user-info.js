@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { UserAvatar } from 'Components/images/avatar';
+import { UserAvatar, ProjectAvatar } from 'Components/images/avatar';
 import Thanks from 'Components/thanks';
 import {
   PopoverDialog,
@@ -22,10 +22,9 @@ import Loader from 'Components/loader';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
-import ProjectAvatar from '../../presenters/includes/project-avatar';
-import { useNotifications } from '../../presenters/notifications';
 import styles from './styles.styl';
 
 const MEMBER_ACCESS_LEVEL = 20;
@@ -45,7 +44,7 @@ const ProjectsList = ({ options, value, onChange }) => (
           }}
         />
         <div className={styles.projectAvatarWrap}>
-          <ProjectAvatar {...project} />
+          <ProjectAvatar project={project} />
         </div>
         {project.domain}
       </label>
@@ -124,7 +123,8 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
   const selectedUserIsTeamAdmin = userIsTeamAdmin({ user, team });
   const selectedUserIsOnlyAdmin = userIsOnlyTeamAdmin({ user, team });
   const teamHasOnlyOneMember = team.users.length === 1;
-  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || (currentUser && currentUser.id === user.id);
+  const isCurrentUser = currentUser && currentUser.id === user.id;
+  const currentUserHasRemovePriveleges = currentUserIsTeamAdmin || isCurrentUser;
   const canCurrentUserRemoveUser = currentUserHasRemovePriveleges && !teamHasOnlyOneMember && !selectedUserIsOnlyAdmin;
 
   return (
@@ -161,7 +161,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
           <Button type="dangerZone" onClick={onRemoveUser}>
-            Remove from Team <Emoji name="wave" />
+            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Emoji name="wave" />
           </Button>
         </PopoverActions>
       )}

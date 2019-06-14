@@ -18,16 +18,16 @@ import {
 } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import { ProjectAvatar } from 'Components/images/avatar';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
-import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
-import ProjectAvatar from '../../presenters/includes/project-avatar';
-
 import styles from './popover.styl';
 
 const collectionTypeOptions = [
@@ -44,7 +44,7 @@ const collectionTypeOptions = [
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
     <div className={styles.popoverTitleWrap}>
-      <ProjectAvatar {...project} /> Add {project.domain} to collection
+      <ProjectAvatar project={project} /> Add {project.domain} to collection
     </div>
   </MultiPopoverTitle>
 );
@@ -123,7 +123,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        'notifySuccess',
+        { type: 'success' },
       );
     });
 
@@ -153,7 +153,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
           <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
         )}
         renderNoResults={() => (
-          <PopoverInfo><NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} /></PopoverInfo>
+          <PopoverInfo>
+            <NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} />
+          </PopoverInfo>
         )}
       />
 

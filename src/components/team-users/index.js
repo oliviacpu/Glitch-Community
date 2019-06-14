@@ -11,6 +11,7 @@ import { useAPI, createAPIHook } from 'State/api';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
+import Notification from 'Components/notification';
 import TransparentButton from 'Components/buttons/transparent-button';
 import { UserAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';

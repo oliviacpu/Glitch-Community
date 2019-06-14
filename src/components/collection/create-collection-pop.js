@@ -7,15 +7,16 @@ import { withRouter } from 'react-router-dom';
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 import { PopoverDialog, MultiPopoverTitle, PopoverActions, PopoverWithButton } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import { createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
-import { AddProjectToCollectionMsg, useNotifications } from '../../presenters/notifications';
 import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './create-collection-pop.styl';
 
@@ -130,9 +131,9 @@ export function CreateCollectionWithProject({ project, addProjectToCollection })
       await addProjectToCollection(project, collection);
 
       const content = <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />;
-      createNotification(content, 'notifySuccess');
+      createNotification(content, { type: 'success' });
     } catch (e) {
-      createNotification('Unable to add project to collection.', 'notifyError');
+      createNotification('Unable to add project to collection.', { type: 'error' });
     }
   };
   const title = <MultiPopoverTitle>{`Add ${project.domain} to a new collection`}</MultiPopoverTitle>;
