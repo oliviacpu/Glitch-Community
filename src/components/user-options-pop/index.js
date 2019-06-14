@@ -7,9 +7,10 @@ import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import Image from 'Components/images/image';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
+import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import { PopoverContainer, PopoverActions, PopoverInfo, PopoverSection } from 'Components/popover';
+import { PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
@@ -35,7 +36,7 @@ CreateTeamButton.propTypes = {
 
 // Team List
 
-const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
+const TeamList = ({ teams, showCreateTeam }) => {
   const orderedTeams = orderBy(teams, (team) => team.name.toLowerCase());
 
   return (
@@ -45,7 +46,13 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
           <Button href={getTeamLink(team)} size="small" type="tertiary" hasEmoji key={team.id}>
             {team.name}
             &nbsp;
-            <Image className={`${styles.teamAvatar} ${emojiStyles.emoji}`}src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width="16" height="16" />
+            <Image
+              className={`${styles.teamAvatar} ${emojiStyles.emoji}`}
+              src={getTeamAvatarUrl({ ...team, size: 'small' })}
+              alt=""
+              width="16"
+              height="16"
+            />
           </Button>
         </div>
       ))}
@@ -64,7 +71,6 @@ TeamList.propTypes = {
     }),
   ).isRequired,
   showCreateTeam: PropTypes.func.isRequired,
-  userIsAnon: PropTypes.bool.isRequired,
 };
 
 // User Options 🧕
@@ -96,7 +102,6 @@ Are you sure you want to sign out?`)
     signOut();
   };
 
-
   return (
     <PopoverDialog className={styles.userOptionsPop} ref={focusFirstElement}>
       <PopoverTitle>
@@ -114,11 +119,11 @@ Are you sure you want to sign out?`)
           </div>
         </UserLink>
       </PopoverTitle>
-      
+
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
-      
+
       <PopoverInfo>
-        {(!canBecomeSuperUser || !superUserFeature) && (
+        {(canBecomeSuperUser || !!superUserFeature) && (
           <div className="user-options-pop-checkbox">
             <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
               Super User
@@ -131,12 +136,7 @@ Are you sure you want to sign out?`)
         <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
           Support
         </Button>
-        <Button
-          type="tertiary"
-          size="small"
-          emoji="balloon"
-          onClick={clickSignout}
-        >
+        <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
           Sign Out
         </Button>
       </PopoverInfo>
