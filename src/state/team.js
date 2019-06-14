@@ -81,32 +81,6 @@ export function useTeamEditor(initialTeam) {
     }
   }
 
-  async function uploadAvatar(blob) {
-    const { data: policy } = await assets.getTeamAvatarImagePolicy(api, team.id);
-    await uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
-
-    const image = await assets.blobToImage(blob);
-    const color = assets.getDominantColor(image);
-    await updateFields({
-      hasAvatarImage: true,
-      backgroundColor: color,
-    });
-    setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
-  }
-
-  async function uploadCover(blob) {
-    const { data: policy } = await assets.getTeamCoverImagePolicy(api, team.id);
-    await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
-
-    const image = await assets.blobToImage(blob);
-    const color = assets.getDominantColor(image);
-    await updateFields({
-      hasCoverImage: true,
-      coverColor: color,
-    });
-    setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
-  }
-
   function removeUserAdmin(id) {
     const index = team.adminIds.indexOf(id);
     if (index !== -1) {
@@ -151,8 +125,36 @@ export function useTeamEditor(initialTeam) {
         updateCurrentUser({ teams });
       }
     }, handleError),
-    uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
-    uploadCover: () => assets.requestFile((blob) => uploadCover(blob).catch(handleError)),
+    uploadAvatar: () =>
+      assets.requestFile(
+        withErrorHandler(async (blob) => {
+          const { data: policy } = await assets.getTeamAvatarImagePolicy(api, team.id);
+          await uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
+
+          const image = await assets.blobToImage(blob);
+          const color = assets.getDominantColor(image);
+          await updateFields({
+            hasAvatarImage: true,
+            backgroundColor: color,
+          });
+          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+        }, handleError),
+      ),
+    uploadCover: () =>
+      assets.requestFile(
+        withErrorHandler(async (blob) => {
+          const { data: policy } = await assets.getTeamCoverImagePolicy(api, team.id);
+          await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
+
+          const image = await assets.blobToImage(blob);
+          const color = assets.getDominantColor(image);
+          await updateFields({
+            hasCoverImage: true,
+            coverColor: color,
+          });
+          setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
+        }, handleError),
+      ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
     addProject: withErrorHandler(async (project) => {
       await addProjectToTeam(api, project, team);
