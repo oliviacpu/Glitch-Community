@@ -52,28 +52,29 @@ export function useProjectEditor(initialProject) {
     }));
   }
 
-  async function updateDomain(domain) {
-    await updateFields({ domain });
-    // don't await this because the project domain has already changed and I don't want to delay other things updating
-    updateProjectDomain(api, project);
-  }
-
-  async function uploadAvatar(blob) {
-    const { data: policy } = await assets.getProjectAvatarImagePolicy(api, project.id);
-    await uploadAsset(blob, policy, '', { cacheControl: 60 });
-    setProject((prev) => ({
-      ...prev,
-      _avatarCache: Date.now(),
-    }));
-  }
+  const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
     addProjectToCollection: (collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
     deleteProject: () => deleteProject(api, project).catch(handleError),
-    updateDomain: (domain) => updateDomain(domain).catch(handleErrorForInput),
+    updateDomain: withErrorHandler(async (domain) => {
+      await updateFields({ domain });
+      // don't await this because the project domain has already changed and I don't want to delay other things updating
+      updateProjectDomain(api, project);
+    }, handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     updatePrivate: (isPrivate) => updateFields({ private: isPrivate }).catch(handleError),
-    uploadAvatar: () => assets.requestFile((blob) => uploadAvatar(blob).catch(handleError)),
+    uploadAvatar: () =>
+      assets.requestFile(
+        withErrorHandler(async (blob) => {
+          const { data: policy } = await assets.getProjectAvatarImagePolicy(api, project.id);
+          await uploadAsset(blob, policy, '', { cacheControl: 60 });
+          setProject((prev) => ({
+            ...prev,
+            _avatarCache: Date.now(),
+          }));
+        }, handleError),
+      ),
   };
   return [project, funcs];
 }
