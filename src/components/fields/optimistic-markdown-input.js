@@ -16,10 +16,10 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
         if (status === 200) {
           setState({ status: "loaded", lastSavedResponse: change, inputState: change })
         } else {
-          setState({ ...state, status: "error", inputState: state.lastSavedResponse })
+          setState({ ...state, status: "error" })
         }
       }, (error) => {
-        setState({ ...state, status: "error", inputState: state.lastSavedResponse })
+        setState({ ...state, status: "error" })
         throw error
       });
     }
@@ -36,7 +36,7 @@ const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(state.inputState, onChangeWithSavedGoodResponse);
   
   React.useEffect(() => {
-    console.log("setting optimistic value")
+    console.log("setting inputState as optimisticValue", optimisticValue)
     setState({ ...state, inputState: optimisticValue })
   }, [optimisticValue])
   
