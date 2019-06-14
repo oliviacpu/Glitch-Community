@@ -150,7 +150,6 @@ const UserPage = ({
               Pinned Projects <Emoji inTitle name="pushpin" />
             </>
           }
-          fetchMembers
           projects={pinnedProjects}
           projectOptions={{
             removePin,
@@ -181,7 +180,6 @@ const UserPage = ({
           data-cy="recent-projects"
           layout="grid"
           title="Recent Projects"
-          fetchMembers
           projects={recentProjects}
           enablePagination
           enableFiltering={recentProjects.length > 6}

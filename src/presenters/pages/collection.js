@@ -173,7 +173,6 @@ const CollectionPageContents = ({
                   featureProject,
                   isAuthorized: currentUserIsAuthor,
                 }}
-                fetchMembers
               />
             )}
             {currentUserIsAuthor && projects.length > 1 && (

@@ -36,13 +36,12 @@ const CategoryPageWrap = ({ addProjectToCollection, category, currentUser }) => 
             <ProjectsList
               layout="gridCompact"
               projects={category.projects}
-              fetchMembers
               projectOptions={{
                 addProjectToCollection,
               }}
             />
           ) : (
-            <ProjectsList layout="gridCompact" projects={category.projects} fetchMembers />
+            <ProjectsList layout="gridCompact" projects={category.projects} />
           )}
         </div>
       </article>

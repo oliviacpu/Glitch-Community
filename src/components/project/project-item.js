@@ -9,9 +9,7 @@ import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
-import { captureException } from 'Utils/sentry';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
-import { getAllPages } from 'Shared/api';
 import { useProjectMembers } from 'State/project';
 
 import ProjectOptionsPop from './project-options-pop';
@@ -30,7 +28,7 @@ const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProfileListWithData = ({ project }) => {
   const { value: members } = useProjectMembers(project.id);
-  return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />
+  return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />;
 };
 
 const ProfileListLoader = ({ project }) => (
@@ -64,7 +62,7 @@ const ProjectItem = ({ project, projectOptions }) => {
               <div className={styles.container}>
                 <header className={styles.header}>
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
-                    <ProfileListLoader />
+                    <ProfileListLoader project={project} />
                   </div>
                   <div className={styles.projectOptionsContainer}>
                     <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
