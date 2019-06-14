@@ -22,11 +22,11 @@ import EditCollectionColor from 'Components/collection/edit-collection-color-pop
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useCollectionEditor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
 import AuthDescription from '../includes/auth-description';
-import CollectionEditor from '../collection-editor';
 import CollectionAvatar from '../includes/collection-avatar';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
@@ -61,23 +61,12 @@ DeleteCollectionBtn.propTypes = {
 };
 
 const CollectionPageContents = ({
-  collection,
-  currentUser,
-  deleteCollection,
-  currentUserIsAuthor,
-  updateNameAndUrl,
-  updateDescription,
-  addProjectToCollection,
-  removeProjectFromCollection,
-  updateColor,
-  updateProjectOrder,
-  displayNewNote,
-  updateNote,
-  hideNote,
-  featureProject,
-  unfeatureProject,
-  ...props
+  collection: initialCollection,
 }) => {
+  const { currentUser } = useCurrentUser()
+  const [collection, funcs] = useCollectionEditor(initialCollection)
+  const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser })
+  
   const collectionHasProjects = !!collection && !!collection.projects && collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -87,7 +76,7 @@ const CollectionPageContents = ({
 
   const onNameChange = async (name) => {
     const url = kebabCase(name);
-    const result = await updateNameAndUrl({ name, url });
+    const result = await funcs.updateNameAndUrl({ name, url });
     history.replaceState(null, null, getLink({ ...collection, url }));
     return result;
   };
@@ -114,7 +103,7 @@ const CollectionPageContents = ({
               <AuthDescription
                 authorized={currentUserIsAuthor}
                 description={collection.description}
-                update={updateDescription}
+                update={funcs.updateDescription}
                 placeholder="Tell us about your collection"
               />
             </div>
@@ -125,11 +114,11 @@ const CollectionPageContents = ({
               </Text>
             </div>
 
-            {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
+            {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
           <div className="collection-contents">
             <div className="collection-project-container-header">
-              {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={addProjectToCollection} collection={collection} />}
+              {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
             </div>
             {!collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
@@ -145,32 +134,31 @@ const CollectionPageContents = ({
                 isAuthorized={currentUserIsAuthor}
                 currentUser={currentUser}
                 featuredProject={featuredProject}
-                unfeatureProject={unfeatureProject}
-                addProjectToCollection={addProjectToCollection}
+                unfeatureProject={funcs.unfeatureProject}
+                addProjectToCollection={funcs.addProjectToCollection}
                 collection={collection}
-                displayNewNote={displayNewNote}
-                updateNote={updateNote}
-                hideNote={hideNote}
+                displayNewNote={funcs.displayNewNote}
+                updateNote={funcs.updateNote}
+                hideNote={funcs.hideNote}
               />
             )}
             {collectionHasProjects && (
               <ProjectsList
                 layout="gridCompact"
-                {...props}
                 projects={projects}
                 collection={collection}
                 enableSorting={currentUserIsAuthor && projects.length > 1}
-                onReorder={updateProjectOrder}
+                onReorder={funcs.updateProjectOrder}
                 noteOptions={{
-                  hideNote,
-                  updateNote,
+                  hideNote: funcs.hideNote,
+                  updateNote: funcs.updateNote,
                   isAuthorized: currentUserIsAuthor,
                 }}
                 projectOptions={{
-                  removeProjectFromCollection,
-                  addProjectToCollection,
-                  displayNewNote,
-                  featureProject,
+                  removeProjectFromCollection: funcs.removeProjectFromCollection,
+                  addProjectToCollection: funcs.addProjectToCollection,
+                  displayNewNote: funcs.displayNewNote,
+                  featureProject: funcs.featureProject,
                   isAuthorized: currentUserIsAuthor,
                 }}
                 fetchMembers
@@ -186,7 +174,7 @@ const CollectionPageContents = ({
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
-      {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={deleteCollection} />}
+      {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={funcs.deleteCollection} />}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
@@ -201,19 +189,6 @@ CollectionPageContents.propTypes = {
     name: PropTypes.string.isRequired,
     projects: PropTypes.array.isRequired,
   }).isRequired,
-  currentUser: PropTypes.object.isRequired,
-  deleteCollection: PropTypes.func.isRequired,
-  currentUserIsAuthor: PropTypes.bool.isRequired,
-  removeProjectFromCollection: PropTypes.func.isRequired,
-  displayNewNote: PropTypes.func,
-  updateNote: PropTypes.func,
-  hideNote: PropTypes.func,
-};
-
-CollectionPageContents.defaultProps = {
-  displayNewNote: null,
-  updateNote: null,
-  hideNote: null,
 };
 
 async function loadCollection(api, ownerName, collectionName) {
@@ -239,7 +214,7 @@ async function loadCollection(api, ownerName, collectionName) {
   }
 }
 
-const CollectionPage = ({ ownerName, name, ...props }) => {
+const CollectionPage = ({ ownerName, name }) => {
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
@@ -252,17 +227,9 @@ const CollectionPage = ({ ownerName, name, ...props }) => {
                 groupId: collection.team ? collection.team.id.toString() : '0',
               }}
             >
-              <CollectionEditor initialCollection={collection}>
-                {(collectionFromEditor, funcs, currentUserIsAuthor) => (
                   <CollectionPageContents
-                    collection={collectionFromEditor}
-                    currentUser={currentUser}
-                    currentUserIsAuthor={currentUserIsAuthor}
-                    {...funcs}
-                    {...props}
+                    collection={collection}
                   />
-                )}
-              </CollectionEditor>
             </AnalyticsContext>
           ) : (
             <NotFound name={name} />
