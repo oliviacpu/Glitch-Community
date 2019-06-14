@@ -19,10 +19,10 @@ const PasswordSettings = ({ userHasPassword }) => {
   const [newPassword, setNewPassword] = useState(null);
   const [passwordVersion, setPasswordVersion] = useState(1);
 
-  const [state, setState] = useState('idle');
+  const [state, setState] = useState(null);
   const andClearState = (func) => (...args) => {
     func(...args);
-    setState('idle');
+    setState(null);
   };
 
   const updatePassword = async (event) => {
@@ -43,15 +43,19 @@ const PasswordSettings = ({ userHasPassword }) => {
     }
   };
 
+  const [resetState, setResetState] = React.useState(null);
+  const primaryEmail = currentUser.emails.find((email) => email.primary);
   const resetPassword = async (event) => {
     event.preventDefault();
-    const primaryEmail = currentUser.emails.find((email) => email.primary);
+    setResetState('working');
     try {
       await api.post('email/sendResetPasswordEmail', {
         emailAddress: primaryEmail.email,
       });
+      setResetState('done');
     } catch (error) {
       console.error(error);
+      setResetState('error');
     }
   };
 
@@ -77,7 +81,10 @@ const PasswordSettings = ({ userHasPassword }) => {
       {userHasPassword &&
         <>
           <Heading tagName="h2">Reset Password</Heading>
-          <Button type="tertiary" size="small" onClick={resetPassword}>Send Reset Password Email</Button>
+          <Button type="tertiary" size="small" disabled={resetState === 'working'} onClick={resetPassword}>Send Reset Password Email</Button>
+
+          {resetState === 'done' && <Badge type="success">Sent a reset code to {primaryEmail.email}</Badge>}
+          {resetState === 'error' && <Badge type="error">Something went wrong, check your inbox?</Badge>}
         </>
       }
     </>
