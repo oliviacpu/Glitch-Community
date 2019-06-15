@@ -177,9 +177,10 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
           {({ togglePopover, visible, focusFirstElement }) => {
+            // TODO we might need an alt for actually getting into the pop "User options"
             const userOptionsButton = (
-              <Button type="dropdown" onClick={togglePopover} disabled={!props.user.id} type="button">
-                <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
+              <Button type="dropdown" onClick={togglePopover} disabled={!props.user.id}>
+                <UserAvatar withinButton style={avatarStyle} />
                 <div className="user-options-dropdown-wrap">
                   <span className="down-arrow icon" />
                 </div>
