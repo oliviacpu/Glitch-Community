@@ -5,6 +5,7 @@ import { orderBy } from 'lodash';
 import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import Image from 'Components/images/image';
+import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Text from 'Components/text/text';
