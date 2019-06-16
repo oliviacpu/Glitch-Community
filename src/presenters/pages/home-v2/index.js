@@ -70,7 +70,7 @@ const calloutImages = {
 
 const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
-    <Row items={content} className={styles.featureCalloutsRow} minWidth="150px">
+    <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
       {({ label, description, cta, backgroundSrc, href, color, id }) => (
         <a href={href} className={styles.plainLink}>
           <div style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
