@@ -18,15 +18,15 @@ import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
+import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
+import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
-import Layout from '../layout';
-import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
-import CollectionAvatar from '../includes/collection-avatar';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -99,7 +99,7 @@ const CollectionPageContents = ({
         <article className="collection-full projects" style={{ backgroundColor: collection.coverColor }}>
           <header className={`collection ${isDarkColor(collection.coverColor) ? 'dark' : ''}`}>
             <div className="collection-image-container">
-              <CollectionAvatar color={collection.coverColor} />
+              <CollectionAvatar collection={collection} />
             </div>
 
             <h1 className="collection-name">

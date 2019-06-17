@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import Embed from 'Components/project/embed';
 import ReportButton from 'Components/report-abuse-pop';
 import { useTracker } from 'State/segment-analytics';
-import { EditButton, RemixButton } from '../../presenters/includes/project-actions';
+import { EditButton, RemixButton } from 'Components/project/project-actions';
 import AddProjectToCollection from './add-project-to-collection-pop';
 
 import styles from './project-embed.styl';
