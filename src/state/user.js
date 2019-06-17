@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import useUploader from 'State/uploader';
 
 import useErrorHandlers from '../presenters/error-handlers';
-import useUploader from '../presenters/includes/uploader';
 
 export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
 export const removePin = (api, projectId, user) => api.delete(`users/${user.id}/pinned-projects/${projectId}`);

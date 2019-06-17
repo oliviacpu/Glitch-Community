@@ -5,8 +5,8 @@ import _ from 'lodash';
 
 import { isDarkColor } from 'Models/collection';
 import { ProfileItem } from 'Components/profile-list';
+import AuthDescription from 'Components/fields/auth-description';
 
-import AuthDescription from '../../presenters/includes/auth-description';
 import styles from './note.styl';
 
 const cx = classNames.bind(styles);
