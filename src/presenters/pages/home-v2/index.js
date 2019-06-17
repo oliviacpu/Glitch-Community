@@ -201,8 +201,8 @@ const CultureZine = ({ content }) => (
     </h2>
     <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
     <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
-      {({ content }) => (
-        <Row items={content} count={2} className={styles.cultureZineRow}>
+      {({ content: cultureZineItems }) => (
+        <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
           {({ title, source, img, url }) => (
             <a href={`/culture${url}`} className={styles.plainLink}>
               <div className={styles.cultureZineImageWrap}>

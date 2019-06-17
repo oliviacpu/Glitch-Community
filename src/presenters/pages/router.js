@@ -19,12 +19,9 @@ import { NotFoundPage, ProjectNotFoundPage } from './error';
 import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
-<<<<<<< HEAD
 import NewHomePage from './home-v2';
 import NewHomePagePreview from './home-v2/preview';
-=======
 import VSCodeAuth from './vscode-auth';
->>>>>>> 533b2d77f70797eb653c67a7374c73771beb5d67
 
 /* global EXTERNAL_ROUTES */
 const parse = (search, name) => {

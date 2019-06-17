@@ -28,13 +28,9 @@ const ProjectEmbed = ({ project, top, isAuthorized, currentUser, addProjectToCol
   const BottomRight = () => (
     <>
       {currentUser.login && (
-<<<<<<< HEAD
-        <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
-=======
         <span className={styles.addToCollectionWrap}>
           <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
         </span>
->>>>>>> 533b2d77f70797eb653c67a7374c73771beb5d67
       )}
       <RemixButton name={project.domain} isMember={isAuthorized} onClick={trackRemix} />
     </>
