@@ -57,15 +57,10 @@ button
   &.has-emoji
     padding-top: 3px
     padding-bottom: 3px
-    .status-badge
-      margin-right: 3px
   .loader
     width: 15px
     height: 15px
     margin-right: 0
-  .status-badge
-    display: inline
-    margin-left: 1px
 
 .button-tertiary
   color: tertiary
@@ -80,9 +75,6 @@ button
   &:hover, &:focus
     color: primary
     border-color: line-on-secondary-background
-  .status-badge
-    display: inline
-    margin-left: 4px
 
 .button-on-secondary-background
   color: text-on-secondary-background
@@ -132,25 +124,3 @@ button.link
 .button-wrap
   display: inline-block
   position: relative
-
-.segmented-buttons
-  margin-bottom: 12px
-  button
-    margin: 0
-    &:first-child
-      border-top-right-radius: 0
-      border-bottom-right-radius: 0
-    &:last-child
-      border-left: 0
-      border-top-left-radius: 0
-      border-bottom-left-radius: 0
-    &:not(:first-child):not(:last-child)
-      border-radius: 0px
-      border-left: 0
-    &.active
-      background: secondary-background-active
-    &.active:hover
-      background-color: secondary-background-hover
-    &:focus
-      outline: none
-      background-color: secondary-background
