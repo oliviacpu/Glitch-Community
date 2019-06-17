@@ -109,7 +109,7 @@ Are you sure you want to sign out?`)
   };
 
   return (
-    <PopoverDialog className={styles.userOptionsPop} ref={focusFirstElement}>
+    <PopoverDialog className={styles.userOptionsPop} ref={focusFirstElement} align="right">
       <PopoverTitle>
         <UserLink user={user}>
           <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
@@ -180,8 +180,8 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
           {({ togglePopover, visible, focusFirstElement }) => {
             // TODO we might need an alt for actually getting into the pop "User options"
             const userOptionsButton = (
-              <Button type="dropdown" onClick={togglePopover} disabled={!props.user.id}>
-                <UserAvatar withinButton style={avatarStyle} />
+              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
+                <UserAvatar user={props.user} withinButton style={avatarStyle} />
                 <div className="user-options-dropdown-wrap">
                   <span className="down-arrow icon" />
                 </div>
