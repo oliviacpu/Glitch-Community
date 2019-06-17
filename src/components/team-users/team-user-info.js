@@ -18,7 +18,6 @@ import {
 } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
-import Emoji from 'Components/images/emoji';
 import Loader from 'Components/loader';
 
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
@@ -152,20 +151,20 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
         <PopoverActions>
           <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
           {selectedUserIsTeamAdmin ? (
-            <Button size="small" type="tertiary" onClick={onRemoveAdmin}>
-              Remove Admin Status <Emoji name="fastDown" />
+            <Button size="small" type="tertiary" emoji="fastDown" onClick={onRemoveAdmin}>
+              Remove Admin Status
             </Button>
           ) : (
-            <Button size="small" type="tertiary" onClick={onMakeAdmin}>
-              Make an Admin <Emoji name="fastUp" />
+            <Button size="small" type="tertiary" emoji="fastUp" onClick={onMakeAdmin}>
+              Make an Admin
             </Button>
           )}
         </PopoverActions>
       )}
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
-          <Button type="dangerZone" onClick={onRemoveUser}>
-            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Emoji name="wave" />
+          <Button type="dangerZone" emoji="wave" onClick={onRemoveUser}>
+            {isCurrentUser ? 'Leave Team' : 'Remove from Team'}
           </Button>
         </PopoverActions>
       )}

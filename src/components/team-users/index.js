@@ -66,14 +66,14 @@ function InvitedUser(props) {
               </PopoverInfo>
 
               <PopoverActions>
-                <Button onClick={resendInvite} type="tertiary" size="small" hasEmoji>
-                  Resend invite <Emoji name="herb" />
+                <Button onClick={resendInvite} type="tertiary" size="small" emoji="herb">
+                  Resend invite
                 </Button>
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
-                <Button onClick={props.onRevokeInvite} type="dangerZone" hasEmoji>
-                  Remove <Emoji name="wave" />
+                <Button onClick={props.onRevokeInvite} type="dangerZone" emoji="wave">
+                  Remove
                 </Button>
               </PopoverActions>
             </PopoverDialog>
