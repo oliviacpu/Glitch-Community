@@ -79,7 +79,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement, superUserHelpers }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, superUserHelpers }) => {
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
 
   const trackLogout = useTracker('Logout');
@@ -107,7 +107,7 @@ Are you sure you want to sign out?`)
   };
 
   return (
-    <PopoverDialog className={styles.userOptionsPop} ref={focusFirstElement} align="right">
+    <PopoverDialog className={styles.userOptionsPop} align="right">
       <PopoverTitle>
         <UserLink user={user}>
           <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
@@ -154,15 +154,10 @@ Are you sure you want to sign out?`)
 
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes,
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
   showNewStuffOverlay: PropTypes.func.isRequired,
-};
-
-UserOptionsPop.defaultProps = {
-  focusFirstElement: null,
 };
 
 function CheckForCreateTeamHash(props) {
@@ -178,7 +173,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
-          {({ togglePopover, visible,  focusFirstElement }) => {
+          {({ togglePopover, visible }) => {
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
                 <div className={styles.userOptionsPopWrap}>
@@ -199,7 +194,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                     }}
                   >
                     {({ createTeam }) => (
-                      <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={createTeam} focusFirstElement={focusFirstElement} />
+                      <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={createTeam} />
                     )}
                   </MultiPopover>
                 )}
