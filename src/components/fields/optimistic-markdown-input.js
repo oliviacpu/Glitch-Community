@@ -93,9 +93,9 @@ function useOptimisticValue(value, onChange) { //todo add onblur
     setState((prevState) => ({ ...prevState, value: newValue, useLastSaved: false, error: null }));
   };
   
-  const optimisticValue = state.useLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
+  const optimisticValue = state.useLastSaved ? state.lastSaved : (state.value === undefined ? value : state.value);
   console.log("WHAT IS STATE LOL", {...state})
-  console.log("What is optimistic value now?", optimisticValue, "because of", state.value !== undefined, state.value, value)
+  console.log("What is optimistic value now?", optimisticValue, "because of state.value is", state.value, "and value is", value)
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
 
