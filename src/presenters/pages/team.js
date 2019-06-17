@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -23,12 +23,12 @@ import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 
 import TeamEditor from '../team-editor';
 import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
-import NameConflictWarning from '../includes/name-conflict';
 import ProjectsLoader from '../projects-loader';
 import styles from './team.styl';
 
@@ -80,6 +80,37 @@ const TeamMarketing = () => (
     </Button>
   </section>
 );
+
+const NameConflictWarning = ({ id }) => (
+  <>
+    <Text>This team has your name. You should update your info to remain unique ❄</Text>
+    <Button size="small" type="tertiary" href={`/user/${id}`}>
+      Your Profile
+    </Button>
+  </>
+);
+
+const teamConflictsWithUser = (team, currentUser) => {
+  return true;
+  if (currentUser && currentUser.login) {
+    return currentUser.login.toLowerCase() === team.url;
+  }
+  return false;
+};
+
+const useTeamNameConflictWarning = (team) => {
+  const { currentUser } = useCurrentUser();
+  const { createNotification } = useNotifications();
+  useEffect(() => {
+    if (teamConflictsWithUser(team, currentUser)) {
+      const notification = createNotification(<NameConflictWarning id={currentUser.id} />, { persistent: true });
+      return () => {
+        notification.removeNotification();
+      };
+    }
+    return undefined;
+  }, [currentUser, team]);
+};
 
 // Team Page
 
@@ -282,17 +313,6 @@ TeamPage.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
 };
 
-const teamConflictsWithUser = (team, currentUser) => {
-  if (currentUser && currentUser.login) {
-    return currentUser.login.toLowerCase() === team.url;
-  }
-  return false;
-};
-
-const TeamNameConflict = ({ team }) => {
-  const { currentUser } = useCurrentUser();
-  return teamConflictsWithUser(team, currentUser) && <NameConflictWarning />;
-};
 const TeamPageEditor = ({ initialTeam, children }) => (
   <TeamEditor initialTeam={initialTeam}>
     {(team, funcs, ...args) => (
@@ -334,6 +354,8 @@ const TeamPageEditor = ({ initialTeam, children }) => (
 const TeamPageContainer = ({ team, ...props }) => {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
+  useTeamNameConflictWarning(team);
+
   return (
     <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
       <TeamPageEditor initialTeam={team}>
@@ -349,7 +371,6 @@ const TeamPageContainer = ({ team, ...props }) => {
               currentUserIsTeamAdmin={currentUserIsTeamAdmin}
               {...props}
             />
-            <TeamNameConflict team={teamFromEditor} />
           </>
         )}
       </TeamPageEditor>
