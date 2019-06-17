@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import _, { debounce } from 'lodash';
+import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
@@ -10,7 +10,6 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { getPredicates, getTeamPair } from 'Models/words';
 import { getLink } from 'Models/team';
-import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 
@@ -20,7 +19,6 @@ import styles from './styles.styl';
 
 const CreateTeamSubmitButton = () => {
   const onClick = useTracker('Create Team submitted');
-  // TODO tbv, this is a standard form, double check how Button component behaves with type="submit"
   return (
     <Button size="small" emoji="thumbsUp" onClick={onClick}>
       Create Team
@@ -68,7 +66,6 @@ function CreateTeamPopBase(props) {
     }
   };
 
-  // const debouncedValidate = (val) => useDebouncedValue(val, 200);
   const debouncedValidate = _.debounce(validate, 200);
   useEffect(() => {
     const getName = async () => {
@@ -84,8 +81,7 @@ function CreateTeamPopBase(props) {
       error: '',
     });
 
-    debounce();
-    await validate(newValue);
+    await debouncedValidate(newValue);
   };
 
   const handleSubmit = async (event) => {
