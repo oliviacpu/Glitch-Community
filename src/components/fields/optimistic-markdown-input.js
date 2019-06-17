@@ -53,6 +53,7 @@ function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
 };
 
 function useOptimisticValue(value, onChange) { //todo add onblur
+  console.log("start", { value })
   // store what is being typed in, along with an error message
   // value undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, useLastSaved: false});
@@ -87,15 +88,14 @@ function useOptimisticValue(value, onChange) { //todo add onblur
     // if (onBlur) { onBlur(); }
   }
   
-  
-  
   const optimisticOnChange = (newValue) => {
+    console.log("optimisticOnChange new value", newValue)
     setState((prevState) => ({ ...prevState, value: newValue, useLastSaved: false, error: null }));
   };
   
   const optimisticValue = state.useLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
   console.log("WHAT IS STATE LOL", {...state})
-  console.log("What is optimistic value now?", optimisticValue, state.value !== undefined, state.value, value)
+  console.log("What is optimistic value now?", optimisticValue, "because of", state.value !== undefined, state.value, value)
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
 
