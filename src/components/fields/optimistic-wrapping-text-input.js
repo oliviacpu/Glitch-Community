@@ -2,10 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import WrappingTextInput from '../inputs/wrapping-text-input';
-import useOptimisticText from './use-optimistic-text';
+
+import usePassivelyTrimmedInput from "./use-passively-trimmed-input";
+import useOptimisticValue from "./use-optimistic-value";
 
 const OptimisticWrappingTextInput = ({ value, onChange, ...props }) => {
-  const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticText(value, onChange);
+  const [untrimmedValue, onChangeBoundWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeBoundWithTrimmedInputs);
+  
   return <WrappingTextInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} />;
 };
 
