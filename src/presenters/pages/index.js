@@ -9,11 +9,11 @@ import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
 import ReportButton from 'Components/report-abuse-pop';
 import RecentProjects from 'Components/recent-projects';
+import Layout from 'Components/layout';
 import { getEditorUrl } from 'Models/project';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
-import Layout from '../layout';
 import Featured from '../featured';
 import OverlayVideo from '../overlays/overlay-video';
 

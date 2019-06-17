@@ -5,16 +5,19 @@ import Helmet from 'react-helmet';
 
 import Header from 'Components/header';
 import Footer from 'Components/footer';
-import NewStuffContainer from './overlays/new-stuff';
-import ErrorBoundary from './includes/error-boundary';
-import Konami from './includes/konami';
+
+import NewStuffContainer from '../../presenters/overlays/new-stuff';
+import ErrorBoundary from '../../presenters/includes/error-boundary';
+import Konami from '../../presenters/includes/konami';
+
+import styles from './styles.styl';
 
 const Layout = ({ children, searchQuery }) => (
-  <div className="content">
+  <div className={styles.content}>
     <Helmet title="Glitch" />
     <NewStuffContainer>
       {(showNewStuffOverlay) => (
-        <div className="header-wrap">
+        <div className={styles.headerWrap}>
           <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
         </div>
       )}
