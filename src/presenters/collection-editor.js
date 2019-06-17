@@ -11,7 +11,6 @@ class CollectionEditor extends React.Component {
     super(props);
     this.state = {
       ...props.initialCollection,
-      errorCount: 0,
     };
   }
 
@@ -56,7 +55,7 @@ class CollectionEditor extends React.Component {
   async updateProjectOrder(project, filteredIndex) {
     // the shown projects list doesn't include the featured project, bump the index to include it
     const featuredIndex = this.state.projects.findIndex((p) => p.id === this.state.featuredProjectId);
-    const index = featuredIndex >= 0 && filteredIndex > featuredIndex ? filteredIndex + 1 : filteredIndex;
+    const index = (featuredIndex >= 0 && filteredIndex > featuredIndex) ? filteredIndex + 1 : filteredIndex;
     this.setState(({ projects }) => {
       const sortedProjects = projects.filter((p) => p !== project);
       sortedProjects.splice(index, 0, project);
@@ -112,7 +111,7 @@ class CollectionEditor extends React.Component {
       displayNewNote: (projectId) => this.displayNewNote(projectId),
       updateNote: ({ note, projectId }) => this.updateNote({ note, projectId }),
       hideNote: (projectId) => this.hideNote(projectId),
-      updateDescription: (description) => this.updateFields({ description }),
+      updateDescription: (description) => this.updateFields({ description }).catch(handleErrorForInput),
       updateColor: (color) => this.updateFields({ coverColor: color }),
       updateProjectOrder: (project, index) => this.updateProjectOrder(project, index).catch(handleError),
       featureProject: (id) => this.featureProject(id).catch(handleError),
