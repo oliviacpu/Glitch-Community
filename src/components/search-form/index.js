@@ -6,7 +6,7 @@ import { getLink as getUserLink } from 'Models/user';
 import { getLink as getTeamLink } from 'Models/team';
 import { useAlgoliaSearch } from 'State/search';
 import TextInput from '../inputs/text-input';
-import PopoverContainer from '../../presenters/pop-overs/popover-container';
+import { PopoverContainer } from 'Components/popover';
 import AutocompleteSearch from './autocomplete';
 import styles from './search-form.styl';
 
@@ -104,7 +104,7 @@ const { actions, reducer } = createSlice({
   }),
 });
 
-function AlgoliaSearchController({ visible, setVisible, children, defaultValue }) {
+function AlgoliaSearchController({ visible, togglePopover, children, defaultValue }) {
   const initialState = {
     selectedResult: null,
     query: defaultValue,
@@ -144,7 +144,7 @@ function AlgoliaSearchController({ visible, setVisible, children, defaultValue }
   return children({
     query,
     onChange: (value) => dispatch(actions.queryChanged(value)),
-    onFocus: () => setVisible(true),
+    onFocus: () => togglePopover(),
     onKeyDown,
     onSubmit,
     redirect,

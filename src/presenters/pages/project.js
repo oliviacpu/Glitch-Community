@@ -19,13 +19,13 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
 import { addBreadcrumb } from 'Utils/sentry';
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
-import PopoverWithButton from '../pop-overs/popover-with-button';
-import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
@@ -118,7 +118,8 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
+function DeleteProjectPopover({ projectDomain, deleteProject }) {
+  const { currentUser } = useCurrentUser();
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -131,7 +132,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   return (
     <section>
       <PopoverWithButton
-        buttonClass="button-small button-tertiary danger-zone"
+        buttonProps={{ size: 'small', type: 'dangerZone' }}
         buttonText={
           <>
             Delete Project
@@ -139,41 +140,38 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
           </>
         }
       >
-        {({ togglePopover, focusFirstElement }) => (
-          <>
-            <dialog className="pop-over delete-project-pop" open ref={focusFirstElement} tabIndex="0">
-              <section className="pop-over-actions">
-                <div className="action-description">You can always undelete a project from your profile page.</div>
-              </section>
-              <section className="pop-over-actions danger-zone">
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <Button
-                    type="tertiary"
-                    size="small"
-                    onClick={() => {
-                      setLoading(true);
-                      deleteProject().then(() => {
-                        togglePopover();
-                        setDone(true);
-                      });
-                    }}
-                  >
-                    Delete {projectDomain} <Emoji name="bomb" />
-                  </Button>
-                )}
-              </section>
-            </dialog>
-          </>
+        {({ togglePopover }) => (
+          <PopoverDialog align="left" wide>
+            <PopoverActions>
+              <ActionDescription>You can always undelete a project from your profile page.</ActionDescription>
+            </PopoverActions>
+            <PopoverActions type="dangerZone">
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button
+                  type="tertiary"
+                  size="small"
+                  onClick={() => {
+                    setLoading(true);
+                    deleteProject().then(() => {
+                      togglePopover();
+                      setDone(true);
+                    });
+                  }}
+                >
+                  Delete {projectDomain} <Emoji name="bomb" />
+                </Button>
+              )}
+            </PopoverActions>
+          </PopoverDialog>
         )}
       </PopoverWithButton>
     </section>
   );
 }
 
-DeleteProjectButton.propTypes = {
-  currentUser: PropTypes.object.isRequired,
+DeleteProjectPopover.propTypes = {
   deleteProject: PropTypes.func.isRequired,
 };
 
@@ -241,7 +239,7 @@ const ProjectPage = ({
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectButton projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />

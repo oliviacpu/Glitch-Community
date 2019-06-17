@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection } from 'Components/overlays';
+import { PopoverContainer } from 'Components/popover';
 import { useTracker } from 'State/segment-analytics';
-
-import PopoverContainer from '../pop-overs/popover-container';
 
 const loadedScripts = new Set();
 function loadScript(src) {
@@ -33,9 +32,9 @@ const OverlayVideo = ({ children }) => {
   const track = useTracker('How it works clicked');
   return (
     <PopoverContainer>
-      {({ visible, setVisible }) => {
+      {({ visible, togglePopover }) => {
         const onToggle = (evt) => {
-          setVisible(evt.target.open);
+          togglePopover();
           if (evt.target.open) {
             track();
           }
