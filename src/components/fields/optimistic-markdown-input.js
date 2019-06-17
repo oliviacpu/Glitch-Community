@@ -30,7 +30,7 @@ const OptmisticMarkdownInput = ({ value, onChange, ...props }) => {
     inputValue, wrappedOnChange, error, wrappedOnBlur,
   } = useOptimistValueOnChangeAndBlur({ value, asyncUpdate: onChange });
   
-  return <MarkdownInput {...props} value={inputValue} onChange={wrappedOnChange}  error={state.error} onBlur={wrappedOnBlur} />;
+  return <MarkdownInput {...props} value={inputValue} onChange={wrappedOnChange} error={error} onBlur={wrappedOnBlur} />;
 };
 
 OptmisticMarkdownInput.propTypes = {
@@ -45,6 +45,7 @@ function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
   const [inputValue, wrappedOnChange, wrappedOnBlur, error] = useRevertOnBlurWhenError(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
   const [optimisticValue, optimisticOnChange] = useOptimisticValueAndDebounceCallsToServer(inputValue, wrappedOnChange);
 
+  console.log({ inputValue, optimisticValue, error })
   return {
     inputValue, wrappedOnChange, wrappedOnBlur, error,
   };
@@ -63,28 +64,26 @@ function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
 
 function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
   const [state, setState] = React.useState({ 
-    status: null, 
+    isLoading: false, 
     lastSavedResponse: value, 
-    inputValue: value 
+    inputValue: value,
+    error: null,
   });
 
   const wrappedOnChange = (change) => {
-    setState({ status: "loading" });
+    setState({ ...state, isLoading: true });
     if (asyncUpdate) {
       return asyncUpdate(change)
         .then(response => {
-          console.log({ response })
           if (response.status === 200) {
-            setState({ status: "loaded", lastSavedResponse: change, inputValue: change });
+            setState({ ...state, isLoading: false, lastSavedResponse: change, inputValue: change });
           } else {
-            setState({ ...state, status: "error" });
+            setState({ ...state, isLoading: false, });
           }
         }).catch(error => {
-          console.log("hit an error?", error);
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry! Something went wrong, try again later?"; 
-
-          setState({ ...state, status: "error" });
-          // throw error; // rethrow error so other funcs can use it later if necessary
+          setState({ ...state, isLoading: true, error: message });
+          throw error; // rethrow error so other funcs can use it later if necessary
         });
     }
   }
@@ -94,7 +93,7 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     if (state.status === "loading") {
       wrappedOnBlur();
     } else {
-      setState({ ...state, inputValue: state.lastSavedResponse });
+      setState({ ...state, inputValue: state.lastSavedResponse, error: null });
       if (onBlur) { onBlur(); }
     }
   }
