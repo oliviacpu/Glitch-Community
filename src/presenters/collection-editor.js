@@ -5,14 +5,13 @@ import _ from 'lodash';
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
-import { captureException } from 'Utils/sentry';
 
 class CollectionEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ...props.initialCollection,
-      errorCount: 0
+      errorCount: 0,
     };
   }
 
@@ -30,16 +29,8 @@ class CollectionEditor extends React.Component {
   async updateFields(changes) {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
-    
-    // var count = this.state.errorCount
-    // this.setState({ errorCount: count + 1 })
-    // console.log("this.state.errorCount", this.state.errorCount)
-    // if (this.state.errorCount % 3 === 0) {
-    //   throw new Error("test")
-    // }
-    // console.log("inside updateFields hitting the backend")
+    await this.props.api.patch(`collections/${this.state.id}`, changes);
     this.setState(changes);
-    return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
   async addProjectToCollection(project, collection) {
@@ -65,7 +56,7 @@ class CollectionEditor extends React.Component {
   async updateProjectOrder(project, filteredIndex) {
     // the shown projects list doesn't include the featured project, bump the index to include it
     const featuredIndex = this.state.projects.findIndex((p) => p.id === this.state.featuredProjectId);
-    const index = (featuredIndex >= 0 && filteredIndex > featuredIndex) ? filteredIndex + 1 : filteredIndex;
+    const index = featuredIndex >= 0 && filteredIndex > featuredIndex ? filteredIndex + 1 : filteredIndex;
     this.setState(({ projects }) => {
       const sortedProjects = projects.filter((p) => p !== project);
       sortedProjects.splice(index, 0, project);

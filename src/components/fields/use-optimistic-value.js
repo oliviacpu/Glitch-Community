@@ -3,7 +3,8 @@ import React from 'react';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 
 /*
-use optimistic value: 
+
+Use Optimistic Value:
 
 - takes in an initial value for the input
 - takes in a way to update the server
@@ -26,38 +27,43 @@ on blur:
 
 export default function useOptimisticValue(value, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowLastSaved: false});
-  
-  // as the user types we save that as state.value
+  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowLastSaved: false });
+
+  // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined
   const optimisticOnChange = (newValue) => {
     setState((prevState) => ({ ...prevState, value: newValue, shouldShowLastSaved: false, error: null }));
   };
-  
-  // show what's passed in, or whatever was last typed since that point, if we are in an error state after a blur show the last saved state
-  const optimisticValue = state.shouldShowLastSaved ? state.lastSaved : (state.value === undefined ? value : state.value);
-  
+
+  let optimisticValue = value;
+  if (state.shouldShowLastSaved) {
+    optimisticValue = state.lastSaved;
+  }
+  if (state.value !== undefined) {
+    optimisticValue = state.value;
+  }
+
   const debouncedValue = useDebouncedValue(state.value, 500);
-  
+
   React.useEffect(() => {
     const ifUserHasTypedSinceLastSave = debouncedValue !== undefined;
-    
+
     if (ifUserHasTypedSinceLastSave) {
-      
       // if the value changes during the async action then ignore the result
       const setStateIfStillRelevant = (newState) => {
         setState((prevState) => {
-          return prevState.value === debouncedValue ? newState : prevState
+          return prevState.value === debouncedValue ? newState : prevState;
         });
       };
-  
+
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowLastSaved: false, });
+          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowLastSaved: false });
           return debouncedValue;
         },
         (error) => {
-          const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
+          const message =
+            (error && error.response && error.response.data && error.response.data.message) || 'Sorry, we had trouble saving. Try again later?';
           setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, shouldShowLastSaved: false });
         },
       );
@@ -65,12 +71,14 @@ export default function useOptimisticValue(value, onChange, onBlur) {
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    const shouldShowLastSaved = !!state.error
-    setState({ ...state, shouldShowLastSaved, error: null, value: undefined });
-    if (onBlur) { 
+    const shouldShowLastSaved = !!state.error;
+    if (shouldShowLastSaved) {
+      setState({ ...state, shouldShowLastSaved, error: null, value: undefined });
+    }
+    if (onBlur) {
       onBlur();
     }
-  }
+  };
 
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
