@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle } from 'Components/popover';
+import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, PopoverTitle } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -117,30 +117,31 @@ function CreateTeamPopBase(props) {
   };
 
   const placeholder = 'Your Team Name';
-    
+
   return (
-      <PopoverDialog align="right">
+    <PopoverDialog align="right">
+      <PopoverSection>
         <MultiPopoverTitle>
           Create Team <Emoji name="herb" inTitle />
         </MultiPopoverTitle>
-        <hr/>
+      </PopoverSection>
 
-        <PopoverInfo>
-          <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
-        </PopoverInfo>
+      <PopoverInfo>
+        <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
+      </PopoverInfo>
 
-        <PopoverActions>
-          <form onSubmit={handleSubmit}>
-            <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
-            <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
+      <PopoverActions>
+        <form onSubmit={handleSubmit}>
+          <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
+          <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
 
-            {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
-          </form>
-        </PopoverActions>
-        <PopoverInfo>
-          <Text>You can change this later</Text>
-        </PopoverInfo>
-      </PopoverDialog>
+          {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
+        </form>
+      </PopoverActions>
+      <PopoverInfo>
+        <Text>You can change this later</Text>
+      </PopoverInfo>
+    </PopoverDialog>
   );
 }
 
@@ -150,10 +151,8 @@ CreateTeamPopBase.propTypes = {
 
 const CreateTeamPop = withRouter((props) => {
   const api = useAPI();
-  
-  return (
-    <CreateTeamPopBase api={api} {...props} />
-  );
+
+  return <CreateTeamPopBase api={api} {...props} />;
 });
 
 export default CreateTeamPop;
