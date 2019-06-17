@@ -106,6 +106,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
     setStatus('loading');
     try {
+      throw new Error('test');
       await axios.post('https://support-poster.glitch.me/post', {
         raw: formatRaw(),
         title: getAbuseReportTitle(reportedModel, reportedType),
@@ -113,7 +114,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 
       setStatus('success');
     } catch (error) {
-      captureException(error);
+      //captureException(error);
       setStatus('error');
     }
   };
