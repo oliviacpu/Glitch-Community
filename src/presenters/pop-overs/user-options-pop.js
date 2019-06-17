@@ -5,7 +5,6 @@ import { orderBy } from 'lodash';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import Image from 'Components/images/image';
-import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
@@ -163,9 +162,9 @@ Are you sure you want to sign out?`)
 
         {userPasswordEnabled && (
           <AccountSettings>
-            <div className="button button-small has-emoji button-tertiary button-on-secondary-background">
-              Account Settings <Emoji name="key" />
-            </div>
+            <Button size="small" type="tertiary" emoji="key" decorative>
+              Account Settings
+            </Button>
           </AccountSettings>
         )}
 
