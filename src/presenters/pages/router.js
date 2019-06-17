@@ -19,8 +19,12 @@ import { NotFoundPage, ProjectNotFoundPage } from './error';
 import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
+<<<<<<< HEAD
 import NewHomePage from './home-v2';
 import NewHomePagePreview from './home-v2/preview';
+=======
+import VSCodeAuth from './vscode-auth';
+>>>>>>> 533b2d77f70797eb653c67a7374c73771beb5d67
 
 /* global EXTERNAL_ROUTES */
 const parse = (search, name) => {
@@ -153,6 +157,8 @@ const Router = () => (
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
+
+      <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />

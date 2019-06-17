@@ -18,6 +18,7 @@ import ProjectItemSmall from 'Components/project/project-item-small';
 import CollectionItem from 'Components/collection/collection-item';
 import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
+import TeamUsers from 'Components/team-users';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
@@ -33,6 +34,7 @@ import Note from 'Components/collection/note';
 import MoreIdeas from 'Components/more-ideas';
 import Footer from 'Components/footer';
 import RecentProjects from 'Components/recent-projects';
+import Notification from 'Components/notification';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
@@ -288,9 +290,13 @@ storiesOf('UserItem', module).add('base', () => (
 
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
-    <TeamItem team={teams[12345]} />
+    <TeamItem team={teams['example-team']} />
   </div>
 ));
+       
+storiesOf('TeamUsers', module)
+  // only partially implemented due to notifications not working in storybook
+  .add('base', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
 
 storiesOf('SearchResultCoverBar', module)
   .add('user', () => (
@@ -547,3 +553,13 @@ storiesOf('Recent Projects', module)
     provideContext({ currentUser: { ...users.modernserf, projects: [] }, currentUserFetched: false }, () => <RecentProjects />),
   )
   .add('logged-in user', provideContext({ currentUser: { ...users.modernserf, projects: Object.values(projects) } }, () => <RecentProjects />));
+
+storiesOf('Notification', module)
+  .add('info', () => (
+    <Notification>
+      Uploading image <progress value="0" />
+    </Notification>
+  ))
+  .add('persistent', () => <Notification persistent>This notification will be here forever</Notification>)
+  .add('success', () => <Notification type="success">Success!</Notification>)
+  .add('error', () => <Notification type="error">Something went wrong</Notification>);

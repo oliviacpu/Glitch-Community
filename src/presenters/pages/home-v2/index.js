@@ -53,7 +53,7 @@ const Banner = () => (
             Start Creating <Arrow />
           </Button>
           <div className={styles.watchVideoBtnWrap}>
-            <Button type="decorative">Watch video</Button>
+            <Button decorative>Watch video</Button>
           </div>
         </div>
       </div>
