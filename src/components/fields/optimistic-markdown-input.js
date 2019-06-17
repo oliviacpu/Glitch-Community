@@ -32,6 +32,12 @@ function OptimisticMarkdownInput({ value, onChange, ...props }) {
   
   return <MarkdownInput {...props} value={optimisticValue} onChange={optimisticOnChange} onBlur={optimisticOnBlur} error={error} />;
 }
+OptimisticMarkdownInput.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+export default OptimisticMarkdownInput;
+
 
 function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
   const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
@@ -54,7 +60,6 @@ function useOptimisticValue(value, onChange) { //todo add onblur
   // debounce our stored value and send the async updates when it is not undefined
   const debouncedValue = useDebouncedValue(state.value, 500);
   React.useEffect(() => {
-    setState({ ...state, usedLastSaved: false });
     if (debouncedValue !== undefined) {
       // if the value changes during the async action then ignore the result
       const setStateIfMatches = (newState) => {
@@ -66,11 +71,11 @@ function useOptimisticValue(value, onChange) { //todo add onblur
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          return setStateIfMatches({ value: undefined, error: null, lastSaved: debouncedValue })
+          return setStateIfMatches({ value: undefined, error: null, lastSaved: debouncedValue, useLastSaved: false, })
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
-          setStateIfMatches({ value: debouncedValue, error: message });
+          setStateIfMatches({ ...state, value: debouncedValue, error: message, useLastSaved: false });
         },
       );
     }
@@ -82,13 +87,15 @@ function useOptimisticValue(value, onChange) { //todo add onblur
   }
   
   
-  const optimisticValue = state.usedLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
   
-  const setOptimisticValue = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue }));
+  const optimisticOnChange = (newValue) => {
+    setState((prevState) => ({ ...prevState, value: newValue, useLastSaved: false, error: null }));
   };
   
-  return [optimisticValue, setOptimisticValue, state.error];
+  const optimisticValue = state.usedLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
+  console.log("WHAT IS STATE LOL", {...state})
+  console.log("What is optimistic value now?", optimisticValue)
+  return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
 
 // function OptmisticMarkdownInput({ value, onChange, ...props }) {
