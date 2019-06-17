@@ -26,7 +26,6 @@ on blur:
 */
 
 const OptmisticMarkdownInput = ({ value, onChange, ...props }) => {
-  console.log({onChange})
   const {
     inputValue, wrappedOnChange, optimisticError, wrappedOnBlur,
   } = useOptimistValueOnChangeAndBlur({ value, asyncUpdate: onChange });
@@ -42,13 +41,9 @@ export default OptmisticMarkdownInput;
 
 
 function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
-  console.log({ value, asyncUpdate })
   const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate);
-  console.log({ nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue })
   const [optimisticValue, optimisticOnChange, optimisticError] = useOptimisticValueAndDebounceCallsToServer(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
-  console.log({ optimisticValue, optimisticOnChange, })
   const [inputValue, wrappedOnChange, wrappedOnBlur] = useRevertOnBlurWhenError(optimisticValue, optimisticOnChange);
-  console.log({ inputValue, wrappedOnChange })
 
   return {
     inputValue, wrappedOnChange, wrappedOnBlur, optimisticError,
@@ -75,25 +70,23 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     inputValue: value 
   });
 
-  const wrappedOnChange = async (change) => {
+  const wrappedOnChange = (change) => {
     console.log("wrappedOnChange getting called with change:", change)
     setState({ status: "loading" });
     if (asyncUpdate) {
-      try {
-        console.log("about to call asyncUpdate in useRevertOnBlurWhenError")
-        const response = await asyncUpdate(change);
-        console.log("got a response", response)
-        if (response.status === 200) {
-          console.log("saving")
-          setState({ status: "loaded", lastSavedResponse: change, inputValue: change });
-        } else {
+      console.log("about to call asyncUpdate in useRevertOnBlurWhenError", asyncUpdate, change)
+      return asyncUpdate(change)
+        .then(response => {
+          if (response.status === 200) {
+            console.log("saving")
+            setState({ status: "loaded", lastSavedResponse: change, inputValue: change });
+          } else {
+            setState({ ...state, status: "error" });
+          }
+        }).catch(error => {
           setState({ ...state, status: "error" });
-        }
-        return response // return response so other funcs can use it later if necessary
-      } catch (error) {
-        setState({ ...state, status: "error" });
-        throw error; // rethrow error so other funcs can use it later if necessary
-      }
+          throw error; // rethrow error so other funcs can use it later if necessary
+        });
     }
   }
   
