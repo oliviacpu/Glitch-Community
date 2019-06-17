@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useOptimisticValue from './use-optimistic-value';
 
 // always show untrimmed version to user, always send out trimmed version to server
-function usePassivelyTrimmedInputs(rawInput, asyncUpdate) {
+export default function usePassivelyTrimmedInput(rawInput, asyncUpdate) {
   const [untrimmedValue, setUntrimmedValue] = useState(rawInput);
   
   const displayedInputValue = rawInput === untrimmedValue.trim() ? untrimmedValue : rawInput;
@@ -14,3 +14,4 @@ function usePassivelyTrimmedInputs(rawInput, asyncUpdate) {
   
   return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
 };
+

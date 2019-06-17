@@ -3,6 +3,7 @@ import React from 'react';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 
 /*
+use optimistic value: 
 
 - takes in an initial value for the input
 - takes in a way to update the server
@@ -23,23 +24,25 @@ on blur:
 
 */
 
-function useOptimisticValue(value, onChange, onBlur) {
+export default function useOptimisticValue(value, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowReve: false});
+  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowLastSaved: false});
   
   // as the user types we save that as state.value
   const optimisticOnChange = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue, shouldShowReve: false, error: null }));
+    setState((prevState) => ({ ...prevState, value: newValue, shouldShowLastSaved: false, error: null }));
   };
   
-  //
-  const optimisticValue = state.shouldShowReve ? state.lastSaved : (state.value === undefined ? value : state.value);
+  // show what's passed in, or whatever was last typed since that point, if we are in an error state after a blur show the last saved state
+  const optimisticValue = state.shouldShowLastSaved ? state.lastSaved : (state.value === undefined ? value : state.value);
   
-  // debounce our stored value and send the async updates when it is not undefined
   const debouncedValue = useDebouncedValue(state.value, 500);
   
   React.useEffect(() => {
-    if (debouncedValue !== undefined) {
+    const ifUserHasTypedSinceLastSave = debouncedValue !== undefined;
+    
+    if (ifUserHasTypedSinceLastSave) {
+      
       // if the value changes during the async action then ignore the result
       const setStateIfStillRelevant = (newState) => {
         setState((prevState) => {
@@ -50,27 +53,24 @@ function useOptimisticValue(value, onChange, onBlur) {
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowReve: false, });
-          return debouncedValue
+          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowLastSaved: false, });
+          return debouncedValue;
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
-          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, shouldShowReve: false });
+          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, shouldShowLastSaved: false });
         },
       );
     }
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    const shouldShowReve = !!state.error
-    setState({ ...state, shouldShowReve, error: null });
+    const shouldShowLastSaved = !!state.error
+    setState({ ...state, shouldShowLastSaved, error: null });
     if (onBlur) { 
       onBlur();
     }
   }
-  
 
-  
-  
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
