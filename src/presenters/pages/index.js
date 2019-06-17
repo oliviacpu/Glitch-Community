@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
-import Link from 'Components/link';
+import Button from 'Components/buttons/button';
 import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
 import ReportButton from 'Components/report-abuse-pop';
 import RecentProjects from 'Components/recent-projects';
+import Layout from 'Components/layout';
 import { getEditorUrl } from 'Models/project';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
-import Layout from '../layout';
 import Featured from '../featured';
 import OverlayVideo from '../overlays/overlay-video';
 
@@ -82,9 +82,9 @@ const WhatIsGlitch = () => {
 const MadeInGlitch = () => (
   <section className="made-in-glitch">
     <Text>Of course, this site was made on Glitch too</Text>
-    <Link to={getEditorUrl('community')} className="button button-link has-emoji">
-      View Source <span className="emoji carp_streamer" />
-    </Link>
+    <Button href={getEditorUrl('community')} emoji="carpStreamer">
+      View Source
+    </Button>
   </section>
 );
 

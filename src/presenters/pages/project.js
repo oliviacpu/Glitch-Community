@@ -6,7 +6,6 @@ import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -19,18 +18,18 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import { ShowButton, EditButton } from 'Components/project/project-actions';
+import AuthDescription from 'Components/fields/auth-description';
+import Layout from 'Components/layout';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
 import { addBreadcrumb } from 'Utils/sentry';
 
-import PopoverWithButton from '../pop-overs/popover-with-button';
+import { PopoverWithButton } from 'Components/popover';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
-import AuthDescription from '../includes/auth-description';
-import { ShowButton, EditButton } from '../includes/project-actions';
-import Layout from '../layout';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -131,13 +130,8 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   return (
     <section>
       <PopoverWithButton
-        buttonClass="button-small button-tertiary danger-zone"
-        buttonText={
-          <>
-            Delete Project
-            <Emoji name="bomb" />
-          </>
-        }
+        buttonText="Delete Project"
+        buttonProps={{ emoji: 'bomb', type: 'dangerZone', size: 'small' }}
       >
         {({ togglePopover, focusFirstElement }) => (
           <>
@@ -152,6 +146,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
                   <Button
                     type="tertiary"
                     size="small"
+                    emoji="bomb"
                     onClick={() => {
                       setLoading(true);
                       deleteProject().then(() => {
@@ -160,7 +155,7 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
                       });
                     }}
                   >
-                    Delete {projectDomain} <Emoji name="bomb" />
+                    Delete {projectDomain}
                   </Button>
                 )}
               </section>

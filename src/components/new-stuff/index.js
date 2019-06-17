@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { PopoverContainer } from 'Components/popover';
+
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
@@ -62,8 +64,8 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <Button onClick={closePopover} ref={last}>
-          Back to Glitch <Emoji name="carpStreamer" />
+        <Button emoji="carpStreamer" onClick={closePopover} ref={last}>
+          Back to Glitch
         </Button>
       </OverlaySection>
     </Overlay>

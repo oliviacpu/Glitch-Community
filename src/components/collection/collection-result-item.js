@@ -6,10 +6,10 @@ import { ProfileItem } from 'Components/profile-list';
 import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import VisibilityContainer from 'Components/visibility-container';
 import VisuallyHidden from 'Components/containers/visually-hidden';
+import { CollectionAvatar } from 'Components/images/avatar';
 import { createAPIHook } from 'State/api';
 import { getSingleItem } from 'Shared/api';
 
-import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './collection-result-item.styl';
 
 const useCurator = createAPIHook(async (api, collection) => {
@@ -53,7 +53,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => (
     href={`/@${collection.fullUrl}`}
   >
     <div className={styles.avatarWrap}>
-      <CollectionAvatar color={collection.coverColor} />
+      <CollectionAvatar collection={collection} />
     </div>
     <ResultInfo>
       <VisuallyHidden>Add to collection</VisuallyHidden>
