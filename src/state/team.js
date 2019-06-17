@@ -6,6 +6,7 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
+import { useProjectReload } from 'State/project';
 
 import useErrorHandlers from '../presenters/error-handlers';
 
@@ -62,6 +63,7 @@ export function useTeamEditor(initialTeam) {
   const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const reloadProjectMembers = useProjectReload();
   const [team, setTeam] = useState({
     ...initialTeam,
     _cacheAvatar: Date.now(),
@@ -79,6 +81,19 @@ export function useTeamEditor(initialTeam) {
         updateCurrentUser({ teams });
       }
     }
+  }
+  
+  function removePermissions(projectIds) {
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.map((p) => {
+        if (!projectIds.includes(p.id)) return p;
+        return {
+          ...p,
+          permissions: p.permissions.filter((perm) => perm.userId !== currentUser.id),
+        };
+      }),
+    }));
   }
 
   function removeUserAdmin(id) {
@@ -123,6 +138,11 @@ export function useTeamEditor(initialTeam) {
       if (currentUser && currentUser.id === userId) {
         const teams = currentUser.teams.filter(({ id }) => id !== team.id);
         updateCurrentUser({ teams });
+      }
+      // update projects so that this user no longer appears in member lists
+      reloadProjectMembers(projectIds);
+      if (userId === currentUser.id) {
+        removePermissions(projectIds);
       }
     }, handleError),
     uploadAvatar: () =>
@@ -208,7 +228,12 @@ export function useTeamEditor(initialTeam) {
       }
       return null;
     }, handleError),
-    joinTeamProject: (projectId) => addUserToProject(api, projectId, team).catch(handleError),
+    joinTeamProject: withErrorHandler(async (projectId) => {
+      const { data: updatedProject } = addUserToProject(api, projectId, team)
+      updatePermissions(updatedProject.users.map((user) => user.projectPermission))
+      
+      reloadProjectMembers([projectId]);
+    }, handleError),
     leaveTeamProject: (projectId) => removeUserFromProject(api, projectId, currentUser.id).catch(handleError),
     addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
     featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
