@@ -119,13 +119,14 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined });
   
-  
-  const wrapOnChange = async (change) => {
-    //save what's being typed in
-    setState({ ...state, updateToSave: change });
   // save a debounced version of what's being typed in
   const debouncedUpdateToSave = useDebouncedValue(state.updateToSave, 500);
-    
+  
+  const wrapOnChange = async (change) => {
+    console.log({ change })
+    //save what's being typed in
+    setState({ ...state, updateToSave: change });
+    console.log(state)
     const textHasUpdatedSinceSave = debouncedUpdateToSave !== undefined;
     console.log({ textHasUpdatedSinceSave, debouncedUpdateToSave })
     if (textHasUpdatedSinceSave) {
