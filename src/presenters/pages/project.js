@@ -5,6 +5,7 @@ import { sampleSize } from 'lodash';
 import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
@@ -77,18 +78,18 @@ const PrivateBadge = () => (
   />
 );
 
-const PrivateToggle = ({ isPrivate, setPrivate }) => {
-  const label = isPrivate ? PrivateTooltip : PublicTooltip;
-  const classBase = 'button-tertiary button-on-secondary-background project-badge';
-  const className = isPrivate ? 'private-project-badge' : 'public-project-badge';
-
-  const target = <button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" aria-label={label} />;
-
-  return <TooltipContainer type="action" id="toggle-private-button-tooltip" target={target} tooltip={label} />;
+const PrivateToggle = ({ isPrivate, setPrivate }) => (
+t=} tooltip={label} 
+    />;
 };
-PrivateToggle.propTypes = {
-  isPrivate: PropTypes.bool.isRequired,
-  setPrivate: PropTypes.func.isRequired,
+Private
+    Toggle.propTypes = {
+  isPrivate: PropTypes(
+    <CheckboxButton onChange={setPrivate}>
+      <span className="project-badge private-project-badge" aria-label={PublicTooltip} />
+    </CheckboxButton>
+  )isRequired,
+  setPriva)e: PropTypes.func.isRequired,
 };
 
 const ReadmeError = (error) =>
@@ -314,3 +315,4 @@ const ProjectPageContainer = ({ name }) => (
 );
 
 export default ProjectPageContainer;
+https://glitch.com/edit/#!/foggy-leopon?path=src/presenters/pages/project.js:87:
