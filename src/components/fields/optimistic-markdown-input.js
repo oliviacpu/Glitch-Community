@@ -27,7 +27,10 @@ on blur:
 
 
 function OptimisticMarkdownInput({ value, onChange, ...props }) {
-  const [untrimmedDisplayValue, wa]
+  const [untrimmedDisplayValue, wrapOnChangeWithTrimmedInputs] = useNonAggressivelyTrimmedInputs(value, onChange);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, error] = useOptimisticValue(untrimmedDisplayValue, wrapOnChangeWithTrimmedInputs);
+  
+  return <MarkdownInput {...props} value={optimisticValue} onChange={optimisticOnChange} onBlur={optimisticOnBlur} error={error} />;
 }
 
 function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
@@ -42,6 +45,51 @@ function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
   
   return [displayedInputValue, wrapAsyncUpdateWithTrimmedValue];
 };
+
+function useOptimisticValue(value, onChange) { //todo add onblur
+  // store what is being typed in, along with an error message
+  // value undefined means that the field is unchanged from the 'real' value
+  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, useLastSaved: false});
+
+  // debounce our stored value and send the async updates when it is not undefined
+  const debouncedValue = useDebouncedValue(state.value, 500);
+  React.useEffect(() => {
+    setState({ ...state, usedLastSaved: false });
+    if (debouncedValue !== undefined) {
+      // if the value changes during the async action then ignore the result
+      const setStateIfMatches = (newState) => {
+        setState((prevState) => {
+          return prevState.value === debouncedValue ? newState : prevState
+        });
+      };
+  
+      // this scope can't be async/await because it's an effect
+      onChange(debouncedValue).then(
+        () => {
+          return setStateIfMatches({ value: undefined, error: null, lastSaved: debouncedValue })
+        },
+        (error) => {
+          const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
+          setStateIfMatches({ value: debouncedValue, error: message });
+        },
+      );
+    }
+  }, [debouncedValue]);
+
+  const optimisticOnBlur = () => {
+    setState({ ...state, useLastSaved: true, error: null });
+    // if (onBlur) { onBlur(); }
+  }
+  
+  
+  const optimisticValue = state.usedLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
+  
+  const setOptimisticValue = (newValue) => {
+    setState((prevState) => ({ ...prevState, value: newValue }));
+  };
+  
+  return [optimisticValue, setOptimisticValue, state.error];
+}
 
 // function OptmisticMarkdownInput({ value, onChange, ...props }) {
 //   const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, onChange);
