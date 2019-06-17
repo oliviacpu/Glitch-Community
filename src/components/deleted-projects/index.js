@@ -25,18 +25,6 @@ const DeletedProject = ({ id, domain, onClick }) => {
       <div className={styles.deletedProject}>
         <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
         <div className={styles.projectName}>{domain}</div>
-<<<<<<< HEAD
-        <div className={styles.buttonWrap}>
-          <Button size="small" decorative>
-            Undelete
-          </Button>
-        </div>
-      </TransparentButton>
-    )}
-  </AnimationContainer>
-);
-
-=======
         <TooltipContainer
           type="action"
           id="undelete-project"
@@ -68,7 +56,6 @@ const DeletedProject = ({ id, domain, onClick }) => {
     </AnimationContainer>
   );
 };
->>>>>>> 533b2d77f70797eb653c67a7374c73771beb5d67
 DeletedProject.propTypes = {
   id: PropTypes.string.isRequired,
   domain: PropTypes.string.isRequired,
@@ -133,15 +120,7 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
   }
   return (
     <>
-<<<<<<< HEAD
-      {undelete ? (
-        <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
-      ) : (
-        <ViewOnlyDeletedProjectsList deletedProjects={deletedProjects} />
-      )}
-=======
       <DeletedProjectsList deletedProjects={deletedProjects} undelete={undelete} />
->>>>>>> 533b2d77f70797eb653c67a7374c73771beb5d67
       <Button type="tertiary" onClick={clickHide}>
         Hide Deleted Projects
       </Button>
