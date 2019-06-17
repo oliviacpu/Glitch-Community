@@ -75,8 +75,8 @@ const TeamMarketing = () => (
       />
       Want your own team page, complete with detailed app analytics?
     </Text>
-    <Button href="/teams" hasEmoji>
-      About Teams <Emoji name="fishingPole" />
+    <Button href="/teams" emoji="fishingPole">
+      About Teams
     </Button>
   </section>
 );

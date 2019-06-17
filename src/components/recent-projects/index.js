@@ -6,7 +6,6 @@ import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink, WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import SignInPop from 'Components/sign-in-pop';
 import { getAvatarStyle, getLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
@@ -35,8 +34,8 @@ const ClearSession = ({ clearUser }) => {
 
   return (
     <div className={styles.clearSession}>
-      <Button onClick={clickClearSession} size="small" type="dangerZone">
-        Clear Session <Emoji name="balloon" />
+      <Button onClick={clickClearSession} size="small" type="dangerZone" emoji="balloon">
+        Clear Session
       </Button>
     </div>
   );

@@ -73,10 +73,11 @@ storiesOf('Button', module)
   ))
   .add('link (click to a different page)', () => <Button href="https://support.glitch.com">Support</Button>)
   .add('with emoji', () => (
-    <Button onClick={helloAlert}>
-      <Emoji name="sunglasses" /> Show
+    <Button emoji="sunglasses" imagePosition="left">
+      Show
     </Button>
   ))
+  .add('with an image', () => <Button image={<Image width={16} height={16} src="https://cdn.glitch.com/team-avatar/74/small?689" alt="" />}>Glitch</Button>)
   .add(`match background`, () => (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#F5F5F5' }}>
       <Button onClick={helloAlert} matchBackground={true}>

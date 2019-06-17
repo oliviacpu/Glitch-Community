@@ -143,7 +143,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
-          data-cy="pinned-projects"
+          dataCy="pinned-projects"
           layout="grid"
           title={
             <>
@@ -177,7 +177,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
-          data-cy="recent-projects"
+          dataCy="recent-projects"
           layout="grid"
           title="Recent Projects"
           projects={recentProjects}
