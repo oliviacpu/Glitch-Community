@@ -20,6 +20,7 @@ import TeamUsers from 'Components/team-users';
 import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
+import ErrorBoundary from 'Components/error-boundary';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -27,7 +28,6 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 
 import TeamEditor from '../team-editor';
-import ErrorBoundary from '../includes/error-boundary';
 
 import ProjectsLoader from '../projects-loader';
 import styles from './team.styl';

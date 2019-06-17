@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import useUploader from 'State/uploader';
 import * as assets from '../utils/assets';
 
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
 import useErrorHandlers from './error-handlers';
-import useUploader from './includes/uploader';
 
 class UserEditor extends React.Component {
   constructor(props) {
