@@ -1,10 +1,41 @@
-<<<<<<< HEAD
 import React, { useState, useMemo, useContext, createContext } from 'react';
 
+import useUploader from 'State/uploader';
 import { useAPI } from 'State/api';
-import { getAllPages } from 'Shared/api';
+import * as assets from 'Utils/assets';
+import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
+
+import useErrorHandlers from '../presenters/error-handlers';
 
 export const ProjectContext = createContext();
+
+export async function getProjectByDomain(api, domain) {
+  const { project, teams, users } = await allByKeys({
+    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
+    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
+  });
+  return { ...project, teams, users };
+}
+
+export const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
+
+export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+
+export const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
+
+export const updateProjectDomain = (api, project) =>
+  api.post(
+    `project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
+    {},
+    {
+      transformRequest: (data, headers) => {
+        // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
+        delete headers.Authorization;
+        return data;
+      },
+    },
+  );
 
 async function getMembers(api, projectId, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
@@ -72,43 +103,7 @@ export function useProjectMembers(projectId) {
 export function useProjectReload() {
   const { reloadProjectMembers } = useContext(ProjectContext);
   return reloadProjectMembers;
-=======
-import { useState } from 'react';
-
-import * as assets from 'Utils/assets';
-import { useAPI } from 'State/api';
-import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
-import useUploader from 'State/uploader';
-
-import useErrorHandlers from '../presenters/error-handlers';
-
-export async function getProjectByDomain(api, domain) {
-  const { project, teams, users } = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
-    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
-    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
-  });
-  return { ...project, teams, users };
 }
-
-export const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
-
-export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-
-export const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
-
-export const updateProjectDomain = (api, project) =>
-  api.post(
-    `project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
-    {},
-    {
-      transformRequest: (data, headers) => {
-        // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
-        delete headers.Authorization;
-        return data;
-      },
-    },
-  );
 
 export function useProjectEditor(initialProject) {
   const [project, setProject] = useState({
@@ -152,5 +147,4 @@ export function useProjectEditor(initialProject) {
       ),
   };
   return [project, funcs];
->>>>>>> ecf8b9556a91c416a06147756b99594347f48a19
 }

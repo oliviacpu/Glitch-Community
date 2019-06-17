@@ -21,7 +21,7 @@ import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
-import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
+import { getLink, userIsOnTeam, userIsTeamAdmine } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
@@ -33,15 +33,18 @@ function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
 
-const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
-  <CollectionsList
-    title="Collections"
-    collections={collections.map((collection) => ({ ...collection, team }))}
-    maybeCurrentUser={currentUser}
-    maybeTeam={team}
-    isAuthorized={currentUserIsOnTeam}
-  />
-);
+const TeamPageCollections = ({ collections, team }) => {
+  const { currentUser } = useCurrentUser();
+  return (
+    <CollectionsList
+      title="Collections"
+      collections={collections.map((collection) => ({ ...collection, team }))}
+      maybeCurrentUser={currentUser}
+      maybeTeam={team}
+      isAuthorized={userIsOnTeam({ team, user: currentUser })}
+    />
+  );
+};
 
 const Beta = () => (
   <a href="/teams/" target="_blank" className={styles.beta}>
@@ -222,9 +225,9 @@ function TeamPage({ team: initialTeam }) {
       <ErrorBoundary>
         <DataLoader
           get={(api) => api.get(`collections?teamId=${team.id}`)}
-          renderLoader={() => <TeamPageCollections {...funcs} collections={team.collections} />}
+          renderLoader={() => <TeamPageCollections team={team} collections={team.collections} />}
         >
-          {({ data }) => <TeamPageCollections {...funcs} collections={data} />}
+          {({ data }) => <TeamPageCollections team={team} collections={data} />}
         </DataLoader>
       </ErrorBoundary>
 
@@ -254,8 +257,6 @@ function TeamPage({ team: initialTeam }) {
 
 TeamPage.propTypes = {
   team: PropTypes.shape({
-    _cacheAvatar: PropTypes.number.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
     adminIds: PropTypes.array.isRequired,
     backgroundColor: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
@@ -271,24 +272,6 @@ TeamPage.propTypes = {
     whitelistedDomain: PropTypes.string,
     featuredProjectId: PropTypes.string,
   }).isRequired,
-  addPin: PropTypes.func.isRequired,
-  addProject: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired,
-  updateWhitelistedDomain: PropTypes.func.isRequired,
-  inviteEmail: PropTypes.func.isRequired,
-  inviteUser: PropTypes.func.isRequired,
-  clearCover: PropTypes.func.isRequired,
-  removeUserFromTeam: PropTypes.func.isRequired,
-  removePin: PropTypes.func.isRequired,
-  removeProject: PropTypes.func.isRequired,
-  updateName: PropTypes.func.isRequired,
-  updateUrl: PropTypes.func.isRequired,
-  updateDescription: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  uploadCover: PropTypes.func.isRequired,
-  featureProject: PropTypes.func.isRequired,
-  unfeatureProject: PropTypes.func.isRequired,
-  addProjectToCollection: PropTypes.func.isRequired,
 };
 
 const TeamPageContainer = ({ team }) => (
