@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
+import { MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
-import Text from 'Components/text/text';
 import { getPredicates, getTeamPair } from 'Models/words';
 import { getLink } from 'Models/team';
 import useDebouncedValue from 'Hooks/use-debounced-value';
@@ -69,7 +68,8 @@ function CreateTeamPopBase(props) {
     }
   };
 
-  const debouncedValidate = (val) => useDebouncedValue(val, 200);
+  // const debouncedValidate = (val) => useDebouncedValue(val, 200);
+  const debouncedValidate = _.debounce(validate, 200);
   useEffect(() => {
     const getName = async () => {
       const teamName = await getTeamPair();
@@ -83,7 +83,9 @@ function CreateTeamPopBase(props) {
       teamName: newValue,
       error: '',
     });
-    debouncedValidate(await validate(newValue));
+
+    debounce();
+    await validate(newValue);
   };
 
   const handleSubmit = async (event) => {
@@ -129,25 +131,19 @@ function CreateTeamPopBase(props) {
       </PopoverSection>
 
       <PopoverInfo>
-        <InfoDescription>
-          Showcase your projects in one place, manage collaborators, and view analytics
-        </InfoDescription>
+        <InfoDescription>Showcase your projects in one place, manage collaborators, and view analytics</InfoDescription>
       </PopoverInfo>
 
       <PopoverActions>
         <form onSubmit={handleSubmit}>
           <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
-          <div className={styles.teamUrlPreview}>
-            /@{_.kebabCase(state.teamName || placeholder)}
-          </div>
+          <div className={styles.teamUrlPreview}>/@{_.kebabCase(state.teamName || placeholder)}</div>
 
           {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
         </form>
       </PopoverActions>
       <PopoverInfo>
-        <InfoDescription>
-          You can change this later
-        </InfoDescription>
+        <InfoDescription>You can change this later</InfoDescription>
       </PopoverInfo>
     </PopoverDialog>
   );
