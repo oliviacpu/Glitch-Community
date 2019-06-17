@@ -22,7 +22,7 @@ import styles from './styles.styl';
 const CreateTeamButton = ({ showCreateTeam }) => {
   const onClickCreateTeam = useTrackedFunc(showCreateTeam, 'Create Team clicked');
   return (
-    <Button size="small" emoji="herb" onClick={onClickCreateTeam}>
+    <Button size="small" onClick={onClickCreateTeam} emoji="herb">
       Create Team
     </Button>
   );
