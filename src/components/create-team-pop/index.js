@@ -11,6 +11,7 @@ import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import { getPredicates, getTeamPair } from 'Models/words';
 import { getLink } from 'Models/team';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 
@@ -68,7 +69,7 @@ function CreateTeamPopBase(props) {
     }
   };
 
-  // const debouncedValidate = (val) => useDebouncedValue(val, 200);
+  const debouncedValidate = (val) => useDebouncedValue(val, 200);
   useEffect(() => {
     const getName = async () => {
       const teamName = await getTeamPair();
@@ -82,7 +83,7 @@ function CreateTeamPopBase(props) {
       teamName: newValue,
       error: '',
     });
-    // debouncedValidate(await validate(newValue));
+    debouncedValidate(await validate(newValue));
   };
 
   const handleSubmit = async (event) => {
@@ -136,7 +137,9 @@ function CreateTeamPopBase(props) {
       <PopoverActions>
         <form onSubmit={handleSubmit}>
           <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
-          <p className="action-description team-url-preview">/@{_.kebabCase(state.teamName || placeholder)}</p>
+          <div className={styles.teamUrlPreview}>
+            /@{_.kebabCase(state.teamName || placeholder)}
+          </div>
 
           {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
         </form>
