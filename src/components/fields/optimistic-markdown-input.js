@@ -47,7 +47,7 @@ function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
 
   console.log({ inputValue, optimisticValue, error })
   return {
-    inputValue, wrappedOnChange, wrappedOnBlur, error,
+    inputValue, wrappedOnChange: optimisticOnChange, wrappedOnBlur, error,
   };
 }
 
@@ -119,14 +119,15 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
   // update undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ updateToSave: undefined });
   
-  // save a debounced version of what's being typed in
-  const debouncedUpdateToSave = useDebouncedValue(state.updateToSave, 500);
   
   const wrapOnChange = async (change) => {
     //save what's being typed in
     setState({ ...state, updateToSave: change });
+  // save a debounced version of what's being typed in
+  const debouncedUpdateToSave = useDebouncedValue(state.updateToSave, 500);
     
     const textHasUpdatedSinceSave = debouncedUpdateToSave !== undefined;
+    console.log({ textHasUpdatedSinceSave, debouncedUpdateToSave })
     if (textHasUpdatedSinceSave) {
       // if the updateToSave changes during the async action then ignore the result
       const setStateIfLastServerCallIsStillRelevant = (newState) => {
@@ -143,6 +144,7 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
           return response // rethrow response in case we want to keep wrapping
         }
       } catch (error) {
+        console.log("inside error", debouncedUpdateToSave)
         setStateIfLastServerCallIsStillRelevant({ updateToSave: debouncedUpdateToSave });
         throw error // rethrow error in case we want to keep wrapping
       }
