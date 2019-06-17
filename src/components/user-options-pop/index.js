@@ -16,7 +16,6 @@ import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
 import styles from './styles.styl';
-import emojiStyles from '../images/emoji.styl';
 
 // Create Team button
 
@@ -48,7 +47,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             type="tertiary"
             image={
               <Image
-                className={`${styles.teamAvatar} ${emojiStyles.emoji}`}
+                className={styles.teamAvatar}
                 src={getTeamAvatarUrl({ ...team, size: 'small' })}
                 alt=""
                 width={16}
