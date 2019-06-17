@@ -31,14 +31,14 @@ class CollectionEditor extends React.Component {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
     
-    // this.setState(changes);
-    var count = this.state.errorCount
-    this.setState({ errorCount: count + 1 })
-    console.log("this.state.errorCount", this.state.errorCount)
-    if (this.state.errorCount % 3 === 0) {
-      throw new Error("test")
-    }
-    console.log("inside updateFields hitting the backend")
+    // var count = this.state.errorCount
+    // this.setState({ errorCount: count + 1 })
+    // console.log("this.state.errorCount", this.state.errorCount)
+    // if (this.state.errorCount % 3 === 0) {
+    //   throw new Error("test")
+    // }
+    // console.log("inside updateFields hitting the backend")
+    this.setState(changes);
     return await this.props.api.patch(`collections/${this.state.id}`, changes);
   }
 
