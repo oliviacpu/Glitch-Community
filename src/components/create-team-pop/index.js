@@ -17,10 +17,10 @@ import styles from './styles.styl';
 
 // Create Team 🌿
 
-const CreateTeamSubmitButton = () => {
+const CreateTeamSubmitButton = ({ disabled }) => {
   const onClick = useTracker('Create Team submitted');
   return (
-    <Button size="small" emoji="thumbsUp" onClick={onClick}>
+    <Button size="small" emoji="thumbsUp" onClick={onClick} disabled={disabled}>
       Create Team
     </Button>
   );
@@ -135,7 +135,7 @@ function CreateTeamPopBase(props) {
           <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
           <div className={styles.teamUrlPreview}>/@{_.kebabCase(state.teamName || placeholder)}</div>
 
-          {state.isLoading ? <Loader /> : <CreateTeamSubmitButton />}
+          {state.isLoading ? <Loader /> : <CreateTeamSubmitButton disabled={state.error} />}
         </form>
       </PopoverActions>
       <PopoverInfo>
