@@ -7,7 +7,7 @@ import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import Image from 'Components/images/image';
 import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { UserLink } from 'Components/link'; 
+import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
