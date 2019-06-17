@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -19,15 +19,14 @@ import AddTeamProject from 'Components/team/add-team-project-pop';
 import TeamUsers from 'Components/team-users';
 import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
+import AuthDescription from 'Components/fields/auth-description';
+import ErrorBoundary from 'Components/error-boundary';
 import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
 
-import AuthDescription from '../includes/auth-description';
-import ErrorBoundary from '../includes/error-boundary';
-
-import NameConflictWarning from '../includes/name-conflict';
 import ProjectsLoader from '../projects-loader';
 import styles from './team.styl';
 
@@ -80,11 +79,42 @@ const TeamMarketing = () => (
   </section>
 );
 
+const NameConflictWarning = ({ id }) => (
+  <>
+    <Text>This team has your name. You should update your info to remain unique <Emoji name="sparkles" /></Text>
+    <Button size="small" type="tertiary" href={`/user/${id}`}>
+      Your Profile
+    </Button>
+  </>
+);
+
+const teamConflictsWithUser = (team, currentUser) => {
+  if (currentUser && currentUser.login) {
+    return currentUser.login.toLowerCase() === team.url;
+  }
+  return false;
+};
+
+const useTeamNameConflictWarning = (team) => {
+  const { currentUser } = useCurrentUser();
+  const { createNotification } = useNotifications();
+  useEffect(() => {
+    if (teamConflictsWithUser(team, currentUser)) {
+      const notification = createNotification(<NameConflictWarning id={currentUser.id} />, { persistent: true });
+      return () => {
+        notification.removeNotification();
+      };
+    }
+    return undefined;
+  }, [currentUser, team]);
+};
+
 // Team Page
 
 function TeamPage(props) {
   const { currentUser } = useCurrentUser();
   const { team } = props;
+  useTeamNameConflictWarning(team);
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
 
@@ -262,17 +292,6 @@ TeamPage.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
 };
 
-const teamConflictsWithUser = (team, currentUser) => {
-  if (currentUser && currentUser.login) {
-    return currentUser.login.toLowerCase() === team.url;
-  }
-  return false;
-};
-
-const TeamNameConflict = ({ team }) => {
-  const { currentUser } = useCurrentUser();
-  return teamConflictsWithUser(team, currentUser) && <NameConflictWarning />;
-};
 const TeamPageEditor = ({ initialTeam, children }) => {
   const [team, funcs] = useTeamEditor(initialTeam);
   return (
@@ -307,6 +326,7 @@ const TeamPageEditor = ({ initialTeam, children }) => {
         );
       }}
     </ProjectsLoader>
+
   );
 };
 const TeamPageContainer = ({ team }) => (
@@ -316,7 +336,6 @@ const TeamPageContainer = ({ team }) => (
         <>
           <Helmet title={teamFromEditor.name} />
           <TeamPage team={teamFromEditor} {...funcs} />
-          <TeamNameConflict team={teamFromEditor} />
         </>
       )}
     </TeamPageEditor>
