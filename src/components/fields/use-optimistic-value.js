@@ -3,43 +3,74 @@ import React from 'react';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 
 /*
-  What this does:
-  - limit server calls to everytime state changes and it's been at least 500 ms AKA the debouncer
+
+- takes in an initial value for the input
+- takes in a way to update the server
+
+as users type (on change):
+- we ping the server with a trimmed version of the text
+- we display an untrimmed version
+- if the server hits an error:
+  - we display that error to the user
+  - we continue to show what the user was typing even though it's not saved
+- if the server succeeds:
+  - we store that response for the future
+  - we pass along the response so that it can be stored in top level state later and passed back in again as props as the inital value
+
+on blur:
+- if the user was in an errored state:
+  - we show the last saved good state and remove the error
+
 */
 
-const useOptimisticValue = (realValue, setValueAsync) => {
-  // store what is being typed in, along with an error message
+function useOptimisticValue(value, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null });
+  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowReve: false});
+  
+  // as the user types we save that as state.value
+  const optimisticOnChange = (newValue) => {
+    setState((prevState) => ({ ...prevState, value: newValue, shouldShowReve: false, error: null }));
+  };
+  
+  //
+  const optimisticValue = state.shouldShowReve ? state.lastSaved : (state.value === undefined ? value : state.value);
+  
   // debounce our stored value and send the async updates when it is not undefined
   const debouncedValue = useDebouncedValue(state.value, 500);
+  
   React.useEffect(() => {
     if (debouncedValue !== undefined) {
       // if the value changes during the async action then ignore the result
-      const setStateIfMatches = (newState) => {
+      const setStateIfStillRelevant = (newState) => {
         setState((prevState) => {
           return prevState.value === debouncedValue ? newState : prevState
         });
       };
+  
       // this scope can't be async/await because it's an effect
-      setValueAsync(debouncedValue).then(
+      onChange(debouncedValue).then(
         () => {
-          setStateIfMatches({ value: undefined, error: null });
+          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowReve: false, });
+          return debouncedValue
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
-          setStateIfMatches({ value: debouncedValue, error: message });
+          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, shouldShowReve: false });
         },
       );
     }
   }, [debouncedValue]);
 
-  const optimisticValue = state.value !== undefined ? state.value : realValue;
+  const optimisticOnBlur = () => {
+    const shouldShowReve = !!state.error
+    setState({ ...state, shouldShowReve, error: null });
+    if (onBlur) { 
+      onBlur();
+    }
+  }
   
-  const setOptimisticValue = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue }));
-  };
-  return [optimisticValue, setOptimisticValue, state.error];
-};
 
-export default useOptimisticValue;
+  
+  
+  return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
+}

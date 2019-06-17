@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import MarkdownInput from '../inputs/markdown-input';
-import useOptimisticText from './use-optimistic-text';
+import useOptimisticText from './use-';
 
 const OptimisticMarkdownInput = ({ value, onChange, ...props }) => {
   const [state, setState] = React.useState({ isLoading: false, lastSavedResponse: value, inputState: value, error: null });
