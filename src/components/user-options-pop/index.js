@@ -45,15 +45,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             type="tertiary"
-            image={
-              <Image
-                className={styles.teamAvatar}
-                src={getTeamAvatarUrl({ ...team, size: 'small' })}
-                alt=""
-                width={16}
-                height={16}
-              />
-            }
+            image={<Image className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
           >
             {team.name}
           </Button>
@@ -175,9 +167,11 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
-                <div className={styles.userOptionsPopWrap}>
+                <div className={styles.userOptionsWrap}>
                   <div className="user">
-                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    <div className={styles.userOptionsButtonAvatar}>
+                      <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    </div>
                     <span className="down-arrow icon" />
                   </div>
                 </div>
@@ -192,9 +186,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                       createTeam: () => <CreateTeamPop />,
                     }}
                   >
-                    {({ createTeam }) => (
-                      <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={createTeam} />
-                    )}
+                    {({ createTeam }) => <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={createTeam} />}
                   </MultiPopover>
                 )}
               </TooltipContainer>

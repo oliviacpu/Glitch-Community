@@ -1,14 +1,44 @@
 @import '../constants.styl'
+    .user
+      padding: 0
+      display: inline-block
+      padding-right: 5px
+      border: none
+      min-width: 48px
+      img
+        width: 28px
+        height: auto
+        position: relative
+        display: inline
+        vertical-align: middle
+        border-radius: 50%
+        margin-right: 3px
+
+    .user-options-pop-button
+      border: 0
+      padding: 0
+      cursor: pointer
+      display: inline-block
+      position: relative
 
 .userOptionsPop
   right: 0
   top: 25px
   width: 180px
-.userOptionsPopWrap
+.userOptionsWrap
   display: flex
   align-items: center
-.downArrow
-  margin-left: 3px
+  &:hover,
+  &:focus
+    opacity: 1
+    // background-color: secondary-background-hover
+    border-radius: 5px
+    border: none;
+    outline: transparent
+.userOptionsButtonAvatar
+  width: 28px
+  height: 28px
+  margin-right: 3px
 .userAvatarContainer
   display: inline-block
   margin: 0 10px 0 0  
