@@ -109,13 +109,13 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
   const [state, setState] = React.useState({ updateToSave: undefined });
   
   // save a debounced version of what's being typed in
-  const debouncedUpdateToSave = useDebouncedValue(state.updateToSave, 500);
+  const debouncedUpdateToSave = useDebouncedValue(rawValueFromOnChange, 500);
   
   const wrapOnChange = async (change) => {
-    console.log({ change })
+    console.log({ change }, "old state", {...state})
     //save what's being typed in
-    setState({ updateToSave: change });
-    console.log(state)
+    await setState({ updateToSave: change });
+    console.log("state?", {...state})
     const textHasUpdatedSinceSave = debouncedUpdateToSave !== undefined;
     console.log({ textHasUpdatedSinceSave, debouncedUpdateToSave })
     if (textHasUpdatedSinceSave) {
