@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { LiveAnnouncer } from 'react-aria-live';
 
 import { AnalyticsContext } from 'State/segment-analytics';
 import { CurrentUserProvider } from 'State/current-user';
@@ -10,9 +11,8 @@ import { ProjectContextProvider } from 'State/project';
 import { NotificationsProvider } from 'State/notifications';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
-import { LiveAnnouncer } from 'react-aria-live';
+import ErrorBoundary from 'Components/error-boundary';
 
-import ErrorBoundary from './presenters/includes/error-boundary';
 import Router from './presenters/pages/router';
 
 const App = () => (

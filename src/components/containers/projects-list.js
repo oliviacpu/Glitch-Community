@@ -201,12 +201,12 @@ function ProjectsList({
   collection,
   noteOptions,
   projectOptions,
-  ...props
+  dataCy,
 }) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article {...props} className={classNames(styles.projectsContainer)}>
+        <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
@@ -244,6 +244,7 @@ ProjectsList.propTypes = {
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
   projectOptions: PropTypes.object,
+  dataCy: PropTypes.string,
 };
 
 ProjectsList.defaultProps = {
@@ -256,6 +257,7 @@ ProjectsList.defaultProps = {
   collection: null,
   noteOptions: {},
   projectOptions: {},
+  dataCy: null,
 };
 
 export default ProjectsList;

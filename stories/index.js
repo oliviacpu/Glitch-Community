@@ -18,6 +18,7 @@ import ProjectItemSmall from 'Components/project/project-item-small';
 import CollectionItem from 'Components/collection/collection-item';
 import CollectionItemSmall from 'Components/collection/collection-item-small';
 import TeamItem from 'Components/team/team-item';
+import TeamUsers from 'Components/team-users';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
@@ -72,10 +73,11 @@ storiesOf('Button', module)
   ))
   .add('link (click to a different page)', () => <Button href="https://support.glitch.com">Support</Button>)
   .add('with emoji', () => (
-    <Button onClick={helloAlert}>
-      <Emoji name="sunglasses" /> Show
+    <Button emoji="sunglasses" imagePosition="left">
+      Show
     </Button>
   ))
+  .add('with an image', () => <Button image={<Image width={16} height={16} src="https://cdn.glitch.com/team-avatar/74/small?689" alt="" />}>Glitch</Button>)
   .add(`match background`, () => (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#F5F5F5' }}>
       <Button onClick={helloAlert} matchBackground={true}>
@@ -289,9 +291,13 @@ storiesOf('UserItem', module).add('base', () => (
 
 storiesOf('TeamItem', module).add('base', () => (
   <div style={{ margin: '2em', width: '25%' }}>
-    <TeamItem team={teams[12345]} />
+    <TeamItem team={teams['example-team']} />
   </div>
 ));
+       
+storiesOf('TeamUsers', module)
+  // only partially implemented due to notifications not working in storybook
+  .add('base', provideContext({ currentUser: {}, api: mockAPI }, () => <TeamUsers team={teams['example-team']} />));
 
 storiesOf('SearchResultCoverBar', module)
   .add('user', () => (

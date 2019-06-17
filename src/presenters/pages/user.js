@@ -14,12 +14,18 @@ import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useUserEditor } from 'State/user';
 
+<<<<<<< HEAD
 import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
+=======
+import ProjectsLoader from '../projects-loader';
+>>>>>>> ecf8b9556a91c416a06147756b99594347f48a19
 import styles from './user.styl';
 
 function syncPageToLogin(login) {
@@ -75,9 +81,6 @@ const UserPage = ({
     featuredProjectId,
     ...user
   },
-  isAuthorized,
-  isSupport,
-  maybeCurrentUser,
   updateDescription,
   updateName,
   updateLogin,
@@ -94,6 +97,10 @@ const UserPage = ({
   setDeletedProjects,
   addProjectToCollection,
 }) => {
+  const { currentUser: maybeCurrentUser } = useCurrentUser();
+  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+  const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;
+
   const pinnedSet = new Set(user.pins.map(({ id }) => id));
   // filter featuredProject out of both pinned & recent projects
   const sortedProjects = orderBy(user.projects, (project) => project.updatedAt, ['desc']);
@@ -143,7 +150,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
-          data-cy="pinned-projects"
+          dataCy="pinned-projects"
           layout="grid"
           title={
             <>
@@ -177,7 +184,7 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
-          data-cy="recent-projects"
+          dataCy="recent-projects"
           layout="grid"
           title="Recent Projects"
           projects={recentProjects}
@@ -214,12 +221,6 @@ const UserPage = ({
 };
 
 UserPage.propTypes = {
-  clearCover: PropTypes.func.isRequired,
-  maybeCurrentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-  leaveProject: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  uploadCover: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string,
     login: PropTypes.string,
@@ -240,14 +241,17 @@ UserPage.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
   featureProject: PropTypes.func.isRequired,
   unfeatureProject: PropTypes.func.isRequired,
+  clearCover: PropTypes.func.isRequired,
+  leaveProject: PropTypes.func.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
+  uploadCover: PropTypes.func.isRequired,
 };
 
 const UserPageContainer = ({ user }) => {
-  const { currentUser: maybeCurrentUser } = useCurrentUser();
-  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
-
+  const [userFromEditor, funcs] = useUserEditor(user);
   return (
     <AnalyticsContext properties={{ origin: 'user' }}>
+<<<<<<< HEAD
       <UserEditor initialUser={user}>
         {(userFromEditor, funcs, isAuthorized) => (
           <>
@@ -256,6 +260,12 @@ const UserPageContainer = ({ user }) => {
           </>
         )}
       </UserEditor>
+=======
+      <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
+      <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
+        {(projects) => <UserPage user={{ ...userFromEditor, projects }} {...funcs} />}
+      </ProjectsLoader>
+>>>>>>> ecf8b9556a91c416a06147756b99594347f48a19
     </AnalyticsContext>
   );
 };
