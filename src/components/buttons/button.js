@@ -14,7 +14,9 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = ({ onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab }) => {
+const Button = React.forwardRef(({
+  onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji,
+}, ref) => {
   const className = cx({
     btn: true,
     cta: type === 'cta',
@@ -22,12 +24,23 @@ const Button = ({ onClick, href, disabled, type, size, submit, matchBackground, 
     tertiary: ['tertiary', 'dangerZone'].includes(type),
     dangerZone: type === 'dangerZone',
     unstyled: type === 'dropDown',
-    hasEmoji: React.Children.toArray(children).some((child) => child.type && child.type === Emoji),
+    hasImage: emoji || image,
+    hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
+    hasSunglassesEmoji: emoji === 'sunglasses',
+    padLeft: (image || emoji) && imagePosition === 'left',
     matchBackground: matchBackground === true,
     active,
     hover,
     decorative,
   });
+
+  const content = (
+    <>
+      {children}
+      {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
+      {image && <ButtonImage image={image} position={imagePosition} />}
+    </>
+  );
 
   if (href) {
     let targetProps = {};
@@ -37,24 +50,27 @@ const Button = ({ onClick, href, disabled, type, size, submit, matchBackground, 
         rel: 'noopener noreferrer',
       };
     }
-
     return (
-      <Link to={href} onClick={onClick} className={className} {...targetProps}>
-        {children}
+      <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
+        {content}
       </Link>
     );
   }
 
   if (decorative) {
-    return <span className={className}>{children}</span>;
+    return (
+      <span className={className} disabled={disabled}>
+        {content}
+      </span>
+    );
   }
 
   return (
-    <button onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
-      {children}
+    <button ref={ref} onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
+      {content}
     </button>
   );
-};
+});
 
 Button.propTypes = {
   /** element(s) to display in the button */
@@ -91,6 +107,12 @@ Button.propTypes = {
   active: PropTypes.bool,
   /** whether the link opens in a new tab or the same window */
   newTab: PropTypes.bool,
+  /** an image node to display within the button */
+  image: PropTypes.node,
+  /** Whether Emoji is to left or right of other content */
+  imagePosition: PropTypes.oneOf(['left', 'right']),
+  /** emoji name */
+  emoji: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -105,6 +127,37 @@ Button.defaultProps = {
   active: false,
   decorative: false,
   newTab: false,
+  image: null,
+  imagePosition: 'right',
+  emoji: null,
+};
+
+const ButtonImage = ({ image, position, up1 }) => {
+  const className = cx({
+    imageContainer: true,
+    alignLeft: position === 'left',
+    up1,
+  });
+
+  return <div className={className}>{image}</div>;
+};
+
+ButtonImage.propTypes = {
+  image: PropTypes.node.isRequired,
+  position: PropTypes.oneOf(['right', 'left']).isRequired,
+  up1: PropTypes.bool,
+};
+
+ButtonImage.defaultProps = {
+  up1: false,
+};
+
+const ButtonEmoji = ({ emoji, ...props }) => (
+  <ButtonImage image={<Emoji name={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
+);
+
+ButtonEmoji.propTypes = {
+  emoji: PropTypes.string.isRequired,
 };
 
 export default Button;

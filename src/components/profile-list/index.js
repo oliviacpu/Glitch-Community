@@ -30,7 +30,10 @@ const useResizeObserver = () => {
   useEffect(() => {
     const setWidthOfRef = () => {
       if (ref.current) {
-        setWidth(ref.current.getBoundingClientRect().width);
+        const boundingClientRect = ref.current.getBoundingClientRect();
+        if (boundingClientRect) {
+          setWidth(boundingClientRect.width);
+        }
       }
     };
     const debouncedSetWidth = debounce(setWidthOfRef, 100);
@@ -131,8 +134,8 @@ const PlaceholderList = ({ size }) => (
 
 const maybeList = (item) => (item ? [item] : []);
 
-export const ProfileItem = ({ user, team, glitchTeam }) => (
-  <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} glitchTeam={glitchTeam} />
+export const ProfileItem = ({ user, team, glitchTeam, size }) => (
+  <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} glitchTeam={glitchTeam} size={size} />
 );
 
 const ProfileList = ({ size, users, teams, layout, glitchTeam }) => {

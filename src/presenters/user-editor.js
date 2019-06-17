@@ -97,17 +97,6 @@ class UserEditor extends React.Component {
   async undeleteProject(id) {
     await this.props.api.post(`/projects/${id}/undelete`);
     const { data } = await this.props.api.get(`projects/${id}`);
-    if (data.domain.endsWith('-deleted')) {
-      try {
-        const newDomain = data.domain.replace(/-deleted$/, '');
-        await this.props.api.patch(`/projects/${id}`, {
-          domain: newDomain,
-        });
-        data.domain = newDomain;
-      } catch (e) {
-        console.warn('failed to rename project on undelete', e);
-      }
-    }
     // temp set undeleted project updatedAt to now, while it's actually updating behind the scenes
     data.updatedAt = Date.now();
     this.setState(({ projects, _deletedProjects }) => ({

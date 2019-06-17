@@ -32,13 +32,17 @@ const usePositionAdjustment = ({ margin }) => {
   const ref = useRef();
   useLayoutEffect(() => {
     const setPosition = () => {
-      const rect = ref.current.getBoundingClientRect();
-      if (rect.left < margin) {
-        setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
-      } else if (rect.right > window.innerWidth - margin) {
-        setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
-      } else {
-        setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        if (rect) {
+          if (rect.left < margin) {
+            setOffset((prevOffset) => ({ ...prevOffset, left: margin - rect.left }));
+          } else if (rect.right > window.innerWidth - margin) {
+            setOffset((prevOffset) => ({ ...prevOffset, left: window.innerWidth - margin - rect.right }));
+          } else {
+            setOffset((prevOffset) => ({ ...prevOffset, left: 0 }));
+          }
+        }
       }
     };
     const debounced = debounce(setPosition, 300);
@@ -55,13 +59,13 @@ const mergeRefs = (...refs) => (element) => {
   });
 };
 
-const alignTypes = ['left', 'right', 'topLeft', 'topRight'];
+const alignTypes = ['none', 'left', 'right', 'topLeft', 'topRight'];
 const PopoverDialog = ({ children, align, wide, className, focusOnDialog }) => {
   const { ref: positionRef, offset } = usePositionAdjustment({ margin: 12 });
   const { ref: focusRef } = useOpenedFromKeyboardFocus(focusOnDialog);
   const focusProps = focusOnDialog ? { tabIndex: 0 } : {};
   return (
-    <div className={classnames(styles.popoverWrap, wide && styles.wide, styles[align], className)}>
+    <div className={classnames(styles.popoverWrap, wide && styles.wide, align !== 'none' && styles[align], className)}>
       <dialog ref={mergeRefs(positionRef, focusRef)} className={styles.popover} style={offset} {...focusProps}>
         {children}
       </dialog>

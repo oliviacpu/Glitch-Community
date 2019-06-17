@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { pickBy } from 'lodash';
@@ -14,7 +14,7 @@ const TYPES = ['email', 'password', 'search', 'text'];
 
 const InputPart = ({ children, className }) => <span className={classNames(styles.inputPart, className)}>{children}</span>;
 
-const TextInput = ({
+const TextInput = forwardRef(({
   autoFocus,
   className,
   disabled,
@@ -33,7 +33,7 @@ const TextInput = ({
   type,
   value,
   ...props
-}) => {
+}, ref) => {
   const uniqueId = useUniqueId();
   const outerClassName = classNames(className, styles.outer);
   const borderClassName = classNames(styles.inputBorder, {
@@ -51,6 +51,7 @@ const TextInput = ({
         {!!prefix && <InputPart>{prefix}</InputPart>}
         <input
           {...eventProps}
+          ref={ref}
           autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
           className={inputClassName}
           disabled={disabled}
@@ -76,7 +77,7 @@ const TextInput = ({
       {!!error && <InputErrorMessage>{error}</InputErrorMessage>}
     </label>
   );
-};
+});
 
 TextInput.propTypes = {
   autoFocus: PropTypes.bool,

@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
-import AccountSettings from 'Components/account-settings-overlay';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
+import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
-import Link, { TeamLink, UserLink } from 'Components/link';
+import TooltipContainer from 'Components/tooltips/tooltip-container';
+import { UserLink } from 'Components/link';
+import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
+import AccountSettings from 'Components/account-settings-overlay';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
@@ -29,16 +31,16 @@ const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
           </button>{' '}
           to create teams
         </p>
-        <button className="button button-small has-emoji" disabled type="button">
-          Create Team <span className="emoji herb" />
-        </button>
+        <Button size="small" emoji="herb" disabled>
+          Create Team
+        </Button>
       </>
     );
   }
   return (
-    <button type="button" onClick={onClickCreateTeam} className="button button-small has-emoji">
-      Create Team <span className="emoji herb" />
-    </button>
+    <Button size="small" onClick={onClickCreateTeam} emoji="herb">
+      Create Team
+    </Button>
   );
 };
 
@@ -56,11 +58,19 @@ const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
     <section className="pop-over-actions">
       {orderedTeams.map((team) => (
         <div className="button-wrap" key={team.id}>
-          <TeamLink key={team.id} team={team} className="button button-small has-emoji button-tertiary">
+          <Button
+            key={team.id}
+            href={getTeamLink(team)}
+            type="tertiary"
+            size="small"
+            image={
+              <div style={{ width: '16px', height: '16px', borderRadius: '3px', overflow: 'hidden' }}>
+                <Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} style={{ borderRadius: '3px' }} width={16} height={16} />
+              </div>
+            }
+          >
             {team.name}
-            &nbsp;
-            <img className="emoji avatar" src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width="16px" height="16px" />
-          </TeamLink>
+          </Button>
         </div>
       ))}
       <CreateTeamButton showCreateTeam={showCreateTeam} userIsAnon={userIsAnon} />
@@ -141,12 +151,15 @@ Are you sure you want to sign out?`)
             </CheckboxButton>
           </div>
         )}
-        <button type="button" onClick={clickNewStuff} className="button-small has-emoji button-tertiary button-on-secondary-background">
-          New Stuff <span className="emoji dog-face" />
-        </button>
-        <Link to="https://support.glitch.com" className="button button-small has-emoji button-tertiary button-on-secondary-background">
-          Support <span className="emoji ambulance" />
-        </Link>
+
+        <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
+          New Stuff
+        </Button>
+        <div className="button-wrap">
+          <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
+            Support
+          </Button>
+        </div>
 
         {userPasswordEnabled && (
           <AccountSettings>
@@ -156,9 +169,9 @@ Are you sure you want to sign out?`)
           </AccountSettings>
         )}
 
-        <button type="button" onClick={clickSignout} className="button-small has-emoji button-tertiary button-on-secondary-background">
-          Sign Out <span className="emoji balloon" />
-        </button>
+        <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
+          Sign Out
+        </Button>
       </section>
     </dialog>
   );
@@ -173,19 +186,8 @@ UserOptionsPop.propTypes = {
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
-class CheckForCreateTeamHash extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { active: window.location.hash === '#create-team' };
-  }
-
-  componentDidMount() {
-    this.setState({ active: false });
-  }
-
-  render() {
-    return this.props.children(this.state.active);
-  }
+function CheckForCreateTeamHash(props) {
+  return props.children(window.location.hash === '#create-team');
 }
 
 // Header button and init pop
