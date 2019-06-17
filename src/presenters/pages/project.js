@@ -18,6 +18,8 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import { ShowButton, EditButton } from 'Components/project/project-actions';
+import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PopoverWithButton } from 'Components/popover';
 import { AnalyticsContext } from 'State/segment-analytics';
@@ -29,8 +31,6 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
 import Expander from '../includes/expander';
-import AuthDescription from '../includes/auth-description';
-import { ShowButton, EditButton } from '../includes/project-actions';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
