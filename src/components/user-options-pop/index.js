@@ -38,6 +38,7 @@ CreateTeamButton.propTypes = {
 // Team List
 
 const TeamList = ({ teams, showCreateTeam }) => {
+  console.log(showCreateTeam);
   const orderedTeams = orderBy(teams, (team) => team.name.toLowerCase());
 
   return (
@@ -190,7 +191,6 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
 
             return (
               <TooltipContainer
-                className="button user-options-pop-button"
                 target={userOptionsButton}
                 tooltip="User options"
                 id="user-options-tooltip"
@@ -203,7 +203,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
                       createTeam: (showCreateTeam) => <CreateTeamPop />,
                     }}
                   >
-                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
+                    {({ showCreateTeam }) => <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={showCreateTeam} focusFirstElement={focusFr}} />}
                   </MultiPopover>
                 )}
               </TooltipContainer>
