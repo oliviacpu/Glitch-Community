@@ -66,7 +66,7 @@ export default function useOptimisticValue(value, onChange, onBlur) {
 
   const optimisticOnBlur = () => {
     const shouldShowLastSaved = !!state.error
-    setState({ ...state, shouldShowLastSaved, error: null });
+    setState({ ...state, shouldShowLastSaved, error: null, value: undefined });
     if (onBlur) { 
       onBlur();
     }
