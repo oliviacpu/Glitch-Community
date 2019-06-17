@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import ReactKonami from 'react-konami';
 
@@ -12,27 +12,23 @@ import ErrorBoundary from '../../presenters/includes/error-boundary';
 
 import styles from './styles.styl';
 
-const Layout = ({ children, searchQuery }) => {
-  const [secretActive, setSecretActive] = useState(false);
-  return (
-    <div className={styles.content}>
-      <Helmet title="Glitch" />
-      <NewStuffContainer>
-        {(showNewStuffOverlay) => (
-          <div className={styles.headerWrap}>
-            <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
-          </div>
-        )}
-      </NewStuffContainer>
-      <ErrorBoundary>{children}</ErrorBoundary>
-      <Footer />
-      <ErrorBoundary fallback={null}>
-        <ReactKonami easterEgg={() => setSecretActive(true)} />
-        {secretActive && <Redirect to="/secret" push />}
-      </ErrorBoundary>
-    </div>
-  );
-};
+const Layout = withRouter(({ children, searchQuery, history }) => (
+  <div className={styles.content}>
+    <Helmet title="Glitch" />
+    <NewStuffContainer>
+      {(showNewStuffOverlay) => (
+        <div className={styles.headerWrap}>
+          <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
+        </div>
+      )}
+    </NewStuffContainer>
+    <ErrorBoundary>{children}</ErrorBoundary>
+    <Footer />
+    <ErrorBoundary fallback={null}>
+      <ReactKonami easterEgg={() => history.push('/secret')} />
+    </ErrorBoundary>
+  </div>
+));
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   searchQuery: PropTypes.string,
