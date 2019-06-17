@@ -18,6 +18,7 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import Layout from 'Components/layout';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
@@ -29,7 +30,6 @@ import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-import Layout from '../layout';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
