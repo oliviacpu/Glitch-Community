@@ -79,9 +79,9 @@ const PrivateBadge = () => (
 );
 
 const PrivateToggle = ({ isPrivate, setPrivate }) => (
-  <TooltipContainer 
-    type="action" 
-    id="toggle-private-button-tooltip" 
+  <TooltipContainer
+    type="action"
+    id="toggle-private-button-tooltip"
     tooltip={isPrivate ? PrivateTooltip : PublicTooltip}
     target={
       <CheckboxButton onChange={setPrivate}>
