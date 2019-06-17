@@ -32,9 +32,11 @@ const OverlayVideo = ({ children }) => {
   const track = useTracker('How it works clicked');
   return (
     <PopoverContainer>
-      {({ visible, setVisible }) => {
+      {({ visible, togglePopover }) => {
         const onToggle = (evt) => {
-          togglePopover();
+          console.log(evt);
+          evt.preventDefault();
+          // togglePopover()
           if (evt.target.open) {
             track();
           }
