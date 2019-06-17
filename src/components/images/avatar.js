@@ -121,12 +121,10 @@ ProjectAvatar.defaultProps = {
   hasAlt: false,
 };
 
-export const CollectionAvatar = ({ collection }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(props.color)} />;
+export const CollectionAvatar = ({ collection }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} />;
 
 CollectionAvatar.propTypes = {
   collection: PropTypes.shape({
-    color: PropTypes.string.isRequired
+    coverColor: PropTypes.string.isRequired,
   }).isRequired,
-  color: ,
 };
-

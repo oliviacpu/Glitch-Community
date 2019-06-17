@@ -1,4 +1,5 @@
-/* eslint-disable no-bitwise import/prefer-default-export */
+/* eslint-disable no-bitwise */
+/* eslint-disable import/prefer-default-export */
 
 // from https://stackoverflow.com/a/21648508/1720985
 export const hexToRgbA = (hex) => {

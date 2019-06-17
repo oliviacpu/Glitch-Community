@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar, ProjectAvatar } from 'Components/images/avatar';
 import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
-import CollectionAvatar from '../../presenters/includes/collection-avatar';
+import { CollectionAvatar } from 'Components/images/avatar';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
@@ -63,7 +63,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 const CollectionResult = ({ value: collection }) => (
   <CollectionLink collection={collection} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
-      <CollectionAvatar {...collection} />
+      <CollectionAvatar collection={collection} />
     </div>
     <div className={styles.infoContainer}>
       <div className={styles.infoPrimary}>{collection.name}</div>
