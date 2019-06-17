@@ -68,16 +68,11 @@ function CreateTeamPopBase(props) {
 
   const debouncedValidate = _.debounce(validate, 200);
   useEffect(() => {
-    let isMounted = true;
     const getName = async () => {
       const teamName = await getTeamPair();
       setState({ teamName });
     };
-    if (isMounted) {
-      getName();
-    }
-    
-    return () => isMounted = false;
+    getName();
   }, []);
 
   const handleChange = async (newValue) => {
