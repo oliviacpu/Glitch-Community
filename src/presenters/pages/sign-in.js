@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import { captureException } from 'Utils/sentry';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import { NestedPopover, NestedPopoverTitle } from '../pop-overs/popover-nested';
 
@@ -29,8 +30,8 @@ class SignIn extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange(e) {
-    this.setState({ email: e.target.value });
+  onChange(value) {
+    this.setState({ email: value });
   }
 
   async onSubmit(e) {
@@ -59,7 +60,7 @@ class SignIn extends React.Component {
             <section className="pop-over-actions first-section">
               {!this.state.done && (
                 <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
-                  <input value={this.state.email} onChange={this.onChange} className="pop-over-input" type="email" placeholder="new@user.com" />
+                  <TextInput value={this.state.email} onChange={this.onChange} type="email" placeholder="new@user.com" />
                   <button style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
                     Send Link
                   </button>
@@ -104,8 +105,8 @@ class SignInCodeHandler extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange(e) {
-    this.setState({ code: e.target.value });
+  onChange(value) {
+    this.setState({ code: value });
   }
 
   async onSubmit(e) {
@@ -130,7 +131,7 @@ class SignInCodeHandler extends React.Component {
           {!this.state.done && (
             <form onSubmit={this.onSubmit} style={{ marginBottom: 0 }}>
               Paste your temporary sign in code below
-              <input value={this.state.code} onChange={this.onChange} className="pop-over-input" type="text" placeholder="cute-unique-cosmos" />
+              <TextInput value={this.state.code} onChange={this.onChange} type="text" placeholder="cute-unique-cosmos" />
               <button style={{ marginTop: 10 }} className="button-small button-link" disabled={!isEnabled}>
                 Sign In
               </button>
