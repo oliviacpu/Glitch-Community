@@ -39,7 +39,6 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     const keyHandler = (event) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
-        console.log('esc')
         setStatus('closed');
       }
     };
@@ -51,6 +50,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     () => ({
       status,
       visible: status !== 'closed',
+      setStatus,
       closePopover,
       togglePopover,
       toggleAndCall,
