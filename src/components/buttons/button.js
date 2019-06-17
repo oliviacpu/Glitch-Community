@@ -151,7 +151,7 @@ ButtonImage.defaultProps = {
 };
 
 const ButtonEmoji = ({ emoji, ...props }) => (
-  <ButtonImage image={<Emoji name={emoji} />} up1={['bentoBox', 'bomb', 'clapper'].includes(emoji)} {...props} />
+  <ButtonImage image={<Emoji name={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
 );
 
 ButtonEmoji.propTypes = {
