@@ -82,15 +82,28 @@ export function useTeamEditor(initialTeam) {
       }
     }
   }
-  
-  function removePermissions(projectIds) {
+
+  function updatePermissions(projectId, permissions) {
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          permissions,
+        };
+      }),
+    }));
+  }
+
+  function removePermissions(userId, projectIds) {
     setTeam((prev) => ({
       ...prev,
       projects: prev.projects.map((p) => {
         if (!projectIds.includes(p.id)) return p;
         return {
           ...p,
-          permissions: p.permissions.filter((perm) => perm.userId !== currentUser.id),
+          permissions: p.permissions.filter((perm) => perm.userId !== userId),
         };
       }),
     }));
@@ -141,9 +154,7 @@ export function useTeamEditor(initialTeam) {
       }
       // update projects so that this user no longer appears in member lists
       reloadProjectMembers(projectIds);
-      if (userId === currentUser.id) {
-        removePermissions(projectIds);
-      }
+      removePermissions(userId, projectIds);
     }, handleError),
     uploadAvatar: () =>
       assets.requestFile(
@@ -229,12 +240,15 @@ export function useTeamEditor(initialTeam) {
       return null;
     }, handleError),
     joinTeamProject: withErrorHandler(async (projectId) => {
-      const { data: updatedProject } = addUserToProject(api, projectId, team)
-      updatePermissions(updatedProject.users.map((user) => user.projectPermission))
-      
+      const { data: updatedProject } = await addUserToProject(api, projectId, team);
+      updatePermissions(projectId, updatedProject.users.map((user) => user.projectPermission));
       reloadProjectMembers([projectId]);
     }, handleError),
-    leaveTeamProject: (projectId) => removeUserFromProject(api, projectId, currentUser.id).catch(handleError),
+    leaveTeamProject: withErrorHandler(async (projectId) => {
+      await removeUserFromProject(api, projectId, currentUser.id);
+      removePermissions(currentUser.id, [projectId]);
+      reloadProjectMembers([projectId]);
+    }, handleError),
     addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
     featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
