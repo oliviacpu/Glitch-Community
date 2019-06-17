@@ -72,7 +72,9 @@ function useOptimisticValue(value, onChange) { //todo add onblur
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          return setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, useLastSaved: false, })
+          console.log("saved!!")
+          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, useLastSaved: false, });
+          return debouncedValue
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
