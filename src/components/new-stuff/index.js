@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { PopoverContainer } from 'Components/popover';
 
