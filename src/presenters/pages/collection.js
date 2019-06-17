@@ -7,7 +7,6 @@ import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -38,6 +37,7 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
     <Button
       type="dangerZone"
       size="small"
+      emoji="bomb"
       onClick={() => {
         if (!window.confirm('Are you sure you want to delete your collection?')) {
           return;
@@ -46,7 +46,7 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
         setDone(true);
       }}
     >
-      Delete Collection <Emoji name="bomb" />
+      Delete Collection
     </Button>
   );
 }
