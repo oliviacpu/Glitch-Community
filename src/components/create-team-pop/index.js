@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, PopoverTitle } from 'Components/popover';
+import { MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -13,6 +13,8 @@ import { getPredicates, getTeamPair } from 'Models/words';
 import { getLink } from 'Models/team';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
+
+import styles from './styles.styl';
 
 // Create Team 🌿
 
@@ -27,7 +29,6 @@ const CreateTeamSubmitButton = () => {
 };
 
 function CreateTeamPopBase(props) {
-  console.log('in create team');
   const [state, setState] = useState({
     teamName: '',
     isLoading: false,
@@ -119,7 +120,7 @@ function CreateTeamPopBase(props) {
   const placeholder = 'Your Team Name';
 
   return (
-    <PopoverDialog align="right">
+    <PopoverDialog align="right" className={styles.createTeamPop}>
       <PopoverSection>
         <MultiPopoverTitle>
           Create Team <Emoji name="herb" inTitle />
@@ -127,7 +128,9 @@ function CreateTeamPopBase(props) {
       </PopoverSection>
 
       <PopoverInfo>
-        <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
+        <InfoDescription>
+          Showcase your projects in one place, manage collaborators, and view analytics
+        </InfoDescription>
       </PopoverInfo>
 
       <PopoverActions>
@@ -139,7 +142,9 @@ function CreateTeamPopBase(props) {
         </form>
       </PopoverActions>
       <PopoverInfo>
-        <Text>You can change this later</Text>
+        <InfoDescription>
+          You can change this later
+        </InfoDescription>
       </PopoverInfo>
     </PopoverDialog>
   );
