@@ -1,25 +1,4 @@
 @import '../constants.styl'
-    .user
-      padding: 0
-      display: inline-block
-      padding-right: 5px
-      border: none
-      min-width: 48px
-      img
-        width: 28px
-        height: auto
-        position: relative
-        display: inline
-        vertical-align: middle
-        border-radius: 50%
-        margin-right: 3px
-
-    .user-options-pop-button
-      border: 0
-      padding: 0
-      cursor: pointer
-      display: inline-block
-      position: relative
 
 .userOptionsPop
   right: 0
@@ -28,14 +7,8 @@
 .userOptionsWrap
   display: flex
   align-items: center
-  &:hover,
-  &:focus
-    opacity: 1
-    // background-color: secondary-background-hover
-    border-radius: 5px
-    border: none;
-    outline: transparent
-.userOptionsButtonAvatar
+  padding-right: 5px
+.userOptionsButtonAvatar img
   width: 28px
   height: 28px
   margin-right: 3px
@@ -45,13 +18,11 @@
   width: 32px
   height: 32px
   overflow: hidden
-  border-radius: 50% // TODO tbv: temporary until avatar component is deployed
+  border-radius: 50%
 .userInfo
   display: inline-block
   color: primary
   font-weight: bold
-  p
-    margin: 0 // TODO tbv: get rid of this once we remove margin from the <Text> component
 .userLogin
   color: text-on-secondary-background
 .teamAvatar

@@ -8,10 +8,9 @@ import Image from 'Components/images/image';
 import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
-import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle } from 'Components/popover';
+import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
@@ -105,10 +104,10 @@ Are you sure you want to sign out?`)
             <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
           </div>
           <div className={styles.userInfo}>
-            <Text>{user.name || 'Anonymous'}</Text>
+            <InfoDescription>{user.name || 'Anonymous'}</InfoDescription>
             {user.login && (
               <div className={styles.userLogin}>
-                <Text>@{user.login}</Text>
+                <InfoDescription>@{user.login}</InfoDescription>
               </div>
             )}
           </div>
@@ -168,12 +167,10 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
                 <div className={styles.userOptionsWrap}>
-                  <div className="user">
-                    <div className={styles.userOptionsButtonAvatar}>
-                      <UserAvatar user={props.user} withinButton style={avatarStyle} />
-                    </div>
-                    <span className="down-arrow icon" />
+                  <div className={styles.userOptionsButtonAvatar}>
+                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
                   </div>
+                  <span className="down-arrow icon" />
                 </div>
               </Button>
             );
