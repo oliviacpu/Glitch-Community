@@ -154,11 +154,15 @@ Are you sure you want to sign out?`)
 
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
+  focusFirstElement: PropTypes,
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
   showNewStuffOverlay: PropTypes.func.isRequired,
+};
+
+UserOptionsPop.defaultProps = {
+  focusFirstElement: null,
 };
 
 function CheckForCreateTeamHash(props) {
@@ -174,7 +178,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
-          {({ togglePopover, visible, focusFirstElement }) => {
+          {({ togglePopover, visible,  focusFirstElement }) => {
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
                 <div className={styles.userOptionsPopWrap}>
