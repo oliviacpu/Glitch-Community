@@ -1,9 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
-import { TeamAvatar, UserAvatar, ProjectAvatar } from 'Components/images/avatar';
+import { TeamAvatar, UserAvatar, ProjectAvatar, CollectionAvatar } from 'Components/images/avatar';
 import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
-import { CollectionAvatar } from 'Components/images/avatar';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
