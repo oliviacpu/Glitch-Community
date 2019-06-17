@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
@@ -14,7 +14,7 @@ import newStuffLog from '../../curated/new-stuff-log';
 import NewStuffArticle from './new-stuff-article';
 import NewStuffPrompt from './new-stuff-prompt';
 import NewStuffPup from './new-stuff-pup';
-import styles from 'styles.styl';
+import styles from './styles.styl';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
@@ -42,7 +42,7 @@ function usePreventTabOut() {
   return { first, last };
 }
 
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover }) => {
   const { first, last } = usePreventTabOut();
 
   return (
@@ -62,7 +62,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <Button onClick={() => setVisible(false)} ref={last}>
+        <Button onClick={closePopover} ref={last}>
           Back to Glitch <Emoji name="carpStreamer" />
         </Button>
       </OverlaySection>
@@ -90,11 +90,11 @@ const NewStuff = ({ children }) => {
   const [log, setLog] = useState(newStuffLog);
   const track = useTracker('Pupdate');
 
-  const renderOuter = ({ visible, setVisible }) => {
+  const renderOuter = ({ visible, togglePopover }) => {
     const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const show = () => {
       track();
-      setVisible(true);
+      togglePopover();
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
       setLog(unreadStuff.length ? unreadStuff : newStuffLog);
       setNewStuffReadId(latestId);
@@ -104,15 +104,15 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" tabIndex={-1} />}
+        {visible && <OverlayBackground />}
       </>
     );
   };
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible }) =>
-        visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null
+      {({ visible, closePopover }) =>
+        visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} closePopover={closePopover} /> : null
       }
     </PopoverContainer>
   );
