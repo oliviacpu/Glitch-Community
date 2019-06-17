@@ -1,5 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+
+const Expander = ({ children, height, minSlide }) => {
+  const ref = useRef()
+  
+  const [scrollHeight, setScrollHeight] = useState(Infinity)
+  const updateHeight = () => {
+    setScrollHeight(ref.current.scrollHeight)
+  }
+  useEffect(updateHeight, [children]);
+  
+  useEffect(() => {
+    ref.current.addEventListener('load', updateHeight, {
+      capture: true,
+    });
+    window.addEventListener('resize', updateHeight, { passive: true });
+    return () => {
+      
+    }
+  }, [])
+}
+
 
 export default class Expander extends React.Component {
   constructor(props) {
