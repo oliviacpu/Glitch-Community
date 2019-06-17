@@ -16,7 +16,6 @@ import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
 import { NotFoundPage, ProjectNotFoundPage } from './error';
-import OauthSignIn from './sign-in';
 import SearchPage from './search';
 import SecretPage from './secret';
 import VSCodeAuth from './vscode-auth';
@@ -152,8 +151,6 @@ const Router = () => (
       ))}
 
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
-
-      <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
       <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 
