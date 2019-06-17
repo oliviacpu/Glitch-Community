@@ -6,7 +6,6 @@ import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -20,6 +19,7 @@ import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
 import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
+import Layout from 'Components/layout';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
@@ -30,7 +30,6 @@ import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
 import AuthDescription from '../includes/auth-description';
 import { ShowButton, EditButton } from '../includes/project-actions';
-import Layout from '../layout';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -132,13 +131,8 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   return (
     <section>
       <PopoverWithButton
-        buttonProps={{ size: 'small', type: 'dangerZone' }}
-        buttonText={
-          <>
-            Delete Project
-            <Emoji name="bomb" />
-          </>
-        }
+        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
+        buttonText="Delete Project"
       >
         {({ togglePopover }) => (
           <PopoverDialog align="left" wide>
@@ -152,6 +146,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
                 <Button
                   type="tertiary"
                   size="small"
+                  emoji="bomb"
                   onClick={() => {
                     setLoading(true);
                     deleteProject().then(() => {
@@ -160,7 +155,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
                     });
                   }}
                 >
-                  Delete {projectDomain} <Emoji name="bomb" />
+                  Delete {projectDomain}
                 </Button>
               )}
             </PopoverActions>
