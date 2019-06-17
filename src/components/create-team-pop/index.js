@@ -27,6 +27,7 @@ const CreateTeamSubmitButton = () => {
 };
 
 function CreateTeamPopBase(props) {
+  console.log('in create team');
   const [state, setState] = useState({
     teamName: '',
     isLoading: false,
@@ -120,8 +121,9 @@ function CreateTeamPopBase(props) {
   return (
       <PopoverDialog align="right">
         <MultiPopoverTitle>
-          Create Team <Emoji name="herb" />
+          Create Team <Emoji name="herb" inTitle />
         </MultiPopoverTitle>
+        <hr/>
 
         <PopoverInfo>
           <Text>Showcase your projects in one place, manage collaborators, and view analytics</Text>
