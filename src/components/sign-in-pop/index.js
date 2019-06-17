@@ -125,13 +125,13 @@ const ForgotPasswordHandler = ({ align }) => {
         )}
         {isDone && !errorMessage && (
           <>
-            <div className="notification notifyPersistent notifySuccess">Almost Done</div>
+            <Notification type="success" persistent>Almost Done</Notification>
             <div>Reset your password by clicking the link sent to {email}.</div>
           </>
         )}
         {isDone && errorMessage && (
           <>
-            <div className="notification notifyPersistent notifyError">Error</div>
+            <Notification type="error" persistent>Error</Notification>
             <div>{errorMessage}</div>
           </>
         )}
