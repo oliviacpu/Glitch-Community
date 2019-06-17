@@ -15,8 +15,6 @@ import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDia
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 
-import { NestedPopover } from '../../presenters/pop-overs/popover-nested';
-
 import styles from './styles.styl';
 import emojiStyles from '../images/emoji.styl';
 
@@ -130,7 +128,7 @@ Are you sure you want to sign out?`)
 
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
-          <div className="user-options-pop-checkbox">
+          <div>
             <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
               Super User
             </CheckboxButton>
@@ -170,7 +168,6 @@ function CheckForCreateTeamHash(props) {
 // Header button and init pop
 
 export default function UserOptionsAndCreateTeamPopContainer(props) {
-  const avatarUrl = getUserAvatarUrl(props.user);
   const avatarStyle = { backgroundColor: props.user.color };
 
   return (
@@ -181,9 +178,11 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
             // TODO we might need an alt for actually getting into the pop "User options"
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
-                <UserAvatar user={props.user} withinButton style={avatarStyle} />
-                <div className="user-options-dropdown-wrap">
-                  <span className="down-arrow icon" />
+                <div className={styles.userOptionsPopWrap}>
+                  <div className="user">
+                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    <span className="down-arrow icon" />
+                  </div>
                 </div>
               </Button>
             );
