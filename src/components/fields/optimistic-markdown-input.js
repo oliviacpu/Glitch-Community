@@ -62,7 +62,7 @@ function useOptimisticValue(value, onChange) { //todo add onblur
   React.useEffect(() => {
     if (debouncedValue !== undefined) {
       // if the value changes during the async action then ignore the result
-      const setStateIfMatches = (newState) => {
+      const setStateIfStillRelevant = (newState) => {
         setState((prevState) => {
           return prevState.value === debouncedValue ? newState : prevState
         });
@@ -71,18 +71,19 @@ function useOptimisticValue(value, onChange) { //todo add onblur
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          return setStateIfMatches({ value: undefined, error: null, lastSaved: debouncedValue, useLastSaved: false, })
+          return setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, useLastSaved: false, })
         },
         (error) => {
           const message = (error && error.response && error.response.data && error.response.data.message) || "Sorry, we had trouble saving. Try again later?";
-          setStateIfMatches({ ...state, value: debouncedValue, error: message, useLastSaved: false });
+          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, useLastSaved: false });
         },
       );
     }
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    setState({ ...state, useLastSaved: true, error: null });
+    const useLastSaved = !!state.error
+    setState({ ...state, useLastSaved, error: null });
     // if (onBlur) { onBlur(); }
   }
   
@@ -92,9 +93,9 @@ function useOptimisticValue(value, onChange) { //todo add onblur
     setState((prevState) => ({ ...prevState, value: newValue, useLastSaved: false, error: null }));
   };
   
-  const optimisticValue = state.usedLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
+  const optimisticValue = state.useLastSaved ? state.lastSaved : (state.value !== undefined ? state.value : value);
   console.log("WHAT IS STATE LOL", {...state})
-  console.log("What is optimistic value now?", optimisticValue)
+  console.log("What is optimistic value now?", optimisticValue, state.value !== undefined, state.value, value)
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
 }
 
