@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'Components/buttons/button';
+
+import styles from './expander.styl';
+
 const Expander = ({ children, height, minSlide }) => {
-  const ref = useRef()
-  
-  const [scrollHeight, setScrollHeight] = useState(Infinity)
+  const ref = useRef();
+
+  const [scrollHeight, setScrollHeight] = useState(Infinity);
   const updateHeight = () => {
-    setScrollHeight(ref.current.scrollHeight)
-  }
+    setScrollHeight(ref.current.scrollHeight);
+  };
   useEffect(updateHeight, [children]);
   useEffect(() => {
     ref.current.addEventListener('load', updateHeight, {
@@ -19,46 +23,46 @@ const Expander = ({ children, height, minSlide }) => {
         capture: true,
       });
       window.removeEventListener('resize', updateHeight, { passive: true });
-    }
-  }, [])
-  
-  const [expandState, setExpandState] = useState('init') // init | expanding | complete
+    };
+  }, []);
+
+  const [expandState, setExpandState] = useState('init'); // init | expanding | complete
   const expand = () => {
-    updateHeight()
-    setExpandState('expanding')
-  }
+    updateHeight();
+    setExpandState('expanding');
+  };
   const onExpandEnd = ({ propertyName }) => {
-    setExpandState(currentExpandState => {
+    setExpandState((currentExpandState) => {
       if (currentExpandState === 'expanding' && propertyName === 'max-height') {
-        return 'complete'
+        return 'complete';
       }
-      return currentExpandState
-    })
-  }
-  
+      return currentExpandState;
+    });
+  };
+
   const aboveLimit = scrollHeight > height;
   const limitHeight = aboveLimit ? height - minSlide : height;
   const style = {
     init: { maxHeight: limitHeight },
     expanding: { maxHeight: scrollHeight },
-    complete: null
-  }[expandState]
+    complete: null,
+  }[expandState];
 
   return (
-    <div ref={ref} className="expander" style={style} onTransitionEnd={onExpandEnd}>
+    <div ref={ref} className={styles.expander} style={style} onTransitionEnd={onExpandEnd}>
       {children}
       {expandState !== 'complete' && aboveLimit && (
-        <div className="expander-mask">
+        <div className={styles.expanderMask}>
           {expandState !== 'expanding' && (
-            <button onClick={expand} className="expander-button button-small button-tertiary">
+            <Button size="small" type="tertiary" onClick={expand}>
               Show More
-            </button>
+            </Button>
           )}
         </div>
       )}
     </div>
   );
-}
+};
 
 Expander.propTypes = {
   children: PropTypes.node.isRequired,
