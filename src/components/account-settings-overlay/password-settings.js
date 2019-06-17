@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
-import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
+import Notification from 'Components/notification';
 import NewPasswordInput from 'Components/new-password-input';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -75,16 +75,16 @@ const PasswordSettings = ({ userHasPassword }) => {
           Set Password
         </Button>
 
-        {state === 'done' && <Badge type="success">Successfully set new password</Badge>}
-        {state === 'error' && <Badge type="error">We couldn't set the password</Badge>}
+        {state === 'done' && <Notification type="success" persistent>Successfully set new password</Notification>}
+        {state === 'error' && <Notification type="error" persistent>We couldn't set the password</Notification>}
       </form>
       {userHasPassword &&
         <>
           <Heading tagName="h2">Reset Password</Heading>
           <Button type="tertiary" size="small" disabled={resetState === 'working'} onClick={resetPassword}>Send Reset Password Email</Button>
 
-          {resetState === 'done' && <Badge type="success">Sent a reset code to {primaryEmail.email}</Badge>}
-          {resetState === 'error' && <Badge type="error">Something went wrong, check your inbox?</Badge>}
+          {resetState === 'done' && <Notification type="success" persistent>Sent a reset code to {primaryEmail.email}</Notification>}
+          {resetState === 'error' && <Notification type="error" persistent>Something went wrong, check your inbox?</Notification>}
         </>
       }
     </>
