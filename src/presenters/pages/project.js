@@ -19,6 +19,8 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import { ShowButton, EditButton } from 'Components/project/project-actions';
+import AuthDescription from 'Components/fields/auth-description';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getLink as getUserLink } from 'Models/user';
@@ -28,8 +30,6 @@ import PopoverWithButton from '../pop-overs/popover-with-button';
 import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
 import ProjectEditor from '../project-editor';
 import Expander from '../includes/expander';
-import AuthDescription from '../includes/auth-description';
-import { ShowButton, EditButton } from '../includes/project-actions';
 import Layout from '../layout';
 
 function syncPageToDomain(domain) {

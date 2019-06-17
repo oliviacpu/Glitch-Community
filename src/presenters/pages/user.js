@@ -14,11 +14,11 @@ import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
-import AuthDescription from '../includes/auth-description';
 import UserEditor from '../user-editor';
 import ProjectsLoader from '../projects-loader';
 import styles from './user.styl';

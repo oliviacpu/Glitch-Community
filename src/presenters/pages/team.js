@@ -19,6 +19,7 @@ import AddTeamProject from 'Components/team/add-team-project-pop';
 import TeamUsers from 'Components/team-users';
 import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
+import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useAPI } from 'State/api';
@@ -26,7 +27,6 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 
 import TeamEditor from '../team-editor';
-import AuthDescription from '../includes/auth-description';
 import ErrorBoundary from '../includes/error-boundary';
 
 import ProjectsLoader from '../projects-loader';
@@ -83,7 +83,7 @@ const TeamMarketing = () => (
 
 const NameConflictWarning = ({ id }) => (
   <>
-    <Text>This team has your name. You should update your info to remain unique ❄</Text>
+    <Text>This team has your name. You should update your info to remain unique <Emoji name="sparkles" /></Text>
     <Button size="small" type="tertiary" href={`/user/${id}`}>
       Your Profile
     </Button>
@@ -91,7 +91,6 @@ const NameConflictWarning = ({ id }) => (
 );
 
 const teamConflictsWithUser = (team, currentUser) => {
-  return true;
   if (currentUser && currentUser.login) {
     return currentUser.login.toLowerCase() === team.url;
   }

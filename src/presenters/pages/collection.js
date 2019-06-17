@@ -20,12 +20,12 @@ import MoreCollectionsContainer from 'Components/collections-list/more-collectio
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
 import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 import Layout from '../layout';
-import AuthDescription from '../includes/auth-description';
 import CollectionEditor from '../collection-editor';
 import CollectionAvatar from '../includes/collection-avatar';
 
