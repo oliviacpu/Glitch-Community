@@ -13,9 +13,9 @@ import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
+import { CollectionAvatar } from 'Components/images/avatar';
 import { isDarkColor } from 'Models/collection';
 
-import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
@@ -76,7 +76,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           style={collectionColorStyles(collection)}
         >
           <div className={styles.avatarContainer}>
-            <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+            <CollectionAvatar collection={collection} />
           </div>
           <div className={styles.nameDescriptionContainer}>
             <div className={styles.itemButtonWrap}>

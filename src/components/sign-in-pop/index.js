@@ -53,9 +53,11 @@ function slackAuthLink() {
 }
 
 const SignInPopButton = ({ company, emoji, href, onClick }) => (
-  <Button href={href} onClick={onClick} size="small">
-    Sign in with {company} <Emoji name={emoji} />
-  </Button>
+  <div style={{ marginBottom: '10px' }}>
+    <Button href={href} onClick={onClick} size="small" emoji={emoji}>
+      Sign in with {company}
+    </Button>
+  </div>
 );
 
 const SignInCodeSection = ({ onClick }) => (
@@ -256,8 +258,8 @@ export const SignInPopBase = withRouter(({ location, align }) => {
             <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
             <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
             {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
-            <Button size="small" onClick={setDestinationAnd(showView.email)}>
-              Sign in with Email <Emoji name="email" />
+            <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
+              Sign in with Email
             </Button>
           </PopoverActions>
           <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />

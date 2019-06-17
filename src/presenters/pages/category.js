@@ -7,11 +7,11 @@ import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
+import Layout from 'Components/layout';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor } from 'State/collection';
 
-import Layout from '../layout';
 import ProjectsLoader from '../projects-loader';
 
 const CategoryPageWrap = ({ category: initialCategory }) => {
