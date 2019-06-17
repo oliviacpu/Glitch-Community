@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import WrappingTextInput from '../inputs/wrapping-text-input';
 
-import usePassivelyTrimmedInput from "./use-passively-trimmed-input";
-import useOptimisticValue from "./use-optimistic-value";
+import usePassivelyTrimmedInput from './use-passively-trimmed-input';
+import useOptimisticValue from './use-optimistic-value';
 
 const OptimisticWrappingTextInput = ({ value, onChange, ...props }) => {
   const [untrimmedValue, onChangeBoundWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange);
   const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeBoundWithTrimmedInputs);
-  
-  return <WrappingTextInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} />;
+
+  return <WrappingTextInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={optimisticOnBlur} />;
 };
 
 OptimisticWrappingTextInput.propTypes = {

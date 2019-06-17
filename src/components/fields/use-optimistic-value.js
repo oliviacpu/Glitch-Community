@@ -29,7 +29,7 @@ export default function useOptimisticValue(value, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowLastSaved: false });
 
-  // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined
+  // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined and instead show whatever value is passed in
   const optimisticOnChange = (newValue) => {
     setState((prevState) => ({ ...prevState, value: newValue, shouldShowLastSaved: false, error: null }));
   };
@@ -49,11 +49,7 @@ export default function useOptimisticValue(value, onChange, onBlur) {
 
     if (ifUserHasTypedSinceLastSave) {
       // if the value changes during the async action then ignore the result
-      const setStateIfStillRelevant = (newState) => {
-        setState((prevState) => {
-          return prevState.value === debouncedValue ? newState : prevState;
-        });
-      };
+      const setStateIfStillRelevant = (newState) => setState((prevState) => (prevState.value === debouncedValue ? newState : prevState));
 
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
