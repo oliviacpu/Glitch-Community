@@ -79,18 +79,17 @@ const PrivateBadge = () => (
 );
 
 const PrivateToggle = ({ isPrivate, setPrivate }) => (
-t=} tooltip={label} 
-    />;
-};
-Private
-    Toggle.propTypes = {
-  isPrivate: PropTypes(
-    <CheckboxButton onChange={setPrivate}>
-      <span className="project-badge private-project-badge" aria-label={PublicTooltip} />
-    </CheckboxButton>
-  )isRequired,
-  setPriva)e: PropTypes.func.isRequired,
-};
+  <TooltipContainer 
+    type="action" 
+    id="toggle-private-button-tooltip" 
+    tooltip={isPrivate ? PrivateTooltip : PublicTooltip}
+    target={
+      <CheckboxButton onChange={setPrivate}>
+        <span className="project-badge private-project-badge" aria-label={PublicTooltip} />
+      </CheckboxButton>
+    }
+  />
+);
 
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
@@ -315,4 +314,3 @@ const ProjectPageContainer = ({ name }) => (
 );
 
 export default ProjectPageContainer;
-https://glitch.com/edit/#!/foggy-leopon?path=src/presenters/pages/project.js:87:
