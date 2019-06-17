@@ -25,31 +25,19 @@ on blur:
 
 */
 
-const OptmisticMarkdownInput = ({ value, onChange, ...props }) => {
-  const {
-    inputValue, wrappedOnChange, error, wrappedOnBlur,
-  } = useOptimistValueOnChangeAndBlur({ value, asyncUpdate: onChange });
-  
-  return <MarkdownInput {...props} value={inputValue} onChange={wrappedOnChange} error={error} onBlur={wrappedOnBlur} />;
-};
+function OptmisticMarkdownInput({ value, onChange, ...props }) {
+  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, onChange);
+  const [inputValue, wrappedOnChange, wrappedOnBlur, error] = useRevertOnBlurWhenError(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
+  const [optimisticValue, optimisticOnChange] = useOptimisticValueAndDebounceCallsToServer(inputValue, wrappedOnChange);
 
+  console.log({ inputValue, optimisticValue, error })
+  return <MarkdownInput {...props} value={optimisticValue} onChange={optimisticOnChange} error={error} onBlur={wrappedOnBlur} />;
+}
 OptmisticMarkdownInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 export default OptmisticMarkdownInput;
-
-
-function useOptimistValueOnChangeAndBlur({ value, asyncUpdate }) {
-  const [nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue] = useNonAggressivelyTrimmedInputs(value, asyncUpdate);
-  const [inputValue, wrappedOnChange, wrappedOnBlur, error] = useRevertOnBlurWhenError(nonAggressivelyTrimmedInputValue, onChangeWrappedWithTrimmedValue);
-  const [optimisticValue, optimisticOnChange] = useOptimisticValueAndDebounceCallsToServer(inputValue, wrappedOnChange);
-
-  console.log({ inputValue, optimisticValue, error })
-  return {
-    inputValue, wrappedOnChange: optimisticOnChange, wrappedOnBlur, error,
-  };
-}
 
 function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
   const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
@@ -75,6 +63,7 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
     if (asyncUpdate) {
       return asyncUpdate(change)
         .then(response => {
+          console.log("got a response")
           if (response.status === 200) {
             setState({ ...state, isLoading: false, lastSavedResponse: change, inputValue: change });
           } else {
@@ -101,8 +90,8 @@ function useRevertOnBlurWhenError(value, asyncUpdate, onBlur) {
   React.useEffect(() => {
     setState({ ...state, inputValue: value })
   }, [value]);
-  
-  return [state.inputValue || value, wrappedOnChange, wrappedOnBlur];
+  console.log({ ...state })
+  return [state.inputValue || value, wrappedOnChange, wrappedOnBlur, state.error];
 }
 
 
@@ -125,7 +114,7 @@ function useOptimisticValueAndDebounceCallsToServer(rawValueFromOnChange, setVal
   const wrapOnChange = async (change) => {
     console.log({ change })
     //save what's being typed in
-    setState({ ...state, updateToSave: change });
+    setState({ updateToSave: change });
     console.log(state)
     const textHasUpdatedSinceSave = debouncedUpdateToSave !== undefined;
     console.log({ textHasUpdatedSinceSave, debouncedUpdateToSave })
