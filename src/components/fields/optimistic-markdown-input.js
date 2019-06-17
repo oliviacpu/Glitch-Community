@@ -28,8 +28,8 @@ on blur:
 */
 
 function OptimisticMarkdownInput({ value, onChange, ...props }) {
-  const [untrimmedDisplayValue, wrapOnChangeWithTrimmedInputs] = useNonAggressivelyTrimmedInputs(value, onChange);
-  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedDisplayValue, wrapOnChangeWithTrimmedInputs);
+  const [notAggressivelyTrimmedInput, wrapOnChangeWithTrimmedInputs] = useNonAggressivelyTrimmedInputs(value, onChange);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(notAggressivelyTrimmedInput, wrapOnChangeWithTrimmedInputs);
   
   return <MarkdownInput {...props} value={optimisticValue} onChange={optimisticOnChange} onBlur={optimisticOnBlur} error={optimisticError} />;
 }
@@ -40,6 +40,7 @@ OptimisticMarkdownInput.propTypes = {
 export default OptimisticMarkdownInput;
 
 
+// always show untrimmed version, always send trimmed version to server
 function useNonAggressivelyTrimmedInputs(rawInput, asyncUpdate) {
   const [untrimmedValue, setUntrimmedValue] = React.useState(rawInput);
   
