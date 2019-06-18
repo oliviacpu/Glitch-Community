@@ -26,6 +26,7 @@ export const getAPIForToken = memoize((persistentToken) => {
 
   return {
     ...api,
+    persistentToken,
     get: (url, config) => {
       // TODO: support params
       if (config) return api.get(url, config);

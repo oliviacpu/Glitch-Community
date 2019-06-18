@@ -7,7 +7,7 @@ import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 
-import CollectionAvatar from '../../presenters/includes/collection-avatar';
+import { CollectionAvatar } from 'Components/images/avatar';
 import { isDarkColor } from '../../models/collection';
 
 import styles from './collection-item.styl';
@@ -39,7 +39,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
       >
         <div className={styles.nameArea}>
           <div className={styles.collectionAvatarContainer}>
-            <CollectionAvatar color={collection.coverColor} collectionId={collection.id} />
+            <CollectionAvatar collection={collection} />
           </div>
           <div className={styles.collectionNameWrap}>
             <div className={styles.itemButtonWrap}>
