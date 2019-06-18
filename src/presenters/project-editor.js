@@ -23,6 +23,8 @@ class ProjectEditor extends React.Component {
   }
 
   async updateFields(changes) {
+    console.log("Testing??")
+    throw new Error("fake")
     await this.props.api.patch(`projects/${this.state.id}`, changes);
     this.setState(changes);
   }
