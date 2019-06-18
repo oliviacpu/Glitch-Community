@@ -50,7 +50,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
   const onNameChange = async (name) => {
     const url = kebabCase(name);
     const result = await funcs.updateNameAndUrl({ name, url });
-    history.replaceState(null, null, getLink({ ...collection, url }));
+    history.replace(getLink({ ...collection, url }));
     return result;
   };
 
@@ -81,7 +81,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
               />
             </div>
 
-            <div className="collection-project-count">
+            <div className={styles.projectCount}>
               <Text>
                 <Pluralize count={collection.projects.length} singular="Project" />
               </Text>
@@ -89,8 +89,8 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
 
             {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
-          <div className="collection-contents">
-            <div className="collection-project-container-header">
+          <div className={styles.collectionContents}>
+            <div className={styles.collectionProjectContainerHeader}>
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
             </div>
             {!collectionHasProjects && currentUserIsAuthor && (
