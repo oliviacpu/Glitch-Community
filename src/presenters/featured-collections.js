@@ -5,6 +5,7 @@ import { sampleSize, flatMap, uniq } from 'lodash';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
+import CollectionContainer from 'Components/collection/container';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionLink } from 'Components/link';
 import DataLoader from 'Components/data-loader';
@@ -68,8 +69,6 @@ const loadCollection = async (api, { owner, name }) => {
     const collection = await getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(owner)}/${name}`, `${owner}/${name}`);
     collection.projects = await getSingleItem(api, `/v1/collections/by/fullUrl/projects?limit=20&fullUrl=${encodeURIComponent(owner)}/${name}`, 'items');
     collection.team = await getSingleItem(api, `/v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-    collection.projectCount = collection.projects.length;
-    collection.projects = sampleSize(collection.projects, 3);
     
     return collection;
   } catch (error) {
@@ -90,7 +89,7 @@ const loadAllCollections = async (api, infos) => {
 
 export const FeaturedCollections = () => (
   <DataLoader get={(api) => loadAllCollections(api, featuredCollections)}>
-    {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionWide collection={collection} key={collection.id} />)}
+    {(collections) => collections.filter((c) => !!c).map((collection) => <CollectionContainer preview collection={collection} key={collection.id} />)}
   </DataLoader>
 );
 
