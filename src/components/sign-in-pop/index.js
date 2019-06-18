@@ -298,20 +298,23 @@ const LoginSection = ({ showForgotPassword }) => {
       }
     } catch (error) {
       let message = error.response && error.response.data && error.response.data.message;
-      if (error.response.status === 401) {
+      if (!message || error.response.status === 401) {
         message = 'Failed to sign in, try again?';
       }
-      setErrorMessage(message || 'Failed to sign in, try again?');
+      setErrorMessage(message);
       setWorking(false);
     }
   };
 
   return (
     <PopoverActions>
+      {!!errorMessage && <Notification type="error" persistent>{errorMessage}</Notification>}
       <form data-cy="sign-in-form" onSubmit={handleSubmit}>
         <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
         <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
-        <Button size="small" disabled={emailValidationError || working} submit>Sign in</Button>
+        <div className={styles.submitWrap}>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
+        </div>
       </form>
       {tfaToken && (
         <form data-cy="tfa-code-form" onSubmit={() => {}}>
@@ -319,10 +322,11 @@ const LoginSection = ({ showForgotPassword }) => {
           <Button size="small" disabled={working} submit>Submit code</Button>
         </form>
       )}
-      {!!errorMessage && <p>{errorMessage}</p>}
-      <Button size="small" type="tertiary" onClick={showForgotPassword}>
-        Forgot Password
-      </Button>
+      <div className={styles.submitWrap}>
+        <Button size="small" type="tertiary" onClick={showForgotPassword}>
+          Forgot Password
+        </Button>
+      </div>
     </PopoverActions>
   );
 };

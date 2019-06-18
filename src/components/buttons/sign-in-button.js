@@ -7,15 +7,7 @@ import Link from 'Components/link';
 
 import styles from './styles.styl';
 
-/* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
-
-function githubAuthLink() {
-  const params = new URLSearchParams();
-  params.append('client_id', GITHUB_CLIENT_ID);
-  params.append('scope', 'user:email');
-  params.append('redirect_uri', `${APP_URL}/login/github`);
-  return `https://github.com/login/oauth/authorize?${params}`;
-}
+/* global FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL */
 
 function facebookAuthLink() {
   const params = new URLSearchParams();
@@ -23,6 +15,14 @@ function facebookAuthLink() {
   params.append('scope', 'email');
   params.append('redirect_uri', `${APP_URL}/login/facebook`);
   return `https://www.facebook.com/v2.9/dialog/oauth?${params}`;
+}
+
+function githubAuthLink() {
+  const params = new URLSearchParams();
+  params.append('client_id', GITHUB_CLIENT_ID);
+  params.append('scope', 'user:email');
+  params.append('redirect_uri', `${APP_URL}/login/github`);
+  return `https://github.com/login/oauth/authorize?${params}`;
 }
 
 function googleAuthLink() {
@@ -41,24 +41,24 @@ function slackAuthLink() {
 
 const companies = {
   facebook: {
-    name: '',
-    emoji: '',
-    authLink: AuthLink()
+    name: 'Facebook',
+    emoji: 'facebook',
+    authLink: facebookAuthLink()
   },
   github: {
-    name: '',
-    emoji: '',
-    authLink: AuthLink()
+    name: 'GitHub',
+    emoji: 'github',
+    authLink: githubAuthLink()
   },
   google: {
-    name: '',
-    emoji: '',
-    authLink: AuthLink()
+    name: 'Google',
+    emoji: 'google',
+    authLink: googleAuthLink()
   },
   slack: {
-    name: '',
-    emoji: '',
-    authLink: AuthLink()
+    name: 'Slack',
+    emoji: 'slack',
+    authLink: slackAuthLink()
   },
 }
 
