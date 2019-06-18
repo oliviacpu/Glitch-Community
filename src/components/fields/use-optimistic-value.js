@@ -63,18 +63,18 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    // wait until we finish loading before calling on blurs
-    if (state.isLoading) {
-      optimisticOnBlur();
-      return;
+    // don't call blurs if you're in the middle of a server call, better to just show an error
+    if (!state.isLoading) {
+      console.log("isloading is false")
+      // if in error, reverts input value to last server response and removes error
+      if (!!state.error) {
+        setState({ ...state, error: null, value: undefined });
+      }
+      if (onBlur) {
+        onBlur();
+      }
     }
-    // if in error, reverts input value to last server response and removes error
-    if (!!state.error) {
-      setState({ ...state, error: null, value: undefined });
-    }
-    if (onBlur) {
-      onBlur();
-    }
+    console.log("we skipped the onblurs")
   };
 
   return [optimisticValue, optimisticOnChange, optimisticOnBlur, state.error];
