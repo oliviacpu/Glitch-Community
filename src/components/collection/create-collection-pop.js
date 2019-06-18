@@ -25,7 +25,7 @@ const Dropdown = ({ selection, options, onUpdate }) => (
     autoWidth
     value={selection}
     options={options}
-    className={`dropdown ${styles.userOrTeamToggle}`}
+    className={styles.userOrTeamToggle}
     classNamePrefix="dropdown"
     onChange={onUpdate}
     isSearchable={false}
