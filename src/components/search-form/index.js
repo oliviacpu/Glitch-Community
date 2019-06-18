@@ -184,7 +184,7 @@ const SearchForm = ({ defaultValue }) => (
         method="get"
         role="search"
         onSubmit={onSubmit}
-        autoComplete={autoComplete}
+        autoComplete="off"
         autoCapitalize="off"
       >
         <TextInput
