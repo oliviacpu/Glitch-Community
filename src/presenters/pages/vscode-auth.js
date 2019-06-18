@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import PopoverContainer from 'Components/popover/container';
 import Text from 'Components/text/text';
+import Logo from 'Components/header/logo';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
 
@@ -28,12 +29,18 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   return (
     <div className={styles.content}>
-      <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
-      {!isSignedIn &&
-        <PopoverContainer>
-          {() => <SignInPop align="none" />}
-        </PopoverContainer>
-      }
+      <div className={styles.whatIsGlitch}>
+        <Logo />
+        <Text>Glitch is the friendly community where anyone can create the web</Text>
+      </div>
+      <div>
+        <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
+        {!isSignedIn &&
+          <PopoverContainer>
+            {() => <SignInPop align="none" />}
+          </PopoverContainer>
+        }
+      </div>
     </div>
   );
 };
