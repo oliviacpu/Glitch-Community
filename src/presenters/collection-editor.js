@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { useAPI } from '../state/api';
 import { useCurrentUser } from '../state/current-user';
-import useErrorHandlers from './error-handlers';
+import useErrorHandlers from '../state/error-handlers';
 
 class CollectionEditor extends React.Component {
   constructor(props) {

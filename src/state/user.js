@@ -4,8 +4,7 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
-
-import useErrorHandlers from '../presenters/error-handlers';
+import useErrorHandlers from 'State/error-handlers';
 
 export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
 export const removePin = (api, projectId, user) => api.delete(`users/${user.id}/pinned-projects/${projectId}`);

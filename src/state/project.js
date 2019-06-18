@@ -4,8 +4,7 @@ import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
 import useUploader from 'State/uploader';
-
-import useErrorHandlers from '../presenters/error-handlers';
+import useErrorHandlers from 'State/error-handlers';
 
 export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({

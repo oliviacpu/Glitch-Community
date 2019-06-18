@@ -6,8 +6,7 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
-
-import useErrorHandlers from '../presenters/error-handlers';
+import useErrorHandlers from 'State/error-handlers';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
