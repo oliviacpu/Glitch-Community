@@ -82,16 +82,16 @@ export function useCollectionEditor(initialCollection) {
     updateNote: async ({ note, projectId }) => {
       note = (note || '').trim();
       // REMOVE THIS -start
-      setUpdateNoteCount(updateNoteCount + 1)
-      if (updateNoteCount % 2 === 0 ) {
-        const pretendError = new Error("test")
-        // pretendError.response = {
-        //   data: {
-        //     message: "errorrrr"
-        //   }
-        // }
-        throw pretendError
-      }
+      // setUpdateNoteCount(updateNoteCount + 1)
+      // if (updateNoteCount % 2 === 0 ) {
+      //   const pretendError = new Error("test")
+      //   // pretendError.response = {
+      //   //   data: {
+      //   //     message: "errorrrr"
+      //   //   }
+      //   // }
+      //   throw pretendError
+      // }
       // REMOVE THIS -end
       await updateProjectInCollection(api, projectId, collection, { annotation: note });
       updateProject({ note, isAddingANewNote: true }, projectId);

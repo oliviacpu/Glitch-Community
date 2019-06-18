@@ -6,18 +6,16 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 
 Use Optimistic Value:
 
-- takes in an initial value for the input
+- takes in an initial value for the input (this representes the real value the server last gave us)
 - takes in a way to update the server
 
 as users type (on change):
-- we ping the server with a trimmed version of the text
-- we display an untrimmed version
+- we show them what they are typing, assuming it has been saved properly
 - if the server hits an error:
   - we display that error to the user
-  - we continue to show what the user was typing even though it's not saved
+  - and we continue to show what the user was typing even though it's not saved
 - if the server succeeds:
-  - we store that response for the future
-  - we pass along the response so that it can be stored in top level state later and passed back in again as props as the inital value
+  - we pass along the response so that it can be stored in top level state later and passed back in again as props as the inital "real" value
 
 on blur:
 - if the user was in an errored state:
@@ -25,7 +23,7 @@ on blur:
 
 */
 
-export default function useOptimisticValue(value, onChange, onBlur) {
+export default function useOptimisticValue(realValue, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
   const [state, setState] = React.useState({ value: undefined, error: null });
 
@@ -34,7 +32,8 @@ export default function useOptimisticValue(value, onChange, onBlur) {
     setState((prevState) => ({ ...prevState, value: newValue, error: null }));
   };
 
-  let optimisticValue = value;
+  // always show what the server knows, unless the user is currently typing something or we're loading an in-flight request
+  let optimisticValue = realValue;
   if (state.value !== undefined) {
     optimisticValue = state.value;
   }
@@ -65,7 +64,7 @@ export default function useOptimisticValue(value, onChange, onBlur) {
 
   const optimisticOnBlur = () => {
     if (!!state.error) {
-      setState({ ...state, error: null, value: undefined });
+      setState({ ...state, error: null, value: undefined }); //reverts input value to last server response
     }
     if (onBlur) {
       onBlur();
