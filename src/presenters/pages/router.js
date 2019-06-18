@@ -44,13 +44,7 @@ function track() {
   }
 }
 
-const PageChangeHandler = withRouter(({ location, history }) => {
-  
-  console.log({ match, location, history })
-  if (location.hash && location.hash.startsWith('user-content')) {
-    console.log('readme link');
-    console.log('test');
-  }
+const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
 
