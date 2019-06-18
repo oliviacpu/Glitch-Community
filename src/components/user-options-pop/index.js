@@ -98,9 +98,6 @@ Are you sure you want to sign out?`)
     signOut();
   };
 
-  const userName = user.name || 'Anonymous';
-  const userAvatarStyle = { backgroundColor: user.color };
-
   const userPasswordEnabled = useDevToggle('User Passwords');
 
   return (
@@ -131,27 +128,6 @@ Are you sure you want to sign out?`)
             </CheckboxButton>
           </div>
         )}
-<<<<<<< HEAD:src/presenters/pop-overs/user-options-pop.js
-
-        <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
-          New Stuff
-        </Button>
-        <div className="button-wrap">
-          <Button size="small" type="tertiary" emoji="ambulance" href="https://support.glitch.com">
-            Support
-          </Button>
-        </div>
-
-        {userPasswordEnabled && (
-          <AccountSettings>
-            <Button size="small" type="tertiary" emoji="key" decorative>
-              Account Settings
-            </Button>
-          </AccountSettings>
-        )}
-
-        <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
-=======
         <div className={styles.buttonWrap}>
           <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
             New Stuff
@@ -162,8 +138,14 @@ Are you sure you want to sign out?`)
             Support
           </Button>
         </div>
+        {userPasswordEnabled && (
+          <AccountSettings>
+            <Button size="small" type="tertiary" emoji="key" decorative>
+              Account Settings
+            </Button>
+          </AccountSettings>
+        )}
         <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
->>>>>>> b9fe8f47357fd1a1b4d202fe2a204d800ea4cf00:src/components/user-options-pop/index.js
           Sign Out
         </Button>
       </PopoverInfo>
