@@ -8,15 +8,14 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { captureException } from 'Utils/sentry';
 
-const JoinTeamPage = withRouter(({ history, teamUrl, joinToken  }) => {
+const JoinTeamPage = withRouter(({ history, teamUrl, joinToken }) => {
   const api = useAPI();
   const { login: replaceCurrentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
-  
+
   useEffect(() => {
     (async () => {
       try {
-        // Suppress the authorization header to prevent user merging
         const { data: user } = await api.post(`/teams/join/${joinToken}`);
         if (user) {
           replaceCurrentUser(user);
@@ -31,7 +30,7 @@ const JoinTeamPage = withRouter(({ history, teamUrl, joinToken  }) => {
         }
         createNotification('Invite failed, try asking your teammate to resend the invite', { type: 'error' });
       }
-      history.push(getLink({ url: teamUrl }))
+      history.push(getLink({ url: teamUrl }));
     })();
   }, []);
 
