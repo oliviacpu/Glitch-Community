@@ -16,7 +16,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     if (onOpen) {
       onOpen();
     }
-  }
+  };
   const closePopover = () => setStatus('closed');
 
   const togglePopover = (event) => {

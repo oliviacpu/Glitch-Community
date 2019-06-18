@@ -184,7 +184,6 @@ const SearchForm = ({ defaultValue }) => (
         method="get"
         role="search"
         onSubmit={onSubmit}
-        onFocus={onFocus}
         autoComplete={autoComplete}
         autoCapitalize="off"
       >
@@ -193,6 +192,7 @@ const SearchForm = ({ defaultValue }) => (
           name="q"
           onChange={onChange}
           onKeyDown={onKeyDown}
+          onFocus={onFocus}
           opaque
           placeholder="bots, apps, users"
           type="search"
