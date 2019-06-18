@@ -70,15 +70,7 @@ const loadCollection = async (api, { owner, name }) => {
     collection.team = await getSingleItem(api, `/v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
     collection.projectCount = collection.projects.length;
     collection.projects = sampleSize(collection.projects, 3);
-    // Gather unique user IDs for all of the projects being loaded, based on permissions
-    const uniqueUserIds = uniq(flatMap(collection.projects, ({ permissions }) => permissions.map(({ userId }) => userId)));
-    // Load all of the users for this set of projects
-    const allUsers = await getFromApi(api, `v1/users/by/id?${joinIdsToQueryString(uniqueUserIds)}`);
-    // Go back over the projects and pick users out of the array by ID based on permissions
-    collection.projects = collection.projects.map((project) => ({
-      ...project,
-      users: project.permissions.map(({ userId }) => allUsers[userId]),
-    }));
+    
     return collection;
   } catch (error) {
     if (error && error.response && error.response.status === 404) {

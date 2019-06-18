@@ -1,28 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import Pluralize from 'react-pluralize';
 import { withRouter } from 'react-router-dom';
-import { kebabCase, partition } from 'lodash';
-import classnames from 'classnames';
+import { kebabCase } from 'lodash';
 
-import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
+import { getLink, getOwnerLink } from 'Models/collection';
 import Button from 'Components/buttons/button';
-import Text from 'Components/text/text';
-import Image from 'Components/images/image';
-import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-import { ProfileItem } from 'Components/profile-list';
-import ProjectsList from 'Components/containers/projects-list';
-import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import CollectionContainer from 'Components/collection/container';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 
 import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
-import AuthDescription from 'Components/fields/auth-description';
-import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
@@ -45,9 +35,9 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       const result = await funcs.updateNameAndUrl({ name, url });
       history.replace(getLink({ ...collection, url }));
       return result;
-    }
-  }
-  
+    },
+  };
+
   return (
     <>
       <Helmet title={collection.name} />

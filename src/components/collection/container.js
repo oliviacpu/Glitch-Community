@@ -4,32 +4,21 @@ import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
 import classnames from 'classnames';
 
-import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
-import Button from 'Components/buttons/button';
+import { isDarkColor } from 'Models/collection';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
-import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
-import DataLoader from 'Components/data-loader';
-import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
-import Layout from 'Components/layout';
-import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
-import { AnalyticsContext } from 'State/segment-analytics';
-import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
-import { getSingleItem, getAllPages } from 'Shared/api';
 
 import styles from './container.styl';
 
 const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, funcs }) => {
-  console.log(collection)
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -37,15 +26,12 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
   const enableSorting = isAuthorized && projects.length > 1;
-  
+
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
         <div className={styles.imageContainer}>
-          {collection.avatarUrl ? (
-            <Image src={collection.avatarUrl} alt="" />
-          ) : <CollectionAvatar collection={collection} />}
-          
+          {collection.avatarUrl ? <Image src={collection.avatarUrl} alt="" /> : <CollectionAvatar collection={collection} />}
         </div>
 
         <div className={styles.collectionInfo}>
@@ -54,7 +40,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
           </h1>
 
           <div className={styles.owner}>
-            <ProfileItem hasLink team={collection.team} user={collection.user} />
+            <ProfileItem hasLink team={collection.team} user={collection.user} glitchTeam={collection.glitchTeam} />
           </div>
 
           <div className={styles.description}>
@@ -78,22 +64,17 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
 
       <div className={styles.collectionContents}>
         <div className={styles.collectionProjectContainerHeader}>
-          {isAuthorized && funcs.addProjectToCollection && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
+          {isAuthorized && funcs.addProjectToCollection && (
+            <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />
+          )}
         </div>
         {!collectionHasProjects && isAuthorized && (
           <div className={styles.emptyCollectionHint}>
-            <Image
-              src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934"
-              alt="psst"
-              width=""
-              height=""
-            />
+            <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
             <Text>You can add any project, created by any user</Text>
           </div>
         )}
-        {!collectionHasProjects && !isAuthorized && (
-          <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>
-        )}
+        {!collectionHasProjects && !isAuthorized && <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>}
         {featuredProject && (
           <FeaturedProject
             isAuthorized={isAuthorized}
@@ -116,14 +97,14 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
             noteOptions={{
               hideNote: funcs.hideNote,
               updateNote: funcs.updateNote,
-              isAuthorized: isAuthorized,
+              isAuthorized,
             }}
             projectOptions={{
               removeProjectFromCollection: funcs.removeProjectFromCollection,
               addProjectToCollection: funcs.addProjectToCollection,
               displayNewNote: funcs.displayNewNote,
               featureProject: funcs.featureProject,
-              isAuthorized: isAuthorized,
+              isAuthorized,
             }}
           />
         )}
@@ -132,8 +113,8 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
         )}
       </div>
     </article>
-  )
-}
+  );
+};
 
 CollectionContainer.propTypes = {
   collection: PropTypes.shape({
@@ -148,12 +129,11 @@ CollectionContainer.propTypes = {
   showFeaturedProject: PropTypes.bool,
   isAuthorized: PropTypes.bool,
   funcs: PropTypes.object,
-}
+};
 CollectionContainer.defaultProps = {
   showFeaturedProject: false,
   isAuthorized: false,
   funcs: {},
-}
-  
-  
+};
+
 export default CollectionContainer;
