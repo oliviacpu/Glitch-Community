@@ -13,7 +13,8 @@ import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
-import OptimisticTextInput from './optimistic-text-input';
+import OptimisticTextInput from 'Components/fields/optimistic-text-input';
+import HiddenCheckbox from 'Components/fields/hidden-checkbox';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
@@ -65,13 +66,6 @@ const IncludedInCollections = ({ projectId }) => (
   </DataLoader>
 );
 
-const HiddenCheckbox = ({ value, onChange, children }) => (
-  <label style={{ position: 'relative', cursor: 'pointer' }}>
-    <input style={{ position: 'absolute', opacity: 0 }} type="checkbox" checked={value} onChange={(e) => onChange(e.target.checked)} />
-    {children}
-  </label>
-);
-
 const privateTooltip = 'Only members can view code';
 const publicTooltip = 'Visible to everyone';
 
@@ -97,15 +91,16 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => (
   />
 );
 
-
 const ProjectDomainInput = ({ project, onChange, setPrivate }) => (
-  <div style={{ dis}}>
-    <OptimisticTextInput
-      labelText="Project Domain"
-      value={project.domain}
-      onChange={onChange}
-      placeholder="Name your project"
-    />
+  <div className="project-domain-input">
+    <div className="project-domain-input__domain-wrap">
+      <OptimisticTextInput
+        labelText="Project Domain"
+        value={project.domain}
+        onChange={onChange}
+        placeholder="Name your project"
+      />
+    </div>
     <PrivateToggle isPrivate={project.private} setPrivate={setPrivate} />
   </div>
 );
