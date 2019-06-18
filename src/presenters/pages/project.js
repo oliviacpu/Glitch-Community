@@ -5,7 +5,6 @@ import { sampleSize } from 'lodash';
 import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
-import CheckboxButton from 'Components/buttons/checkbox-button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
@@ -66,6 +65,13 @@ const IncludedInCollections = ({ projectId }) => (
   </DataLoader>
 );
 
+const HiddenCheckbox = ({ value, onChange, children }) => (
+  <label style={{ position: 'relative' }}>
+    <input style={{ position: 'absolute', opacity: 0 }} type="checkbox" checked={value} onChange={(e) => onChange(e.target.checked)}/>
+    {children}
+  </label>
+);
+
 const PrivateTooltip = 'Only members can view code';
 const PublicTooltip = 'Visible to everyone';
 
@@ -84,9 +90,9 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => (
     id="toggle-private-button-tooltip"
     tooltip={isPrivate ? PrivateTooltip : PublicTooltip}
     target={
-      <CheckboxButton onChange={setPrivate}>
+      <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
         <span className="project-badge private-project-badge" aria-label={PublicTooltip} />
-      </CheckboxButton>
+      </HiddenCheckbox>
     }
   />
 );
