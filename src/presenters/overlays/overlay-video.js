@@ -36,7 +36,7 @@ const OverlayVideo = ({ children }) => {
         const onToggle = (evt) => {
           if (evt.target.open) {
             track();
-            openPopover();
+            openPopover(evt);
           } else {
             closePopover();
           }
