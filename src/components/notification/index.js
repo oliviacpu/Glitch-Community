@@ -22,7 +22,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   return (
     <>
-      {el && el.current && <LiveMessage aria-live="polite" message={el.current.innerText} />}
+      {el && el.current && <LiveMessage aria-live="polite" message={`${type}: ${el.current.innerText}`} />}
       <aside ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
