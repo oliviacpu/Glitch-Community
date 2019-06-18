@@ -155,7 +155,6 @@ module.exports = smp.wrap({
     new StatsPlugin('stats.json', {
       all: false,
       assets: true,
-      cachedAssets: true,
       entrypoints: true,
       hash: true,
       publicPath: true,
