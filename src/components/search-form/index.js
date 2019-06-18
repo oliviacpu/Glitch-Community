@@ -106,7 +106,7 @@ const { actions, reducer } = createSlice({
   }),
 });
 
-function AlgoliaSearchController({ visible, togglePopover, children, defaultValue }) {
+function AlgoliaSearchController({ visible, openPopover, children, defaultValue }) {
   const initialState = {
     selectedResult: null,
     query: defaultValue,
@@ -146,7 +146,7 @@ function AlgoliaSearchController({ visible, togglePopover, children, defaultValu
   return children({
     query,
     onChange: (value) => dispatch(actions.queryChanged(value)),
-    onFocus: () => togglePopover(),
+    onFocus: openPopover,
     onKeyDown,
     onSubmit,
     redirect,

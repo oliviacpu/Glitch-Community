@@ -7,22 +7,25 @@ import { isFragment } from 'react-is';
 const usePopoverToggle = ({ startOpen, onOpen }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
 
+  const openPopover = (event) => {
+    if (event && event.detail === 0) {
+      setStatus('openedFromKeyboard');
+    } else {
+      setStatus('openedFromClick');
+    }
+  }
   const closePopover = () => setStatus('closed');
 
   const togglePopover = (event) => {
     const wasClosed = status === 'closed';
 
     if (wasClosed) {
-      if (event && event.detail === 0) {
-        setStatus('openedFromKeyboard');
-      } else {
-        setStatus('openedFromClick');
-      }
+      openPopover(event);
       if (onOpen) {
         onOpen();
       }
     } else {
-      setStatus('closed');
+      closePopover();
     }
   };
 
@@ -51,6 +54,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
       status,
       visible: status !== 'closed',
       setStatus,
+      openPopover,
       closePopover,
       togglePopover,
       toggleAndCall,
