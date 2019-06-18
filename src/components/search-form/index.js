@@ -127,8 +127,9 @@ const AlgoliaSearchController = withRouter(({ history, visible, openPopover, def
     if (!query) return;
     if (selectedResult) {
       history.push(urlForItem[selectedResult.type](selectedResult, query));
+    } else {
+      history.push(`/search?q=${query}`);
     }
-    history.push(`/search?q=${query}`);
   };
 
   const onChange = (value) => dispatch(actions.queryChanged(value));
