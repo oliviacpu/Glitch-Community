@@ -35,6 +35,7 @@ export default function useOptimisticValue(value, onChange, onBlur) {
   };
 
   let optimisticValue = value;
+  console.log(value, state.value, state.lastSaved)
   if (state.shouldShowLastSaved) {
     optimisticValue = state.lastSaved;
   }
