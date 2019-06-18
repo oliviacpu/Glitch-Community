@@ -1,10 +1,48 @@
 @import "../../components/constants.styl"
 
+.container
+  display: flex
+  flex-direction: column
+  width: 100%
+  // @media (min-width: largeViewport)
+  //   flex-direction: row
+    
+.collectionHeader
+  flex: 0 0 auto
+  padding: 12px 25px
+  border-radius: 5px 5px 0 0
+    
 .collectionContents
+  flex: 1 0 auto
   padding: 20px
   background-color: secondary-background
-  width: 75% // fixme
+  
+// sidebar 
+.imageContainer
+  margin: 15px 0px
+  max-width: 175px
+  img
+    width: 85%
+    max-height: 100%
 
+.name
+  margin-bottom: 0
+
+.owner
+  margin: 12px 0
+
+.description
+  p
+    margin: 0
+  > * p
+    margin: 0 !important
+    
+.projectCount
+  margin: 25px 0px 0px
+  font-size: 14px
+  font-weight: 600
+  
+// contents
 
 .collectionProjectContainerHeader
   margin-bottom: 1rem
@@ -14,8 +52,4 @@
   display: flex
   > * + *
     margin-left: 10px
-
-.projectCount
-  margin: 25px 0px 0px
-  font-size: 14px
-  font-weight: 600
+        

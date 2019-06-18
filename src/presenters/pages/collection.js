@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
 import { withRouter } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
+import classnames from 'classnames';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
 import Button from 'Components/buttons/button';
@@ -57,22 +58,22 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
   return (
     <>
       <Helmet title={collection.name} />
-      <main className="collection-page">
-        <article className="collection-full projects" style={{ backgroundColor: collection.coverColor }}>
-          <header className={`collection ${isDarkColor(collection.coverColor) ? 'dark' : ''}`}>
-            <div className="collection-image-container">
+      <main>
+        <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark)}>
+          <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
+            <div className={styles.imageContainer}>
               <CollectionAvatar collection={collection} />
             </div>
 
-            <h1 className="collection-name">
+            <h1 className={styles.name}>
               {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
             </h1>
 
-            <div className="collection-owner">
+            <div className={styles.owner}>
               <ProfileItem hasLink team={collection.team} user={collection.user} />
             </div>
 
-            <div className="collection-description">
+            <div className={styles.description}>
               <AuthDescription
                 authorized={currentUserIsAuthor}
                 description={collection.description}
@@ -89,6 +90,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
 
             {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
+          
           <div className={styles.collectionContents}>
             <div className={styles.collectionProjectContainerHeader}>
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
@@ -147,12 +149,12 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
           </div>
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
+        {currentUserIsAuthor && (
+          <Button type="dangerZone" size="small" emoji="bomb" onClick={onDeleteCollection}>
+            Delete Collection
+          </Button>
+        )}
       </main>
-      {currentUserIsAuthor && (
-        <Button type="dangerZone" size="small" emoji="bomb" onClick={onDeleteCollection}>
-          Delete Collection
-        </Button>
-      )}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
