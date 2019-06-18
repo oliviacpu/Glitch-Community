@@ -26,10 +26,17 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   if (preview) {
     projects = sampleSize(collection.projects, 3);
   }
-  
   if (showFeaturedProject && collection.featuredProjectId) {
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
+
+  let collectionName = collection.name;
+  if (isAuthorized) {
+    collectionName = <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} />;
+  } else if (preview) {
+    collectionName = <CollectionLink collection={collection}>{collection.name}</CollectionLink>;
+  }
+
   const enableSorting = isAuthorized && projects.length > 1;
 
   return (
@@ -40,13 +47,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         </div>
 
         <div className={styles.collectionInfo}>
-          <h1 className={styles.name}>
-            {isAuthorized ? (
-              <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} /> 
-            ) : preview ? (
-              <CollectionLink collection={collection}>{collection.name}</CollectionLink>
-            ) : collection.name}
-          </h1>
+          <h1 className={styles.name}>{collectionName}</h1>
 
           <div className={styles.owner}>
             <ProfileItem hasLink team={collection.team} user={collection.user} glitchTeam={collection.glitchTeam} />
@@ -61,11 +62,13 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
             />
           </div>
 
-          {!preview && <div className={styles.projectCount}>
-            <Text>
-              <Pluralize count={collection.projects.length} singular="Project" />
-            </Text>
-          </div>}
+          {!preview && (
+            <div className={styles.projectCount}>
+              <Text>
+                <Pluralize count={collection.projects.length} singular="Project" />
+              </Text>
+            </div>
+          )}
 
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
         </div>
@@ -98,7 +101,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         )}
         {collectionHasProjects && (
           <ProjectsList
-            layout={preview ? "row" : "gridCompact"}
+            layout={preview ? 'row' : 'gridCompact'}
             projects={projects}
             collection={collection}
             enableSorting={enableSorting}
@@ -118,7 +121,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           />
         )}
         {enableSorting && (
-          <div>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</div>
+          <Text>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</Text>
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>
