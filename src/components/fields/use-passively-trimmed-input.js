@@ -11,10 +11,10 @@ export default function usePassivelyTrimmedInput(rawInput, asyncUpdate, onBlur) 
     return asyncUpdate(value.trim());
   };
 
-  const wrapOnBlur = () => {
+  const wrapOnBlur = (event) => {
     setUntrimmedValue(rawInput.trim());
     if (onBlur) {
-      onBlur();
+      onBlur(event);
     }
   };
 

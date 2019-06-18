@@ -62,13 +62,13 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
     }
   }, [debouncedValue]);
 
-  const optimisticOnBlur = () => {
+  const optimisticOnBlur = (event) => {
     // if you have already shown the user an error you can go ahead and hide it and revert back to last saved value
     if (!!state.error) {
       setState({ error: null, value: undefined });
     }
     if (onBlur) {
-      onBlur();
+      onBlur(event);
     }
   };
 
