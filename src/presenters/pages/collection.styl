@@ -18,7 +18,7 @@
     flex-direction: row
   @media (min-width: largeViewport)
     flex-direction: column
-    flex: 0 0 25%
+    flex: 0 0 300px
     border-radius: 5px 0 0 5px
 
 .dark .collectionHeader
@@ -29,7 +29,7 @@
     color: #D2FEFF
     
 .collectionContents
-  flex: 1 0 auto
+  flex: 1 1 auto
   padding: 20px
   background-color: secondary-background
   border-radius: 0 0 5px 5px
@@ -37,9 +37,10 @@
     border-radius: 0 5px 5px 0
   
 .collectionInfo
-  flex: 1 0 auto
+  flex: 1 1 auto
 
 .imageContainer
+  flex: 0 0 auto
   padding: 15px 15px 15px 0
   max-width: 175px
   svg

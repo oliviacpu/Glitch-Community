@@ -12,20 +12,33 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor } from 'State/collection';
 
+import styles from './collection.styl';
+
 const CategoryPageWrap = ({ category: initialCategory }) => {
   const { currentUser } = useCurrentUser();
   const [category, { addProjectToCollection }] = useCollectionEditor(initialCategory);
   return (
     <>
       <Helmet title={category.name} />
-      <main className="collection-page">
-        <article className="projects collection-full" style={{ backgroundColor: category.backgroundColor }}>
-          <header className="collection">
+      <main>
+        <article className={styles.container}>
+          <header className={styles.collectionHeader} style={{ backgroundColor: category.backgroundColor }}>
             <Heading tagName="h1">{category.name}</Heading>
-            <div className="collection-image-container">
+            <div className={styles.imageContainer}>
               <Image src={category.avatarUrl} alt="" />
             </div>
 
+            <div className={styles.description}>
+              <AuthDescription
+                authorized={currentUserIsAuthor}
+                description={collection.description}
+                update={funcs.updateDescription}
+                placeholder="Tell us about your collection"
+              />
+            </div>
+
+
+            
             <p className="description">{category.description}</p>
           </header>
 
