@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
 import Text from 'Components/text/text';
+import Heading from 'Components/text/heading';
 import SignInButton from 'Components/buttons/sign-in-button';
 import Logo from 'Components/header/logo';
 import { useCurrentUser } from 'State/current-user';
@@ -46,7 +47,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     <div className={styles.content}>
       <div className={styles.whatIsGlitch}>
         <Logo />
-        <Text>Glitch is the friendly community where anyone can create the web</Text>
+        <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
       </div>
       <div className={styles.signIn}>
         <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
