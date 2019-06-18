@@ -13,7 +13,7 @@ import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
-import ProjectDomainInput from 'Components/fields/project-domain-input';
+import OptimisticTextInput from './optimistic-text-input';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
@@ -72,15 +72,15 @@ const HiddenCheckbox = ({ value, onChange, children }) => (
   </label>
 );
 
-const PrivateTooltip = 'Only members can view code';
-const PublicTooltip = 'Visible to everyone';
+const privateTooltip = 'Only members can view code';
+const publicTooltip = 'Visible to everyone';
 
 const PrivateBadge = () => (
   <TooltipContainer
     type="info"
     id="private-project-badge-tooltip"
-    tooltip={PrivateTooltip}
-    target={<span className="project-badge private-project-badge" aria-label={PrivateTooltip} />}
+    tooltip={privateTooltip}
+    target={<span className="project-badge private-project-badge" aria-label={privateTooltip} />}
   />
 );
 
@@ -88,14 +88,26 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => (
   <TooltipContainer
     type="action"
     id="toggle-private-button-tooltip"
-    tooltip={isPrivate ? PrivateTooltip : PublicTooltip}
+    tooltip={isPrivate ? privateTooltip : publicTooltip}
     target={
-      // note that the state is "is private" but we want the label here to be "is public"
-      <HiddenCheckbox value={!isPrivate} onChange={(isPublic) => setPrivate(!isPublic)}>
-        <span className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`} aria-label={PublicTooltip} />
+      <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
+        <span className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`} aria-label={privateTooltip} />
       </HiddenCheckbox>
     }
   />
+);
+
+
+const ProjectDomainInput = ({ project, onChange, setPrivate }) => (
+  <div style={{ dis}}>
+    <OptimisticTextInput
+      labelText="Project Domain"
+      value={project.domain}
+      onChange={onChange}
+      placeholder="Name your project"
+    />
+    <PrivateToggle isPrivate={project.private} setPrivate={setPrivate} />
+  </div>
 );
 
 const ReadmeError = (error) =>
@@ -195,9 +207,9 @@ const ProjectPage = ({ project: initialProject }) => {
           <Heading tagName="h1">
             {isAuthorized ? (
               <ProjectDomainInput
-                domain={domain}
+                project={project}
                 onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
+                setPrivate={updatePrivate}
               />
             ) : (
               <>
