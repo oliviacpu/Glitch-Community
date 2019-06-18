@@ -139,11 +139,13 @@ Are you sure you want to sign out?`)
           </Button>
         </div>
         {userPasswordEnabled && (
-          <AccountSettings>
-            <Button size="small" type="tertiary" emoji="key" decorative>
-              Account Settings
-            </Button>
-          </AccountSettings>
+          <div className={styles.buttonWrap}>
+            <AccountSettings>
+              <Button size="small" type="tertiary" emoji="key" decorative>
+                Account Settings
+              </Button>
+            </AccountSettings>
+          </div>
         )}
         <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
           Sign Out
