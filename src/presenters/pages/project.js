@@ -108,7 +108,7 @@ const ReadmeLoader = ({ domain }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
       <Expander height={250}>
-        <Markdown>{data.toString()}</Markdown>
+        <Markdown linkifyHeadings>{data.toString()}</Markdown>
       </Expander>
     )}
   </DataLoader>
