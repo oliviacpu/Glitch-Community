@@ -146,7 +146,7 @@ const FeaturedEmbed = ({ content: { domain, title, description, href, image } })
     </a>
     <figcaption className={styles.featuredEmbedCaption}>
       <div className={styles.featuredEmbedText}>
-        <h4 className={styles.h4}>{title}</h4>
+        <h3 className={styles.h3}>{title}</h3>
         <Markdown>{description}</Markdown>
       </div>
     </figcaption>
