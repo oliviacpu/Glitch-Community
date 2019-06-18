@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
@@ -41,12 +41,12 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
   if (collection.featuredProjectId) {
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
-  
+
   const onDeleteCollection = () => {
     if (!window.confirm('Are you sure you want to delete your collection?')) return;
     funcs.deleteCollection();
     history.push(getOwnerLink(collection));
-  }
+  };
 
   const onNameChange = async (name) => {
     const url = kebabCase(name);
@@ -64,7 +64,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
             <div className={styles.imageContainer}>
               <CollectionAvatar collection={collection} />
             </div>
-            
+
             <div className={styles.collectionInfo}>
               <h1 className={styles.name}>
                 {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
@@ -92,7 +92,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
               {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
             </div>
           </header>
-          
+
           <div className={styles.collectionContents}>
             <div className={styles.collectionProjectContainerHeader}>
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}

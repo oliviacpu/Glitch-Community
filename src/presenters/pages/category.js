@@ -29,21 +29,12 @@ const CategoryPageWrap = ({ category: initialCategory }) => {
             </div>
 
             <div className={styles.description}>
-              <AuthDescription
-                authorized={currentUserIsAuthor}
-                description={collection.description}
-                update={funcs.updateDescription}
-                placeholder="Tell us about your collection"
-              />
+              <p>{category.description}</p>
             </div>
-
-
-            
-            <p className="description">{category.description}</p>
           </header>
 
-          <div className="collection-contents">
-            <div className="collection-project-container-header">
+          <div className={styles.collectionContents}>
+            <div className={styles.collectionProjectContainerHeader}>
               <Heading tagName="h3">Projects ({category.projects.length})</Heading>
             </div>
             {currentUser.login ? (
@@ -81,6 +72,7 @@ async function loadCategory(api, id) {
     projects: category.projects.map((project) => ({
       ...project,
       permissions: [],
+      teamIds: [],
     })),
   };
 }
