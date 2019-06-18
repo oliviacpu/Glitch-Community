@@ -118,9 +118,11 @@ const ForgotPasswordHandler = ({ align }) => {
               disabled={isWorking}
               testingId="reset-password-email"
             />
-            <Button size="small" disabled={!isEnabled} submit>
-              Send Reset Password Link
-            </Button>
+            <div className={styles.submitWrap}>
+              <Button size="small" disabled={!isEnabled} submit>
+                Send Reset Password Link
+              </Button>
+            </div>
           </form>
         )}
         {isDone && !errorMessage && (
