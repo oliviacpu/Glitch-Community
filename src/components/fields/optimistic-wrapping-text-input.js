@@ -8,7 +8,11 @@ import useOptimisticValue from './use-optimistic-value';
 
 const OptimisticWrappingTextInput = ({ value, onChange, onBlur, ...props }) => {
   const [untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange);
-  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(
+    untrimmedValue,
+    onChangeWithTrimmedInputs,
+    onBlurWithTrimmedInputs,
+  );
 
   return <WrappingTextInput {...props} value={optimisticValue} error={optimisticError} onChange={optimisticOnChange} onBlur={optimisticOnBlur} />;
 };

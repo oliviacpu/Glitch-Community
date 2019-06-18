@@ -7,7 +7,11 @@ import useOptimisticValue from './use-optimistic-value';
 
 const OptimisticTextInput = ({ value, onChange, onBlur, ...props }) => {
   const [untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange, onBlur);
-  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(
+    untrimmedValue,
+    onChangeWithTrimmedInputs,
+    onBlurWithTrimmedInputs,
+  );
 
   return <TextInput {...props} value={optimisticValue} onChange={optimisticOnChange} onBlur={optimisticOnBlur} error={optimisticError} />;
 };

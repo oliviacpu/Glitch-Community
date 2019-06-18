@@ -46,7 +46,7 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
     if (ifUserHasTypedSinceLastSave) {
       // if the value changes during the async action then ignore the result
       const setStateIfStillRelevant = (newState) => setState((prevState) => (prevState.value === debouncedValue ? newState : prevState));
-      setState({ ...state, isLoading: true })
+      setState({ ...state, isLoading: true });
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
@@ -63,15 +63,12 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    // don't call blurs if you're in the middle of a server call, better to just show an error
-    if (!state.isLoading) {
-      // if in error, reverts input value to last server response and removes error
-      if (!!state.error) {
-        setState({ ...state, error: null, value: undefined });
-      }
-      if (onBlur) {
-        onBlur();
-      }
+    // if you have already shown the user an error you can go ahead and hide it and revert back to last saved value
+    if (!state.isLoading && !!state.error) {
+      setState({ ...state, error: null, value: undefined });
+    }
+    if (onBlur) {
+      onBlur();
     }
   };
 
