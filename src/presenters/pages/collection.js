@@ -64,31 +64,33 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
             <div className={styles.imageContainer}>
               <CollectionAvatar collection={collection} />
             </div>
+            
+            <div className={styles.collectionInfo}>
+              <h1 className={styles.name}>
+                {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
+              </h1>
 
-            <h1 className={styles.name}>
-              {currentUserIsAuthor ? <CollectionNameInput name={collection.name} onChange={onNameChange} /> : collection.name}
-            </h1>
+              <div className={styles.owner}>
+                <ProfileItem hasLink team={collection.team} user={collection.user} />
+              </div>
 
-            <div className={styles.owner}>
-              <ProfileItem hasLink team={collection.team} user={collection.user} />
+              <div className={styles.description}>
+                <AuthDescription
+                  authorized={currentUserIsAuthor}
+                  description={collection.description}
+                  update={funcs.updateDescription}
+                  placeholder="Tell us about your collection"
+                />
+              </div>
+
+              <div className={styles.projectCount}>
+                <Text>
+                  <Pluralize count={collection.projects.length} singular="Project" />
+                </Text>
+              </div>
+
+              {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
             </div>
-
-            <div className={styles.description}>
-              <AuthDescription
-                authorized={currentUserIsAuthor}
-                description={collection.description}
-                update={funcs.updateDescription}
-                placeholder="Tell us about your collection"
-              />
-            </div>
-
-            <div className={styles.projectCount}>
-              <Text>
-                <Pluralize count={collection.projects.length} singular="Project" />
-              </Text>
-            </div>
-
-            {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
           
           <div className={styles.collectionContents}>
