@@ -6,7 +6,6 @@ import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Emoji from 'Components/images/emoji';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -19,18 +18,18 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import Expander from 'Components/containers/expander';
+import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
+import { ShowButton, EditButton } from 'Components/project/project-actions';
+import AuthDescription from 'Components/fields/auth-description';
+import Layout from 'Components/layout';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
+import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-
-import PopoverWithButton from '../pop-overs/popover-with-button';
-import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
-import ProjectEditor from '../project-editor';
-import Expander from '../includes/expander';
-import AuthDescription from '../includes/auth-description';
-import { ShowButton, EditButton } from '../includes/project-actions';
-import Layout from '../layout';
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -42,7 +41,7 @@ const getIncludedCollections = async (api, projectId) => {
   const populatedCollections = await Promise.all(
     selectedCollections.map(async (collection) => {
       const { projects, user, team } = await allByKeys({
-        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=projectOrder&orderDirection=ASC`),
         user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
         team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
       });
@@ -118,7 +117,8 @@ ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
-function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
+function DeleteProjectPopover({ projectDomain, deleteProject }) {
+  const { currentUser } = useCurrentUser();
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -131,63 +131,52 @@ function DeleteProjectButton({ projectDomain, deleteProject, currentUser }) {
   return (
     <section>
       <PopoverWithButton
-        buttonClass="button-small button-tertiary danger-zone"
-        buttonText={
-          <>
-            Delete Project
-            <Emoji name="bomb" />
-          </>
-        }
+        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
+        buttonText="Delete Project"
       >
-        {({ togglePopover, focusFirstElement }) => (
-          <>
-            <dialog className="pop-over delete-project-pop" open ref={focusFirstElement} tabIndex="0">
-              <section className="pop-over-actions">
-                <div className="action-description">You can always undelete a project from your profile page.</div>
-              </section>
-              <section className="pop-over-actions danger-zone">
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <Button
-                    type="tertiary"
-                    size="small"
-                    onClick={() => {
-                      setLoading(true);
-                      deleteProject().then(() => {
-                        togglePopover();
-                        setDone(true);
-                      });
-                    }}
-                  >
-                    Delete {projectDomain} <Emoji name="bomb" />
-                  </Button>
-                )}
-              </section>
-            </dialog>
-          </>
+        {({ togglePopover }) => (
+          <PopoverDialog align="left" wide>
+            <PopoverActions>
+              <ActionDescription>You can always undelete a project from your profile page.</ActionDescription>
+            </PopoverActions>
+            <PopoverActions type="dangerZone">
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button
+                  type="tertiary"
+                  size="small"
+                  emoji="bomb"
+                  onClick={() => {
+                    setLoading(true);
+                    deleteProject().then(() => {
+                      togglePopover();
+                      setDone(true);
+                    });
+                  }}
+                >
+                  Delete {projectDomain}
+                </Button>
+              )}
+            </PopoverActions>
+          </PopoverDialog>
         )}
       </PopoverWithButton>
     </section>
   );
 }
 
-DeleteProjectButton.propTypes = {
-  currentUser: PropTypes.object.isRequired,
+DeleteProjectPopover.propTypes = {
   deleteProject: PropTypes.func.isRequired,
 };
 
-const ProjectPage = ({
-  project,
-  addProjectToCollection,
-  currentUser,
-  isAuthorized,
-  updateDomain,
-  updateDescription,
-  updatePrivate,
-  deleteProject,
-  uploadAvatar,
-}) => {
+const ProjectPage = ({ project: initialProject }) => {
+  const [project, { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
+    initialProject,
+  );
+
+  const { currentUser } = useCurrentUser();
+  const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
@@ -235,13 +224,18 @@ const ProjectPage = ({
         </ProjectProfileContainer>
       </section>
       <div className="project-embed-wrap">
-        <ProjectEmbed project={project} isAuthorized={isAuthorized} currentUser={currentUser} addProjectToCollection={addProjectToCollection} />
+        <ProjectEmbed
+          project={project}
+          isAuthorized={isAuthorized}
+          currentUser={currentUser}
+          addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
+        />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectButton projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
@@ -253,8 +247,6 @@ const ProjectPage = ({
   );
 };
 ProjectPage.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -263,57 +255,32 @@ ProjectPage.propTypes = {
     teams: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
   }).isRequired,
-  updateDomain: PropTypes.func.isRequired,
-  updateDescription: PropTypes.func.isRequired,
-  updatePrivate: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired,
 };
 
-async function getProject(api, domain) {
-  const data = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
-    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
-    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
-  });
-
-  const { project, ...rest } = data;
+async function addProjectBreadcrumb(projectWithMembers) {
+  const { users, teams, ...project } = projectWithMembers;
   addBreadcrumb({
     level: 'info',
     message: `project: ${JSON.stringify(project)}`,
   });
-  return { ...project, ...rest };
+  return projectWithMembers;
 }
 
-const ProjectPageLoader = ({ domain, ...props }) => {
-  const { currentUser } = useCurrentUser();
-
-  return (
-    <DataLoader get={(api) => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
-      {(project) =>
-        project ? (
-          <ProjectEditor initialProject={project}>
-            {(currentProject, funcs, userIsMember) => (
-              <>
-                <Helmet title={currentProject.domain} />
-                <ProjectPage project={currentProject} {...funcs} isAuthorized={userIsMember} currentUser={currentUser} {...props} />
-              </>
-            )}
-          </ProjectEditor>
-        ) : (
-          <NotFound name={domain} />
-        )
-      }
-    </DataLoader>
-  );
-};
-ProjectPageLoader.propTypes = {
-  domain: PropTypes.string.isRequired,
-};
-
-const ProjectPageContainer = ({ name }) => (
+const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
-      <ProjectPageLoader domain={name} />
+      <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
+        {(project) =>
+          project ? (
+            <>
+              <Helmet title={project.domain} />
+              <ProjectPage project={project} />
+            </>
+          ) : (
+            <NotFound name={domain} />
+          )
+        }
+      </DataLoader>
     </AnalyticsContext>
   </Layout>
 );

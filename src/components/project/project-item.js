@@ -8,10 +8,10 @@ import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import AnimationContainer from 'Components/animation-container';
-import { captureException } from 'Utils/sentry';
+import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
-import { getAllPages } from 'Shared/api';
-import { createAPIHook } from 'State/api';
+import { useProjectMembers } from 'State/project';
+
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
 
@@ -26,9 +26,21 @@ const getLinkBodyStyles = (project) =>
 
 const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
+const ProfileListWithData = ({ project }) => {
+  const { value: members } = useProjectMembers(project.id);
+  return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />;
+};
+
+const ProfileListLoader = ({ project }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (
+      wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} />
+    )}
+  </VisibilityContainer>
+);
+
 const ProjectItem = ({ project, projectOptions }) => {
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
-
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
@@ -50,7 +62,7 @@ const ProjectItem = ({ project, projectOptions }) => {
               <div className={styles.container}>
                 <header className={styles.header}>
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
-                    <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} users={project.users} teams={project.teams} />
+                    <ProfileListLoader project={project} />
                   </div>
                   <div className={styles.projectOptionsContainer}>
                     <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
@@ -63,8 +75,8 @@ const ProjectItem = ({ project, projectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative>
-                          {project.private && <PrivateIcon />} <span className={styles.projectDomain}>{project.domain}</span>
+                        <Button decorative image={project.private ? <PrivateIcon /> : null} imagePosition="left">
+                          <span className={styles.projectDomain}>{project.domain}</span>
                         </Button>
                       </div>
                     </div>
@@ -98,29 +110,5 @@ ProjectItem.defaultProps = {
   projectOptions: {},
 };
 
-const useUsers = createAPIHook((api, project) => {
-  try {
-    return getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
 
-const useTeams = createAPIHook((api, project) => {
-  try {
-    return getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-function ProjectWithDataLoading({ project, ...props }) {
-  const { value: users } = useUsers(project);
-  const { value: teams } = useTeams(project);
-  const projectWithData = { ...project, users, teams };
-  return <ProjectItem project={projectWithData} {...props} />;
-}
-
-export default ({ fetchMembers, ...props }) => (fetchMembers ? <ProjectWithDataLoading {...props} /> : <ProjectItem {...props} />);
+export default ProjectItem;

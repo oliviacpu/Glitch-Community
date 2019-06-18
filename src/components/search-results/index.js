@@ -43,8 +43,13 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
 // Search results from algolia do not contain their associated users or teams,
 // so those need to be fetched after the search results have loaded.
 const useTeamUsers = createAPIHook(async (api, teamID) => {
-  const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
-  return res.data.items;
+  try {
+    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
+    return res.data.items;
+  } catch (e) {
+    captureException(e);
+    return [];
+  }
 });
 
 function TeamWithDataLoading({ team }) {
@@ -87,13 +92,6 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
   }
 });
 
-function ProjectWithDataLoading({ project, ...props }) {
-  const { value: users } = useUsers(project.userIDs);
-  const { value: teams } = useTeams(project.teamIDs);
-  const projectWithData = { ...project, users, teams };
-  return <ProjectItem project={projectWithData} {...props} />;
-}
-
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -101,10 +99,6 @@ function ProjectResult({ result }) {
   const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
     props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-  }
-
-  if (!result.users) {
-    return <ProjectWithDataLoading {...props} />;
   }
 
   return <ProjectItem {...props} />;

@@ -1,10 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
-import { TeamAvatar, UserAvatar } from 'Components/images/avatar';
+import { TeamAvatar, UserAvatar, ProjectAvatar, CollectionAvatar } from 'Components/images/avatar';
 import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
-import ProjectAvatar from '../../presenters/includes/project-avatar';
-import CollectionAvatar from '../../presenters/includes/collection-avatar';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
@@ -46,7 +44,7 @@ const UserResult = ({ value: user }) => (
 const ProjectResult = ({ value: project }) => (
   <ProjectLink project={project} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
-      <ProjectAvatar {...project} />
+      <ProjectAvatar project={project} />
     </div>
     <div className={styles.infoContainer}>
       <div className={styles.infoPrimary}>{project.domain}</div>
@@ -64,7 +62,7 @@ const CollectionLink = ({ collection, children, ...props }) => (
 const CollectionResult = ({ value: collection }) => (
   <CollectionLink collection={collection} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
-      <CollectionAvatar {...collection} />
+      <CollectionAvatar collection={collection} />
     </div>
     <div className={styles.infoContainer}>
       <div className={styles.infoPrimary}>{collection.name}</div>

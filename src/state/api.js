@@ -26,6 +26,7 @@ export const getAPIForToken = memoize((persistentToken) => {
 
   return {
     ...api,
+    persistentToken,
     get: (url, config) => {
       // TODO: support params
       if (config) return api.get(url, config);
@@ -111,7 +112,7 @@ export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
         const value = await asyncFunction(api, ...args);
         setResult({ status: 'ready', value });
       } catch (error) {
-        setResult({ status: 'error', value: error });
+        setResult({ status: 'error', error });
         if (options.captureException) {
           captureException(error);
         }
