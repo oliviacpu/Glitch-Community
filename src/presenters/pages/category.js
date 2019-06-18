@@ -12,8 +12,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor } from 'State/collection';
 
-import ProjectsLoader from '../projects-loader';
-
 const CategoryPageWrap = ({ category: initialCategory }) => {
   const { currentUser } = useCurrentUser();
   const [category, { addProjectToCollection }] = useCollectionEditor(initialCategory);
@@ -31,27 +29,22 @@ const CategoryPageWrap = ({ category: initialCategory }) => {
             <p className="description">{category.description}</p>
           </header>
 
-          <ProjectsLoader projects={category.projects}>
-            {(projects) => (
-              <div className="collection-contents">
-                <div className="collection-project-container-header">
-                  <Heading tagName="h3">Projects ({category.projects.length})</Heading>
-                </div>
-
-                {currentUser.login ? (
-                  <ProjectsList
-                    layout="gridCompact"
-                    projects={projects}
-                    projectOptions={{
-                      addProjectToCollection,
-                    }}
-                  />
-                ) : (
-                  <ProjectsList layout="gridCompact" projects={projects} />
-                )}
-              </div>
+          <div className="collection-contents">
+            <div className="collection-project-container-header">
+              <Heading tagName="h3">Projects ({category.projects.length})</Heading>
+            </div>
+            {currentUser.login ? (
+              <ProjectsList
+                layout="gridCompact"
+                projects={category.projects}
+                projectOptions={{
+                  addProjectToCollection,
+                }}
+              />
+            ) : (
+              <ProjectsList layout="gridCompact" projects={category.projects} />
             )}
-          </ProjectsLoader>
+          </div>
         </article>
       </main>
       <MoreIdeas />
@@ -69,16 +62,20 @@ CategoryPageWrap.propTypes = {
 };
 
 async function loadCategory(api, id) {
-  const { data } = await api.get(`categories/${id}`);
-  return data;
+  const { data: category } = await api.get(`categories/${id}`);
+  return {
+    ...category,
+    projects: category.projects.map((project) => ({
+      ...project,
+      permissions: [],
+    })),
+  };
 }
 
 const CategoryPage = ({ category }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'category' }}>
-      <DataLoader get={(api) => loadCategory(api, category.id)}>
-        {(loadedCategory) => <CategoryPageWrap category={loadedCategory} userIsAuthor={false} />}
-      </DataLoader>
+      <DataLoader get={(api) => loadCategory(api, category.id)}>{(loadedCategory) => <CategoryPageWrap category={loadedCategory} />}</DataLoader>
     </AnalyticsContext>
   </Layout>
 );

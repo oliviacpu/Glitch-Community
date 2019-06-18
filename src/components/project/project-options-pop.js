@@ -33,9 +33,9 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
-  const projectUserIds = project && project.users && project.users.map((projectUser) => projectUser.id);
-  const isProjectMember = currentUser && projectUserIds && projectUserIds.includes(currentUser.id);
-  const currentUserProjectPermissions = currentUser && project && project.permissions && project.permissions.find((p) => p.userId === currentUser.id);
+  const projectUserIds = project.permissions.map(({ userId }) => userId);
+  const isProjectMember = currentUser && projectUserIds.includes(currentUser.id);
+  const currentUserProjectPermissions = currentUser && project.permissions.find((p) => p.userId === currentUser.id);
   const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
   const {
     isAuthorized,
@@ -63,7 +63,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
     leaveTeamProject:
       leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
     leaveProject:
-      leaveProject && project.users.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
+      leaveProject && project.permissions.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
         ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
         : null,
     removeProjectFromTeam:
@@ -163,7 +163,15 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
 }
 
 ProjectOptionsPop.propTypes = {
-  project: PropTypes.object.isRequired,
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+    permissions: PropTypes.array.isRequired,
+    teamIds: PropTypes.array.isRequired,
+    private: PropTypes.bool,
+    note: PropTypes.any,
+    isAddingNewNote: PropTypes.bool,
+  }).isRequired,
   projectOptions: PropTypes.object,
 };
 
