@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './animations.styl';
 
 export const Discover = () => (
-  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="125" width="290" className={styles.feature}>
+  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="110" width="290" className={styles.feature}>
     <defs id="defs10">
       <ellipse id="path-1" cx="16.799999" cy="14.954068" rx="16.799999" ry="7.8000002" />
       <path
