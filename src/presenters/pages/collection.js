@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
@@ -27,39 +27,9 @@ import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
-function DeleteCollectionBtn({ collection, deleteCollection }) {
-  const [done, setDone] = useState(false);
-  if (done) {
-    return <Redirect to={getOwnerLink(collection)} />;
-  }
-  return (
-    <Button
-      type="dangerZone"
-      size="small"
-      emoji="bomb"
-      onClick={() => {
-        if (!window.confirm('Are you sure you want to delete your collection?')) {
-          return;
-        }
-        deleteCollection();
-        setDone(true);
-      }}
-    >
-      Delete Collection
-    </Button>
-  );
-}
+import styles from './collection.styl';
 
-DeleteCollectionBtn.propTypes = {
-  collection: PropTypes.shape({
-    team: PropTypes.object,
-    user: PropTypes.object,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-  deleteCollection: PropTypes.func.isRequired,
-};
-
-const CollectionPageContents = ({ collection: initialCollection }) => {
+const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, funcs] = useCollectionEditor(initialCollection);
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
@@ -69,6 +39,12 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
   let { projects } = collection;
   if (collection.featuredProjectId) {
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+  }
+  
+  const onDeleteCollection = () => {
+    if (!window.confirm('Are you sure you want to delete your collection?')) return;
+    funcs.deleteCollection();
+    history.push(getOwnerLink(collection));
   }
 
   const onNameChange = async (name) => {
@@ -118,7 +94,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
             </div>
             {!collectionHasProjects && currentUserIsAuthor && (
-              <div className="empty-collection-hint">
+              <div className={styles.emptyCollectionHint}>
                 <Image
                   src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934"
                   alt="psst"
@@ -129,7 +105,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
               </div>
             )}
             {!collectionHasProjects && !currentUserIsAuthor && (
-              <div className="empty-collection-hint">No projects to see in this collection just yet.</div>
+              <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>
             )}
             {featuredProject && (
               <FeaturedProject
@@ -172,11 +148,15 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
-      {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={funcs.deleteCollection} />}
+      {currentUserIsAuthor && (
+        <Button type="dangerZone" size="small" emoji="bomb" onClick={onDeleteCollection}>
+          Delete Collection
+        </Button>
+      )}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
-};
+});
 
 CollectionPageContents.propTypes = {
   collection: PropTypes.shape({
