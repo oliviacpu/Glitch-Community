@@ -16,9 +16,7 @@ import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
-import MoreCollectionsContainer from 'Components/collections-list/more-collections';
-import AddCollectionProject from 'Components/collection/add-collection-project-pop';
-import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
+import CollectionContainer from 'Components/collection/container';
 import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
@@ -27,112 +25,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
-
-import styles from './collection.styl';
-
-
-const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, funcs }) => {
-  const collectionHasProjects = !!collection && !!collection.projects && collection.projects.length > 0;
-  let featuredProject = null;
-  let { projects } = collection;
-  if (showFeaturedProject && collection.featuredProjectId) {
-    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
-  }
-  
-  return (
-    <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark)}>
-      <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
-        <div className={styles.imageContainer}>
-          <CollectionAvatar collection={collection} />
-        </div>
-
-        <div className={styles.collectionInfo}>
-          <h1 className={styles.name}>
-            {isAuthorized ? <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} /> : collection.name}
-          </h1>
-
-          <div className={styles.owner}>
-            <ProfileItem hasLink team={collection.team} user={collection.user} />
-          </div>
-
-          <div className={styles.description}>
-            <AuthDescription
-              authorized={isAuthorized}
-              description={collection.description}
-              update={funcs.updateDescription}
-              placeholder="Tell us about your collection"
-            />
-          </div>
-
-          <div className={styles.projectCount}>
-            <Text>
-              <Pluralize count={collection.projects.length} singular="Project" />
-            </Text>
-          </div>
-
-          {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
-        </div>
-      </header>
-
-      <div className={styles.collectionContents}>
-        <div className={styles.collectionProjectContainerHeader}>
-          {isAuthorized && funcs.addProjectToCollection && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
-        </div>
-        {!collectionHasProjects && isAuthorized && (
-          <div className={styles.emptyCollectionHint}>
-            <Image
-              src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934"
-              alt="psst"
-              width=""
-              height=""
-            />
-            <Text>You can add any project, created by any user</Text>
-          </div>
-        )}
-        {!collectionHasProjects && !isAuthorized && (
-          <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>
-        )}
-        {featuredProject && (
-          <FeaturedProject
-            isAuthorized={isAuthorized}
-            featuredProject={featuredProject}
-            unfeatureProject={funcs.unfeatureProject}
-            addProjectToCollection={funcs.addProjectToCollection}
-            collection={collection}
-            displayNewNote={funcs.displayNewNote}
-            updateNote={funcs.updateNote}
-            hideNote={funcs.hideNote}
-          />
-        )}
-        {collectionHasProjects && (
-          <ProjectsList
-            layout="gridCompact"
-            projects={projects}
-            collection={collection}
-            enableSorting={isAuthorized && projects.length > 1}
-            onReorder={funcs.updateProjectOrder}
-            noteOptions={{
-              hideNote: funcs.hideNote,
-              updateNote: funcs.updateNote,
-              isAuthorized: isAuthorized,
-            }}
-            projectOptions={{
-              removeProjectFromCollection: funcs.removeProjectFromCollection,
-              addProjectToCollection: funcs.addProjectToCollection,
-              displayNewNote: funcs.displayNewNote,
-              featureProject: funcs.featureProject,
-              isAuthorized: isAuthorized,
-            }}
-          />
-        )}
-        {isAuthorized && projects.length > 1 && (
-          <div>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</div>
-        )}
-      </div>
-    </article>
-  )
-}
-
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
@@ -161,7 +53,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
         {currentUserIsAuthor && (
-          <Button type="dangerZone" size="small" emoji="bomb" onClick={onDeleteCollection}>
+          <Button type="dangerZone" size="small" emoji="bomb" onClick={funcs.onDeleteCollection}>
             Delete Collection
           </Button>
         )}
