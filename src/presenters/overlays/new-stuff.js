@@ -10,6 +10,7 @@ import CheckboxButton from 'Components/buttons/checkbox-button';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
+import useUniqueId from 'Hooks/use-unique-id';
 import PopoverContainer from '../pop-overs/popover-container';
 
 import newStuffLog from '../../curated/new-stuff-log';
@@ -49,7 +50,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         <div className="new-stuff-avatar">
           <NewStuffPup />
         </div>
-        <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
+        <OverlayTitle id={useUniqueId()}>New Stuff</OverlayTitle>
         <div className="new-stuff-toggle">
           <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these

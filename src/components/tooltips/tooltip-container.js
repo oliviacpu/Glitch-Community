@@ -9,19 +9,13 @@ const cx = classNames.bind(styles);
 export const TYPES = ['action', 'info'];
 export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
-function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback, newStuff }) {
+function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
   });
-  const uniqueId = useUniqueId();
-
-  // prevents invalid aria-labelledby values when names contain whitespace
-  id = id.replace(/\s/g, '-');
-
-  id = id.concat(uniqueId);
-  // }
+  const id = useUniqueId();
 
   const tooltipClassName = cx({
     tooltip: true,
@@ -93,8 +87,6 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
 
 TooltipContainer.propTypes = {
   children: PropTypes.node,
-  /* the id of the tooltip */
-  id: PropTypes.string.isRequired,
   /* the type of tooltip */
   type: PropTypes.oneOf(TYPES).isRequired,
   /* tooltip text */

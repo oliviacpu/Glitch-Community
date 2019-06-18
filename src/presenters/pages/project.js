@@ -71,7 +71,6 @@ const PublicTooltip = 'Visible to everyone';
 const PrivateBadge = () => (
   <TooltipContainer
     type="info"
-    id="private-project-badge-tooltip"
     tooltip={PrivateTooltip}
     target={<span className="project-badge private-project-badge" />}
   />
@@ -85,7 +84,6 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => {
   return (
     <TooltipContainer
       type="action"
-      id="toggle-private-button-tooltip"
       target={<button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" />}
       tooltip={tooltip}
     />

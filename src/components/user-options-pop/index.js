@@ -176,7 +176,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
             );
 
             return (
-              <TooltipContainer target={userOptionsButton} tooltip="User options" id="user-options-tooltip" type="action" align={['right']}>
+              <TooltipContainer target={userOptionsButton} tooltip="User options" type="action" align={['right']}>
                 {visible && (
                   <MultiPopover
                     views={{
