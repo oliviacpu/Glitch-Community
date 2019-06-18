@@ -6,9 +6,9 @@ import useOptimisticValue from './use-optimistic-value';
 
 import MarkdownInput from '../inputs/markdown-input';
 
-function OptimisticMarkdownInput({ value, onChange, ...props }) {
-  const [untrimmedValue, onChangeBoundWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange);
-  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeBoundWithTrimmedInputs);
+function OptimisticMarkdownInput({ value, onChange, onBlur, ...props }) {
+  const [untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs] = usePassivelyTrimmedInput(value, onChange, onBlur);
+  const [optimisticValue, optimisticOnChange, optimisticOnBlur, optimisticError] = useOptimisticValue(untrimmedValue, onChangeWithTrimmedInputs, onBlurWithTrimmedInputs);
 
   return <MarkdownInput {...props} value={optimisticValue} onChange={optimisticOnChange} onBlur={optimisticOnBlur} error={optimisticError} />;
 }
