@@ -13,17 +13,15 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     } else {
       setStatus('openedFromClick');
     }
+    if (onOpen) {
+      onOpen();
+    }
   }
   const closePopover = () => setStatus('closed');
 
   const togglePopover = (event) => {
-    const wasClosed = status === 'closed';
-
-    if (wasClosed) {
+    if (status === 'closed') {
       openPopover(event);
-      if (onOpen) {
-        onOpen();
-      }
     } else {
       closePopover();
     }
