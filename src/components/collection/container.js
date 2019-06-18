@@ -41,7 +41,11 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
         <div className={styles.collectionInfo}>
           <h1 className={styles.name}>
-            {isAuthorized ? <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} /> : collection.name}
+            {isAuthorized ? (
+              <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} /> 
+            ) : preview ? (
+              <CollectionLink collection={collection}>{collection.name}</CollectionLink>
+            ) : collection.name}
           </h1>
 
           <div className={styles.owner}>
@@ -117,7 +121,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           <div>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</div>
         )}
         {preview && (
-          <CollectionLink collection={collection} className="collection-view-all">
+          <CollectionLink collection={collection} className={styles.viewAll}>
             View all <Pluralize count={collection.projects.length} singular="project" /> <span aria-hidden>→</span>
           </CollectionLink>
         )}
