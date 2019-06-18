@@ -9,13 +9,13 @@ Use Optimistic Value:
 - takes in an initial value for the input (this representes the real value the server last gave us)
 - takes in a way to update the server
 
-as users type (on change):
-- we show them what they are typing, assuming it has been saved properly
+on change:
+- we show them what they are typing (or editing in case of checkbox, etc), and OPTIMISTICALLY assume it all went according to plan
 - if the server hits an error:
   - we display that error to the user
-  - and we continue to show what the user was typing even though it's not saved
+  - and we continue to show what the user's input even though it's not saved
 - if the server succeeds:
-  - we pass along the response so that it can be stored in top level state later and passed back in again as props as the inital "real" value
+  - we pass along the response so that it can be stored in top level state later and passed back in again as props as the initial "real" value
 
 on blur:
 - if the user was in an errored state:
@@ -25,7 +25,7 @@ on blur:
 
 export default function useOptimisticValue(realValue, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null });
+  const [state, setState] = React.useState({ value: undefined, error: null, isLoading: false });
 
   // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined and instead show whatever value is passed in
   const optimisticOnChange = (newValue) => {
@@ -46,25 +46,31 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
     if (ifUserHasTypedSinceLastSave) {
       // if the value changes during the async action then ignore the result
       const setStateIfStillRelevant = (newState) => setState((prevState) => (prevState.value === debouncedValue ? newState : prevState));
-
+      setState({ ...state, isLoading: true })
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          setStateIfStillRelevant({ value: undefined, error: null });
+          setStateIfStillRelevant({ value: undefined, error: null, isLoading: false });
           return debouncedValue;
         },
         (error) => {
           const message =
             (error && error.response && error.response.data && error.response.data.message) || 'Sorry, we had trouble saving. Try again later?';
-          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message });
+          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, isLoading: false });
         },
       );
     }
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
+    // wait until we finish loading before calling on blurs
+    if (state.isLoading) {
+      optimisticOnBlur();
+      return;
+    }
+    // if in error, reverts input value to last server response and removes error
     if (!!state.error) {
-      setState({ ...state, error: null, value: undefined }); //reverts input value to last server response
+      setState({ ...state, error: null, value: undefined });
     }
     if (onBlur) {
       onBlur();
