@@ -3,12 +3,14 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
-import PopoverContainer from 'Components/popover/container';
 import Text from 'Components/text/text';
+import SignInButton from 'Components/buttons/sign-in-button';
 import Logo from 'Components/header/logo';
-import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
+import useLocalStorage from 'State/local-storage';
 
 import styles from './vscode-auth.styl';
 
@@ -27,18 +29,34 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     }, 3000);
   }
 
+  const slackAuthEnabled = useDevToggle('Slack Auth');
+  const [, setDestination] = useLocalStorage('destinationAfterAuth');
+  const onClick = () =>
+    setDestination({
+      expires: dayjs()
+        .add(10, 'minutes')
+        .toISOString(),
+      to: {
+        pathname: location.pathname,
+        search: location.search,
+      },
+    });
+
   return (
     <div className={styles.content}>
       <div className={styles.whatIsGlitch}>
         <Logo />
         <Text>Glitch is the friendly community where anyone can create the web</Text>
       </div>
-      <div>
+      <div className={styles.signIn}>
         <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
         {!isSignedIn &&
-          <PopoverContainer>
-            {() => <SignInPop align="none" />}
-          </PopoverContainer>
+          <div>
+            <SignInButton company="facebook" onClick={onClick} />
+            <SignInButton company="github" onClick={onClick} />
+            <SignInButton company="google" onClick={onClick} />
+            {slackAuthEnabled && <SignInButton company="slack" onClick={onClick} />}
+          </div>
         }
       </div>
     </div>

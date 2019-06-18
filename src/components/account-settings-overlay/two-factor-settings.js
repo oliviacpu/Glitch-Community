@@ -5,7 +5,7 @@ import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
 import TextInput from 'Components/inputs/text-input';
 import Button from 'Components/buttons/button';
-import Badge from 'Components/badges/badge';
+import Notification from 'Components/notification';
 
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -72,6 +72,8 @@ const TwoFactorSettings = () => {
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
+      {done && !twoFactorEnabled && <Notification type="success" persistent>Successfully disabled two-factor authentication</Notification>}
+      {done && twoFactorEnabled && <Notification type="success" persistent>Successfully enabled two-factor authentication</Notification>}
       {twoFactorEnabled && <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
       {!twoFactorEnabled &&
         <>
@@ -85,8 +87,6 @@ const TwoFactorSettings = () => {
           }
         </>
       }
-      {done && !twoFactorEnabled && <Badge type="success">Successfully disabled two-factor authentication</Badge>}
-      {done && twoFactorEnabled && <Badge type="success">Successfully enabled two-factor authentication</Badge>}
     </>
   );
 };
