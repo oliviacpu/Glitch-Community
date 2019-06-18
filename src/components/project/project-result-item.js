@@ -8,21 +8,12 @@ import VisibilityContainer from 'Components/visibility-container';
 import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import { ProjectAvatar } from 'Components/images/avatar';
 import { getLink } from 'Models/project';
-import { createAPIHook } from 'State/api';
-import { getAllPages } from 'Shared/api';
+import { useProjectMembers } from 'State/project';
 
 import styles from './project-result-item.styl';
 
-const useMembers = createAPIHook(async (api, project) => {
-  const [users, teams] = await Promise.all([
-    getAllPages(api, `/v1/projects/by/id/users?id=${project.id}`),
-    getAllPages(api, `/v1/projects/by/id/teams?id=${project.id}`),
-  ]);
-  return { users, teams };
-});
-
 const ProfileListWithData = ({ project }) => {
-  const { value: members } = useMembers(project);
+  const { value: members } = useProjectMembers(project.id);
   return <ProfileList {...members} layout="row" size="small" />;
 };
 

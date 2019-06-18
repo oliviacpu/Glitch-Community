@@ -117,8 +117,8 @@ const formatByType = {
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    userIDs: project.members,
-    teamIDs: project.teams,
+    permissions: project.members.map((userId) => ({ userId })),
+    teamIds: project.teams,
     private: project.isPrivate,
   }),
   collection: (collection) => ({
