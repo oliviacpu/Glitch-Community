@@ -9,20 +9,19 @@ const cx = classNames.bind(styles);
 export const TYPES = ['action', 'info'];
 export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
-function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback }) {
+function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
   });
-  const uniqueId = useUniqueId('tooltip');
+  const uniqueId = useUniqueId();
 
   // prevents invalid aria-labelledby values when names contain whitespace
   id = id.replace(/\s/g, '-');
 
-  if (id !== 'new-stuff-tooltip') {
-    id = id.concat(uniqueId);
-  }
+  id = id.concat(uniqueId);
+  // }
 
   const tooltipClassName = cx({
     tooltip: true,

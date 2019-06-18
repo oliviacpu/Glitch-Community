@@ -11,12 +11,13 @@ import styles from './new-stuff-prompt.styl';
 const NewStuffPrompt = ({ onClick }) => (
   <div className={styles.footer}>
     <TooltipContainer
-      align={['top']}
-      id="new-stuff-tooltip"
+      align={['top']}    
+      id="new-stuff"
       persistent
       target={<TransparentButton onClick={onClick}><NewStuffPup /></TransparentButton>}
       tooltip="New"
       type="info"
+      newStuff
     />
   </div>
 );
