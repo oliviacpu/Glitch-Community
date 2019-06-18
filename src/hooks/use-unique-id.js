@@ -2,12 +2,12 @@ import React from 'react';
 
 let counter = 0;
 
-const useUniqueId = () => {
+const useUniqueId = (prefix = Math.random()) => {
   const [uniqueId] = React.useState(() => {
     counter += 1;
     return counter;
   });
-  return `input-${uniqueId}`;
+  return `${prefix}-${uniqueId}`;
 };
 
 export default useUniqueId;

@@ -15,7 +15,7 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
   });
-  const uniqueId = useUniqueId();
+  const uniqueId = useUniqueId('tooltip');
 
   // prevents invalid aria-labelledby values when names contain whitespace
   id = id.replace(/\s/g, '-');
@@ -29,7 +29,7 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
     top: align.includes('top'),
     left: align.includes('left'),
     right: align.includes('right'),
-    'new-stuff': id === 'new-stuff-tooltip',
+    newStuff,
     persistent,
     fallback,
   });
