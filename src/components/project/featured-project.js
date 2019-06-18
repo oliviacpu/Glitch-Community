@@ -33,7 +33,6 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
 const FeaturedProject = ({
   addProjectToCollection,
   collection,
-  currentUser,
   displayNewNote,
   featuredProject,
   hideNote,
@@ -58,7 +57,6 @@ const FeaturedProject = ({
           }
           project={featuredProject}
           isAuthorized={isAuthorized}
-          currentUser={currentUser}
           addProjectToCollection={addProjectToCollection}
         />
       )}
@@ -66,9 +64,9 @@ const FeaturedProject = ({
   </div>
 );
 
+
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
   featuredProject: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   unfeatureProject: PropTypes.func.isRequired,
