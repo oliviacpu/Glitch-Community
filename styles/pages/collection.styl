@@ -1,4 +1,4 @@
-.collection-full, .collection-wide
+.collection-wide
   display: flex
   border-radius: 5px
   background-color: rgba(229, 229, 229, 0.4)
@@ -11,6 +11,11 @@
   .collection-owner
     margin: 12px 0
 
+  .category
+    img
+      padding-bottom: 0.5rem
+    .description
+      max-width: initial
   @media(max-width: largeViewport)
     flex-wrap: wrap
   .collection-image-container
@@ -43,6 +48,14 @@
       color: white
       a
         color: white
+      .collection-name textarea
+        color: white
+      .content-editable
+        border-color: white
+      .collection-description textarea
+        color: white
+    .content-editable
+      border-color: secondary
   .collection-name
     margin-bottom: 0px
   .collection-description 
@@ -57,7 +70,7 @@
   .edit-collection-color-btn
     margin-top: 25px
   .collection-url
-    font-family: monospace
+    font-family: Menlo, Consolas, Monaco, "Lucida Console", Monospace
     font-size: small
     font-weight: bold
     margin-top: 0px
@@ -78,7 +91,9 @@
       border-bottom-right-radius: 5px
       border-top-right-radius: 0px
   .collection-project-container-header
-    margin-bottom: 1rem
+    margin-bottom: 1rem    
+  .project-options-pop
+    width: 200px
   .empty-collection-hint
     border-radius: 4px
     margin: 25px 16px
@@ -101,4 +116,5 @@ a.collection-view-all
   font-weight: 600
   font-size: 13px
 a.collection-view-all:hover
-  text-decoration: underline !important
+  text-decoration: underline !important  
+  
