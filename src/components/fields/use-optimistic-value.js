@@ -27,18 +27,14 @@ on blur:
 
 export default function useOptimisticValue(value, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null, lastSaved: value, shouldShowLastSaved: false });
+  const [state, setState] = React.useState({ value: undefined, error: null });
 
   // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined and instead show whatever value is passed in
   const optimisticOnChange = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue, shouldShowLastSaved: false, error: null }));
+    setState((prevState) => ({ ...prevState, value: newValue, error: null }));
   };
 
   let optimisticValue = value;
-  console.log(value, state.value, state.lastSaved)
-  if (state.shouldShowLastSaved) {
-    optimisticValue = state.lastSaved;
-  }
   if (state.value !== undefined) {
     optimisticValue = state.value;
   }
@@ -55,22 +51,21 @@ export default function useOptimisticValue(value, onChange, onBlur) {
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          setStateIfStillRelevant({ value: undefined, error: null, lastSaved: debouncedValue, shouldShowLastSaved: false });
+          setStateIfStillRelevant({ value: undefined, error: null });
           return debouncedValue;
         },
         (error) => {
           const message =
             (error && error.response && error.response.data && error.response.data.message) || 'Sorry, we had trouble saving. Try again later?';
-          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, shouldShowLastSaved: false });
+          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message });
         },
       );
     }
   }, [debouncedValue]);
 
   const optimisticOnBlur = () => {
-    const shouldShowLastSaved = !!state.error;
-    if (shouldShowLastSaved) {
-      setState({ ...state, shouldShowLastSaved, error: null, value: undefined });
+    if (!!state.error) {
+      setState({ ...state, error: null, value: undefined });
     }
     if (onBlur) {
       onBlur();
