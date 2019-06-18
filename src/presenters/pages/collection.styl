@@ -6,8 +6,6 @@
   width: 100%
   @media (min-width: largeViewport)
     flex-direction: row
-  &.dark
-    color: white
     
 .collectionHeader
   flex: 0 0 auto
@@ -15,11 +13,20 @@
   border-radius: 5px 5px 0 0
   display: flex
   flex-direction: column
+  
   @media (min-width: mediumViewport)
     flex-direction: row
   @media (min-width: largeViewport)
     flex-direction: column
+    flex: 0 0 25%
     border-radius: 5px 0 0 5px
+
+.dark .collectionHeader
+  color: white
+  textarea
+    color: inherit
+  a
+    color: #D2FEFF
     
 .collectionContents
   flex: 1 0 auto
