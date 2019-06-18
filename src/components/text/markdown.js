@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import markdownIt from 'markdown-it';
 import markdownEmoji from 'markdown-it-emoji';
+import markdownHeadings from 'markdown-it-github-headings';
 import markdownSanitizer from 'markdown-it-sanitizer';
 import truncate from 'html-truncate';
 import styles from './markdown.styl';
@@ -17,7 +18,10 @@ const md = ({ allowImages }) => {
   if (!allowImages) {
     mdIt.disable('image');
   }
-  return mdIt.use(markdownEmoji).use(markdownSanitizer);
+  if (linkifyHeadings) {
+    return mdIt.use(markdownHeadings).use(markdownEmoji).use(markdownSanitizer);
+  }
+  return 
 };
 
 const stripHtml = (html) => {
@@ -28,7 +32,11 @@ const stripHtml = (html) => {
 /**
  * Markdown Component
  */
-const Markdown = ({ children, length, allowImages, renderAsPlaintext }) => {
+const Markdown = ({ children, length, allowImages, renderAsPlaintext, linkifyHeadings }) => {
+  let rendered;
+  if (linkifyHeadings) {
+    renderede = md.({ allowImages }).render(children || '');
+  }
   let rendered = md({ allowImages }).render(children || '');
   let className = styles.markdownContent;
 
