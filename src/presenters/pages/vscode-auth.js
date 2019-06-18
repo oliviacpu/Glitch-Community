@@ -45,9 +45,13 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   return (
     <div className={styles.content}>
-      <div className={styles.whatIsGlitch}>
-        <Logo />
-        <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
+      <div className={styles.about}>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
+        <div className={styles.whatIsGlitch}>
+          <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
+        </div>
       </div>
       <div className={styles.signIn}>
         <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
