@@ -66,8 +66,8 @@ const IncludedInCollections = ({ projectId }) => (
 );
 
 const HiddenCheckbox = ({ value, onChange, children }) => (
-  <label style={{ position: 'relative' }}>
-    <input style={{ position: 'absolute', opacity: 0 }} type="checkbox" checked={value} onChange={(e) => onChange(e.target.checked)}/>
+  <label style={{ position: 'relative', cursor: 'pointer' }}>
+    <input style={{ position: 'absolute', opacity: 0 }} type="checkbox" checked={value} onChange={(e) => onChange(e.target.checked)} />
     {children}
   </label>
 );
@@ -90,8 +90,9 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => (
     id="toggle-private-button-tooltip"
     tooltip={isPrivate ? PrivateTooltip : PublicTooltip}
     target={
-      <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
-        <span className="project-badge private-project-badge" aria-label={PublicTooltip} />
+      // note that the state is "is private" but we want the label here to be "is public"
+      <HiddenCheckbox value={!isPrivate} onChange={(isPublic) => setPrivate(!isPublic)}>
+        <span className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`} aria-label={PublicTooltip} />
       </HiddenCheckbox>
     }
   />
