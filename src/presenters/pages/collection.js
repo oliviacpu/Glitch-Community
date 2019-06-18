@@ -17,6 +17,8 @@ import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
 import CollectionContainer from 'Components/collection/container';
+import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+
 import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';

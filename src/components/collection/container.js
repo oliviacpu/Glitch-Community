@@ -29,6 +29,7 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 import styles from './container.styl';
 
 const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, funcs }) => {
+  console.log(collection)
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -41,7 +42,10 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, fu
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
         <div className={styles.imageContainer}>
-          <CollectionAvatar collection={collection} />
+          {collection.avatarUrl ? (
+            <Image src={collection.avatarUrl} alt="" />
+          ) : <CollectionAvatar collection={collection} />}
+          
         </div>
 
         <div className={styles.collectionInfo}>

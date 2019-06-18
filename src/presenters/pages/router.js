@@ -13,7 +13,7 @@ import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
 import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
-// import CategoryPage from './category';
+import CategoryPage from './category';
 import CollectionPage from './collection';
 import { NotFoundPage, ProjectNotFoundPage } from './error';
 import SearchPage from './search';

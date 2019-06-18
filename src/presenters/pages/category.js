@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import Image from 'Components/images/image';
 import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
+import CollectionContainer from 'Components/collection/container';
 import MoreIdeas from 'Components/more-ideas';
 import DataLoader from 'Components/data-loader';
 import Layout from 'Components/layout';
@@ -12,29 +13,26 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor } from 'State/collection';
 
-import styles from './collection.styl';
-
 const CategoryPageWrap = ({ category: initialCategory }) => {
   const { currentUser } = useCurrentUser();
   const [category, { addProjectToCollection }] = useCollectionEditor(initialCategory);
   return (
     <>
       <Helmet title={category.name} />
-      <main>
-        <article className={styles.container}>
-          <header className={styles.collectionHeader} style={{ backgroundColor: category.backgroundColor }}>
+      <main className="collection-page">
+        <CollectionContainer collection={category} funcs={{ addProjectToCollection }} />
+        {/*<article className="projects collection-full" style={{ backgroundColor: category.backgroundColor }}>
+          <header className="collection">
             <Heading tagName="h1">{category.name}</Heading>
-            <div className={styles.imageContainer}>
+            <div className="collection-image-container">
               <Image src={category.avatarUrl} alt="" />
             </div>
 
-            <div className={styles.description}>
-              <p>{category.description}</p>
-            </div>
+            <p className="description">{category.description}</p>
           </header>
 
-          <div className={styles.collectionContents}>
-            <div className={styles.collectionProjectContainerHeader}>
+          <div className="collection-contents">
+            <div className="collection-project-container-header">
               <Heading tagName="h3">Projects ({category.projects.length})</Heading>
             </div>
             {currentUser.login ? (
@@ -49,7 +47,7 @@ const CategoryPageWrap = ({ category: initialCategory }) => {
               <ProjectsList layout="gridCompact" projects={category.projects} />
             )}
           </div>
-        </article>
+        </article>*/}
       </main>
       <MoreIdeas />
     </>
@@ -69,10 +67,10 @@ async function loadCategory(api, id) {
   const { data: category } = await api.get(`categories/${id}`);
   return {
     ...category,
+    coverColor: category.backgroundColor,
     projects: category.projects.map((project) => ({
       ...project,
       permissions: [],
-      teamIds: [],
     })),
   };
 }
