@@ -29,7 +29,7 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
 
   // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined and instead show whatever value is passed in
   const optimisticOnChange = (newValue) => {
-    setState((prevState) => ({ ...prevState, value: newValue, error: null }));
+    setState((prevState) => ({ value: newValue, error: null }));
   };
 
   // always show what the server knows, unless the user is currently typing something or we're loading an in-flight request
@@ -65,7 +65,7 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
   const optimisticOnBlur = () => {
     // if you have already shown the user an error you can go ahead and hide it and revert back to last saved value
     if (!!state.error) {
-      setState({ ...state, error: null, value: undefined });
+      setState({ error: null, value: undefined });
     }
     if (onBlur) {
       onBlur();
