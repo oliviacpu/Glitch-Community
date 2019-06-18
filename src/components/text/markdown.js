@@ -19,7 +19,7 @@ const md = ({ allowImages, linkifyHeadings }) => {
     mdIt.disable('image');
   }
   if (linkifyHeadings) {
-    const headingOpts = { enableHeadingLinkIcons: false, prefixHeadingIds: false };
+    const headingOpts = { enableHeadingLinkIcons: false, prefixHeadingIds: true };
     return mdIt.use(markdownHeadings, headingOpts).use(markdownEmoji).use(markdownSanitizer);
   }
   return mdIt.use(markdownEmoji).use(markdownSanitizer);

@@ -44,7 +44,9 @@ function track() {
   }
 }
 
-const PageChangeHandler = withRouter(({ location }) => {
+const PageChangeHandler = withRouter(({ location, history }) => {
+  
+  console.log({ match, location, history })
   if (location.hash && location.hash.startsWith('user-content')) {
     console.log('readme link');
     console.log('test');
