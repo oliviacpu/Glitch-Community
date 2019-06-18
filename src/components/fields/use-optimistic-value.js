@@ -25,7 +25,7 @@ on blur:
 
 export default function useOptimisticValue(realValue, onChange, onBlur) {
   // value undefined means that the field is unchanged from the 'real' value
-  const [state, setState] = React.useState({ value: undefined, error: null, isLoading: false });
+  const [state, setState] = React.useState({ value: undefined, error: null });
 
   // as the user types we save that as state.value, later as the user saves, we reset the state.value to undefined and instead show whatever value is passed in
   const optimisticOnChange = (newValue) => {
@@ -46,17 +46,17 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
     if (ifUserHasTypedSinceLastSave) {
       // if the value changes during the async action then ignore the result
       const setStateIfStillRelevant = (newState) => setState((prevState) => (prevState.value === debouncedValue ? newState : prevState));
-      setState({ ...state, isLoading: true });
+      
       // this scope can't be async/await because it's an effect
       onChange(debouncedValue).then(
         () => {
-          setStateIfStillRelevant({ value: undefined, error: null, isLoading: false });
+          setStateIfStillRelevant({ value: undefined, error: null });
           return debouncedValue;
         },
         (error) => {
           const message =
             (error && error.response && error.response.data && error.response.data.message) || 'Sorry, we had trouble saving. Try again later?';
-          setStateIfStillRelevant({ ...state, value: debouncedValue, error: message, isLoading: false });
+          setStateIfStillRelevant({ value: debouncedValue, error: message });
         },
       );
     }
@@ -64,7 +64,7 @@ export default function useOptimisticValue(realValue, onChange, onBlur) {
 
   const optimisticOnBlur = () => {
     // if you have already shown the user an error you can go ahead and hide it and revert back to last saved value
-    if (!state.isLoading && !!state.error) {
+    if (!!state.error) {
       setState({ ...state, error: null, value: undefined });
     }
     if (onBlur) {
