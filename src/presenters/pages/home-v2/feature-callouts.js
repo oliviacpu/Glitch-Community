@@ -321,7 +321,7 @@ export const Discover = () => (
 );
 
 export const Dreams = () => (
-  <svg width="184px" height="119px" viewBox="0 0 184 119" className={styles.feature}>
+  <svg width="150px" height="119px" viewBox="0 0 184 119" className={styles.feature}>
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-29-19-xlarge-banner" transform="translate(-535.000000, -620.000000)">
         <g id="Group-32" transform="translate(489.000000, 605.267418)">
@@ -479,7 +479,7 @@ export const Dreams = () => (
 );
 
 export const Teams = () => (
-  <svg id="teams" width="194px" height="115px" viewBox="0 0 194 115" className={styles.feature}>
+  <svg id="teams" width="160px" height="115px" viewBox="0 0 194 115" className={styles.feature}>
     <g id="Design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-21-19" transform="translate(-517.000000, -627.000000)">
         <g id="team-animation" transform="translate(518.852039, 628.307670)">
