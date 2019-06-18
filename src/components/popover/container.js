@@ -50,6 +50,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     () => ({
       status,
       visible: status !== 'closed',
+      setStatus,
       closePopover,
       togglePopover,
       toggleAndCall,
