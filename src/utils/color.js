@@ -1,9 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import DefaultAvatar from 'Components/collection/defaultAvatar';
-
 /* eslint-disable no-bitwise */
+/* eslint-disable import/prefer-default-export */
+
 // from https://stackoverflow.com/a/21648508/1720985
 export const hexToRgbA = (hex) => {
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
@@ -16,12 +13,3 @@ export const hexToRgbA = (hex) => {
   }
   return false;
 };
-/* eslint-enable no-bitwise */
-
-const CollectionAvatar = (props) => <DefaultAvatar backgroundFillColor={hexToRgbA(props.color)} />;
-
-CollectionAvatar.propTypes = {
-  color: PropTypes.string.isRequired,
-};
-
-export default CollectionAvatar;

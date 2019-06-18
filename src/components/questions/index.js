@@ -7,9 +7,9 @@ import { sample } from 'lodash';
 import Heading from 'Components/text/heading';
 import Link from 'Components/link';
 import Grid from 'Components/containers/grid';
+import ErrorBoundary from 'Components/error-boundary';
 import QuestionItem from './item';
 
-import ErrorBoundary from '../../presenters/includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import styles from './questions.styl';

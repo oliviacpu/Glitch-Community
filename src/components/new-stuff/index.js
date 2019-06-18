@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
-import NewStuffArticle from 'Components/new-stuff/new-stuff-article';
-import NewStuffPrompt from 'Components/new-stuff/new-stuff-prompt';
-import NewStuffPup from 'Components/new-stuff/new-stuff-pup';
-import Button from 'Components/buttons/button';
+
+import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
+import Button from 'Components/buttons/button';
+import { PopoverContainer } from 'Components/popover';
+
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
-import PopoverContainer from '../pop-overs/popover-container';
 
 import newStuffLog from '../../curated/new-stuff-log';
+import NewStuffArticle from './new-stuff-article';
+import NewStuffPrompt from './new-stuff-prompt';
+import NewStuffPup from './new-stuff-pup';
+import styles from './styles.styl';
 
 const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 function usePreventTabOut() {
-  const first = React.useRef();
-  const last = React.useRef();
+  const first = useRef();
+  const last = useRef();
 
   const onKeyDown = (e) => {
     if (e.key === 'Tab') {
@@ -32,7 +35,7 @@ function usePreventTabOut() {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [first, last]);
@@ -40,17 +43,17 @@ function usePreventTabOut() {
   return { first, last };
 }
 
-const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover }) => {
   const { first, last } = usePreventTabOut();
 
   return (
-    <Overlay className="new-stuff-overlay" ariaModal ariaLabelledBy="newStuff">
+    <Overlay className={styles.newStuffOverlay} ariaModal ariaLabelledBy="newStuff">
       <OverlaySection type="info">
-        <div className="new-stuff-avatar">
+        <div className={styles.newStuffAvatar}>
           <NewStuffPup />
         </div>
         <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
-        <div className="new-stuff-toggle">
+        <div className={styles.newStuffToggle}>
           <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these
           </CheckboxButton>
@@ -60,7 +63,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <Button emoji="carpStreamer" onClick={() => setVisible(false)} ref={last}>
+        <Button emoji="carpStreamer" onClick={closePopover} ref={last}>
           Back to Glitch
         </Button>
       </OverlaySection>
@@ -85,14 +88,14 @@ const NewStuff = ({ children }) => {
   const isSignedIn = !!currentUser && !!currentUser.login;
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
-  const [log, setLog] = React.useState(newStuffLog);
+  const [log, setLog] = useState(newStuffLog);
   const track = useTracker('Pupdate');
 
-  const renderOuter = ({ visible, setVisible }) => {
+  const renderOuter = ({ visible, togglePopover }) => {
     const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const show = () => {
       track();
-      setVisible(true);
+      togglePopover();
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
       setLog(unreadStuff.length ? unreadStuff : newStuffLog);
       setNewStuffReadId(latestId);
@@ -102,15 +105,15 @@ const NewStuff = ({ children }) => {
       <>
         {children(show)}
         {pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" tabIndex={-1} />}
+        {visible && <OverlayBackground />}
       </>
     );
   };
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, setVisible }) =>
-        visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} setVisible={setVisible} /> : null
+      {({ visible, closePopover }) =>
+        visible ? <NewStuffOverlay showNewStuff={showNewStuff} setShowNewStuff={setShowNewStuff} newStuff={log} closePopover={closePopover} /> : null
       }
     </PopoverContainer>
   );

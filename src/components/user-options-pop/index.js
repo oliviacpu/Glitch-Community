@@ -2,40 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
+import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
 import Image from 'Components/images/image';
+import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import AccountSettings from 'Components/account-settings-overlay';
+import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
+import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
-import PopoverContainer from './popover-container';
-import { NestedPopover } from './popover-nested';
-import CreateTeamPop from './create-team-pop';
+import styles from './styles.styl';
 
 // Create Team button
 
-const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
+const CreateTeamButton = ({ showCreateTeam }) => {
   const onClickCreateTeam = useTrackedFunc(showCreateTeam, 'Create Team clicked');
-  if (userIsAnon) {
-    return (
-      <>
-        <p className="description action-description">
-          <button onClick={showCreateTeam} className="button-unstyled link" type="button">
-            Sign in
-          </button>{' '}
-          to create teams
-        </p>
-        <Button size="small" emoji="herb" disabled>
-          Create Team
-        </Button>
-      </>
-    );
-  }
   return (
     <Button size="small" onClick={onClickCreateTeam} emoji="herb">
       Create Team
@@ -45,35 +31,29 @@ const CreateTeamButton = ({ showCreateTeam, userIsAnon }) => {
 
 CreateTeamButton.propTypes = {
   showCreateTeam: PropTypes.func.isRequired,
-  userIsAnon: PropTypes.bool.isRequired,
 };
 
 // Team List
 
-const TeamList = ({ teams, showCreateTeam, userIsAnon }) => {
+const TeamList = ({ teams, showCreateTeam }) => {
   const orderedTeams = orderBy(teams, (team) => team.name.toLowerCase());
 
   return (
-    <section className="pop-over-actions">
+    <PopoverActions>
       {orderedTeams.map((team) => (
-        <div className="button-wrap" key={team.id}>
+        <div className={styles.buttonWrap} key={team.id}>
           <Button
-            key={team.id}
             href={getTeamLink(team)}
-            type="tertiary"
             size="small"
-            image={
-              <div style={{ width: '16px', height: '16px', borderRadius: '3px', overflow: 'hidden' }}>
-                <Image alt="" src={getTeamAvatarUrl({ ...team, size: 'small' })} style={{ borderRadius: '3px' }} width={16} height={16} />
-              </div>
-            }
+            type="tertiary"
+            image={<Image className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
           >
             {team.name}
           </Button>
         </div>
       ))}
-      <CreateTeamButton showCreateTeam={showCreateTeam} userIsAnon={userIsAnon} />
-    </section>
+      <CreateTeamButton showCreateTeam={showCreateTeam} />
+    </PopoverActions>
   );
 };
 
@@ -87,12 +67,11 @@ TeamList.propTypes = {
     }),
   ).isRequired,
   showCreateTeam: PropTypes.func.isRequired,
-  userIsAnon: PropTypes.bool.isRequired,
 };
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, focusFirstElement, superUserHelpers }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, superUserHelpers }) => {
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
 
   const trackLogout = useTracker('Logout');
@@ -125,31 +104,34 @@ Are you sure you want to sign out?`)
   const userPasswordEnabled = useDevToggle('User Passwords');
 
   return (
-    <dialog className="pop-over user-options-pop" ref={focusFirstElement}>
-      <UserLink user={user} className="user-info">
-        <section className="pop-over-actions user-info">
-          <img className="avatar" src={getUserAvatarUrl(user)} alt="Your avatar" style={userAvatarStyle} />
-          <div className="info-container">
-            <p className="name" title={userName}>
-              {userName}
-            </p>
+    <PopoverDialog className={styles.userOptionsPop} align="right">
+      <PopoverTitle>
+        <UserLink user={user}>
+          <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
+            <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
+          </div>
+          <div className={styles.userInfo}>
+            <InfoDescription>{user.name || 'Anonymous'}</InfoDescription>
             {user.login && (
-              <p className="user-login" title={user.login}>
-                @{user.login}
-              </p>
+              <div className={styles.userLogin}>
+                <InfoDescription>@{user.login}</InfoDescription>
+              </div>
             )}
           </div>
-        </section>
-      </UserLink>
+        </UserLink>
+      </PopoverTitle>
+
       <TeamList teams={user.teams} showCreateTeam={showCreateTeam} userIsAnon={!user.login} />
-      <section className="pop-over-info">
+
+      <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
-          <div className="user-options-pop-checkbox">
+          <div>
             <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
               Super User
             </CheckboxButton>
           </div>
         )}
+<<<<<<< HEAD:src/presenters/pop-overs/user-options-pop.js
 
         <Button size="small" type="tertiary" emoji="dogFace" onClick={clickNewStuff}>
           New Stuff
@@ -169,16 +151,28 @@ Are you sure you want to sign out?`)
         )}
 
         <Button size="small" type="tertiary" emoji="balloon" onClick={clickSignout}>
+=======
+        <div className={styles.buttonWrap}>
+          <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
+            New Stuff
+          </Button>
+        </div>
+        <div className={styles.buttonWrap}>
+          <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
+            Support
+          </Button>
+        </div>
+        <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
+>>>>>>> b9fe8f47357fd1a1b4d202fe2a204d800ea4cf00:src/components/user-options-pop/index.js
           Sign Out
         </Button>
-      </section>
-    </dialog>
+      </PopoverInfo>
+    </PopoverDialog>
   );
 };
 
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
-  focusFirstElement: PropTypes.func.isRequired,
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
@@ -192,38 +186,34 @@ function CheckForCreateTeamHash(props) {
 // Header button and init pop
 
 export default function UserOptionsAndCreateTeamPopContainer(props) {
-  const avatarUrl = getUserAvatarUrl(props.user);
   const avatarStyle = { backgroundColor: props.user.color };
+
   return (
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen}>
-          {({ togglePopover, visible, focusFirstElement }) => {
+          {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <button className="user" onClick={togglePopover} disabled={!props.user.id} type="button">
-                <img className="user-avatar" src={avatarUrl} style={avatarStyle} width="30px" height="30px" alt="User options" />
-                <div className="user-options-dropdown-wrap">
+              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
+                <div className={styles.userOptionsWrap}>
+                  <div className={styles.userOptionsButtonAvatar}>
+                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                  </div>
                   <span className="down-arrow icon" />
                 </div>
-              </button>
+              </Button>
             );
 
             return (
-              <TooltipContainer
-                className="button user-options-pop-button"
-                target={userOptionsButton}
-                tooltip="User options"
-                id="user-options-tooltip"
-                type="action"
-                align={['right']}
-              >
+              <TooltipContainer target={userOptionsButton} tooltip="User options" id="user-options-tooltip" type="action" align={['right']}>
                 {visible && (
-                  <NestedPopover
-                    alternateContent={() => <CreateTeamPop {...props} {...{ focusFirstElement }} />}
-                    startAlternateVisible={createTeamOpen}
+                  <MultiPopover
+                    views={{
+                      createTeam: () => <CreateTeamPop />,
+                    }}
                   >
-                    {(showCreateTeam) => <UserOptionsPop {...props} {...{ togglePopover, showCreateTeam, focusFirstElement }} />}
-                  </NestedPopover>
+                    {({ createTeam }) => <UserOptionsPop {...props} togglePopover={togglePopover} showCreateTeam={createTeam} />}
+                  </MultiPopover>
                 )}
               </TooltipContainer>
             );
