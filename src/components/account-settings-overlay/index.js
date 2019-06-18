@@ -13,6 +13,12 @@ import PasswordSettings from './password-settings';
 import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
+const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
+  <Button size="small" onClick={() => setPage(name)} active={name === currentPage}>
+    {children}
+  </Button>
+);
+
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -42,12 +48,12 @@ const AccountSettingsOverlay = () => {
       <OverlaySection type="actions">
         <div className={styles.accountSettings}>
           <div className={styles.accountSettingsActions}>
-            <Button size="small" onClick={() => setPage('password')}>
+            <AccountSettingsTab name="password" currentPage={page} setPage={setPage}>
               Password
-            </Button>
-            <Button size="small" onClick={() => setPage('2fa')}>
+            </AccountSettingsTab>
+            <AccountSettingsTab name="2fa" currentPage={page} setPage={setPage}>
               Two-Factor Authentication
-            </Button>
+            </AccountSettingsTab>
           </div>
           <div className={styles.accountSettingsContent}>
             {page === 'password' ? <PasswordSettings userHasPassword={userHasPassword} /> : null}
