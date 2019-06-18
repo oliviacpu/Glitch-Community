@@ -1,11 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
-import Link from 'Components/link';
-
-import styles from './styles.styl';
 
 /* global FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL */
 
@@ -43,31 +39,39 @@ const companies = {
   facebook: {
     name: 'Facebook',
     emoji: 'facebook',
-    authLink: facebookAuthLink()
+    href: facebookAuthLink(),
   },
   github: {
     name: 'GitHub',
-    emoji: 'github',
-    authLink: githubAuthLink()
+    emoji: 'octocat',
+    href: githubAuthLink(),
   },
   google: {
     name: 'Google',
     emoji: 'google',
-    authLink: googleAuthLink()
+    href: googleAuthLink(),
   },
   slack: {
     name: 'Slack',
     emoji: 'slack',
-    authLink: slackAuthLink()
+    href: slackAuthLink(),
   },
-}
+};
 
-const SignInButton = ({ company, emoji, href, onClick }) => (
-  <div style={{ marginBottom: '10px' }}>
-    <Button href={href} onClick={onClick} size="small" emoji={emoji}>
-      Sign in with {company}
-    </Button>
-  </div>
-);
+const SignInButton = ({ company, onClick }) => {
+  const { name, emoji, href } = companies[company];
+
+  return (
+    <div style={{ marginBottom: '10px' }}>
+      <Button href={href} onClick={onClick} size="small" emoji={emoji}>
+        Sign in with {name}
+      </Button>
+    </div>
+  );
+};
+
+SignInButton.propTypes = {
+  company: PropTypes.oneOf(Object.keys(companies)).isRequired,
+};
 
 export default SignInButton;
