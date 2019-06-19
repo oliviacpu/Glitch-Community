@@ -333,10 +333,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
           </PopoverInfo>
           {userPasswordEnabled && <LoginSection showForgotPassword={showView.forgotPassword} />}
           <PopoverActions>
-            <SignInButton company="facebook" onClick={onClick} />
-            <SignInButton company="github" onClick={onClick} />
-            <SignInButton company="google" onClick={onClick} />
-            {slackAuthEnabled && <SignInButton company="slack" onClick={onClick} />}
+            
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email
             </Button>
