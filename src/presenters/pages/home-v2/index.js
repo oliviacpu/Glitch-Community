@@ -7,6 +7,11 @@ import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
 import Markdown from 'Components/text/markdown';
+import Link from 'Components/link';
+import Text from 'Components/text/text';
+import ReportButton from 'Components/report-abuse-pop';
+
+import { getEditorUrl } from 'Models/project';
 
 import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
@@ -240,6 +245,15 @@ const BuildingOnGlitch = ({ content }) => (
   </section>
 );
 
+const MadeInGlitch = () => (
+  <section className="made-in-glitch">
+    <Text>Of course, this site was made on Glitch too</Text>
+    <Link to={getEditorUrl('community')} className="button button-link has-emoji">
+      View Source <span className="emoji carp_streamer" />
+    </Link>
+  </section>
+);
+
 export const Home = ({ data }) => (
   <>
     <Banner />
@@ -252,6 +266,8 @@ export const Home = ({ data }) => (
     </TopPicks>
     <CultureZine content={data.cultureZine} />
     <BuildingOnGlitch content={data.buildingOnGlitch} />
+    <MadeInGlitch />
+    <ReportButton reportedType="home" />
   </>
 );
 
