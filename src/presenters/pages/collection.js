@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
@@ -28,6 +28,10 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
+
+const DeleteCollectionPop = withRouter(({ history, collection }) => {
+  
+})
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
