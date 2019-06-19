@@ -4,34 +4,25 @@ import { Helmet } from 'react-helmet';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
-import NotFound from 'Components/errors/not-found';
 import Layout from 'Components/layout';
 import Button from 'Components/buttons/button';
-import { captureException } from 'Utils/sentry';
-import { getShowUrl } from 'Models/project';
-import { useAPI } from 'State/api';
-import { useCurrentUser } from 'State/current-user';
 
 import styles from './error.styl';
 
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
 
-const ErrorMessage = ({ title, description}) => (
+const ErrorMessage = ({ title, description }) => (
   <div className={styles.errorMessage}>
     <Heading tagName="h1">{title}</Heading>
     <Text>{description}</Text>
-    <Button href="/">
-      Back to Glitch
-    </Button>
+    <Button href="/">Back to Glitch</Button>
   </div>
-)
+);
 
 export const NotFoundPage = () => {
   // we show a translated error message and redirect in index.ejs (this just ensures we don't show duplicate messages)
-  if (window.location.origin === 'https://translate.googleusercontent.com') {
-    return null;
-  }
+  if (window.location.origin === 'https://translate.googleusercontent.com') return null;
 
   return (
     <Layout>
