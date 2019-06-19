@@ -234,7 +234,16 @@ const SignInWithCode = ({ align }) => {
   );
 };
 
-const LoginSection = ({ showForgotPassword }) => {
+const TwoFactorSignIn = ({ align, token }) => (
+  <PopoverDialog align={align}>
+    <MultiPopoverTitle>Enter your two factor code</MultiPopoverTitle>
+    <PopoverActions>
+      <TwoFactorForm initialToken={token} />
+    </PopoverActions>
+  </PopoverDialog>
+);
+
+const PasswordLoginSection = ({ showForgotPassword }) => {
   const [emailAddress, setEmail, emailValidationError] = useEmail();
   const [password, setPassword] = useState('');
   const [tfaToken, setTfaToken] = useState('');
@@ -292,6 +301,8 @@ export const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
+  const [tfaToken, setTfaToken] = React.useState('');
+  
   const onClick = () =>
     setDestination({
       expires: dayjs()
@@ -307,12 +318,18 @@ export const SignInPopBase = withRouter(({ location, align }) => {
     onClick();
     next();
   };
+  
+  const setTwoFactorAnd = (next) => (token) => {
+    setTfaToken(token);
+    next();
+  };
 
   return (
     <MultiPopover
       views={{
         email: (showView) => <EmailHandler align={align} showView={showView} />,
         signInCode: () => <SignInWithCode align={align} />,
+        twoFactor: () => <TwoFactorHandler align={align} token={tfaToken} />,
         forgotPassword: () => <ForgotPasswordHandler align={align} />,
       }}
     >
@@ -327,7 +344,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
               <Link to="/legal/#privacy">Privacy Statement</Link>
             </div>
           </PopoverInfo>
-          {userPasswordEnabled && <LoginSection showForgotPassword={showView.forgotPassword} />}
+          {userPasswordEnabled && <PasswordLoginSection showTwoFactor={setTwoFactorAnd(showView.twoFactor)showForgotPassword={showView.forgotPassword} />}
           <PopoverActions>
 
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>

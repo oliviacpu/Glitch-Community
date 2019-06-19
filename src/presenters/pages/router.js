@@ -21,6 +21,8 @@ import SearchPage from './search';
 import SecretPage from './secret';
 import VSCodeAuth from './vscode-auth';
 
+import TwoFactorCodePage from './two-factor-code';
+
 /* global EXTERNAL_ROUTES */
 const parse = (search, name) => {
   const params = new URLSearchParams(search);
@@ -157,7 +159,7 @@ const Router = () => (
       ))}
 
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
-
+      <Route path="/2fa-test" exact render={<TwoFactorCodePage initialToken={"none"} onSuccess={() => {}} />} />
       <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 
       {EXTERNAL_ROUTES.map((route) => (

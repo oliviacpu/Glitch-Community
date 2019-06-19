@@ -9,35 +9,29 @@ import Logo from 'Components/header/logo';
 import Heading from 'Components/text/heading';
 import TwoFactorForm from 'Components/sign-in/two-factor-form';
 
-import { useCurrentUser } from 'State/current-user';
-import useDevToggle from 'State/dev-toggles';
-import useLocalStorage from 'State/local-storage';
+import styles from './two-factor-code.styl';
 
-import styles from './vscode-auth.styl';
-
-const TwoFactorCodePage = ({ initialToken, onSuccess }) => {
-  return (
-    <div className={styles.layout}>
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <div className={styles.about}>
-            <div className={styles.logo}>
-              <Link to="/">
-                <Logo />
-              </Link>
-            </div>
-            <div className={styles.whatIsGlitch}>
-              <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
-            </div>
+const TwoFactorCodePage = ({ initialToken, onSuccess }) => (
+  <div className={styles.layout}>
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.about}>
+          <div className={styles.logo}>
+            <Link to="/">
+              <Logo />
+            </Link>
           </div>
-          <div className={styles.code}>
-            <TwoFactorForm initialToken={initialToken} onSuccess={onSuccess} />
+          <div className={styles.whatIsGlitch}>
+            <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
           </div>
+        </div>
+        <div className={styles.code}>
+          <TwoFactorForm initialToken={initialToken} onSuccess={onSuccess} />
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 TwoFactorCodePage.propTypes = {
   initialToken: PropTypes.string.isRequired,
