@@ -11,6 +11,8 @@ import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
+import Loader from 'Components/loader';
+import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
 import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
@@ -29,6 +31,7 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
+  const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
   if (done) {
     return <Redirect to={getOwnerLink(collection)} />;
   }
@@ -38,10 +41,23 @@ function DeleteCollectionBtn({ collection, deleteCollection }) {
       size="small"
       emoji="bomb"
       onClick={() => {
-        if (!window.confirm('Are you sure you want to delete your collection?')) {
-          return;
-        }
-        deleteCollection();
+        return (
+          <PopoverDialog focusOnDialog align="left">
+            <PopoverTitle>Delete {collection.name}</PopoverTitle>
+            <PopoverActions>
+              <Image height="98px" width="auto" src={illustration} alt="" />
+              <ActionDescription>
+                Deleting {collection.name} will remove this collection. No projects will be deleted
+              </ActionDescription>
+            </PopoverActions>
+            <PopoverActions type="dangerZone">
+              <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteCollection}>
+                Delete {collection.name}
+                {!done && <Loader />}
+              </Button>
+            </PopoverActions>
+          </PopoverDialog>
+        );
         setDone(true);
       }}
     >
