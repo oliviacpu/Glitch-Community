@@ -26,7 +26,7 @@ import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
+import { useCollectionEditor, userOrTeamIsAuthor, deleteCollection } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 const DeleteCollectionPop = withRouter(({ history, collection }) => {
