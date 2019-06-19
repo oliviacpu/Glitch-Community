@@ -78,37 +78,3 @@ OauthErrorPage.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };
-
-export const ProjectNotFoundPage = ({ name }) => {
-  const api = useAPI();
-  const { currentUser } = useCurrentUser();
-
-  const check = async () => {
-    try {
-      const { data } = await api.post(`projects/${name}/appAuthToken`);
-      if (data) {
-        window.location.replace(getShowUrl(name));
-      }
-    } catch (error) {
-      const status = error && error.response && error.response.status;
-      if (status !== 404 && status !== 401) {
-        captureException(error);
-      }
-    }
-  };
-  React.useEffect(() => {
-    check();
-  }, [name, currentUser.persistentToken]);
-
-  return (
-    <Layout>
-      <Helmet title="👻 Project not found" />
-      <NotFound name={name} />
-      <Text>Either there's no project here, or you don't have access to it. Are you logged in as the right user?</Text>
-    </Layout>
-  );
-};
-
-ProjectNotFoundPage.propTypes = {
-  name: PropTypes.string.isRequired,
-};

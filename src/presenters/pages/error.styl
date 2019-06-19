@@ -3,14 +3,17 @@
   align-items: center
   justify-content: center
   flex-direction: column
-  margin: 20px 0
-
-.errorImage
-  margin-bottom: 3em
+  padding: 20px 0
+  margin: -1.5em
+  & > *
+    margin: 1.5em
+  @media(min-width: 700px)
+    flex-direction: row
+    padding: 10em 0
   
 .emailErrorImage
-  margin-bottom: 3em
-  max-width: 72%  
+  max-width: 72%
+  margin-right: 0
 
 .errorMessage
   background: secondary-background 
@@ -19,15 +22,3 @@
   *
     margin: 20px
 
-@media(min-width: 700px)
-  .container
-    padding-top: 10em
-    padding-bottom: 10em
-    flex-direction: row
-  .errorImage
-    margin-right: 3em
-  .emailErrorImage
-    margin-right: 3em
-    margin-right: 0
-  .errorMessage
-    margin-top: 0
