@@ -2,10 +2,9 @@ import React, { useState, useMemo, useContext, createContext } from 'react';
 
 import useUploader from 'State/uploader';
 import { useAPI } from 'State/api';
+import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
-
-import useErrorHandlers from '../presenters/error-handlers';
 
 export const ProjectContext = createContext();
 

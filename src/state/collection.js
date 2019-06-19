@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useAPI } from 'State/api';
-import useErrorHandlers from '../presenters/error-handlers';
+import useErrorHandlers from 'State/error-handlers';
 
 export const addProjectToCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/add/${projectId}`);
 export const orderProjectInCollection = (api, projectId, collection, index) =>
