@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 
 import Text from 'Components/text/text';
 import Link from 'Components/link';
@@ -28,18 +27,6 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     }, 3000);
   }
 
-  const slackAuthEnabled = useDevToggle('Slack Auth');
-  const [, setDestination] = useLocalStorage('destinationAfterAuth');
-  const onClick = () =>
-    setDestination({
-      expires: dayjs()
-        .add(10, 'minutes')
-        .toISOString(),
-      to: {
-        pathname: location.pathname,
-        search: location.search,
-      },
-    });
 
   return (
     <div className={styles.layout}>

@@ -4,30 +4,44 @@ import PropTypes from 'prop-types';
 import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 
+import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
-const TwoFactorSignIn = ({ token }) => {
+const TwoFactorSignIn = ({ initialToken }) => {
+  const api = useAPI();
   const { login } = useCurrentUser();
   const [code, setCode] = React.useState('');
+  const [token, setToken] = React.useState(initialToken);
   const [working, setWorking] = React.useState(false);
-  const [error, setError] = React.useState(null);
+  const [errorText, setErrorText] = React.useState(null);
   
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     setWorking(true);
-    setError(null);
+    setErrorText(null);
+    
+    try {
+      const { data } = api.post('/user/tfa/verifyCode', { code, token });
+      console.log(data);
+    } catch (error) {
+      if (error && error.response && error.response.data && error.response.data.status === 401) {
+        setToken(error.response.data.retryToken);
+        setErrorText(error.response.data.message);
+        setWorking(false);
+      }
+    }
   };
   
   return (
     <form onSubmit={onSubmit}>
-      <TextInput value={code} onChange={setCode} placeholder="12345" labelText="code" disabled={working} />
-      <Button size="small" submit>Submit</Button>
+      <TextInput value={code} onChange={setCode} placeholder="123456" labelText="code" disabled={working} />
+      <Button size="small" disabled={working || code.length < 6} submit>Submit</Button>
     </form>
   );
 };
 
 TwoFactorSignIn.propTypes = {
-  token: PropTypes.string.isRequired,
+  initialToken: PropTypes.string.isRequired,
 };
 
 export default TwoFactorSignIn;
