@@ -36,31 +36,28 @@ const ResetPasswordLogin = ({ loginToken, resetPasswordToken }) => {
 const ResetPasswordForm = ({ resetPasswordToken }) => {
   const api = useAPI();
   const [password, setPassword] = React.useState(null);
-  const [state, setState] = React.useState(null);
-  const [error, setError] = React.useState(null);
-  const isWorking = state === 'working';
+  const [state, setState] = React.useState({});
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    setState('working');
+    setState({ working: true });
     try {
       await api.post('/user/updatePasswordWithToken', {
         token: resetPasswordToken,
         password,
       });
-      setState('done');
+      setState({ done: true });
     } catch (error) {
       console.error(error);
       if (error.response && error.response.data && error.response.data.status === 401) {
-        setError('Reset request was not found or already used.');
+        setState({ error: 'This password reset request has already been used' });
       } else {
-        setError('Something went wrong setting your password');
+        setState({ error: 'Something went wrong setting your password' });
       }
-      setState('error');
     }
   };
 
-  if (state === 'done') {
+  if (state.done) {
     return <Redirect to="/" />;
   }
 
@@ -70,15 +67,15 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
         <OverlayTitle>Reset Password <Emoji name="key" /></OverlayTitle>
       </OverlaySection>
       <OverlaySection type="actions">
-        {state === 'error' ? (
+        {state.error ? (
           <>
             <Notification type="error" persistent>Error</Notification>
-            {error}
+            {state.error}
           </>
         ) : (
           <form onSubmit={onSubmit}>
-            <NewPasswordInput disabled={isWorking} onChange={setPassword} />
-            <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
+            <NewPasswordInput disabled={state.working} onChange={setPassword} />
+            <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
           </form>
         )}
       </OverlaySection>
