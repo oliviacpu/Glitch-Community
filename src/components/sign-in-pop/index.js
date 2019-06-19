@@ -185,7 +185,7 @@ const EmailHandler = ({ align, showView }) => {
   );
 };
 
-const SignInWithCode = ({ align }) => {
+const SignInWithCode = ({ align, showTwoFactor }) => {
   const { login } = useCurrentUser();
   const api = useAPI();
   const [code, setCode] = useState('');
@@ -197,8 +197,12 @@ const SignInWithCode = ({ align }) => {
     setStatus('loading');
     try {
       const { data } = await api.post(`/auth/email/${code}`);
-      login(data);
-      setStatus('done');
+      if (data.tfaToken) {
+        showTwoFactor(data.tfaToken);
+      } else {
+        login(data);
+        setStatus('done');
+      }
     } catch (error) {
       if (error && error.response && error.response.status !== 401) {
         captureException(error);
@@ -236,17 +240,16 @@ const SignInWithCode = ({ align }) => {
 
 const TwoFactorSignIn = ({ align, token }) => (
   <PopoverDialog align={align}>
-    <MultiPopoverTitle>Enter your two factor code</MultiPopoverTitle>
+    <MultiPopoverTitle>Two factor auth <Emoji name="key" /></MultiPopoverTitle>
     <PopoverActions>
       <TwoFactorForm initialToken={token} />
     </PopoverActions>
   </PopoverDialog>
 );
 
-const PasswordLoginSection = ({ showForgotPassword }) => {
+const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
   const [emailAddress, setEmail, emailValidationError] = useEmail();
   const [password, setPassword] = useState('');
-  const [tfaToken, setTfaToken] = useState('');
   const [working, setWorking] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -261,8 +264,7 @@ const PasswordLoginSection = ({ showForgotPassword }) => {
       const { data } = await api.post('user/login', { emailAddress, password });
       // leave working=true because logging in will hide the sign in pop
       if (data.tfaToken) {
-        setWorking(false);
-        setTfaToken(data.tfaToken);
+        showTwoFactor(data.tfaToken);
       } else {
         login(data);
       }
@@ -279,15 +281,13 @@ const PasswordLoginSection = ({ showForgotPassword }) => {
   return (
     <PopoverActions>
       {!!errorMessage && <Notification type="error" persistent>{errorMessage}</Notification>}
-      {!tfaToken ? (
-        <form data-cy="sign-in-form" onSubmit={handleSubmit}>
-          <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
-          <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
-          <div className={styles.submitWrap}>
-            <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
-          </div>
-        </form>
-      ) : <TwoFactorForm initialToken={tfaToken} />}
+      <form data-cy="sign-in-form" onSubmit={handleSubmit}>
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
+        <div className={styles.submitWrap}>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
+        </div>
+      </form>
       <div className={styles.submitWrap}>
         <Button size="small" type="tertiary" onClick={showForgotPassword}>
           Forgot Password
@@ -302,7 +302,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
   const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
   const [tfaToken, setTfaToken] = React.useState('');
-  
+
   const onClick = () =>
     setDestination({
       expires: dayjs()
@@ -318,7 +318,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
     onClick();
     next();
   };
-  
+
   const setTwoFactorAnd = (next) => (token) => {
     setTfaToken(token);
     next();
@@ -328,8 +328,8 @@ export const SignInPopBase = withRouter(({ location, align }) => {
     <MultiPopover
       views={{
         email: (showView) => <EmailHandler align={align} showView={showView} />,
-        signInCode: () => <SignInWithCode align={align} />,
-        twoFactor: () => <TwoFactorHandler align={align} token={tfaToken} />,
+        signInCode: (showView) => <SignInWithCode align={align} showTwoFactor={setTwoFactorAnd(showView.twoFactor)} />,
+        twoFactor: () => <TwoFactorSignIn align={align} token={tfaToken} />,
         forgotPassword: () => <ForgotPasswordHandler align={align} />,
       }}
     >
@@ -344,7 +344,9 @@ export const SignInPopBase = withRouter(({ location, align }) => {
               <Link to="/legal/#privacy">Privacy Statement</Link>
             </div>
           </PopoverInfo>
-          {userPasswordEnabled && <PasswordLoginSection showTwoFactor={setTwoFactorAnd(showView.twoFactor)showForgotPassword={showView.forgotPassword} />}
+          {userPasswordEnabled && (
+            <PasswordLoginSection showTwoFactor={setTwoFactorAnd(showView.twoFactor)} showForgotPassword={showView.forgotPassword} />
+          )}
           <PopoverActions>
 
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
