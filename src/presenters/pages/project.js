@@ -29,6 +29,7 @@ import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
+import useUniqueId from 'Hooks/use-unique-id';
 
 import Expander from '../includes/expander';
 
@@ -179,7 +180,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { domain, users, teams, suspendedReason } = project;
   return (
     <main className="project-page">
-      <section id="info">
+      <section id={useUniqueId()}>
         <ProjectProfileContainer
           currentUser={currentUser}
           project={project}
@@ -230,16 +231,16 @@ const ProjectPage = ({ project: initialProject }) => {
           addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
         />
       </div>
-      <section id="readme">
+      <section id={useUniqueId()}>
         <ReadmeLoader domain={domain} />
       </section>
 
       {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
-      <section id="included-in-collections">
+      <section id={useUniqueId()}>
         <IncludedInCollections projectId={project.id} />
       </section>
-      <section id="related">
+      <section id={useUniqueId()}>
         <RelatedProjects project={project} />
       </section>
     </main>
