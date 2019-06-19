@@ -278,7 +278,7 @@ const LoginSection = ({ showForgotPassword }) => {
             <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
           </div>
         </form>
-      ) : <TwoFactorForm token={tfaToken} />}
+      ) : <TwoFactorForm initialToken={tfaToken} />}
       <div className={styles.submitWrap}>
         <Button size="small" type="tertiary" onClick={showForgotPassword}>
           Forgot Password
