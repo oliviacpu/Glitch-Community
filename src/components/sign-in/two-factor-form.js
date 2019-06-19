@@ -9,6 +9,8 @@ import Text from 'Components/text/text';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './styles.styl';
+
 const TwoFactorSignIn = ({ initialToken, onSuccess }) => {
   const api = useAPI();
   const { login } = useCurrentUser();
@@ -52,8 +54,9 @@ const TwoFactorSignIn = ({ initialToken, onSuccess }) => {
       <Notification type="success" persistent>Almost Done</Notification>
       <Text>Enter your two factor auth code to finish signing in</Text>
       <TextInput value={code} onChange={onChange} maxLength={6} placeholder="123456" labelText="code" error={status.message} disabled={status.working} />
-      <div className={styles.submitWrap}></div>
-      <Button size="small" disabled={status.working || code.length < 6} submit>Sign in</Button>
+      <div className={styles.submitWrap}>
+        <Button size="small" disabled={status.working || code.length < 6} submit>Sign in</Button>
+      </div>
     </form>
   );
 };
