@@ -45,7 +45,7 @@ const DeletedProject = ({ id, domain, onClick }) => {
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
           <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-          <div className={styles.projectName}>{domain}</div>
+          <span className={styles.projectName}>{domain}</span>
           <div className={styles.buttonWrap}>
             <Button size="small" decorative>
               Undelete
