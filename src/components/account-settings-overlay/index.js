@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
-import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import PopoverContainer from 'Components/popover/container';
 import { useCurrentUser } from 'State/current-user';
 import { useAPI } from 'State/api';
@@ -72,15 +72,18 @@ const AccountSettingsOverlay = () => {
   );
 };
 
-const AccountSettings = ({ children }) => (
-  <PopoverContainer>
-    {({ visible, openPopover, closePopover }) => (
-      <details onToggle={(evt) => evt.target.open ? openPopover(evt) : closePopover()} open={visible} className="overlay-container">
-        <summary>{children}</summary>
-        <AccountSettingsOverlay />
-      </details>
-    )}
-  </PopoverContainer>
-);
+const AccountSettingsContainer = ({ children }) => {
+  const renderOuter = ({ visible, openPopover }) => (
+    <>
+      {children(openPopover)}
+      {visible && <OverlayBackground />}
+    </>
+  );
+  return (
+    <PopoverContainer outer={renderOuter}>
+      {({ visible }) => visible ? <AccountSettingsOverlay /> : null}
+    </PopoverContainer>
+  );
+}
 
-export default AccountSettings;
+export default AccountSettingsContainer;

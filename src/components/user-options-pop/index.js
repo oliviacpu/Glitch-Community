@@ -71,7 +71,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, superUserHelpers }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showAccountsshowNewStuffOverlay, superUserHelpers }) => {
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
 
   const trackLogout = useTracker('Logout');
@@ -140,11 +140,9 @@ Are you sure you want to sign out?`)
         </div>
         {userPasswordEnabled && (
           <div className={styles.buttonWrap}>
-            <AccountSettings>
-              <Button size="small" type="tertiary" emoji="key" decorative>
-                Account Settings
-              </Button>
-            </AccountSettings>
+            <Button size="small" type="tertiary" emoji="key" decorative>
+              Account Settings
+            </Button>
           </div>
         )}
         <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
@@ -160,6 +158,7 @@ UserOptionsPop.propTypes = {
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
+  showAccountSettingsOverlay: PropTypes.func.isRequired,
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
