@@ -16,6 +16,7 @@ import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
+import useUniqueId from 'Hooks/use-unique-id';
 
 import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './create-collection-pop.styl';
@@ -33,7 +34,7 @@ const getUserOption = (currentUser) => ({
 const getTeamOption = (team) => ({
   value: team.id,
   label: (
-    <span id={team.id}>
+    <span id={useUniqueId()}>
       <TeamAvatar team={team} hideTooltip /> {team.name}
     </span>
   ),
