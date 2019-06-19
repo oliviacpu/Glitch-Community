@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
-import { withRouter } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
-import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
-import Button from 'Components/buttons/button';
+import { isDarkColor, getLink } from 'Models/collection';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
-import Loader from 'Components/loader';
-import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton } from 'Components/popover';
 import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
@@ -20,17 +16,17 @@ import DataLoader from 'Components/data-loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
+import DeleteCollection from 'Components/collection/delete-collection-pop';
 import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor, userOrTeamIsAuthor, deleteCollection } from 'State/collection';
-import { useNotifications } from 'State/notifications';
+import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
-import { useAPI } from 'State/api';
 
+/*
 const DeleteCollectionPop = withRouter(({ history, collection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
@@ -86,7 +82,7 @@ DeleteCollectionBtn.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
-
+*/
 const CollectionPageContents = ({ collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, funcs] = useCollectionEditor(initialCollection);
@@ -200,7 +196,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
-      {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={funcs.deleteCollection} />}
+      {currentUserIsAuthor && <DeleteCollection collection={collection} />}
       <MoreCollectionsContainer collection={collection} />
     </>
   );

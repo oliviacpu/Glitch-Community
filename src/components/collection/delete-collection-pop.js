@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-  const DeleteCollectionPop = withRouter(({ history, collection }) => {
+import { getOwnerLink } from 'Models/collection';
+import Button from 'Components/buttons/button';
+import Image from 'Components/images/image';
+import Loader from 'Components/loader';
+import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton } from 'Components/popover';
+import { deleteCollection } from 'State/collection';
+import { useNotifications } from 'State/notifications';
+import { useAPI } from 'State/api';
+
+const DeleteCollectionPop = withRouter(({ history, collection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
@@ -42,18 +51,18 @@ import { withRouter } from 'react-router-dom';
   );
 });
 
-function DeleteCollectionBtn({ collection }) {
-  return (
-    <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-      {() => <DeleteCollectionPop collection={collection} />}
-    </PopoverWithButton>
-  );
-}
+const DeleteCollection = ({ collection }) => (
+  <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+    {() => <DeleteCollectionPop collection={collection} />}
+  </PopoverWithButton>
+);
 
-DeleteCollectionBtn.propTypes = {
+DeleteCollection.propTypes = {
   collection: PropTypes.shape({
     team: PropTypes.object,
     user: PropTypes.object,
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+export default DeleteCollection;
