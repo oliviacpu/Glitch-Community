@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { getOwnerLink } from 'Models/collection';
-import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
-import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton } from 'Components/popover';
+import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
 import { deleteCollection } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
@@ -20,13 +19,10 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
   async function deleteThisCollection() {
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
-    console.log(collectionIsDeleting);
     try {
-      console.log('try');
       deleteCollection(api, collection);
       history.push(getOwnerLink(collection));
     } catch (error) {
-      console.log('catch');
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
       setCollectionIsDeleting(false);
     }
@@ -42,10 +38,9 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteThisCollection}>
-          Delete {collection.name}
+        <PopoverMenuButton size="small" label={`Delete ${collection.name}`} type="dangerZone" emoji="bomb" onClick={deleteThisCollection}>
           {collectionIsDeleting && <Loader />}
-        </Button>
+        </PopoverMenuButton>
       </PopoverActions>
     </PopoverDialog>
   );
