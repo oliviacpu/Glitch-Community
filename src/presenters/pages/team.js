@@ -26,7 +26,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
-import useUniqueId from 'Hooks/use-unique-id';
 
 import ProjectsLoader from '../projects-loader';
 import styles from './team.styl';
@@ -101,7 +100,7 @@ const useTeamNameConflictWarning = (team) => {
   const { createNotification } = useNotifications();
   useEffect(() => {
     if (teamConflictsWithUser(team, currentUser)) {
-      const notification = createNotification(<NameConflictWarning id={useUniqueId()} />, { persistent: true });
+      const notification = createNotification(<NameConflictWarning id={team.id} />, { persistent: true });
       return () => {
         notification.removeNotification();
       };
