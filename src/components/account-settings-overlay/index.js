@@ -84,6 +84,6 @@ const AccountSettingsContainer = ({ children }) => {
       {({ visible }) => visible ? <AccountSettingsOverlay /> : null}
     </PopoverContainer>
   );
-}
+};
 
 export default AccountSettingsContainer;

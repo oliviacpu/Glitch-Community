@@ -48,7 +48,13 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           )}
           {!!currentUser && currentUser.login && (
             <li className={styles.buttonWrap}>
-              <UserOptionsPop user={currentUser} signOut={clear} showAccountSettingsOverlay={showAccountSettingsOverlay} showNewStuffOverlay={showNewStuffOverlay} superUserHelpers={superUserHelpers} />
+              <UserOptionsPop
+                user={currentUser}
+                signOut={clear}
+                showAccountSettingsOverlay={showAccountSettingsOverlay}
+                showNewStuffOverlay={showNewStuffOverlay}
+                superUserHelpers={superUserHelpers}
+              />
             </li>
           )}
         </ul>

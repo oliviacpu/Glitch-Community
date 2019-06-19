@@ -10,7 +10,6 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
-import AccountSettings from 'Components/account-settings-overlay';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
@@ -71,7 +70,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showAccountsshowNewStuffOverlay, superUserHelpers }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showAccountSettingsOverlay, showNewStuffOverlay, superUserHelpers }) => {
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
 
   const trackLogout = useTracker('Logout');
@@ -79,6 +78,12 @@ const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showAcco
   const clickNewStuff = (event) => {
     togglePopover();
     showNewStuffOverlay();
+    event.stopPropagation();
+  };
+
+  const clickAccountSettings = (event) => {
+    togglePopover();
+    showAccountSettingsOverlay();
     event.stopPropagation();
   };
 
@@ -140,7 +145,7 @@ Are you sure you want to sign out?`)
         </div>
         {userPasswordEnabled && (
           <div className={styles.buttonWrap}>
-            <Button size="small" type="tertiary" emoji="key" decorative>
+            <Button size="small" type="tertiary" emoji="key" onClick={clickAccountSettings}>
               Account Settings
             </Button>
           </div>
