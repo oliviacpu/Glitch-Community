@@ -159,7 +159,7 @@ const Router = () => (
       ))}
 
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
-      <Route path="/2fa-test" exact render={({ location }) => <TwoFactorCodePage key={location.key} initialToken='none' onSuccess={() => {}} />} />
+      <Route path="/2fa-test" exact render={({ location }) => <TwoFactorCodePage key={location.key} initialToken="" onSuccess={() => {}} />} />
       <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 
       {EXTERNAL_ROUTES.map((route) => (
