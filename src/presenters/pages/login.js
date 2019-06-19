@@ -8,7 +8,7 @@ import { captureException } from 'Utils/sentry';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import TwoFactorForm from 'Components/sign-in/two-factor-form';
+import TwoFactorCodePage from './two-factor-code';
 import { EmailErrorPage, OauthErrorPage } from './error';
 
 // The Editor may embed /login/* endpoints in an iframe in order to share code.
@@ -106,7 +106,7 @@ const LoginPage = ({ provider, url }) => {
     return <OauthErrorPage title={errorTitle} description={errorMessage} />;
   }
   if (state.status === 'tfa') {
-    return <TwoFactorForm initialToken={state.token} onSuccess={setDone} />;
+    return <TwoFactorCodePage initialToken={state.token} onSuccess={setDone} />;
   }
   return <div className="content" />;
 };
