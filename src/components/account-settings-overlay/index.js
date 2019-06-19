@@ -74,8 +74,8 @@ const AccountSettingsOverlay = () => {
 
 const AccountSettings = ({ children }) => (
   <PopoverContainer>
-    {({ visible, setVisible }) => (
-      <details onToggle={(evt) => setVisible(evt.target.open)} open={visible} className="overlay-container">
+    {({ visible, openPopover, closePopover }) => (
+      <details onToggle={(evt) => evt.target.open ? openPopover(evt) : closePopover()} open={visible} className="overlay-container">
         <summary>{children}</summary>
         <AccountSettingsOverlay />
       </details>
