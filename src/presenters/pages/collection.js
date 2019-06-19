@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Pluralize from 'react-pluralize';
-import { Redirect, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { kebabCase, partition } from 'lodash';
 
 import { isDarkColor, getLink, getOwnerLink } from 'Models/collection';
@@ -12,7 +12,7 @@ import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
+import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton } from 'Components/popover';
 import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
@@ -29,24 +29,29 @@ import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, deleteCollection } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { getSingleItem, getAllPages } from 'Shared/api';
+import { useAPI } from 'State/api';
 
-const DeleteCollectionPop = withRouter(({ collection }) => {
+const DeleteCollectionPop = withRouter(({ history, collection }) => {
+  const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
   const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
-  async function deleteCollection() {
+  async function deleteThisCollection() {
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
+    console.log(collectionIsDeleting);
     try {
-      deleteCollection(collection);
-      <Redirect to={getOwnerLink(collection)} />;
+      console.log('try');
+      deleteCollection(api, collection);
+      history.push(getOwnerLink);
     } catch (error) {
+      console.log('catch');
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
       setCollectionIsDeleting(false);
     }
   }
-  
+
   return (
     <PopoverDialog focusOnDialog align="left">
       <PopoverTitle>Delete {collection.name}</PopoverTitle>
@@ -57,7 +62,7 @@ const DeleteCollectionPop = withRouter(({ collection }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteCollection}>
+        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteThisCollection}>
           Delete {collection.name}
           {collectionIsDeleting && <Loader />}
         </Button>
