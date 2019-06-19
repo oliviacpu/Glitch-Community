@@ -15,6 +15,7 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useTrackedFunc } from 'State/segment-analytics';
+import useUniqueId from 'Hooks/use-unique-id';
 
 import styles from './deleted-projects.styl';
 
@@ -72,7 +73,7 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
         const canUndelete = permission && permission.accessLevel === 30 && undelete;
         const onClick = canUndelete ? () => undeleteTracked(id) : null;
 
-        return <DeletedProject id={id} domain={domain} onClick={onClick} />;
+        return <DeletedProject id={useUniqueId()} domain={domain} onClick={onClick} />;
       }}
     </Grid>
   );
