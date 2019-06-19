@@ -1,0 +1,65 @@
+.container
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  margin: 20px 0
+
+.errorImage
+  margin-bottom: 3em
+  
+.emailErrorImage
+  max-width: 72%  
+
+.errorMessage
+  background: secondary-background 
+  border: 3px solid black
+  border-radius: 10px
+  *
+    margin: 20px
+
+@media(min-width: 700px)
+  .container
+    padding-top: 10em
+    padding-bottom: 10em
+    flex-direction: row
+  .errorImage
+    margin-right: 3em
+  .emailErrorImage
+    margin-right: 0
+  .errorMessage
+    margin-top: 0
+
+
+    
+    
+:global
+  .error-page-container
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    margin: 20px 0
+    .error-image
+      margin-bottom: 3em
+    .email-error-image
+        max-width: 72%
+    .error-msg 
+      background: secondary-background 
+      border: 3px solid black
+      border-radius: 10px
+      *
+        margin: 20px
+
+  @media(min-width: 700px)
+    .error-page-container
+      padding-top: 10em
+      padding-bottom: 10em
+      flex-direction: row
+      .error-image
+        margin-right: 3em
+      .email-error-image
+        margin-right: 0
+      .error-msg
+        margin-top: 0
+

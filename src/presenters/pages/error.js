@@ -6,11 +6,13 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import NotFound from 'Components/errors/not-found';
 import Layout from 'Components/layout';
+import Button from 'Components/buttons/button';
 import { captureException } from 'Utils/sentry';
 import { getShowUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './error.styl';
 
 const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
 
@@ -24,14 +26,14 @@ export const NotFoundPage = () => {
   return (
     <Layout>
       <Helmet title="👻 Page not found" />
-      <main className="error-page-container">
-        <Image className="error-image" src={telescopeImageUrl} alt="" width="318px" height="297px" />
-        <div className="error-msg">
+      <main className={styles.container}>
+        <Image className={styles.errorImage} src={telescopeImageUrl} alt="" width="318px" height="297px" />
+        <div className={styles.errorMessage}>
           <Heading tagName="h1">Page Not Found</Heading>
           <Text>Maybe a typo, or perhaps it's moved?</Text>
-          <a className="button button-link" href="/">
+          <Button href="/">
             Back to Glitch
-          </a>
+          </Button>
         </div>
       </main>
     </Layout>
