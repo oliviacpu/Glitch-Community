@@ -44,7 +44,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
     try {
       console.log('try');
       deleteCollection(api, collection);
-      history.push(getOwnerLink);
+      history.push(getOwnerLink(collection));
     } catch (error) {
       console.log('catch');
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
