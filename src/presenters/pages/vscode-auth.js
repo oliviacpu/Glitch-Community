@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
+import Layout from 'Components/layout';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import SignInButton from 'Components/buttons/sign-in-button';
@@ -44,25 +45,29 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     });
 
   return (
-    <div className={styles.content}>
-      <div className={styles.about}>
-        <div className={styles.logo}>
-          <Logo />
-        </div>
-        <div className={styles.whatIsGlitch}>
-          <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
-        </div>
-      </div>
-      <div className={styles.signIn}>
-        <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
-        {!isSignedIn &&
-          <div>
-            <SignInButton company="facebook" onClick={onClick} />
-            <SignInButton company="github" onClick={onClick} />
-            <SignInButton company="google" onClick={onClick} />
-            {slackAuthEnabled && <SignInButton company="slack" onClick={onClick} />}
+    <div className={styles.layout}>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.about}>
+            <div className={styles.logo}>
+              <Logo />
+            </div>
+            <div className={styles.whatIsGlitch}>
+              <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
+            </div>
           </div>
-        }
+          <div className={styles.signIn}>
+            <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
+            {!isSignedIn &&
+              <div>
+                <SignInButton company="facebook" onClick={onClick} />
+                <SignInButton company="github" onClick={onClick} />
+                <SignInButton company="google" onClick={onClick} />
+                {slackAuthEnabled && <SignInButton company="slack" onClick={onClick} />}
+              </div>
+            }
+          </div>
+        </div>
       </div>
     </div>
   );
