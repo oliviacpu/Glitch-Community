@@ -27,22 +27,24 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
 
-import ProjectsLoader from '../projects-loader';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
 
-const TeamPageCollections = ({ collections, team, currentUser, currentUserIsOnTeam }) => (
-  <CollectionsList
-    title="Collections"
-    collections={collections.map((collection) => ({ ...collection, team }))}
-    maybeCurrentUser={currentUser}
-    maybeTeam={team}
-    isAuthorized={currentUserIsOnTeam}
-  />
-);
+const TeamPageCollections = ({ collections, team }) => {
+  const { currentUser } = useCurrentUser();
+  return (
+    <CollectionsList
+      title="Collections"
+      collections={collections.map((collection) => ({ ...collection, team }))}
+      maybeCurrentUser={currentUser}
+      maybeTeam={team}
+      isAuthorized={userIsOnTeam({ team, user: currentUser })}
+    />
+  );
+};
 
 const Beta = () => (
   <a href="/teams/" target="_blank" className={styles.beta}>
@@ -111,9 +113,9 @@ const useTeamNameConflictWarning = (team) => {
 
 // Team Page
 
-function TeamPage(props) {
+function TeamPage({ team: initialTeam }) {
   const { currentUser } = useCurrentUser();
-  const { team } = props;
+  const [team, funcs] = useTeamEditor(initialTeam);
   useTeamNameConflictWarning(team);
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
@@ -123,15 +125,15 @@ function TeamPage(props) {
   const [pinnedProjects, recentProjects] = partition(team.projects.filter(({ id }) => id !== team.featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
-  const updateUrl = (url) => props.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
+  const updateUrl = (url) => funcs.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
 
   const projectOptions = {
-    addProjectToCollection: props.addProjectToCollection,
-    deleteProject: props.deleteProject,
-    leaveTeamProject: props.leaveTeamProject,
-    removeProjectFromTeam: props.removeProject,
-    joinTeamProject: props.joinTeamProject,
-    featureProject: props.featureProject,
+    addProjectToCollection: funcs.addProjectToCollection,
+    deleteProject: funcs.deleteProject,
+    leaveTeamProject: funcs.leaveTeamProject,
+    removeProjectFromTeam: funcs.removeProject,
+    joinTeamProject: funcs.joinTeamProject,
+    featureProject: funcs.featureProject,
     isAuthorized: currentUserIsOnTeam,
   };
 
@@ -142,43 +144,43 @@ function TeamPage(props) {
         <TeamProfileContainer
           item={team}
           coverActions={{
-            'Upload Cover': currentUserIsTeamAdmin ? props.uploadCover : null,
-            'Clear Cover': currentUserIsTeamAdmin && team.hasCoverImage ? props.clearCover : null,
+            'Upload Cover': currentUserIsTeamAdmin ? funcs.uploadCover : null,
+            'Clear Cover': currentUserIsTeamAdmin && team.hasCoverImage ? funcs.clearCover : null,
           }}
           avatarActions={{
-            'Upload Avatar': currentUserIsTeamAdmin ? props.uploadAvatar : null,
+            'Upload Avatar': currentUserIsTeamAdmin ? funcs.uploadAvatar : null,
           }}
         >
-          <TeamFields team={team} updateName={props.updateName} updateUrl={updateUrl} />
+          <TeamFields team={team} updateName={funcs.updateName} updateUrl={updateUrl} />
           <div className={styles.usersInformation}>
             <TeamUsers
               team={team}
-              removeUserFromTeam={props.removeUserFromTeam}
-              updateUserPermissions={props.updateUserPermissions}
-              updateWhitelistedDomain={props.updateWhitelistedDomain}
-              inviteEmail={props.inviteEmail}
-              inviteUser={props.inviteUser}
-              joinTeam={props.joinTeam}
+              removeUserFromTeam={funcs.removeUserFromTeam}
+              updateUserPermissions={funcs.updateUserPermissions}
+              updateWhitelistedDomain={funcs.updateWhitelistedDomain}
+              inviteEmail={funcs.inviteEmail}
+              inviteUser={funcs.inviteUser}
+              joinTeam={funcs.joinTeam}
             />
           </div>
           <Thanks count={team.users.reduce((total, { thanksCount }) => total + thanksCount, 0)} />
           <AuthDescription
             authorized={currentUserIsTeamAdmin}
             description={team.description}
-            update={props.updateDescription}
+            update={funcs.updateDescription}
             placeholder="Tell us about your team"
           />
         </TeamProfileContainer>
       </section>
 
-      <ErrorBoundary>{currentUserIsOnTeam && <AddTeamProject addProject={props.addProject} teamProjects={team.projects} />}</ErrorBoundary>
+      <ErrorBoundary>{currentUserIsOnTeam && <AddTeamProject addProject={funcs.addProject} teamProjects={team.projects} />}</ErrorBoundary>
 
       {featuredProject && (
         <FeaturedProject
           featuredProject={featuredProject}
           isAuthorized={currentUserIsOnTeam}
-          unfeatureProject={props.unfeatureProject}
-          addProjectToCollection={props.addProjectToCollection}
+          unfeatureProject={funcs.unfeatureProject}
+          addProjectToCollection={funcs.addProjectToCollection}
           currentUser={currentUser}
         />
       )}
@@ -195,7 +197,7 @@ function TeamPage(props) {
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
           projectOptions={{
-            removePin: props.removePin,
+            removePin: funcs.removePin,
             ...projectOptions,
           }}
         />
@@ -211,7 +213,7 @@ function TeamPage(props) {
           enablePagination
           enableFiltering={recentProjects.length > 6}
           projectOptions={{
-            addPin: props.addPin,
+            addPin: funcs.addPin,
             ...projectOptions,
           }}
         />
@@ -223,9 +225,9 @@ function TeamPage(props) {
       <ErrorBoundary>
         <DataLoader
           get={(api) => api.get(`collections?teamId=${team.id}`)}
-          renderLoader={() => <TeamPageCollections {...props} collections={team.collections} />}
+          renderLoader={() => <TeamPageCollections team={team} collections={team.collections} />}
         >
-          {({ data }) => <TeamPageCollections {...props} collections={data} />}
+          {({ data }) => <TeamPageCollections team={team} collections={data} />}
         </DataLoader>
       </ErrorBoundary>
 
@@ -235,7 +237,7 @@ function TeamPage(props) {
             id={team.id}
             currentUserIsOnTeam={currentUserIsOnTeam}
             projects={team.projects}
-            addProject={props.addProject}
+            addProject={funcs.addProject}
             myProjects={currentUser ? currentUser.projects : []}
           />
         </ErrorBoundary>
@@ -255,8 +257,6 @@ function TeamPage(props) {
 
 TeamPage.propTypes = {
   team: PropTypes.shape({
-    _cacheAvatar: PropTypes.number.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
     adminIds: PropTypes.array.isRequired,
     backgroundColor: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
@@ -272,73 +272,12 @@ TeamPage.propTypes = {
     whitelistedDomain: PropTypes.string,
     featuredProjectId: PropTypes.string,
   }).isRequired,
-  addPin: PropTypes.func.isRequired,
-  addProject: PropTypes.func.isRequired,
-  deleteProject: PropTypes.func.isRequired,
-  updateWhitelistedDomain: PropTypes.func.isRequired,
-  inviteEmail: PropTypes.func.isRequired,
-  inviteUser: PropTypes.func.isRequired,
-  clearCover: PropTypes.func.isRequired,
-  removeUserFromTeam: PropTypes.func.isRequired,
-  removePin: PropTypes.func.isRequired,
-  removeProject: PropTypes.func.isRequired,
-  updateName: PropTypes.func.isRequired,
-  updateUrl: PropTypes.func.isRequired,
-  updateDescription: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  uploadCover: PropTypes.func.isRequired,
-  featureProject: PropTypes.func.isRequired,
-  unfeatureProject: PropTypes.func.isRequired,
-  addProjectToCollection: PropTypes.func.isRequired,
 };
 
-const TeamPageEditor = ({ initialTeam, children }) => {
-  const [team, funcs] = useTeamEditor(initialTeam);
-  return (
-    <ProjectsLoader projects={team.projects}>
-      {(projects, reloadProjects) => {
-        // Inject page specific changes to the editor
-        // Mainly url updating and calls to reloadProjects
-
-        const removeUserFromTeam = async (user, projectIds) => {
-          await funcs.removeUserFromTeam(user, projectIds);
-          reloadProjects(...projectIds);
-        };
-
-        const joinTeamProject = async (projectId) => {
-          await funcs.joinTeamProject(projectId);
-          reloadProjects(projectId);
-        };
-
-        const leaveTeamProject = async (projectId) => {
-          await funcs.leaveTeamProject(projectId);
-          reloadProjects(projectId);
-        };
-
-        return children(
-          { ...team, projects },
-          {
-            ...funcs,
-            removeUserFromTeam,
-            joinTeamProject,
-            leaveTeamProject,
-          },
-        );
-      }}
-    </ProjectsLoader>
-
-  );
-};
 const TeamPageContainer = ({ team }) => (
   <AnalyticsContext properties={{ origin: 'team' }} context={{ groupId: team.id.toString() }}>
-    <TeamPageEditor initialTeam={team}>
-      {(teamFromEditor, funcs) => (
-        <>
-          <Helmet title={teamFromEditor.name} />
-          <TeamPage team={teamFromEditor} {...funcs} />
-        </>
-      )}
-    </TeamPageEditor>
+    <Helmet title={team.name} />
+    <TeamPage team={team} />
   </AnalyticsContext>
 );
 
