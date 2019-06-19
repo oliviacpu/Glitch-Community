@@ -4,10 +4,12 @@ import { Redirect } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 import useLocalStorage from 'State/local-storage';
 
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import Notification from 'Components/notification';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 
 import NewPasswordInput from 'Components/new-password-input';
@@ -66,22 +68,30 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
         <OverlayTitle>Reset Password <Emoji name="key" /></OverlayTitle>
       </OverlaySection>
       <OverlaySection type="actions">
-        <form onSubmit={onSubmit}>
-          <NewPasswordInput disabled={isWorking} onChange={setPassword} />
-          <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
-        </form>
+        {state === 'error' ? (
+          <>
+            <Notification type="error" persistent></Notification>
+          </>
+        ) : (
+          <form onSubmit={onSubmit}>
+            <NewPasswordInput disabled={isWorking} onChange={setPassword} />
+            <Button size="small" disabled={!password || isWorking} submit>Set Password</Button>
+          </form>
+        )}
       </OverlaySection>
     </Overlay>
   );
 };
 
 const ResetPasswordPage = ({ loginToken, resetPasswordToken }) => {
+  const { currentUser } = useCurrentUser();
   if (loginToken && resetPasswordToken) {
     return <ResetPasswordLogin loginToken={loginToken} resetPasswordToken={resetPasswordToken} />;
   }
-  if (resetPasswordToken) {
+  if (resetPasswordToken && currentUser && currentUser.login) {
     return <ResetPasswordForm resetPasswordToken={resetPasswordToken} />;
   }
+  // Something went wrong
   return <Redirect to="/" />;
 };
 
