@@ -56,16 +56,18 @@ const LoginPage = ({ provider, url }) => {
   const perform = async () => {
     try {
       const { data } = await api.post(url);
-      if (data.id <= 0) {
+      if (data.tfaToken) {
+        setTwoFactor(data.tfaToken);
+      } else if (!data.id || data.id <= 0) {
         throw new Error(`Bad user id (${data.id}) after ${provider} login`);
+      } else {
+        console.log('LOGGED IN', data.id);
+        login(data);
+
+        setDone();
+        analytics.track('Signed In', { provider });
+        notifyParent({ success: true, details: { provider } });
       }
-
-      console.log('LOGGED IN', data.id);
-      login(data);
-
-      setDone();
-      analytics.track('Signed In', { provider });
-      notifyParent({ success: true, details: { provider } });
     } catch (error) {
       const errorData = error && error.response && error.response.data;
       setError(undefined, errorData && errorData.message);
@@ -104,7 +106,7 @@ const LoginPage = ({ provider, url }) => {
     return <OauthErrorPage title={errorTitle} description={errorMessage} />;
   }
   if (state.status === 'tfa') {
-    return <TwoFactorForm initialToken={state.token} />;
+    return <TwoFactorForm initialToken={state.token} onSuccess={setDone} />;
   }
   return <div className="content" />;
 };

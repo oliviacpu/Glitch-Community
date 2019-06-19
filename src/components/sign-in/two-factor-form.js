@@ -9,7 +9,7 @@ import Text from 'Components/text/text';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
-const TwoFactorSignIn = ({ initialToken }) => {
+const TwoFactorSignIn = ({ initialToken, onSuccess }) => {
   const api = useAPI();
   const { login } = useCurrentUser();
   const [code, setCode] = React.useState('');
@@ -27,6 +27,7 @@ const TwoFactorSignIn = ({ initialToken }) => {
     try {
       const { data } = await api.post('/user/tfa/verifyCode', { code, token });
       login(data.user);
+      onSuccess();
     } catch (error) {
       if (error && error.response && error.response.data && error.response.data.status === 401) {
         setToken(error.response.data.retryToken);
@@ -58,6 +59,11 @@ const TwoFactorSignIn = ({ initialToken }) => {
 
 TwoFactorSignIn.propTypes = {
   initialToken: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func,
+};
+
+TwoFactorSignIn.defaultProps = {
+  onSuccess: () => {},
 };
 
 export default TwoFactorSignIn;
