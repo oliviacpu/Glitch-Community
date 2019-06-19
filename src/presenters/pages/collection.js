@@ -27,46 +27,50 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, deleteCollection } from 'State/collection';
+import { useNotifications } from 'State/notifications';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
-const DeleteCollectionPop = withRouter(({ history, collection }) => {
-  
-})
-
-function DeleteCollectionBtn({ collection, deleteCollection }) {
-  const [done, setDone] = useState(false);
+const DeleteCollectionPop = withRouter(({ collection }) => {
+  const { createNotification } = useNotifications();
+  const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
   const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
-  if (done) {
-    return <Redirect to={getOwnerLink(collection)} />;
+
+  async function deleteCollection() {
+    if (collectionIsDeleting) return;
+    setCollectionIsDeleting(true);
+    try {
+      deleteCollection(collection);
+      <Redirect to={getOwnerLink(collection)} />;
+    } catch (error) {
+      createNotification('Something went wrong, try refreshing?', { type: 'error' });
+      setCollectionIsDeleting(false);
+    }
   }
+  
   return (
-    <Button
-      type="dangerZone"
-      size="small"
-      emoji="bomb"
-      onClick={() => {
-        return (
-          <PopoverDialog focusOnDialog align="left">
-            <PopoverTitle>Delete {collection.name}</PopoverTitle>
-            <PopoverActions>
-              <Image height="98px" width="auto" src={illustration} alt="" />
-              <ActionDescription>
-                Deleting {collection.name} will remove this collection. No projects will be deleted
-              </ActionDescription>
-            </PopoverActions>
-            <PopoverActions type="dangerZone">
-              <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteCollection}>
-                Delete {collection.name}
-                {!done && <Loader />}
-              </Button>
-            </PopoverActions>
-          </PopoverDialog>
-        );
-        setDone(true);
-      }}
-    >
-      Delete Collection
-    </Button>
+    <PopoverDialog focusOnDialog align="left">
+      <PopoverTitle>Delete {collection.name}</PopoverTitle>
+      <PopoverActions>
+        <Image height="98px" width="auto" src={illustration} alt="" />
+        <ActionDescription>
+          Deleting {collection.name} will remove this collection. No projects will be deleted
+        </ActionDescription>
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteCollection}>
+          Delete {collection.name}
+          {collectionIsDeleting && <Loader />}
+        </Button>
+      </PopoverActions>
+    </PopoverDialog>
+  );
+});
+
+function DeleteCollectionBtn({ collection }) {
+  return (
+    <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+      {() => <DeleteCollectionPop collection={collection} />}
+    </PopoverWithButton>
   );
 }
 
@@ -76,7 +80,6 @@ DeleteCollectionBtn.propTypes = {
     user: PropTypes.object,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  deleteCollection: PropTypes.func.isRequired,
 };
 
 const CollectionPageContents = ({ collection: initialCollection }) => {
