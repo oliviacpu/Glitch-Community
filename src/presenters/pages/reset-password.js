@@ -7,6 +7,7 @@ import { useAPI } from 'State/api';
 import useLocalStorage from 'State/local-storage';
 
 import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 
 import NewPasswordInput from 'Components/new-password-input';
@@ -62,7 +63,7 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
   return (
     <Overlay>
       <OverlaySection type="info">
-        <OverlayTitle>Reset Password</OverlayTitle>
+        <OverlayTitle>Reset Password <Emoji name="key" /></OverlayTitle>
       </OverlaySection>
       <OverlaySection type="actions">
         <form onSubmit={onSubmit}>
@@ -75,10 +76,13 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
 };
 
 const ResetPasswordPage = ({ loginToken, resetPasswordToken }) => {
-  if (loginToken) {
+  if (loginToken && resetPasswordToken) {
     return <ResetPasswordLogin loginToken={loginToken} resetPasswordToken={resetPasswordToken} />;
   }
-  return <ResetPasswordForm resetPasswordToken={resetPasswordToken} />;
+  if (resetPasswordToken) {
+    return <ResetPasswordForm resetPasswordToken={resetPasswordToken} />;
+  }
+  return <Redirect to="/" />;
 };
 
 ResetPasswordPage.propTypes = {
