@@ -11,7 +11,7 @@ import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import Notification from 'Components/notification';
 import Loader from 'Components/loader';
-import { TwoFactorForm } from 'Components/sign-in';
+import TwoFactorForm from 'Components/sign-in/two-factor-form';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 import useLocalStorage from 'State/local-storage';
@@ -329,7 +329,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
           </PopoverInfo>
           {userPasswordEnabled && <LoginSection showForgotPassword={showView.forgotPassword} />}
           <PopoverActions>
-            
+
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email
             </Button>

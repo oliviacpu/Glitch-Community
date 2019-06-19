@@ -3,11 +3,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { captureException } from '../../utils/sentry';
+import { captureException } from 'Utils/sentry';
 
-import useLocalStorage from '../../state/local-storage';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import TwoFactorForm from 'Components/sign-in/two-factor-form';
 import { EmailErrorPage, OauthErrorPage } from './error';
 
 // The Editor may embed /login/* endpoints in an iframe in order to share code.
@@ -50,6 +51,7 @@ const LoginPage = ({ provider, url }) => {
   const [state, setState] = React.useState({ status: 'active' });
   const setDone = () => setState({ status: 'done' });
   const setError = (title, message) => setState({ status: 'error', title, message });
+  const setTwoFactor = (token) => setState({ status: 'tfa', token });
 
   const perform = async () => {
     try {
@@ -100,6 +102,9 @@ const LoginPage = ({ provider, url }) => {
       return <EmailErrorPage title={errorTitle} description={errorMessage} />;
     }
     return <OauthErrorPage title={errorTitle} description={errorMessage} />;
+  }
+  if (state.status === 'tfa') {
+    return <TwoFactorForm initialToken={state.token} />;
   }
   return <div className="content" />;
 };
