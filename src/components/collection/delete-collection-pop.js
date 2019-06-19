@@ -21,7 +21,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
     setCollectionIsDeleting(true);
     try {
       deleteCollection(api, collection);
-      history.push(getOwnerLink(collection));
+      history.push(getOwnerLink(collection)); // when this is the same page, why doesn't it update?
     } catch (error) {
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
       setCollectionIsDeleting(false);
@@ -34,7 +34,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
       <PopoverActions>
         <Image height="98px" width="auto" src={illustration} alt="" />
         <ActionDescription>
-          Deleting {collection.name} will remove this collection. No projects will be deleted
+          Deleting {collection.name} will remove this collection. No projects will be deleted.
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
