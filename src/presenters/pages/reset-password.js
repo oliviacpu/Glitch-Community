@@ -37,6 +37,7 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
   const api = useAPI();
   const [password, setPassword] = React.useState(null);
   const [state, setState] = React.useState(null);
+  const [error, setError] = React.useState(null);
   const isWorking = state === 'working';
 
   const onSubmit = async (event) => {
@@ -50,16 +51,17 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
       setState('done');
     } catch (error) {
       console.error(error);
+      if (error.response && error.response.data && error.response.data.status === 401) {
+        setError('Reset request was not found or already used.');
+      } else {
+        setError('Something went wrong setting your password');
+      }
       setState('error');
     }
   };
 
   if (state === 'done') {
     return <Redirect to="/" />;
-  }
-
-  if (state === 'error') {
-    return <>Something went wrong :(</>;
   }
 
   return (
@@ -70,7 +72,8 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
       <OverlaySection type="actions">
         {state === 'error' ? (
           <>
-            <Notification type="error" persistent></Notification>
+            <Notification type="error" persistent>Error</Notification>
+            {error}
           </>
         ) : (
           <form onSubmit={onSubmit}>
