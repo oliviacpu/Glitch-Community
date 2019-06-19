@@ -61,11 +61,13 @@ const AccountSettingsOverlay = () => {
           </div>
         </div>
       </OverlaySection>
-      <OverlaySection type="info">
-        <Text>
-          Email notifications are sent to <b>{primaryEmail.email}</b>
-        </Text>
-      </OverlaySection>
+      {!!primaryEmail && (
+        <OverlaySection type="info">
+          <Text>
+            Email notifications are sent to <b>{primaryEmail.email}</b>
+          </Text>
+        </OverlaySection>
+      )}
     </Overlay>
   );
 };
