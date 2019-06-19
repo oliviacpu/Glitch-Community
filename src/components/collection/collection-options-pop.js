@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PopoverMenu, PopoverMenuButton, PopoverDialog, PopoverActions } from 'Components/popover';
+import DeleteCollection from 'Components/collection/delete-collection-pop';
 
 export default function CollectionOptions({ deleteCollection, collection }) {
   if (!deleteCollection) {
     return null;
   }
   function confirmThenDelete() {
+    <DeleteCollection collection={collection} />
     if (!window.confirm('Are you sure you want to delete your collection?')) {
       return;
     }
