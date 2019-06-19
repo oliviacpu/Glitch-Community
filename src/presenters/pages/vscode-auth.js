@@ -5,8 +5,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import Layout from 'Components/layout';
 import Text from 'Components/text/text';
+import Link from 'Components/link';
 import Heading from 'Components/text/heading';
 import SignInButton from 'Components/buttons/sign-in-button';
 import Logo from 'Components/header/logo';
@@ -20,9 +20,6 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
-
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try the \"Glitch: Sign In With Email\" command.)";
-  const signInMessage = 'Please Sign In to continue.';
 
   if (isSignedIn) {
     setTimeout(() => {
@@ -50,16 +47,24 @@ const VSCodeAuth = ({ insiders, openProject }) => {
         <div className={styles.content}>
           <div className={styles.about}>
             <div className={styles.logo}>
-              <Logo />
+              <Link to="/">
+                <Logo />
+              </Link>
             </div>
             <div className={styles.whatIsGlitch}>
               <Heading tagName="h1">Glitch is the friendly community where anyone can create the web</Heading>
             </div>
           </div>
           <div className={styles.signIn}>
-            <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
+            {isSignedIn &&
+              <div>
+                <Text>You are being redirected.</Text>
+                <Text>(If you aren't sent back to VSCode, try the &quot;Glitch: Sign In With Email&quot; command.)</Text>
+              </div>
+            }
             {!isSignedIn &&
               <div>
+                <Text>Please Sign In to continue.</Text>
                 <SignInButton company="facebook" onClick={onClick} />
                 <SignInButton company="github" onClick={onClick} />
                 <SignInButton company="google" onClick={onClick} />
