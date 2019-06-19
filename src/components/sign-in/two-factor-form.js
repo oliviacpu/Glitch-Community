@@ -13,36 +13,38 @@ const TwoFactorSignIn = ({ initialToken }) => {
   // const { login } = useCurrentUser();
   const [code, setCode] = React.useState('');
   const [token, setToken] = React.useState(initialToken);
-  const [working, setWorking] = React.useState(false);
-  const [errorText, setErrorText] = React.useState(null);
+  const [status, setStatus] = React.useState({});
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    setWorking(true);
-    setErrorText(null);
-
+    setStatus({ working: true });
     try {
       const { data } = api.post('/user/tfa/verifyCode', { code, token });
       console.log(data);
     } catch (error) {
       if (error && error.response && error.response.data && error.response.data.status === 401) {
         setToken(error.response.data.retryToken);
-        setErrorText(error.response.data.message);
-        setWorking(false);
+        setStatus({ message: error.response.data.message });
       } else {
-        
+        setStatus({ error: true });
       }
     }
   };
 
+  if (status.error) {
+    return (
+      <>
+        <Notification type="error" persistent>Error</Notification>
+        Something went wrong trying to sign in.
+      </>
+    );
+  }
+
   return (
-    <>
-      {!!errorText && <Notification type="error" persistent>{errorText}</Notification>}
-      <form onSubmit={onSubmit}>
-        <TextInput value={code} onChange={setCode} maxLength={6} placeholder="123456" labelText="code" disabled={working} />
-        <Button size="small" disabled={working || code.length < 6} submit>Sign in</Button>
-      </form>
-    </>
+    <form onSubmit={onSubmit}>
+      <TextInput value={code} onChange={setCode} maxLength={6} placeholder="123456" labelText="code" error={status.message} disabled={status.working} />
+      <Button size="small" disabled={status.working || code.length < 6} submit>Sign in</Button>
+    </form>
   );
 };
 
