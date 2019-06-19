@@ -106,9 +106,9 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
         <div>
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
-              <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} />
-              </div>
+              <span className={styles.arrowPadding}>
+                <span className={styles.downArrow} />
+              </span>
               <div className={globalStyles.visuallyHidden}>{label}</div>
             </TransparentButton>
           </div>
