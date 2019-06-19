@@ -5,10 +5,10 @@ import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import PopoverContainer from 'Components/popover/container';
 import { useCurrentUser } from 'State/current-user';
 import { useAPI } from 'State/api';
 
-import PopoverContainer from '../../presenters/pop-overs/popover-container';
 import PasswordSettings from './password-settings';
 import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';

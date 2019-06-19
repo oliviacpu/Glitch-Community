@@ -23,7 +23,7 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions, fetchMembers }) => {
+const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions }) => {
   const Container = containers[layout];
   return (
     <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
@@ -40,7 +40,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
               />
             </div>
           )}
-          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
         </>
       )}
     </Container>
@@ -197,7 +197,6 @@ function ProjectsList({
   enablePagination,
   enableSorting,
   onReorder,
-  fetchMembers,
   projectsPerPage,
   collection,
   noteOptions,
@@ -223,7 +222,6 @@ function ProjectsList({
                   sortable={enableSorting && paginatedProjects.length === projects.length}
                   onReorder={onReorder}
                   projectOptions={projectOptions}
-                  fetchMembers={fetchMembers}
                 />
               )}
             </PaginationController>
@@ -242,7 +240,6 @@ ProjectsList.propTypes = {
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
   enableSorting: (props) => props.enableSorting && props.layout === 'row' && new Error('Sortable rows are not supported'),
-  fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
@@ -256,7 +253,6 @@ ProjectsList.defaultProps = {
   enableFiltering: false,
   enablePagination: false,
   enableSorting: false,
-  fetchMembers: false,
   projectsPerPage: 6,
   collection: null,
   noteOptions: {},
