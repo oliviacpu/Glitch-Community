@@ -71,7 +71,7 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
         {state.error ? (
           <>
             <Notification type="error" persistent>Error</Notification>
-            {state.error}
+            <Text>{state.error}</Text>
           </>
         ) : (
           <form onSubmit={onSubmit}>
