@@ -80,9 +80,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
           <div className={styles.nameDescriptionContainer}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative>
-                <div className={styles.name}>{collection.name}</div>
-              </Button>
+              <Button decorative>{collection.name}</Button>
             </div>
             <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>

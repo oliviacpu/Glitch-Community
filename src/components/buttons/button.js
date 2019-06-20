@@ -139,7 +139,7 @@ const ButtonImage = ({ image, position, up1 }) => {
     up1,
   });
 
-  return <div className={className}>{image}</div>;
+  return <span className={className}>{image}</span>;
 };
 
 ButtonImage.propTypes = {

@@ -183,12 +183,12 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
-                <div className={styles.userOptionsWrap}>
-                  <div className={styles.userOptionsButtonAvatar}>
+                <span className={styles.userOptionsWrap}>
+                  <span className={styles.userOptionsButtonAvatar}>
                     <UserAvatar user={props.user} withinButton style={avatarStyle} />
-                  </div>
+                  </span>
                   <span className="down-arrow icon" />
-                </div>
+                </span>
               </Button>
             );
 
