@@ -9,6 +9,8 @@ import MaskImage from 'Components/images/mask-image';
 import Markdown from 'Components/text/markdown';
 import Link from 'Components/link';
 import Text from 'Components/text/text';
+import Questions from 'Components/questions';
+import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import { useCurrentUser } from 'State/current-user';
 
@@ -255,10 +257,14 @@ const MadeInGlitch = () => (
   </section>
 );
 
-export const Home = ({ data, loggedIn }) => (
+// loggedIn and hasProjects are passed as props instead of pulled from context
+// because we want the preview to show what an anonymous user would see
+export const Home = ({ data, loggedIn, hasProjects }) => (
   <>
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
+    {hasProjects && <RecentProjects />}
+    {loggedIn && <Questions />}
     <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
       <FeaturedEmbed content={data.featuredEmbed} />
@@ -276,7 +282,7 @@ const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <Home data={compiledData} loggedIn={currentUser} />
+      <Home data={compiledData} loggedIn={!!currentUser.login} hasProjects={currentUser.projects.length > 0} />
     </Layout>
   );
 };
