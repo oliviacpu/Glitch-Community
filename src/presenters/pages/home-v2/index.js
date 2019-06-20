@@ -12,11 +12,11 @@ import Text from 'Components/text/text';
 import Questions from 'Components/questions';
 import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
+import Layout from 'Components/layout';
 import { useCurrentUser } from 'State/current-user';
 
 import { getEditorUrl } from 'Models/project';
 
-import Layout from '../../layout';
 import CuratedCollectionContainer from './collection-container';
 import { Discover, Dreams, Teams } from './feature-callouts';
 import compiledData from '../../../curated/home.json';

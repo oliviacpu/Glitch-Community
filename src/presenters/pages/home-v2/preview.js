@@ -4,9 +4,9 @@ import { withRouter } from 'react-router-dom';
 
 import DataLoader from 'Components/data-loader';
 import Button from 'Components/buttons/button';
+import Layout from 'Components/layout';
 import { useAPI } from 'State/api';
 
-import Layout from '../../layout';
 import { Home } from './index';
 import styles from './styles.styl';
 
