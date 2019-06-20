@@ -15,6 +15,8 @@ import AuthLayout from 'Components/layout/auth-layout';
 import NewPasswordInput from 'Components/new-password-input';
 import { EmailTokenLoginPage } from './login';
 
+import styles from './reset-password.styl';
+
 const ResetPasswordLogin = ({ loginToken, resetPasswordToken }) => {
   const [ready, setReady] = React.useState(false);
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
@@ -72,7 +74,9 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
       ) : (
         <form onSubmit={onSubmit}>
           <NewPasswordInput disabled={state.working} onChange={setPassword} />
-          <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
+          <div className={styles.submitWrap}>
+            <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
+          </div>
         </form>
       )}
     </AuthLayout>
