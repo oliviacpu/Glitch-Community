@@ -9,10 +9,11 @@ import useLocalStorage from 'State/local-storage';
 
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
+import Heading from 'Components/text/heading';
 import Notification from 'Components/notification';
-import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
 import Text from 'Components/text/text';
 
+import AuthLayout from 'Components/layout/auth-layout';
 import NewPasswordInput from 'Components/new-password-input';
 import { EmailTokenLoginPage } from './login';
 
@@ -63,24 +64,20 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
   }
 
   return (
-    <Overlay>
-      <OverlaySection type="info">
-        <OverlayTitle>Reset Password <Emoji name="key" /></OverlayTitle>
-      </OverlaySection>
-      <OverlaySection type="actions">
-        {state.error ? (
-          <>
-            <Notification type="error" persistent>Error</Notification>
-            <Text>{state.error}</Text>
-          </>
-        ) : (
-          <form onSubmit={onSubmit}>
-            <NewPasswordInput disabled={state.working} onChange={setPassword} />
-            <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
-          </form>
-        )}
-      </OverlaySection>
-    </Overlay>
+    <AuthLayout>
+      <Text>Enter a new password</Text>
+      {state.error ? (
+        <>
+          <Notification type="error" persistent>Error</Notification>
+          <Text>{state.error}</Text>
+        </>
+      ) : (
+        <form onSubmit={onSubmit}>
+          <NewPasswordInput disabled={state.working} onChange={setPassword} />
+          <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
+        </form>
+      )}
+    </AuthLayout>
   );
 };
 
