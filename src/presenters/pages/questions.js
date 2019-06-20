@@ -3,7 +3,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
-import Layout from '../layout';
+import Layout from 'Components/layout';
 
 const QuestionsPage = () => (
   <Layout>

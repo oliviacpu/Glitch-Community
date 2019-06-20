@@ -4,6 +4,7 @@
 /* eslint-disable no-extend-native */
 import 'details-element-polyfill';
 import 'url-search-params-polyfill';
+import 'intersection-observer';
 
 if (!String.prototype.trimStart) {
   String.prototype.trimStart = String.prototype.trimLeft;

@@ -9,14 +9,14 @@ import { useCurrentUser } from '../../state/current-user';
 
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
+import OauthSignIn from './signin';
 import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
 import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
-import { NotFoundPage, ProjectNotFoundPage } from './error';
-import OauthSignIn from './sign-in';
+import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
 import NewHomePage from './home-v2';
@@ -104,16 +104,13 @@ const Router = () => (
         render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
       />
 
+      <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
+
       <Route path="/join/@:teamUrl/:joinToken" exact render={({ match }) => <JoinTeamPage key={location.key} {...match.params} />} />
 
       <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
       <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
-      <Route
-        path="/~:name/404"
-        exact
-        render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
-      />
 
       <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
@@ -152,8 +149,6 @@ const Router = () => (
       ))}
 
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
-
-      <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
       <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
 

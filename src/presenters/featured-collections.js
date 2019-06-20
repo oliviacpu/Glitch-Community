@@ -8,13 +8,14 @@ import ProjectsList from 'Components/containers/projects-list';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionLink } from 'Components/link';
 import DataLoader from 'Components/data-loader';
+import { CollectionAvatar } from 'Components/images/avatar';
 import { captureException } from '../utils/sentry';
 
 import { featuredCollections } from '../curated/collections';
 import { isDarkColor } from '../models/collection';
 
 import { getSingleItem, getFromApi, joinIdsToQueryString } from '../../shared/api';
-import CollectionAvatar from './includes/collection-avatar';
+
 
 const CollectionWide = ({ collection }) => {
   const dark = isDarkColor(collection.coverColor) ? 'dark' : '';
@@ -24,7 +25,7 @@ const CollectionWide = ({ collection }) => {
     <article className="collection-wide projects" style={{ backgroundColor: collection.coverColor }}>
       <header className={`collection ${dark}`}>
         <CollectionLink className="collection-image-container" collection={collection}>
-          <CollectionAvatar color={collection.coverColor} />
+          <CollectionAvatar collection={collection} />
         </CollectionLink>
         <CollectionLink className="collection-name" collection={collection}>
           <Heading tagName="h2">{collection.name}</Heading>

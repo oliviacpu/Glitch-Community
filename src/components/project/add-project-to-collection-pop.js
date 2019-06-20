@@ -17,7 +17,6 @@ import {
   PopoverSearch,
 } from 'Components/popover';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import { ProjectAvatar } from 'Components/images/avatar';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
@@ -178,12 +177,8 @@ AddProjectToCollectionBase.propTypes = {
 
 const AddProjectToCollection = ({ project, addProjectToCollection }) => (
   <PopoverWithButton
-    buttonProps={{ size: 'small' }}
-    buttonText={
-      <>
-        Add to Collection <Emoji name="framedPicture" />
-      </>
-    }
+    buttonProps={{ size: 'small', emoji: 'framedPicture' }}
+    buttonText="Add to Collection"
   >
     {({ togglePopover }) => (
       <MultiPopover

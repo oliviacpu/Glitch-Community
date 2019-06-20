@@ -92,13 +92,6 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
   }
 });
 
-function ProjectWithDataLoading({ project, ...props }) {
-  const { value: users } = useUsers(project.userIDs);
-  const { value: teams } = useTeams(project.teamIDs);
-  const projectWithData = { ...project, users, teams };
-  return <ProjectItem project={projectWithData} {...props} />;
-}
-
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -106,10 +99,6 @@ function ProjectResult({ result }) {
   const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
     props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-  }
-
-  if (!result.users) {
-    return <ProjectWithDataLoading {...props} />;
   }
 
   return <ProjectItem {...props} />;

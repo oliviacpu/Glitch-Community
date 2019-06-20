@@ -1,20 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import ReactKonami from 'react-konami';
 
 import Header from 'Components/header';
 import Footer from 'Components/footer';
-import NewStuffContainer from './overlays/new-stuff';
-import ErrorBoundary from './includes/error-boundary';
-import Konami from './includes/konami';
+import NewStuffContainer from 'Components/new-stuff';
+import ErrorBoundary from 'Components/error-boundary';
 
-const Layout = ({ children, searchQuery }) => (
-  <div className="content">
+import styles from './styles.styl';
+
+const Layout = withRouter(({ children, searchQuery, history }) => (
+  <div className={styles.content}>
     <Helmet title="Glitch" />
     <NewStuffContainer>
       {(showNewStuffOverlay) => (
-        <div className="header-wrap">
+        <div className={styles.headerWrap}>
           <Header searchQuery={searchQuery} showNewStuffOverlay={showNewStuffOverlay} />
         </div>
       )}
@@ -22,12 +24,10 @@ const Layout = ({ children, searchQuery }) => (
     <ErrorBoundary>{children}</ErrorBoundary>
     <Footer />
     <ErrorBoundary fallback={null}>
-      <Konami>
-        <Redirect to="/secret" push />
-      </Konami>
+      <ReactKonami easterEgg={() => history.push('/secret')} />
     </ErrorBoundary>
   </div>
-);
+));
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   searchQuery: PropTypes.string,

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
+import CollectionAvatarBase from 'Components/collection/defaultAvatar';
+import { hexToRgbA } from 'Utils/color';
 
 import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
@@ -109,4 +111,12 @@ ProjectAvatar.propTypes = {
 
 ProjectAvatar.defaultProps = {
   hasAlt: false,
+};
+
+export const CollectionAvatar = ({ collection }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} />;
+
+CollectionAvatar.propTypes = {
+  collection: PropTypes.shape({
+    coverColor: PropTypes.string.isRequired,
+  }).isRequired,
 };

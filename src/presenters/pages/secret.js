@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
-
 import Helmet from 'react-helmet';
+
 import { useDevToggles } from 'State/dev-toggles';
+
+import styles from './secret.styl';
 
 function useZeldaMusicalCue() {
   useEffect(() => {
@@ -39,13 +41,12 @@ const Secret = () => {
   };
 
   return (
-    <section className="secretPage">
-      <div className="filler" />
+    <section className={styles.secretPage}>
       <Helmet title="Glitch - It's a secret to everybody." />
       <ul>
         {toggleData.map(({ name, description }) => (
           <li key={name}>
-            <button title={description} onClick={() => toggleTheToggle(name)} className={isEnabled(name) ? 'lit' : 'dark'}>
+            <button title={description} onClick={() => toggleTheToggle(name)} className={isEnabled(name) ? styles.lit : ''}>
               {name}
             </button>
           </li>

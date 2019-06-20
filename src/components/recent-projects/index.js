@@ -6,12 +6,10 @@ import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink, WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import SignInPop from 'Components/sign-in-pop';
 import { getAvatarStyle, getLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
-import ProjectsLoader from '../../presenters/projects-loader';
 import styles from './styles.styl';
 
 const SignInNotice = () => (
@@ -35,8 +33,8 @@ const ClearSession = ({ clearUser }) => {
 
   return (
     <div className={styles.clearSession}>
-      <Button onClick={clickClearSession} size="small" type="dangerZone">
-        Clear Session <Emoji name="balloon" />
+      <Button onClick={clickClearSession} size="small" type="dangerZone" emoji="balloon">
+        Clear Session
       </Button>
     </div>
   );
@@ -61,9 +59,7 @@ const RecentProjects = () => {
           </div>
           <div className={styles.projectsWrap}>
             {fetched ? (
-              <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
-                {(projects) => <ProjectsList layout="row" projects={projects} />}
-              </ProjectsLoader>
+              <ProjectsList layout="row" projects={currentUser.projects.slice(0, 3)} />
             ) : (
               <Loader />
             )}
