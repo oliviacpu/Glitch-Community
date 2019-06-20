@@ -9,6 +9,7 @@ import { useCurrentUser } from '../../state/current-user';
 
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
+import OauthSignIn from './signin';
 import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
 import ProjectPage from './project';
@@ -96,6 +97,8 @@ const Router = () => (
         exact
         render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
       />
+
+      <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
 
       <Route path="/join/@:teamUrl/:joinToken" exact render={({ match }) => <JoinTeamPage key={location.key} {...match.params} />} />
 
