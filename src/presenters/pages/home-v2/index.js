@@ -10,6 +10,7 @@ import Markdown from 'Components/text/markdown';
 import Link from 'Components/link';
 import Text from 'Components/text/text';
 import ReportButton from 'Components/report-abuse-pop';
+import { useCurrentUser } from 'State/current-user';
 
 import { getEditorUrl } from 'Models/project';
 
@@ -254,10 +255,10 @@ const MadeInGlitch = () => (
   </section>
 );
 
-export const Home = ({ data }) => (
+export const Home = ({ data, loggedIn }) => (
   <>
-    <Banner />
-    <FeatureCallouts content={data.featureCallouts} />
+    {!loggedIn && <Banner />}
+    {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
       <FeaturedEmbed content={data.featuredEmbed} />
@@ -271,10 +272,12 @@ export const Home = ({ data }) => (
   </>
 );
 
-const HomeWithProductionData = () => (
-  <Layout>
-    <Home data={compiledData} />
-  </Layout>
-);
-
+const HomeWithProductionData = () => {
+  const { currentUser } = useCurrentUser();
+  return (
+    <Layout>
+      <Home data={compiledData} loggedIn={currentUser} />
+    </Layout>
+  );
+};
 export default HomeWithProductionData;
