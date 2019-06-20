@@ -67,7 +67,6 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, setVisible }
     </Overlay>
   );
 };
-
 NewStuffOverlay.propTypes = {
   setShowNewStuff: PropTypes.func.isRequired,
   showNewStuff: PropTypes.bool.isRequired,
