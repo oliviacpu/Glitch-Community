@@ -11,6 +11,7 @@ import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import Notification from 'Components/notification';
 import { Overlay, OverlaySection, OverlayTitle } from 'Components/overlays';
+import Text from 'Components/text/text';
 
 import NewPasswordInput from 'Components/new-password-input';
 import { EmailTokenLoginPage } from './login';
