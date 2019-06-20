@@ -121,10 +121,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
       ...filteredUsers.map((user) => ({
         id: user.id,
         result: user,
-        onClick: () => {
-          console.log({ user })
-          inviteUser(user)
-        },
+        onClick: () => inviteUser(user),
         component: UserResult,
       })),
     );

@@ -176,7 +176,6 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
   const onInviteUser = async (user) => {
-    console.log("onInviteUser", {user})
     setNewlyInvited((invited) => [...invited, user]);
     try {
       await inviteUser(user);
