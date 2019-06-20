@@ -9,6 +9,7 @@ import Link from 'Components/link';
 import FeaturedItems from '../curated/featured';
 import FeaturedEmbedObject from '../curated/featured-embed';
 
+
 import FeaturedEmbed from './featured-embed';
 import { FeaturedCollections } from './featured-collections';
 
