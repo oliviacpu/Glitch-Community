@@ -47,6 +47,8 @@ We use them to hide features that we're still working on. The code lives in `dev
 
 Nope! Though you can set your remix to run in production mode by setting `NODE_ENV=production` in the `.env` file. Doing so will improve performance a bit, but webpack will take a lot longer.
 
+### How does caching work?
+
 
 ### How do I add a question to the FAQ?
 
