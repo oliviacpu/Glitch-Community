@@ -16,7 +16,7 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
-import { NotFoundPage, ProjectNotFoundPage } from './error';
+import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
 import VSCodeAuth from './vscode-auth';
@@ -105,11 +105,6 @@ const Router = () => (
       <Route path="/questions" exact render={({ location }) => <QuestionsPage key={location.key} />} />
 
       <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
-      <Route
-        path="/~:name/404"
-        exact
-        render={({ location, match }) => <ProjectNotFoundPage key={location.key} name={punycode.toASCII(match.params.name)} />}
-      />
 
       <Route
         path="/@:name"
