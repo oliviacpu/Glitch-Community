@@ -8,8 +8,6 @@ import { useCurrentUser } from 'State/current-user';
 import useLocalStorage from 'State/local-storage';
 
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
-import Heading from 'Components/text/heading';
 import Notification from 'Components/notification';
 import Text from 'Components/text/text';
 
