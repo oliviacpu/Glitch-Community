@@ -31,6 +31,8 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
+import styles from './project.styl';
+
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
@@ -179,7 +181,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   return (
-    <main className="project-page">
+    <main>
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
@@ -214,16 +216,16 @@ const ProjectPage = ({ project: initialProject }) => {
             placeholder="Tell us about your app"
           />
           <div>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <ShowButton name={domain} />
             </span>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <EditButton name={domain} isMember={isAuthorized} />
             </span>
           </div>
         </ProjectProfileContainer>
       </section>
-      <div className="project-embed-wrap">
+      <div className={styles.projectEmbedWrap}>
         <ProjectEmbed
           project={project}
           isAuthorized={isAuthorized}
