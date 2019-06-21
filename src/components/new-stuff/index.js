@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import Button from 'Components/buttons/button';
@@ -36,10 +35,13 @@ function usePreventTabOut() {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [first, last]);
+  useEffect(
+    () => {
+      document.addEventListener('keydown', onKeyDown);
+      return () => document.removeEventListener('keydown', onKeyDown);
+    },
+    [first, last],
+  );
 
   return { first, last };
 }
@@ -53,13 +55,8 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover
         <div className={styles.newStuffAvatar}>
           <NewStuffPup />
         </div>
-<<<<<<< HEAD:src/presenters/overlays/new-stuff.js
         <OverlayTitle id={useUniqueId()}>New Stuff</OverlayTitle>
-        <div className="new-stuff-toggle">
-=======
-        <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
         <div className={styles.newStuffToggle}>
->>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090:src/components/new-stuff/index.js
           <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these
           </CheckboxButton>
@@ -110,13 +107,8 @@ const NewStuff = ({ children }) => {
     return (
       <>
         {children(show)}
-<<<<<<< HEAD:src/presenters/overlays/new-stuff.js
-        {!pupVisible && <NewStuffPrompt onClick={show} />}
-        {visible && <div className="overlay-background" role="presentation" tabIndex={-1} />}
-=======
         {pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <OverlayBackground />}
->>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090:src/components/new-stuff/index.js
       </>
     );
   };
