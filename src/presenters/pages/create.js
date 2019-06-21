@@ -23,7 +23,7 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 const bannerIllustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561144073293'
 const bannerShape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
 const Banner = () => (
-  <div className={styles.banner}>
+  <section className={styles.banner}>
     <div className={styles.bannerText}>
       <Heading className={styles.bannerTagline} tagName="h1">
         <Mark color="#fbf2b8">Create</Mark><Unmarked>the app of your dreams</Unmarked>
@@ -39,14 +39,24 @@ const Banner = () => (
     <div className={styles.bannerIllustration}>
       <Image src={bannerIllustration} alt="" />
     </div>
-  </div>
-)
+  </section>
+);
+
+const WhatIsGlitch = () => (
+  <section className={styles.whatIsGlitch}>
+    <div>
+    <Heading className={styles.h2} tagName="h2"><Mark color="#d7a6f9">What is Glitch?</Mark></Heading>
+    <Text>Glitch is a collaborative coding environment that lives in your browser and deploys your code as you type.</Text>
+    <Text>Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+  </section>
+);
 
 const CreatePage = () => {
   return (
     <Layout>
       <main class={styles.main}>
         <Banner />
+        <WhatIsGlitch />
       </main>
     </Layout>
   );
