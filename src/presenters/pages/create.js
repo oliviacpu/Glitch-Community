@@ -31,7 +31,9 @@ const Banner = () => (
       <Text>
         Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.
       </Text>
-      <Button href={getRemixUrl(name)} type="cta">Remix Hello World</Button>
+      <span className={styles.bannerRemixBtn}>
+        <Button href={getRemixUrl(name)} type="cta">Remix Hello World</Button>
+      </span>
     </div>
     
     <div className={styles.bannerIllustration}>

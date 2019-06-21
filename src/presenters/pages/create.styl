@@ -20,6 +20,7 @@ html
   background-color: var(--mark-color)
   padding: u0 u2
   border-radius: u1
+  line-height: 1
 .markText
   position: relative
   display: inline-block
@@ -31,10 +32,13 @@ html
 .main
   max-width: 950px
   margin: auto
-  
+
 .banner
   display: flex
   min-height: 360px
+  @media(max-width: 700px) {
+    flex
+  }
 .bannerText
   position: relative
   flex-basis: 50%
@@ -54,4 +58,5 @@ html
 .bannerIllustration
   flex-basis: 50%
 .bannerRemixBtn
-  bottom: 40px
+  bottom: 65px
+  right: 110px
