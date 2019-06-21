@@ -69,6 +69,12 @@ const paginationReducer = (oldState, action) => {
         totalPages: oldState.totalPages,
         announce: 'Showing all pages',
       };
+    case 'restart':
+      return {
+        ...oldState,
+        page: 1,
+        announce: `Showing page 1 of ${oldState.totalPages}`,
+      };
     default:
       return {};
   }
@@ -108,6 +114,11 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
     const startIdx = (state.page - 1) * projectsPerPage;
     projects = projects.slice(startIdx, startIdx + projectsPerPage);
   }
+
+  useEffect(() => {
+    dispatchState('restart');
+  }, [numProjects]);
+
   return (
     <>
       {children(projects)}
