@@ -17,22 +17,27 @@ const isTeamProject = ({ currentUser, project }) => {
   return false;
 };
 
+const leaveProjectPop = ({ event, project, leaveProject }) => 
+    <PopoverDialog focusOnDialog align="left">
+      <PopoverTitle>Leave {project.name}</PopoverTitle>
+      <PopoverActions>
+        <ActionDescription>
+          Once you leave this project, you'll lose access to it unless someone else invites you back.
+          Are you sure you want to leave ${project.domain}?
+        </ActionDescription>
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        <PopoverMenuButton size="small" label={`Leave ${project.name}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
+      </PopoverActions>
+    </PopoverDialog>
+  );
+
 const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
   if (isTeamProject({ currentUser, project })) {
     leaveProject(project.id, event);
     return;
   }
-  <PopoverDialog focusOnDialog align="left">
-    <PopoverTitle>Leave {project.name}</PopoverTitle>
-    <PopoverActions>
-      <ActionDescription>
-        Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are you sure you want to leave ${project.domain}?
-      </ActionDescription>
-    </PopoverActions>
-    <PopoverActions type="dangerZone">
-      <PopoverMenuButton size="small" label={`Leave ${project.name}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
-    </PopoverActions>
-  </PopoverDialog>
+  leaveProjectPop({ event, project, leaveProject });
 };
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
