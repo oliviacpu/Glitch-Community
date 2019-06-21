@@ -43,6 +43,40 @@ const writeToStorage = (name, value) => {
   }
 };
 
+
+
+const LocalStorageManager = ({ children }) => {
+  const [cache, setCache] = React.useState(new Map());
+
+  React.useEffect(() => {
+    const onStorage = (event) => {
+      if (event.storageArea === storage) {
+        setCache(new Map());
+      }
+    };
+    window.addEventListener('storage', onStorage, { passive: true });
+    return () => {
+      window.removeEventListener('storage', onStorage, { passive: true });
+    };
+  }, [name]);
+  
+  const getValue = (name) => {
+    if (!cache.has(name)) {
+      const value = readFromStorage(name);
+      setCache(new Map([...cache, [name, value]]));
+      return value;
+    }
+    return cache.get(name);
+  };
+  
+  const setValue = (name, value) => {
+    writeToStorage(name, value);
+    setCache(new Map([...cache, [name, value]]));
+  };
+  
+  return 
+};
+
 const useLocalStorage = (name, defaultValue) => {
   const [rawValue, setValueInMemory] = React.useState(() => readFromStorage(name));
 
