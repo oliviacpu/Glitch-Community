@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle } from 'Components/popover';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -22,7 +22,6 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
     leaveProject(project.id, event);
     return;
   }
-  return (
   <PopoverDialog focusOnDialog align="left">
     <PopoverTitle>Leave {project.name}</PopoverTitle>
     <PopoverActions>
@@ -31,17 +30,9 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
       </ActionDescription>
     </PopoverActions>
     <PopoverActions type="dangerZone">
-      <PopoverMenuButton size="small" label={`Leave ${project.name}`} type="dangerZone" emoji="wave" onClick={leaveProject} />
-      </PopoverMenuButton>
+      <PopoverMenuButton size="small" label={`Leave ${project.name}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
     </PopoverActions>
   </PopoverDialog>
-);
-  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-    project.domain
-  }?`;
-  if (window.confirm(prompt)) {
-    leaveProject(project.id, event);
-  }
 };
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
