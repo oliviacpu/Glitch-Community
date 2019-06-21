@@ -8,6 +8,9 @@ u3 = 16px
 u4 = 32px
 u5 = 50px
 
+html
+  background: #f5f5f5
+
 .mark
   display: inline-block
   transform: rotate(-1deg)
@@ -15,7 +18,7 @@ u5 = 50px
   left: "-%s" % u1
   z-index: 0
   background-color: var(--mark-color)
-  padding: u05 u2
+  padding: u0 u2
   border-radius: u1
 .markText
   position: relative
@@ -25,7 +28,17 @@ u5 = 50px
   position: relative
   z-index: 1
   
+.main
+  max-width: 900px
+  margin: auto
+  
 .banner
   display: flex
+.bannerTagline h1
+  font-size: 28px
 .bannerText
-  background-image('https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750');
+  background-image: url('https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750');
+  background-repeat: no-repeat;
+  flex-basis: 50%
+.bannerIllustration
+  flex-basis: 50%

@@ -25,9 +25,11 @@ const bannerShape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0
 const Banner = () => (
   <div className={styles.banner}>
     <div className={styles.bannerText}>
-      <Heading tagName="h1">
-        <Mark color="#fbf2b8">Create</Mark><Unmarked>the app of your dreams</Unmarked>
-      </Heading>
+      <span className={styles.bannerTagline}>
+        <Heading tagName="h1">
+          <Mark color="#fbf2b8">Create</Mark><Unmarked>the app of your dreams</Unmarked>
+        </Heading>
+      </span>
       <Text>
         Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web aps.
       </Text>
@@ -43,7 +45,9 @@ const Banner = () => (
 const CreatePage = () => {
   return (
     <Layout>
-      <Banner />
+      <main class={styles.main}>
+        <Banner />
+      </main>
     </Layout>
   );
 };
