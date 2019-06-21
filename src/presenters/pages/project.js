@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
-import { withRouter } from 'react-router-dom';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
@@ -71,11 +70,7 @@ const PrivateTooltip = 'Only members can view code';
 const PublicTooltip = 'Visible to everyone';
 
 const PrivateBadge = () => (
-  <TooltipContainer
-    type="info"
-    tooltip={PrivateTooltip}
-    target={<span className="project-badge private-project-badge" />}
-  />
+  <TooltipContainer type="info" tooltip={PrivateTooltip} target={<span className="project-badge private-project-badge" />} />
 );
 
 const PrivateToggle = ({ isPrivate, setPrivate }) => {
@@ -104,9 +99,7 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = withRouter(({ location, domain }) => {
-  // const isLinkToReadmeHeading = location.hash && location.hash.
-  return (
+const ReadmeLoader = ({ domain }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
       <Expander height={250} expanded>
@@ -114,7 +107,7 @@ const ReadmeLoader = withRouter(({ location, domain }) => {
       </Expander>
     )}
   </DataLoader>
-)});
+);
 
 ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
@@ -125,18 +118,18 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (done) {
-      window.location = getUserLink(currentUser);
-    }
-  }, [done, currentUser]);
+  useEffect(
+    () => {
+      if (done) {
+        window.location = getUserLink(currentUser);
+      }
+    },
+    [done, currentUser],
+  );
 
   return (
     <section>
-      <PopoverWithButton
-        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
-        buttonText="Delete Project"
-      >
+      <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText="Delete Project">
         {({ togglePopover }) => (
           <PopoverDialog align="left" wide>
             <PopoverActions>

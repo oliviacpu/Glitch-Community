@@ -232,7 +232,7 @@ function TeamPage(props) {
       {currentUserIsOnTeam && (
         <ErrorBoundary>
           <TeamAnalytics
-            id={useUniqueId()}
+            id={team.id}
             currentUserIsOnTeam={currentUserIsOnTeam}
             projects={team.projects}
             addProject={props.addProject}
