@@ -37,7 +37,7 @@ const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) =
     leaveProject(project.id, event);
     return;
   }
-  LeaveProjectPop({ event, project, leaveProject });
+  <LeaveProjectPop event={event} project={project} leaveProject={leaveProject} />;
 };
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
