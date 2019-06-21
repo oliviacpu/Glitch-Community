@@ -10,12 +10,13 @@ export const TAGS = ['h1', 'h2', 'h3', 'h4'];
 /**
  * Heading Component
  */
-const Heading = ({ children, tagName: TagName }) => {
-  const classNameObj = {
+const Heading = ({ children, className, tagName: TagName }) => {
+  const headingClassNameObj = {
     heading: true,
   };
-  classNameObj[TagName] = true;
-  return <TagName className={cx(classNameObj)}>{children}</TagName>;
+  
+  headingClassNameObj[TagName] = true;
+  return <TagName className={classNames(cx(headingClassNameObj), className)}>{children}</TagName>;
 };
 
 Heading.propTypes = {
