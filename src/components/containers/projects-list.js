@@ -50,7 +50,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
 const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
 const paginationReducer = (oldState, action) => {
-  switch (action) {
+  switch (action.type) {
     case 'next':
       return {
         page: oldState.page + 1,
@@ -73,7 +73,7 @@ const paginationReducer = (oldState, action) => {
       return {
         ...oldState,
         page: 1,
-        announce: `Showing page 1 of ${oldState.totalPages}`,
+        announce: `Showing page 1 of ${action.totalPages}`,
       };
     default:
       return {};
@@ -99,7 +99,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       prevButtonRef.current.focus();
     }
 
-    dispatchState('next');
+    dispatchState({ type: 'next' });
   };
 
   const onPreviousButtonClick = () => {
@@ -107,7 +107,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       nextButtonRef.current.focus();
     }
 
-    dispatchState('previous');
+    dispatchState({ type: 'previous' });
   };
 
   if (canPaginate) {
@@ -116,7 +116,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   }
 
   useEffect(() => {
-    dispatchState('restart');
+    dispatchState({ type: 'restart', totalPages: numPages });
   }, [numProjects]);
 
   return (
