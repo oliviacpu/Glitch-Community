@@ -69,6 +69,7 @@ const LocalStorageProvider = ({ children }) => {
   }, []);
 
   const getValue = (name) => {
+    console.log('get', name);
     if (!cache.has(name)) {
       const value = readFromStorage(name);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
