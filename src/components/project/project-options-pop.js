@@ -32,14 +32,16 @@ const LeaveProjectPop = ({ event, project, leaveProject }) => (
   </PopoverDialog>
 );
 
-const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
+function promptThenLeaveProject({ event, project, leaveProject, currentUser }) {
   if (isTeamProject({ currentUser, project })) {
     leaveProject(project.id, event);
     return;
   }
-  LeaveProjectPop({ event, project, leaveProject });
-  // <LeaveProjectPop event={event} project={project} leaveProject={leaveProject} />;
-};
+  return (
+    // LeaveProjectPop({ event, project, leaveProject });
+    <LeaveProjectPop event={event} project={project} leaveProject={leaveProject} />
+  );
+}
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
