@@ -11,7 +11,7 @@ export default function CollectionOptions({ deleteCollection, collection }) {
   return (
     <PopoverMenu>
       {() => (
-        <PopoverDialog focusOnDialog align="right">
+        <PopoverDialog focusOnDialog align="left">
           <PopoverActions type="dangerZone">
             <DeleteCollection collection={collection} />
           </PopoverActions>

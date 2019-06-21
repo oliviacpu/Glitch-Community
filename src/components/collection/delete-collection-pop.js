@@ -21,7 +21,6 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
     setCollectionIsDeleting(true);
     try {
       deleteCollection(api, collection);
-      if (location.pathname !== getOwnerLink(collection)) {
         history.push(getOwnerLink(collection)); // when this is the same page, why doesn't it update?
       }
     } catch (error) {
