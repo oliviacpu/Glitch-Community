@@ -16,7 +16,6 @@ import { useAPI, createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
-import useUniqueId from 'Hooks/use-unique-id';
 
 import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './create-collection-pop.styl';
@@ -31,17 +30,16 @@ const getUserOption = (currentUser) => ({
   ),
 });
 
-function getTeamOption (team) {
-  const id = useUniqueId();
+function getTeamOption(team) {
   return {
     value: team.id,
     label: (
-      <span id={id}>
+      <span id={team.id}>
         <TeamAvatar team={team} hideTooltip /> {team.name}
       </span>
     ),
   };
-};
+}
 
 function getOptions(currentUser) {
   const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
