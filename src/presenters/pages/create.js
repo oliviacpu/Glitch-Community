@@ -60,7 +60,7 @@ const WhatIsGlitch = () => (
 
 const Starters = () => (
   <section className={styles.starters}>
-    <Heading className={styles.h2}><Mark color="#F9DB91">Starters for all developers</Mark></Heading>
+    <Heading className={styles.h2} tagName="h2"><Mark color="#F9DB91">Starters for all developers</Mark></Heading>
     <Text fontSize="15px">
       Remixable working apps mean you never have to start from scratch. You can even{' '}
       <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
