@@ -34,12 +34,21 @@ html
   
 .banner
   display: flex
+  min-height: 360px
 .bannerTagline
-  font-size: 30px
-  transform: rotate(-2deg)
+  max-width: 250px
+  font-size: 32px
+  transform: rotate(-5deg)
 .bannerText
+  display: inline-flex
+  flex-basis: 50%
+  flex-direction: column
+  align-items: flex-end
+  padding: 30px 85px 0 0
   background-image: url('https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750');
   background-repeat: no-repeat
-  flex-basis: 50%
+  p
+    max-width: 250px
+    margin-left: 40px
 .bannerIllustration
   flex-basis: 50%
