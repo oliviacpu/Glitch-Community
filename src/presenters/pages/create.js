@@ -59,9 +59,49 @@ const WhatIsGlitch = () => (
   </section>
 );
 
+const STARTER_APPS = [
+  {
+    name: 'React',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.png?v=1561160699261',
+    color: '',
+    domain: 'starter-react',
+  },
+  {
+    name: 'Ember',
+    logo: '',
+    color: '',
+    domain: '',
+  },
+  {
+    name: 'Nuxt',
+    logo: '',
+    color: '',
+    domain: 'nuxt-hello-world',
+  },
+  {
+    name: 'React',
+    logo: '',
+    color: '',
+    domain: '',
+  },
+  {
+    name: 'Angular',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular.png?v=1561160794919',
+    color: '',
+    domain: 'angular-quickstart',
+  },
+  {
+    name: 'Svelte',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.png?v=1561160701052',
+    color: '',
+    domain: 'sveltejs-template-starter',
+  },
+];
 const Starters = () => (
   <section className={styles.starters}>
-    <Heading className={styles.h2} tagName="h2"><Mark color="#F9DB91">Starters for all developers</Mark></Heading>
+    <Heading className={styles.h2} tagName="h2">
+      <Mark color="#F9DB91">Starters for all developers</Mark>
+    </Heading>
     <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
       Remixable working apps mean you never have to start from scratch. You can even{' '}
       <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
