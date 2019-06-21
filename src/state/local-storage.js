@@ -43,9 +43,9 @@ const writeToStorage = (name, value) => {
   }
 };
 
+const Context = React.createContext([() => undefined, () => {}]);
 
-
-const LocalStorageManager = ({ children }) => {
+const LocalStorageProvider = ({ children }) => {
   const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
@@ -59,7 +59,7 @@ const LocalStorageManager = ({ children }) => {
       window.removeEventListener('storage', onStorage, { passive: true });
     };
   }, [name]);
-  
+
   const getValue = (name) => {
     if (!cache.has(name)) {
       const value = readFromStorage(name);
@@ -68,37 +68,28 @@ const LocalStorageManager = ({ children }) => {
     }
     return cache.get(name);
   };
-  
+
   const setValue = (name, value) => {
     writeToStorage(name, value);
     setCache(new Map([...cache, [name, value]]));
   };
-  
-  return 
+
+  return (
+    <Context.Provider value={[getValue, setValue]}>
+      {children}
+    </Context.Provider>
+  );
 };
 
 const useLocalStorage = (name, defaultValue) => {
-  const [rawValue, setValueInMemory] = React.useState(() => readFromStorage(name));
-
-  React.useEffect(() => {
-    const reload = (event) => {
-      if (event.storageArea === storage && event.key === name) {
-        setValueInMemory(readFromStorage(name));
-      }
-    };
-    window.addEventListener('storage', reload, { passive: true });
-    return () => {
-      window.removeEventListener('storage', reload, { passive: true });
-    };
-  }, [name]);
+  const [getRawValue, setRawValue] = React.useContext(Context);
+  const rawValue = getRawValue(name);
 
   const value = rawValue !== undefined ? rawValue : defaultValue;
-  const setValue = (newValue) => {
-    setValueInMemory(newValue);
-    writeToStorage(name, newValue);
-  };
+  const setValue = (newValue) => setRawValue(name, newValue);
 
   return [value, setValue];
 };
 
 export default useLocalStorage;
+export { LocalStorageProvider };

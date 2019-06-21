@@ -9,6 +9,7 @@ import { UserPrefsProvider } from 'State/user-prefs';
 import { DevTogglesProvider } from 'State/dev-toggles';
 import { ProjectContextProvider } from 'State/project';
 import { NotificationsProvider } from 'State/notifications';
+import { LocalStorageProvider } from 'State/local-storage';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
 import ErrorBoundary from 'Components/error-boundary';
@@ -19,25 +20,27 @@ const App = () => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <BrowserRouter>
       <NotificationsProvider>
-        <UserPrefsProvider>
-          <DevTogglesProvider>
-            <LiveAnnouncer>
-              <AnalyticsContext context={{ groupId: '0' }}>
-                <CurrentUserProvider>
-                  <APIContextProvider>
-                    <ProjectContextProvider>
-                      <>
-                        <SuperUserBanner />
-                        <OfflineNotice />
-                        <Router />
-                      </>
-                    </ProjectContextProvider>
-                  </APIContextProvider>
-                </CurrentUserProvider>
-              </AnalyticsContext>
-            </LiveAnnouncer>
-          </DevTogglesProvider>
-        </UserPrefsProvider>
+        <LocalStorageProvider>
+          <UserPrefsProvider>
+            <DevTogglesProvider>
+              <LiveAnnouncer>
+                <AnalyticsContext context={{ groupId: '0' }}>
+                  <CurrentUserProvider>
+                    <APIContextProvider>
+                      <ProjectContextProvider>
+                        <>
+                          <SuperUserBanner />
+                          <OfflineNotice />
+                          <Router />
+                        </>
+                      </ProjectContextProvider>
+                    </APIContextProvider>
+                  </CurrentUserProvider>
+                </AnalyticsContext>
+              </LiveAnnouncer>
+            </DevTogglesProvider>
+          </UserPrefsProvider>
+        </LocalStorageProvider>
       </NotificationsProvider>
     </BrowserRouter>
   </ErrorBoundary>
