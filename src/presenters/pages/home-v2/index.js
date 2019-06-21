@@ -218,7 +218,7 @@ const CultureZine = ({ content }) => (
               </div>
               <div className={styles.cultureZineText}>
                 <h4 className={styles.h4}>{title}</h4>
-                <p>{source}</p>
+                {source && <p>{source.name}</p>}
               </div>
             </a>
           )}
