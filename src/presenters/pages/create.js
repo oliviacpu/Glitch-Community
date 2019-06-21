@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
@@ -49,7 +50,7 @@ const WhatIsGlitch = () => (
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#d7a6f9">What is Glitch?</Mark>
       </Heading>
-      <div className={styles.whatIsGlitchDescription}>
+      <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
         <Text size="15px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
         <Text size="15px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
       </div>
@@ -61,7 +62,7 @@ const WhatIsGlitch = () => (
 const Starters = () => (
   <section className={styles.starters}>
     <Heading className={styles.h2} tagName="h2"><Mark color="#F9DB91">Starters for all developers</Mark></Heading>
-    <Text fontSize="15px">
+    <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
       Remixable working apps mean you never have to start from scratch. You can even{' '}
       <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
     </Text>
