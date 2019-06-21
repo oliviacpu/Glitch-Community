@@ -11,7 +11,7 @@ u5 = 50px
 html
   background: #f5f5f5
 .main
-  max-width: 950px
+  max-width: 900px
   margin: auto
   
 // shared
@@ -73,8 +73,14 @@ html
 // what is glitch
 .whatIsGlitch
   display: flex
+  @media (max-width: mediumViewport)
+    flex-wrap: wrap
 .whatIsGlitchDescription
-  margin-left: 50px
+  max-width: 550px
+  margin: 50px
+  padding-right: 20px
+  @media (max-width: mediumViewport)
+    margin: 20px 0 0 30px
 .whatIsGlitchVideo
   background: #000
   width: 700px
