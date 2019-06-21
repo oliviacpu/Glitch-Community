@@ -31,21 +31,6 @@ const getUserOption = (currentUser) => ({
   ),
 });
 
-const getTeamOption = (team) => ({
-  value: team.id,
-  label: (
-    <span id={useUniqueId()}>
-      <TeamAvatar team={team} hideTooltip /> {team.name}
-    </span>
-  ),
-});
-
-function getOptions(currentUser) {
-  const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
-  const teamOptions = orderedTeams.map(getTeamOption);
-  return [getUserOption(currentUser), ...teamOptions];
-}
-
 const useCollections = createAPIHook((api, teamId, currentUser) => {
   if (teamId) {
     return getAllPages(api, `/v1/teams/by/id/collections?id=${teamId}&limit=100`);
@@ -149,6 +134,25 @@ CreateCollectionWithProject.propTypes = {
 
 const CreateCollectionPop = withRouter(({ team, history }) => {
   const { currentUser } = useCurrentUser();
+  
+  const getTeamOption = (team) => {
+    const id = useUniqueId();
+    return {
+      value: team.id,
+      label: (
+        <span id={id}>
+          <TeamAvatar team={team} hideTooltip /> {team.name}
+        </span>
+      ),
+    };
+  };
+
+function getOptions(currentUser) {
+  const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
+  const teamOptions = orderedTeams.map(getTeamOption);
+  return [getUserOption(currentUser), ...teamOptions];
+}
+  
   const options = team ? [getTeamOption(team)] : [getUserOption(currentUser)];
   const track = useTracker('Create Collection clicked');
   const onSubmit = (collection) => {
