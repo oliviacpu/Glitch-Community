@@ -1,1 +1,27 @@
 @import '../../components/constants.styl';
+
+u0 = 2px
+u05 = 4px
+u1 = 5px
+u2 = 10px
+u3 = 16px
+u4 = 32px
+u5 = 50px
+
+.mark
+  display: inline-block
+  transform: rotate(-1deg)
+  position: relative
+  left: "-%s" % u1
+  z-index: 0
+  background-color: var(--mark-color)
+  padding: u1 u2
+  border-radius: u1
+.markText
+  position: relative
+  display: inline-block
+  transform: rotate(1deg)
+  
+.unmarked
+  position: relative
+  z-index: 1
