@@ -32,11 +32,7 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import useUniqueId from 'Hooks/use-unique-id';
 
-<<<<<<< HEAD
-import Expander from 'Components/containers/expander';
-=======
 import styles from './project.styl';
->>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -107,7 +103,7 @@ const ReadmeError = (error) =>
 const ReadmeLoader = ({ domain }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
-      <Expander height={250} expanded>
+      <Expander height={250}>
         <Markdown linkifyHeadings>{data.toString()}</Markdown>
       </Expander>
     )}
@@ -180,13 +176,8 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   return (
-<<<<<<< HEAD
-    <main className="project-page">
-      <section id={useUniqueId()}>
-=======
     <main>
-      <section id="info">
->>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090
+      <section id={useUniqueId()}>
         <ProjectProfileContainer
           currentUser={currentUser}
           project={project}
