@@ -18,6 +18,7 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import Expander from 'Components/containers/expander';
 import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
@@ -31,7 +32,11 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import useUniqueId from 'Hooks/use-unique-id';
 
+<<<<<<< HEAD
 import Expander from 'Components/containers/expander';
+=======
+import styles from './project.styl';
+>>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -175,8 +180,13 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   return (
+<<<<<<< HEAD
     <main className="project-page">
       <section id={useUniqueId()}>
+=======
+    <main>
+      <section id="info">
+>>>>>>> 4cd15aa72407b2716307d2375f37ae2b0ee84090
         <ProjectProfileContainer
           currentUser={currentUser}
           project={project}
@@ -210,16 +220,16 @@ const ProjectPage = ({ project: initialProject }) => {
             placeholder="Tell us about your app"
           />
           <div>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <ShowButton name={domain} />
             </span>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <EditButton name={domain} isMember={isAuthorized} />
             </span>
           </div>
         </ProjectProfileContainer>
       </section>
-      <div className="project-embed-wrap">
+      <div className={styles.projectEmbedWrap}>
         <ProjectEmbed
           project={project}
           isAuthorized={isAuthorized}

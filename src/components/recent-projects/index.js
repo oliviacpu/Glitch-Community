@@ -10,7 +10,6 @@ import SignInPop from 'Components/sign-in-pop';
 import { getAvatarStyle, getLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
-import ProjectsLoader from '../../presenters/projects-loader';
 import styles from './styles.styl';
 
 const SignInNotice = () => (
@@ -60,9 +59,7 @@ const RecentProjects = () => {
           </div>
           <div className={styles.projectsWrap}>
             {fetched ? (
-              <ProjectsLoader projects={currentUser.projects.slice(0, 3)}>
-                {(projects) => <ProjectsList layout="row" projects={projects} />}
-              </ProjectsLoader>
+              <ProjectsList layout="row" projects={currentUser.projects.slice(0, 3)} />
             ) : (
               <Loader />
             )}

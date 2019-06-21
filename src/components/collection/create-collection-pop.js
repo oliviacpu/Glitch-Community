@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase, orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
+import Select from 'react-select';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
@@ -17,8 +18,19 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
-import Dropdown from '../../presenters/pop-overs/dropdown';
 import styles from './create-collection-pop.styl';
+
+const Dropdown = ({ selection, options, onUpdate }) => (
+  <Select
+    autoWidth
+    value={selection}
+    options={options}
+    className={styles.userOrTeamToggle}
+    classNamePrefix="dropdown"
+    onChange={onUpdate}
+    isSearchable={false}
+  />
+);
 
 // Format in { value: teamId, label: html elements } format for react-select
 const getUserOption = (currentUser) => ({
@@ -100,7 +112,7 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
           {options.length > 1 && (
             <div>
               {'for '}
-              <Dropdown containerClass={styles.userOrTeamToggle} options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
+              <Dropdown options={options} selection={selection} onUpdate={(value) => setSelection(value)} />
             </div>
           )}
 
