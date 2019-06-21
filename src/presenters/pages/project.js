@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
+import { withRouter } from 'react-router-dom';
 
 import Button from 'Components/buttons/button';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
@@ -31,7 +32,7 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import useUniqueId from 'Hooks/use-unique-id';
 
-import Expander from '../includes/expander';
+import Expander from 'Components/containers/expander';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -103,7 +104,9 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = ({ domain }) => (
+const ReadmeLoader = withRouter(({ location, domain }) => {
+  // const isLinkToReadmeHeading = location.hash && location.hash.
+  return (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
       <Expander height={250} expanded>
@@ -111,7 +114,7 @@ const ReadmeLoader = ({ domain }) => (
       </Expander>
     )}
   </DataLoader>
-);
+)});
 
 ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
