@@ -16,6 +16,7 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
+import CreatePage from './create';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
@@ -49,14 +50,17 @@ const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
 
-  useEffect(() => {
-    if (isUpdate.current) {
-      window.scrollTo(0, 0);
-      reload();
-    }
-    isUpdate.current = true;
-    track();
-  }, [location.key]);
+  useEffect(
+    () => {
+      if (isUpdate.current) {
+        window.scrollTo(0, 0);
+        reload();
+      }
+      isUpdate.current = true;
+      track();
+    },
+    [location.key],
+  );
   return null;
 });
 
@@ -106,18 +110,12 @@ const Router = () => (
 
       <Route path="/~:name" exact render={({ location, match }) => <ProjectPage key={location.key} name={punycode.toASCII(match.params.name)} />} />
 
-      <Route
-        path="/@:name"
-        exact
-        render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />}
-      />
+      <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
       <Route
         path="/@:owner/:name"
         exact
-        render={({ location, match }) => (
-          <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />
-        )}
+        render={({ location, match }) => <CollectionPage key={location.key} ownerName={match.params.owner} name={match.params.name} />}
       />
 
       <Route
@@ -139,6 +137,12 @@ const Router = () => (
         }}
       />
 
+      <Route
+        path="/create"
+        exact
+        render={({ location }) => <CreatePage key={location.key} />}
+      />
+
       {categories.map((category) => (
         <Route
           key={category.url}
@@ -150,7 +154,13 @@ const Router = () => (
 
       <Route path="/secret" exact render={({ location }) => <SecretPage key={location.key} />} />
 
-      <Route path="/vscode-auth" exact render={({ location }) => <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />} />
+      <Route
+        path="/vscode-auth"
+        exact
+        render={({ location }) => (
+          <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} openProject={parse(location.search, 'openProject')} />
+        )}
+      />
 
       {EXTERNAL_ROUTES.map((route) => (
         <Route key={route} path={route} render={({ location }) => <ExternalPageReloader key={location.key} />} />
