@@ -8,7 +8,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-const LeaveProjectPop = (event, project, leaveProject) => (
+const leaveProjectPop = (event, project, leaveProject) => (
   <PopoverDialog focusOnDialog align="left">
     <PopoverTitle>Leave {project.domain}</PopoverTitle>
     <PopoverActions>
@@ -56,7 +56,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
       leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
     leaveProject:
       leaveProject && project.permissions.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
-        ? (event) => LeaveProjectPop(event, project, leaveProject)
+        ? (event) => leaveProjectPop(event, project, leaveProject)
         : null,
     removeProjectFromTeam:
       removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
