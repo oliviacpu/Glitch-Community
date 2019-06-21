@@ -42,16 +42,14 @@ const getUserOption = (currentUser) => ({
   ),
 });
 
-function getTeamOption(team) {
-  return {
-    value: team.id,
-    label: (
-      <span id={team.id}>
-        <TeamAvatar team={team} hideTooltip /> {team.name}
-      </span>
-    ),
-  };
-}
+const getTeamOption = (team) => ({
+  value: team.id,
+  label: (
+    <span id={team.id}>
+      <TeamAvatar team={team} hideTooltip /> {team.name}
+    </span>
+  ),
+});
 
 function getOptions(currentUser) {
   const orderedTeams = orderBy(currentUser.teams, (team) => team.name.toLowerCase());
