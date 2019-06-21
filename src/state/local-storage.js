@@ -51,7 +51,15 @@ const LocalStorageProvider = ({ children }) => {
   React.useEffect(() => {
     const onStorage = (event) => {
       if (event.storageArea === storage) {
-        setCache(new Map());
+        if (event.key) {
+          setCache((oldCache) => {
+            const newCache = new Cache(oldCache);
+            newCache.delete(event.key);
+            return newCache;
+          });
+        } else {
+          setCache(new Map());
+        }
       }
     };
     window.addEventListener('storage', onStorage, { passive: true });
@@ -70,13 +78,12 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
-    console.log(name, value);
     writeToStorage(name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
   return (
-    <Context.Provider value={[getValue, setValue, cache]}>
+    <Context.Provider value={[getValue, setValue]}>
       {children}
     </Context.Provider>
   );
