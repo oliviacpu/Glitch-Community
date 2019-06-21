@@ -70,6 +70,7 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
+    console.log(name, value);
     writeToStorage(name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
