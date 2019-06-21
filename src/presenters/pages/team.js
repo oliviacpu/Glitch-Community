@@ -102,7 +102,7 @@ const useTeamNameConflictWarning = (team) => {
   const { createNotification } = useNotifications();
   useEffect(() => {
     if (teamConflictsWithUser(team, currentUser)) {
-      const notification = createNotification(<NameConflictWarning id={team.id} />, { persistent: true });
+      const notification = createNotification(<NameConflictWarning id={currentUser.id} />, { persistent: true });
       return () => {
         notification.removeNotification();
       };

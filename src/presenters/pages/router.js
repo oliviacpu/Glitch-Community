@@ -51,7 +51,7 @@ const PageChangeHandler = withRouter(({ location }) => {
 
   useEffect(() => {
     if (isUpdate.current) {
-      // window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
       reload();
     }
     isUpdate.current = true;
