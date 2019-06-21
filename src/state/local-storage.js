@@ -66,7 +66,7 @@ const LocalStorageProvider = ({ children }) => {
     return () => {
       window.removeEventListener('storage', onStorage, { passive: true });
     };
-  }, [name]);
+  }, []);
 
   const getValue = (name) => {
     if (!cache.has(name)) {
