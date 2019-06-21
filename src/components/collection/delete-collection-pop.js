@@ -21,7 +21,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
     setCollectionIsDeleting(true);
     try {
       deleteCollection(api, collection);
-      location.pathname === getOwnerLink(collection) ? location.reload() : history.push(getOwnerLink(collection));
+      history.push(getOwnerLink(collection));
     } catch (error) {
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
       setCollectionIsDeleting(false);
