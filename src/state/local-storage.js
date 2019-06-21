@@ -63,7 +63,7 @@ const LocalStorageProvider = ({ children }) => {
   const getValue = (name) => {
     if (!cache.has(name)) {
       const value = readFromStorage(name);
-      setCache(new Map([...cache, [name, value]]));
+      setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
     return cache.get(name);
@@ -71,11 +71,11 @@ const LocalStorageProvider = ({ children }) => {
 
   const setValue = (name, value) => {
     writeToStorage(name, value);
-    setCache(new Map([...cache, [name, value]]));
+    setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
   return (
-    <Context.Provider value={[getValue, setValue]}>
+    <Context.Provider value={[getValue, setValue, cache]}>
       {children}
     </Context.Provider>
   );
