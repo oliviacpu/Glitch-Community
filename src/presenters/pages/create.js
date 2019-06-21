@@ -45,9 +45,13 @@ const Banner = () => (
 const WhatIsGlitch = () => (
   <section className={styles.whatIsGlitch}>
     <div>
-    <Heading className={styles.h2} tagName="h2"><Mark color="#d7a6f9">What is Glitch?</Mark></Heading>
-    <Text>Glitch is a collaborative coding environment that lives in your browser and deploys your code as you type.</Text>
-    <Text>Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+      <Heading className={styles.h2} tagName="h2"><Mark color="#d7a6f9">What is Glitch?</Mark></Heading>
+      <div className={styles.whatIsGlitchDescription}>
+        <Text size="13px">Glitch is a collaborative coding environment that lives in your browser and deploys your code as you type.</Text>
+        <Text>Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+      </div>
+    </div>
+    <div className={styles.whatIsGlitchVideo}></div>
   </section>
 );
 
