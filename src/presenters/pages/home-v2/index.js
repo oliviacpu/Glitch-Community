@@ -211,7 +211,7 @@ const CultureZine = ({ content }) => (
     <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
       {({ content: cultureZineItems }) => (
         <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
-          {({ title, source, img, url }) => (
+          {({ title, primary_tag: source, feature_image: img, url }) => (
             <a href={`/culture${url}`} className={styles.plainLink}>
               <div className={styles.cultureZineImageWrap}>
                 <MaskImage src={img} />
@@ -271,7 +271,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
       <AppsWeLove content={data.appsWeLove} />
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
-    <CultureZine content={data.cultureZine} />
+    <CultureZine content={window.ZINE_POSTS.slice(0, 4)} />
     <BuildingOnGlitch content={data.buildingOnGlitch} />
     <MadeInGlitch />
     <ReportButton reportedType="home" />
