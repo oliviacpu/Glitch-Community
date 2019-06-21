@@ -55,12 +55,21 @@ const WhatIsGlitch = () => (
   </section>
 );
 
+const Starters = () => (
+  <section className={styles.starters}>
+    <Text fontSize="15px">
+      Remixable working apps mean you never have to start from scratch. You can even clone a git repo from services like GitHub and GitLab to make a copy and deploy on Glitch.
+    </Text>
+  </section>
+);
+
 const CreatePage = () => {
   return (
     <Layout>
       <main class={styles.main}>
         <Banner />
         <WhatIsGlitch />
+        <Starters />
       </main>
     </Layout>
   );
