@@ -8,15 +8,6 @@ import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-const isTeamProject = ({ currentUser, project }) => {
-  for (const team of currentUser.teams) {
-    if (project.teamIds.includes(team.id)) {
-      return true;
-    }
-  }
-  return false;
-};
-
 const LeaveProjectPop = ({ event, project, leaveProject }) => (
   <PopoverDialog focusOnDialog align="left">
     <PopoverTitle>Leave {project.domain}</PopoverTitle>
@@ -31,17 +22,6 @@ const LeaveProjectPop = ({ event, project, leaveProject }) => (
     </PopoverActions>
   </PopoverDialog>
 );
-
-function promptThenLeaveProject({ event, project, leaveProject, currentUser }) {
-  if (isTeamProject({ currentUser, project })) {
-    leaveProject(project.id, event);
-    return;
-  }
-  return (
-    // LeaveProjectPop({ event, project, leaveProject });
-    <LeaveProjectPop event={event} project={project} leaveProject={leaveProject} />
-  );
-}
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
@@ -76,7 +56,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
       leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
     leaveProject:
       leaveProject && project.permissions.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
-        ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
+        ? (event) => LeaveProjectPop({ event, project, leaveProject })
         : null,
     removeProjectFromTeam:
       removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
