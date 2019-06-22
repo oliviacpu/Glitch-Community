@@ -68,9 +68,9 @@ const STARTER_APPS = [
   },
   {
     name: 'Ember',
-    logo: '',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.png?v=1561160695744',
     color: '',
-    domain: '',
+    domain: 'ember',
   },
   {
     name: 'Nuxt',
@@ -79,10 +79,10 @@ const STARTER_APPS = [
     domain: 'nuxt-hello-world',
   },
   {
-    name: 'React',
-    logo: '',
+    name: 'Vue',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.png?v=1561160722208',
     color: '',
-    domain: '',
+    domain: 'vue-ssr',
   },
   {
     name: 'Angular',
@@ -109,16 +109,24 @@ const Starters = () => (
   </section>
 );
 
-const CreatePage = () => {
-  return (
-    <Layout>
-      <main class={styles.main}>
-        <Banner />
-        <WhatIsGlitch />
-        <Starters />
-      </main>
-    </Layout>
-  );
-};
+const StarterItem = (app) => (
+  <div>
+    <Image src={app.logo} alt="" />
+    <div>
+      <Heading tagName="h4">{app.name}</Heading>
+      <Button size="small" href={getRemixUrl(app.domain)}>Remix {app.name} starter</Button>
+    </div>
+  </div>
+);
+
+const CreatePage = () => (
+  <Layout>
+    <main class={styles.main}>
+      <Banner />
+      <WhatIsGlitch />
+      <Starters />
+    </main>
+  </Layout>
+);
 
 export default CreatePage;
