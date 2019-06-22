@@ -111,12 +111,12 @@ const Starters = () => (
     <div className={styles.startersSection}>
       <div
         className={styles.startersInfo}
-        style={{ backgroundImage: `url(${frameworkBlob})``'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857' }}
+        style={{ backgroundImage: `url(${frameworkBlob})` }}
       >
         <Heading className={styles.h3} tagName="h3">
           Framework starters
         </Heading>
-        <Text>Build off the most popular JavaScript frameworks</Text>
+        <Text size="15px">Build off the most popular JavaScript frameworks</Text>
       </div>
       <ul className={styles.startersGrid}>{STARTER_APPS.map(StarterItem)}</ul>
     </div>
