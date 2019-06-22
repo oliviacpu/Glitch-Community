@@ -113,15 +113,15 @@ const Starters = () => (
         <Heading tagName="h3">Framework starters</Heading>
         <Text>Build off the most popular JavaScript frameworks</Text>
       </div>
-      <ul>
-        
+      <ul className={styles.frameworkStarterGrid}>
+        {STARTER_APPS.map(StarterItem)}
       </ul>
     </div>
   </section>
 );
 
 const StarterItem = (app) => (
-  <li>
+  <li className={styles.frameworkStarter}>
     <Image src={app.logo} alt="" />
     <div>
       <Heading tagName="h4">{app.name}</Heading>
