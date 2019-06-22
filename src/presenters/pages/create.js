@@ -107,27 +107,32 @@ const Starters = () => (
       Remixable working apps mean you never have to start from scratch. You can even{' '}
       <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
     </Text>
-    
-    <div>
-      <div style={{backgroundImage: frameworkBlob}}>
-        <Heading tagName="h3">Framework starters</Heading>
+
+    <div className={styles.startersSection}>
+      <div
+        className={styles.startersInfo}
+        style={{ backgroundImage: `url(${frameworkBlob})``'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857' }}
+      >
+        <Heading className={styles.h3} tagName="h3">
+          Framework starters
+        </Heading>
         <Text>Build off the most popular JavaScript frameworks</Text>
       </div>
-      <ul className={classNames(styles.starterGrid, styles.frameworkStarterGrid)}>
-        {STARTER_APPS.map(StarterItem)}
-      </ul>
+      <ul className={styles.startersGrid}>{STARTER_APPS.map(StarterItem)}</ul>
     </div>
   </section>
 );
 
 const StarterItem = (app) => (
-  <li style={{'--color': app.color}} className={styles.frameworkStarter}>
+  <li style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <div className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </div>
     <div>
       <Heading tagName="h4">{app.name}</Heading>
-      <Button size="small" href={getRemixUrl(app.domain)}>Remix {app.name} starter</Button>
+      <Button size="small" href={getRemixUrl(app.domain)}>
+        Remix {app.name} starter
+      </Button>
     </div>
   </li>
 );
