@@ -103,17 +103,27 @@ html
   margin-top: 0
 .frameworkStarterGrid
   display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  grid-column-gap: u2
+  grid-row-gap: u4
 .frameworkStarter
+  display: flex
+  align-items: center
   list-style: none
+  h4
+    font-size: 16px
+    line-height: 1
+    margin: 0 0 u2 0
 .frameworkLogo
   display: inline-flex
   align-items: center
   justify-content: center
-  width: 65px
-  height: 65px
+  width: 75px
+  height: 75px
+  margin-right: u2
   background: var(--color)
   border-radius: 50%
   vertical-align: middle
   img
-    width: 40px
+    width: 45px
     height: auto
