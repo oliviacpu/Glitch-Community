@@ -116,7 +116,9 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   }
 
   useEffect(() => {
-    dispatchState({ type: 'restart', totalPages: numPages });
+    if (state.page !== 1) {
+      dispatchState({ type: 'restart', totalPages: numPages });
+    }
   }, [numProjects]);
 
   return (
