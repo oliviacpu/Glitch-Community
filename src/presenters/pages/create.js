@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import { values } from 'lodash';
 
 import Image from 'Components/images/image';
+import { TeamAvatar } from 'Components/images/avatar';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
@@ -10,7 +12,8 @@ import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import { useAPI } from 'State/api';
-import { getRemixUrl } from '../../models/project';
+import { getRemixUrl } from 'Models/project';
+import { getUrl as getTeamUrl } from 'Models/team';
 
 import styles from './create.styl';
 
@@ -108,8 +111,9 @@ function Starters() {
   useEffect(() => {
     const fetchTeams = async () => {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
-      console.log(url);
       const { data } = await api.get(url);
+      console.log(data);
+      console.log(values(...data));
       setPlatformStarters(data);
     };
     fetchTeams();
@@ -142,14 +146,14 @@ function Starters() {
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {platformStarters.map(PlatformStarterItem)}
+        {values(platformStarters).map(PlatformStarterItem)}
       </div>
     </section>
   );
 }
 
 const FrameworkStarterItem = (app) => (
-  <div style={{ '--color': app.color }} className={styles.frameworkStarter}>
+  <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
@@ -163,8 +167,12 @@ const FrameworkStarterItem = (app) => (
 );
 
 const PlatformStarterItem = (team) => (
-  <div>
-    
+  <div key={team.id}>
+    <TeamAvatar team={team} />
+    <div>
+      <Button href={getTeamUrl(team)} />
+      <Text>{team.description}</Text>
+    </div>
   </div>
 );
 
