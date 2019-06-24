@@ -134,7 +134,7 @@ function PlatformStarterItem(team) {
     <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
       <div className={styles.platformLogo}><TeamAvatar team={team} hideTooltip /></div>
       <div>
-        <Button href={getTeamLink(team)}>{team.name}</Button>
+        <div className={styles.platformLink}><Button href={getTeamLink(team)}>{team.name}</Button></div>
         <Text size="15px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
       </div>
     </div>

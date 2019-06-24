@@ -11,7 +11,7 @@ u5 = 50px
 html
   background: #f5f5f5
 .main
-  max-width: 950px
+  max-width: 1000px
   margin: auto
   
 // shared
@@ -105,14 +105,16 @@ html
 .startersGrid
   display: grid
   grid-template-columns: 1fr
-  grid-gap: u2
+  grid-gap: u3
   max-width: 260px
   margin: auto
   @media (min-width: mediumSmallViewport)
     grid-template-columns: 1fr 1fr
     max-width: initial
   @media (min-width: mediumLargeViewport)
-    grid-template-columns: 1fr 1fr 1fr
+    grid-template-columns: 1fr 1fr 1fr    
+  @media (min-width: largeViewport)
+    grid-template-columns: 1fr 1fr 1fr 1fr
   + .startersGrid
     margin-top: u5
 .startersInfo
@@ -125,6 +127,8 @@ html
   text-align: center
   @media (min-width: mediumSmallViewport)
     text-align: left
+  @media (min-width: mediumLargeViewport)
+    grid-row: 1 / span 3
   p
     max-width: 200px
   h3
@@ -161,8 +165,9 @@ html
   border-radius: u05
 .platformLogo
   margin-right: u2
-  padding: u1
   img
-    width: 50px
-    height: 50px
+    width: 45px
+    height: 45px
     border-radius: 0
+.platformLink
+  margin-bottom: u2
