@@ -98,7 +98,10 @@ const FRAMEWORK_STARTERS = [
   },
 ];
 const PLATFORM_STARTERS = [
-  
+  {
+    name: 'Slack',
+    team: 'slack-blueprints',
+  }
 ];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const Starters = () => (
