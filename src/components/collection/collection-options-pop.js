@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { PopoverMenu, PopoverDialog, PopoverActions } from 'Components/popover';
 import DeleteCollection from 'Components/collection/delete-collection-pop';
 
-export default function CollectionOptions({ collection }) {
+export default function CollectionOptions({ deleteCollection, collection }) {
+  if (!deleteCollection) {
+    return null;
+  }
+
   return (
     <PopoverMenu>
       {() => (
@@ -19,4 +23,9 @@ export default function CollectionOptions({ collection }) {
 
 CollectionOptions.propTypes = {
   collection: PropTypes.object.isRequired,
+  deleteCollection: PropTypes.func,
+};
+
+CollectionOptions.defaultProps = {
+  deleteCollection: null,
 };
