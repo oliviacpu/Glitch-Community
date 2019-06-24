@@ -135,7 +135,7 @@ function PlatformStarterItem(team) {
       <div className={styles.platformLogo}><TeamAvatar team={team} hideTooltip /></div>
       <div>
         <div className={styles.platformLink}><Button href={getTeamLink(team)}>{team.name}</Button></div>
-        <Text size="15px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
+        <Text size="14px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
       </div>
     </div>
   );
@@ -174,7 +174,7 @@ function Starters() {
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
         <div className={styles.startersInfo} style={{ backgroundImage: `url(${platformBlob})` }}>
-          <Heading className={styles.h3} tagName="h3">
+          <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
             Platform starters
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
