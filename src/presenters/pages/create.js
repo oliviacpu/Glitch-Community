@@ -257,14 +257,6 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
           <source src={video} />
         </video>
 
-        <div className={styles.screencapHighlights}>
-          {highlights.map((highlight, i) => (
-            <Text className={styles.screencapHighlight} key={i}>
-              {highlight}
-            </Text>
-          ))}
-        </div>
-
         <div className={styles.screencapImageContainer}>
           <div className={styles.screencapBlob}>
             <Image src={blob} alt="" />
@@ -273,6 +265,14 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
             <Image src={image} alt="" />
           </div>
         </div>
+      </div>
+
+      <div className={styles.screencapHighlights}>
+        {highlights.map((highlight, i) => (
+          <Text className={styles.screencapHighlight} key={i}>
+            {highlight}
+          </Text>
+        ))}
       </div>
     </section>
   );
