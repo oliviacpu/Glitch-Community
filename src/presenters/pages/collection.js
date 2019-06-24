@@ -24,7 +24,7 @@ import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
+import { useCollectionEditor, userOrTeamIsAuthor, useCollectionProjects } from 'State/collection';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
@@ -184,7 +184,6 @@ CollectionPageContents.propTypes = {
     coverColor: PropTypes.string,
     description: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    projects: PropTypes.array.isRequired,
   }).isRequired,
 };
 
@@ -194,12 +193,6 @@ async function loadCollection(api, ownerName, collectionName) {
       api,
       `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`,
       `${ownerName}/${collectionName}`,
-    );
-    collection.projects = await getAllPages(
-      api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(
-        ownerName,
-      )}/${collectionName}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
     );
 
     if (collection.user) {
