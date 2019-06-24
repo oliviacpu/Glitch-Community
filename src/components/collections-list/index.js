@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
@@ -20,9 +20,8 @@ const CreateFirstCollection = () => (
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
   const { currentUser } = useCurrentUser();
-  const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
 
-  const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
+  const collections = rawCollections;
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
