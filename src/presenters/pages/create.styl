@@ -242,32 +242,35 @@ html
   display: flex
   flex-wrap: wrap
   position: relative
-  margin-top: u2
+  margin-top: u4
   hr
-    display: none
-    border-top: 1px solid secondary-background-hover
+    margin: u4 0
+    background: secondary-background-hover
+    width: 60%
   > div
     margin-right: u4
     max-width: 70%
-  @media (min-width: mediumViewport)
+  h3
+    margin-top: 0
+    font-weight: 600
+  @media (min-width: hugeViewport)
     max-width: 80%
     flex-wrap: nowrap
     margin-left: 40px
     > div
       max-width: 100%
-    > div + div
     hr
-      display: block
-  h3
-    font-weight: 600
+      display: none
+    h3
+      margin-top: initial
 .helpImage
-  @media (max-width: mediumViewport)
+  @media (max-width: hugeViewport)
     top: 50%
     right: 0
     transform: translateY(-50%)
     width: 140px
 .ambulance
-  width: 90px
-  bottom: 30px
-  right: 15px
+  @media (max-width: hugeViewport)
+    width: 90px
+    bottom: 30px
   
