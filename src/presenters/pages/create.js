@@ -200,36 +200,38 @@ function Collaborate() {
   const description =
     'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
 
-  return <ScreencapSection title={title} video={video} blob={blob} image={pyramid} markColor="#c9c4fa" />;
+  return <ScreencapSection title={title} description={description} video={video} blob={blob} image={pyramid} imageName="pyramid" markColor="#c9c4fa" />;
 }
 
 function YourAppIsLive() {
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
   const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
-  const title = 'Build collaboratively';
+  const title = 'Your app is live, instantly';
   const description =
-    'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
+    "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
 
-  return <ScreencapSection title={title} video={video} blob={blob} image={mic} markColor="#c9fafe" />;
+  return <ScreencapSection title={title} description={description} video={video} blob={blob} image={mic} imageName="mic" markColor="#c9fafe" />;
 }
 
-function ScreencapSection({ title, description, video, blob, image, markColor }) {
+function ScreencapSection({ title, description, video, blob, image, imageName, markColor }) {
   return (
     <section>
       <Heading className={styles.h2} tagName="h2">
         <Mark color={markColor}>{title}</Mark>
       </Heading>
-      <Text className={styles.screencapDescription} size="15px" />
+      <Text className={classNames(styles.sectionDescription, styles.screencapDescription)} size="15px">
+        {description}
+      </Text>
       <div className={styles.screencapContainer}>
-        <video autoplay="true" loop="true" muted="true">
+        <video autoPlay="true" loop="true" muted="true">
           <source src={video} />
         </video>
         <div className={styles.screencapImageContainer}>
           <div className={styles.screencapBlob}>
             <Image src={blob} alt="" />
           </div>
-          <div className={styles.screencapImage}>
+          <div className={classNames(styles[imageName], styles.screencapImage)}>
             <Image src={image} alt="" />
           </div>
         </div>
