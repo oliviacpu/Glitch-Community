@@ -289,7 +289,7 @@ function Help() {
       </Heading>
       <Text className={styles.sectionDescription}>Still have questions about Glitch? We're here to lend a hand.</Text>
       
-      <div className={classNames(styles.sectionDescription, styles.helpLinks)}>
+      <div className={styles.helpLinks}>
         <div>
           <Heading tagName="h3">Help Center</Heading>
           <Text>The best place to find answers to FAQs.</Text>
@@ -306,11 +306,13 @@ function Help() {
           </Text>
         </div>
         
-        <div className={styles.screencapBlob}>
-          <Image src={blob} alt="" />
-        </div>
-        <div className={styles.screencapImage}>
-          <Image src={ambulance} alt="" />
+        <div className={styles.screencapImageContainer}>
+          <div className={styles.screencapBlob}>
+            <Image src={blob} alt="" />
+          </div>
+          <div className={styles.screencapImage}>
+            <Image src={ambulance} alt="" />
+          </div>
         </div>
       </div>
     </section>
