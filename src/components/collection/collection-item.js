@@ -115,13 +115,11 @@ CollectionItem.propTypes = {
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
-  deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
-  deleteCollection: null,
   isAuthorized: false,
   showCurator: false,
 };
