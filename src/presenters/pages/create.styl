@@ -105,21 +105,22 @@ html
 .startersGrid
   display: grid
   grid-template-columns: 1fr
-  padding: 0
   grid-gap: u2
   @media (min-width: mediumSmallViewport)
     grid-template-columns: 1fr 1fr
-  @media (min-width: mediumViewport)
+  @media (min-width: largeViewport)
     grid-template-columns: 1fr 1fr 1fr
 .startersInfo
   grid-row: 1 / span 2
   background-repeat: no-repeat
   background-size: contain
-  margin-left: -20px
+  min-height: 250px
+  margin-bottom: -100px
+  p
+    max-width: 200px
 .startersDescription
   max-width: 400px
   margin-top: 0
-
 .frameworkStarter
   display: flex
   align-items: center

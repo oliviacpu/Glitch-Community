@@ -124,17 +124,17 @@ const Starters = () => (
 );
 
 const StarterItem = (app) => (
-  <li style={{ '--color': app.color }} className={styles.frameworkStarter}>
-    <div className={styles.frameworkLogo}>
+  <div style={{ '--color': app.color }} className={styles.frameworkStarter}>
+    <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
-    </div>
-    <div>
+    </span>
+    <span>
       <Heading tagName="h4">{app.name}</Heading>
       <Button size="small" href={getRemixUrl(app.domain)}>
         Remix {app.name} starter
       </Button>
-    </div>
-  </li>
+    </span>
+  </div>
 );
 
 const CreatePage = () => (
