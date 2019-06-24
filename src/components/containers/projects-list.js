@@ -116,9 +116,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
   }
 
   useEffect(() => {
-    if (state.page !== 1) {
-      dispatchState({ type: 'restart', totalPages: numPages });
-    }
+    dispatchState({ type: 'restart', totalPages: numPages });
   }, [numProjects]);
 
   return (
@@ -138,7 +136,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState('expand')}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
             Show all <Badge>{numProjects}</Badge>
           </Button>
         </div>
