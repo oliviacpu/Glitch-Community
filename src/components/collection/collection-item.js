@@ -25,14 +25,16 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
+const ProjectsLoading = (
+  <div className={classNames(styles.projectsContainer, styles.empty)}>
+    <Loader />
+  </div>
+)
+
 const ProjectsPreview = ({ collection, isAuthorized }) => {
   const isLoading = !collection.projects;
   if (isLoading) {
-    return (
-      <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Loader />
-      </div>
-    );
+    return <ProjectsLoading />;
   }
   if (collection.projects.length > 0) {
     return (
@@ -58,6 +60,14 @@ const ProjectsPreview = ({ collection, isAuthorized }) => {
 ProjectsPreview.propTypes = {
   collection: PropTypes.object.isRequired,
 };
+
+const CollectionProjectsLoader = ({ collection }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (
+      wasEverVisible ? <ProfileListWithData project={project} /> : <ProjectsLoading />
+    )}
+  </VisibilityContainer>
+)
 
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
@@ -89,14 +99,6 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
         </CollectionLink>
 
         <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
-
-        {collection.projects && collection.projects.length > 0 && (
-          <CollectionLink collection={collection} className={styles.footerLink}>
-            {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-            <Pluralize count={collection.projects.length} singular="project" />
-            <span aria-hidden="true"> →</span>
-          </CollectionLink>
-        )}
       </div>
     )}
   </AnimationContainer>
