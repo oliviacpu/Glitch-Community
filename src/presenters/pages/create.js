@@ -297,7 +297,7 @@ function Help() {
             <Button href="https://glitch.com/help">Help Center <span aria-hidden="true">&rarr;</span></Button>
           </Text>
         </div>
-
+        <hr/>
         <div>
           <Heading tagName="h3">Support Forum</Heading>
           <Text>Personalized support for your app-specific questions.</Text>
@@ -306,14 +306,14 @@ function Help() {
           </Text>
         </div>
         
-        <div className={styles.screencapImageContainer}>
+        <span className={classNames(styles.helpImage, styles.screencapImageContainer)}>
           <div className={styles.screencapBlob}>
             <Image src={blob} alt="" />
           </div>
-          <div className={styles.screencapImage}>
+          <div className={classNames(styles.ambulance, styles.screencapImage)}>
             <Image src={ambulance} alt="" />
           </div>
-        </div>
+        </span>
       </div>
     </section>
   );

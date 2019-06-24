@@ -243,6 +243,9 @@ html
   flex-wrap: wrap
   position: relative
   margin-top: u2
+  hr
+    display: none
+    border-top: 1px solid secondary-background-hover
   > div
     margin-right: u4
     max-width: 70%
@@ -252,6 +255,9 @@ html
     margin-left: 40px
     > div
       max-width: 100%
+    > div + div
+    hr
+      display: block
   h3
     font-weight: 600
 .helpImage
@@ -259,4 +265,9 @@ html
     top: 50%
     right: 0
     transform: translateY(-50%)
+    width: 140px
+.ambulance
+  width: 90px
+  bottom: 30px
+  right: 15px
   
