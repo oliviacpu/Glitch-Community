@@ -60,6 +60,7 @@ const PasswordSettings = ({ userHasPassword }) => {
   };
 
   const isWorking = state === 'working';
+  const canSubmit = !isWorking && !!newPassword && (!!oldPassword || !currentUser.passwordEnabled);
 
   return (
     <>
@@ -71,7 +72,7 @@ const PasswordSettings = ({ userHasPassword }) => {
 
         <NewPasswordInput key={passwordVersion} disabled={isWorking} onChange={andClearState(setNewPassword)} />
 
-        <Button type="tertiary" size="small" disabled={!oldPassword || !newPassword || isWorking} submit>
+        <Button type="tertiary" size="small" disabled={!canSubmit} submit>
           Set Password
         </Button>
 
