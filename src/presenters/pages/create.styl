@@ -102,21 +102,24 @@ html
 
 .startersSection
   min-height: 250px
+.startersGrid
+  display: grid
+  grid-template-columns: 1fr
+  padding: 0
+  grid-gap: u2
+  @media (min-width: mediumSmallViewport)
+    grid-template-columns: 1fr 1fr
+  @media (min-width: mediumViewport)
+    grid-template-columns: 1fr 1fr 1fr
 .startersInfo
-  flex-basis: 250px
+  grid-row: 1 / span 2
   background-repeat: no-repeat
   background-size: contain
   margin-left: -20px
 .startersDescription
   max-width: 400px
   margin-top: 0
-.startersGrid
-  display: grid
-  grid-template-columns: 1fr 1fr 1fr
-  padding: 0
-  grid-gap: u4
-.frameworksGrid
-  grid-template-columns: 1fr
+
 .frameworkStarter
   display: flex
   align-items: center

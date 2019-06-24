@@ -108,7 +108,7 @@ const Starters = () => (
       <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
     </Text>
 
-    <div className={styles.startersSection}>
+    <div className={classNames(styles.startersSection, styles.startersGrid)}>
       <div
         className={styles.startersInfo}
         style={{ backgroundImage: `url(${frameworkBlob})` }}
@@ -118,7 +118,7 @@ const Starters = () => (
         </Heading>
         <Text size="15px">Build off the most popular JavaScript frameworks</Text>
       </div>
-      <ul className={classNames(styles.startersGrid, styles.frameworksGrid)}>{STARTER_APPS.map(StarterItem)}</ul>
+      {STARTER_APPS.map(StarterItem)}
     </div>
   </section>
 );
