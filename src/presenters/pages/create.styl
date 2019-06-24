@@ -113,6 +113,8 @@ html
     max-width: initial
   @media (min-width: mediumLargeViewport)
     grid-template-columns: 1fr 1fr 1fr
+  + .startersGrid
+    margin-top: u5
 .startersInfo
   grid-row: 1 / span 2
   background-repeat: no-repeat
@@ -152,5 +154,15 @@ html
   img
     width: 45px
     height: auto
-.frameworkStarter
+.platformStarter
+  display: flex
+  flex-wrap: nowrap;
   padding: u2
+  border-radius: u05
+.platformLogo
+  margin-right: u2
+  padding: u1
+  img
+    width: 50px
+    height: 50px
+    border-radius: 0
