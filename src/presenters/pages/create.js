@@ -12,6 +12,7 @@ import Button from 'Components/buttons/button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
+import Loader from 'Components/loader';
 import { useAPI } from 'State/api';
 import { getRemixUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
@@ -141,7 +142,7 @@ function PlatformStarterItem(team) {
   );
 }
 function Starters() {
-  const [platformStarters, setPlatformStarters] = useState([]);
+  const [platformStarters, setPlatformStarters] = useState(null);
   const api = useAPI();
   useEffect(() => {
     const fetchTeams = async () => {
@@ -179,7 +180,7 @@ function Starters() {
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {platformStarters.map(PlatformStarterItem)}
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
       </div>
     </section>
   );
