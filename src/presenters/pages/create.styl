@@ -38,6 +38,8 @@ html
   z-index: 1
 .sectionDescription
   margin-left: 40px
+  @media (max-width: largeViewport)
+    margin-left: 30px
 
 // banner
 .banner
@@ -186,15 +188,22 @@ html
   max-width: 570px
 .screencapContainer
   position: relative
-  margin: u4 40px u2 40px
+  margin: u3 auto
+  @media (min-width: mediumViewport)
+    margin: u4 40px u2 40px
   video
     max-width: 100%
 .screencapImageContainer
   position: absolute
-  right: -50px
-  bottom: -50px
-  width: 170px
-  height: 170px
+  right: -10px
+  bottom: -10px
+  width: 100px
+  height: 100px
+  @media (min-width: mediumLargeViewport)
+    width: 170px
+    height: 170px
+    right: -50px
+    bottom: -50px
 .screencapBlob
 .screencapImage
   position: absolute
@@ -205,20 +214,28 @@ html
   z-index: 2
   right: 20px
 .mic
-  right: 50px
+  right: 20px
   bottom: 10px
+  @media (min-width: mediumLargeViewport)
+    right: 50px
 .screencapHighlights
   display: flex
+  flex-wrap: wrap
   max-width: 80%
-  margin: 0 40px
+  @media (min-width: mediumViewport)
+    margin: 0 40px
 .screencapHighlight
-  margin: 0 u2 0 0
+  margin: u2 0 0 0
   padding: u2
   height: 0%
   flex-shrink: 0
-  max-width: 500px
+  max-width: 100%
   background: secondary-background-hover
   border-radius: u05
   + .screencapHighlight
     margin-top: 0
+  @media (min-width: largeViewport)
+    margin: 0 u2 0 0
+    flex-wrap: nowrap
+    max-width: 500px
   
