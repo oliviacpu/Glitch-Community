@@ -1,7 +1,72 @@
-import { useState } from 'react';
+import React, { useState, useMemo, useContext, createContext } from 'react';
 
 import { useAPI } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
+import { getAllPages } from 'Shared/api';
+
+export const CollectionContext = createContext();
+
+async function getCollectionProjects(api, collection, withCacheBust) {
+  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection}&limit=100${cacheBust}`);
+}
+
+const loadingResponse = { status: 'loading' };
+
+function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
+  setResponses((prev) => {
+    const next = { ...prev };
+    for (const { id } of collections) {
+      if (!next[id] || !next[id].projects) {
+        next[id] = { ...next[id], projects: loadingResponse };
+      }
+    }
+    return next;
+  });
+  collections.forEach(async (collection) => {
+    const projects = await getCollectionProjects(api, collection, withCacheBust);
+    setResponses((prev) => ({
+      ...prev,
+      [collection.id]: {
+        ...prev[collection.id],
+        projects: { status: 'ready', value: projects },
+      },
+    }));
+  });
+}
+
+export const CollectionContextProvider = ({ children }) => {
+  const [responses, setResponses] = useState({});
+  const api = useAPI();
+
+  const value = useMemo(
+    () => ({
+      getCollectionProjects: (collection) => {
+        if (responses[collection.id] && responses[collection.id].projects) {
+          return responses[collection.id].projects;
+        }
+        loadCollectionProjects(api, [collection], setResponses);
+        return loadingResponse;
+      },
+      reloadCollectionProjects: (collections) => {
+        loadCollectionProjects(api, collections, setResponses, true);
+      },
+    }),
+    [responses, api],
+  );
+
+  return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
+};
+
+export function useCollectionProjects(collection) {
+  const { getCollectionProjects } = useContext(CollectionContext);
+  return getCollectionProjects(collection);
+}
+
+export function useCollectionReload() {
+  const { reloadCollectionProjects } = useContext(CollectionContext);
+  return reloadCollectionProjects;
+}
 
 export const addProjectToCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/add/${projectId}`);
 export const orderProjectInCollection = (api, projectId, collection, index) =>
