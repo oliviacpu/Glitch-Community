@@ -12,8 +12,6 @@ import Layout from 'Components/layout';
 import { useAPI } from 'State/api';
 import { getRemixUrl } from '../../models/project';
 
-const api = useAPI()
-
 import styles from './create.styl';
 
 const Mark = ({ color, children }) => (
@@ -104,13 +102,17 @@ const PLATFORM_STARTERS = ['slack-blueprints', 'twitchdev', 'material', 'trello'
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
-function Starters () {
+function Starters() {
   const [platformStarters, setPlatformStarters] = useState([]);
-  useEffect(async () => {
-    const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
-    console.log(url)
-    const { data } = await api.get(url);
-    setPlatformStarters(data);
+  const api = useAPI();
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
+      console.log(url);
+      const { data } = await api.get(url);
+      setPlatformStarters(data);
+    };
+    fetchTeams();
   }, []);
   return (
     <section className={styles.starters}>
@@ -119,14 +121,12 @@ function Starters () {
       </Heading>
       <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
         Remixable working apps mean you never have to start from scratch. You can even{' '}
-        <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
+        <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on
+        Glitch.
       </Text>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
-        <div
-          className={styles.startersInfo}
-          style={{ backgroundImage: `url(${frameworkBlob})` }}
-        >
+        <div className={styles.startersInfo} style={{ backgroundImage: `url(${frameworkBlob})` }}>
           <Heading className={styles.h3} tagName="h3">
             Framework starters
           </Heading>
@@ -136,20 +136,17 @@ function Starters () {
       </div>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
-        <div
-          className={styles.startersInfo}
-          style={{ backgroundImage: `url(${platformBlob})` }}
-        >
+        <div className={styles.startersInfo} style={{ backgroundImage: `url(${platformBlob})` }}>
           <Heading className={styles.h3} tagName="h3">
             Platform starters
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {PLATFORM_STARTERS.map(FrameworkStarterItem)}
+        {platformStarters.map(PlatformStarterItem)}
       </div>
     </section>
   );
-};
+}
 
 const FrameworkStarterItem = (app) => (
   <div style={{ '--color': app.color }} className={styles.frameworkStarter}>
@@ -165,15 +162,20 @@ const FrameworkStarterItem = (app) => (
   </div>
 );
 
-function CreatePage () {
-  return (
-    <Layout>
-      <main class={styles.main}>
-        <Banner />
-        <WhatIsGlitch />
-      </main>
-    </Layout>
-  );
-};
+const PlatformStarterItem = (team) => (
+  <div>
+    
+  </div>
+);
+
+const CreatePage = () => (
+  <Layout>
+    <main className={styles.main}>
+      <Banner />
+      <WhatIsGlitch />
+      <Starters />
+    </main>
+  </Layout>
+);
 
 export default CreatePage;
