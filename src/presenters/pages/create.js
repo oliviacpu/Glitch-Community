@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -9,7 +9,10 @@ import Button from 'Components/buttons/button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
+import { useAPI } from 'State/api';
 import { getRemixUrl } from '../../models/project';
+
+const api = useAPI()
 
 import styles from './create.styl';
 
@@ -97,18 +100,18 @@ const FRAMEWORK_STARTERS = [
     domain: 'sveltejs-template-starter',
   },
 ];
-const PLATFORM_STARTERS = ['slack-blueprints', 'twitchdev', 'material', 'trello', 
-  {
-    name: 'Slack',
-    team: 'slack-blueprints',
-  }
-];
+const PLATFORM_STARTERS = ['slack-blueprints', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
+
 function Starters () {
-  useEffect(() => {
-    
-  })
+  const [platformStarters, setPlatformStarters] = useState([]);
+  useEffect(async () => {
+    const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
+    console.log(url)
+    const { data } = await api.get(url);
+    setPlatformStarters(data);
+  }, []);
   return (
     <section className={styles.starters}>
       <Heading className={styles.h2} tagName="h2">
@@ -146,7 +149,7 @@ function Starters () {
       </div>
     </section>
   );
-);
+};
 
 const FrameworkStarterItem = (app) => (
   <div style={{ '--color': app.color }} className={styles.frameworkStarter}>
@@ -162,14 +165,15 @@ const FrameworkStarterItem = (app) => (
   </div>
 );
 
-const CreatePage = () => (
-  <Layout>
-    <main class={styles.main}>
-      <Banner />
-      <WhatIsGlitch />
-      <Starters />
-    </main>
-  </Layout>
-);
+function CreatePage () {
+  return (
+    <Layout>
+      <main class={styles.main}>
+        <Banner />
+        <WhatIsGlitch />
+      </main>
+    </Layout>
+  );
+};
 
 export default CreatePage;
