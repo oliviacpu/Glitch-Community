@@ -6,6 +6,7 @@ import { values } from 'lodash';
 import Image from 'Components/images/image';
 import { TeamAvatar } from 'Components/images/avatar';
 import Text from 'Components/text/text';
+import Markdown from 'Components/'
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
 import Link from 'Components/link';
@@ -179,7 +180,7 @@ function PlatformStarterItem(team) {
       <TeamAvatar team={team} />
       <div>
         <Button href={getTeamLink(team)}>{team.name}</Button>
-        <Text size="15px">{team.description}</Text>
+        <Text size="15px"><Markdown renderAsText>{team.description}</Markdown></Text>
       </div>
     </div>
   );
