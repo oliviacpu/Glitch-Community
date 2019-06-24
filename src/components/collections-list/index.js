@@ -5,7 +5,6 @@ import Heading from 'Components/text/heading';
 import CollectionItem from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
-import DeleteCollection from 'Components/collection/delete-collection-pop';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
@@ -41,7 +40,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       )}
       <Grid items={orderedCollections}>
         {(collection) => (
-          <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={DeleteCollection} showCurator={showCurator} />
+          <CollectionItem collection={collection} isAuthorized={isAuthorized} showCurator={showCurator} />
         )}
       </Grid>
     </article>
