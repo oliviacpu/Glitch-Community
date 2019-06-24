@@ -6,7 +6,7 @@ import { getAllPages } from 'Shared/api';
 
 export const CollectionContext = createContext();
 
-async function getCollectionProjects(api, collection, withCacheBust) {
+async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection}&limit=100${cacheBust}`);
 }
@@ -24,7 +24,7 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
     return next;
   });
   collections.forEach(async (collection) => {
-    const projects = await getCollectionProjects(api, collection, withCacheBust);
+    const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
     setResponses((prev) => ({
       ...prev,
       [collection.id]: {

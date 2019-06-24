@@ -33,19 +33,6 @@ function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
 
-const TeamPageCollections = ({ collections, team }) => {
-  const { currentUser } = useCurrentUser();
-  return (
-    <CollectionsList
-      title="Collections"
-      collections={collections.map((collection) => ({ ...collection, team }))}
-      maybeCurrentUser={currentUser}
-      maybeTeam={team}
-      isAuthorized={userIsOnTeam({ team, user: currentUser })}
-    />
-  );
-};
-
 const Beta = () => (
   <a href="/teams/" target="_blank" className={styles.beta}>
     <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
@@ -222,14 +209,12 @@ function TeamPage({ team: initialTeam }) {
       {team.projects.length === 0 && currentUserIsOnTeam && <ProjectPals />}
 
       {/* TEAM COLLECTIONS */}
-      <ErrorBoundary>
-        <DataLoader
-          get={(api) => api.get(`collections?teamId=${team.id}`)}
-          renderLoader={() => <TeamPageCollections team={team} collections={team.collections} />}
-        >
-          {({ data }) => <TeamPageCollections team={team} collections={data} />}
-        </DataLoader>
-      </ErrorBoundary>
+      <CollectionsList
+        title="Collections"
+        collections={team.collections.map((collection) => ({ ...collection, team }))}
+        maybeTeam={team}
+        isAuthorized={currentUserIsOnTeam}
+      />
 
       {currentUserIsOnTeam && (
         <ErrorBoundary>
