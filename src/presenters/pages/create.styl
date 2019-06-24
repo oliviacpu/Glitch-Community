@@ -106,16 +106,20 @@ html
   display: grid
   grid-template-columns: 1fr
   grid-gap: u2
+  max-width: 260px
+  margin: auto
   @media (min-width: mediumSmallViewport)
     grid-template-columns: 1fr 1fr
+    max-width: initial
   @media (min-width: largeViewport)
     grid-template-columns: 1fr 1fr 1fr
 .startersInfo
   grid-row: 1 / span 2
   background-repeat: no-repeat
   background-size: contain
-  min-height: 250px
-  margin-bottom: -100px
+  height: 250px
+  margin-bottom: -50px;
+  padding: 25px 45px;
   p
     max-width: 200px
 .startersDescription
