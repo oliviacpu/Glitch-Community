@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import get from 'lodash/get';
 
 import Text from 'Components/text/text';
@@ -21,21 +21,10 @@ const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
-  const api = useAPI();
 
   const [page, setPage] = useState('password');
-  const [userHasPassword, setUserHasPassword] = useState(false);
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
-
-  useEffect(() => {
-    async function hasSetPassword() {
-      const response = await api.get(`/users/${currentUser.id}/hasSetPassword`);
-      setUserHasPassword(get(response, 'data.hasSetPassword'));
-    }
-
-    hasSetPassword();
-  }, []);
 
   return (
     <Overlay className="account-settings-overlay">
@@ -56,7 +45,7 @@ const AccountSettingsOverlay = () => {
             </AccountSettingsTab>
           </div>
           <div className={styles.accountSettingsContent}>
-            {page === 'password' ? <PasswordSettings userHasPassword={userHasPassword} /> : null}
+            {page === 'password' ? <PasswordSettings /> : null}
             {page === '2fa' ? <TwoFactorSettings /> : null}
           </div>
         </div>

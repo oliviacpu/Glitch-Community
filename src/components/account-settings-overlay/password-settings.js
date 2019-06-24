@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
@@ -11,7 +10,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
 
-const PasswordSettings = ({ userHasPassword }) => {
+const PasswordSettings = () => {
   const api = useAPI();
   const { currentUser, reload } = useCurrentUser();
 
@@ -64,9 +63,9 @@ const PasswordSettings = ({ userHasPassword }) => {
 
   return (
     <>
-      <Heading tagName="h2">{userHasPassword ? 'Change Password' : 'Set Password'}</Heading>
+      <Heading tagName="h2">{currentUser.passwordEnabled ? 'Change Password' : 'Set Password'}</Heading>
       <form className={styles.passwordForm} onSubmit={updatePassword}>
-        {userHasPassword && (
+        {currentUser.passwordEnabled && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} disabled={isWorking} onChange={setOldPassword} />
         )}
 
@@ -79,7 +78,7 @@ const PasswordSettings = ({ userHasPassword }) => {
         {state === 'done' && <Notification type="success" persistent>Successfully set new password</Notification>}
         {state === 'error' && <Notification type="error" persistent>We couldn't set the password</Notification>}
       </form>
-      {userHasPassword &&
+      {currentUser.passwordEnabled &&
         <>
           <Heading tagName="h2">Reset Password</Heading>
           <Button type="tertiary" size="small" disabled={resetState === 'working'} onClick={resetPassword}>Send Reset Password Email</Button>
@@ -90,10 +89,6 @@ const PasswordSettings = ({ userHasPassword }) => {
       }
     </>
   );
-};
-
-PasswordSettings.propTypes = {
-  userHasPassword: PropTypes.bool.isRequired,
 };
 
 export default PasswordSettings;

@@ -56,7 +56,7 @@ const NewPasswordInput = ({ disabled, onChange }) => {
   const [didFirstEffect, setDidFirstEffect] = React.useState(false);
   React.useEffect(() => {
     if (didFirstEffect) {
-      if (password.length > pwMinCharCount && !weakPasswordError && password === password2) {
+      if (password.length >= pwMinCharCount && !weakPasswordError && password === password2) {
         onChange(password);
       } else {
         onChange(null);
