@@ -186,7 +186,7 @@ html
   max-width: 570px
 .screencapContainer
   position: relative
-  margin: u4 40px
+  margin: u4 40px u2 40px
   video
     max-width: 100%
 .screencapImageContainer
@@ -209,12 +209,14 @@ html
   bottom: 10px
 .screencapHighlights
   display: flex
-  flex-wrap: nowrap
   max-width: 80%
   margin: 0 40px
 .screencapHighlight
   margin: 0 u2 0 0
   padding: u2
+  height: 0%
+  flex-shrink: 0
+  max-width: 500px
   background: secondary-background-hover
   border-radius: u05
   + .screencapHighlight
