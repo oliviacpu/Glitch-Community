@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { values } from 'lodash';
+import { values, sampleSize } from 'lodash';
 
 import Image from 'Components/images/image';
 import { TeamAvatar } from 'Components/images/avatar';
@@ -254,7 +254,7 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
       </Text>
 
       <div className={styles.screencapContainer}>
-        <video autoPlay="true" loop="true" muted="true">
+        <video autoPlay="" loop="" muted="">
           <source src={video} />
         </video>
 
@@ -325,21 +325,45 @@ function Help() {
 }
 
 function Remix() {
-  const apps = ['starter-chartjs', 'starter-leaflet', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example', 'float-layout', 'hello-magenta', ]
-  return (
-    <Tabs>
-      <TabList>
-        <Tab>Title 1</Tab>
-        <Tab>Title 2</Tab>
-      </TabList>
+  const allApps = [
+    'starter-chartjs',
+    'starter-leaflet',
+    'starter-react',
+    'data-dashboard',
+    'hello-tensorflow',
+    'airtable-example',
+    'float-layout',
+    'hello-magenta',
+  ];
+  const apps = sampleSize(allApps, 5);
+  const [currentApp, setCurrentApp] = useState(apps[0]);
 
-      <TabPanel>
-        <h2>Any content 1</h2>
-      </TabPanel>
-      <TabPanel>
-        <h2>Any content 2</h2>
-      </TabPanel>
-    </Tabs>
+  const AppTab = (app) => (
+    <Tab key={app}>
+      <Button onClick={() => setCurrentApp(app)}>{app}</Button>
+    </Tab>
+  );
+
+  const AppTabPanel = (app) => (
+    <TabPanel>
+      <Embed domain={app} />
+      <Button type="cta" href={getRemixUrl(app)} emoji="microphone">
+        Remix your own
+      </Button>
+    </TabPanel>
+  );
+
+  return (
+    <section>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#FBF2B8">Remix any app to get started</Mark>
+      </Heading>
+
+<!--       <Tabs>
+        <TabList>{apps.map(<AppTab />)}</TabList>
+        {apps.map(<AppTabPanel />)}}
+      </Tabs> -->
+    </section>
   );
 }
 
