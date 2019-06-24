@@ -111,7 +111,7 @@ html
   @media (min-width: mediumSmallViewport)
     grid-template-columns: 1fr 1fr
     max-width: initial
-  @media (min-width: largeViewport)
+  @media (min-width: mediumLargeViewport)
     grid-template-columns: 1fr 1fr 1fr
 .startersInfo
   grid-row: 1 / span 2
@@ -119,8 +119,13 @@ html
   background-size: contain
   height: 250px
   margin-bottom: -50px;
-  padding: 25px 45px;
+  padding: 30px 45px;
+  text-align: center
+    @media (min-width: mediumSmallViewport)
+      text-align: left
   p
+    max-width: 200px
+  h3
     max-width: 200px
 .startersDescription
   max-width: 400px

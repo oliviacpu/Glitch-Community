@@ -59,7 +59,7 @@ const WhatIsGlitch = () => (
   </section>
 );
 
-const STARTER_APPS = [
+const FRAMEWORK_STARTERS = [
   {
     name: 'React',
     logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.png?v=1561160699261',
@@ -97,6 +97,9 @@ const STARTER_APPS = [
     domain: 'sveltejs-template-starter',
   },
 ];
+const PLATFORM_STARTERS = [
+  
+];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const Starters = () => (
   <section className={styles.starters}>
@@ -118,12 +121,25 @@ const Starters = () => (
         </Heading>
         <Text size="15px">Build off the most popular JavaScript frameworks</Text>
       </div>
-      {STARTER_APPS.map(StarterItem)}
+      {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
+    </div>
+    
+    <div className={classNames(styles.startersSection, styles.startersGrid)}>
+      <div
+        className={styles.startersInfo}
+        style={{ backgroundImage: `url(${platformBlob})` }}
+      >
+        <Heading className={styles.h3} tagName="h3">
+          Platform starters
+        </Heading>
+        <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
+      </div>
+      {PLATFORM_STARTERS.map(FrameworkStarterItem)}
     </div>
   </section>
 );
 
-const StarterItem = (app) => (
+const FrameworkStarterItem = (app) => (
   <div style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
