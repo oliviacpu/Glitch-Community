@@ -164,7 +164,7 @@ function Starters() {
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
         <div className={styles.startersInfo} style={{ backgroundImage: `url(${frameworkBlob})` }}>
-          <Heading className={styles.h3} tagName="h3">
+          <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
             Framework starters
           </Heading>
           <Text size="15px">Build off the most popular JavaScript frameworks</Text>
