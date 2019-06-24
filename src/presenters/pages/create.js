@@ -186,21 +186,28 @@ function Starters() {
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {platformStarters ? platformStarters.map(PlatformStarterItem) : <div<Loader />}
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
       </div>
     </section>
   );
 }
 
 function Collaborate() {
+  const collaborateVideo = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
+const collaborateBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567'
   return (
     <section>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#c9c4fa">Build collaboratively</Mark>
       </Heading>
-      <Text size="15px">
+      <Text className={styles.collaborateDescription} size="15px">
         Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.
       </Text>
+      <div className={styles.screencapContainer}>
+        <video autoplay="true" loop="true" muted="true">
+          <source src="https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269"></source>
+        </video>
+      </div>
     </section>
   );
 }
