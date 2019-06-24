@@ -193,40 +193,78 @@ function Starters() {
 }
 
 function Collaborate() {
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567';
-  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561410495436';
   const title = 'Build collaboratively';
   const description =
     'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
+  const highlights = [
+    'Work on public or private projects',
+    'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
+  ];
+  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567';
+  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561410495436';
 
-  return <ScreencapSection title={title} description={description} video={video} blob={blob} image={pyramid} imageName="pyramid" markColor="#c9c4fa" />;
+  return (
+    <ScreencapSection
+      title={title}
+      description={description}
+      highlights={highlights}
+      video={video}
+      blob={blob}
+      image={pyramid}
+      imageName="pyramid"
+      markColor="#c9c4fa"
+    />
+  );
 }
 
 function YourAppIsLive() {
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
-  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
   const title = 'Your app is live, instantly';
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
+  const highlights = ['Supports custom domains'];
+  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
+  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
 
-  return <ScreencapSection title={title} description={description} video={video} blob={blob} image={mic} imageName="mic" markColor="#c9fafe" />;
+  return (
+    <ScreencapSection
+      title={title}
+      description={description}
+      highlights={highlights}
+      video={video}
+      blob={blob}
+      image={mic}
+      imageName="mic"
+      markColor="#c9fafe"
+    />
+  );
 }
 
-function ScreencapSection({ title, description, video, blob, image, imageName, markColor }) {
+function ScreencapSection({ title, description, video, highlights, blob, image, imageName, markColor }) {
   return (
     <section>
       <Heading className={styles.h2} tagName="h2">
         <Mark color={markColor}>{title}</Mark>
       </Heading>
+
       <Text className={classNames(styles.sectionDescription, styles.screencapDescription)} size="15px">
         {description}
       </Text>
+
       <div className={styles.screencapContainer}>
         <video autoPlay="true" loop="true" muted="true">
           <source src={video} />
         </video>
+
+        <div className={styles.screencapHighlights}>
+          {highlights.map((highlight, i) => (
+            <Text className={styles.screencapHighlight} key={i}>
+              {highlight}
+            </Text>
+          ))}
+        </div>
+
         <div className={styles.screencapImageContainer}>
           <div className={styles.screencapBlob}>
             <Image src={blob} alt="" />
