@@ -193,20 +193,46 @@ function Starters() {
 }
 
 function Collaborate() {
-  const collaborateVideo = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
-const collaborateBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567'
+  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567';
+  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561410495436';
+  const title = 'Build collaboratively';
+  const description =
+    'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
+
+  return <ScreencapSection title={title} video={video} blob={blob} image={pyramid} markColor="#c9c4fa" />;
+}
+
+function YourAppIsLive() {
+  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
+  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
+  const title = 'Build collaboratively';
+  const description =
+    'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
+
+  return <ScreencapSection title={title} video={video} blob={blob} image={mic} markColor="#c9fafe" />;
+}
+
+function ScreencapSection({ title, description, video, blob, image, markColor }) {
   return (
     <section>
       <Heading className={styles.h2} tagName="h2">
-        <Mark color="#c9c4fa">Build collaboratively</Mark>
+        <Mark color={markColor}>{title}</Mark>
       </Heading>
-      <Text className={styles.collaborateDescription} size="15px">
-        Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.
-      </Text>
+      <Text className={styles.screencapDescription} size="15px" />
       <div className={styles.screencapContainer}>
         <video autoplay="true" loop="true" muted="true">
-          <source src="https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269"></source>
+          <source src={video} />
         </video>
+        <div className={styles.screencapImageContainer}>
+          <div className={styles.screencapBlob}>
+            <Image src={blob} alt="" />
+          </div>
+          <div className={styles.screencapImage}>
+            <Image src={image} alt="" />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -219,6 +245,7 @@ const CreatePage = () => (
       <WhatIsGlitch />
       <Starters />
       <Collaborate />
+      <YourAppIsLive />
     </main>
   </Layout>
 );
