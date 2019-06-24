@@ -118,7 +118,7 @@ const Starters = () => (
         </Heading>
         <Text size="15px">Build off the most popular JavaScript frameworks</Text>
       </div>
-      <ul className={styles.startersGrid}>{STARTER_APPS.map(StarterItem)}</ul>
+      <ul className={classNames(styles.startersGrid, styles.frameworksGrid)}>{STARTER_APPS.map(StarterItem)}</ul>
     </div>
   </section>
 );
