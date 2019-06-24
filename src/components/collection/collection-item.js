@@ -16,7 +16,6 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { isDarkColor } from 'Models/collection';
 
-
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
