@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import CollectionItem from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
+import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
@@ -18,9 +19,16 @@ const CreateFirstCollection = () => (
 );
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
+  const api = useAPI();
   const { currentUser } = useCurrentUser();
+  const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
 
-  const collections = rawCollections;
+  function deleteCollection(id) {
+    setDeletedCollectionIds((ids) => [...ids, id]);
+    return api.delete(`/collections/${id}`);
+  }
+
+  const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
@@ -40,7 +48,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       )}
       <Grid items={orderedCollections}>
         {(collection) => (
-          <CollectionItem collection={collection} isAuthorized={isAuthorized} showCurator={showCurator} />
+          <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={deleteCollection} showCurator={showCurator} />
         )}
       </Grid>
     </article>

@@ -16,7 +16,6 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { isDarkColor } from 'Models/collection';
 
-import DeleteCollection from 'Components/collection/delete-collection-pop';
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
@@ -61,8 +60,8 @@ ProjectsPreview.propTypes = {
 };
 
 
-const CollectionItem = ({ collection, isAuthorized, showCurator }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={DeleteCollection || (() => {})}>
+const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
@@ -115,11 +114,13 @@ CollectionItem.propTypes = {
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
+  deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
+  deleteCollection: null,
   isAuthorized: false,
   showCurator: false,
 };
