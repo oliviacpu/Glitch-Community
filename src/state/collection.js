@@ -8,7 +8,7 @@ export const CollectionContext = createContext();
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection}&limit=100${cacheBust}`);
+  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
 const loadingResponse = { status: 'loading' };

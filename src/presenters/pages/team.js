@@ -8,7 +8,6 @@ import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
-import DataLoader from 'Components/data-loader';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';

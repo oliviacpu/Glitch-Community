@@ -14,7 +14,9 @@ import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
+import VisibilityContainer from 'Components/visibility-container';
 import { isDarkColor } from 'Models/collection';
+import { useCollectionProjects } from 'State/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -25,50 +27,55 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
-const ProjectsLoading = (
+const ProjectsLoading = () => (
   <div className={classNames(styles.projectsContainer, styles.empty)}>
     <Loader />
   </div>
-)
+);
 
-const ProjectsPreview = ({ collection, isAuthorized }) => {
-  const isLoading = !collection.projects;
-  if (isLoading) {
-    return <ProjectsLoading />;
-  }
-  if (collection.projects.length > 0) {
+const CollectionProjects = ({ collection, isAuthorized }) => {
+  const { value: projects } = useCollectionProjects(collection);
+
+  if (!projects) return <ProjectsLoading />;
+
+  if (projects.length === 0 && isAuthorized) {
     return (
-      <div className={styles.projectsContainer}>
-        <Row className={styles.projectsList} items={collection.projects} count={3}>
-          {(project) => <ProjectItemSmall project={project} />}
-        </Row>
+      <div className={classNames(styles.projectsContainer, styles.empty)}>
+        <Text>
+          This collection is empty – add some projects <Emoji name="index" />
+        </Text>
+      </div>
+    );
+  }
+  if (projects.length === 0 && !isAuthorized) {
+    return (
+      <div className={classNames(styles.projectsContainer, styles.empty)}>
+        <Text>No projects to see in this collection just yet.</Text>
       </div>
     );
   }
 
-  const emptyState = isAuthorized ? (
-    <Text>
-      {'This collection is empty – add some projects '}
-      <Emoji name="index" />
-    </Text>
-  ) : (
-    <Text>No projects to see in this collection just yet.</Text>
+  return (
+    <>
+      <div className={styles.projectsContainer}>
+        <Row className={styles.projectsList} items={projects} count={3}>
+          {(project) => <ProjectItemSmall project={project} />}
+        </Row>
+      </div>
+      <CollectionLink collection={collection} className={styles.footerLink}>
+        {`View ${projects.length >= 3 ? 'all' : ''} `}
+        <Pluralize count={projects.length} singular="project" />
+        <span aria-hidden="true"> →</span>
+      </CollectionLink>
+    </>
   );
-  return <div className={classNames(styles.projectsContainer, styles.empty)}>{emptyState}</div>;
 };
 
-ProjectsPreview.propTypes = {
-  collection: PropTypes.object.isRequired,
-};
-
-const CollectionProjectsLoader = ({ collection }) => (
+const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
   <VisibilityContainer>
-    {({ wasEverVisible }) => (
-      wasEverVisible ? <ProfileListWithData project={project} /> : <ProjectsLoading />
-    )}
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionProjects collection={collection} isAuthorized={isAuthorized} /> : <ProjectsLoading />)}
   </VisibilityContainer>
-)
-
+);
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
@@ -98,7 +105,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
         </CollectionLink>
 
-        <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
+        <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} />
       </div>
     )}
   </AnimationContainer>
@@ -110,7 +117,6 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    projects: PropTypes.array,
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,

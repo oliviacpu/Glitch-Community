@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
 import { useAPI } from 'State/api';
@@ -44,7 +44,7 @@ export function useUserEditor(initialUser) {
       updateCurrentUser(data);
     }
   }
-  
+
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
