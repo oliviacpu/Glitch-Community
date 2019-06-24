@@ -163,7 +163,7 @@ export function useTeamEditor(initialTeam) {
             hasAvatarImage: true,
             backgroundColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     uploadCover: () =>
