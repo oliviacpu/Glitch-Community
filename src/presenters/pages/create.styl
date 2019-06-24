@@ -110,7 +110,7 @@ html
   grid-template-columns: 1fr
   grid-gap: u3
   max-width: 260px
-  margin: auto
+  margin: u5 auto
   @media (min-width: mediumSmallViewport)
     grid-template-columns: 1fr 1fr
     max-width: initial
@@ -120,8 +120,6 @@ html
     margin-left: initial
   @media (min-width: hugeViewport)
     grid-template-columns: 1fr 1fr 1fr 1fr
-  + .startersGrid
-    margin-top: u5
 .startersInfo
   grid-row: 1 / span 2
   background-repeat: no-repeat
@@ -238,4 +236,15 @@ html
     margin: 0 u2 0 0
     flex-wrap: nowrap
     max-width: 500px
+    
+// help
+.help
+  position: relative
+.helpLinks
+  display: flex
+  margin-top: u2
+  > div
+    margin-right: u4
+  @media (min-width: mediumViewport)
+    max-width: 80%
   

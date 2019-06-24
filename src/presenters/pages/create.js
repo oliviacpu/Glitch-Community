@@ -279,16 +279,40 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
 }
 
 function Help() {
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561416296360';
+  const ambulance = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561416321109';
+  
   return (
-    <section>
+    <section className={styles.help}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#f8d3c9">Help whenever you need it</Mark>
       </Heading>
       <Text className={styles.sectionDescription}>Still have questions about Glitch? We're here to lend a hand.</Text>
       
-      <Heading tagName="h3">Help Center</Heading>
-      <Text>The best place to find answers to FAQs.</Text>
-      <
+      <div className={classNames(styles.sectionDescription, styles.helpLinks)}>
+        <div>
+          <Heading tagName="h3">Help Center</Heading>
+          <Text>The best place to find answers to FAQs.</Text>
+          <Text>
+            <Button href="https://glitch.com/help">Help Center <span aria-hidden="true">&rarr;</span></Button>
+          </Text>
+        </div>
+
+        <div>
+          <Heading tagName="h3">Support Forum</Heading>
+          <Text>Personalized support for your app-specific questions.</Text>
+          <Text>
+            <Button href="https://support.glitch.com">Forums <span aria-hidden="true">&rarr;</span></Button>
+          </Text>
+        </div>
+        
+        <div className={styles.screencapBlob}>
+          <Image src={blob} alt="" />
+        </div>
+        <div className={styles.screencapImage}>
+          <Image src={ambulance} alt="" />
+        </div>
+      </div>
     </section>
   );
 }
