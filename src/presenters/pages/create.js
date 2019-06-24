@@ -278,6 +278,21 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
   );
 }
 
+function Help() {
+  return (
+    <section>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#f8d3c9">Help whenever you need it</Mark>
+      </Heading>
+      <Text className={styles.sectionDescription}>Still have questions about Glitch? We're here to lend a hand.</Text>
+      
+      <Heading tagName="h3">Help Center</Heading>
+      <Text>The best place to find answers to FAQs.</Text>
+      <
+    </section>
+  );
+}
+
 const CreatePage = () => (
   <Layout>
     <main className={styles.main}>
@@ -286,6 +301,7 @@ const CreatePage = () => (
       <Starters />
       <Collaborate />
       <YourAppIsLive />
+      <Help />
     </main>
   </Layout>
 );
