@@ -338,31 +338,30 @@ function Remix() {
   const apps = sampleSize(allApps, 5);
   const [currentApp, setCurrentApp] = useState(apps[0]);
 
-  const AppTab = (app) => (
-    <Tab key={app}>
-      <Button onClick={() => setCurrentApp(app)}>{app}</Button>
-    </Tab>
-  );
-
-  const AppTabPanel = (app) => (
-    <TabPanel>
-      <Embed domain={app} />
-      <Button type="cta" href={getRemixUrl(app)} emoji="microphone">
-        Remix your own
-      </Button>
-    </TabPanel>
-  );
-
   return (
     <section>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
-<!--       <Tabs>
-        <TabList>{apps.map(<AppTab />)}</TabList>
-        {apps.map(<AppTabPanel />)}}
-      </Tabs> -->
+      <Tabs>
+        <TabList>
+          {apps.map(app => (
+            <Tab key={app}>
+              <Button onClick={() => setCurrentApp(app)}>{app}</Button>
+            </Tab>
+          ))}
+        </TabList>
+        
+        {apps.map(app => (
+          <TabPanel>
+            <Embed domain={app} />
+            <Button type="cta" href={getRemixUrl(app)} emoji="microphone">
+              Remix your own
+            </Button>
+          </TabPanel>
+        ))}
+      </Tabs>
     </section>
   );
 }
