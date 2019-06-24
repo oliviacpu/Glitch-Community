@@ -97,49 +97,55 @@ const FRAMEWORK_STARTERS = [
     domain: 'sveltejs-template-starter',
   },
 ];
-const PLATFORM_STARTERS = [
+const PLATFORM_STARTERS = ['slack-blueprints', 'twitchdev', 'material', 'trello', 
   {
     name: 'Slack',
     team: 'slack-blueprints',
   }
 ];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
-const Starters = () => (
-  <section className={styles.starters}>
-    <Heading className={styles.h2} tagName="h2">
-      <Mark color="#F9DB91">Starters for all developers</Mark>
-    </Heading>
-    <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
-      Remixable working apps mean you never have to start from scratch. You can even{' '}
-      <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
-    </Text>
-
-    <div className={classNames(styles.startersSection, styles.startersGrid)}>
-      <div
-        className={styles.startersInfo}
-        style={{ backgroundImage: `url(${frameworkBlob})` }}
-      >
-        <Heading className={styles.h3} tagName="h3">
-          Framework starters
-        </Heading>
-        <Text size="15px">Build off the most popular JavaScript frameworks</Text>
-      </div>
-      {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
-    </div>
+const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
+function Starters () {
+  useEffect(() => {
     
-    <div className={classNames(styles.startersSection, styles.startersGrid)}>
-      <div
-        className={styles.startersInfo}
-        style={{ backgroundImage: `url(${platformBlob})` }}
-      >
-        <Heading className={styles.h3} tagName="h3">
-          Platform starters
-        </Heading>
-        <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
+  })
+  return (
+    <section className={styles.starters}>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#F9DB91">Starters for all developers</Mark>
+      </Heading>
+      <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
+        Remixable working apps mean you never have to start from scratch. You can even{' '}
+        <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on Glitch.
+      </Text>
+
+      <div className={classNames(styles.startersSection, styles.startersGrid)}>
+        <div
+          className={styles.startersInfo}
+          style={{ backgroundImage: `url(${frameworkBlob})` }}
+        >
+          <Heading className={styles.h3} tagName="h3">
+            Framework starters
+          </Heading>
+          <Text size="15px">Build off the most popular JavaScript frameworks</Text>
+        </div>
+        {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
       </div>
-      {PLATFORM_STARTERS.map(FrameworkStarterItem)}
-    </div>
-  </section>
+
+      <div className={classNames(styles.startersSection, styles.startersGrid)}>
+        <div
+          className={styles.startersInfo}
+          style={{ backgroundImage: `url(${platformBlob})` }}
+        >
+          <Heading className={styles.h3} tagName="h3">
+            Platform starters
+          </Heading>
+          <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
+        </div>
+        {PLATFORM_STARTERS.map(FrameworkStarterItem)}
+      </div>
+    </section>
+  );
 );
 
 const FrameworkStarterItem = (app) => (
