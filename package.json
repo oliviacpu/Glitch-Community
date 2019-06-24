@@ -109,7 +109,8 @@
     "webpack-dev-middleware": "^3.6.2",
     "winston": "^3.2.1",
     "wcag-contrast": "^2.1.1",
-    "intersection-observer": "^0.7.0"
+    "intersection-observer": "^0.7.0",
+    "react-tabs": "^3.0.0"
   },
   "engines": {
     "node": "10.x"
