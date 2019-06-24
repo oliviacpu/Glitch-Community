@@ -133,10 +133,16 @@ function PlatformStarterItem(team) {
 
   return (
     <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
-      <div className={styles.platformLogo}><TeamAvatar team={team} hideTooltip /></div>
+      <div className={styles.platformLogo}>
+        <TeamAvatar team={team} hideTooltip />
+      </div>
       <div>
-        <div className={styles.platformLink}><Button href={getTeamLink(team)}>{team.name}</Button></div>
-        <Text size="14px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
+        <div className={styles.platformLink}>
+          <Button href={getTeamLink(team)}>{team.name}</Button>
+        </div>
+        <Text size="14px">
+          <Markdown renderAsPlaintext>{team.description}</Markdown>
+        </Text>
       </div>
     </div>
   );
@@ -180,8 +186,21 @@ function Starters() {
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <div<Loader />}
       </div>
+    </section>
+  );
+}
+
+function Collaborate() {
+  return (
+    <section>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#c9c4fa">Build collaboratively</Mark>
+      </Heading>
+      <Text size="15px">
+        Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.
+      </Text>
     </section>
   );
 }
@@ -192,6 +211,7 @@ const CreatePage = () => (
       <Banner />
       <WhatIsGlitch />
       <Starters />
+      <Collaborate />
     </main>
   </Layout>
 );
