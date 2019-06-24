@@ -13,7 +13,7 @@ import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import { useAPI } from 'State/api';
 import { getRemixUrl } from 'Models/project';
-import { getUrl as getTeamUrl } from 'Models/team';
+import { getLink as getTeamLink } from 'Models/team';
 
 import styles from './create.styl';
 
@@ -101,7 +101,7 @@ const FRAMEWORK_STARTERS = [
     domain: 'sveltejs-template-starter',
   },
 ];
-const PLATFORM_STARTERS = ['slack-blueprints', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
+const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
@@ -112,9 +112,7 @@ function Starters() {
     const fetchTeams = async () => {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
-      console.log(data);
-      console.log(values(...data));
-      setPlatformStarters(data);
+      setPlatformStarters(values(data));
     };
     fetchTeams();
   }, []);
@@ -146,7 +144,7 @@ function Starters() {
           </Heading>
           <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
-        {values(platformStarters).map(PlatformStarterItem)}
+        {platformStarters.map(PlatformStarterItem)}
       </div>
     </section>
   );
@@ -166,15 +164,26 @@ const FrameworkStarterItem = (app) => (
   </div>
 );
 
-const PlatformStarterItem = (team) => (
-  <div key={team.id}>
-    <TeamAvatar team={team} />
-    <div>
-      <Button href={getTeamUrl(team)} />
-      <Text>{team.description}</Text>
+function PlatformStarterItem(team) {
+  const bgColors = {
+    slack: '#f9d6c6',
+    material: '#b8ebe6',
+    twitchdev: '#eeecfb',
+    trello: '#dde5e9',
+    aframe: '#aad6fb',
+    spotify: '#d3f3e6',
+  };
+
+  return (
+    <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
+      <TeamAvatar team={team} />
+      <div>
+        <Button href={getTeamLink(team)}>{team.name}</Button>
+        <Text size="15px">{team.description}</Text>
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 const CreatePage = () => (
   <Layout>
