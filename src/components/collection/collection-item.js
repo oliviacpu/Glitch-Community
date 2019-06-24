@@ -78,7 +78,7 @@ const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
 );
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
@@ -126,7 +126,7 @@ CollectionItem.propTypes = {
 };
 
 CollectionItem.defaultProps = {
-  deleteCollection: null,
+  deleteCollection: () => {},
   isAuthorized: false,
   showCurator: false,
 };
