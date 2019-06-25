@@ -6,9 +6,8 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
+import useErrorHandlers from 'State/error-handlers';
 import { useProjectReload } from 'State/project';
-
-import useErrorHandlers from '../presenters/error-handlers';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -137,7 +136,7 @@ export function useTeamEditor(initialTeam) {
       }
     }, handleError),
     inviteEmail: (email) => inviteEmail(api, email, team).catch(handleError),
-    inviteUser: () => inviteUserToTeam(api, currentUser, team).catch(handleError),
+    inviteUser: (user) => inviteUserToTeam(api, user, team).catch(handleError),
     removeUserFromTeam: withErrorHandler(async (userId, projectIds) => {
       // Kick them out of every project at once, and wait until it's all done
       await Promise.all(projectIds.map((projectId) => removeUserFromProject(api, projectId, userId)));
