@@ -107,11 +107,13 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
               />
             </div>
 
-            {status === 'ready' && <div className="collection-project-count">
-              <Text>
-                <Pluralize count={projects.length} singular="Project" />
-              </Text>
-            </div>}
+            {status === 'ready' && (
+              <div className="collection-project-count">
+                <Text>
+                  <Pluralize count={projects.length} singular="Project" />
+                </Text>
+              </div>
+            )}
 
             {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
@@ -119,9 +121,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
             <div className="collection-project-container-header">
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
             </div>
-            {status === 'loading' && (
-              <Loader />
-            )}
+            {status === 'loading' && <Loader />}
             {status === 'ready' && !collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
                 <Image

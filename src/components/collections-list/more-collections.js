@@ -15,45 +15,44 @@ import { CollectionContext } from 'State/collection';
 
 import styles from './styles.styl';
 
-const loadMoreCollectionsFromAuthor = async ({ api, getCollectionProjects, collection }) => {
+const loadMoreCollectionsFromAuthor = ({ api, collection }) => {
   const authorType = collection.teamId === -1 ? 'user' : 'team';
   const authorEndpoint = `${authorType}s`;
   const authorId = authorType === 'user' ? collection.userId : collection.teamId;
 
   // get up to 10 collections from the author
-  return await getSingleItem(
-    api,
-    `v1/${authorEndpoint}/${authorId}/collections?limit=10&orderKey=createdAt&orderDirection=DESC`,
-    'items',
-  );
+  return getSingleItem(api, `v1/${authorEndpoint}/${authorId}/collections?limit=10&orderKey=createdAt&orderDirection=DESC`, 'items');
 };
 
-const MoreCollections = ({ currentCollection, collections }) => {
+function useCollectionsWithProjects(collections) {
   const { getCollectionProjects } = useContext(CollectionContext);
   const responses = collections.map(getCollectionProjects);
-  const [collectionsWithProjects, setCollectionsWithProjects] = useState(null)
+  const [collectionsWithProjects, setCollectionsWithProjects] = useState(null);
   useEffect(() => {
     setCollectionsWithProjects((prev) => {
       if (prev) return prev;
 
-      const allResponsesComplete = responses.every(r => r.status !== 'loading')
-      if (!allResponsesComplete) return null
-      
-      const moreCollectionsWithProjects = []
+      const allResponsesComplete = responses.every((r) => r.status !== 'loading');
+      if (!allResponsesComplete) return null;
+
+      const moreCollectionsWithProjects = [];
       responses.forEach((response, i) => {
         if (response.status === 'ready' && response.value.length > 0) {
-          moreCollectionsWithProjects.push({ ...collections[i], projects: response.value })
-        }        
-      })      
-      return sampleSize(moreCollectionsWithProjects, 3)
-    })
-  }, [responses])
-  
+          moreCollectionsWithProjects.push({ ...collections[i], projects: response.value });
+        }
+      });
+      return sampleSize(moreCollectionsWithProjects, 3);
+    });
+  }, [responses]);
+  return collectionsWithProjects;
+}
+
+const MoreCollections = ({ currentCollection, collections }) => {
+  const collectionsWithProjects = useCollectionsWithProjects(collections);
+  if (!collectionsWithProjects) return <Loader />;
+
   const isUserCollection = currentCollection.teamId === -1;
   const type = isUserCollection ? 'user' : 'team';
-  
-  if (!collectionsWithProjects) return <Loader />
-
   return (
     <>
       <div className={styles.moreByLinkWrap}>
@@ -77,11 +76,11 @@ MoreCollections.propTypes = {
   collections: PropTypes.array.isRequired,
 };
 
-const MoreCollectionsContainer = ({ collection }) =>  (
+const MoreCollectionsContainer = ({ collection }) => (
   <DataLoader get={(api) => loadMoreCollectionsFromAuthor({ api, collection })}>
     {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
   </DataLoader>
-)
+);
 
 MoreCollectionsContainer.propTypes = {
   collection: PropTypes.object.isRequired,
