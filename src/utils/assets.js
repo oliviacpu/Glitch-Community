@@ -47,8 +47,10 @@ const drawCanvasThumbnail = (image, type, max) => {
     targetContext.drawImage(sourceCanvas, 0, 0, width, height);
     sourceCanvas = targetCanvas;
   }
-  return new Promise((resolve) =>
-    sourceCanvas.toBlob(
+  return new Promise((resolve) => {
+    console.log("hi")
+    console.log(sourceCanvas.toBlob)
+    return sourceCanvas.toBlob(
       (blob) => {
         blob.width = width;
         blob.height = height;
@@ -56,7 +58,8 @@ const drawCanvasThumbnail = (image, type, max) => {
       },
       type,
       quality,
-    ),
+    )
+  }
   );
 };
 
