@@ -49,16 +49,18 @@ Nope! Though you can set your remix to run in production mode by setting `NODE_E
 
 
 ### How does caching work within the community app? 
+Our HTML:
+When we render our views/index.ejs file as html and server it, we set it to have a maxAge of 1 ms which is set in server/routes.js, so it does not cache at all.
 
-Our Bundles: 
-To check out our caching logic directly, look at webpack.config.js but for a brief summary:
-- we split our code into chunks and we cache those files for a week, which you can see in server/routes.js where ms is 7 days in milliseconds:
+
+Our Bundles TLDR: 
+- our javascript caching logic can be found in webpack.config.js and server/routes.js
+- we split our javascript into chunked bundles and we cache those files for up to a week. To see where we designate this age go to server/routes.js where we specify the max-age:
 ```  app.use(express.static('build', { index: false, maxAge: ms })); ```
-- when code is updated we generate a new "chunkhash" which changes the name of the file from something like dependencies.random123.js to dependencies.random456.js, which means that the next time users go to glitch.com, they will request the new file from cloudfront, thus breaking any cache
+- when code is updated, we generate a new "chunkhash" which changes the name of the file that chunk of code lives in from something like `dependencies.random123.js` to `dependencies.random456.js` which means that the next time users go to glitch.com, they will request the new file from cloudfront, thus breaking any cache
 - we do this so to improve the speeds of our downloads of the js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
 
-Our HTML:
-our view.ejs file has a maxAge of 1 second also set in server/routes.js so this should not cache? but it does... lol
+
 
 Things that can go wrong:
 

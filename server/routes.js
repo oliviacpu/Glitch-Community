@@ -72,7 +72,7 @@ module.exports = function(external) {
       console.error("Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.");
       built = false;
     }
-  console.log("gunna render")
+    console.log("gunna render")
     res.render('index.ejs', {
       title,
       description,
