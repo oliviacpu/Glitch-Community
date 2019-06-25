@@ -403,7 +403,7 @@ function Categories() {
     {
       name: 'Bots',
       color: '#c7bff0',
-      url: '/bots',
+      url: '/handy-bots',
       icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561477841495',
     },
     {
