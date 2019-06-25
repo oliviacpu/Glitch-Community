@@ -18,7 +18,7 @@ import styles from './team-item.styl';
 
 const useTeamUsers = createAPIHook(async (api, teamID) => {
   try {
-    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
+    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}&limit=10`);
     return res.data.items;
   } catch (e) {
     captureException(e);

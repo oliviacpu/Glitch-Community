@@ -4,7 +4,9 @@ import { useAPI, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 
-export const CollectionContext = createContext();
+const CollectionContext = createContext();
+
+
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
@@ -57,6 +59,8 @@ export const CollectionContextProvider = ({ children }) => {
 
   return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
 };
+
+export const useCollectionContext = () => useContext(CollectionContext);
 
 export function useCollectionProjects(collection) {
   const { getCollectionProjects } = useContext(CollectionContext);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
@@ -11,7 +11,7 @@ import Row from 'Components/containers/row';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 import { getSingleItem } from 'Shared/api';
-import { CollectionContext } from 'State/collection';
+import { useCollectionContext } from 'State/collection';
 
 import styles from './styles.styl';
 
@@ -25,7 +25,7 @@ const loadMoreCollectionsFromAuthor = ({ api, collection }) => {
 };
 
 function useCollectionsWithProjects(collections) {
-  const { getCollectionProjects } = useContext(CollectionContext);
+  const { getCollectionProjects } = useCollectionContext();
   const responses = collections.map(getCollectionProjects);
   const [collectionsWithProjects, setCollectionsWithProjects] = useState(null);
   useEffect(() => {

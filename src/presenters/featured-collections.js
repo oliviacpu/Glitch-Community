@@ -6,23 +6,6 @@ import { getSingleItem } from 'Shared/api';
 
 import { featuredCollections } from '../curated/collections';
 
-const loadCollection = async (api, { owner, name }) => {
-  try {
-    const collection = await getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(owner)}/${name}`, `${owner}/${name}`);
-    collection.projects = await getSingleItem(api, `/v1/collections/by/fullUrl/projects?limit=20&fullUrl=${encodeURIComponent(owner)}/${name}`, 'items');
-    collection.team = await getSingleItem(api, `/v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-
-    return collection;
-  } catch (error) {
-    if (error && error.response && error.response.status === 404) {
-      return null;
-    }
-    captureException(error);
-  }
-
-  return null;
-};
-
 const loadAllCollections = async (api, infos) => {
   // don't await until every request is sent so they can all run at once
   const promises = infos.map((info) => loadCollection(api, info));

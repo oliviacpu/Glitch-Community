@@ -77,12 +77,6 @@ async function loadCollection(api, ownerName, collectionName) {
       `v1/collections/by/id/projects?id=${collection.id}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
     );
 
-    if (collection.user) {
-      collection.user = await getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id);
-    } else {
-      collection.team = await getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-    }
-
     return collection;
   } catch (error) {
     if (error && error.response && error.response.status === 404) {

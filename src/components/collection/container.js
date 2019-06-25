@@ -16,10 +16,12 @@ import EditCollectionColor from 'Components/collection/edit-collection-color-pop
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
+import { useCollectionCurator } from 'State/collection';
 
 import styles from './container.styl';
 
 const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, preview, funcs }) => {
+  const { value: curator } = useCollectionCurator(collection);
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -50,7 +52,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           <h1 className={styles.name}>{collectionName}</h1>
 
           <div className={styles.owner}>
-            <ProfileItem hasLink team={collection.team} user={collection.user} glitchTeam={collection.glitchTeam} />
+            <ProfileItem hasLink {...curator} glitchTeam={collection.glitchTeam} />
           </div>
 
           <div className={styles.description}>
@@ -140,8 +142,6 @@ CollectionContainer.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
     featuredProjectId: PropTypes.string,
-    user: PropTypes.object,
-    team: PropTypes.object,
   }).isRequired,
   showFeaturedProject: PropTypes.bool,
   isAuthorized: PropTypes.bool,
