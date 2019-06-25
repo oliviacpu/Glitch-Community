@@ -31,7 +31,7 @@ const Mark = ({ color, children }) => (
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
 function Banner() {
-  const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561144073293';
+  const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561493320944';
   const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
 
   return (
