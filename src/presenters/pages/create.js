@@ -355,10 +355,12 @@ function Remix() {
         
         {apps.map(app => (
           <TabPanel>
-            <Embed domain={app} />
-            <Button type="cta" href={getRemixUrl(app)} emoji="microphone">
-              Remix your own
-            </Button>
+            <div className={styles.embedContainer}><Embed domain={app} /></div>
+            <div className={styles.EmbedRemixBtn}>
+              <Button type="cta" href={getRemixUrl(currentApp)} emoji="microphone">
+                Remix your own
+              </Button>
+            </div>
           </TabPanel>
         ))}
       </Tabs>
