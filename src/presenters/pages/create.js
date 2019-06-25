@@ -392,6 +392,73 @@ function Remix() {
   );
 }
 
+function Categories () {
+  const categories = [
+    {
+      name: 'Games',
+      color: '#fae3d1',
+      url: 'games',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ftetris.svg?v=1561477843652'
+    },
+    {
+      name: 'Bots',
+      color: '#c7bff0',
+      url: 'bots',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561477841495'
+    },
+    {
+      name: 'Music',
+      color: '#a9c4f7',
+      url: 'music',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmusic.svg?v=1561477845755'
+    },
+    {
+      name: 'Art',
+      color: '#f2a7bb',
+      url: 'art',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fart.svg?v=1561477843142'
+    },
+    {
+      name: 'Productivity',
+      color: '#7aa4d3',
+      url: 'tools-for-work',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwork.svg?v=1561477844156'
+    },
+    {
+      name: 'Hardware',
+      color: '#6cd8a9',
+      url: 'hardware',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg?v=1561477845354'
+    },
+    {
+      name: 'Building Blocks',
+      color: '#65cad2',
+      url: 'building-blocks',
+      icon: ''
+    },
+    {
+      name: '',
+      color: '',
+      url: '',
+      icon: ''
+    },
+    {
+      name: '',
+      color: '',
+      url: '',
+      icon: ''
+    },
+  ];
+  return (
+    <section className={classNames(styles.categories, styles.section)}>
+      <Text>...or browse starter apps for inspiration</Text>
+      
+      <ul>
+      </ul>
+    </section>
+  );
+}
+
 const CreatePage = () => (
   <Layout>
     <main className={styles.main}>
@@ -402,6 +469,7 @@ const CreatePage = () => (
       <YourAppIsLive />
       <Help />
       <Remix />
+      <Categories />
     </main>
   </Layout>
 );
