@@ -42,11 +42,11 @@ const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsha
           <Unmarked>the app of your dreams</Unmarked>
         </Heading>
         <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
-        <span className={styles.bannerRemixBtn}>
+        <div className={styles.bannerRemixBtn}>
           <Button href={getRemixUrl('hello-webpage')} type="cta">
             Remix Hello World
           </Button>
-        </span>
+        </div>
       </div>
 
       <div className={styles.bannerIllustration}>
