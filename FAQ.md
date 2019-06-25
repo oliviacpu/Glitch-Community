@@ -48,12 +48,18 @@ We use them to hide features that we're still working on. The code lives in `dev
 Nope! Though you can set your remix to run in production mode by setting `NODE_ENV=production` in the `.env` file. Doing so will improve performance a bit, but webpack will take a lot longer.
 
 
-### How does caching work within community app? How does caching work with cloudfront? If glitch.com is down, how can I tell if it's due to a caching issue? How can I fix it?
+### How does caching work within the community app? 
 
 To check out our caching logic directly, look at webpack.config.js but for a brief summary:
-- we split our code into chunks and we cache those files indefinitely
-- when code is updated we generate a new "chunkhash" which changes the name of the file, thus breaking the cache
-- we do this so that things that don't change often (ex React or other dependencies) are loaded once, and then used from cache there after. 
+- we split our code into chunks and we cache those files for a week, which you can see in server/routes.js where ms is 7 days in milliseconds:
+```  app.use(express.static('build', { index: false, maxAge: ms })); ```
+- when code is updated we generate a new "chunkhash" which changes the name of the file from something like dependencies.random123.js to dependencies.random456.js, which means that the next time users go to glitch.com, they will request the new file from cloudfront, thus breaking any cache
+- we do this so to improve the speeds of our downloads of the js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
+
+Things that can go wrong:
+
+
+### Why am I still seeing sentry errors for old code if it isn't cached?
 
 ### How do I add a question to the FAQ?
 
