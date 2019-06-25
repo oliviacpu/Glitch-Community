@@ -53,7 +53,7 @@ const LocalStorageProvider = ({ children }) => {
       if (event.storageArea === storage) {
         if (event.key) {
           setCache((oldCache) => {
-            const newCache = new Cache(oldCache);
+            const newCache = new Map(oldCache);
             newCache.delete(event.key);
             return newCache;
           });
@@ -79,10 +79,10 @@ const LocalStorageProvider = ({ children }) => {
     return cache.get(name);
   };
 
-  const setValue = (name, value) => {
+  const setValue = React.useMemo(() => (name, value) => {
     writeToStorage(name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
-  };
+  });
 
   return (
     <Context.Provider value={[getValue, setValue]}>
