@@ -26,7 +26,9 @@ const CreateTeamSubmitButton = ({ disabled }) => {
   );
 };
 
-function CreateTeamPopBase(props) {
+const CreateTeamPop = withRouter(({ history}) => {
+  const api = useAPI();
+  
   const [state, setState] = useState({
     teamName: '',
     isLoading: false,
@@ -39,7 +41,7 @@ function CreateTeamPopBase(props) {
       let error = null;
 
       try {
-        const { data } = await props.api.get(`userId/byLogin/${url}`);
+        const { data } = await api.get(`userId/byLogin/${url}`);
         if (data !== 'NOT FOUND') {
           error = 'Name in use, try another';
         }
@@ -50,7 +52,7 @@ function CreateTeamPopBase(props) {
       }
 
       try {
-        const { data } = await props.api.get(`teamId/byUrl/${url}`);
+        const { data } = await api.get(`teamId/byUrl/${url}`);
         if (data !== 'NOT FOUND') {
           error = 'Team already exists, try another';
         }
@@ -95,7 +97,7 @@ function CreateTeamPopBase(props) {
       } catch (error) {
         // Just use the plain description
       }
-      const { data } = await props.api.post('teams', {
+      const { data } = await api.post('teams', {
         name: state.teamName,
         url: _.kebabCase(state.teamName),
         hasAvatarImage: false,
@@ -106,7 +108,7 @@ function CreateTeamPopBase(props) {
         hasCoverImage: false,
         isVerified: false,
       });
-      props.history.push(getLink(data));
+      history.push(getLink(data));
     } catch (error) {
       const message = error && error.response && error.response.data && error.response.data.message;
       setState({
@@ -143,16 +145,6 @@ function CreateTeamPopBase(props) {
       </PopoverInfo>
     </PopoverDialog>
   );
-}
-
-CreateTeamPopBase.propTypes = {
-  api: PropTypes.any.isRequired,
-};
-
-const CreateTeamPop = withRouter((props) => {
-  const api = useAPI();
-
-  return <CreateTeamPopBase api={api} {...props} />;
 });
 
 export default CreateTeamPop;

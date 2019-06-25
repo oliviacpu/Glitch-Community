@@ -131,6 +131,10 @@ export const useAPIHandlers = () => {
   return useMemo(
     () => ({
       // all entities
+      createItem: ({ team, collection }) => {
+        if (team) return api.post('/teams', team);
+        if (collection) return api.post('/collections', collection);
+      },
       updateItem: (entityArgs, changes) => api.patch(`/${entityPath(entityArgs)}`, changes),
       deleteItem: (entityArgs, changes) => api.delete(`/${entityPath(entityArgs)}`, changes),
       
@@ -160,6 +164,7 @@ export const useAPIHandlers = () => {
       joinTeam: ({ team }) => api.post(`/teams/${team.id}/join`),
       inviteEmailToTeam: ({ team }, emailAddress) => api.post(`/teams/${team.id}/sendJoinTeamEmail`, { emailAddress }),
       inviteUserToTeam: ({ team, user }) => api.post(`/teams/${team.id}/sendJoinTeamEmail`, { userId: user.id }),
+      revokeTeamInvite: ({ team, user }) => api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`),
       updateUserAccessLevel: ({ user, team }, accessLevel) => api.patch(`/teams/${team.id}/users/${user.id}`, { access_level: accessLevel }),
       removeUserFromTeam: ({ user, team }) => api.delete(`/teams/${team.id}/users/${user.id}`),
       addProjectToTeam: ({ project, team }) => api.post(`/teams/${team.id}/projects/${project.id}`),
