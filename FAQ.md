@@ -47,8 +47,13 @@ We use them to hide features that we're still working on. The code lives in `dev
 
 Nope! Though you can set your remix to run in production mode by setting `NODE_ENV=production` in the `.env` file. Doing so will improve performance a bit, but webpack will take a lot longer.
 
-### How does caching work?
 
+### How does caching work within community app? If glitch.com is down, how can I tell if it's due to a caching issue? How can I fix it?
+
+To check out our caching logic directly, look at webpack.config.js but for a brief summary:
+- we split our code into chunks and we cache those files indefinitely
+- when code is updated we generate a new "chunkhash" which changes the name of the file, thus breaking the cache
+- we do this so that things that don't change often (ex React or other dependencies) are loaded once, and then used from cache there after. 
 
 ### How do I add a question to the FAQ?
 
