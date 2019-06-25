@@ -63,11 +63,7 @@ export function useTeamEditor(initialTeam) {
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
-  const [team, setTeam] = useState({
-    ...initialTeam,
-    _cacheAvatar: Date.now(),
-    _cacheCover: Date.now(),
-  });
+  const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
     const { data } = await updateTeam(api, team, changes);
@@ -167,7 +163,7 @@ export function useTeamEditor(initialTeam) {
             hasAvatarImage: true,
             backgroundColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     uploadCover: () =>
@@ -182,7 +178,7 @@ export function useTeamEditor(initialTeam) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
