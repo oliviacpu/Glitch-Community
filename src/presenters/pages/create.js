@@ -449,7 +449,7 @@ function Categories() {
 
       <ul className={styles.categoriesGrid}>
         {categories.map((category) => (
-          <li className={styles.categoryGridItem}>
+          <li className={styles.categoriesGridItem} style={{ '--bgColor': category.color }}>
             <Link to={category.url}>
               <Image src={category.icon} alt="" />
               {category.name}
