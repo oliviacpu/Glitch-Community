@@ -3,10 +3,24 @@ import React, { useState, useMemo, useContext, createContext } from 'react';
 import { useAPI, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
+import { captureException } from 'Utils/sentry';
 
 const CollectionContext = createContext();
 
-
+export const getCollectionWithProjects = async (api, { owner, name }) => {
+  const fullUrl = `${encodeURIComponent(owner)}/${name}`;
+  try {
+    const [collection, projects] = await Promise.all([
+      getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
+      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
+    ]);
+    return { ...collection, projects };
+  } catch (error) {
+    if (error && error.response && error.response.status === 404) return null;
+    captureException(error);
+    return null;
+  }
+};
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
