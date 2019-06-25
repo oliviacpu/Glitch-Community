@@ -68,24 +68,28 @@ const LocalStorageProvider = ({ children }) => {
     };
   }, []);
 
-  const getValue = (name) => {
-    console.log('get', name);
-    if (!cache.has(name)) {
-      console.log('read', name);
-      const value = readFromStorage(name);
-      setCache((oldCache) => new Map([...oldCache, [name, value]]));
-      return value;
-    }
-    return cache.get(name);
-  };
+  const context = React.useMemo(() => {
+    const getValue = (name) => {
+      console.log('get', name);
+      if (!cache.has(name)) {
+        console.log('read', name);
+        const value = readFromStorage(name);
+        setCache((oldCache) => new Map([...oldCache, [name, value]]));
+        return value;
+      }
+      return cache.get(name);
+    };
 
-  const setValue = React.useMemo(() => (name, value) => {
-    writeToStorage(name, value);
-    setCache((oldCache) => new Map([...oldCache, [name, value]]));
-  });
+    const setValue = (name, value) => {
+      writeToStorage(name, value);
+      setCache((oldCache) => new Map([...oldCache, [name, value]]));
+    };
+
+    return [getValue, setValue];
+  }, [cache]);
 
   return (
-    <Context.Provider value={[getValue, setValue]}>
+    <Context.Provider value={context}>
       {children}
     </Context.Provider>
   );
