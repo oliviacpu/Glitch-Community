@@ -72,6 +72,7 @@
     "group-by-time": "^1.0.0",
     "helmet": "^3.16.0",
     "html-truncate": "^1.2.2",
+    "intersection-observer": "^0.7.0",
     "lodash": "^4.17.11",
     "lodash-webpack-plugin": "^0.11.5",
     "markdown-it": "^8.4.2",
