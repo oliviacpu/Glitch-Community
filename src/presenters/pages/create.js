@@ -212,7 +212,7 @@ function Collaborate() {
     'Work on public or private projects',
     'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
   ];
-  const smallVido = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-collaborate.mp4?v=1561489721760';
+  const smallVideo = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-collaborate.mp4?v=1561489721760';
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561410252567';
   const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561410495436';
@@ -269,8 +269,11 @@ function ScreencapSection({ title, description, video, smallVideo, highlights, b
       </Text>
 
       <div className={styles.screencapContainer}>
-        <video autoPlay={true} loop={true} muted={true}>
-          <source src={smallVideo} media="all and (max-width: 800 px)"/>
+        <video className={styles.smallScreencap} autoPlay={true} loop={true} muted={true}>
+          <source src={smallVideo} />
+        </video>
+        
+        <video className={styles.bigScreencap}>
           <source src={video} />
         </video>
 
