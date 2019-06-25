@@ -12,7 +12,7 @@ const getProfileStyles = {
 };
 
 const CoverContainer = ({ coverActions, children, type, item }) => {
-  const cache = item._cacheCover; // eslint-disable-line no-underscore-dangle
+  const cache = item.updatedAt;
   return (
     <div className={styles.coverContainer} style={getProfileStyles[type]({ ...item, cache })}>
       {children}
