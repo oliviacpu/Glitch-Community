@@ -76,37 +76,37 @@ const WhatIsGlitch = () => (
 const FRAMEWORK_STARTERS = [
   {
     name: 'React',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.png?v=1561160699261',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.png?v=1561503860355',
     color: '#000',
     domain: 'starter-react',
   },
   {
     name: 'Ember',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.png?v=1561160695744',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.png?v=1561503858320',
     color: '#f8d1d5',
     domain: 'ember',
   },
   {
     name: 'Nuxt',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.png?v=1561160716701',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.png?v=1561503859201',
     color: '#ebfef5',
     domain: 'nuxt-hello-world',
   },
   {
     name: 'Vue',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.png?v=1561160722208',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.png?v=1561503859958',
     color: '#ccfde5',
     domain: 'vue-ssr',
   },
   {
     name: 'Angular',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular.png?v=1561160794919',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular.png?v=1561503858815',
     color: '#f9dcd1',
     domain: 'angular-quickstart',
   },
   {
     name: 'Svelte',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.png?v=1561160701052',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.png?v=1561503859572',
     color: '#f6c6b4',
     domain: 'sveltejs-template-starter',
   },
@@ -142,7 +142,7 @@ function PlatformStarterItem(team) {
   return (
     <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
       <div className={styles.platformLogo}>
-        <TeamAvatar team={team} hideTooltip />
+        <TeamAvatar team={team} size="small" hideTooltip />
       </div>
       <div>
         <div className={styles.platformLink}>
