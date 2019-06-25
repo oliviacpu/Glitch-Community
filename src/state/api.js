@@ -124,18 +124,16 @@ export const useAPIHandlers = () => {
   return useMemo(
     () => ({
       // all entities
-      
+      updateItem: (entityArgs, changes) => api.patch(`/${entityPath(entityArgs)}`, changes),
+      deleteItem: (entityArgs, changes) => api.delete(`/${entityPath(entityArgs)}`, changes),
       
       // collections
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
       removeProjectFromCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/remove/${project.id}`),
-      updateCollection: ({ collection }, changes) => api.patch(`/collections/${collection.id}`, changes),
-      deleteCollection: ({ collection }) => api.delete(`/collections/${collection.id}`),
+      
       // projects
-      updateProject: ({ project }, changes) => api.patch(`/projects/${project.id}`, changes),
-      deleteProject: ({ project }) => api.delete(`/projects/${project.id}`),
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
       updateProjectDomain: ({ project }) =>
         api.post(
@@ -153,7 +151,6 @@ export const useAPIHandlers = () => {
       undeleteProject: ({ project }) => api.post(`/projects/${project.id}/undelete`),
 
       // teams
-      updateTeam: ({ team }, changes) => api.patch(`/teams/${team.id}`, changes),
       joinTeam: ({ team }) => api.post(`/teams/${team.id}/join`),
       inviteEmailToTeam: ({ team }, emailAddress) => api.post(`/teams/${team.id}/sendJoinTeamEmail`, { emailAddress }),
       inviteUserToTeam: ({ team, user }) => api.post(`/teams/${team.id}/sendJoinTeamEmail`, { userId: user.id }),
@@ -166,9 +163,6 @@ export const useAPIHandlers = () => {
       // teams / users
       addPinnedProject: ({ project, team, user }) => api.post(`/${entityPath({ team, user })}/pinned-projects/${project.id}`),
       removePinnedProject: ({ project, team, user }) => api.delete(`/${entityPath({ team, user })}/pinned-projects/${project.id}`),
-
-      // users
-      updateUser: ({ user }, changes) => api.patch(`/users/${user.id}`, changes),
     }),
     [api],
   );

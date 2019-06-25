@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
 
-import { useAPI } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
@@ -17,7 +17,9 @@ export function useTeamEditor(initialTeam) {
   const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const 
   const reloadProjectMembers = useProjectReload();
+  const { updateItem, joinTeam, inviteEmailToTeam, inviteUserToTeam, removeUserFromProject, removeUserFromTeam } = useAPIHandlers();
   const [team, setTeam] = useState({
     ...initialTeam,
     _cacheAvatar: Date.now(),
@@ -25,7 +27,7 @@ export function useTeamEditor(initialTeam) {
   });
 
   async function updateFields(changes) {
-    const { data } = await updateTeam(api, team, changes);
+    const { data } = await updateItem({ team }, changes);
     setTeam((prev) => ({ ...prev, ...data }));
     if (currentUser) {
       const teamIndex = currentUser.teams.findIndex(({ id }) => id === team.id);
@@ -50,21 +52,21 @@ export function useTeamEditor(initialTeam) {
     }));
   }
 
-  function removePermissions(userId, projectIds) {
+  function removePermissions(user, projects) {
     setTeam((prev) => ({
       ...prev,
       projects: prev.projects.map((p) => {
-        if (!projectIds.includes(p.id)) return p;
+        if (!projects.some((project) => project.id === p.id)) return p;
         return {
           ...p,
-          permissions: p.permissions.filter((perm) => perm.userId !== userId),
+          permissions: p.permissions.filter((perm) => perm.userId !== user.id),
         };
       }),
     }));
   }
 
-  function removeUserAdmin(id) {
-    const index = team.adminIds.indexOf(id);
+  function removeUserAdmin(user) {
+    const index = team.adminIds.indexOf(user.id);
     if (index !== -1) {
       setTeam((prev) => ({
         ...prev,
@@ -80,7 +82,7 @@ export function useTeamEditor(initialTeam) {
     updateUrl: (url) => updateFields({ url }).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     joinTeam: withErrorHandler(async () => {
-      await joinTeam(api, team);
+      await joinTeam({ team });
       setTeam((prev) => ({
         ...prev,
         users: [...prev.users, currentUser],
@@ -90,25 +92,25 @@ export function useTeamEditor(initialTeam) {
         updateCurrentUser({ teams: [...teams, team] });
       }
     }, handleError),
-    inviteEmail: (email) => inviteEmail(api, email, team).catch(handleError),
-    inviteUser: (user) => inviteUserToTeam(api, user, team).catch(handleError),
-    removeUserFromTeam: withErrorHandler(async (userId, projectIds) => {
+    inviteEmail: (email) => inviteEmailToTeam({ team }, email).catch(handleError),
+    inviteUser: (user) => inviteUserToTeam({ user, team }).catch(handleError),
+    removeUserFromTeam: withErrorHandler(async (user, projects) => {
       // Kick them out of every project at once, and wait until it's all done
-      await Promise.all(projectIds.map((projectId) => removeUserFromProject(api, projectId, userId)));
+      await Promise.all(projects.map((project) => removeUserFromProject({ project, user })));
       // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
-      await removeUserFromTeam(api, userId, team);
-      removeUserAdmin(userId);
+      await removeUserFromTeam({ user, team });
+      removeUserAdmin(user);
       setTeam((prev) => ({
         ...prev,
-        users: prev.users.filter((u) => u.id !== userId),
+        users: prev.users.filter((u) => u.id !== user.id),
       }));
-      if (currentUser && currentUser.id === userId) {
+      if (currentUser && currentUser.id === user.id) {
         const teams = currentUser.teams.filter(({ id }) => id !== team.id);
         updateCurrentUser({ teams });
       }
       // update projects so that this user no longer appears in member lists
-      reloadProjectMembers(projectIds);
-      removePermissions(userId, projectIds);
+      reloadProjectMembers(projects.map((project) => project.id));
+      removePermissions(user, projects);
     }, handleError),
     uploadAvatar: () =>
       assets.requestFile(
@@ -198,9 +200,9 @@ export function useTeamEditor(initialTeam) {
       updatePermissions(projectId, updatedProject.users.map((user) => user.projectPermission));
       reloadProjectMembers([projectId]);
     }, handleError),
-    leaveTeamProject: withErrorHandler(async (projectId) => {
+    leaveTeamProject: withErrorHandler(async (project) => {
       await removeUserFromProject(api, projectId, currentUser.id);
-      removePermissions(currentUser.id, [projectId]);
+      removePermissions(currentUser, [project]);
       reloadProjectMembers([projectId]);
     }, handleError),
     addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
