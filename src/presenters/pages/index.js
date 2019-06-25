@@ -55,7 +55,6 @@ const WhatIsGlitch = () => {
           <Heading tagName="h1">
             <Image src={witchSmall} srcSet={[`${witchLarge} 1000w`]} alt={whatsGlitchAlt} width="100%" />
           </Heading>
-
           <OverlayVideo>
             <div className="button video">
               <Image src={play} className="play-button" alt="How it works" width="" height="" />

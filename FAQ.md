@@ -58,6 +58,7 @@ To check out our caching logic directly, look at webpack.config.js but for a bri
 - we do this so to improve the speeds of our downloads of the js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
 
 Our HTML:
+our view.ejs file has a maxAge of 1 second also set in server/routes.js so this should not cache? but it does... lol
 
 Things that can go wrong:
 
