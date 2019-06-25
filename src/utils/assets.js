@@ -57,7 +57,7 @@ const drawCanvasThumbnail = (image, type, max) => {
       type,
       quality,
     )
-  );
+  ));
 };
 
 // Takes an HTML5 File and returns a promise for an HTML5 Blob that is fulfilled
