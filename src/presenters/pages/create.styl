@@ -11,7 +11,8 @@ u5 = 50px
 html
   background: #f5f5f5
 .main
-  max-width: 1050px
+  padding: 1rem 2rem
+  max-width: 1100px
   margin: auto
 .section + .section
   margin-top: 60px
@@ -269,19 +270,19 @@ html
   @media (min-width: mediumViewport)
     margin: 0 40px
 .screencapHighlight
-  margin: u2 0 0 0
+  margin-bottom: u2
   padding: u2
   height: 0%
   flex-shrink: 0
   max-width: 100%
   background: secondary-background-hover
   border-radius: u05
+  + .screencapHighlight
+    margin-top: 0
   @media (min-width: largeViewport)
-    margin: 0 u2 0 0
+    margin-right: u2
     flex-wrap: nowrap
     max-width: 500px
-    + .screencapHighlight
-      margin-top: 0
     
 // help
 .helpLinks

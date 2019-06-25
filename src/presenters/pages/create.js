@@ -462,18 +462,16 @@ function Categories() {
 }
 
 const CreatePage = () => (
-  <Layout>
-    <main className={styles.main}>
-      <Banner />
-      <WhatIsGlitch />
-      <Starters />
-      <Collaborate />
-      <YourAppIsLive />
-      <Help />
-      <Remix />
-      <Categories />
-    </main>
-  </Layout>
+  <main className={styles.main}>
+    <Banner />
+    <WhatIsGlitch />
+    <Starters />
+    <Collaborate />
+    <YourAppIsLive />
+    <Help />
+    <Remix />
+    <Categories />
+  </main>
 );
 
 export default CreatePage;
