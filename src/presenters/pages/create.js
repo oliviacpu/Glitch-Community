@@ -35,7 +35,7 @@ const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c
 const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
   
   return (
-    <section className={styles.banner}>
+    <section className={classNames(styles.section, styles.banner)}>
       <div className={styles.bannerText} style={{ backgroundImage: `url(${shape})` }}>
         <Heading className={styles.bannerTagline} tagName="h1">
           <Mark color="#fbf2b8">Create</Mark>
