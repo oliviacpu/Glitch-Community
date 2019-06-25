@@ -53,16 +53,11 @@ const NewPasswordInput = ({ disabled, onChange }) => {
     weakPasswordError = true;
   }
 
-  const [didFirstEffect, setDidFirstEffect] = React.useState(false);
   React.useEffect(() => {
-    if (didFirstEffect) {
-      if (password.length >= pwMinCharCount && !weakPasswordError && password === password2) {
-        onChange(password);
-      } else {
-        onChange(null);
-      }
+    if (password.length >= pwMinCharCount && !weakPasswordError && password === password2) {
+      onChange(password);
     } else {
-      setDidFirstEffect(true);
+      onChange(null);
     }
   }, [password, password2, weakPasswordError]);
 
