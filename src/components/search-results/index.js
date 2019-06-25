@@ -16,7 +16,7 @@ import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
 import { captureException } from 'Utils/sentry';
 
-import { useAPI, createAPIHook } from '../../state/api';
+import { useAPI, useAPIHandlers, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import styles from './search-results.styl';
@@ -94,11 +94,11 @@ const useTeams = createAPIHook(async (api, teamIDs) => {
 
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
-  const api = useAPI();
+  const { addProjectToCollection } = useAPIHandlers();
 
   const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
-    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+    props.projectOptions.addProjectToCollection = (project, collection) => addProjectToCollection({ project, collection });
   }
 
   return <ProjectItem {...props} />;

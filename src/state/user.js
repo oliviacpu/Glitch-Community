@@ -25,7 +25,7 @@ export function useUserEditor(initialUser) {
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAsset, uploadAssetSizes } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-  const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
+  const { getCoverImagePolicy } = assets.useAssetPolicy();
   const {
     updateItem,
     deleteItem,
