@@ -49,20 +49,19 @@ Nope! Though you can set your remix to run in production mode by setting `NODE_E
 
 
 ### How does caching work within the community app? 
-Our HTML:
-When we render our views/index.ejs file as html and server it, we set it to have a maxAge of 1 second which is set in server/routes.js, so it does not cache at all.
 
+Our logic around caching can generally be found in 1 of 2 places: webpack.config.js and server/routes.js
+
+Our HTML TLDR:
+When we render our views/index.ejs file as html and server it, we set it to have a maxAge of 1 second which is set in server/routes.js, so we're not trying to cache it. However we also use express, which [by default sets weak etags](http://expressjs.com/en/api.html#etag.options.table) which we are using. This means that the file will return a 304 until it's modified. 
 
 Our Bundles TLDR: 
-- our javascript caching logic can be found in webpack.config.js and server/routes.js
-- we split our javascript into chunked bundles and we cache those files for up to a week. To see where we designate this age go to server/routes.js.
-- when code is updated, we generate a new "chunkhash" which changes the name of the file that chunk of code lives in from something like `dependencies.random123.js` to `dependencies.random456.js` which busts the cache
-- we do this so to improve the speeds of our downloads of the js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
-
-
+- we split our javascript into chunked bundles with webpack and we cache those files for up to a week. 
+- when code is updated, we generate a new "chunkhash" which changes busts our cache, so that our html file is seen as modified, and it will ping for a new javascript file. 
+- we do this to improve the download speed of our js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
 
 Things that can go wrong:
-
+- a hash doesn't change, but files are deleted or broken. This shouldn't happen, but if it does  
 
 ### Why am I still seeing sentry errors for old code if it isn't cached?
 
