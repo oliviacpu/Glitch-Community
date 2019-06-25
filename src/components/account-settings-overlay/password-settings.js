@@ -80,7 +80,7 @@ const PasswordSettings = () => {
     <>
       <Heading tagName="h2">{currentUser.passwordEnabled ? 'Change Password' : 'Set Password'}</Heading>
 
-      <form className={styles.passwordForm} onSubmit={updatePassword}>
+      <form className={styles.accountSettingsForm} onSubmit={updatePassword}>
         {currentUser.passwordEnabled && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} disabled={status.working} onChange={setOldPassword} />
         )}

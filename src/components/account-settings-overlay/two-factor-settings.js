@@ -79,7 +79,7 @@ const TwoFactorSettings = () => {
         <>
           <Button type="tertiary" size="small" disabled={!!secret || working} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
-            <form className={styles.passwordForm} onSubmit={verifyCode}>
+            <form className={styles.accountSettingsForm} onSubmit={verifyCode}>
               <img alt="QR Code" src={secret} />
               <TextInput labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} value={code} disabled={working} onChange={setCode} />
               <Button type="tertiary" size="small" disabled={code.length < 6 || working} submit>Verify Initial Code</Button>
