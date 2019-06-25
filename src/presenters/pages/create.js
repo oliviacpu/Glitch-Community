@@ -5,17 +5,18 @@ import classNames from 'classnames/bind';
 import { values, sampleSize } from 'lodash';
 
 import Image from 'Components/images/image';
-import { TeamAvatar } from 'Components/images/avatar';
+import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
 import Text from 'Components/text/text';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import { useAPI } from 'State/api';
-import { getRemixUrl } from 'Models/project';
+import { getRemixUrl, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 
 import styles from './create.styl';
@@ -335,8 +336,18 @@ function Remix() {
     'float-layout',
     'hello-magenta',
   ];
-  const apps = sampleSize(allApps, 5);
+  const api = useAPI();
+  const [apps, setApps] = useState(null);
   const [currentApp, setCurrentApp] = useState(apps[0]);
+  
+  useEffect(() => {
+    const fetchApps = async (domains) => {
+      const url = `/v1/projects/by/url?url=${allApps.join('&url=')}`;
+      const { data } = await api.get(url);
+      setApps(values(data));
+    };
+    fetchApps(sampleSize(allApps, 5));
+  }, []);
 
   return (
     <section>
@@ -346,17 +357,18 @@ function Remix() {
 
       <Tabs>
         <TabList>
-          {apps.map(app => (
-            <Tab key={app}>
-              <Button onClick={() => setCurrentApp(app)}>{app}</Button>
+          {apps && apps.map(app => (
+            <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app}>
+              <ProjectAvatar project={app} hideTooltip />
+              {app}
             </Tab>
           ))}
         </TabList>
         
-        {apps.map(app => (
+        {apps && apps.map(app => (
           <TabPanel>
             <div className={styles.embedContainer}><Embed domain={app} /></div>
-            <div className={styles.EmbedRemixBtn}>
+            <div className={styles.embedRemixBtn}>
               <Button type="cta" href={getRemixUrl(currentApp)} emoji="microphone">
                 Remix your own
               </Button>
