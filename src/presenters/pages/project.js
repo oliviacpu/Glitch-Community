@@ -37,23 +37,8 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const getIncludedCollections = async (api, projectId) => {
-  const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
-  const selectedCollections = sampleSize(collections, 3);
-  const populatedCollections = await Promise.all(
-    selectedCollections.map(async (collection) => {
-      const { projects, user, team } = await allByKeys({
-        user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
-        team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
-      });
-      return { ...collection, projects, user, team };
-    }),
-  );
-  return populatedCollections.filter((c) => c.team || c.user);
-};
-
 const IncludedInCollections = ({ projectId }) => (
-  <DataLoader get={(api) => getIncludedCollections(api, projectId)} renderLoader={() => null}>
+  <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
       collections.length > 0 && (
         <>

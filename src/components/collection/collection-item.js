@@ -17,6 +17,7 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import { isDarkColor } from 'Models/collection';
 import { useCollectionProjects } from 'State/collection';
+import { createAPIHook } from 'State/api';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -77,6 +78,29 @@ const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
   </VisibilityContainer>
 );
 
+const useCollectionCurator = createAPIHook(async (api, collection) => {
+  if (collection.teamId > 0) {
+    const { data: team } = await api.get(`/v1/teams/by/id?id=${collection.teamId}`)
+    return { team }
+  }
+  if (collection.userId > 0) {
+    const { data: user } = await api.get(`/v1/users/by/id?id=${collection.userId}`)
+    return { user }
+  }
+  return {}
+})
+
+const CollectionCurator = ({ collection }) => {
+  const curator = useCollectionCurator(collection)
+  return <ProfileItem {...curator} />
+}
+
+const CollectionCuratorLoader = ({ collection }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}  
+  </VisibilityContainer>
+)
+
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
@@ -117,8 +141,6 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    user: PropTypes.object,
-    team: PropTypes.object,
   }).isRequired,
   deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,

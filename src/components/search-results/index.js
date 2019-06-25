@@ -64,34 +64,6 @@ const TeamResult = ({ result }) => {
   return <TeamItem team={result} />;
 };
 
-const useUsers = createAPIHook(async (api, userIDs) => {
-  if (!userIDs.length) {
-    return undefined;
-  }
-  const idString = userIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/users/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-const useTeams = createAPIHook(async (api, teamIDs) => {
-  if (!teamIDs.length) {
-    return undefined;
-  }
-  const idString = teamIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -102,20 +74,6 @@ function ProjectResult({ result }) {
   }
 
   return <ProjectItem {...props} />;
-}
-
-function CollectionWithDataLoading({ collection }) {
-  const { value: users = [] } = useUsers(collection.userIDs);
-  const { value: teams = [] } = useTeams(collection.teamIDs);
-  const collectionWithData = { ...collection, user: users[0], team: teams[0] };
-  return <CollectionItemSmall showCurator collection={collectionWithData} />;
-}
-
-function CollectionResult({ result }) {
-  if (!result.user && !result.team) {
-    return <CollectionWithDataLoading collection={result} />;
-  }
-  return <CollectionItemSmall showCurator collection={result} />;
 }
 
 const groups = [
@@ -129,7 +87,7 @@ const resultComponents = {
   team: TeamResult,
   user: ({ result }) => <UserItem user={result} />,
   project: ProjectResult,
-  collection: CollectionResult,
+  collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
 const ResultComponent = ({ result }) => {
