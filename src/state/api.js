@@ -4,7 +4,6 @@ import axios from 'axios';
 import { memoize } from 'lodash';
 import { useCurrentUser } from './current-user';
 import { captureException } from 'Utils/sentry';
-import { entityPath } from 'Shared/api';
 
 export const Context = createContext();
 
@@ -119,6 +118,14 @@ export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
   return result;
 };
 
+export const entityPath = ({ user, team, project, collection }) => {
+  if (user) return `users/${user.id}`;
+  if (team) return  `teams/${team.id}`;
+  if (project) return `project/${project.id}`;
+  if (collection) return `collection/${collection.id}`;
+  throw new Error("Missing entity");
+};
+
 export const useAPIHandlers = () => {
   const api = useAPI();
   return useMemo(
@@ -158,7 +165,7 @@ export const useAPIHandlers = () => {
       removeUserFromTeam: ({ user, team }) => api.delete(`/teams/${team.id}/users/${user.id}`),
       addProjectToTeam: ({ project, team }) => api.post(`/teams/${team.id}/projects/${project.id}`),
       removeProjectFromTeam: ({ project, team }) => api.delete(`/teams/${team.id}/projects/${project.id}`),
-      addUserToProject: ({ project, team }) => api.post(`/teams/${team.id}/projects/${project.id}/join`),
+      joinTeamProject: ({ project, team }) => api.post(`/teams/${team.id}/projects/${project.id}/join`),
 
       // teams / users
       addPinnedProject: ({ project, team, user }) => api.post(`/${entityPath({ team, user })}/pinned-projects/${project.id}`),

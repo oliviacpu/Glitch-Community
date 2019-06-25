@@ -1,27 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import * as assets from 'Utils/assets';
-import { useAPI } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
 
-export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
-export const removePin = (api, projectId, user) => api.delete(`users/${user.id}/pinned-projects/${projectId}`);
-export const leaveProject = (api, projectId, user) =>
-  api.delete(`/projects/${projectId}/authorization`, {
-    data: {
-      targetUserId: user.id,
-    },
-  });
-
-export const getProject = (api, projectId) => api.get(`projects/${projectId}`);
-export const getDeletedProject = (api, projectId) => api.get(`projects/${projectId}?showDeleted=true`);
-export const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
-export const undeleteProject = (api, projectId) => api.post(`/projects/${projectId}/undelete`);
-
 export const getUserCollections = (api, user) => api.get(`collections?userId=${user.id}`);
-export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
 
 export function useUserEditor(initialUser) {
   const [user, setUser] = useState({
@@ -29,11 +14,19 @@ export function useUserEditor(initialUser) {
     _cacheCover: Date.now(),
     _deletedProjects: [],
   });
-  const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAsset, uploadAssetSizes } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-
+  const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
+  const {
+    updateItem,
+    removeUserFromProject,
+    addPinnedProject,
+    removePinnedProject,
+    addProjectToCollection,
+  } = useAPIHandlers();
+  
+  
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
   async function updateFields(changes) {

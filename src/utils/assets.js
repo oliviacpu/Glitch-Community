@@ -5,8 +5,7 @@
 import { useMemo } from 'react';
 import quantize from 'quantize';
 import S3Uploader from './s3-uploader';
-import { useAPI } from 'State/api';
-import { entityPath } from 'Shared/api';
+import { useAPI, entityPath } from 'State/api';
 
 export const COVER_SIZES = {
   large: 1000,
