@@ -36,16 +36,18 @@ const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsha
   
   return (
     <section className={classNames(styles.section, styles.banner)}>
-      <div className={styles.bannerText} style={{ backgroundImage: `url(${shape})` }}>
-        <Heading className={styles.bannerTagline} tagName="h1">
-          <Mark color="#fbf2b8">Create</Mark>
-          <Unmarked>the app of your dreams</Unmarked>
-        </Heading>
-        <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
-        <div className={styles.bannerRemixBtn}>
-          <Button href={getRemixUrl('hello-webpage')} type="cta">
-            Remix Hello World
-          </Button>
+      <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
+        <div className={styles.bannerText}>
+          <Heading className={styles.bannerTagline} tagName="h1">
+            <Mark color="#fbf2b8">Create</Mark>
+            <Unmarked>the app of your dreams</Unmarked>
+          </Heading>
+          <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
+          <div className={styles.bannerRemixBtn}>
+            <Button href={getRemixUrl('hello-webpage')} type="cta">
+              Remix Hello World
+            </Button>
+          </div>
         </div>
       </div>
 

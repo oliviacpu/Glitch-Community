@@ -52,31 +52,39 @@ html
   @media (min-width: largeViewport)
     flex-wrap: nowrap
     padding: 0 u4
-.bannerText
+.bannerShape
+  position: relative
   background-repeat: no-repeat
   background-size: contain
-  width: 100%
-  padding: 30px 0 0 120px
+  width: 100vw
   height: 360px
-  > *
-    max-width: 250px
+  margin-left: -2rem
+.bannerText
+  position: absolute
+  left: 95px
+  top: 25px
+  max-width: 250px
   p
-    width: 250px
+    font-size: 15px
+    @media (min-width: mediumSmallViewport)
+      font-size: inherit
+  @media (min-width: mediumViewport)
+    left: 120px
+    top: 30px
 .bannerTagline
-  left: 110px
-  top: 30px
   font-size: 32px
   transform: rotate(-5deg)
 .bannerIllustration
   flex: 100%
   text-align: center
+  z-index: 3
+  margin
   img
     max-width: 450px
   @media (max-width: mediumViewport)
     flex-basis: 100%
     order: -1
 .bannerRemixBtn
-  width: 100%
   margin: 25px 0 0 95px
 
 // what is glitch
