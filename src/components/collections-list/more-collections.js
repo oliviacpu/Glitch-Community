@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
 
@@ -10,10 +10,11 @@ import Row from 'Components/containers/row';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 import { getSingleItem } from 'Shared/api';
+import { CollectionContext } from 'State/collection';
 
 import styles from './styles.styl';
 
-const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
+const loadMoreCollectionsFromAuthor = async ({ api, getCollectionProjects, collection }) => {
   const authorType = collection.teamId === -1 ? 'user' : 'team';
   const authorEndpoint = `${authorType}s`;
   const authorId = authorType === 'user' ? collection.userId : collection.teamId;
@@ -46,6 +47,22 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
 };
 
 const MoreCollections = ({ currentCollection, collections }) => {
+  const { getCollectionProjects } = useContext(CollectionContext);
+  const responses = collections.map(getCollectionProjects);
+  const [collectionsWithProjects, setCollectionsWithProjects] = useState(null)
+  useEffect(() => {
+    setCollectionsWithProjects((prev) => {
+      if (prev) return null
+      const usableResponses = responses.filter(r => r.status === 'ready' && r.value.length);
+      
+      if (usableResponses.length > 3 || allResponsesComplete) {
+        
+      }
+    })
+    const usableResponses = responses()
+  }, [responses])
+
+  
   const isUserCollection = currentCollection.teamId === -1;
   const type = isUserCollection ? 'user' : 'team';
 
@@ -72,11 +89,13 @@ MoreCollections.propTypes = {
   collections: PropTypes.array.isRequired,
 };
 
-const MoreCollectionsContainer = ({ collection }) => (
-  <DataLoader get={(api) => loadMoreCollectionsFromAuthor({ api, collection })}>
-    {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
-  </DataLoader>
-);
+const MoreCollectionsContainer = ({ collection }) => {
+  return (
+    <DataLoader get={(api) => loadMoreCollectionsFromAuthor({ api, getCollectionProjects, collection })}>
+      {(collections) => (collections.length > 0 ? <MoreCollections currentCollection={collection} collections={collections} /> : null)}
+    </DataLoader>
+  )
+}
 MoreCollectionsContainer.propTypes = {
   collection: PropTypes.object.isRequired,
 };
