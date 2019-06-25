@@ -295,21 +295,21 @@ html
     margin: u4 0
     background: secondary-background-hover
     width: 60%
-  @media (min-width: mediumSmallViewport)
-    > div
-      margin-right: u4
-      max-width: 70%
-    hr
-      display: block
   h3
     margin-top: 0
     font-weight: 600
-  @media (min-width: mediumViewport)
-    display: none
+  @media (min-width: mediumSmallViewport)
+    hr
+      display: block
+    > div
+      margin-right: u4
+      max-width: 70%
   @media (min-width: largeViewport)
-    max-width: 80%
+    max-width: 100%
     flex-wrap: nowrap
     margin-left: 40px
+    hr
+      display: none
     > div
       max-width: 100%
     h3
@@ -325,6 +325,11 @@ html
     transform: translateY(-50%)
     width: 160px
     margin: 0
+  @media (min-width: largeViewport)
+    top: initial
+    bottom: 0
+    right: 0
+    transform: none
 .ambulance
   bottom: 30px
   width: 90px
