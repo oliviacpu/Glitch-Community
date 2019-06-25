@@ -53,7 +53,7 @@ const Banner = () => (
 );
 
 const WhatIsGlitch = () => (
-  <section className={styles.whatIsGlitch}>
+  <section className={classNames(styles.section, styles.whatIsGlitch)}>
     <div>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#d7a6f9">What is Glitch?</Mark>
@@ -161,7 +161,7 @@ function Starters() {
     fetchTeams();
   }, []);
   return (
-    <section className={styles.starters}>
+    <section className={classNames(styles.section, styles.starters)}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#F9DB91">Starters for all developers</Mark>
       </Heading>
@@ -245,7 +245,7 @@ function YourAppIsLive() {
 
 function ScreencapSection({ title, description, video, highlights, blob, image, imageName, markColor }) {
   return (
-    <section>
+    <section className={styles.section}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color={markColor}>{title}</Mark>
       </Heading>
@@ -285,7 +285,7 @@ function Help() {
   const ambulance = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561416321109';
 
   return (
-    <section className={styles.help}>
+    <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#f8d3c9">Help whenever you need it</Mark>
       </Heading>
@@ -354,13 +354,13 @@ function Remix() {
   }, [apps]);
 
   return (
-    <section className={styles.remix}>
+    <section className={classNames(styles.section, styles.remix)}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
       <Tabs>
-        <TabList>
+        <TabList className={styles.remixAppTabs}>
           {apps.map(app => (
             <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app.domain}>
               <ProjectAvatar project={app} hideTooltip />
@@ -387,7 +387,6 @@ function Remix() {
 }
 
 const CreatePage = () => (
-  <Layout>
     <main className={styles.main}>
       <Banner />
       <WhatIsGlitch />
@@ -397,7 +396,6 @@ const CreatePage = () => (
       <Help />
       <Remix />
     </main>
-  </Layout>
 );
 
 export default CreatePage;

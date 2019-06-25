@@ -11,8 +11,12 @@ u5 = 50px
 html
   background: #f5f5f5
 .main
-  max-width: 1000px
+  max-width: 950px
   margin: auto
+.section + .section
+  margin-top: u5
+  &.remix
+    margin-top: 100px
   
 // shared
 .h2
@@ -276,7 +280,22 @@ html
   
 // remix
 .remix
-  
+  text-align: center
+.remixAppTabs
+  display: flex
+  padding: 0
+  overflow-x: auto
+.remixAppTab
+  display: inline-flex
+  align-items: center
+  margin-right: u3
+  list-style: none
+  background: secondary-background-hover
+  border-radius: u1
+  padding: u2
+  cursor: pointer
+  img
+    margin-right: u2
 .embedContainer
   iframe
     height: 300px
