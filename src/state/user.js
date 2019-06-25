@@ -26,7 +26,6 @@ export const addProjectToCollection = (api, project, collection) => api.patch(`c
 export function useUserEditor(initialUser) {
   const [user, setUser] = useState({
     ...initialUser,
-    _cacheCover: Date.now(),
     _deletedProjects: [],
   });
   const api = useAPI();
@@ -77,7 +76,7 @@ export function useUserEditor(initialUser) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setUser((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setUser((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
