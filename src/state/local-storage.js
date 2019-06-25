@@ -83,7 +83,7 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   return (
-    <Context.Provider value={[getValue,setValue]}>
+    <Context.Provider value={[getValue, setValue]}>
       {children}
     </Context.Provider>
   );
