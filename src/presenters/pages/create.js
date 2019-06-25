@@ -311,7 +311,18 @@ function Help() {
             </Button>
           </Text>
         </div>
+        
         <hr />
+        
+        <div aria-hidden="true" className={classNames(styles.helpImage, styles.screencapImageContainer)}>
+          <div className={styles.screencapBlob}>
+            <Image src={blob} alt="" />
+          </div>
+          <div className={classNames(styles.ambulance, styles.screencapImage)}>
+            <Image src={ambulance} alt="" />
+          </div>
+        </div>
+        
         <div>
           <Heading tagName="h3">Support Forum</Heading>
           <Text>Personalized support for your app-specific questions.</Text>
@@ -321,15 +332,6 @@ function Help() {
             </Button>
           </Text>
         </div>
-
-        <span className={classNames(styles.helpImage, styles.screencapImageContainer)}>
-          <div className={styles.screencapBlob}>
-            <Image src={blob} alt="" />
-          </div>
-          <div className={classNames(styles.ambulance, styles.screencapImage)}>
-            <Image src={ambulance} alt="" />
-          </div>
-        </span>
       </div>
     </section>
   );

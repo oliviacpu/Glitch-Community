@@ -291,12 +291,16 @@ html
   position: relative
   margin-top: u4
   hr
+    display: none
     margin: u4 0
     background: secondary-background-hover
     width: 60%
-  > div
-    margin-right: u4
-    max-width: 70%
+  @media (min-width: mediumSmallViewport)
+    > div
+      margin-right: u4
+      max-width: 70%
+    hr
+      display: block
   h3
     margin-top: 0
     font-weight: 600
@@ -306,16 +310,17 @@ html
     margin-left: 40px
     > div
       max-width: 100%
-    hr
-      display: none
     h3
       margin-top: initial
 .helpImage
-  @media (max-width: largeViewport)
+  position: relative
+  margin: u4 auto
+  width: 140px
+  height: initial
+  @media (min-width: mediumViewport)
     top: 50%
     right: 0
     transform: translateY(-50%)
-    width: 140px
 .ambulance
   @media (max-width: largeViewport)
     width: 90px
