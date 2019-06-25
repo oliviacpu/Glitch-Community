@@ -12,6 +12,7 @@ import { useProjectReload } from 'State/project';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
+// eslint-disable-next-line import/prefer-default-export
 export function useTeamEditor(initialTeam) {
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAssetSizes } = useUploader();
@@ -145,7 +146,7 @@ export function useTeamEditor(initialTeam) {
     uploadCover: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getCoverImagePolicy({ team });
+          const { data: policy } = await getCoverImagePolicy({ team });
           await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
 
           const image = await assets.blobToImage(blob);

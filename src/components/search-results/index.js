@@ -16,7 +16,7 @@ import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
 import { captureException } from 'Utils/sentry';
 
-import { useAPI, useAPIHandlers, createAPIHook } from '../../state/api';
+import { useAPIHandlers, createAPIHook } from '../../state/api';
 import { useCurrentUser } from '../../state/current-user';
 
 import styles from './search-results.styl';

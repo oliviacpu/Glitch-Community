@@ -48,7 +48,12 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       )}
       <Grid items={orderedCollections}>
         {(collection) => (
-          <CollectionItem collection={collection} isAuthorized={isAuthorized} deleteCollection={() => deleteCollection(collection)} showCurator={showCurator} />
+          <CollectionItem
+            collection={collection}
+            isAuthorized={isAuthorized}
+            deleteCollection={() => deleteCollection(collection)}
+            showCurator={showCurator}
+          />
         )}
       </Grid>
     </article>

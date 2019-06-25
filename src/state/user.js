@@ -7,8 +7,8 @@ import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem } from 'Shared/api';
 
-function useUserPageGetters () {
-  const api = useAPI();  
+function useUserPageGetters() {
+  const api = useAPI();
   return {
     getUserCollections: ({ user }) => api.get(`collections?userId=${user.id}`),
     getDeletedProject: ({ project }) => api.get(`/projects/${project.id}?showDeleted=true`),
@@ -16,6 +16,7 @@ function useUserPageGetters () {
   };
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export function useUserEditor(initialUser) {
   const [user, setUser] = useState({
     ...initialUser,
@@ -36,7 +37,7 @@ export function useUserEditor(initialUser) {
     addProjectToCollection,
   } = useAPIHandlers();
   const { getUserCollections, getDeletedProject, getProject } = useUserPageGetters();
-  
+
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
   async function updateFields(changes) {
@@ -65,7 +66,7 @@ export function useUserEditor(initialUser) {
     uploadAvatar: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await getCoverImagePolicy({ user });  // TODO: why not 'getAvatarImagePolicy' here?
+          const { data: policy } = await getCoverImagePolicy({ user }); // TODO: why not 'getAvatarImagePolicy' here?
           const url = await uploadAsset(blob, policy, 'temporary-user-avatar');
 
           const image = await assets.blobToImage(blob);

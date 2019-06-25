@@ -4,8 +4,8 @@
 
 import { useMemo } from 'react';
 import quantize from 'quantize';
-import S3Uploader from './s3-uploader';
 import { useAPI, entityPath } from 'State/api';
+import S3Uploader from './s3-uploader';
 
 export const COVER_SIZES = {
   large: 1000,
@@ -146,13 +146,16 @@ export function uploadAsset(blob, policy, key, options = {}) {
   return S3Uploader(policy).upload({ key, blob, ...options });
 }
 
-const useAssetPolicy = () => {
+export const useAssetPolicy = () => {
   const api = useAPI();
-  return useMemo(() => ({
-    getCoverImagePolicy: (args) => api.get(`/${entityPath(args)}/cover/policy`),
-    getAvatarImagePolicy: (args) => api.get(`/${entityPath(args)}/avatar/policy`),
-  }), [api]);
-}
+  return useMemo(
+    () => ({
+      getCoverImagePolicy: (args) => api.get(`/${entityPath(args)}/cover/policy`),
+      getAvatarImagePolicy: (args) => api.get(`/${entityPath(args)}/avatar/policy`),
+    }),
+    [api],
+  );
+};
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
   const upload = uploadAsset(blob, policy, 'original');

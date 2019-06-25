@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize } from 'lodash';
-import { useCurrentUser } from './current-user';
 import { captureException } from 'Utils/sentry';
+import { useCurrentUser } from './current-user';
 
 export const Context = createContext();
 
@@ -120,10 +120,10 @@ export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
 
 export const entityPath = ({ user, team, project, collection }) => {
   if (user) return `users/${user.id}`;
-  if (team) return  `teams/${team.id}`;
+  if (team) return `teams/${team.id}`;
   if (project) return `project/${project.id}`;
   if (collection) return `collection/${collection.id}`;
-  throw new Error("Missing entity");
+  throw new Error('Missing entity');
 };
 
 export const useAPIHandlers = () => {
@@ -133,13 +133,13 @@ export const useAPIHandlers = () => {
       // all entities
       updateItem: (entityArgs, changes) => api.patch(`/${entityPath(entityArgs)}`, changes),
       deleteItem: (entityArgs, changes) => api.delete(`/${entityPath(entityArgs)}`, changes),
-      
+
       // collections
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
       removeProjectFromCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/remove/${project.id}`),
-      
+
       // projects
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
       updateProjectDomain: ({ project }) =>

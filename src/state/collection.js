@@ -16,7 +16,14 @@ export function userOrTeamIsAuthor({ collection, user }) {
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
-  const { updateItem, deleteItem, addProjectToCollection, orderProjectInCollection, removeProjectFromCollection, updateProjectInCollection } = useAPIHandlers();
+  const {
+    updateItem,
+    deleteItem,
+    addProjectToCollection,
+    orderProjectInCollection,
+    removeProjectFromCollection,
+    updateProjectInCollection,
+  } = useAPIHandlers();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
 
   async function updateFields(changes) {

@@ -93,13 +93,7 @@ export function useProjectEditor(initialProject) {
   const { uploadAsset } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
-  const {
-    updateItem,
-    deleteItem,
-    addProjectToCollection,
-    updateProjectDomain,
-    
-  } = useAPIHandlers();
+  const { updateItem, deleteItem, addProjectToCollection, updateProjectDomain } = useAPIHandlers();
 
   async function updateFields(changes) {
     await updateItem({ project }, changes);
