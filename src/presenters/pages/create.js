@@ -18,6 +18,7 @@ import Loader from 'Components/loader';
 import { useAPI } from 'State/api';
 import { getRemixUrl, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
+import { emojiPattern } from 'Shared/regex';
 
 import styles from './create.styl';
 
@@ -142,9 +143,7 @@ function PlatformStarterItem(team) {
         <div className={styles.platformLink}>
           <Button href={getTeamLink(team)}>{team.name}</Button>
         </div>
-        <Text size="14px">
-          <Markdown renderAsPlaintext>{team.description}</Markdown>
-        </Text>
+        <Markdown renderAsPlaintext>{team.description}</Markdown>
       </div>
     </div>
   );
@@ -156,10 +155,14 @@ function Starters() {
     const fetchTeams = async () => {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
-      setPlatformStarters(values(data));
+
+      let teams = values(data);
+      teams = teams.map((team) => Object.assign(team, { description: team.description.replace(emojiPattern, '') }));
+      setPlatformStarters(teams);
     };
     fetchTeams();
   }, []);
+
   return (
     <section className={classNames(styles.section, styles.starters)}>
       <Heading className={styles.h2} tagName="h2">
@@ -366,7 +369,7 @@ function Remix() {
         </TabList>
 
         {apps.map((app) => (
-          <TabPanel>
+          <TabPanel key={app.domain}>
             <div className={styles.embedContainer}>
               <Embed domain={app.domain} />
             </div>
