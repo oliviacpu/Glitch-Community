@@ -338,8 +338,8 @@ function Remix() {
   ];
   const api = useAPI();
   const [apps, setApps] = useState([]);
-  const [currentApp, setCurrentApp] = useState(null);
-  
+  const [currentTab, setCurrentTab] = useState(0);
+
   useEffect(() => {
     const fetchApps = async (domains) => {
       const url = `/v1/projects/by/domain?domain=${domains.join('&domain=')}`;
@@ -348,10 +348,6 @@ function Remix() {
     };
     fetchApps(sampleSize(allApps, 5));
   }, []);
-  
-  useEffect(() => {
-    setCurrentApp(apps[0]);
-  }, [apps]);
 
   return (
     <section className={classNames(styles.section, styles.remix)}>
@@ -359,19 +355,21 @@ function Remix() {
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
-      <Tabs selectedIndex={apps.indexOf(currentApp)}>
+      <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
         <TabList className={styles.remixAppTabs}>
-          {apps.map(app => (
-            <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app.domain}>
+          {apps.map((app) => (
+            <Tab className={styles.remixAppTab} key={app.domain}>
               <ProjectAvatar project={app} hideTooltip />
               <Text size="14px">{app.domain}</Text>
             </Tab>
           ))}
         </TabList>
-        
-        {apps.map(app => (
+
+        {apps.map((app) => (
           <TabPanel>
-            <div className={styles.embedContainer}><Embed domain={app.domain} /></div>
+            <div className={styles.embedContainer}>
+              <Embed domain={app.domain} />
+            </div>
             <div className={styles.embedRemixBtn}>
               <Button type="cta" href={getRemixUrl(app.domain)} emoji="microphone">
                 Remix your own
@@ -385,6 +383,7 @@ function Remix() {
 }
 
 const CreatePage = () => (
+  <Layout>
     <main className={styles.main}>
       <Banner />
       <WhatIsGlitch />
@@ -394,6 +393,7 @@ const CreatePage = () => (
       <Help />
       <Remix />
     </main>
+  </Layout>
 );
 
 export default CreatePage;
