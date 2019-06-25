@@ -304,6 +304,8 @@ html
   h3
     margin-top: 0
     font-weight: 600
+  @media (min-width: mediumViewport)
+    display: none
   @media (min-width: largeViewport)
     max-width: 80%
     flex-wrap: nowrap
@@ -316,15 +318,18 @@ html
   position: relative
   margin: u4 auto
   width: 140px
-  height: initial
-  @media (min-width: mediumViewport)
+  @media (min-width: mediumSmallViewport)
+    position: absolute
     top: 50%
     right: 0
     transform: translateY(-50%)
+    width: 160px
+    margin: 0
 .ambulance
-  @media (max-width: largeViewport)
-    width: 90px
-    bottom: 30px
+  bottom: 30px
+  width: 90px
+  @media (min-width: mediumViewport)
+    width: 100px
   
 // remix
 .remix

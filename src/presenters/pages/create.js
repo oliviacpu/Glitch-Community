@@ -471,7 +471,6 @@ const CreatePage = () => (
     <Collaborate />
     <YourAppIsLive />
     <Help />
-    <Remix />
     <Categories />
   </main>
 );
