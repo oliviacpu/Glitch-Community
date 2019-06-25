@@ -50,6 +50,7 @@ function useCollectionsWithProjects(collections) {
 const MoreCollections = ({ currentCollection, collections }) => {
   const collectionsWithProjects = useCollectionsWithProjects(collections);
   if (!collectionsWithProjects) return <Loader />;
+  if (!collectionsWithProjects.length) return null;
 
   const isUserCollection = currentCollection.teamId === -1;
   const type = isUserCollection ? 'user' : 'team';
