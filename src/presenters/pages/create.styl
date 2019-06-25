@@ -283,19 +283,30 @@ html
   text-align: center
 .remixAppTabs
   display: flex
+  margin-top: u4
   padding: 0
   overflow-x: auto
 .remixAppTab
   display: inline-flex
+  flex: 1
   align-items: center
-  margin-right: u3
   list-style: none
   background: secondary-background-hover
-  border-radius: u1
-  padding: u2
+  border-radius: u05
+  padding: u1 u2
   cursor: pointer
+  height: 0%
+  flex-shrink: 0
+  @media (min-width: largeViewport)
+    flex: 1
+  &:not(:last-child)
+    margin-right: u3
   img
     margin-right: u2
+    height: auto
+  &[aria-selected="true"]
+    background: #2C4772
+    color: #fff
 .embedContainer
   iframe
     height: 300px

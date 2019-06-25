@@ -342,7 +342,7 @@ function Remix() {
   
   useEffect(() => {
     const fetchApps = async (domains) => {
-      const url = `/v1/projects/by/domain?domain=${allApps.join('&domain=')}`;
+      const url = `/v1/projects/by/domain?domain=${domains.join('&domain=')}`;
       const { data } = await api.get(url);
       setApps(values(data));
     };
@@ -364,7 +364,7 @@ function Remix() {
           {apps.map(app => (
             <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app.domain}>
               <ProjectAvatar project={app} hideTooltip />
-              {app.domain}
+              <Text size="14px">{app.domain}</Text>
             </Tab>
           ))}
         </TabList>
