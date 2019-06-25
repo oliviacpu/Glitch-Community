@@ -57,19 +57,24 @@ export function useAPI() {
 /*
 Create a hook for working with the API via async functions.
 Usage:
+
 const useTeamsAPI = createAPIHook(async (api, teamID) => {
   const team = await api.get(`/team/${teamID}`);
   const { projectIDs } = team;
   team.projects = await Promise.all(projectIDs.map(projectID => api.get(`/project/${projectID})`));
   return team;
 });
+
 function TeamWithProjects ({ teamID }) {
   const { status, value } = useTeamsAPI(teamID)
+  
   if (status === 'loading') {
     return <Loading />
   }
+  
   // ... render the team ...
 }
+
 */
 
 // we don't want to set "stale" state, e.g. if the user clicks over to a different team's page
