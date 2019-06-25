@@ -20,7 +20,6 @@ function useUserPageGetters() {
 export function useUserEditor(initialUser) {
   const [user, setUser] = useState({
     ...initialUser,
-    _cacheCover: Date.now(),
     _deletedProjects: [],
   });
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
@@ -89,7 +88,7 @@ export function useUserEditor(initialUser) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setUser((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setUser((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),

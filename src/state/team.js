@@ -36,11 +36,7 @@ export function useTeamEditor(initialTeam) {
     joinTeamProject,
     addProjectToCollection,
   } = useAPIHandlers();
-  const [team, setTeam] = useState({
-    ...initialTeam,
-    _cacheAvatar: Date.now(),
-    _cacheCover: Date.now(),
-  });
+  const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
     const { data } = await updateItem({ team }, changes);
@@ -140,7 +136,7 @@ export function useTeamEditor(initialTeam) {
             hasAvatarImage: true,
             backgroundColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     uploadCover: () =>
@@ -155,7 +151,7 @@ export function useTeamEditor(initialTeam) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
