@@ -337,41 +337,47 @@ function Remix() {
     'hello-magenta',
   ];
   const api = useAPI();
-  const [apps, setApps] = useState(null);
-  const [currentApp, setCurrentApp] = useState(apps[0]);
+  const [apps, setApps] = useState([]);
+  const [currentApp, setCurrentApp] = useState(null);
   
   useEffect(() => {
     const fetchApps = async (domains) => {
-      const url = `/v1/projects/by/url?url=${allApps.join('&url=')}`;
+      const url = `/v1/projects/by/domain?domain=${allApps.join('&domain=')}`;
       const { data } = await api.get(url);
       setApps(values(data));
     };
     fetchApps(sampleSize(allApps, 5));
   }, []);
+  
+  useEffect(() => {
+    setCurrentApp(apps[0])
+  }, [apps]);
 
   return (
-    <section>
+    <section className={styles.remix}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
       <Tabs>
         <TabList>
-          {apps && apps.map(app => (
-            <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app}>
+          {apps.map(app => (
+            <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app.domain}>
               <ProjectAvatar project={app} hideTooltip />
-              {app}
+              {app.domain}
             </Tab>
           ))}
         </TabList>
         
-        {apps && apps.map(app => (
+        {apps.map(app => (
           <TabPanel>
-            <div className={styles.embedContainer}><Embed domain={app} /></div>
+            <div className={styles.embedContainer}><Embed domain={app.domain} /></div>
             <div className={styles.embedRemixBtn}>
-              <Button type="cta" href={getRemixUrl(currentApp)} emoji="microphone">
-                Remix your own
-              </Button>
+              {currentApp && (
+                <Button type="cta" href={getRemixUrl(app.domain)} emoji="microphone">
+                  Remix your own
+                </Button>
+              )}
             </div>
           </TabPanel>
         ))}
