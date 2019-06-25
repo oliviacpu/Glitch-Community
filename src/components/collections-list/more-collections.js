@@ -9,8 +9,8 @@ import Heading from 'Components/text/heading';
 import Row from 'Components/containers/row';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
+import { getSingleItem } from 'Shared/api';
 
-import { getSingleItem } from '../../../shared/api';
 import styles from './styles.styl';
 
 const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
@@ -31,7 +31,7 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   // get project details for each collection
   let moreCollectionsWithProjects = await Promise.all(
     moreCollectionsFromAuthor.map(async (c) => {
-      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}`, 'items');
+      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}&limit=100`, 'items');
       return c;
     }),
   );

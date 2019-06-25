@@ -15,6 +15,7 @@ import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
 import CollectionNameInput from 'Components/fields/collection-name-input';
 import DataLoader from 'Components/data-loader';
+import Loader from 'Components/loader';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
@@ -25,7 +26,7 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, useCollectionProjects } from 'State/collection';
-import { getSingleItem, getAllPages } from 'Shared/api';
+import { getSingleItem } from 'Shared/api';
 
 function DeleteCollectionBtn({ collection, deleteCollection }) {
   const [done, setDone] = useState(false);
@@ -62,13 +63,14 @@ DeleteCollectionBtn.propTypes = {
 const CollectionPageContents = ({ collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, funcs] = useCollectionEditor(initialCollection);
+  const { status, value: baseProjects } = useCollectionProjects(initialCollection);
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
-  const collectionHasProjects = !!collection && !!collection.projects && collection.projects.length > 0;
+  const collectionHasProjects = status.ready && baseProjects.length > 0;
   let featuredProject = null;
-  let { projects } = collection;
+  let projects = baseProjects;
   if (collection.featuredProjectId) {
-    [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
+    [[featuredProject], projects] = partition(baseProjects, (p) => p.id === collection.featuredProjectId);
   }
 
   const onNameChange = async (name) => {
@@ -117,6 +119,9 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
             <div className="collection-project-container-header">
               {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
             </div>
+            {status === 'loading' && (
+              <Loader />
+            )}
             {!collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
                 <Image
