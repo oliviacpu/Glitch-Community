@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
 
@@ -29,7 +28,7 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 
 import styles from './project.styl';
 

@@ -16,8 +16,7 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import { isDarkColor } from 'Models/collection';
-import { useCollectionProjects } from 'State/collection';
-import { createAPIHook } from 'State/api';
+import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -78,28 +77,16 @@ const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
   </VisibilityContainer>
 );
 
-const useCollectionCurator = createAPIHook(async (api, collection) => {
-  if (collection.teamId > 0) {
-    const { data: team } = await api.get(`/v1/teams/by/id?id=${collection.teamId}`)
-    return { team }
-  }
-  if (collection.userId > 0) {
-    const { data: user } = await api.get(`/v1/users/by/id?id=${collection.userId}`)
-    return { user }
-  }
-  return {}
-})
-
 const CollectionCurator = ({ collection }) => {
-  const curator = useCollectionCurator(collection)
-  return <ProfileItem {...curator} />
-}
+  const { value: curator } = useCollectionCurator(collection);
+  return <ProfileItem {...curator} />;
+};
 
 const CollectionCuratorLoader = ({ collection }) => (
   <VisibilityContainer>
-    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}  
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
   </VisibilityContainer>
-)
+);
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
@@ -107,7 +94,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
           <div className={styles.header}>
-            <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
+            <div className={styles.curator}>{showCurator && <CollectionCuratorLoader collection={collection} />}</div>
             {isAuthorized && <CollectionOptions collection={collection} deleteCollection={animateAndDeleteCollection} />}
           </div>
         )}

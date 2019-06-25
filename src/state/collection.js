@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useContext, createContext } from 'react';
 
-import { useAPI } from 'State/api';
+import { useAPI, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
-import { getAllPages } from 'Shared/api';
+import { getSingleItem, getAllPages } from 'Shared/api';
 
 export const CollectionContext = createContext();
 
@@ -67,6 +67,18 @@ export function useCollectionReload() {
   const { reloadCollectionProjects } = useContext(CollectionContext);
   return reloadCollectionProjects;
 }
+
+export const useCollectionCurator = createAPIHook(async (api, collection) => {
+  if (collection.teamId > 0) {
+    const team = await getSingleItem(api, `/v1/teams/by/id?id=${collection.teamId}`, collection.teamId);
+    return { team };
+  }
+  if (collection.userId > 0) {
+    const user = await getSingleItem(api, `/v1/users/by/id?id=${collection.userId}`, collection.userId);
+    return { user };
+  }
+  return {};
+});
 
 export const addProjectToCollection = (api, projectId, collection) => api.patch(`collections/${collection.id}/add/${projectId}`);
 export const orderProjectInCollection = (api, projectId, collection, index) =>
