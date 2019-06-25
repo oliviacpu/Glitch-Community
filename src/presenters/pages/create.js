@@ -350,7 +350,7 @@ function Remix() {
   }, []);
   
   useEffect(() => {
-    setCurrentApp(apps[0])
+    setCurrentApp(apps[0]);
   }, [apps]);
 
   return (
@@ -359,7 +359,7 @@ function Remix() {
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
-      <Tabs>
+      <Tabs selectedIndex={apps.indexOf(currentApp)}>
         <TabList className={styles.remixAppTabs}>
           {apps.map(app => (
             <Tab onSelect={() => setCurrentApp(app)} className={styles.remixAppTab} key={app.domain}>
@@ -373,11 +373,9 @@ function Remix() {
           <TabPanel>
             <div className={styles.embedContainer}><Embed domain={app.domain} /></div>
             <div className={styles.embedRemixBtn}>
-              {currentApp && (
-                <Button type="cta" href={getRemixUrl(app.domain)} emoji="microphone">
-                  Remix your own
-                </Button>
-              )}
+              <Button type="cta" href={getRemixUrl(app.domain)} emoji="microphone">
+                Remix your own
+              </Button>
             </div>
           </TabPanel>
         ))}
