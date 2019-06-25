@@ -119,7 +119,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
           </header>
           <div className="collection-contents">
             <div className="collection-project-container-header">
-              {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={collection} />}
+              {currentUserIsAuthor && <AddCollectionProject addProjectToCollection={funcs.addProjectToCollection} collection={{ ...collection, projects }} />}
             </div>
             {status === 'loading' && <Loader />}
             {status === 'ready' && !collectionHasProjects && currentUserIsAuthor && (
