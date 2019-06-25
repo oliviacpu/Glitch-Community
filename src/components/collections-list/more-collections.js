@@ -31,11 +31,11 @@ const loadMoreCollectionsFromAuthor = async ({ api, collection }) => {
   // get project details for each collection
   let moreCollectionsWithProjects = await Promise.all(
     moreCollectionsFromAuthor.map(async (c) => {
-      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?id=${c.id}&limit=100`, 'items');
+      c.projects = await getSingleItem(api, `/v1/collections/by/id/projects?limit=100&id=${c.id}`, 'items');
       return c;
     }),
   );
-
+  
   // filter out empty collections that don't have projects
   moreCollectionsWithProjects = moreCollectionsWithProjects.filter((c) => c.projects && c.projects.length > 0);
 

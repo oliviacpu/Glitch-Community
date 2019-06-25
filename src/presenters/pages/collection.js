@@ -66,7 +66,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
   const { status, value: baseProjects } = useCollectionProjects(initialCollection);
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
-  const collectionHasProjects = status.ready && baseProjects.length > 0;
+  const collectionHasProjects = baseProjects && baseProjects.length > 0;
   let featuredProject = null;
   let projects = baseProjects;
   if (collection.featuredProjectId) {
@@ -107,11 +107,11 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
               />
             </div>
 
-            <div className="collection-project-count">
+            {status === 'ready' && <div className="collection-project-count">
               <Text>
-                <Pluralize count={collection.projects.length} singular="Project" />
+                <Pluralize count={projects.length} singular="Project" />
               </Text>
-            </div>
+            </div>}
 
             {currentUserIsAuthor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
           </header>
@@ -122,7 +122,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
             {status === 'loading' && (
               <Loader />
             )}
-            {!collectionHasProjects && currentUserIsAuthor && (
+            {status === 'ready' && !collectionHasProjects && currentUserIsAuthor && (
               <div className="empty-collection-hint">
                 <Image
                   src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934"
@@ -133,7 +133,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
                 <Text>You can add any project, created by any user</Text>
               </div>
             )}
-            {!collectionHasProjects && !currentUserIsAuthor && (
+            {status === 'ready' && !collectionHasProjects && !currentUserIsAuthor && (
               <div className="empty-collection-hint">No projects to see in this collection just yet.</div>
             )}
             {featuredProject && (
@@ -149,7 +149,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
                 hideNote={funcs.hideNote}
               />
             )}
-            {collectionHasProjects && (
+            {status === 'ready' && collectionHasProjects && (
               <ProjectsList
                 layout="gridCompact"
                 projects={projects}
@@ -170,7 +170,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
                 }}
               />
             )}
-            {currentUserIsAuthor && projects.length > 1 && (
+            {status === 'ready' && currentUserIsAuthor && projects.length > 1 && (
               <div>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</div>
             )}
           </div>
