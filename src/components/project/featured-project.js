@@ -64,7 +64,6 @@ const FeaturedProject = ({
   </div>
 );
 
-
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func.isRequired,
   featuredProject: PropTypes.object.isRequired,
