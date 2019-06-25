@@ -41,7 +41,7 @@ const Banner = () => (
       </Heading>
       <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
       <span className={styles.bannerRemixBtn}>
-        <Button href={getRemixUrl(name)} type="cta">
+        <Button href={getRemixUrl('hello-webpage')} type="cta">
           Remix Hello World
         </Button>
       </span>
@@ -143,7 +143,7 @@ function PlatformStarterItem(team) {
         <div className={styles.platformLink}>
           <Button href={getTeamLink(team)}>{team.name}</Button>
         </div>
-        <Markdown renderAsPlaintext>{team.description}</Markdown>
+        <Text size="14px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
       </div>
     </div>
   );
@@ -258,7 +258,7 @@ function ScreencapSection({ title, description, video, highlights, blob, image, 
       </Text>
 
       <div className={styles.screencapContainer}>
-        <video autoPlay="" loop="" muted="">
+        <video autoPlay={true} loop={true} muted={true}>
           <source src={video} />
         </video>
 
