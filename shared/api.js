@@ -54,10 +54,19 @@ const allByKeys = async (objOfPromises) => {
   }, {});
 };
 
+const entityPath = ({ user, team, project, collection }) => {
+  if (user) return `users/${user.id}`;
+  if (team) return  `teams/${team.id}`;
+  if (project) return `project/${project.id}`;
+  if (collection) return `collection/${collection.id}`;
+  throw new Error("Missing entity");
+};
+
 module.exports = {
   joinIdsToQueryString,
   getFromApi,
   getSingleItem,
   getAllPages,
   allByKeys,
+  entityPath,
 };

@@ -3,7 +3,8 @@ import React, { useState, useEffect, useContext, useRef, useMemo, createContext 
 import axios from 'axios';
 import { memoize } from 'lodash';
 import { useCurrentUser } from './current-user';
-import { captureException } from '../utils/sentry';
+import { captureException } from 'Utils/sentry';
+import { entityPath } from 'Shared/api';
 
 export const Context = createContext();
 
@@ -118,12 +119,13 @@ export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
   return result;
 };
 
-const entityPath = ({ user, team }) => (user ? `users/${user.id}` : `teams/${team.id}`);
-
 export const useAPIHandlers = () => {
   const api = useAPI();
   return useMemo(
     () => ({
+      // all entities
+      
+      
       // collections
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),

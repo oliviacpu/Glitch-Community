@@ -2,8 +2,11 @@
 
 /* eslint-disable no-param-reassign */
 
+import { useMemo } from 'react';
 import quantize from 'quantize';
 import S3Uploader from './s3-uploader';
+import { useAPI } from 'State/api';
+import { entityPath } from 'Shared/api';
 
 export const COVER_SIZES = {
   large: 1000,
@@ -140,24 +143,16 @@ export function requestFile(callback) {
   console.log('input created: ', input);
 }
 
-export function getUserCoverImagePolicy(api, id) {
-  return api.get(`users/${id}/cover/policy`);
-}
-
-export function getTeamAvatarImagePolicy(api, id) {
-  return api.get(`teams/${id}/avatar/policy`);
-}
-
-export function getTeamCoverImagePolicy(api, id) {
-  return api.get(`teams/${id}/cover/policy`);
-}
-
-export function getProjectAvatarImagePolicy(api, id) {
-  return api.get(`projects/${id}/avatar/policy`);
-}
-
 export function uploadAsset(blob, policy, key, options = {}) {
   return S3Uploader(policy).upload({ key, blob, ...options });
+}
+
+const useAssetPolicy = () => {
+  const api = useAPI();
+  return useMemo(() => ({
+    getCoverImagePolicy: (args) => api.get(`/${entityPath(args)}/cover/policy`),
+    getAvatarImagePolicy: (args) => api.get(`/${entityPath(args)}/avatar/policy`),
+  }), [api]);
 }
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
