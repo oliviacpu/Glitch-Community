@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 
 import * as assets from 'Utils/assets';
-import { useAPIHandlers } from 'State/api';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
+import { getSingleItem } from 'Shared/api';
 
-export const getUserCollections = (api, user) => api.get(`collections?userId=${user.id}`);
+function useUserPageGetters () {
+  const api = useAPI();  
+  return {
+    getUserCollections: ({ user }) => api.get(`collections?userId=${user.id}`),
+    getDeletedProject: ({ project }) => api.get(`/projects/${project.id}?showDeleted=true`),
+    getProject: ({ project }) => getSingleItem(api, `/v1/projects/by/id?id=${project.id}`, project.id),
+  };
+}
 
 export function useUserEditor(initialUser) {
   const [user, setUser] = useState({
@@ -20,17 +28,19 @@ export function useUserEditor(initialUser) {
   const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
   const {
     updateItem,
+    deleteItem,
     removeUserFromProject,
     addPinnedProject,
     removePinnedProject,
+    undeleteProject,
     addProjectToCollection,
   } = useAPIHandlers();
-  
+  const { getUserCollections, getDeletedProject, getProject } = useUserPageGetters();
   
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
   async function updateFields(changes) {
-    const { data } = await api.patch(`users/${user.id}`, changes);
+    const { data } = await updateItem({ user }, changes);
     setUser((prev) => ({ ...prev, ...data }));
     if (isCurrentUser) {
       updateCurrentUser(data);
@@ -38,7 +48,7 @@ export function useUserEditor(initialUser) {
   }
 
   async function reloadCollections() {
-    const { data } = await getUserCollections(api, user);
+    const { data } = await getUserCollections({ user });
     setUser((prev) => ({ ...prev, collections: data }));
   }
 
@@ -55,7 +65,7 @@ export function useUserEditor(initialUser) {
     uploadAvatar: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
+          const { data: policy } = await getCoverImagePolicy({ user });  // TODO: why not 'getAvatarImagePolicy' here?
           const url = await uploadAsset(blob, policy, 'temporary-user-avatar');
 
           const image = await assets.blobToImage(blob);
@@ -69,7 +79,7 @@ export function useUserEditor(initialUser) {
     uploadCover: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getUserCoverImagePolicy(api, user.id);
+          const { data: policy } = await getCoverImagePolicy({ user });
           await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
 
           const image = await assets.blobToImage(blob);
@@ -82,53 +92,53 @@ export function useUserEditor(initialUser) {
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
-    addPin: withErrorHandler(async (projectId) => {
-      await addPin(api, projectId, user);
+    addPin: withErrorHandler(async (project) => {
+      await addPinnedProject({ project, user });
       setUser((prev) => ({
         ...prev,
-        pins: [...prev.pins, { id: projectId }],
+        pins: [...prev.pins, { id: project.id }],
       }));
     }, handleError),
-    removePin: withErrorHandler(async (projectId) => {
-      await removePin(api, projectId, user);
+    removePin: withErrorHandler(async (project) => {
+      await removePinnedProject({ project, user });
       setUser((prev) => ({
         ...prev,
-        pins: prev.pins.filter((p) => p.id !== projectId),
+        pins: prev.pins.filter((p) => p.id !== project.id),
       }));
     }, handleError),
-    leaveProject: withErrorHandler(async (projectId) => {
-      await leaveProject(api, projectId, currentUser);
+    leaveProject: withErrorHandler(async (project) => {
+      await removeUserFromProject({ project, user: currentUser });
       setUser((prev) => ({
         ...prev,
-        projects: prev.projects.filter((p) => p.id !== projectId),
+        projects: prev.projects.filter((p) => p.id !== project.id),
       }));
     }, handleError),
-    deleteProject: withErrorHandler(async (projectId) => {
-      await deleteProject(api, projectId);
-      const { data } = await getDeletedProject(api, projectId);
+    deleteProject: withErrorHandler(async (project) => {
+      await deleteItem({ project });
+      const { data } = await getDeletedProject({ project });
       setUser((prev) => ({
         ...prev,
-        projects: prev.projects.filter((p) => p.id !== projectId),
+        projects: prev.projects.filter((p) => p.id !== project.id),
         _deletedProjects: [data, ...prev._deletedProjects], // eslint-disable-line no-underscore-dangle
       }));
     }, handleError),
-    undeleteProject: withErrorHandler(async (projectId) => {
-      await undeleteProject(api, projectId);
-      const { data } = await getProject(api, projectId);
+    undeleteProject: withErrorHandler(async (project) => {
+      await undeleteProject({ project });
+      const { data } = await getProject({ project });
       // temp set undeleted project updatedAt to now, while it's actually updating behind the scenes
       data.updatedAt = Date.now();
       setUser((prev) => ({
         ...prev,
         projects: [data, ...prev.projects],
-        _deletedProjects: prev._deletedProjects.filter((p) => p.id !== projectId), // eslint-disable-line no-underscore-dangle
+        _deletedProjects: prev._deletedProjects.filter((p) => p.id !== project.id), // eslint-disable-line no-underscore-dangle
       }));
     }, handleError),
     setDeletedProjects: (_deletedProjects) => setUser((prev) => ({ ...prev, _deletedProjects })),
     addProjectToCollection: withErrorHandler(async (project, collection) => {
-      await addProjectToCollection(api, project, collection);
+      await addProjectToCollection({ project, collection });
       reloadCollections();
     }, handleCustomError),
-    featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
+    featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
   return [user, funcs];

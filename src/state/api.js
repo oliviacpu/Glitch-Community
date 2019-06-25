@@ -154,7 +154,6 @@ export const useAPIHandlers = () => {
             },
           },
         ),
-      getDeletedProject: ({ project }) => api.get(`/projects/${project.id}?showDeleted=true`),
       undeleteProject: ({ project }) => api.post(`/projects/${project.id}/undelete`),
 
       // teams
