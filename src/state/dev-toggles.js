@@ -35,8 +35,7 @@ const toggleData = [
 // };
 
 export const useDevToggles = () => {
-  const defaultEnabledToggles = toggleData.filter((toggle) => toggle.enabledByDefault).map((toggle) => toggle.name);
-  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', defaultEnabledToggles);
+  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', []);
   return { enabledToggles, toggleData, setEnabledToggles };
 };
 
