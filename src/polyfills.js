@@ -13,8 +13,8 @@ if (!String.prototype.trimEnd) {
   String.prototype.trimEnd = String.prototype.trimRight;
 }
 
-/*eslint-disable */
 // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
+/* eslint-disable */
 if (!HTMLCanvasElement.prototype.toBlob) {
   Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
     value: function (callback, type, quality) {
@@ -35,6 +35,6 @@ if (!HTMLCanvasElement.prototype.toBlob) {
     }
   });
 }
-/*eslint-enable */
+/* eslint-enable */
 
 /* eslint-enable no-extend-native */
