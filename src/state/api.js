@@ -67,11 +67,11 @@ const useTeamsAPI = createAPIHook(async (api, teamID) => {
 
 function TeamWithProjects ({ teamID }) {
   const { status, value } = useTeamsAPI(teamID)
-  
+
   if (status === 'loading') {
     return <Loading />
   }
-  
+
   // ... render the team ...
 }
 
