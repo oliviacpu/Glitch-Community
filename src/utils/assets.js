@@ -47,7 +47,7 @@ const drawCanvasThumbnail = (image, type, max) => {
     targetContext.drawImage(sourceCanvas, 0, 0, width, height);
     sourceCanvas = targetCanvas;
   }
-  return new Promise((resolve) => (
+  return new Promise((resolve) =>
     sourceCanvas.toBlob(
       (blob) => {
         blob.width = width;
@@ -56,8 +56,8 @@ const drawCanvasThumbnail = (image, type, max) => {
       },
       type,
       quality,
-    )
-  ));
+    ),
+  );
 };
 
 // Takes an HTML5 File and returns a promise for an HTML5 Blob that is fulfilled
