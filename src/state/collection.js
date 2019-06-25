@@ -56,7 +56,7 @@ export function useCollectionEditor(initialCollection) {
           projects: [project, ...prev.projects],
         }));
       }
-      await addProjectToCollection({ project, selectedCollection });
+      await addProjectToCollection({ project, collection: selectedCollection });
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
