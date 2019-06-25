@@ -34,6 +34,7 @@ async function uploadWrapper(notifications, upload) {
     });
   } catch (error) {
     captureException(error);
+    console.log("error!", error)
     notifications.createNotification(<NotifyError error={error} />, { type: 'error' });
     removeNotification();
     return result;
