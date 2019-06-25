@@ -7,7 +7,7 @@ import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionAvatar } from 'Components/images/avatar';
-import VisibilityContainer from 'Components/containers/visibility-container';
+import VisibilityContainer from 'Components/visibility-container';
 import { isDarkColor } from 'Models/collection';
 import { useCollectionCurator } from 'State/collection';
 

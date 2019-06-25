@@ -14,10 +14,8 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { captureException } from 'Utils/sentry';
-
-import { useAPI, createAPIHook } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 
 import styles from './search-results.styl';
 
@@ -40,30 +38,6 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
   );
 };
 
-// Search results from algolia do not contain their associated users or teams,
-// so those need to be fetched after the search results have loaded.
-const useTeamUsers = createAPIHook(async (api, teamID) => {
-  try {
-    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
-    return res.data.items;
-  } catch (e) {
-    captureException(e);
-    return [];
-  }
-});
-
-function TeamWithDataLoading({ team }) {
-  const { value: users } = useTeamUsers(team.id);
-  return <TeamItem team={{ ...team, users }} />;
-}
-
-const TeamResult = ({ result }) => {
-  if (!result.users) {
-    return <TeamWithDataLoading team={result} />;
-  }
-  return <TeamItem team={result} />;
-};
-
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -84,7 +58,7 @@ const groups = [
 ];
 
 const resultComponents = {
-  team: TeamResult,
+  team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
   project: ProjectResult,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
