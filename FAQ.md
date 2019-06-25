@@ -60,8 +60,12 @@ Our Bundles TLDR:
 - when code is updated, we generate a new "chunkhash" which changes busts our cache, so that our html file is seen as modified, and it will ping for a new javascript file. 
 - we do this to improve the download speed of our js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
 
+Cloudfront: 
+In production, our code goes through cloudfront. This is why there's a delay after deploys as cloudfront has to get the latest code. To confirm whether cloudfront has updated to match  
+
 Things that can go wrong:
-- a hash doesn't change, but files are deleted or broken. This shouldn't happen, but if it does  
+- prod has a hash that points to broken or non existant code. To confirm this is the case, community.glitch.me and glitch.com will be the same, and in the network tab you'll see they are pulling javascript files with the same bundle hash. To fix, confirm that community-staging.glitch.me is in working order and swap. 
+- 
 
 ### Why am I still seeing sentry errors for old code if it isn't cached?
 
