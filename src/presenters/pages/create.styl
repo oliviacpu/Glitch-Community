@@ -49,16 +49,20 @@ html
 .banner
   display: flex
   flex-wrap: wrap
-  @media (min-width: largeViewport)
+  @media (min-width: mediumViewport)
     flex-wrap: nowrap
+  @media (min-width: largeViewport)
     padding: 0 u4
 .bannerShape
   position: relative
+  flex: 2.25
   background-repeat: no-repeat
   background-size: contain
   width: 100vw
   height: 360px
   margin-left: -2rem
+  @media (min-width: largeViewport)
+    margin-left: 0
 .bannerText
   position: absolute
   left: 95px
@@ -66,7 +70,7 @@ html
   max-width: 250px
   p
     font-size: 15px
-    @media (min-width: mediumSmallViewport)
+    @media (min-width: mediumViewport)
       font-size: inherit
   @media (min-width: mediumViewport)
     left: 120px
@@ -75,15 +79,17 @@ html
   font-size: 32px
   transform: rotate(-5deg)
 .bannerIllustration
-  flex: 100%
+  flex: 3
   text-align: center
   z-index: 3
-  margin
+  margin-bottom: -20px
   img
-    max-width: 450px
+    max-width: 95%
+    padding: 0 u5
   @media (max-width: mediumViewport)
     flex-basis: 100%
     order: -1
+    margin-bottom: 0
 .bannerRemixBtn
   margin: 25px 0 0 95px
 
