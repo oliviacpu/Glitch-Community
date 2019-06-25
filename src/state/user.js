@@ -124,7 +124,7 @@ export function useUserEditor(initialUser) {
     }, handleError),
     undeleteProject: withErrorHandler(async (project) => {
       await undeleteProject({ project });
-      const { data } = await getProject({ project });
+      const data = await getProject({ project });
       // temp set undeleted project updatedAt to now, while it's actually updating behind the scenes
       data.updatedAt = Date.now();
       setUser((prev) => ({

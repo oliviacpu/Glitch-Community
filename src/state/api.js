@@ -126,8 +126,8 @@ export const createAPIHook = (asyncFunction, options = {}) => (...args) => {
 export const entityPath = ({ user, team, project, collection }) => {
   if (user) return `users/${user.id}`;
   if (team) return `teams/${team.id}`;
-  if (project) return `project/${project.id}`;
-  if (collection) return `collection/${collection.id}`;
+  if (project) return `projects/${project.id}`;
+  if (collection) return `collections/${collection.id}`;
   throw new Error('Missing entity');
 };
 
@@ -137,7 +137,7 @@ export const useAPIHandlers = () => {
     () => ({
       // all entities
       updateItem: (entityArgs, changes) => api.patch(`/${entityPath(entityArgs)}`, changes),
-      deleteItem: (entityArgs, changes) => api.delete(`/${entityPath(entityArgs)}`, changes),
+      deleteItem: (entityArgs) => api.delete(`/${entityPath(entityArgs)}`),
 
       // collections
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
