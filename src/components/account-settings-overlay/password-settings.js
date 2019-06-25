@@ -31,16 +31,11 @@ const ResetPassword = () => {
       setStatus({ error: true });
     }
   };
-  
-  if (!currentUser.passwordEnabled) {
-    return null;
-  }
-  
+
   return (
     <>
       <Heading tagName="h2">Reset Password</Heading>
       <Button type="tertiary" size="small" disabled={status.working} onClick={resetPassword}>Send Reset Password Email</Button>
-
       {status.done && <Notification type="success" persistent>Sent a reset code to {primaryEmail.email}</Notification>}
       {status.error && <Notification type="error" persistent>Something went wrong, check your inbox?</Notification>}
     </>
@@ -84,6 +79,7 @@ const PasswordSettings = () => {
   return (
     <>
       <Heading tagName="h2">{currentUser.passwordEnabled ? 'Change Password' : 'Set Password'}</Heading>
+
       <form className={styles.passwordForm} onSubmit={updatePassword}>
         {currentUser.passwordEnabled && (
           <TextInput type="password" labelText="current password" placeholder="current password" value={oldPassword} disabled={status.working} onChange={setOldPassword} />
@@ -98,8 +94,8 @@ const PasswordSettings = () => {
         {status.done && <Notification type="success" persistent>Successfully set new password</Notification>}
         {status.error && <Notification type="error" persistent>We couldn't set the password</Notification>}
       </form>
-      {currentUser.passwordEnabled &&
-      }
+
+      {currentUser.passwordEnabled && <ResetPassword />}
     </>
   );
 };
