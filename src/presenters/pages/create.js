@@ -30,28 +30,31 @@ const Mark = ({ color, children }) => (
 
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
-const bannerIllustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561144073293';
-const bannerShape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
-const Banner = () => (
-  <section className={styles.banner}>
-    <div className={styles.bannerText}>
-      <Heading className={styles.bannerTagline} tagName="h1">
-        <Mark color="#fbf2b8">Create</Mark>
-        <Unmarked>the app of your dreams</Unmarked>
-      </Heading>
-      <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
-      <span className={styles.bannerRemixBtn}>
-        <Button href={getRemixUrl('hello-webpage')} type="cta">
-          Remix Hello World
-        </Button>
-      </span>
-    </div>
+function Banner() {
+const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561144073293';
+const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
+  
+  return (
+    <section className={styles.banner}>
+      <div className={styles.bannerText} style={{ backgroundImage: `url(${shape})` }}>
+        <Heading className={styles.bannerTagline} tagName="h1">
+          <Mark color="#fbf2b8">Create</Mark>
+          <Unmarked>the app of your dreams</Unmarked>
+        </Heading>
+        <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
+        <span className={styles.bannerRemixBtn}>
+          <Button href={getRemixUrl('hello-webpage')} type="cta">
+            Remix Hello World
+          </Button>
+        </span>
+      </div>
 
-    <div className={styles.bannerIllustration}>
-      <Image src={bannerIllustration} alt="" />
-    </div>
-  </section>
-);
+      <div className={styles.bannerIllustration}>
+        <Image src={illustration} alt="" />
+      </div>
+    </section>
+  );
+}
 
 const WhatIsGlitch = () => (
   <section className={classNames(styles.section, styles.whatIsGlitch)}>
@@ -143,7 +146,9 @@ function PlatformStarterItem(team) {
         <div className={styles.platformLink}>
           <Button href={getTeamLink(team)}>{team.name}</Button>
         </div>
-        <Text size="14px"><Markdown renderAsPlaintext>{team.description}</Markdown></Text>
+        <Text size="14px">
+          <Markdown renderAsPlaintext>{team.description}</Markdown>
+        </Text>
       </div>
     </div>
   );
