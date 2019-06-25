@@ -131,10 +131,6 @@ export const useAPIHandlers = () => {
   return useMemo(
     () => ({
       // all entities
-      createItem: ({ team, collection }) => {
-        if (team) return api.post('/teams', team);
-        if (collection) return api.post('/collections', collection);
-      },
       updateItem: (entityArgs, changes) => api.patch(`/${entityPath(entityArgs)}`, changes),
       deleteItem: (entityArgs, changes) => api.delete(`/${entityPath(entityArgs)}`, changes),
       
