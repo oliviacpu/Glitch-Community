@@ -19,9 +19,9 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
     baseProjectId: project.id,
     baseDomain: project.domain,
   });
-  const isMember = project.permissions.some(({ userId }) => userId === currentUser.id);
 
-  const bottomLeft = isAuthorized || isMember ? (
+  const isMember = currentUser.projects.some(({ id }) => id === project.id);
+  const bottomLeft = isMember ? (
     <EditButton name={project.id} isMember={isMember} size="small" />
   ) : (
     <ReportButton reportedType="project" reportedModel={project} />
