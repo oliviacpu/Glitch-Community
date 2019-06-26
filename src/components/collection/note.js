@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { isDarkColor } from 'Models/collection';
 import { ProfileItem } from 'Components/profile-list';
 import AuthDescription from 'Components/fields/auth-description';
+import { CollectionCuratorLoader } from 'Components/collection/collection-item';
 
 import styles from './note.styl';
 
