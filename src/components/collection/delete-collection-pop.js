@@ -26,7 +26,7 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteColl
         deleteCollection(api, collection);
         history.push(getOwnerLink(collection));
       } else {
-        console.log("on user page");
+        console.log("on user page", collection.id, animateDeleteCollection);
         animateDeleteCollection(collection.id);
         console.log('whooo');
       }
@@ -54,9 +54,9 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteColl
   );
 });
 
-const DeleteCollection = ({ collection, animateDeleteCollection }) => (
+const DeleteCollection = ({ collection, deleteCollection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} animateDeleteCollection={animateDeleteCollection} />}
+    {() => <DeleteCollectionPop collection={collection} animateDeleteCollection={deleteCollection} />}
   </PopoverWithButton>
 );
 
