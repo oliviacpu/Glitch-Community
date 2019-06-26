@@ -24,11 +24,14 @@ import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
+
 const BannerVideo = () => (
   <div className={styles.bannerVideoWrap}>
     <div className={styles.bannerVideoChrome}>
       <div className={styles.bannerVideoInnerWrap}>
-        <div className={styles.bannerVideo} />
+        <video className={styles.bannerVideo}>
+          <source type="video/mp4" src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"/>
+        </video>
       </div>
     </div>
   </div>
