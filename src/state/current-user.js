@@ -79,13 +79,8 @@ function identifyUser(user) {
 
 // Test if two user objects reference the same person
 function usersMatch(a, b) {
-  if (a && b && a.id === b.id && a.persistentToken === b.persistentToken) {
-    return true;
-  }
-  if (!a && !b) {
-    return true;
-  }
-  return false;
+  if (!a && !b) return true;
+  return a && b && a.id === b.id && a.persistentToken === b.persistentToken;
 }
 
 async function getAnonUser(api) {
@@ -118,9 +113,7 @@ async function getCachedUser(api, sharedUser) {
       collections: getAllPages(api, makeUrl('collections')),
     });
     const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
-    if (!usersMatch(sharedUser, user)) {
-      return 'error';
-    }
+    if (!usersMatch(sharedUser, user)) return 'error';
     return user;
   } catch (error) {
     if (error.response && (error.response.status === 401 || error.response.status === 404)) {
@@ -159,7 +152,7 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
   captureMessage('Invalid cachedUser');
 };
 
-const useDebouncedAsync = async (fn) => {
+const useDebouncedAsync = (fn) => {
   const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
   return async (...args) => {
     if (working) return;
@@ -181,50 +174,39 @@ export const CurrentUserProvider = ({ children }) => {
   const api = getAPIForToken(persistentToken);
 
   const load = useDebouncedAsync(async () => {
-    console.log('load 0')
     let sharedOrAnonUser = sharedUser;
 
     // If we're signed out create a new anon user
     if (!sharedOrAnonUser) {
-      console.log('load 0.1')
       sharedOrAnonUser = await getAnonUser(api);
       setSharedUser(sharedOrAnonUser);
     }
 
-    console.log('load 1')
-    
     // Check if we have to clear the cached user
     if (!usersMatch(sharedOrAnonUser, cachedUser)) {
-      console.log('load 1.1')
       setCachedUser(undefined);
     }
 
     const newCachedUser = await getCachedUser(api, sharedUser);
-    
-    console.log('load 2')
+
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
       // If it did change then quit out and let useEffect sort it out
       if (usersMatch(sharedOrAnonUser, sharedUser)) {
-        console.log('load 2.1')
         // The user wasn't changed, so we need to fix it
         setFetched(false);
         const newSharedUser = await getSharedUser(api, persistentToken);
-        console.log('load 2.2')
         setSharedUser(newSharedUser);
         logSharedUserError(sharedUser, newSharedUser);
       }
     } else {
-      console.log('load 3')
       // The shared user is good, store it
       setCachedUser(newCachedUser);
       setFetched(true);
     }
   });
 
-  
-  
   useEffect(() => {
     identifyUser(cachedUser);
   }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken]);
@@ -235,12 +217,7 @@ export const CurrentUserProvider = ({ children }) => {
     // for easier debugging
     window.currentUser = cachedUser;
     window.api = api;
-  }, [
-    cachedUser && cachedUser.id, 
-    cachedUser && cachedUser.persistentToken, 
-    sharedUser && sharedUser.id, 
-    sharedUser && sharedUser.persistentToken,
-  ]);
+  }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken, sharedUser && sharedUser.id, sharedUser && sharedUser.persistentToken]);
 
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
