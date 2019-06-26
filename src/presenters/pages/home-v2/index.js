@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button';
@@ -24,11 +25,22 @@ import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
-const Video = ({ className, src, poster })) => {
-  const [playing, setPlaying] = useState(false);
+const Video = ({ className, src, poster }) => {
+  const [status, setStatus] = useState('init'); // init | playing | paused
+  
+  const onClick = (e) => {
+    if (status === 'playing') {
+      e.target.pause()
+      setStatus('paused')
+    } else {
+      e.target.play()
+      setStatus('playing')
+    }
+  }
+  
   return (
-    <video>
-      <source></source>
+    <video poster={poster} className={classnames(className, styles[status])} onClick={onClick}>
+      <source type="video/mp4" src={src} />
     </video>
   )
 } 
@@ -41,7 +53,7 @@ const BannerVideo = () => (
           className={styles.bannerVideo}
           poster="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
           src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
-        >
+        />
       </div>
     </div>
   </div>
