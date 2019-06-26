@@ -133,32 +133,6 @@ async function getCachedUser(api, sharedUser) {
   }
 }
 
-// This takes sharedUser and cachedUser
-// sharedUser is stored in localStorage['cachedUser']
-// cachedUser is stored in localStorage['community-cachedUser']
-// sharedUser syncs with the editor and is authoritative on id and persistentToken
-// cachedUser mirrors GET /users/{id} and is what we actually display
-
-class CurrentUserManager extends React.Component {
-
-  componentDidUpdate(prev) {
-    const { cachedUser, sharedUser } = this.props;
-
-    if (!usersMatch(cachedUser, prev.cachedUser)) {
-      identifyUser(cachedUser);
-    }
-
-    if (!usersMatch(cachedUser, sharedUser) || !usersMatch(sharedUser, prev.sharedUser)) {
-      // delay loading a moment so both items from storage have a chance to update
-      setTimeout(() => this.load(), 1);
-    }
-
-    // hooks for easier debugging
-    window.currentUser = cachedUser;
-    window.api = this.api();
-  }
-}
-
 const getSuperUserHelpers = (api, cachedUser) => {
   const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
 
@@ -173,20 +147,29 @@ const getSuperUserHelpers = (api, cachedUser) => {
   };
 }
 
+const useOneAtATime = async (fn) => {
+  const [working, setWorking] = useState(false) // Used to prevent simultaneous loading
+  return async (...args) => {
+    if (working) return;
+    setWorking(true);
+    const results = await fn(...args);
+    setWorking(false);
+    return results;
+  }
+}
+
 export const CurrentUserProvider = ({ children }) => {
-  const [state, setState] = useState({
-    fetched: false, // Set true on first complete load
-    working: false, // Used to prevent simultaneous loading
-  })
+  const [fetched, setFetched] = useState(false) // Set true on first complete load
+
+  // sharedUser syncs with the editor and is authoritative on id and persistentToken
   const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
+  // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
   
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
   const api = getAPIForToken(persistentToken);
   
-  const load = async () => {
-    if (state.working) return;
-    setState({ working: true });
+  const load = useOneAtATime(async () => {
     let sharedOrAnonUser = sharedUser;
 
     // If we're signed out create a new anon user
@@ -207,7 +190,7 @@ export const CurrentUserProvider = ({ children }) => {
       // If it did change then quit out and let componentDidUpdate sort it out
       if (usersMatch(sharedOrAnonUser, sharedUser)) {
         // The user wasn't changed, so we need to fix it
-        setState({ fetched: false });
+        setFetched(false)
         const newSharedUser = await getSharedUser(api, persistentToken);
         setSharedUser(newSharedUser);
         console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
@@ -224,21 +207,27 @@ export const CurrentUserProvider = ({ children }) => {
     } else {
       // The shared user is good, store it
       setCachedUser(newCachedUser);
-      setState({ fetched: true });
+      setFetched(true)
     }
-
-    setState({ working: false });
-  }
+  });
   
   useEffect(() => {
     identifyUser(cachedUser);
-    load();
-  }, []);
+  }, [cachedUser.id, cachedUser.persistentToken]);
+  
+  useEffect(() => {
+    // delay loading a moment so both items from storage have a chance to update
+    setTimeout(load, 1);
+    // hooks for easier debugging
+    window.currentUser = cachedUser;
+    window.api = this.api();
+  }, [cachedUser.id, cachedUser.persistentToken, sharedUser.id, sharedUser.persistentToken]);
+  
   
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
     persistentToken,
-    fetched: !!cachedUser && state.fetched,
+    fetched: !!cachedUser && fetched,
     reload: load,
     login: (data) => {
       setSharedUser(data);
