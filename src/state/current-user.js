@@ -95,7 +95,7 @@ async function getAnonUser(api) {
 
 async function getSharedUser(api, persistentToken) {
   if (!persistentToken) return undefined;
-  
+
   try {
     return await getSingleItem(api, `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
   } catch (error) {
@@ -110,9 +110,7 @@ async function getCachedUser(api, sharedUser) {
   try {
     const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
     const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
-    const {
-      baseUser, emails, projects, teams, collections,
-    } = await allByKeys({
+    const { baseUser, emails, projects, teams, collections } = await allByKeys({
       baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
       emails: getAllPages(api, makeUrl('emails')),
       projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
@@ -142,88 +140,108 @@ const getSuperUserHelpers = (api, cachedUser) => {
       window.scrollTo(0, 0);
       window.location.reload();
     },
-    canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
+    canBecomeSuperUser:
+      cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
     superUserFeature,
   };
-}
+};
 
-const useOneAtATime = async (fn) => {
-  const [working, setWorking] = useState(false) // Used to prevent simultaneous loading
+const logSharedUserError = (sharedUser, newSharedUser) => {
+  console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
+  addBreadcrumb({
+    level: 'info',
+    message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
+  });
+  addBreadcrumb({
+    level: 'info',
+    message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
+  });
+  captureMessage('Invalid cachedUser');
+};
+
+const useDebouncedAsync = async (fn) => {
+  const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
   return async (...args) => {
     if (working) return;
     setWorking(true);
-    const results = await fn(...args);
+    await fn(...args);
     setWorking(false);
-    return results;
-  }
-}
+  };
+};
 
 export const CurrentUserProvider = ({ children }) => {
-  const [fetched, setFetched] = useState(false) // Set true on first complete load
+  const [fetched, setFetched] = useState(false); // Set true on first complete load
 
   // sharedUser syncs with the editor and is authoritative on id and persistentToken
   const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
-  
+
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
   const api = getAPIForToken(persistentToken);
-  
-  const load = useOneAtATime(async () => {
+
+  const load = useDebouncedAsync(async () => {
+    console.log('load 0')
     let sharedOrAnonUser = sharedUser;
 
     // If we're signed out create a new anon user
     if (!sharedOrAnonUser) {
+      console.log('load 0.1')
       sharedOrAnonUser = await getAnonUser(api);
       setSharedUser(sharedOrAnonUser);
     }
 
+    console.log('load 1')
+    
     // Check if we have to clear the cached user
     if (!usersMatch(sharedOrAnonUser, cachedUser)) {
+      console.log('load 1.1')
       setCachedUser(undefined);
     }
 
     const newCachedUser = await getCachedUser(api, sharedUser);
+    
+    console.log('load 2')
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
-      // If it did change then quit out and let componentDidUpdate sort it out
+      // If it did change then quit out and let useEffect sort it out
       if (usersMatch(sharedOrAnonUser, sharedUser)) {
+        console.log('load 2.1')
         // The user wasn't changed, so we need to fix it
-        setFetched(false)
+        setFetched(false);
         const newSharedUser = await getSharedUser(api, persistentToken);
+        console.log('load 2.2')
         setSharedUser(newSharedUser);
-        console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
-        addBreadcrumb({
-          level: 'info',
-          message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
-        });
-        addBreadcrumb({
-          level: 'info',
-          message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
-        });
-        captureMessage('Invalid cachedUser');
+        logSharedUserError(sharedUser, newSharedUser);
       }
     } else {
+      console.log('load 3')
       // The shared user is good, store it
       setCachedUser(newCachedUser);
-      setFetched(true)
+      setFetched(true);
     }
   });
+
+  
   
   useEffect(() => {
     identifyUser(cachedUser);
-  }, [cachedUser.id, cachedUser.persistentToken]);
-  
+  }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken]);
+
   useEffect(() => {
     // delay loading a moment so both items from storage have a chance to update
     setTimeout(load, 1);
-    // hooks for easier debugging
+    // for easier debugging
     window.currentUser = cachedUser;
-    window.api = this.api();
-  }, [cachedUser.id, cachedUser.persistentToken, sharedUser.id, sharedUser.persistentToken]);
-  
-  
+    window.api = api;
+  }, [
+    cachedUser && cachedUser.id, 
+    cachedUser && cachedUser.persistentToken, 
+    sharedUser && sharedUser.id, 
+    sharedUser && sharedUser.persistentToken,
+  ]);
+
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
     persistentToken,
@@ -231,7 +249,7 @@ export const CurrentUserProvider = ({ children }) => {
     reload: load,
     login: (data) => {
       setSharedUser(data);
-      setCachedUser(undefined); 
+      setCachedUser(undefined);
     },
     update: (changes) => {
       setCachedUser({ ...cachedUser, ...changes });
@@ -242,8 +260,8 @@ export const CurrentUserProvider = ({ children }) => {
     },
     superUserHelpers: getSuperUserHelpers(api, cachedUser),
   };
-  
-  return <Context.Provider value={userProps}>{children}</Context.Provider>
+
+  return <Context.Provider value={userProps}>{children}</Context.Provider>;
 };
 CurrentUserProvider.propTypes = {
   children: PropTypes.node.isRequired,
