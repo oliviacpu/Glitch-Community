@@ -52,26 +52,23 @@ Nope! Though you can set your remix to run in production mode by setting `NODE_E
 
 Our logic around caching can generally be found in 1 of 2 places: `webpack.config.js` and `server/routes.js`. But as a summary:
 
-Our HTML:
+**Our HTML:**
 - the html document we render from our views/index.ejs file has maxAge of 1 second, so it shouldn't really cache.
-- However we also use express to render this file, which [by default sets weak etags](http://expressjs.com/en/api.html#etag.options.table). This means that the server will compare the file with what the client last saw and if it's the same will return a 304.
+- However we also use express to render this file, which [by default sets weak etags](http://expressjs.com/en/api.html#app.settings.table). This means that the server will compare the file with what the client last saw and if it's the same will return a 304.
 
-Our Javascript: 
+**Our Javascript:** 
 - we split our javascript into chunked bundles with webpack and we cache those files for up to a week. 
-- when code is updated, we generate a new "chunkhash" which busts our cache. A new html file should be sent down to the client with a new references to a new javascript file. 
-- because our code is split, we're able to cache things that don't change very often (like our dependencies), and while busting the cache to deploy the latest and greatest to our clients. 
+- when code is updated, we generate a new "chunkhash" which busts our cache. A new html file should be sent down to the client with a new reference to a new javascript file. 
+- because our code is split, we're able to cache things that don't change very often (like our dependencies), while busting the cache to deploy the latest and greatest to our clients. 
 
-Cloudfront: 
+**Cloudfront:**
 In production, our code goes through cloudfront. This is why there's a delay after deploys, to see the code on glitch.com but not on community.glitch.me. It's possible for proxies of our code like cloudfront to cache our code as well since we have cache control set to `public` for our files, although the expected behavior should be the same as the relationship between community.glitch.me and your own browser.
 
-Debugging Caching Issues:
-- as always, if both glitch.com and community.glitch.me are broken, and community-staging.glitch.me is in good working order, swap, and debug later.
+**Debugging Caching Issues:**
+- as always, if glitch.com and community.glitch.me are both broken, and community-staging.glitch.me is in good working order, swap, and debug later.
 - if you find glitch.com working in some browsers and not others, take a look at the hashes for the bundled javascript files to see if you're serving different files.
 - if you see the hashes match but one is serving code and the other is not, you know something went wrong in serving that file (perhaps it was accidentally deleted at some point but the hashes never worked) you'll want to swap staging and community if you haven't already, and rebuild the new staging to get a new hash. 
-- if the hashes don't match, you know why you're seeing different behavior. The next question is to figure out why the browser is holding on to the older one. 
-
-### Why am I still seeing sentry errors for old code if it isn't cached?
-
+- if the hashes don't match, you know why you're seeing different behavior. The next question is to figure out why the browser is holding on to the older one.
 
 ### How do I add a question to the FAQ?
 
