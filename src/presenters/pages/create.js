@@ -273,8 +273,44 @@ function YourAppIsLive() {
 }
 
 function ScreencapSection({ title, description, video, smallVideos, highlights, blob, image, imageName, markColor }) {
-  return (
-    <section className={styles.section}>
+  const Videos = () => (
+    <div className={styles.screencapContainer}>
+      {smallVideos.map((v) => (
+        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
+          <source src={v} />
+        </video>
+      ))}
+
+      <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
+        <source src={video} />
+      </video>
+
+      <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
+        <div className={styles.blob}>
+          <Image src={blob} alt="" />
+        </div>
+        <div className={classNames(styles[imageName], styles.blobImage)}>
+          <Image src={image} alt="" />
+        </div>
+      </div>
+    </div>
+  );
+
+  const Highlights = () => (
+    <div className={styles.screencapHighlights}>
+      {highlights.map((highlight) => (
+        <div key={highlight} className={styles.screencapHighlight}>
+          <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
+          <Text className={styles.screencapHighlight} key={Date.now()}>
+            {highlight}
+          </Text>
+        </div>
+      ))}
+    </div>
+  );
+
+  const Info = () => (
+    <>
       <Heading className={styles.h2} tagName="h2">
         <Mark color={markColor}>{title}</Mark>
       </Heading>
@@ -282,54 +318,25 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
       <Text className={classNames(styles.sectionDescription, styles.screencapDescription)} size="16px">
         {description}
       </Text>
+    </>
+  );
 
+  return (
+    <section className={styles.section}>
       <VisibilityContainer>
         {({ wasEverVisible }) =>
           wasEverVisible ? (
             <>
-          
-      const Videos = ({ bigVideo, smallVideos }) (
-        <div className={styles.screencapContainer}>
-          {smallVideos.map((v) => (
-            <video
-              key={v}
-              className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-              autoPlay
-              playsInline
-              loop
-              muted
-            >
-              <source src={v} />
-            </video>
-          ))}
-
-          <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
-            <source src={video} />
-          </video>
-
-          <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
-            <div className={styles.blob}>
-              <Image src={blob} alt="" />
-            </div>
-            <div className={classNames(styles[imageName], styles.blobImage)}>
-              <Image src={image} alt="" />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.screencapHighlights}>
-          {highlights.map((highlight) => (
-            <div key={highlight} className={styles.screencapHighlight}>
-              <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
-              <Text className={styles.screencapHighlight} key={Date.now()}>
-                {highlight}
-              </Text>
-            </div>
-          ))}
-        </div>
-      );
+              <Info title={title} description={description} markColor={markColor} />
+              <Videos video={video} smallVideos={smallVideos} />
+              <Highlights highlights={highlights} />
             </>
-          ) : <div aria-hidden="true" style={{ height: '500px'}}></div>
+          ) : (
+            <>
+              <Info title={title} description={description} markColor={markColor} />
+              <div aria-hidden="true" style={{ height: '500px' }} />
+            </>
+          )
         }
       </VisibilityContainer>
     </section>
@@ -439,7 +446,9 @@ function Remix() {
                 </TabPanel>
               ))}
             </Tabs>
-          ) : <div aria-hidden="true" style={{ height: '500px'}}></div>;
+          ) : (
+            <div aria-hidden="true" style={{ height: '500px' }} />
+          );
         }}
       </VisibilityContainer>
     </section>
