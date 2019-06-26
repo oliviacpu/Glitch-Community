@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -88,6 +88,51 @@ function usersMatch(a, b) {
   return false;
 }
 
+async function getAnonUser(api) {
+  const { data } = await api.post('users/anon');
+  return data;
+}
+
+async function getSharedUser(api, persistentToken) {
+  if (!persistentToken) return undefined;
+  
+  try {
+    return await getSingleItem(api, `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
+  } catch (error) {
+    if (error.response && error.response.status === 401) return undefined;
+    throw error;
+  }
+}
+
+async function getCachedUser(api, sharedUser) {
+  if (!sharedUser) return undefined;
+  if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
+  try {
+    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
+    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
+    const {
+      baseUser, emails, projects, teams, collections,
+    } = await allByKeys({
+      baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
+      emails: getAllPages(api, makeUrl('emails')),
+      projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
+      teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
+      collections: getAllPages(api, makeUrl('collections')),
+    });
+    const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
+    if (!usersMatch(sharedUser, user)) {
+      return 'error';
+    }
+    return user;
+  } catch (error) {
+    if (error.response && (error.response.status === 401 || error.response.status === 404)) {
+      // 401 means our token is bad, 404 means the user doesn't exist
+      return 'error';
+    }
+    throw error;
+  }
+}
+
 // This takes sharedUser and cachedUser
 // sharedUser is stored in localStorage['cachedUser']
 // cachedUser is stored in localStorage['community-cachedUser']
@@ -95,11 +140,6 @@ function usersMatch(a, b) {
 // cachedUser mirrors GET /users/{id} and is what we actually display
 
 class CurrentUserManager extends React.Component {
-
-  componentDidMount() {
-    identifyUser(this.props.cachedUser);
-    this.load();
-  }
 
   componentDidUpdate(prev) {
     const { cachedUser, sharedUser } = this.props;
@@ -116,103 +156,6 @@ class CurrentUserManager extends React.Component {
     // hooks for easier debugging
     window.currentUser = cachedUser;
     window.api = this.api();
-  }
-
-  async getAnonUser() {
-    const { data } = await this.api().post('users/anon');
-    return data;
-  }
-
-  async getSharedUser() {
-    const persistentToken = this.persistentToken();
-    if (!persistentToken) {
-      return undefined;
-    }
-    try {
-      return await getSingleItem(this.api(), `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        return undefined;
-      }
-      throw error;
-    }
-  }
-
-  async getCachedUser() {
-    const { sharedUser } = this.props;
-    if (!sharedUser) return undefined;
-    if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
-    try {
-      const api = this.api();
-      const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
-      const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
-      const {
-        baseUser, emails, projects, teams, collections,
-      } = await allByKeys({
-        baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
-        emails: getAllPages(api, makeUrl('emails')),
-        projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
-        teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
-        collections: getAllPages(api, makeUrl('collections')),
-      });
-      const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
-      if (!usersMatch(sharedUser, user)) {
-        return 'error';
-      }
-      return user;
-    } catch (error) {
-      if (error.response && (error.response.status === 401 || error.response.status === 404)) {
-        // 401 means our token is bad, 404 means the user doesn't exist
-        return 'error';
-      }
-      throw error;
-    }
-  }
-
-  async load() {
-    if (this.state.working) return;
-    this.setState({ working: true });
-    let { sharedUser } = this.props;
-
-    // If we're signed out create a new anon user
-    if (!sharedUser) {
-      sharedUser = await this.getAnonUser();
-      this.props.setSharedUser(sharedUser);
-    }
-
-    // Check if we have to clear the cached user
-    if (!usersMatch(sharedUser, this.props.cachedUser)) {
-      this.props.setCachedUser(undefined);
-    }
-
-    const newCachedUser = await this.getCachedUser();
-    if (newCachedUser === 'error') {
-      // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
-      // Anon users get their token and id deleted when they're merged into a user on sign in
-      // If it did change then quit out and let componentDidUpdate sort it out
-      if (usersMatch(sharedUser, this.props.sharedUser)) {
-        // The user wasn't changed, so we need to fix it
-        this.setState({ fetched: false });
-        const newSharedUser = await this.getSharedUser();
-        this.props.setSharedUser(newSharedUser);
-        console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
-        addBreadcrumb({
-          level: 'info',
-          message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
-        });
-        addBreadcrumb({
-          level: 'info',
-          message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
-        });
-        captureMessage('Invalid cachedUser');
-      }
-    } else {
-      // The shared user is good, store it
-      this.props.setCachedUser(newCachedUser);
-      this.setState({ fetched: true });
-    }
-
-    this.setState({ working: false });
   }
 }
 
@@ -241,28 +184,73 @@ export const CurrentUserProvider = ({ children }) => {
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
   const api = getAPIForToken(persistentToken);
   
-  const login = (data) => {
-    setSharedUser(data);
-    setCachedUser(undefined); 
+  const load = async () => {
+    if (state.working) return;
+    setState({ working: true });
+    let sharedOrAnonUser = sharedUser;
+
+    // If we're signed out create a new anon user
+    if (!sharedOrAnonUser) {
+      sharedOrAnonUser = await getAnonUser(api);
+      setSharedUser(sharedOrAnonUser);
+    }
+
+    // Check if we have to clear the cached user
+    if (!usersMatch(sharedOrAnonUser, cachedUser)) {
+      setCachedUser(undefined);
+    }
+
+    const newCachedUser = await getCachedUser(api, sharedUser);
+    if (newCachedUser === 'error') {
+      // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
+      // Anon users get their token and id deleted when they're merged into a user on sign in
+      // If it did change then quit out and let componentDidUpdate sort it out
+      if (usersMatch(sharedOrAnonUser, sharedUser)) {
+        // The user wasn't changed, so we need to fix it
+        setState({ fetched: false });
+        const newSharedUser = await getSharedUser(api, persistentToken);
+        setSharedUser(newSharedUser);
+        console.log(`Fixed shared cachedUser from ${sharedUser.id} to ${newSharedUser && newSharedUser.id}`);
+        addBreadcrumb({
+          level: 'info',
+          message: `Fixed shared cachedUser. Was ${JSON.stringify(sharedUser)}`,
+        });
+        addBreadcrumb({
+          level: 'info',
+          message: `New shared cachedUser: ${JSON.stringify(newSharedUser)}`,
+        });
+        captureMessage('Invalid cachedUser');
+      }
+    } else {
+      // The shared user is good, store it
+      setCachedUser(newCachedUser);
+      setState({ fetched: true });
+    }
+
+    setState({ working: false });
   }
   
-  const logout = () => {
-    setSharedUser(undefined);
-    setCachedUser(undefined);
-  };
-  
-  const update = (changes) => {
-    setCachedUser({ ...cachedUser, ...changes });
-  };
+  useEffect(() => {
+    identifyUser(cachedUser);
+    load();
+  }, []);
   
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
     persistentToken,
     fetched: !!cachedUser && state.fetched,
-    reload: () => this.load(),
-    login,
-    update,
-    clear: logout,
+    reload: load,
+    login: (data) => {
+      setSharedUser(data);
+      setCachedUser(undefined); 
+    },
+    update: (changes) => {
+      setCachedUser({ ...cachedUser, ...changes });
+    },
+    clear: () => {
+      setSharedUser(undefined);
+      setCachedUser(undefined);
+    },
     superUserHelpers: getSuperUserHelpers(api, cachedUser),
   };
   
