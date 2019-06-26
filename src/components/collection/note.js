@@ -4,7 +4,6 @@ import classNames from 'classnames/bind';
 import _ from 'lodash';
 
 import { isDarkColor } from 'Models/collection';
-import { ProfileItem } from 'Components/profile-list';
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionCuratorLoader } from 'Components/collection/collection-item';
 
@@ -46,7 +45,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
         />
       </div>
       <div className={styles.user}>
-        <ProfileItem user={collection.user} team={collection.team} />
+        <CollectionCuratorLoader collection={collection} />
       </div>
     </div>
   );
