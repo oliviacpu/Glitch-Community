@@ -1,13 +1,17 @@
 import React from 'react';
+import classnames from 'classnames';
+
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import HiddenCheckbox from 'Components/fields/hidden-checkbox';
+
+import styles from './styles.styl'
 
 const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
 export const PrivateIcon = ({ className, label, isPrivate }) => (
   <span
-    className={`${className} project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`}
+    className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public)}
     aria-label={label}
   />
 );
