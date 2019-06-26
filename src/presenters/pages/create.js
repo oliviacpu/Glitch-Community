@@ -76,37 +76,37 @@ const WhatIsGlitch = () => (
 const FRAMEWORK_STARTERS = [
   {
     name: 'React',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.png?v=1561503860355',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.svg?v=1561557350494',
     color: '#000',
     domain: 'starter-react',
   },
   {
     name: 'Ember',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.png?v=1561503858320',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.svg?v=1561557345876',
     color: '#f8d1d5',
     domain: 'ember',
   },
   {
     name: 'Nuxt',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.png?v=1561503859201',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.svg?v=1561557346924',
     color: '#ebfef5',
     domain: 'nuxt-hello-world',
   },
   {
     name: 'Vue',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.png?v=1561503859958',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.svg?v=1561557349215',
     color: '#ccfde5',
     domain: 'vue-ssr',
   },
   {
     name: 'Angular',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular.png?v=1561503858815',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular-logo.svg?v=1561557349215',
     color: '#f9dcd1',
     domain: 'angular-quickstart',
   },
   {
     name: 'Svelte',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.png?v=1561503859572',
+    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.svg?v=1561557347852',
     color: '#f6c6b4',
     domain: 'sveltejs-template-starter',
   },
@@ -142,7 +142,7 @@ function PlatformStarterItem(team) {
   return (
     <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
       <div className={styles.platformLogo}>
-        <TeamAvatar team={team} size="small" hideTooltip />
+        <TeamAvatar team={team} size="large" hideTooltip />
       </div>
       <div>
         <div className={styles.platformLink}>
@@ -472,16 +472,18 @@ function Categories() {
 }
 
 const CreatePage = () => (
-  <main className={styles.main}>
-    <Banner />
-    <WhatIsGlitch />
-    <Starters />
-    <Collaborate />
-    <YourAppIsLive />
-    <Help />
-    <Remix />
-    <Categories />
-  </main>
+  <Layout>
+    <main className={styles.main}>
+      <Banner />
+      <WhatIsGlitch />
+      <Starters />
+      <Collaborate />
+      <YourAppIsLive />
+      <Help />
+      <Remix />
+      <Categories />
+    </main>
+  </Layout>
 );
 
 export default CreatePage;
