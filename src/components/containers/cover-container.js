@@ -12,6 +12,7 @@ const getProfileStyles = {
 };
 
 const CoverContainer = ({ coverActions, children, type, item }) => {
+  console.log({ item })
   const cache = item.updatedAt;
   return (
     <div className={styles.coverContainer} style={getProfileStyles[type]({ ...item, cache })}>
