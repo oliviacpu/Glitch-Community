@@ -14,6 +14,7 @@ import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import { useAPI } from 'State/api';
+import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
@@ -31,6 +32,10 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 function Banner() {
   const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561493320944';
   const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
+  const trackRemix = useTracker('Click Remix Hello World', {
+    baseProjectId: '929980a8-32fc-4ae7-a66f-dddb3ae4912c',
+    baseDomain: 'hello-world',
+  });
 
   return (
     <section className={classNames(styles.section, styles.banner)}>
@@ -42,7 +47,7 @@ function Banner() {
           </Heading>
           <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
           <div className={styles.bannerRemixBtn}>
-            <Button href={getRemixUrl('hello-webpage')} type="cta">
+            <Button href={getRemixUrl('hello-webpage')} onClick={trackRemix} type="cta">
               Remix Hello World
             </Button>
           </div>
