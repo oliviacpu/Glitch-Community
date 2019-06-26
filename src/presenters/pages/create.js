@@ -478,7 +478,7 @@ function Categories() {
 
       <ul className={styles.categoriesGrid}>
         {categories.map((category) => (
-          <li className={styles.categoriesGridItem} style={{ '--bgColor': category.color }}>
+          <li key={category.url} className={styles.categoriesGridItem} style={{ '--bgColor': category.color }}>
             <Link to={category.url}>
               <Image src={category.icon} alt="" />
               {category.name}
@@ -491,18 +491,20 @@ function Categories() {
 }
 
 const CreatePage = () => (
-  <Layout>
-    <main className={styles.main}>
-      <Banner />
-      <WhatIsGlitch />
-      <Starters />
-      <Collaborate />
-      <YourAppIsLive />
-      <Help />
-      <Remix />
-      <Categories />
-    </main>
-  </Layout>
+  <div style={{ background: '#f5f5f5' }}>
+    <Layout>
+      <main className={styles.main}>
+        <Banner />
+        <WhatIsGlitch />
+        <Starters />
+        <Collaborate />
+        <YourAppIsLive />
+        <Help />
+        <Remix />
+        <Categories />
+      </main>
+    </Layout>
+  </div>
 );
 
 export default CreatePage;
