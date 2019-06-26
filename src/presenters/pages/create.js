@@ -21,13 +21,19 @@ import { emojiPattern } from 'Shared/regex';
 
 import styles from './create.styl';
 
-const trackRemix = (app) => {
-  useTracker('Click Remix', {
+function RemixButton({ app, type, size, emoji, children }) {
+  const trackRemix = useTracker('Click Remix', {
     baseProjectId: app.id,
     baseDomain: app.domain,
-    origin: '/create'
+    origin: '/create',
   });
-};
+
+  return (
+    <Button href={getRemixUrl(app.domain)} onClick={() => trackRemix()} type={type} emoji={emoji}>
+      {children}
+    </Button>
+  );
+}
 
 const Mark = ({ color, children }) => (
   <span className={styles.mark} style={{ '--mark-color': color }}>
@@ -40,10 +46,6 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 function Banner() {
   const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561493320944';
   const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
-  const trackRemix = useTracker('/create: Click Remix Hello World', {
-    baseProjectId: '929980a8-32fc-4ae7-a66f-dddb3ae4912c',
-    baseDomain: 'hello-world',
-  });
 
   return (
     <section className={classNames(styles.section, styles.banner)}>
@@ -55,9 +57,9 @@ function Banner() {
           </Heading>
           <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
           <div className={styles.bannerRemixBtn}>
-            <Button href={getRemixUrl('hello-webpage')} onClick={trackRemix} type="cta">
+            <RemixButton app={{ id: '929980a8-32fc-4ae7-a66f-dddb3ae4912c', domain: 'hello-webpage' }} type="cta">
               Remix Hello World
-            </Button>
+            </RemixButton>
           </div>
         </div>
       </div>
@@ -127,14 +129,6 @@ const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
 const FrameworkStarterItem = (app) => {
-  const RemixButton = ({ app }) => {
-
-  return (
-    <Button size="small" href={getRemixUrl(app.domain)} onClick={() => trackRemix(app)}>
-      Remix {app.name} starter
-    </Button>
-  );
-};
   return (
     <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
       <span className={styles.frameworkLogo}>
@@ -142,7 +136,7 @@ const FrameworkStarterItem = (app) => {
       </span>
       <span>
         <Heading tagName="h4">{app.name}</Heading>
-        <RemixButton app={app} />
+        <RemixButton app={app} size="small">Remix {app.name} starter</RemixButton>
       </span>
     </div>
   );
@@ -394,14 +388,6 @@ function Remix() {
     fetchApps(sampleSize(allApps, 5));
   }, []);
 
-  const RemixButton = (app) => {
-    return (
-      <Button type="cta" href={getRemixUrl(app.domain)} onClick={() => trackRemix(app)} emoji="microphone">
-        Remix your own
-      </Button>
-    );
-  };
-
   return (
     <section className={classNames(styles.section, styles.remix)}>
       <Heading className={styles.h2} tagName="h2">
@@ -424,7 +410,7 @@ function Remix() {
               <Embed domain={app.domain} />
             </div>
             <div className={styles.embedRemixBtn}>
-              <RemixButton app={app} />
+              <RemixButton type="cta" emoji="microphone" app={app} />
             </div>
           </TabPanel>
         ))}
