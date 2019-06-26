@@ -44,8 +44,8 @@ const Mark = ({ color, children }) => (
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
 function Banner() {
-  const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561493320944';
-  const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
+  const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561575405393';
+  const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561575627767';
 
   return (
     <section className={classNames(styles.section, styles.banner)}>
@@ -126,7 +126,7 @@ const FRAMEWORK_STARTERS = [
 ];
 const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217';
-const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
+const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539';
 
 const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
@@ -228,7 +228,7 @@ function Collaborate() {
   const smallVideo = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-collaborate.mp4?v=1561489721760';
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069';
-  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561410495436';
+  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
 
   return (
     <ScreencapSection
@@ -253,8 +253,8 @@ function YourAppIsLive() {
   const smallVideo1 = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
   const smallVideo2 = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-small-app.mp4?v=1560959054771';
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
-  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561575626899';
+  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561575404922';
 
   return (
     <ScreencapSection
@@ -318,8 +318,8 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 }
 
 function Help() {
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561416296360';
-  const ambulance = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561416321109';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561575218038';
+  const ambulance = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561575219950';
 
   return (
     <section className={classNames(styles.section, styles.help)}>
@@ -427,19 +427,19 @@ function Categories() {
       name: 'Games',
       color: '#fae3d1',
       url: '/games',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ftetris.svg?v=1561477843652',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ftetris.svg?v=1561575626455',
     },
     {
       name: 'Bots',
       color: '#c7bff0',
       url: '/handy-bots',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561477841495',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561575218667',
     },
     {
       name: 'Music',
       color: '#a9c4f7',
       url: '/music',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmusic.svg?v=1561477845755',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmusic.svg?v=1561575625725',
     },
     {
       name: 'Art',
@@ -451,25 +451,25 @@ function Categories() {
       name: 'Productivity',
       color: '#7aa4d3',
       url: '/tools-for-work',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwork.svg?v=1561477844156',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwork.svg?v=1561575627331',
     },
     {
       name: 'Hardware',
       color: '#6cd8a9',
       url: '/hardware',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg?v=1561477845354',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg?v=1561575405808',
     },
     {
       name: 'Building Blocks',
       color: '#65cad2',
       url: '/building-blocks',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg?v=1561477844698',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg?v=1561575219123',
     },
     {
       name: 'Learn to Code',
       color: '#f8d3c8',
       url: '/learn-to-code',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg?v=1561477842327',
+      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg?v=1561575404279',
     },
   ];
   return (
