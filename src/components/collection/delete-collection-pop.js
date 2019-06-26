@@ -6,11 +6,11 @@ import { getOwnerLink } from 'Models/collection';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
 import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
-import { deleteCollection } from 'State/collection';
+import { deleteCollection as deleteCollectionViaState } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
 
-const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteCollection }) => {
+const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteCollection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
@@ -21,10 +21,10 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteColl
     setCollectionIsDeleting(true);
     try {
       if (window.location.pathname !== getOwnerLink(collection)) {
-        deleteCollection(api, collection);
+        deleteCollectionViaState(api, collection);
         history.push(getOwnerLink(collection));
       } else {
-        animateDeleteCollection(collection.id);
+        animateAndDeleteCollection(collection.id);
       }
     } catch (error) {
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
@@ -52,7 +52,7 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteColl
 
 const DeleteCollection = ({ collection, deleteCollection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} animateDeleteCollection={deleteCollection} />}
+    {() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />}
   </PopoverWithButton>
 );
 
