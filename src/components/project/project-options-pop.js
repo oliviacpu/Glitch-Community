@@ -9,22 +9,36 @@ import { useCurrentUser } from 'State/current-user';
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
 function leaveProjectPop(event, project, leaveProject) {
+  const isTeamProject = ({ currentUser, project }) => {
+    for (const team of currentUser.teams) {
+      if (project.teamIds.includes(team.id)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  if (isTeamProject({ currentUser, project })) {
+    leaveProject(project.id, event);
+    return;
+  }
+
   console.log("leaveProjectPop called");
-  return(
-  <PopoverDialog focusOnDialog align="left">
-    <PopoverTitle>Leave {project.domain}</PopoverTitle>
-    <PopoverActions>
-      <ActionDescription>
-        Once you leave this project, you'll lose access to it unless someone else invites you back.
-        Are you sure you want to leave ${project.domain}?
-      </ActionDescription>
-    </PopoverActions>
-    <PopoverActions type="dangerZone">
-      <PopoverMenuButton size="small" label={`Leave ${project.domain}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
-    </PopoverActions>
-  </PopoverDialog>
-);
-                                                          };
+  return (
+    <PopoverDialog focusOnDialog align="left">
+      <PopoverTitle>Leave {project.domain}</PopoverTitle>
+      <PopoverActions>
+        <ActionDescription>
+          Once you leave this project, you'll lose access to it unless someone else invites you back.
+          Are you sure you want to leave ${project.domain}?
+        </ActionDescription>
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        <PopoverMenuButton size="small" label={`Leave ${project.domain}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
+      </PopoverActions>
+    </PopoverDialog>
+  );
+}
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
