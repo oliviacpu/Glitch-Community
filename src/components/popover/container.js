@@ -61,17 +61,17 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
   );
 };
 
-class UnmonitoredComponent extends React.Component {
-  handleClickOutside() {
-    this.props.onClickOutside();
-  }
+const UnmonitoredComponent = ({ onClickOutside, children }) => {
+  UnmonitoredComponent.handleClickOutside = () => {
+    console.log('on click outside')
+    onClickOutside()
+  };
+  return children;
+};
 
-  render() {
-    return this.props.children;
-  }
-}
-
-const MonitoredComponent = onClickOutside(UnmonitoredComponent);
+const MonitoredComponent = onClickOutside(UnmonitoredComponent, {
+  handleClickOutside: (x) => console.log(x) || UnmonitoredComponent.handleClickOutside,
+});
 
 export const PopoverToggleContext = createContext(null);
 
