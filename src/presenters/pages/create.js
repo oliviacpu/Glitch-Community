@@ -32,7 +32,7 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 function Banner() {
   const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561493320944';
   const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561146220750';
-  const trackRemix = useTracker('Click Remix Hello World', {
+  const trackRemix = useTracker('/create: Click Remix Hello World', {
     baseProjectId: '929980a8-32fc-4ae7-a66f-dddb3ae4912c',
     baseDomain: 'hello-world',
   });
@@ -118,6 +118,19 @@ const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify'
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
+const RemixButton = ({ app }) => {
+  const trackRemix = useTracker('/create: Click Remix framework starter', {
+    baseProjectId: app.id,
+    baseDomain: app.domain,
+  });
+
+  return (
+    <Button size="small" href={getRemixUrl(app.domain)} onClick={trackRemix}>
+      Remix {app.name} starter
+    </Button>
+  );
+};
+
 const FrameworkStarterItem = (app) => (
   <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
     <span className={styles.frameworkLogo}>
@@ -125,9 +138,7 @@ const FrameworkStarterItem = (app) => (
     </span>
     <span>
       <Heading tagName="h4">{app.name}</Heading>
-      <Button size="small" href={getRemixUrl(app.domain)}>
-        Remix {app.name} starter
-      </Button>
+      <RemixButton app={app} />
     </span>
   </div>
 );
@@ -274,13 +285,7 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 
       <div className={styles.screencapContainer}>
         {smallVideos.map((v) => (
-          <video
-            className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-            autoPlay
-            playsInline
-            loop
-            muted
-          >
+          <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
             <source src={v} />
           </video>
         ))}
@@ -383,6 +388,17 @@ function Remix() {
     };
     fetchApps(sampleSize(allApps, 5));
   }, []);
+  
+  const trackRemix = useTracker('/create: Click Remix', {
+    baseProjectId: apps[currentTab].id,
+    baseDomain: apps[currentTab].domain,
+  });
+
+  return (
+    <Button size="small" href={getRemixUrl(app.domain)} onClick={trackRemix}>
+      Remix {app.name} starter
+    </Button>
+  );
 
   return (
     <section className={classNames(styles.section, styles.remix)}>
