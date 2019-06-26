@@ -239,6 +239,9 @@ html
   video
     max-width: 100%
 .screencapImageContainer
+  // display: none
+  // TODO tara: should not be visible on small viewports for screencap sections
+  // need to refactor this to be a blob image container, since these styles are re-used for the help section blob
   position: absolute
   right: -10px
   bottom: -10px
@@ -263,11 +266,17 @@ html
   bottom: 10px
   @media (min-width: mediumLargeViewport)
     right: 50px
+.screencap
+  border-radius: u1
+  box-shadow: 4px 4px #c3c3c3
 .bigScreencap
   display: none
 .smallScreencap
+  width: 65%
   + .smallScreencap
-    
+    transform: translate(50%, -40%)
+    z-index: -1
+    margin-bottom: -30%
 @media (min-width: mediumViewport)
   .smallScreencap
     display: none
@@ -380,9 +389,7 @@ html
     color: #fff
 .embedContainer
   iframe
-    height: 300px
-    @media (min-width: mediumViewport)
-      height: 500px
+    min-height: 500px
     @media (min-width: largeViewport)
       height: 600px
 .embedRemixBtn

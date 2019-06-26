@@ -271,12 +271,12 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 
       <div className={styles.screencapContainer}>
         {smallVideos.map(video => (
-          <video className={styles.smallScreencap} autoPlay={true} playsInline={true} loop={true} muted={true}>
+          <video className={classNames(styles.screencap, styles.smallScreencap)} autoPlay={true} playsInline={true} loop={true} muted={true}>
             <source src={video} />
           </video>
         ))}
         
-        <video className={styles.bigScreencap} autoPlay={true} playsInline={true} loop={true} muted={true}>
+        <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay={true} playsInline={true} loop={true} muted={true}>
           <source src={video} />
         </video>
 
