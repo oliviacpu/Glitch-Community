@@ -24,6 +24,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
 
   function deleteCollection(id) {
+    console.log("deleting id", id)
     setDeletedCollectionIds((ids) => [...ids, id]);
     return api.delete(`/collections/${id}`);
   }

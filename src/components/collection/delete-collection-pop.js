@@ -10,7 +10,7 @@ import { deleteCollection } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
 
-const DeleteCollectionPop = withRouter(({ history, collection }) => {
+const DeleteCollectionPop = withRouter(({ history, collection, animateDeleteCollection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
@@ -20,10 +20,14 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
     try {
-      deleteCollection(api, collection);
+      console.log("in try")
       if (window.location.pathname !== getOwnerLink(collection)) {
+        console.log("on collection page")
+        deleteCollection(api, collection);
         history.push(getOwnerLink(collection));
       } else {
+        console.log("on user page");
+        animateDeleteCollection(collection.id);
         console.log('whooo');
       }
     } catch (error) {
@@ -50,9 +54,9 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
   );
 });
 
-const DeleteCollection = ({ collection }) => (
+const DeleteCollection = ({ collection, animateDeleteCollection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} />}
+    {() => <DeleteCollectionPop collection={collection} animateDeleteCollection={animateDeleteCollection} />}
   </PopoverWithButton>
 );
 
