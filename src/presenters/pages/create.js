@@ -414,42 +414,51 @@ function Remix() {
     fetchApps(sampleSize(allApps, 5));
   }, []);
 
+  const Embeds = () => (
+    <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+      <TabList className={styles.remixAppTabs}>
+        {apps.map((app) => (
+          <Tab className={styles.remixAppTab} key={app.domain}>
+            <ProjectAvatar project={app} hideTooltip />
+            <Text size="14px">{app.domain}</Text>
+          </Tab>
+        ))}
+      </TabList>
+
+      {apps.map((app) => (
+        <TabPanel key={app.domain}>
+          <div className={styles.embedContainer}>
+            <Embed domain={app.domain} />
+          </div>
+          <div className={styles.embedRemixBtn}>
+            <RemixButton type="cta" emoji="microphone" app={app}>
+              Remix your own
+            </RemixButton>
+          </div>
+        </TabPanel>
+      ))}
+    </Tabs>
+  );
+
+  const Info = () => (
+    <Heading className={styles.h2} tagName="h2">
+      <Mark color="#FBF2B8">Remix any app to get started</Mark>
+    </Heading>
+  );
+
   return (
     <section className={classNames(styles.section, styles.remix)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#FBF2B8">Remix any app to get started</Mark>
-      </Heading>
-
       <VisibilityContainer>
-        {({ wasEverVisible }) => {
+        {({ wasEverVisible }) =>
           wasEverVisible ? (
-            <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-              <TabList className={styles.remixAppTabs}>
-                {apps.map((app) => (
-                  <Tab className={styles.remixAppTab} key={app.domain}>
-                    <ProjectAvatar project={app} hideTooltip />
-                    <Text size="14px">{app.domain}</Text>
-                  </Tab>
-                ))}
-              </TabList>
-
-              {apps.map((app) => (
-                <TabPanel key={app.domain}>
-                  <div className={styles.embedContainer}>
-                    <Embed domain={app.domain} />
-                  </div>
-                  <div className={styles.embedRemixBtn}>
-                    <RemixButton type="cta" emoji="microphone" app={app}>
-                      Remix your own
-                    </RemixButton>
-                  </div>
-                </TabPanel>
-              ))}
-            </Tabs>
+            <>
+              <Info />
+              <Embeds />
+            </>
           ) : (
-            <div aria-hidden="true" style={{ height: '500px' }} />
-          );
-        }}
+            <Info />
+          )
+        }
       </VisibilityContainer>
     </section>
   );
