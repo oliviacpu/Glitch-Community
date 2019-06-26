@@ -21,6 +21,14 @@ import { emojiPattern } from 'Shared/regex';
 
 import styles from './create.styl';
 
+const trackRemix = (app) => {
+  useTracker('Click Remix', {
+    baseProjectId: app.id,
+    baseDomain: app.domain,
+    origin: '/create'
+  });
+};
+
 const Mark = ({ color, children }) => (
   <span className={styles.mark} style={{ '--mark-color': color }}>
     <span className={styles.markText}>{children}</span>
@@ -120,13 +128,9 @@ const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c
 
 const FrameworkStarterItem = (app) => {
   const RemixButton = ({ app }) => {
-  const trackRemix = useTracker('/create: Click Remix framework starter', {
-    baseProjectId: app.id,
-    baseDomain: app.domain,
-  });
 
   return (
-    <Button size="small" href={getRemixUrl(app.domain)} onClick={trackRemix}>
+    <Button size="small" href={getRemixUrl(app.domain)} onClick={() => trackRemix(app)}>
       Remix {app.name} starter
     </Button>
   );
@@ -391,14 +395,8 @@ function Remix() {
   }, []);
 
   const RemixButton = (app) => {
-    const trackRemix = useTracker('/create: Click Remix embedded app', {
-      source: '/create',
-      baseProjectId: apps[currentTab].id,
-      baseDomain: apps[currentTab].domain,
-    });
-
     return (
-      <Button type="cta" href={getRemixUrl(app.domain)} emoji="microphone">
+      <Button type="cta" href={getRemixUrl(app.domain)} onClick={() => trackRemix(app)} emoji="microphone">
         Remix your own
       </Button>
     );
