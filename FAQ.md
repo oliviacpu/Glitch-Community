@@ -58,15 +58,15 @@ Our HTML:
 
 Our Javascript: 
 - we split our javascript into chunked bundles with webpack and we cache those files for up to a week. 
-- when code is updated, we generate a new "chunkhash" which changes busts our cache, so that our html file is seen as modified, and it will ping for a new javascript file. 
-- we do this to improve the download speed of our js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
+- when code is updated, we generate a new "chunkhash" which busts our cache. A new html file should be sent down to the client with a new references to a new javascript file. 
+- because our code is split, we're able to cache things that don't change very often (like our dependencies), and while busting the cache to deploy the latest and greatest to our clients. 
 
 Cloudfront: 
-In production, our code goes through cloudfront. This is why there's a delay after deploys as cloudfront has to get the latest code. To confirm whether cloudfront has updated to match  
+In production, our code goes through cloudfront. This is why there's a delay after deploys, to see the code on glitch.com but not on community.glitch.me. It's possible for proxies of our code like cloudfront to cache our code as well since we have cache control set to `public` for our files, although the expected behavior should be the same as the relationship between community.glitch.me and your own browser.
 
-Things that can go wrong:
-- prod has a hash that points to broken or non existant code. To confirm this is the case, community.glitch.me and glitch.com will be the same, and in the network tab you'll see they are pulling javascript files with the same bundle hash. To fix, confirm that community-staging.glitch.me is in working order and swap. 
-- 
+Debugging Caching Issues:
+- as a general rule of thumb if community.glitch.me is broken in the same way as 
+- look at the hashes for the javascript files to see if you're serving different files, if you see the hashes match but one is serving code and the other is not, you have a bad hash
 
 ### Why am I still seeing sentry errors for old code if it isn't cached?
 
