@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import PopoverContainer from 'Components/popover/container';
 import Text from 'Components/text/text';
@@ -11,7 +12,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import styles from './vscode-auth.styl';
 
-const VSCodeAuth = ({ insiders, openProject }) => {
+const VSCodeAuth = withRouter(({ insiders, openProject, history }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
@@ -22,6 +23,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   if (isSignedIn) {
     setTimeout(() => {
       const scheme = insiders ? 'vscode-insiders' : 'vscode';
+      history.push('/');
       window.location.assign(`${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`);
     }, 3000);
   }
@@ -36,7 +38,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
       }
     </div>
   );
-};
+});
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,
