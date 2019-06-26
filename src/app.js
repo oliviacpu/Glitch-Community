@@ -7,6 +7,8 @@ import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
 import { UserPrefsProvider } from 'State/user-prefs';
 import { DevTogglesProvider } from 'State/dev-toggles';
+import { ProjectContextProvider } from 'State/project';
+import { CollectionContextProvider } from 'State/collection';
 import { NotificationsProvider } from 'State/notifications';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
@@ -24,11 +26,15 @@ const App = () => (
               <AnalyticsContext context={{ groupId: '0' }}>
                 <CurrentUserProvider>
                   <APIContextProvider>
-                    <>
-                      <SuperUserBanner />
-                      <OfflineNotice />
-                      <Router />
-                    </>
+                    <ProjectContextProvider>
+                      <CollectionContextProvider>
+                        <>
+                          <SuperUserBanner />
+                          <OfflineNotice />
+                          <Router />
+                        </>
+                      </CollectionContextProvider>
+                    </ProjectContextProvider>
                   </APIContextProvider>
                 </CurrentUserProvider>
               </AnalyticsContext>

@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { mapValues, flatMap } from 'lodash';
 
 import { PopoverContainer } from 'Components/popover';
@@ -60,12 +61,6 @@ const urlForItem = {
 
 const seeAllResultsSelected = { type: 'seeAllResults' };
 
-const redirectFor = ({ query, selectedResult }) => {
-  if (!query) return null;
-  if (!selectedResult) return `/search?q=${query}`;
-  return urlForItem[selectedResult.type](selectedResult, query);
-};
-
 function getOffsetSelectedResult({ results, selectedResult }, offset) {
   const flatResults = flatMap(results, ({ items }) => items);
   if (!selectedResult && offset < 0) {
@@ -100,20 +95,15 @@ const { actions, reducer } = createSlice({
     ...state,
     selectedResult: getOffsetSelectedResult(state, 1),
   }),
-  submitted: (state) => ({
-    ...state,
-    redirect: redirectFor(state),
-  }),
 });
 
-function AlgoliaSearchController({ visible, togglePopover, children, defaultValue }) {
+const AlgoliaSearchController = withRouter(({ history, visible, openPopover, defaultValue }) => {
   const initialState = {
     selectedResult: null,
     query: defaultValue,
-    redirect: null,
     results: [],
   };
-  const [{ query, results, selectedResult, redirect }, dispatch] = useReducer(reducer, initialState);
+  const [{ query, results, selectedResult }, dispatch] = useReducer(reducer, initialState);
   const algoliaResults = useAlgoliaSearch(query);
 
   useEffect(() => {
@@ -122,12 +112,6 @@ function AlgoliaSearchController({ visible, togglePopover, children, defaultValu
       dispatch(actions.resultsChanged(algoliaResults));
     }
   }, [algoliaResults]);
-
-  useEffect(() => {
-    if (redirect) {
-      window.location = redirect;
-    }
-  }, [redirect]);
 
   const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
@@ -140,69 +124,49 @@ function AlgoliaSearchController({ visible, togglePopover, children, defaultValu
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(actions.submitted());
+    if (!query) return;
+    if (selectedResult) {
+      history.push(urlForItem[selectedResult.type](selectedResult, query));
+    } else {
+      history.push(`/search?q=${query}`);
+    }
   };
 
-  return children({
-    query,
-    onChange: (value) => dispatch(actions.queryChanged(value)),
-    onFocus: () => togglePopover(),
-    onKeyDown,
-    onSubmit,
-    redirect,
-    autoComplete: 'off',
-    autoCompleteResults: query && visible && (
-      <div className={styles.popOver}>
-        <AutocompleteSearch
-          query={query}
-          results={resultsWithSelection(results, selectedResult)}
-          seeAllResultsSelected={selectedResult === seeAllResultsSelected}
-        />
-      </div>
-    ),
-  });
-}
+  const onChange = (value) => dispatch(actions.queryChanged(value));
 
-function SearchController({ children, defaultValue }) {
+  return (
+    <form className={styles.container} role="search" onSubmit={onSubmit} autoComplete="off" autoCapitalize="off">
+      <TextInput
+        labelText="Search Glitch"
+        name="q"
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        onFocus={openPopover}
+        opaque
+        placeholder="bots, apps, users"
+        type="search"
+        value={query}
+      />
+      {query && visible && (
+        <div className={styles.popOver}>
+          <AutocompleteSearch
+            query={query}
+            results={resultsWithSelection(results, selectedResult)}
+            seeAllResultsSelected={selectedResult === seeAllResultsSelected}
+          />
+        </div>
+      )}
+    </form>
+  );
+});
+
+function SearchForm({ defaultValue }) {
   return (
     <PopoverContainer>
-      {(popoverProps) => (
-        <AlgoliaSearchController {...popoverProps} defaultValue={defaultValue}>
-          {children}
-        </AlgoliaSearchController>
-      )}
+      {({ visible, openPopover }) => <AlgoliaSearchController visible={visible} openPopover={openPopover} defaultValue={defaultValue} />}
     </PopoverContainer>
   );
 }
-
-const SearchForm = ({ defaultValue }) => (
-  <SearchController defaultValue={defaultValue}>
-    {({ query, onChange, onFocus, onSubmit, onKeyDown, autoComplete, autoCompleteResults }) => (
-      <form
-        className={styles.container}
-        action="/search"
-        method="get"
-        role="search"
-        onSubmit={onSubmit}
-        onFocus={onFocus}
-        autoComplete={autoComplete}
-        autoCapitalize="off"
-      >
-        <TextInput
-          labelText="Search Glitch"
-          name="q"
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          opaque
-          placeholder="bots, apps, users"
-          type="search"
-          value={query}
-        />
-        {autoCompleteResults}
-      </form>
-    )}
-  </SearchController>
-);
 
 SearchForm.propTypes = {
   defaultValue: PropTypes.string,

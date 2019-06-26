@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
 
@@ -19,6 +18,7 @@ import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
 import RelatedProjects from 'Components/related-projects';
+import Expander from 'Components/containers/expander';
 import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
@@ -29,32 +29,16 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 
-import Expander from '../includes/expander';
+import styles from './project.styl';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const getIncludedCollections = async (api, projectId) => {
-  const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
-  const selectedCollections = sampleSize(collections, 3);
-  const populatedCollections = await Promise.all(
-    selectedCollections.map(async (collection) => {
-      const { projects, user, team } = await allByKeys({
-        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=projectOrder&orderDirection=ASC`),
-        user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
-        team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
-      });
-      return { ...collection, projects, user, team };
-    }),
-  );
-  return populatedCollections.filter((c) => c.team || c.user);
-};
-
 const IncludedInCollections = ({ projectId }) => (
-  <DataLoader get={(api) => getIncludedCollections(api, projectId)} renderLoader={() => null}>
+  <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
       collections.length > 0 && (
         <>
@@ -85,24 +69,13 @@ const PrivateToggle = ({ isPrivate, setPrivate }) => (
     tooltip={isPrivate ? privateTooltip : publicTooltip}
     target={
       <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
-        <span className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`} aria-label={privateTooltip} />
+        <span
+          className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`}
+          aria-label={privateTooltip}
+        />
       </HiddenCheckbox>
     }
   />
-);
-
-const ProjectDomainInput = ({ project, onChange, setPrivate }) => (
-  <div className="project-domain-input">
-    <div className="project-domain-input__domain-wrap">
-      <OptimisticTextInput
-        labelText="Project Domain"
-        value={project.domain}
-        onChange={onChange}
-        placeholder="Name your project"
-      />
-    </div>
-    <PrivateToggle isPrivate={project.private} setPrivate={setPrivate} />
-  </div>
 );
 
 const ReadmeError = (error) =>
@@ -140,10 +113,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
 
   return (
     <section>
-      <PopoverWithButton
-        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
-        buttonText="Delete Project"
-      >
+      <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText="Delete Project">
         {({ togglePopover }) => (
           <PopoverDialog align="left" wide>
             <PopoverActions>
@@ -188,8 +158,9 @@ const ProjectPage = ({ project: initialProject }) => {
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
+  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
-    <main className="project-page">
+    <main>
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
@@ -199,19 +170,24 @@ const ProjectPage = ({ project: initialProject }) => {
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}
         >
-          <Heading tagName="h1">
-            {isAuthorized ? (
-              <ProjectDomainInput
-                project={project}
-                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                setPrivate={updatePrivate}
-              />
-            ) : (
-              <>
-                {!currentUser.isSupport && suspendedReason ? 'suspended project' : domain} {project.private && <PrivateBadge />}
-              </>
-            )}
-          </Heading>
+          {isAuthorized ? (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">
+                <OptimisticTextInput
+                  labelText="Project Domain"
+                  value={project.domain}
+                  onChange={updateDomainAndSync}
+                  placeholder="Name your project"
+                />
+              </Heading>
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+            </div>
+          ) : (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+              {project.private && <PrivateBadge />}
+            </div>
+          )}
           {users.length + teams.length > 0 && (
             <div>
               <ProfileList hasLinks teams={teams} users={users} layout="block" />
@@ -224,16 +200,16 @@ const ProjectPage = ({ project: initialProject }) => {
             placeholder="Tell us about your app"
           />
           <div>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <ShowButton name={domain} />
             </span>
-            <span className="project-page__profile-button">
+            <span className={styles.profileButton}>
               <EditButton name={domain} isMember={isAuthorized} />
             </span>
           </div>
         </ProjectProfileContainer>
       </section>
-      <div className="project-embed-wrap">
+      <div className={styles.projectEmbedWrap}>
         <ProjectEmbed
           project={project}
           isAuthorized={isAuthorized}

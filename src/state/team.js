@@ -6,8 +6,9 @@ import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
-
-import useErrorHandlers from '../presenters/error-handlers';
+import useErrorHandlers from 'State/error-handlers';
+import { useProjectReload } from 'State/project';
+import { useCollectionReload } from 'State/collection';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -62,11 +63,9 @@ export function useTeamEditor(initialTeam) {
   const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-  const [team, setTeam] = useState({
-    ...initialTeam,
-    _cacheAvatar: Date.now(),
-    _cacheCover: Date.now(),
-  });
+  const reloadProjectMembers = useProjectReload();
+  const reloadCollectionProjects = useCollectionReload();
+  const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
     const { data } = await updateTeam(api, team, changes);
@@ -79,6 +78,32 @@ export function useTeamEditor(initialTeam) {
         updateCurrentUser({ teams });
       }
     }
+  }
+
+  function updatePermissions(projectId, permissions) {
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          permissions,
+        };
+      }),
+    }));
+  }
+
+  function removePermissions(userId, projectIds) {
+    setTeam((prev) => ({
+      ...prev,
+      projects: prev.projects.map((p) => {
+        if (!projectIds.includes(p.id)) return p;
+        return {
+          ...p,
+          permissions: p.permissions.filter((perm) => perm.userId !== userId),
+        };
+      }),
+    }));
   }
 
   function removeUserAdmin(id) {
@@ -109,7 +134,7 @@ export function useTeamEditor(initialTeam) {
       }
     }, handleError),
     inviteEmail: (email) => inviteEmail(api, email, team).catch(handleError),
-    inviteUser: () => inviteUserToTeam(api, currentUser, team).catch(handleError),
+    inviteUser: (user) => inviteUserToTeam(api, user, team).catch(handleError),
     removeUserFromTeam: withErrorHandler(async (userId, projectIds) => {
       // Kick them out of every project at once, and wait until it's all done
       await Promise.all(projectIds.map((projectId) => removeUserFromProject(api, projectId, userId)));
@@ -124,6 +149,9 @@ export function useTeamEditor(initialTeam) {
         const teams = currentUser.teams.filter(({ id }) => id !== team.id);
         updateCurrentUser({ teams });
       }
+      // update projects so that this user no longer appears in member lists
+      reloadProjectMembers(projectIds);
+      removePermissions(userId, projectIds);
     }, handleError),
     uploadAvatar: () =>
       assets.requestFile(
@@ -137,7 +165,7 @@ export function useTeamEditor(initialTeam) {
             hasAvatarImage: true,
             backgroundColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     uploadCover: () =>
@@ -152,7 +180,7 @@ export function useTeamEditor(initialTeam) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
@@ -208,9 +236,20 @@ export function useTeamEditor(initialTeam) {
       }
       return null;
     }, handleError),
-    joinTeamProject: (projectId) => addUserToProject(api, projectId, team).catch(handleError),
-    leaveTeamProject: (projectId) => removeUserFromProject(api, projectId, currentUser.id).catch(handleError),
-    addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
+    joinTeamProject: withErrorHandler(async (projectId) => {
+      const { data: updatedProject } = await addUserToProject(api, projectId, team);
+      updatePermissions(projectId, updatedProject.users.map((user) => user.projectPermission));
+      reloadProjectMembers([projectId]);
+    }, handleError),
+    leaveTeamProject: withErrorHandler(async (projectId) => {
+      await removeUserFromProject(api, projectId, currentUser.id);
+      removePermissions(currentUser.id, [projectId]);
+      reloadProjectMembers([projectId]);
+    }, handleError),
+    addProjectToCollection: withErrorHandler(async (project, collection) => {
+      await addProjectToCollection(api, project, collection);
+      reloadCollectionProjects([collection]);
+    }, handleCustomError),
     featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };

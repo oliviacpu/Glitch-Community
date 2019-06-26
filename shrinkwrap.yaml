@@ -49,6 +49,7 @@ dependencies:
   group-by-time: 1.0.0
   helmet: 3.16.0
   html-truncate: 1.2.2
+  intersection-observer: 0.7.0
   lodash: 4.17.11
   lodash-webpack-plugin: 0.11.5
   markdown-it: 8.4.2
@@ -8092,6 +8093,10 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha512-mT34yGKMNceBQUoVn7iCDKDntA7SC6gycMAWzGx1z/CMCTV7b2AAtXlo3nRyHZ1FelRkQbQjprHSYGwzLtkVbw==
+  /intersection-observer/0.7.0:
+    dev: false
+    resolution:
+      integrity: sha512-Id0Fij0HsB/vKWGeBe9PxeY45ttRiBmhFyyt/geBdDHBYNctMRTE3dC1U3ujzz3lap+hVXlEcVaB56kZP/eEUg==
   /invariant/2.2.4:
     dependencies:
       loose-envify: 1.4.0
@@ -13881,6 +13886,7 @@ specifiers:
   group-by-time: ^1.0.0
   helmet: ^3.16.0
   html-truncate: ^1.2.2
+  intersection-observer: ^0.7.0
   lodash: ^4.17.11
   lodash-webpack-plugin: ^0.11.5
   markdown-it: ^8.4.2

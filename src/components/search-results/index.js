@@ -14,10 +14,8 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { captureException } from 'Utils/sentry';
-
-import { useAPI, createAPIHook } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
 
 import styles from './search-results.styl';
 
@@ -40,65 +38,6 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
   );
 };
 
-// Search results from algolia do not contain their associated users or teams,
-// so those need to be fetched after the search results have loaded.
-const useTeamUsers = createAPIHook(async (api, teamID) => {
-  try {
-    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
-    return res.data.items;
-  } catch (e) {
-    captureException(e);
-    return [];
-  }
-});
-
-function TeamWithDataLoading({ team }) {
-  const { value: users } = useTeamUsers(team.id);
-  return <TeamItem team={{ ...team, users }} />;
-}
-
-const TeamResult = ({ result }) => {
-  if (!result.users) {
-    return <TeamWithDataLoading team={result} />;
-  }
-  return <TeamItem team={result} />;
-};
-
-const useUsers = createAPIHook(async (api, userIDs) => {
-  if (!userIDs.length) {
-    return undefined;
-  }
-  const idString = userIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/users/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-const useTeams = createAPIHook(async (api, teamIDs) => {
-  if (!teamIDs.length) {
-    return undefined;
-  }
-  const idString = teamIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-function ProjectWithDataLoading({ project, ...props }) {
-  const { value: users } = useUsers(project.userIDs);
-  const { value: teams } = useTeams(project.teamIDs);
-  const projectWithData = { ...project, users, teams };
-  return <ProjectItem project={projectWithData} {...props} />;
-}
-
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
   const api = useAPI();
@@ -108,25 +47,7 @@ function ProjectResult({ result }) {
     props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
   }
 
-  if (!result.users) {
-    return <ProjectWithDataLoading {...props} />;
-  }
-
   return <ProjectItem {...props} />;
-}
-
-function CollectionWithDataLoading({ collection }) {
-  const { value: users = [] } = useUsers(collection.userIDs);
-  const { value: teams = [] } = useTeams(collection.teamIDs);
-  const collectionWithData = { ...collection, user: users[0], team: teams[0] };
-  return <CollectionItemSmall showCurator collection={collectionWithData} />;
-}
-
-function CollectionResult({ result }) {
-  if (!result.user && !result.team) {
-    return <CollectionWithDataLoading collection={result} />;
-  }
-  return <CollectionItemSmall showCurator collection={result} />;
 }
 
 const groups = [
@@ -137,10 +58,10 @@ const groups = [
 ];
 
 const resultComponents = {
-  team: TeamResult,
+  team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
   project: ProjectResult,
-  collection: CollectionResult,
+  collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
 const ResultComponent = ({ result }) => {

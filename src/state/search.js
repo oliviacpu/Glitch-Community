@@ -2,9 +2,11 @@
 import algoliasearch from 'algoliasearch/lite';
 import { useEffect, useReducer, useMemo } from 'react';
 import { mapValues, sumBy, pick } from 'lodash';
+
+import { allByKeys } from 'Shared/api';
+import useErrorHandlers from 'State/error-handlers';
+
 import { useAPI } from './api';
-import { allByKeys } from '../../shared/api';
-import useErrorHandlers from '../presenters/error-handlers';
 import starterKits from '../curated/starter-kits';
 
 // TODO: this is super hacky; this would probably work a lot better with algolia
@@ -117,8 +119,8 @@ const formatByType = {
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    userIDs: project.members,
-    teamIDs: project.teams,
+    permissions: project.members.map((userId) => ({ userId })),
+    teamIds: project.teams,
     private: project.isPrivate,
   }),
   collection: (collection) => ({
@@ -129,8 +131,8 @@ const formatByType = {
     id: Number(collection.objectID.replace('collection-', '')),
     team: null,
     user: null,
-    teamIDs: collection.team > 0 ? [collection.team] : [],
-    userIDs: collection.user > 0 ? [collection.user] : [],
+    teamId: collection.team,
+    userId: collection.user,
   }),
 };
 

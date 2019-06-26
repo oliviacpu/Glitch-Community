@@ -6,9 +6,9 @@ import ReactKonami from 'react-konami';
 
 import Header from 'Components/header';
 import Footer from 'Components/footer';
+import NewStuffContainer from 'Components/new-stuff';
 import ErrorBoundary from 'Components/error-boundary';
 
-import NewStuffContainer from '../../presenters/overlays/new-stuff';
 import styles from './styles.styl';
 
 const Layout = withRouter(({ children, searchQuery, history }) => (
