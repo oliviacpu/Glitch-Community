@@ -65,8 +65,8 @@ const WhatIsGlitch = () => (
         <Mark color="#d7a6f9">What is Glitch?</Mark>
       </Heading>
       <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
-        <Text size="15px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
-        <Text size="15px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+        <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
+        <Text size="16px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
       </div>
     </div>
     <div className={styles.whatIsGlitchVideo} />
@@ -175,7 +175,7 @@ function Starters() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#F9DB91">Starters for all developers</Mark>
       </Heading>
-      <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="15px">
+      <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="16px">
         Remixable working apps mean you never have to start from scratch. You can even{' '}
         <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on
         Glitch.
@@ -186,7 +186,7 @@ function Starters() {
           <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
             Framework starters
           </Heading>
-          <Text size="15px">Build off the most popular JavaScript frameworks</Text>
+          <Text size="16px">Build off the most popular JavaScript frameworks</Text>
         </div>
         {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
       </div>
@@ -196,7 +196,7 @@ function Starters() {
           <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
             Platform starters
           </Heading>
-          <Text size="15px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
+          <Text size="16px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
         </div>
         {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
       </div>
@@ -265,13 +265,13 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
         <Mark color={markColor}>{title}</Mark>
       </Heading>
 
-      <Text className={classNames(styles.sectionDescription, styles.screencapDescription)} size="15px">
+      <Text className={classNames(styles.sectionDescription, styles.screencapDescription)} size="16px">
         {description}
       </Text>
 
       <div className={styles.screencapContainer}>
         {smallVideos.map(video => (
-          <video className={classNames(styles.screencap, styles.smallScreencap)} autoPlay={true} playsInline={true} loop={true} muted={true}>
+          <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay={true} playsInline={true} loop={true} muted={true}>
             <source src={video} />
           </video>
         ))}
