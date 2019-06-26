@@ -17,7 +17,7 @@ const VSCodeAuth = withRouter(({ insiders, openProject, history }) => {
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try the \"Glitch: Sign In With Email\" command.)";
+  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
   const signInMessage = 'Please Sign In to continue.';
 
   if (isSignedIn) {
