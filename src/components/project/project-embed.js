@@ -21,7 +21,7 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
   });
 
   const isMember = currentUser.projects.some(({ id }) => id === project.id);
-  const bottomLeft = isMember ? (
+  const bottomLeft = isAuthorized || isMember ? (
     <EditButton name={project.id} isMember={isMember} size="small" />
   ) : (
     <ReportButton reportedType="project" reportedModel={project} />
