@@ -51,7 +51,7 @@ Avatar.defaultProps = {
 export const TeamAvatar = ({ team, size, hideTooltip }) => (
   <Avatar
     name={team.name}
-    src={getTeamAvatarUrl({ ...team, size: 'small' })}
+    src={getTeamAvatarUrl({ ...team, size })}
     srcFallback={DEFAULT_TEAM_AVATAR}
     type="team"
     hideTooltip={hideTooltip}
@@ -64,9 +64,11 @@ TeamAvatar.propTypes = {
     hasAvatarImage: PropTypes.bool.isRequired,
   }).isRequired,
   hideTooltip: PropTypes.bool,
+  size: PropTypes.oneOf(['small', 'large']),
 };
 TeamAvatar.defaultProps = {
   hideTooltip: false,
+  size: 'small',
 };
 
 export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton }) => (
