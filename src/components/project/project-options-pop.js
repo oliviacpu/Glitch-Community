@@ -8,7 +8,8 @@ import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-const leaveProjectPop(event, project, leaveProject) => {
+function leaveProjectPop(event, project, leaveProject) {
+  console.log("leaveProjectPop called");
   return(
   <PopoverDialog focusOnDialog align="left">
     <PopoverTitle>Leave {project.domain}</PopoverTitle>
