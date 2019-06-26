@@ -283,37 +283,52 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
         {description}
       </Text>
 
-      <div className={styles.screencapContainer}>
-        {smallVideos.map((v) => (
-          <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
-            <source src={v} />
-          </video>
-        ))}
+      <VisibilityContainer>
+        {({ wasEverVisible }) =>
+          wasEverVisible ? (
+            <>
+              <div className={styles.screencapContainer}>
+                {smallVideos.map((v) => (
+                  <video
+                    key={v}
+                    className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
+                    autoPlay
+                    playsInline
+                    loop
+                    muted
+                  >
+                    <source src={v} />
+                  </video>
+                ))}
 
-        <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
-          <source src={video} />
-        </video>
+                <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
+                  <source src={video} />
+                </video>
 
-        <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
-          <div className={styles.blob}>
-            <Image src={blob} alt="" />
-          </div>
-          <div className={classNames(styles[imageName], styles.blobImage)}>
-            <Image src={image} alt="" />
-          </div>
-        </div>
-      </div>
+                <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
+                  <div className={styles.blob}>
+                    <Image src={blob} alt="" />
+                  </div>
+                  <div className={classNames(styles[imageName], styles.blobImage)}>
+                    <Image src={image} alt="" />
+                  </div>
+                </div>
+              </div>
 
-      <div className={styles.screencapHighlights}>
-        {highlights.map((highlight) => (
-          <div key={highlight} className={styles.screencapHighlight}>
-            <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
-            <Text className={styles.screencapHighlight} key={Date.now()}>
-              {highlight}
-            </Text>
-          </div>
-        ))}
-      </div>
+              <div className={styles.screencapHighlights}>
+                {highlights.map((highlight) => (
+                  <div key={highlight} className={styles.screencapHighlight}>
+                    <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
+                    <Text className={styles.screencapHighlight} key={Date.now()}>
+                      {highlight}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null
+        }
+      </VisibilityContainer>
     </section>
   );
 }
@@ -395,29 +410,35 @@ function Remix() {
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
 
-      <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-        <TabList className={styles.remixAppTabs}>
-          {apps.map((app) => (
-            <Tab className={styles.remixAppTab} key={app.domain}>
-              <ProjectAvatar project={app} hideTooltip />
-              <Text size="14px">{app.domain}</Text>
-            </Tab>
-          ))}
-        </TabList>
+      <VisibilityContainer>
+        {({ wasEverVisible }) => {
+          wasEverVisible ? (
+            <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+              <TabList className={styles.remixAppTabs}>
+                {apps.map((app) => (
+                  <Tab className={styles.remixAppTab} key={app.domain}>
+                    <ProjectAvatar project={app} hideTooltip />
+                    <Text size="14px">{app.domain}</Text>
+                  </Tab>
+                ))}
+              </TabList>
 
-        {apps.map((app) => (
-          <TabPanel key={app.domain}>
-            <div className={styles.embedContainer}>
-              <Embed domain={app.domain} />
-            </div>
-            <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix your own
-              </RemixButton>
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
+              {apps.map((app) => (
+                <TabPanel key={app.domain}>
+                  <div className={styles.embedContainer}>
+                    <Embed domain={app.domain} />
+                  </div>
+                  <div className={styles.embedRemixBtn}>
+                    <RemixButton type="cta" emoji="microphone" app={app}>
+                      Remix your own
+                    </RemixButton>
+                  </div>
+                </TabPanel>
+              ))}
+            </Tabs>
+          ) : null;
+        }}
+      </VisibilityContainer>
     </section>
   );
 }
