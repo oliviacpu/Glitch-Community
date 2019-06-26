@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -13,7 +12,6 @@ import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
-import HiddenCheckbox from 'Components/fields/hidden-checkbox';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
@@ -23,6 +21,7 @@ import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } f
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
+import { PrivateBadge, PrivateToggle} from 'Components/private-badge';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
@@ -48,34 +47,6 @@ const IncludedInCollections = ({ projectId }) => (
       )
     }
   </DataLoader>
-);
-
-const privateTooltip = 'Only members can view code';
-const publicTooltip = 'Visible to everyone';
-
-const PrivateBadge = () => (
-  <TooltipContainer
-    type="info"
-    id="private-project-badge-tooltip"
-    tooltip={privateTooltip}
-    target={<span className="project-badge private-project-badge" aria-label={privateTooltip} />}
-  />
-);
-
-const PrivateToggle = ({ isPrivate, setPrivate }) => (
-  <TooltipContainer
-    type="action"
-    id="toggle-private-button-tooltip"
-    tooltip={isPrivate ? privateTooltip : publicTooltip}
-    target={
-      <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
-        <span
-          className={`button button-tertiary project-badge ${isPrivate ? 'private-project-badge' : 'public-project-badge'}`}
-          aria-label={privateTooltip}
-        />
-      </HiddenCheckbox>
-    }
-  />
 );
 
 const ReadmeError = (error) =>
@@ -272,3 +243,4 @@ const ProjectPageContainer = ({ name: domain }) => (
 );
 
 export default ProjectPageContainer;
+ 
