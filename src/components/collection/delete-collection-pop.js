@@ -52,7 +52,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
 
 const DeleteCollection = ({ collection, animate }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} />}
+    {() => <DeleteCollectionPop collection={collection} animate={animate} />}
   </PopoverWithButton>
 );
 
