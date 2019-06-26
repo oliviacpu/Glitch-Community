@@ -29,7 +29,7 @@ function RemixButton({ app, type, size, emoji, children }) {
   });
 
   return (
-    <Button href={getRemixUrl(app.domain)} onClick={() => trackRemix()} type={type} emoji={emoji}>
+    <Button href={getRemixUrl(app.domain)} onClick={() => trackRemix()} type={type} size={size} emoji={emoji}>
       {children}
     </Button>
   );
@@ -128,19 +128,19 @@ const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify'
 const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561160086857';
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
-const FrameworkStarterItem = (app) => {
-  return (
-    <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
-      <span className={styles.frameworkLogo}>
-        <Image src={app.logo} alt="" />
-      </span>
-      <span>
-        <Heading tagName="h4">{app.name}</Heading>
-        <RemixButton app={app} size="small">Remix {app.name} starter</RemixButton>
-      </span>
-    </div>
-  );
-};
+const FrameworkStarterItem = (app) => (
+  <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
+    <span className={styles.frameworkLogo}>
+      <Image src={app.logo} alt="" />
+    </span>
+    <span>
+      <Heading tagName="h4">{app.name}</Heading>
+      <RemixButton app={app} size="small">
+        Remix {app.name} starter
+      </RemixButton>
+    </span>
+  </div>
+);
 
 function PlatformStarterItem(team) {
   const bgColors = {
@@ -410,7 +410,9 @@ function Remix() {
               <Embed domain={app.domain} />
             </div>
             <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app} />
+              <RemixButton type="cta" emoji="microphone" app={app}>
+                Remix your own
+              </RemixButton>
             </div>
           </TabPanel>
         ))}
