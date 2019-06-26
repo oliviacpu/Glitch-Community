@@ -55,9 +55,9 @@ const Video = ({ src, poster }) => {
 }
 
 const Chrome = () => (
-  <svg viewBox="0 0 580 60" >
+  <svg viewBox="0 0 578 55" >
     <g  stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <g  transform="translate(-621.000000, -148.000000)" fillRule="nonzero">
+        <g  transform="translate(-622.000000, -148.000000)" fillRule="nonzero">
             <g  transform="translate(621.643282, 148.087262)">
                 <g >
                     <rect fill="#FFFFFF" x="-2.27373675e-13" y="0" width="578.550562" height="396" rx="5"></rect>
