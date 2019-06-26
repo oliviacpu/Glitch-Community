@@ -8,8 +8,8 @@ import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-function leaveProjectPop(event, project, leaveProject) {
-  const isTeamProject = ({ currentUser, project }) => {
+function leaveProjectPop({ currentUser, event, project, leaveProject }) {
+  const isTeamProject = () => {
     for (const team of currentUser.teams) {
       if (project.teamIds.includes(team.id)) {
         return true;
@@ -18,7 +18,7 @@ function leaveProjectPop(event, project, leaveProject) {
     return false;
   };
 
-  if (isTeamProject({ currentUser, project })) {
+  if (isTeamProject({ currentUser })) {
     leaveProject(project.id, event);
     return;
   }
