@@ -62,13 +62,14 @@ Our logic around caching can generally be found in 1 of 2 places: `webpack.confi
 - because our code is split, we're able to cache things that don't change very often (like our dependencies), while busting the cache to deploy the latest and greatest to our clients. 
 
 **Cloudfront:**
-In production, our code goes through cloudfront. This is why there's a delay after deploys, to see the code on glitch.com but not on community.glitch.me. It's possible for proxies of our code like cloudfront to cache our code as well since we have cache control set to `public` for our files, although the expected behavior should be the same as the relationship between community.glitch.me and your own browser.
+In production, our code goes through cloudfront. This is why there's a delay after deploys, to see the code on glitch.com but not on community.glitch.me. It's possible for proxies of our code like cloudfront to cache our code as well since we have cache control set to `public` for our files, although the expected behavior should be the same as the relationship between community.glitch.me and your own browser. However cloudfront has it's own 
 
 **Debugging Caching Issues:**
 - as always, if glitch.com and community.glitch.me are both broken, and community-staging.glitch.me is in good working order, swap, and debug later.
+- if glitch.com is broken but community.glitch.me works fine it points to an issue with cloudfront and it's best to communicate with the glitch platform team
 - if you find glitch.com working in some browsers and not others, take a look at the hashes for the bundled javascript files to see if you're serving different files.
-- if you see the hashes match but one is serving code and the other is not, you know something went wrong in serving that file (perhaps it was accidentally deleted at some point but the hashes never worked) you'll want to swap staging and community if you haven't already, and rebuild the new staging to get a new hash. 
-- if the hashes don't match, you know why you're seeing different behavior. The next question is to figure out why the browser is holding on to the older one.
+- if you see the hashes match but one is serving code and the other is not, you know something went wrong in serving that file (perhaps it was accidentally deleted at some point but the hashes never worked) you'll want to swap staging and community if you haven't already, and rebuild the new staging to get a new hash for your javascript bundles. 
+- if the hashes don't match, you know why you're seeing different behavior, you're serving different code! The next question is to figure out why? Is the browser serving one from cache and the other directly from cloudfront? 
 
 ### How do I add a question to the FAQ?
 
