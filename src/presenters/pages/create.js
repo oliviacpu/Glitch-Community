@@ -287,46 +287,49 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
         {({ wasEverVisible }) =>
           wasEverVisible ? (
             <>
-              <div className={styles.screencapContainer}>
-                {smallVideos.map((v) => (
-                  <video
-                    key={v}
-                    className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-                    autoPlay
-                    playsInline
-                    loop
-                    muted
-                  >
-                    <source src={v} />
-                  </video>
-                ))}
+          
+      const Videos = ({ bigVideo, smallVideos }) (
+        <div className={styles.screencapContainer}>
+          {smallVideos.map((v) => (
+            <video
+              key={v}
+              className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
+              autoPlay
+              playsInline
+              loop
+              muted
+            >
+              <source src={v} />
+            </video>
+          ))}
 
-                <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
-                  <source src={video} />
-                </video>
+          <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
+            <source src={video} />
+          </video>
 
-                <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
-                  <div className={styles.blob}>
-                    <Image src={blob} alt="" />
-                  </div>
-                  <div className={classNames(styles[imageName], styles.blobImage)}>
-                    <Image src={image} alt="" />
-                  </div>
-                </div>
-              </div>
+          <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
+            <div className={styles.blob}>
+              <Image src={blob} alt="" />
+            </div>
+            <div className={classNames(styles[imageName], styles.blobImage)}>
+              <Image src={image} alt="" />
+            </div>
+          </div>
+        </div>
 
-              <div className={styles.screencapHighlights}>
-                {highlights.map((highlight) => (
-                  <div key={highlight} className={styles.screencapHighlight}>
-                    <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
-                    <Text className={styles.screencapHighlight} key={Date.now()}>
-                      {highlight}
-                    </Text>
-                  </div>
-                ))}
-              </div>
+        <div className={styles.screencapHighlights}>
+          {highlights.map((highlight) => (
+            <div key={highlight} className={styles.screencapHighlight}>
+              <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
+              <Text className={styles.screencapHighlight} key={Date.now()}>
+                {highlight}
+              </Text>
+            </div>
+          ))}
+        </div>
+      );
             </>
-          ) : null
+          ) : <div aria-hidden="true" style={{ height: '500px'}}></div>
         }
       </VisibilityContainer>
     </section>
@@ -436,7 +439,7 @@ function Remix() {
                 </TabPanel>
               ))}
             </Tabs>
-          ) : null;
+          ) : <div aria-hidden="true" style={{ height: '500px'}}></div>;
         }}
       </VisibilityContainer>
     </section>
