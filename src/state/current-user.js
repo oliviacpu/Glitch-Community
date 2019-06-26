@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -95,13 +95,6 @@ function usersMatch(a, b) {
 // cachedUser mirrors GET /users/{id} and is what we actually display
 
 class CurrentUserManager extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fetched: false, // Set true on first complete load
-      working: false, // Used to prevent simultaneous loading
-    };
-  }
 
   componentDidMount() {
     identifyUser(this.props.cachedUser);
@@ -176,15 +169,6 @@ class CurrentUserManager extends React.Component {
     }
   }
 
-  persistentToken() {
-    const { sharedUser } = this.props;
-    return sharedUser ? sharedUser.persistentToken : null;
-  }
-
-  api() {
-    return getAPIForToken(this.persistentToken());
-  }
-
   async load() {
     if (this.state.working) return;
     this.setState({ working: true });
@@ -230,76 +214,59 @@ class CurrentUserManager extends React.Component {
 
     this.setState({ working: false });
   }
-
-  async login(user) {
-    this.props.setSharedUser(user);
-    this.props.setCachedUser(undefined);
-  }
-
-  update(changes) {
-    this.props.setCachedUser({
-      ...this.props.cachedUser,
-      ...changes,
-    });
-  }
-
-  async logout() {
-    this.props.setSharedUser(undefined);
-    this.props.setCachedUser(undefined);
-  }
-
-  superUserHelpers() {
-    const { cachedUser } = this.props;
-    const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
-
-    return {
-      toggleSuperUser: async () => {
-        await this.api().post(`https://support-toggle.glitch.me/support/${superUserFeature ? 'disable' : 'enable'}`);
-        window.scrollTo(0, 0);
-        window.location.reload();
-      },
-      canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
-      superUserFeature,
-    };
-  }
-
-  render() {
-    const { children, sharedUser, cachedUser } = this.props;
-    return children({
-      currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
-      persistentToken: this.persistentToken(),
-      fetched: !!cachedUser && this.state.fetched,
-      reload: () => this.load(),
-      login: (user) => this.login(user),
-      update: (changes) => this.update(changes),
-      clear: () => this.logout(),
-      superUserHelpers: this.superUserHelpers(),
-    });
-  }
 }
-CurrentUserManager.propTypes = {
-  sharedUser: PropTypes.shape({
-    id: PropTypes.number,
-    persistentToken: PropTypes.string,
-  }),
-  cachedUser: PropTypes.object,
-  setSharedUser: PropTypes.func.isRequired,
-  setCachedUser: PropTypes.func.isRequired,
-};
 
-CurrentUserManager.defaultProps = {
-  cachedUser: null,
-  sharedUser: null,
-};
+const getSuperUserHelpers = (api, cachedUser) => {
+  const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
+
+  return {
+    toggleSuperUser: async () => {
+      await api.post(`https://support-toggle.glitch.me/support/${superUserFeature ? 'disable' : 'enable'}`);
+      window.scrollTo(0, 0);
+      window.location.reload();
+    },
+    canBecomeSuperUser: cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
+    superUserFeature,
+  };
+}
 
 export const CurrentUserProvider = ({ children }) => {
+  const [state, setState] = useState({
+    fetched: false, // Set true on first complete load
+    working: false, // Used to prevent simultaneous loading
+  })
   const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
-  return (
-    <CurrentUserManager sharedUser={sharedUser} setSharedUser={setSharedUser} cachedUser={cachedUser} setCachedUser={setCachedUser}>
-      {(props) => <Context.Provider value={props}>{children}</Context.Provider>}
-    </CurrentUserManager>
-  );
+  
+  const persistentToken = sharedUser ? sharedUser.persistentToken : null;
+  const api = getAPIForToken(persistentToken);
+  
+  const login = (data) => {
+    setSharedUser(data);
+    setCachedUser(undefined); 
+  }
+  
+  const logout = () => {
+    setSharedUser(undefined);
+    setCachedUser(undefined);
+  };
+  
+  const update = (changes) => {
+    setCachedUser({ ...cachedUser, ...changes });
+  };
+  
+  const userProps = {
+    currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
+    persistentToken,
+    fetched: !!cachedUser && state.fetched,
+    reload: () => this.load(),
+    login,
+    update,
+    clear: logout,
+    superUserHelpers: getSuperUserHelpers(api, cachedUser),
+  };
+  
+  return <Context.Provider value={userProps}>{children}</Context.Provider>
 };
 CurrentUserProvider.propTypes = {
   children: PropTypes.node.isRequired,
