@@ -16,7 +16,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
   const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
-  async function deleteThisCollection(animate) {
+  async function deleteThisCollection() {
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
     try {
@@ -24,7 +24,7 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
       if (window.location.pathname !== getOwnerLink(collection)) {
         history.push(getOwnerLink(collection));
       } else {
-        animate(collection.id);
+        console.log('whooo');
       }
     } catch (error) {
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
@@ -50,9 +50,9 @@ const DeleteCollectionPop = withRouter(({ history, collection }) => {
   );
 });
 
-const DeleteCollection = ({ collection, animate }) => (
+const DeleteCollection = ({ collection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} animate={animate} />}
+    {() => <DeleteCollectionPop collection={collection} />}
   </PopoverWithButton>
 );
 
@@ -62,11 +62,6 @@ DeleteCollection.propTypes = {
     user: PropTypes.object,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  animate: PropTypes.func,
-};
-
-DeleteCollection.defaultProps = {
-  animate: null,
 };
 
 export default DeleteCollection;

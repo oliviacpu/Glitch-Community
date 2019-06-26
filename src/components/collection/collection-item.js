@@ -60,14 +60,14 @@ ProjectsPreview.propTypes = {
 };
 
 
-const CollectionItem = ({ collection, animate, isAuthorized, showCurator }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={animate || (() => {})}>
+const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
           <div className={styles.header}>
             <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
-            {isAuthorized && <CollectionOptions collection={collection} animate={animateAndDeleteCollection} />}
+            {isAuthorized && <CollectionOptions collection={collection} deleteCollection={animateAndDeleteCollection} />}
           </div>
         )}
         <CollectionLink
@@ -114,13 +114,13 @@ CollectionItem.propTypes = {
     user: PropTypes.object,
     team: PropTypes.object,
   }).isRequired,
-  animate: PropTypes.func,
+  deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
-  animate: null,
+  deleteCollection: null,
   isAuthorized: false,
   showCurator: false,
 };

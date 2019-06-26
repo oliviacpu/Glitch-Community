@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { PopoverMenu, PopoverDialog, PopoverActions } from 'Components/popover';
 import DeleteCollection from 'Components/collection/delete-collection-pop';
 
-export default function CollectionOptions({ collection, animate }) {
+export default function CollectionOptions({ collection, deleteCollection }) {
   return (
     <PopoverMenu>
       {() => (
         <PopoverDialog focusOnDialog align="right">
           <PopoverActions type="dangerZone">
-            <DeleteCollection collection={collection} animate={animate} />
+            <DeleteCollection collection={collection} deleteCollection={deleteCollection} />
           </PopoverActions>
         </PopoverDialog>
       )}
@@ -19,9 +19,9 @@ export default function CollectionOptions({ collection, animate }) {
 
 CollectionOptions.propTypes = {
   collection: PropTypes.object.isRequired,
-  animate: PropTypes.func,
+  deleteCollection: PropTypes.func,
 };
 
 CollectionOptions.defaultProps = {
-  animate: null,
+  deleteCollection: null,
 };
