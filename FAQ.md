@@ -50,12 +50,13 @@ Nope! Though you can set your remix to run in production mode by setting `NODE_E
 
 ### How does caching work within the community app? 
 
-Our logic around caching can generally be found in 1 of 2 places: webpack.config.js and server/routes.js
+Our logic around caching can generally be found in 1 of 2 places: `webpack.config.js` and `server/routes.js`. But as a summary:
 
-Our HTML TLDR:
-When we render our views/index.ejs file as html and server it, we set it to have a maxAge of 1 second which is set in server/routes.js, so we're not trying to cache it. However we also use express, which [by default sets weak etags](http://expressjs.com/en/api.html#etag.options.table) which we are using. This means that the file will return a 304 until it's modified. 
+Our HTML:
+- the html document we render from our views/index.ejs file has maxAge of 1 second, so it shouldn't really cache.
+- However we also use express to render this file, which [by default sets weak etags](http://expressjs.com/en/api.html#etag.options.table). This means that the server will compare the file with what the client last saw and if it's the same will return a 304.
 
-Our Bundles TLDR: 
+Our Javascript: 
 - we split our javascript into chunked bundles with webpack and we cache those files for up to a week. 
 - when code is updated, we generate a new "chunkhash" which changes busts our cache, so that our html file is seen as modified, and it will ping for a new javascript file. 
 - we do this to improve the download speed of our js files so that our users don't have to redownload things like React or our npm modules everytime there's a new build of our app.
