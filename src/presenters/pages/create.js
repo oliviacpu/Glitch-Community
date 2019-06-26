@@ -223,7 +223,7 @@ function Collaborate() {
       description={description}
       highlights={highlights}
       video={video}
-      smallVideo={smallVideo}
+      smallVideos={[smallVideo]}
       blob={blob}
       image={pyramid}
       imageName="pyramid"
@@ -237,7 +237,8 @@ function YourAppIsLive() {
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
   const highlights = ['Supports custom domains'];
-  const smallVideo = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
+  const smallVideo1 = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
+  const smallVideo2 = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-small-app.mp4?v=1560959054771';
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561410916138';
   const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561410952941';
@@ -248,7 +249,7 @@ function YourAppIsLive() {
       description={description}
       highlights={highlights}
       video={video}
-      smallVideo={smallVideo}
+      smallVideos={[smallVideo1, smallVideo2]}
       blob={blob}
       image={mic}
       imageName="mic"
@@ -257,7 +258,7 @@ function YourAppIsLive() {
   );
 }
 
-function ScreencapSection({ title, description, video, smallVideo, highlights, blob, image, imageName, markColor }) {
+function ScreencapSection({ title, description, video, smallVideos, highlights, blob, image, imageName, markColor }) {
   return (
     <section className={styles.section}>
       <Heading className={styles.h2} tagName="h2">
@@ -269,9 +270,11 @@ function ScreencapSection({ title, description, video, smallVideo, highlights, b
       </Text>
 
       <div className={styles.screencapContainer}>
-        <video className={styles.smallScreencap} autoPlay={true} playsInline={true} loop={true} muted={true}>
-          <source src={smallVideo} />
-        </video>
+        {smallVideos.map(video => (
+          <video className={styles.smallScreencap} autoPlay={true} playsInline={true} loop={true} muted={true}>
+            <source src={video} />
+          </video>
+        ))}
         
         <video className={styles.bigScreencap} autoPlay={true} playsInline={true} loop={true} muted={true}>
           <source src={video} />
