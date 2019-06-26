@@ -103,31 +103,13 @@ section:first-of-type
 .bannerVideoWrap
   background: white
   z-index: 1
-  border: 2px solid #EAEAEA
-  display: flex
+  svg, video
+    width: 100%
+    display: block
+    margin: 0
   
-.bannerVideoChrome
-  background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbrowser.svg?v=1560654605973')
-  background-size: contain
-  background-repeat: no-repeat
-  border-radius: u1
-  width: 100%
-  height: auto
-  padding-bottom: 69%
-  position: relative
-  
-.bannerVideoInnerWrap
-  display: flex
-  position: absolute
-  width: 100%
-  bottom: 0
-  padding: u3
-  background: white
-
 .bannerVideo
   position: relative
-  video
-    width: 100%
 .bannerVideoButtonWrap
   pointer-events: none
   position: absolute
@@ -135,7 +117,8 @@ section:first-of-type
   width: 100%
   bottom: 0
   left: 0
-  padding: u2
+  padding-bottom: u4
+  
   
 .bannerBtnWrap
   margin-left: 120px
