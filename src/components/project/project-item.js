@@ -74,7 +74,7 @@ const ProjectItem = ({ project, projectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon isPrivate /> : null} imagePosition="left">
+                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                           <span className={styles.projectDomain}>{project.domain}</span>
                         </Button>
                       </div>

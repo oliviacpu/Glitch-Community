@@ -54,7 +54,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
           </div>
           <div className={styles.collectionNameWrap}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative image={collection.private ? <PrivateIcon isPrivate /> : null} imagePosition="left">
+              <Button decorative image={collection.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                 <div className={styles.collectionName}>{collection.name}</div>
               </Button>
             </div>

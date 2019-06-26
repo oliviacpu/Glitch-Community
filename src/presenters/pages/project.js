@@ -21,7 +21,7 @@ import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } f
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
-import { PrivateBadge, PrivateToggle} from 'Components/private-badge';
+import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
@@ -243,4 +243,3 @@ const ProjectPageContainer = ({ name: domain }) => (
 );
 
 export default ProjectPageContainer;
- 

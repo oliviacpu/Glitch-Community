@@ -4,25 +4,24 @@ import classnames from 'classnames';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import HiddenCheckbox from 'Components/fields/hidden-checkbox';
 
-import styles from './styles.styl'
+import styles from './styles.styl';
 
 const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
-export const PrivateIcon = ({ className, label, isPrivate }) => (
+export const PrivateIcon = ({ className, label, inButton, isPrivate }) => (
   <span
-    className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public)}
+    className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public, inButton && styles.inButton)}
     aria-label={label}
   />
 );
 
+PrivateIcon.defaultProps = {
+  label: privateText,
+};
+
 export const PrivateBadge = () => (
-  <TooltipContainer
-    type="info"
-    id="private-project-badge-tooltip"
-    tooltip={privateText}
-    target={<PrivateIcon isPrivate label={privateText} />}
-  />
+  <TooltipContainer type="info" id="private-project-badge-tooltip" tooltip={privateText} target={<PrivateIcon isPrivate label={privateText} />} />
 );
 
 export const PrivateToggle = ({ isPrivate, setPrivate }) => (
@@ -32,11 +31,7 @@ export const PrivateToggle = ({ isPrivate, setPrivate }) => (
     tooltip={isPrivate ? privateText : publicText}
     target={
       <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
-        <PrivateIcon
-          isPrivate={isPrivate}
-          className={styles.button}
-          label={privateText}
-        />
+        <PrivateIcon isPrivate={isPrivate} className={styles.button} label={privateText} />
       </HiddenCheckbox>
     }
   />
