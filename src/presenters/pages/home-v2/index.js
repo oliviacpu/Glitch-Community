@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 
@@ -25,7 +25,7 @@ import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
-const Video = ({ className, src, poster }) => {
+const Video = ({ src, poster }) => {
   const [status, setStatus] = useState('init'); // init | playing | paused
   
   const onClick = (e) => {
@@ -39,9 +39,18 @@ const Video = ({ className, src, poster }) => {
   }
   
   return (
-    <video poster={poster} className={classnames(className, styles[status])} onClick={onClick}>
-      <source type="video/mp4" src={src} />
-    </video>
+    <div className={classnames(styles.bannerVideo, styles[status])}>
+      <video poster={poster} onClick={onClick}>
+        <source type="video/mp4" src={src} />
+      </video>
+      {status === 'init' && (
+        <div className={styles.bannerVideoButtonWrap}>
+          <Button decorative>
+            Play Video
+          </Button>  
+        </div>
+      )}
+    </div>
   )
 } 
 
@@ -50,7 +59,6 @@ const BannerVideo = () => (
     <div className={styles.bannerVideoChrome}>
       <div className={styles.bannerVideoInnerWrap}>
         <Video
-          className={styles.bannerVideo}
           poster="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
           src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
         />
