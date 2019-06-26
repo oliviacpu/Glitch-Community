@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
 
@@ -29,7 +28,7 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 
 import styles from './project.styl';
 
@@ -37,24 +36,8 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const getIncludedCollections = async (api, projectId) => {
-  const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
-  const selectedCollections = sampleSize(collections, 3);
-  const populatedCollections = await Promise.all(
-    selectedCollections.map(async (collection) => {
-      const { projects, user, team } = await allByKeys({
-        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=projectOrder&orderDirection=ASC`),
-        user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
-        team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
-      });
-      return { ...collection, projects, user, team };
-    }),
-  );
-  return populatedCollections.filter((c) => c.team || c.user);
-};
-
 const IncludedInCollections = ({ projectId }) => (
-  <DataLoader get={(api) => getIncludedCollections(api, projectId)} renderLoader={() => null}>
+  <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
       collections.length > 0 && (
         <>

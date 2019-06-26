@@ -19,9 +19,6 @@
   border-radius: 5px
   min-width: 100%
   transition: 0.1s all
-  :global .collection-options-pop-btn
-    display: block
-    position: inherit
   :global .down-arrow
     margin-left: 0
 
@@ -96,12 +93,11 @@
     margin-bottom: 10px
     
 .smallCollectionLink
-  display: block
   color: inherit
   text-decoration: none
   display: flex
   flex-direction: column
-  height: 100%
+  flex: 1 1 100%
   &:hover
     text-decoration: none
     

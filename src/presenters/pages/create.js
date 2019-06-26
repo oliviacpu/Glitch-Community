@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { values, sampleSize } from 'lodash';
 
@@ -10,13 +9,12 @@ import Text from 'Components/text/text';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
-import TransparentButton from 'Components/buttons/transparent-button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import { useAPI } from 'State/api';
-import { getRemixUrl, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+import { getRemixUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
 
@@ -270,13 +268,19 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
       </Text>
 
       <div className={styles.screencapContainer}>
-        {smallVideos.map(video => (
-          <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay={true} playsInline={true} loop={true} muted={true}>
-            <source src={video} />
+        {smallVideos.map((v) => (
+          <video
+            className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
+            autoPlay
+            playsInline
+            loop
+            muted
+          >
+            <source src={v} />
           </video>
         ))}
-        
-        <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay={true} playsInline={true} loop={true} muted={true}>
+
+        <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
           <source src={video} />
         </video>
 
@@ -291,10 +295,10 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
       </div>
 
       <div className={styles.screencapHighlights}>
-        {highlights.map((highlight, i) => (
+        {highlights.map((highlight) => (
           <div className={styles.creencapHighlight}>
-            <hr className={styles.screencapSquiggle} style={{ '--color': markColor }}/>
-            <Text className={styles.screencapHighlight} key={i}>
+            <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
+            <Text className={styles.screencapHighlight} key={Date.now()}>
               {highlight}
             </Text>
           </div>
@@ -316,7 +320,7 @@ function Help() {
       <Text className={styles.sectionDescription}>Still have questions about Glitch? We're here to lend a hand.</Text>
 
       <div className={styles.helpLinks}>
-        <div>
+        <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Help Center</Heading>
           <Text>The best place to find answers to FAQs.</Text>
           <Text>
@@ -325,9 +329,9 @@ function Help() {
             </Button>
           </Text>
         </div>
-        
+
         <hr />
-        
+
         <div aria-hidden="true" className={classNames(styles.helpImage, styles.blobContainer)}>
           <div className={styles.blob}>
             <Image src={blob} alt="" />
@@ -336,8 +340,8 @@ function Help() {
             <Image src={ambulance} alt="" />
           </div>
         </div>
-        
-        <div>
+
+        <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Support Forum</Heading>
           <Text>Personalized support for your app-specific questions.</Text>
           <Text>
