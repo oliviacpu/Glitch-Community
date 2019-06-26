@@ -8,6 +8,7 @@ import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
+import { PrivateIcon } from 'Components/private-badge';
 import { isDarkColor } from 'Models/collection';
 import { useCollectionCurator } from 'State/collection';
 
@@ -17,8 +18,6 @@ const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,
   border: collection.coverColor,
 });
-
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const CollectionCurator = ({ collection }) => {
   const { value: curator } = useCollectionCurator(collection);
@@ -55,8 +54,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
           </div>
           <div className={styles.collectionNameWrap}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative>
-                {collection.private && <PrivateIcon />}
+              <Button decorative image={collection.private ? <PrivateIcon isPrivate /> : null} imagePosition="left">
                 <div className={styles.collectionName}>{collection.name}</div>
               </Button>
             </div>

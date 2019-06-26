@@ -33,8 +33,8 @@ export const PrivateToggle = ({ isPrivate, setPrivate }) => (
     target={
       <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
         <PrivateIcon
-          isPrivate
-          className={`button button-tertiary`}
+          isPrivate={isPrivate}
+          className={styles.button}
           label={privateText}
         />
       </HiddenCheckbox>
