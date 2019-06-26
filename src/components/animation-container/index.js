@@ -21,7 +21,6 @@ const AnimationContainer = ({ type, children, className, onAnimationEnd }) => {
       ref={ref}
       className={classnames(className, state.active && styles[type])}
       onAnimationEnd={(event) => {
-        console.log("hit onAnimationEnd", event.target, ref.current);
         if (event.target === ref.current) {
           onAnimationEnd(...state.handlerArgs);
         }
