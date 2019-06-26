@@ -129,7 +129,7 @@ const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77
 const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561160088057';
 
 const FrameworkStarterItem = (app) => (
-  <div style={{ '--color': app.color }} className={styles.frameworkStarter} key={app.domain}>
+  <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
@@ -153,7 +153,7 @@ function PlatformStarterItem(team) {
   };
 
   return (
-    <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.id}>
+    <div className={styles.platformStarter} style={{ backgroundColor: bgColors[team.url] }} key={team.url}>
       <div className={styles.platformLogo}>
         <TeamAvatar team={team} size="large" hideTooltip />
       </div>
@@ -284,7 +284,7 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 
       <div className={styles.screencapContainer}>
         {smallVideos.map((v) => (
-          <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
+          <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
             <source src={v} />
           </video>
         ))}
@@ -305,7 +305,7 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 
       <div className={styles.screencapHighlights}>
         {highlights.map((highlight) => (
-          <div className={styles.creencapHighlight}>
+          <div key={highlight} className={styles.screencapHighlight}>
             <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
             <Text className={styles.screencapHighlight} key={Date.now()}>
               {highlight}
