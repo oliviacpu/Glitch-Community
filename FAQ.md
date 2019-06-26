@@ -65,8 +65,10 @@ Cloudfront:
 In production, our code goes through cloudfront. This is why there's a delay after deploys, to see the code on glitch.com but not on community.glitch.me. It's possible for proxies of our code like cloudfront to cache our code as well since we have cache control set to `public` for our files, although the expected behavior should be the same as the relationship between community.glitch.me and your own browser.
 
 Debugging Caching Issues:
-- as a general rule of thumb if community.glitch.me is broken in the same way as 
-- look at the hashes for the javascript files to see if you're serving different files, if you see the hashes match but one is serving code and the other is not, you have a bad hash
+- as always, if both glitch.com and community.glitch.me are broken, and community-staging.glitch.me is in good working order, swap, and debug later.
+- if you find glitch.com working in some browsers and not others, take a look at the hashes for the bundled javascript files to see if you're serving different files.
+- if you see the hashes match but one is serving code and the other is not, you know something went wrong in serving that file (perhaps it was accidentally deleted at some point but the hashes never worked) you'll want to swap staging and community if you haven't already, and rebuild the new staging to get a new hash. 
+- if the hashes don't match, you know why you're seeing different behavior. The next question is to figure out why the browser is holding on to the older one. 
 
 ### Why am I still seeing sentry errors for old code if it isn't cached?
 
