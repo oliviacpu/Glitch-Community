@@ -13,6 +13,7 @@ import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
+import VisibilityContainer from 'Components/visibility-container';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
