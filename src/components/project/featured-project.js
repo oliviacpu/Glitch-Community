@@ -56,7 +56,6 @@ const FeaturedProject = ({
             />
           }
           project={featuredProject}
-          isAuthorized={isAuthorized}
           addProjectToCollection={addProjectToCollection}
         />
       )}

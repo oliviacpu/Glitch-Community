@@ -209,12 +209,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed
-          project={project}
-          isAuthorized={isAuthorized}
-          currentUser={currentUser}
-          addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
-        />
+        <ProjectEmbed project={project} addProjectToCollection={(_, collection) => addProjectToCollection(collection)} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />

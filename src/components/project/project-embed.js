@@ -20,7 +20,7 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     baseProjectId: project.id,
     baseDomain: project.domain,
   });
-  
+
   const bottomLeft = isMember ? (
     <EditButton name={project.id} isMember={isMember} size="small" />
   ) : (
