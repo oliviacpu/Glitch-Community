@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -152,11 +152,15 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
   captureMessage('Invalid cachedUser');
 };
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const useDebouncedAsync = (fn) => {
   const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
   return async (...args) => {
     if (working) return;
     setWorking(true);
+    // delay loading a moment so both items from storage have a chance to update
+    await sleep(1);
     await fn(...args);
     setWorking(false);
   };
@@ -167,6 +171,13 @@ export const CurrentUserProvider = ({ children }) => {
 
   // sharedUser syncs with the editor and is authoritative on id and persistentToken
   const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
+  // put sharedUser in a ref so that we can access its current value in load(),
+  // even if it was changed elsewhwere
+  const sharedUserRef = useRef(sharedUser);
+  useEffect(() => {
+    sharedUserRef.current = sharedUser;
+  }, [sharedUser]);
+
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
 
@@ -187,13 +198,13 @@ export const CurrentUserProvider = ({ children }) => {
       setCachedUser(undefined);
     }
 
-    const newCachedUser = await getCachedUser(api, sharedUser);
+    const newCachedUser = await getCachedUser(api, sharedOrAnonUser);
 
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
       // If it did change then quit out and let useEffect sort it out
-      if (usersMatch(sharedOrAnonUser, sharedUser)) {
+      if (usersMatch(sharedOrAnonUser, sharedUserRef.current)) {
         // The user wasn't changed, so we need to fix it
         setFetched(false);
         const newSharedUser = await getSharedUser(api, persistentToken);
@@ -212,8 +223,7 @@ export const CurrentUserProvider = ({ children }) => {
   }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken]);
 
   useEffect(() => {
-    // delay loading a moment so both items from storage have a chance to update
-    setTimeout(load, 1);
+    load();
     // for easier debugging
     window.currentUser = cachedUser;
     window.api = api;
