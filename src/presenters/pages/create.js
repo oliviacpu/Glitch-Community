@@ -253,7 +253,7 @@ function YourAppIsLive() {
       blob={blob}
       image={mic}
       imageName="mic"
-      markColor="#c9fafe"
+      markColor="#9fe9ff"
     />
   );
 }
@@ -280,11 +280,11 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
           <source src={video} />
         </video>
 
-        <div className={styles.screencapImageContainer}>
-          <div className={styles.screencapBlob}>
+        <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
+          <div className={styles.blob}>
             <Image src={blob} alt="" />
           </div>
-          <div className={classNames(styles[imageName], styles.screencapImage)}>
+          <div className={classNames(styles[imageName], styles.blobImage)}>
             <Image src={image} alt="" />
           </div>
         </div>
@@ -292,9 +292,12 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
 
       <div className={styles.screencapHighlights}>
         {highlights.map((highlight, i) => (
-          <Text className={styles.screencapHighlight} key={i}>
-            {highlight}
-          </Text>
+          <div className={styles.creencapHighlight}>
+            <hr className={styles.screencapSquiggle} style={{ '--color': markColor }}/>
+            <Text className={styles.screencapHighlight} key={i}>
+              {highlight}
+            </Text>
+          </div>
         ))}
       </div>
     </section>
@@ -325,11 +328,11 @@ function Help() {
         
         <hr />
         
-        <div aria-hidden="true" className={classNames(styles.helpImage, styles.screencapImageContainer)}>
-          <div className={styles.screencapBlob}>
+        <div aria-hidden="true" className={classNames(styles.helpImage, styles.blobContainer)}>
+          <div className={styles.blob}>
             <Image src={blob} alt="" />
           </div>
-          <div className={classNames(styles.ambulance, styles.screencapImage)}>
+          <div className={classNames(styles.ambulance, styles.blobImage)}>
             <Image src={ambulance} alt="" />
           </div>
         </div>

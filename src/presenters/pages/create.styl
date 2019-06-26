@@ -45,6 +45,31 @@ html
   margin-left: 40px
   @media (max-width: largeViewport)
     margin-left: 30px
+.blobContainer
+  position: absolute
+  right: -10px
+  bottom: -10px
+  width: 100px
+  height: 100px
+  @media (min-width: mediumLargeViewport)
+    width: 170px
+    height: 170px
+    right: -50px
+    bottom: -50px
+.blob
+.blobImage
+  position: absolute
+  right: 0
+  bottom: 0
+  z-index: 1
+.blobImage
+  z-index: 2
+  right: 20px
+.mic
+  right: 20px
+  bottom: 10px
+  @media (min-width: mediumLargeViewport)
+    right: 50px
 
 // banner
 .banner
@@ -238,34 +263,7 @@ html
     margin: u4 40px u2 40px
   video
     max-width: 100%
-.screencapImageContainer
-  // display: none
-  // TODO tara: should not be visible on small viewports for screencap sections
-  // need to refactor this to be a blob image container, since these styles are re-used for the help section blob
-  position: absolute
-  right: -10px
-  bottom: -10px
-  width: 100px
-  height: 100px
-  @media (min-width: mediumLargeViewport)
-    width: 170px
-    height: 170px
-    right: -50px
-    bottom: -50px
 .screencapBlob
-.screencapImage
-  position: absolute
-  right: 0
-  bottom: 0
-  z-index: 1
-.screencapImage
-  z-index: 2
-  right: 20px
-.mic
-  right: 20px
-  bottom: 10px
-  @media (min-width: mediumLargeViewport)
-    right: 50px
 .screencap
   border-radius: u1
   box-shadow: 4px 4px #c3c3c3
@@ -278,6 +276,8 @@ html
     z-index: -1
     margin-bottom: -30%
 @media (min-width: mediumViewport)
+  .screencapBlob
+    display:block
   .smallScreencap
     display: none
   .bigScreencap
@@ -290,18 +290,25 @@ html
     margin: 0 40px
 .screencapHighlight
   margin-bottom: u2
-  padding: u2
+  margin-right: u4
+  font-size: 14px
   height: 0%
   flex-shrink: 0
   max-width: 100%
-  background: secondary-background-hover
   border-radius: u05
   + .screencapHighlight
     margin-top: 0
   @media (min-width: largeViewport)
-    margin-right: u2
     flex-wrap: nowrap
     max-width: 500px
+.screencapSquiggle
+  margin: 0
+  margin-top: 0.5em
+  height: 20px
+  background-color: var(--color)
+  width: 100%
+  mask-image: url('https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsquiggly.svg?v=1561560873098')
+  mask-repeat: no-repeat
     
 // help
 .helpLinks
