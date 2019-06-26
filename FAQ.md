@@ -69,7 +69,7 @@ In production, our code goes through cloudfront. This is why there's a delay aft
 - if `glitch.com` is broken but `community.glitch.me` works fine it points to an issue with cloudfront and it's best to communicate with the glitch infrastructure team to figure out where the problem is.
 - if you find `glitch.com` working in some browsers and not others, take a look at the hashes for the bundled javascript files to see if you're serving different files:
     - if the hashes match but one is serving code and the other is not or they are serving different code, you know something went wrong in serving that file in our pipeline and it's probably best to generate a new hash. You'll want to swap staging and community to get back to the last working hash if you haven't already, and then rebuild the new staging project to get a new hash for your javascript bundles. 
-    - if the hashes don't match, you know why you're seeing different behavior, you're serving different code! The next question is to figure out why? Check to see where the code is being served from, is it from browser cache?
+    - if the hashes don't match, you know why you're seeing different behavior, you're serving different code! The next question is to figure out why? Check to see where the code is being served from, is it from browser cache? if `glitch.com` hashes don't match that at `community.glitch.me` after a few minutes after a swap the issue sounds more likely to be with cloudfront or some other piece of our infrastructure. 
 
 ### How do I add a question to the FAQ?
 
