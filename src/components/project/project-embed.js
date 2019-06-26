@@ -19,15 +19,15 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
     baseProjectId: project.id,
     baseDomain: project.domain,
   });
+  const isMember = project.permissions.some(({ userId }) => userId === currentUser.id);
 
-  const BottomLeft = () => {
-    if (isAuthorized) {
-      return <EditButton name={project.id} isMember={isAuthorized} size="small" />;
-    }
-    return <ReportButton reportedType="project" reportedModel={project} />;
-  };
+  const bottomLeft = isAuthorized || isMember ? (
+    <EditButton name={project.id} isMember={isMember} size="small" />
+  ) : (
+    <ReportButton reportedType="project" reportedModel={project} />
+  );
 
-  const BottomRight = () => (
+  const bottomRight = (
     <>
       {currentUser.login && (
         <div className={styles.addToCollectionWrap}>
@@ -46,10 +46,10 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
-          <BottomLeft />
+          {bottomLeft}
         </div>
         <div className={cx({ right: true, buttonWrap: true })}>
-          <BottomRight />
+          {bottomRight}
         </div>
       </div>
     </section>
