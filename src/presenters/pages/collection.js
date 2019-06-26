@@ -15,8 +15,7 @@ import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
-import { getSingleItem, getAllPages } from 'Shared/api';
+import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } from 'State/collection';
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
@@ -65,38 +64,10 @@ CollectionPageContents.propTypes = {
   }).isRequired,
 };
 
-async function loadCollection(api, ownerName, collectionName) {
-  try {
-    const collection = await getSingleItem(
-      api,
-      `v1/collections/by/fullUrl?fullUrl=${encodeURIComponent(ownerName)}/${collectionName}`,
-      `${ownerName}/${collectionName}`,
-    );
-    collection.projects = await getAllPages(
-      api,
-      `v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(
-        ownerName,
-      )}/${collectionName}&orderKey=projectOrder&orderDirection=ASC&limit=100`,
-    );
 
-    if (collection.user) {
-      collection.user = await getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id);
-    } else {
-      collection.team = await getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id);
-    }
-
-    return collection;
-  } catch (error) {
-    if (error && error.response && error.response.status === 404) {
-      return null;
-    }
-    throw error;
-  }
-}
-
-const CollectionPage = ({ ownerName, name }) => (
+const CollectionPage = ({ owner, name }) => (
   <Layout>
-    <DataLoader get={(api) => loadCollection(api, ownerName, name)}>
+    <DataLoader get={(api) => getCollectionWithProjects(api, { owner, name })}>
       {(collection) =>
         collection ? (
           <AnalyticsContext
