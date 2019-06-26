@@ -41,6 +41,7 @@ const ProfileListLoader = ({ project }) => (
 
 const ProjectItem = ({ project, projectOptions }) => {
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
+  console.log(projectOptions);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
