@@ -1,6 +1,6 @@
 @import './constants.styl'
 
-largeBannerHeight = 440px
+maxBannerWidth = 500px
 
 .unmarked
   position: relative
@@ -13,13 +13,14 @@ largeBannerHeight = 440px
   color: white  
   border-radius: u2
   padding: u4 0px
-  @media(min-width: mediumViewport)
+  @media(min-width: largeViewport)
     flex-direction: row
     padding: u4 0px
     justify-content: flex-start
     
 .bannerCopyContainer
   width: 100%
+  max-width: 440px
   padding-top: 11%
   padding-left: 14%
   padding-bottom: u3
@@ -36,22 +37,23 @@ largeBannerHeight = 440px
     line-height: 1.2
     text-shadow: 1px 1px #6356C7
 
-  @media(min-width: mediumViewport)
-    flex: 0 0 440px
+  @media(min-width: maxBannerWidth)
     margin-bottom: "-%s" % u4
     min-height: 400px
     padding-top: 45px
     padding-left: 50px
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
     h1
       font-size: t6
     p
       font-size: t3
-      
+  @media(min-width: largeViewport)
+    flex: 0 0 440px
+    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
+    
 .bannerCopyAndButtons
   position: relative
   margin: u3 25% u3 30%
-  @media(min-width: mediumViewport)
+  @media(min-width: largeViewport)
     left: -20px
     margin: u3 auto
     width: 180px
@@ -59,7 +61,7 @@ largeBannerHeight = 440px
 .watchVideoBtnWrap
   display: block
   margin: u3 0
-  @media(min-width: mediumViewport)
+  @media(min-width: largeViewport)
     display: none
 
 .bannerVideoWrap
@@ -67,7 +69,7 @@ largeBannerHeight = 440px
   z-index: 1
   border-radius: u1
   display: none
-  @media(min-width: mediumViewport)
+  @media(min-width: largeViewport)
     display: block
   svg, video
     width: 100%
