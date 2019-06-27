@@ -80,27 +80,25 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 
 const Banner = () => (
   <header id="banner" className={styles.banner}>
-    <div className={styles.bannerCopyContainer}>
-      <div className={styles.bannerCopy}>
-        <h1>
-          <Unmarked>Glitch is the</Unmarked>
-          <br />
-          <Mark color="#1D9AF9">friendly community</Mark>
-          <br />
-          <Unmarked>where everyone can</Unmarked>
-          <br />
-          <Mark color="#18B576">create the web</Mark>
-        </h1>
-        <p>Discover, build, and share millions of apps and websites — for free</p>
-        <div className={styles.bannerBtnWrap}>
-          <Button type="cta" href="#top-picks">
-            Start Creating <Arrow />
-          </Button>
-          <div className={styles.watchVideoBtnWrap}>
-            <Button decorative>Watch video</Button>
-          </div>
+    <div className={styles.bannerCopyContainer}>      
+      <h1>
+        <Unmarked>Glitch is the</Unmarked>
+        <br />
+        <Mark color="#1D9AF9">friendly community</Mark>
+        <br />
+        <Unmarked>where everyone can</Unmarked>
+        <br />
+        <Mark color="#18B576">create the web</Mark>
+      </h1>
+      <p>Discover, build, and share millions of apps and websites — for free</p>
+      <div className={styles.bannerBtnWrap}>
+        <Button type="cta" href="#top-picks">
+          Start Creating <Arrow />
+        </Button>
+        <div className={styles.watchVideoBtnWrap}>
+          <Button decorative>Watch video</Button>
         </div>
-      </div>
+      </div> 
     </div>
     <BannerVideo />
   </header>

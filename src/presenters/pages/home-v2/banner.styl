@@ -23,37 +23,35 @@ largeBannerHeight = 440px
   // max-width: 440px
   padding-top: 11%
   padding-left: 14%
+  padding-bottom: u3
   background-position: top center
   background-repeat: no-repeat
   background-size: contain
   background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
-  @media(min-width: mediumViewport)
-    flex: 0 0 440px
-    min-height: 400px
-    padding-top: 50px
-    padding-left: 60px 
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
-    
-.bannerCopy
-  padding-bottom: u3
   h1
     font-size: 6vw
     margin: 0
     transform: rotate(-5deg)
   p
-    font-size: t2
-    margin: u3 auto
-    width: 50%
+    position: relative
+    font-size: 3.5vw
+    margin: u3 25% u3 30%
     text-shadow: 1px 1px #6356C7
+
   @media(min-width: mediumViewport)
-    padding-bottom: 0
+    flex: 0 0 440px
+    min-height: 400px
+    padding-top: 45px
+    padding-left: 50px
+    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
     h1
       font-size: t6
     p
       font-size: t3
-      margin: u3 u5
-      width: 190px
-  
+      left: -20px
+      margin: u3 auto
+      width: 180px
+
 .bannerBtnWrap
   margin-left: 120px
   
