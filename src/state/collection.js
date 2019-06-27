@@ -1,10 +1,6 @@
 import React, { useState, useMemo, useContext, createContext } from 'react';
 
-<<<<<<< HEAD
-import { useAPIHandlers } from 'State/api';
-=======
-import { useAPI, createAPIHook } from 'State/api';
->>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
+import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';

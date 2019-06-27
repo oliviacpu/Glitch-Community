@@ -21,7 +21,7 @@ export function useTeamEditor(initialTeam) {
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
   const reloadProjectMembers = useProjectReload();
-<<<<<<< HEAD
+  const reloadCollectionProjects = useCollectionReload();
   const {
     updateItem,
     deleteItem,
@@ -38,9 +38,6 @@ export function useTeamEditor(initialTeam) {
     joinTeamProject,
     addProjectToCollection,
   } = useAPIHandlers();
-=======
-  const reloadCollectionProjects = useCollectionReload();
->>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
   const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
@@ -222,16 +219,11 @@ export function useTeamEditor(initialTeam) {
       removePermissions(currentUser, [project]);
       reloadProjectMembers([project.id]);
     }, handleError),
-<<<<<<< HEAD
-    addProjectToCollection: (project, collection) => addProjectToCollection({ project, collection }).catch(handleCustomError),
-    featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
-=======
     addProjectToCollection: withErrorHandler(async (project, collection) => {
-      await addProjectToCollection(api, project, collection);
+      await addProjectToCollection({ project, collection });
       reloadCollectionProjects([collection]);
     }, handleCustomError),
-    featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
->>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
+    featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
   return [team, funcs];
