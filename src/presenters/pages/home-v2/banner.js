@@ -11,28 +11,22 @@ import styles from './banner.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
-const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641';
+const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795';
 const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4_720.mp4?v=1561656950182';
 
-const Video = forwardRef(({ onClick, poster, src }, ref) => (
-  <video ref={ref} poster={poster} onClick={onClick}>
+const Video = forwardRef(({ poster, src, onClick, controls }, ref) => (
+  <video ref={ref} poster={poster} onClick={onClick} controls={controls}>
     <source type="video/mp4" src={src} />
   </video>
 ));
 
-const OverlayVideoBody = ({ closePopover }) => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current.play();
-  }, []);
-  return (
-    <Overlay>
-      <OverlaySection type="actions">
-        <Video ref={ref} onClick={closePopover} src={videoSrc} />
-      </OverlaySection>
-    </Overlay>
-  );
-};
+const OverlayVideoBody = ({ closePopover }) => (
+  <Overlay>
+    <OverlaySection type="actions">
+      <Video poster={videoPoster} src={videoSrc} controls />
+    </OverlaySection>
+  </Overlay>
+);
 
 const OverlayVideo = () => {
   const track = useTracker('Watch Video clicked');
