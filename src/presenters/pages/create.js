@@ -398,8 +398,6 @@ function Remix() {
     'data-dashboard',
     'hello-tensorflow',
     'airtable-example',
-    'float-layout',
-    'hello-magenta',
   ];
   const api = useAPI();
   const [apps, setApps] = useState([]);
