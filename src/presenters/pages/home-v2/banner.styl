@@ -11,8 +11,6 @@ largeBannerHeight = 440px
   flex-direction: column
   align-items: center
   color: white  
-  background-size: cover
-  background-position: center
   border-radius: u2
   padding: u4 0px
   // @media(min-width: mediumViewport)
@@ -22,35 +20,34 @@ largeBannerHeight = 440px
   //   padding: u4 0px
     
 .bannerCopyContainer
-  margin: 0 auto
-  position: relative
-  background-position: left
+  width: 100%
+  // max-width: 440px
+  padding-top: 11% // max 50px
+  padding-left: 14% // max 65px
+  background-position: top center
   background-repeat: no-repeat
-  background-size: cover
+  background-size: contain
   background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
-  width: 
-  @media(min-width: mediumViewport)
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
+  // @media(min-width: mediumViewport)
+  //   background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
     
 .bannerCopy
   padding-bottom: u3
-  top: 50px
-  left: 65px
-  width: 360px
+  // max-width: 360px
   h1
-    font-size: t6
+    font-size: 6vw
     margin: 0
     transform: rotate(-5deg)
   p
-    margin: u4 0 u3 u4
-    width: 260px
-  @media(min-width: mediumViewport)
-    top: 37px
-    padding-bottom: 0
-    padding-right: u4
-    p
-      margin: u3 u5
-      width: 190px
+    margin: u4 0 u4 u4
+    width: 60%
+  // @media(min-width: mediumViewport)
+  //   top: 37px
+  //   padding-bottom: 0
+  //   padding-right: u4
+  //   p
+  //     margin: u3 u5
+  //     width: 190px
   
 .bannerBtnWrap
   margin-left: 120px
