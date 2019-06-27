@@ -25,7 +25,7 @@ const loadMoreCollectionsFromAuthor = ({ api, collection }) => {
 };
 
 function useCollectionsWithProjects(collections) {
-  const { getCollectionProjects } = useCollectionContext();
+  const getCollectionProjects = useCollectionContext();
   const responses = collections.map(getCollectionProjects);
   const [collectionsWithProjects, setCollectionsWithProjects] = useState(null);
   useEffect(() => {

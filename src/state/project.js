@@ -1,12 +1,10 @@
-import React, { useState, useMemo, useContext, createContext } from 'react';
+import React, { useState, useCallback, useContext, createContext } from 'react';
 
 import useUploader from 'State/uploader';
 import { useAPI, useAPIHandlers } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
-
-export const ProjectContext = createContext();
 
 export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({
@@ -52,37 +50,40 @@ function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust)
   });
 }
 
+const ProjectMemberContext = createContext();
+const ProjectReloadContext = createContext();
 export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
   const api = useAPI();
 
-  const value = useMemo(
-    () => ({
-      getProjectMembers: (projectId) => {
-        if (projectResponses[projectId] && projectResponses[projectId].members) {
-          return projectResponses[projectId].members;
-        }
-        loadProjectMembers(api, [projectId], setProjectResponses);
-        return loadingResponse;
-      },
-      reloadProjectMembers: (projectIds) => {
-        loadProjectMembers(api, projectIds, setProjectResponses, true);
-      },
-    }),
-    [projectResponses, api],
-  );
+  const getProjectMembers = useCallback((projectId) => {
+    if (projectResponses[projectId] && projectResponses[projectId].members) {
+      return projectResponses[projectId].members;
+    }
+    loadProjectMembers(api, [projectId], setProjectResponses);
+    return loadingResponse;
+  }, [projectResponses, api]);
 
-  return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
+  const reloadProjectMembers = useCallback((projectIds) => {
+    loadProjectMembers(api, projectIds, setProjectResponses, true);
+  }, [api]);
+
+  return (
+    <ProjectMemberContext.Provider value={getProjectMembers}>
+      <ProjectReloadContext.Provider value={reloadProjectMembers}>
+        {children}
+      </ProjectReloadContext.Provider>
+    </ProjectMemberContext.Provider>
+  );
 };
 
 export function useProjectMembers(projectId) {
-  const { getProjectMembers } = useContext(ProjectContext);
+  const getProjectMembers = useContext(ProjectMemberContext);
   return getProjectMembers(projectId);
 }
 
 export function useProjectReload() {
-  const { reloadProjectMembers } = useContext(ProjectContext);
-  return reloadProjectMembers;
+  return useContext(ProjectReloadContext);
 }
 
 export function useProjectEditor(initialProject) {
