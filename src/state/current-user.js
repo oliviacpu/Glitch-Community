@@ -207,7 +207,7 @@ export const CurrentUserProvider = ({ children }) => {
       if (usersMatch(sharedOrAnonUser, sharedUserRef.current)) {
         // The user wasn't changed, so we need to fix it
         setFetched(false);
-        const newSharedUser = await getSharedUser(api, persistentToken);
+        const newSharedUser = await getSharedUser(api, sharedOrAnonUser.persistentToken);
         setSharedUser(newSharedUser);
         logSharedUserError(sharedUser, newSharedUser);
       }
