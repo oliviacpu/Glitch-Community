@@ -8,6 +8,7 @@ import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
 import { useProjectReload } from 'State/project';
+import { useCollectionReload } from 'State/collection';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -63,11 +64,8 @@ export function useTeamEditor(initialTeam) {
   const { createNotification } = useNotifications();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
-  const [team, setTeam] = useState({
-    ...initialTeam,
-    _cacheAvatar: Date.now(),
-    _cacheCover: Date.now(),
-  });
+  const reloadCollectionProjects = useCollectionReload();
+  const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
     const { data } = await updateTeam(api, team, changes);
@@ -167,7 +165,7 @@ export function useTeamEditor(initialTeam) {
             hasAvatarImage: true,
             backgroundColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheAvatar: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     uploadCover: () =>
@@ -182,7 +180,7 @@ export function useTeamEditor(initialTeam) {
             hasCoverImage: true,
             coverColor: color,
           });
-          setTeam((prev) => ({ ...prev, _cacheCover: Date.now() }));
+          setTeam((prev) => ({ ...prev, updatedAt: Date.now() }));
         }, handleError),
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
@@ -248,7 +246,10 @@ export function useTeamEditor(initialTeam) {
       removePermissions(currentUser.id, [projectId]);
       reloadProjectMembers([projectId]);
     }, handleError),
-    addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
+    addProjectToCollection: withErrorHandler(async (project, collection) => {
+      await addProjectToCollection(api, project, collection);
+      reloadCollectionProjects([collection]);
+    }, handleCustomError),
     featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };

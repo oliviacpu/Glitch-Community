@@ -226,8 +226,6 @@ UserPage.propTypes = {
     projects: PropTypes.array.isRequired,
     teams: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
-    _deletedProjects: PropTypes.array.isRequired,
   }).isRequired,
 };
 

@@ -204,6 +204,7 @@ const SignInWithCode = ({ align }) => {
             </div>
           </form>
         )}
+        {status === 'loading' && <Loader />}
         {status === 'done' && <Notification persistent type="success">Success!</Notification>}
         {status === 'error' && (
           <>
