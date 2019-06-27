@@ -211,7 +211,7 @@ export function useTeamEditor(initialTeam) {
       updatePermissions(project, updatedProject.users.map((user) => user.projectPermission));
       reloadProjectMembers([project.id]);
     }, handleError),
-    leaveTeamProject: withErrorHandler(async (project) => {
+    leaveProject: withErrorHandler(async (project) => {
       await removeUserFromProject({ project, user: currentUser });
       removePermissions(currentUser, [project]);
       reloadProjectMembers([project.id]);

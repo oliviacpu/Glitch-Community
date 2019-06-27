@@ -113,13 +113,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
               updateNote: funcs.updateNote,
               isAuthorized,
             }}
-            projectOptions={{
-              removeProjectFromCollection: funcs.removeProjectFromCollection,
-              addProjectToCollection: funcs.addProjectToCollection,
-              displayNewNote: funcs.displayNewNote,
-              featureProject: funcs.featureProject,
-              isAuthorized,
-            }}
+            projectOptions={{ ...funcs, collection }}
           />
         )}
         {enableSorting && (
