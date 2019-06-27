@@ -2,13 +2,43 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
+import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
+import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
 
 import styles from './banner.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
-const Video = ({ src, poster }) => {
+
+const OverlayVideoBody = () => {
+  
+}
+
+const OverlayVideo = () => {
+  const renderOuter = ({ visible, togglePopover }) => {
+    const show = () => {
+      togglePopover();
+    };
+
+    return (
+      <>
+        <Button onClick={togglePopover}>Watch Video</Button>
+        {visible && <OverlayBackground />}
+      </>
+    );
+  };
+
+  return (
+    <PopoverContainer outer={renderOuter}>
+      {({ visible, closePopover }) =>
+        visible ? <OverlayVideoBody closePopover={closePopover} /> : null
+      }
+    </PopoverContainer>
+  );
+};
+
+const InlineVideo = ({ src, poster }) => {
   const [status, setStatus] = useState('init'); // init | playing | paused
 
   const onClick = (e) => {
@@ -28,7 +58,7 @@ const Video = ({ src, poster }) => {
       </video>
       {status === 'init' && (
         <div className={styles.bannerVideoButtonWrap}>
-          <Button decorative>Play Video</Button>
+          <Button decorative>Watch Video</Button>
         </div>
       )}
     </div>
@@ -66,16 +96,6 @@ const Chrome = () => (
   </svg>
 );
 
-const BannerVideo = () => (
-  <div className={styles.bannerVideoWrap}>
-    <Chrome />
-    <Video
-      poster="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
-      src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
-    />
-  </div>
-);
-
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
 const Banner = () => (
@@ -97,11 +117,17 @@ const Banner = () => (
           Start Creating <Arrow />
         </Button>
         <div className={styles.watchVideoBtnWrap}>
-          <Button decorative>Watch video</Button>
+          <OverlayVideo />
         </div>
       </div>
     </div>
-    <BannerVideo />
+    <div className={styles.bannerVideoWrap}>
+      <Chrome />
+      <InlineVideo
+        poster="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
+        src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
+      />
+    </div>
   </header>
 );
 
