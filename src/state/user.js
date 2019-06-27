@@ -125,10 +125,6 @@ export function useUserEditor(initialUser) {
       }));
     }, handleError),
     setDeletedProjects: (_deletedProjects) => setUser((prev) => ({ ...prev, _deletedProjects })),
-    addProjectToCollection: withErrorHandler(async (project, collection) => {
-      await addProjectToCollection({ project, collection });
-      reloadCollectionProjects([collection]);
-    }, handleCustomError),
     featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
