@@ -1,5 +1,7 @@
 @import './constants.styl'
 
+largeBannerHeight = 440px
+
 .unmarked
   position: relative
   z-index: 1
@@ -13,6 +15,11 @@
   background-position: center
   border-radius: u2
   padding: u4 0px
+  @media(min-width: mediumViewport)
+    flex-direction: row
+    justify-content: flex-end
+    align-items: center
+    padding: u4 0px
     
 .bannerCopyContainer
   width: 390px
@@ -23,14 +30,24 @@
   background-repeat: no-repeat
   background-size: cover
   background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
-  
+  @media(min-width: smallViewport)
+    width: 450px
+    height: 450px
+  @media(min-width: mediumViewport)
+    width: 375px
+    height: 375px
+    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
+    margin-right: -20px
+  @media(min-width: largeViewport)
+    width: 500px
+    height: largeBannerHeight
+    
 .bannerCopy
   padding-bottom: u3
   position: absolute
   top: 50px
   left: 65px
   width: 360px
-  
   h1
     font-size: t6
     margin: 0
@@ -38,10 +55,32 @@
   p
     margin: u4 0 u3 u4
     width: 260px
+  @media(min-width: mediumViewport)
+    top: 37px
+    padding-bottom: 0
+    padding-right: u4
+    p
+      margin: u3 u5
+      width: 190px
   
+.bannerBtnWrap
+  margin-left: 120px
+  
+.watchVideoBtnWrap
+  display: block
+  margin: u3 0
+  @media(min-width: mediumViewport)
+    display: none
+
 .bannerVideoWrap
   background: white
   z-index: 1
+  @media(min-width: mediumViewport)
+    width: 55%
+    margin: "-%s 0" % u5
+    border-radius: u1    
+  @media(min-width: largeViewport)
+    width: 60%
   svg, video
     width: 100%
     display: block
@@ -61,61 +100,3 @@
   padding-bottom: u4
   
   
-.bannerBtnWrap
-  margin-left: 120px
-  
-.watchVideoBtnWrap
-  display: none
-  
-  
-/* VIEWPORT SPECIFIC STUFF TO KEEP TEXT ALIGNED WITH BACKGROUND IMAGE */
-largeBannerHeight = 440px
-
-
-@media(min-width: mediumViewport)
-  .banner
-    flex-direction: row
-    justify-content: flex-end
-    align-items: center
-    padding: u4 0px
-  .bannerCopyContainer
-    width: 500px
-    height: largeBannerHeight
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
-    margin-right: -20px
-  .bannerCopy
-    padding-bottom: 0
-    padding-right: u4
-  .bannerVideoWrap
-    // min-height: largeBannerHeight // this is for changing video aspect ratio
-    width: 60%
-    margin: "-%s 0" % u5
-    border-radius: u1
-    
-// @media(min-width: mediumViewport) and (max-width: largeViewport)
-//   .bannerVideoWrap
-//     width: 55%
-    
-
-// @media(min-width: smallViewport) and (max-width: mediumViewport)
-//   .bannerCopyContainer
-//     background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560537222315')
-//     width: 450px
-//     height: 450px
-//     margin: 0 auto
-//   .watchVideoBtnWrap
-//     display: block
-//     margin: u3 0
-
-// @media(max-width: smallViewport)
-//   .bannerCopyContainer
-//     width: 375px
-//     height: 375px
-//   .bannerCopy
-//     top: 37px
-//     p
-//       margin: u3 u5
-//       width: 190px
-//   .watchVideoBtnWrap
-//     display: block
-//     margin: u3 0
