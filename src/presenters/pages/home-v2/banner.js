@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
@@ -14,13 +14,13 @@ const Arrow = () => <span aria-hidden="true">→</span>;
 const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795';
 const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4_720.mp4?v=1561656950182';
 
-const Video = forwardRef(({ poster, src, onClick, controls }, ref) => (
-  <video ref={ref} poster={poster} onClick={onClick} controls={controls}>
+const Video = ({ poster, src, onClick, controls }) => (
+  <video poster={poster} onClick={onClick} controls={controls}>
     <source type="video/mp4" src={src} />
   </video>
-));
+);
 
-const OverlayVideoBody = ({ closePopover }) => (
+const OverlayVideoBody = () => (
   <Overlay>
     <OverlaySection type="actions">
       <Video poster={videoPoster} src={videoSrc} controls />
@@ -82,26 +82,22 @@ const InlineVideo = () => {
 const Chrome = () => (
   <svg viewBox="0 0 578 55">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-      <g transform="translate(-622.000000, -148.000000)" fillRule="nonzero">
-        <g transform="translate(621.643282, 148.087262)">
+      <g transform="translate(-622, -148)" fillRule="nonzero">
+        <g transform="translate(622, 148)">
           <g>
-            <rect fill="#FFFFFF" x="-2.27373675e-13" y="0" width="578.550562" height="396" rx="5" />
+            <rect fill="#FFFFFF" x="0" y="0" width="578" height="396" rx="5" />
             <g>
               <path
-                d="M5,-2.50111043e-12 L573.550562,-2.50111043e-12 C576.311986,-2.5016177e-12 578.550562,2.23857625 578.550562,5 L578.550562,57 L0,57 L0,5 C-1.2263553e-15,2.23857625 2.23857625,-2.50060316e-12 5,-2.50111043e-12 Z"
-                id="Rectangle-Copy-10"
-                fill="#6356C7"
-                opacity="0.806152344"
+                d="M5,0 L573,0 C576,0 578,2 578,5 L578,57 L0,57 L0,5 C0,2 2,0 5,0 Z"
+                fill="#847bd2"
               />
               <path
-                d="M2.27373675e-13,24.2075809 L54.3951641,24.2075809 L54.3951641,11.912738 C54.3951641,9.15131422 56.6337404,6.91273797 59.3951641,6.91273797 L122.98116,6.91273797 C125.742584,6.91273797 127.98116,9.15131422 127.98116,11.912738 L127.98116,24.2075809 L578.550562,24.2075809 L578.550562,58.3511734 L2.27373675e-13,58.3511734 L2.27373675e-13,24.2075809 Z"
-                id="Rectangle-Copy-11"
-                fill="#EBEDFF"
-                opacity="0.806152344"
+                d="M0,24 L54,24 L54,11 C54,9 56,6 59,6 L122,6 C125,6 127,9 127,11 L127,24 L578,24 L578,58 L0,58 L0,24 Z"
+                fill="#d8d8f6"
               />
-              <circle id="Oval" fill="#E8E8E8" cx="15.1" cy="13.755152" r="4.02860638" />
-              <circle id="Oval-Copy-3" fill="#E8E8E8" cx="27" cy="13.755152" r="4.02860638" />
-              <circle id="Oval-Copy-5" fill="#E8E8E8" cx="38.9" cy="13.755152" r="4.02860638" />
+              <circle fill="#E8E8E8" cx="15" cy="14" r="4" />
+              <circle fill="#E8E8E8" cx="27" cy="14" r="4" />
+              <circle fill="#E8E8E8" cx="39" cy="14" r="4" />
             </g>
           </g>
         </g>
