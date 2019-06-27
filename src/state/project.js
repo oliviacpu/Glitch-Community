@@ -91,9 +91,9 @@ export function useProjectEditor(initialProject) {
     _avatarCache: Date.now(),
   });
   const { uploadAsset } = useUploader();
-  const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
-  const { updateItem, deleteItem, addProjectToCollection, updateProjectDomain } = useAPIHandlers();
+  const { updateItem, deleteItem, updateProjectDomain } = useAPIHandlers();
 
   async function updateFields(changes) {
     await updateItem({ project }, changes);
@@ -106,7 +106,6 @@ export function useProjectEditor(initialProject) {
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
-    addProjectToCollection: (collection) => addProjectToCollection({ project, collection }).catch(handleCustomError),
     deleteProject: () => deleteItem({ project }).catch(handleError),
     updateDomain: withErrorHandler(async (domain) => {
       await updateFields({ domain });

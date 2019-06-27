@@ -156,7 +156,7 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
-  const [project, { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
     initialProject,
   );
 
@@ -209,12 +209,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed
-          project={project}
-          isAuthorized={isAuthorized}
-          currentUser={currentUser}
-          addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
-        />
+        <ProjectEmbed project={project} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
