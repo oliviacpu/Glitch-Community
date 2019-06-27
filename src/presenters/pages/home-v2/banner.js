@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
-import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
+import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
 
@@ -10,9 +10,27 @@ import styles from './banner.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
+const videoPoster = "https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
+const videoSrc = "https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
 
-const OverlayVideoBody = () => {
-  
+const Video = forwardRef(({ onClick, poster, src }, ref) => (
+  <video ref={ref} poster={poster} onClick={onClick}>
+    <source type="video/mp4" src={src} />
+  </video>
+))
+
+const OverlayVideoBody = ({ closePopover }) => {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current.play()
+  }, [])
+  return (
+    <Overlay>
+      <OverlaySection type="actions">
+        <Video ref={ref} onClick={closePopover} src={videoSrc} />
+      </OverlaySection>
+    </Overlay>
+  )
 }
 
 const OverlayVideo = () => {
@@ -38,7 +56,7 @@ const OverlayVideo = () => {
   );
 };
 
-const InlineVideo = ({ src, poster }) => {
+const InlineVideo = () => {
   const [status, setStatus] = useState('init'); // init | playing | paused
 
   const onClick = (e) => {
@@ -53,9 +71,7 @@ const InlineVideo = ({ src, poster }) => {
 
   return (
     <div className={classnames(styles.bannerVideo, styles[status])}>
-      <video poster={poster} onClick={onClick}>
-        <source type="video/mp4" src={src} />
-      </video>
+      <Video onClick={onClick} poster={videoPoster} src={videoSrc} />
       {status === 'init' && (
         <div className={styles.bannerVideoButtonWrap}>
           <Button decorative>Watch Video</Button>
@@ -123,10 +139,7 @@ const Banner = () => (
     </div>
     <div className={styles.bannerVideoWrap}>
       <Chrome />
-      <InlineVideo
-        poster="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
-        src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
-      />
+      <InlineVideo />
     </div>
   </header>
 );
