@@ -9,42 +9,31 @@ largeBannerHeight = 440px
 .banner
   display: flex
   flex-direction: column
-  align-items: flex-start
+  align-items: center
   color: white  
   background-size: cover
   background-position: center
   border-radius: u2
   padding: u4 0px
-  @media(min-width: mediumViewport)
-    flex-direction: row
-    justify-content: flex-end
-    align-items: center
-    padding: u4 0px
+  // @media(min-width: mediumViewport)
+  //   flex-direction: row
+  //   justify-content: flex-end
+  //   align-items: center
+  //   padding: u4 0px
     
 .bannerCopyContainer
-  width: 390px
-  height: 390px
   margin: 0 auto
   position: relative
   background-position: left
   background-repeat: no-repeat
   background-size: cover
   background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
-  @media(min-width: smallViewport)
-    width: 450px
-    height: 450px
+  width: 
   @media(min-width: mediumViewport)
-    width: 375px
-    height: 375px
     background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
-    margin-right: -20px
-  @media(min-width: largeViewport)
-    width: 500px
-    height: largeBannerHeight
     
 .bannerCopy
   padding-bottom: u3
-  position: absolute
   top: 50px
   left: 65px
   width: 360px
