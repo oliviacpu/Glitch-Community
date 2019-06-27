@@ -11,7 +11,6 @@ import { getSingleItem } from 'Shared/api';
 function useUserPageGetters() {
   const api = useAPI();
   return {
-    getUserCollections: ({ user }) => api.get(`collections?userId=${user.id}`),
     getDeletedProject: ({ project }) => api.get(`/projects/${project.id}?showDeleted=true`),
     getProject: ({ project }) => getSingleItem(api, `/v1/projects/by/id?id=${project.id}`, project.id),
   };
@@ -36,7 +35,7 @@ export function useUserEditor(initialUser) {
     undeleteProject,
     addProjectToCollection,
   } = useAPIHandlers();
-  const { getUserCollections, getDeletedProject, getProject } = useUserPageGetters();
+  const { getDeletedProject, getProject } = useUserPageGetters();
   const reloadCollectionProjects = useCollectionReload();
 
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
