@@ -28,7 +28,7 @@ const useDefaultProjectOptions = () => {
       reloadCollectionProjects([collection]);
     }, handleCustomError),
     joinTeamProject: withErrorHandler(async (project, team) => {
-      const { data: updatedProject } = await joinTeamProject({ team, project });
+      await joinTeamProject({ team, project });
       reloadProjectMembers([project.id]);
     }, handleError),
     leaveProject: withErrorHandler(async (project) => {
@@ -39,6 +39,7 @@ const useDefaultProjectOptions = () => {
   };
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const useProjectOptions = (project, { user, team, collection, ...options } = {}) => {
   const { currentUser } = useCurrentUser();
   const defaultProjectOptions = useDefaultProjectOptions();

@@ -11,6 +11,7 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
+import { useProjectOptions } from 'State/project-options';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -41,7 +42,8 @@ const ProfileListLoader = ({ project }) => (
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
-const ProjectItem = ({ project, projectOptions }) => {
+const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
