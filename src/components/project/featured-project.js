@@ -52,7 +52,7 @@ const FeaturedProject = ({
               updateNote={updateNote}
               isAuthorized={isAuthorized}
               unfeatureProject={animateAndUnfeatureProject}
-              createNote={collection ? () => displayNewNote(featuredProject.id) : null}
+              createNote={collection ? () => displayNewNote(featuredProject) : null}
             />
           }
           project={featuredProject}
