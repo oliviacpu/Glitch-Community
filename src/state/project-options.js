@@ -52,7 +52,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   }, [user, team, project]);
   
   return useMemo(() => {
-
     const isLoggedIn = !!currentUser.login;
     const isProjectMember = userIsProjectMember({ project, user: currentUser });
     const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
@@ -12,6 +12,7 @@ import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
+import { useCurrentUser } from 'State/current-user';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -25,12 +26,10 @@ const getLinkBodyStyles = (project) =>
     [styles.private]: project.private,
   });
 
-const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
-
-const ProfileListWithData = ({ project }) => {
+const ProfileListWithData = React.memo(({ project }) => {
   const { value: members } = useProjectMembers(project.id);
   return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />;
-};
+});
 
 const ProfileListLoader = ({ project }) => (
   <VisibilityContainer>
@@ -43,7 +42,12 @@ const ProfileListLoader = ({ project }) => (
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  const renderCount = useRef(0)
+  renderCount.current++;
+  console.log(renderCount);
   const projectOptions = useProjectOptions(project, providedProjectOptions);
+  // const projectOptions = {};
+  const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -65,7 +69,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
             return (
               <div className={styles.container}>
                 <header className={styles.header}>
-                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
+                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
                   <div className={styles.projectOptionsContainer}>
