@@ -26,18 +26,18 @@ const getLinkBodyStyles = (project) =>
     [styles.private]: project.private,
   });
 
-const ProfileListWithData = React.memo(({ project }) => {
+const ProfileListWithData = ({ project }) => {
   const { value: members } = useProjectMembers(project.id);
   return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />;
-});
+};
 
-const ProfileListLoader = ({ project }) => (
+const ProfileListLoader = React.memo(({ project }) => (
   <VisibilityContainer>
     {({ wasEverVisible }) => (
       wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} />
     )}
   </VisibilityContainer>
-);
+));
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
