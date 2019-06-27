@@ -5,43 +5,45 @@ import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
+import { useTracker } from 'State/segment-analytics';
 
 import styles from './banner.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
-const videoPoster = "https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641"
-const videoSrc = "https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
+const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641';
+const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313';
 
 const Video = forwardRef(({ onClick, poster, src }, ref) => (
   <video ref={ref} poster={poster} onClick={onClick}>
     <source type="video/mp4" src={src} />
   </video>
-))
+));
 
 const OverlayVideoBody = ({ closePopover }) => {
-  const ref = useRef()
+  const ref = useRef();
   useEffect(() => {
-    ref.current.play()
-  }, [])
+    ref.current.play();
+  }, []);
   return (
     <Overlay>
       <OverlaySection type="actions">
         <Video ref={ref} onClick={closePopover} src={videoSrc} />
       </OverlaySection>
     </Overlay>
-  )
-}
+  );
+};
 
 const OverlayVideo = () => {
+  const track = useTracker('Watch Video clicked');
   const renderOuter = ({ visible, togglePopover }) => {
-    const show = () => {
+    const onClick = () => {
+      track();
       togglePopover();
     };
-
     return (
       <>
-        <Button onClick={togglePopover}>Watch Video</Button>
+        <Button onClick={onClick}>Watch Video</Button>
         {visible && <OverlayBackground />}
       </>
     );
@@ -49,17 +51,19 @@ const OverlayVideo = () => {
 
   return (
     <PopoverContainer outer={renderOuter}>
-      {({ visible, closePopover }) =>
-        visible ? <OverlayVideoBody closePopover={closePopover} /> : null
-      }
+      {({ visible, closePopover }) => (visible ? <OverlayVideoBody closePopover={closePopover} /> : null)}
     </PopoverContainer>
   );
 };
 
 const InlineVideo = () => {
   const [status, setStatus] = useState('init'); // init | playing | paused
+  const track = useTracker();
 
   const onClick = (e) => {
+    if (status === 'init') {
+      track('Watch Video clicked');
+    }
     if (status === 'playing') {
       e.target.pause();
       setStatus('paused');
@@ -116,7 +120,7 @@ const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}<
 
 const Banner = () => (
   <header id="banner" className={styles.banner}>
-    <div className={styles.bannerCopyContainer}>      
+    <div className={styles.bannerCopyContainer}>
       <h1>
         <Unmarked>Glitch is the</Unmarked>
         <br />
@@ -128,7 +132,7 @@ const Banner = () => (
       </h1>
       <div className={styles.bannerCopyAndButtons}>
         <p>Discover, build, and share millions of apps and websites — for free</p>
-      
+
         <Button type="cta" href="#top-picks">
           Start Creating <Arrow />
         </Button>
