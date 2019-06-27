@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { pickBy } from 'lodash';
 
 import { useCurrentUser } from 'State/current-user';
@@ -22,7 +22,7 @@ const useDefaultProjectOptions = () => {
   const { handleError, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
   const reloadCollectionProjects = useCollectionReload();
-  return {
+  return useMemo(() => ({
     addProjectToCollection: withErrorHandler(async (project, collection) => {
       await addProjectToCollection({ project, collection });
       reloadCollectionProjects([collection]);
@@ -36,7 +36,7 @@ const useDefaultProjectOptions = () => {
       reloadProjectMembers([project.id]);
     }, handleError),
     deleteProject: (project) => deleteProject({ project }).catch(handleError),
-  };
+  }), [currentUser]);
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -50,29 +50,32 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
     if (team) return team.teamPins.some(({ projectId }) => projectId === project.id);
     return false;
   }, [user, team, project]);
+  
+  return useMemo(() => {
 
-  const isLoggedIn = !!currentUser.login;
-  const isProjectMember = userIsProjectMember({ project, user: currentUser });
-  const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
-  const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });
+    const isLoggedIn = !!currentUser.login;
+    const isProjectMember = userIsProjectMember({ project, user: currentUser });
+    const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
+    const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });
 
-  const isUser = user && user.id === currentUser.id;
-  const isCollectionOwner = collection && userOrTeamIsAuthor({ collection, user: currentUser });
-  const isTeamMember = team && userIsOnTeam({ team, user: currentUser });
-  const projectTeam = team || currentUser.teams.find((t) => project.teamIds.includes(t.id));
-  const isProfileOwner = isUser || isCollectionOwner || isTeamMember;
-  const canAddNote = collection ? isCollectionOwner : isProjectAdmin;
+    const isUser = user && user.id === currentUser.id;
+    const isCollectionOwner = collection && userOrTeamIsAuthor({ collection, user: currentUser });
+    const isTeamMember = team && userIsOnTeam({ team, user: currentUser });
+    const projectTeam = team || currentUser.teams.find((t) => project.teamIds.includes(t.id));
+    const isProfileOwner = isUser || isCollectionOwner || isTeamMember;
+    const canAddNote = collection ? isCollectionOwner : isProjectAdmin;
 
-  return pickBy({
-    addProjectToCollection: isLoggedIn && projectOptions.addProjectToCollection,
-    featureProject: !project.private && isProfileOwner && bind(projectOptions.featureProject, project),
-    addPin: isProfileOwner && !isPinned && bind(projectOptions.addPin, project),
-    removePin: isProfileOwner && isPinned && bind(projectOptions.removePin, project),
-    displayNewNote: !project.note && !project.isAddingANewNote && canAddNote && bind(projectOptions.displayNewNote, project),
-    joinTeamProject: !isProjectMember && !!projectTeam && bind(projectOptions.joinTeamProject, project, projectTeam),
-    leaveProject: isProjectMember && !isOnlyProjectAdmin && bind(projectOptions.leaveProject, project),
-    removeProjectFromTeam: isTeamMember && bind(projectOptions.removeProjectFromTeam, project),
-    deleteProject: isProjectAdmin && bind(projectOptions.deleteProject, project),
-    removeProjectFromCollection: isCollectionOwner && bind(projectOptions.removeProjectFromCollection, project),
-  });
+    return pickBy({
+      addProjectToCollection: isLoggedIn && projectOptions.addProjectToCollection,
+      featureProject: !project.private && isProfileOwner && bind(projectOptions.featureProject, project),
+      addPin: isProfileOwner && !isPinned && bind(projectOptions.addPin, project),
+      removePin: isProfileOwner && isPinned && bind(projectOptions.removePin, project),
+      displayNewNote: !project.note && !project.isAddingANewNote && canAddNote && bind(projectOptions.displayNewNote, project),
+      joinTeamProject: !isProjectMember && !!projectTeam && bind(projectOptions.joinTeamProject, project, projectTeam),
+      leaveProject: isProjectMember && !isOnlyProjectAdmin && bind(projectOptions.leaveProject, project),
+      removeProjectFromTeam: isTeamMember && bind(projectOptions.removeProjectFromTeam, project),
+      deleteProject: isProjectAdmin && bind(projectOptions.deleteProject, project),
+      removeProjectFromCollection: isCollectionOwner && bind(projectOptions.removeProjectFromCollection, project),
+    });
+  }, [currentUser, user, team, project])  
 };

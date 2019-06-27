@@ -65,7 +65,7 @@ const FeaturedProject = ({
 );
 
 FeaturedProject.propTypes = {
-  addProjectToCollection: PropTypes.func.isRequired,
+  addProjectToCollection: PropTypes.func,
   featuredProject: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   unfeatureProject: PropTypes.func.isRequired,
@@ -77,6 +77,7 @@ FeaturedProject.propTypes = {
 
 FeaturedProject.defaultProps = {
   collection: null,
+  addProjectToCollection: null,
   displayNewNote: () => {},
   hideNote: () => {},
   updateNote: () => {},
