@@ -31,13 +31,13 @@ const ProfileListWithData = ({ project }) => {
   return <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} {...members} />;
 };
 
-const ProfileListLoader = React.memo(({ project }) => (
+const ProfileListLoader = ({ project }) => (
   <VisibilityContainer>
     {({ wasEverVisible }) => (
       wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} />
     )}
   </VisibilityContainer>
-));
+);
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
