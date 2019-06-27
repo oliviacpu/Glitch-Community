@@ -7,14 +7,13 @@ import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
 import Markdown from 'Components/text/markdown';
-import Link from 'Components/link';
 import Text from 'Components/text/text';
 import Questions from 'Components/questions';
 import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
+import Mark from 'Components/mark';
 import { useCurrentUser } from 'State/current-user';
-
 import { getEditorUrl } from 'Models/project';
 
 import Banner from './banner';
@@ -24,12 +23,6 @@ import compiledData from '../../../curated/home.json';
 import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
-
-const Mark = ({ color, children }) => (
-  <span className={styles.mark} style={{ '--mark-color': color }}>
-    <span className={styles.markText}>{children}</span>
-  </span>
-);
 
 const calloutImages = {
   apps: () => <Discover />,
@@ -209,9 +202,9 @@ const BuildingOnGlitch = ({ content }) => (
 const MadeInGlitch = () => (
   <section className="made-in-glitch">
     <Text>Of course, this site was made on Glitch too</Text>
-    <Link to={getEditorUrl('community')} className="button button-link has-emoji">
-      View Source <span className="emoji carp_streamer" />
-    </Link>
+    <Button href={getEditorUrl('community')} emoji="carpStreamer">
+      View Source
+    </Button>
   </section>
 );
 

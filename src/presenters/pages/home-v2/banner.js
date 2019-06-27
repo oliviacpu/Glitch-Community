@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
+import Mark from 'Components/mark';
 
 import styles from './styles.styl';
 
@@ -73,12 +74,6 @@ const BannerVideo = () => (
       src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313"
     />
   </div>
-);
-
-const Mark = ({ color, children }) => (
-  <span className={styles.mark} style={{ '--mark-color': color }}>
-    <span className={styles.markText}>{children}</span>
-  </span>
 );
 
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
