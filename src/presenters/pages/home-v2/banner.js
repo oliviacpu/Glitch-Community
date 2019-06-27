@@ -90,15 +90,16 @@ const Banner = () => (
         <br />
         <Mark color="#18B576">create the web</Mark>
       </h1>
-      <p>Discover, build, and share millions of apps and websites — for free</p>
-      <div className={styles.bannerBtnWrap}>
+      <div className={styles.bannerCopyAndButtons}>
+        <p>Discover, build, and share millions of apps and websites — for free</p>
+      
         <Button type="cta" href="#top-picks">
           Start Creating <Arrow />
         </Button>
         <div className={styles.watchVideoBtnWrap}>
           <Button decorative>Watch video</Button>
         </div>
-      </div> 
+      </div>
     </div>
     <BannerVideo />
   </header>

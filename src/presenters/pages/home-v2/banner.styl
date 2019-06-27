@@ -20,7 +20,6 @@ largeBannerHeight = 440px
     
 .bannerCopyContainer
   width: 100%
-  // max-width: 440px
   padding-top: 11%
   padding-left: 14%
   padding-bottom: u3
@@ -33,13 +32,13 @@ largeBannerHeight = 440px
     margin: 0
     transform: rotate(-5deg)
   p
-    position: relative
-    font-size: 3.5vw
-    margin: u3 25% u3 30%
+    font-size: 3.4vw
+    line-height: 1.2
     text-shadow: 1px 1px #6356C7
 
   @media(min-width: mediumViewport)
     flex: 0 0 440px
+    margin-bottom: "-%s" % u4
     min-height: 400px
     padding-top: 45px
     padding-left: 50px
@@ -48,12 +47,14 @@ largeBannerHeight = 440px
       font-size: t6
     p
       font-size: t3
-      left: -20px
-      margin: u3 auto
-      width: 180px
-
-.bannerBtnWrap
-  margin-left: 120px
+      
+.bannerCopyAndButtons
+  position: relative
+  margin: u3 25% u3 30%
+  @media(min-width: mediumViewport)
+    left: -20px
+    margin: u3 auto
+    width: 180px
   
 .watchVideoBtnWrap
   display: block
@@ -62,14 +63,12 @@ largeBannerHeight = 440px
     display: none
 
 .bannerVideoWrap
-  background: white
+  flex: 1 1 auto
   z-index: 1
+  border-radius: u1
+  display: none
   @media(min-width: mediumViewport)
-    width: 55%
-    margin: "-%s 0" % u5
-    border-radius: u1    
-  @media(min-width: largeViewport)
-    width: 60%
+    display: block
   svg, video
     width: 100%
     display: block
