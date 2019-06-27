@@ -8,6 +8,7 @@ import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
+import Arrow from 'Components/arrow';
 import { isDarkColor } from 'Models/collection';
 import { useCollectionCurator } from 'State/collection';
 
@@ -72,7 +73,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
         </div>
       </div>
       <div className={styles.smallProjectCount}>
-        <Pluralize count={collection.projects.length} singular="project" /> →
+        <Pluralize count={collection.projects.length} singular="project" /> <Arrow />
       </div>
     </CollectionLink>
   </div>
