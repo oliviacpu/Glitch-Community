@@ -156,7 +156,7 @@ class CurrentUserManager extends React.Component {
       const {
         baseUser, emails, projects, teams, collections,
       } = await allByKeys({
-        baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}`, sharedUser.id),
+        baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}&cache=${Date.now()}`, sharedUser.id),
         emails: getAllPages(api, makeUrl('emails')),
         projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
         teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
