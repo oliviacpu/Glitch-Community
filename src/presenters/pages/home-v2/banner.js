@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import Button from 'Components/buttons/button';
 import Mark from 'Components/mark';
 
-import styles from './styles.styl';
+import styles from './banner.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
 
