@@ -24,7 +24,7 @@ const PopoverMenuItems = ({ children }) =>
 const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
   const { currentUser } = useCurrentUser();
   // TODO: replace this with a multi-popover pane
-  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject &&  (project) => {
+  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject && ((project) => {
     if (isTeamProject({ currentUser, project })) {
       projectOptions.leaveProject(project);
       return;
@@ -36,7 +36,7 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
     if (window.confirm(prompt)) {
       projectOptions.leaveProject(project);
     }
-  }, 'Leave Project clicked');
+  }), 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (

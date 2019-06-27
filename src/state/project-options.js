@@ -51,7 +51,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
     return false;
   }, [user, team, project]);
 
-  const isLoggedIn = currentUser.login;
+  const isLoggedIn = !!currentUser.login;
   const isProjectMember = userIsProjectMember({ project, user: currentUser });
   const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
   const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });

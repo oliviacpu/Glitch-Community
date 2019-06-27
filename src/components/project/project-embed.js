@@ -16,7 +16,7 @@ import styles from './project-embed.styl';
 const cx = classNames.bind(styles);
 
 const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
-  const projectOptions = useProjectOptions(project, { addProjectToCollection });
+  const projectOptions = useProjectOptions(project, addProjectToCollection ? { addProjectToCollection } : {});
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const trackRemix = useTracker('Click Remix', {
