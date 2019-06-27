@@ -211,7 +211,7 @@ const MadeInGlitch = () => (
 // loggedIn and hasProjects are passed as props instead of pulled from context
 // because we want the preview to show what an anonymous user would see
 export const Home = ({ data, loggedIn, hasProjects }) => (
-  <>
+  <div className={styles.homeContainer}>
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
@@ -226,7 +226,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     <BuildingOnGlitch content={data.buildingOnGlitch} />
     <MadeInGlitch />
     <ReportButton reportedType="home" />
-  </>
+  </div>
 );
 
 const HomeWithProductionData = () => {

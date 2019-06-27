@@ -1,27 +1,14 @@
 @import './constants.styl'
 
-section
-  margin-top: 5em 
-  .subtitle
-    margin-left: u3
-    margin-bottom: 2.5em
-section:first-of-type
-  margin-top: 0
-  
-.mark
-  display: inline-block
-  transform: rotate(-1deg)
-  position: relative
-  left: "-%s" % u1
-  z-index: 0
-  background-color: var(--mark-color)
-  padding: u1 u2
-  border-radius: u1
-.markText
-  position: relative
-  display: inline-block
-  transform: rotate(1deg)
-  
+.homeContainer
+  section
+    margin-top: 5em 
+    .subtitle
+      margin-left: u3
+      margin-bottom: 2.5em
+  section:first-of-type
+    margin-top: 0
+
 .unmarked
   position: relative
   z-index: 1
@@ -201,7 +188,7 @@ largeBannerHeight = 440px
   flex-direction: column
   background-color: bg2
   border-radius: u1
-  margin-top: u2
+  margin-top: u2 !important
   
 .unifiedStoriesFeatureLabel
   display: inline-block
