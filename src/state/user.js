@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
+<<<<<<< HEAD
 import { getSingleItem } from 'Shared/api';
 
 function useUserPageGetters() {
@@ -15,6 +16,25 @@ function useUserPageGetters() {
     getProject: ({ project }) => getSingleItem(api, `/v1/projects/by/id?id=${project.id}`, project.id),
   };
 }
+=======
+import { useCollectionReload } from 'State/collection';
+
+export const addPin = (api, projectId, user) => api.post(`users/${user.id}/pinned-projects/${projectId}`);
+export const removePin = (api, projectId, user) => api.delete(`users/${user.id}/pinned-projects/${projectId}`);
+export const leaveProject = (api, projectId, user) =>
+  api.delete(`/projects/${projectId}/authorization`, {
+    data: {
+      targetUserId: user.id,
+    },
+  });
+
+export const getProject = (api, projectId) => api.get(`projects/${projectId}`);
+export const getDeletedProject = (api, projectId) => api.get(`projects/${projectId}?showDeleted=true`);
+export const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
+export const undeleteProject = (api, projectId) => api.post(`/projects/${projectId}/undelete`);
+
+export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
 
 // eslint-disable-next-line import/prefer-default-export
 export function useUserEditor(initialUser) {
@@ -25,6 +45,7 @@ export function useUserEditor(initialUser) {
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAsset, uploadAssetSizes } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+<<<<<<< HEAD
   const { getCoverImagePolicy } = assets.useAssetPolicy();
   const {
     updateItem,
@@ -36,6 +57,9 @@ export function useUserEditor(initialUser) {
     addProjectToCollection,
   } = useAPIHandlers();
   const { getUserCollections, getDeletedProject, getProject } = useUserPageGetters();
+=======
+  const reloadCollectionProjects = useCollectionReload();
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
 
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
@@ -47,6 +71,7 @@ export function useUserEditor(initialUser) {
     }
   }
 
+<<<<<<< HEAD
   async function reloadCollections() {
     const { data } = await getUserCollections({ user });
     setUser((prev) => ({ ...prev, collections: data }));
@@ -56,6 +81,8 @@ export function useUserEditor(initialUser) {
     reloadCollections();
   }, []);
 
+=======
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
@@ -135,8 +162,13 @@ export function useUserEditor(initialUser) {
     }, handleError),
     setDeletedProjects: (_deletedProjects) => setUser((prev) => ({ ...prev, _deletedProjects })),
     addProjectToCollection: withErrorHandler(async (project, collection) => {
+<<<<<<< HEAD
       await addProjectToCollection({ project, collection });
       reloadCollections();
+=======
+      await addProjectToCollection(api, project, collection);
+      reloadCollectionProjects([collection]);
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
     }, handleCustomError),
     featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),

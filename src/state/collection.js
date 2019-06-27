@@ -1,7 +1,106 @@
-import { useState } from 'react';
+import React, { useState, useMemo, useContext, createContext } from 'react';
 
+<<<<<<< HEAD
 import { useAPIHandlers } from 'State/api';
+=======
+import { useAPI, createAPIHook } from 'State/api';
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
 import useErrorHandlers from 'State/error-handlers';
+import { getSingleItem, getAllPages } from 'Shared/api';
+import { captureException } from 'Utils/sentry';
+
+const CollectionContext = createContext();
+
+export const getCollectionWithProjects = async (api, { owner, name }) => {
+  const fullUrl = `${encodeURIComponent(owner)}/${name}`;
+  try {
+    const [collection, projects] = await Promise.all([
+      getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
+      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
+    ]);
+    return { ...collection, projects };
+  } catch (error) {
+    if (error && error.response && error.response.status === 404) return null;
+    captureException(error);
+    return null;
+  }
+};
+
+async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
+  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
+}
+
+const loadingResponse = { status: 'loading' };
+
+function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
+  setResponses((prev) => {
+    const next = { ...prev };
+    for (const { id } of collections) {
+      if (!next[id] || !next[id].projects) {
+        next[id] = { ...next[id], projects: loadingResponse };
+      }
+    }
+    return next;
+  });
+  collections.forEach(async (collection) => {
+    const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
+    setResponses((prev) => ({
+      ...prev,
+      [collection.id]: {
+        ...prev[collection.id],
+        projects: { status: 'ready', value: projects },
+      },
+    }));
+  });
+}
+
+export const CollectionContextProvider = ({ children }) => {
+  const [responses, setResponses] = useState({});
+  const api = useAPI();
+
+  const value = useMemo(
+    () => ({
+      getCollectionProjects: (collection) => {
+        if (responses[collection.id] && responses[collection.id].projects) {
+          return responses[collection.id].projects;
+        }
+        loadCollectionProjects(api, [collection], setResponses);
+        return loadingResponse;
+      },
+      reloadCollectionProjects: (collections) => {
+        loadCollectionProjects(api, collections, setResponses, true);
+      },
+    }),
+    [responses, api],
+  );
+
+  return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
+};
+
+export const useCollectionContext = () => useContext(CollectionContext);
+
+export function useCollectionProjects(collection) {
+  const { getCollectionProjects } = useContext(CollectionContext);
+  return getCollectionProjects(collection);
+}
+
+export function useCollectionReload() {
+  const { reloadCollectionProjects } = useContext(CollectionContext);
+  return reloadCollectionProjects;
+}
+
+export const useCollectionCurator = createAPIHook(async (api, collection) => {
+  if (collection.teamId > 0) {
+    const team = await getSingleItem(api, `/v1/teams/by/id?id=${collection.teamId}`, collection.teamId);
+    return { team };
+  }
+  if (collection.userId > 0) {
+    const user = await getSingleItem(api, `/v1/users/by/id?id=${collection.userId}`, collection.userId);
+    return { user };
+  }
+  return {};
+});
 
 export function userOrTeamIsAuthor({ collection, user }) {
   if (!user) return false;

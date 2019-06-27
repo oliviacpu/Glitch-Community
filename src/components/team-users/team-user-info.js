@@ -41,7 +41,12 @@ const ProjectsList = ({ options, value, onChange }) => (
           value={project.id}
           onChange={(e) => {
             const next = new Set(value);
-            onChange(Array.from(e.target.checked ? next.add(e.target.value) : next.delete(e.target.value)));
+            if (e.target.checked) {
+              next.add(e.target.value);
+            } else {
+              next.delete(e.target.value);
+            }
+            onChange(Array.from(next));
           }}
         />
         <div className={styles.projectAvatarWrap}>

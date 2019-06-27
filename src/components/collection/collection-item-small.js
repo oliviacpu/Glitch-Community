@@ -6,9 +6,10 @@ import classnames from 'classnames';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
-
 import { CollectionAvatar } from 'Components/images/avatar';
-import { isDarkColor } from '../../models/collection';
+import VisibilityContainer from 'Components/visibility-container';
+import { isDarkColor } from 'Models/collection';
+import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-item.styl';
 
@@ -18,6 +19,17 @@ const collectionColorStyles = (collection) => ({
 });
 
 const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
+
+const CollectionCurator = ({ collection }) => {
+  const { value: curator } = useCollectionCurator(collection);
+  return <ProfileItem {...curator} />;
+};
+
+const CollectionCuratorLoader = ({ collection }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
+  </VisibilityContainer>
+);
 
 const CollectionLink = ({ collection, children }) => (
   <a href={`/@${collection.fullUrl}`} className={styles.smallCollectionLink}>
@@ -29,7 +41,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
     {showCurator && (
       <div className={styles.curator}>
-        <ProfileItem user={collection.user} team={collection.team} />
+        <CollectionCuratorLoader collection={collection} />
       </div>
     )}
     <CollectionLink collection={collection}>

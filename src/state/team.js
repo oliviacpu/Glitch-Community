@@ -8,6 +8,7 @@ import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
 import { useProjectReload } from 'State/project';
+import { useCollectionReload } from 'State/collection';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -20,6 +21,7 @@ export function useTeamEditor(initialTeam) {
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
   const reloadProjectMembers = useProjectReload();
+<<<<<<< HEAD
   const {
     updateItem,
     deleteItem,
@@ -36,6 +38,9 @@ export function useTeamEditor(initialTeam) {
     joinTeamProject,
     addProjectToCollection,
   } = useAPIHandlers();
+=======
+  const reloadCollectionProjects = useCollectionReload();
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
   const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
@@ -217,8 +222,16 @@ export function useTeamEditor(initialTeam) {
       removePermissions(currentUser, [project]);
       reloadProjectMembers([project.id]);
     }, handleError),
+<<<<<<< HEAD
     addProjectToCollection: (project, collection) => addProjectToCollection({ project, collection }).catch(handleCustomError),
     featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
+=======
+    addProjectToCollection: withErrorHandler(async (project, collection) => {
+      await addProjectToCollection(api, project, collection);
+      reloadCollectionProjects([collection]);
+    }, handleCustomError),
+    featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
+>>>>>>> ca8dcd64905faebab897409078ff9c6a661d22ed
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
   return [team, funcs];
