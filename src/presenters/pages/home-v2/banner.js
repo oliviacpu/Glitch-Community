@@ -12,7 +12,7 @@ import styles from './banner.styl';
 const Arrow = () => <span aria-hidden="true">→</span>;
 
 const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fjenn_poster_small.jpg?v=1561584125641';
-const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4.mp4?v=1561583730313';
+const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4_720.mp4?v=1561656950182';
 
 const Video = forwardRef(({ onClick, poster, src }, ref) => (
   <video ref={ref} poster={poster} onClick={onClick}>
