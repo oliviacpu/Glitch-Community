@@ -92,7 +92,7 @@ async function getAnonUser() {
 async function getSharedUser(persistentToken) {
   if (!persistentToken) return undefined;
   const api = getAPIForToken(persistentToken);
-  
+
   try {
     return await getSingleItem(api, `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
   } catch (error) {
