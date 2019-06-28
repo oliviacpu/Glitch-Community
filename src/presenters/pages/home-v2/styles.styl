@@ -32,23 +32,20 @@
   margin-top: 1em 2em auto
     
 .featureCalloutsRow
-  text-align: center
-  --gap: u3
-  @media(min-width: mediumViewport)
-    text-align: left
+  --gap: u4
     
 .featureCalloutsImage
   height: 70px
   background-size: contain
   background-repeat: no-repeat
   background-position: center
-  // display: flex
-  // align-items: center
-  // justify-content: center
+  display: flex
   svg
     height: 100%
+    max-width: 100%
   @media(min-width: mediumViewport)
     height: 145px
+    padding: u2
     
 .featureCalloutsHeader
   display: flex
@@ -60,9 +57,10 @@
 .featureCalloutsTitle
   font-size: t3
   font-weight: 600
-  margin-left: "-%s" % u3
+  margin-left: t2
   @media(min-width: mediumViewport)
-    margin-top: "-%s" % u3
+    margin-top: "-%s" % u2
+    margin-bottom: u2
     margin-left: 0
 
   
