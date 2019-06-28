@@ -6,6 +6,6 @@ module.exports = {
   Curated: path.resolve(__dirname, '../src/curated'),
   Models: path.resolve(__dirname, '../src/models'),
   State: path.resolve(__dirname, '../src/state'),
-  Shared: path.resolve(__dirname),
   Hooks: path.resolve(__dirname, '../src/hooks'),
+  Shared: path.resolve(__dirname),
 };

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useContext, createContext } from 'react';
 
 import useUploader from 'State/uploader';
-import { useAPI } from 'State/api';
+import { useAPI, useAPIHandlers } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
@@ -16,25 +16,6 @@ export async function getProjectByDomain(api, domain) {
   });
   return { ...project, teams, users };
 }
-
-export const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
-
-export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-
-export const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
-
-export const updateProjectDomain = (api, project) =>
-  api.post(
-    `project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
-    {},
-    {
-      transformRequest: (data, headers) => {
-        // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
-        delete headers.Authorization;
-        return data;
-      },
-    },
-  );
 
 async function getMembers(api, projectId, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
@@ -111,10 +92,11 @@ export function useProjectEditor(initialProject) {
   });
   const { uploadAsset } = useUploader();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-  const api = useAPI();
+  const { getAvatarImagePolicy } = assets.useAssetPolicy();
+  const { updateItem, deleteItem, addProjectToCollection, updateProjectDomain } = useAPIHandlers();
 
   async function updateFields(changes) {
-    await updateProject(api, project, changes);
+    await updateItem({ project }, changes);
     setProject((prev) => ({
       ...prev,
       ...changes,
@@ -124,19 +106,19 @@ export function useProjectEditor(initialProject) {
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
-    addProjectToCollection: (collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
-    deleteProject: () => deleteProject(api, project).catch(handleError),
+    addProjectToCollection: (collection) => addProjectToCollection({ project, collection }).catch(handleCustomError),
+    deleteProject: () => deleteItem({ project }).catch(handleError),
     updateDomain: withErrorHandler(async (domain) => {
       await updateFields({ domain });
       // don't await this because the project domain has already changed and I don't want to delay other things updating
-      updateProjectDomain(api, project);
+      updateProjectDomain({ project });
     }, handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     updatePrivate: (isPrivate) => updateFields({ private: isPrivate }).catch(handleError),
     uploadAvatar: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getProjectAvatarImagePolicy(api, project.id);
+          const { data: policy } = await getAvatarImagePolicy({ project });
           await uploadAsset(blob, policy, '', { cacheControl: 60 });
           setProject((prev) => ({
             ...prev,
