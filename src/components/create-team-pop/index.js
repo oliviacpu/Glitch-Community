@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+import { MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { getPredicates, getTeamPair } from 'Models/words';
@@ -120,11 +120,9 @@ function CreateTeamPopBase(props) {
 
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
-      <PopoverSection>
-        <MultiPopoverTitle>
-          Create Team <Emoji name="herb" inTitle />
-        </MultiPopoverTitle>
-      </PopoverSection>
+      <MultiPopoverTitle>
+        Create Team <Emoji name="herb" inTitle />
+      </MultiPopoverTitle>
 
       <PopoverInfo>
         <InfoDescription>Showcase your projects in one place, manage collaborators, and view analytics</InfoDescription>

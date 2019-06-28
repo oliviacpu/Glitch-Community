@@ -39,6 +39,8 @@ const ProfileListLoader = ({ project }) => (
   </VisibilityContainer>
 );
 
+const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
+
 const ProjectItem = ({ project, projectOptions }) => {
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
@@ -49,11 +51,11 @@ const ProjectItem = ({ project, projectOptions }) => {
             const animatedProjectOptions = pickBy(
               {
                 ...projectOptions,
-                addPin: (id) => slideUp('addPin', id),
-                removePin: (id) => slideDown('removePin', id),
-                deleteProject: (id) => slideDown('deleteProject', id),
-                removeProjectFromTeam: (id) => slideDown('removeProjectFromTeam', id),
-                featureProject: (id) => slideUp('featureProject', id),
+                addPin: bind(slideUp, 'addPin'),
+                removePin: bind(slideDown, 'removePin'),
+                deleteProject: bind(slideDown, 'deleteProject'),
+                removeProjectFromTeam: bind(slideDown, 'removeProjectFromTeam'),
+                featureProject: bind(slideUp, 'featureProject'),
               },
               (_, key) => projectOptions[key],
             );
