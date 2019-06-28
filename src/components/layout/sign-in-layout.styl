@@ -1,38 +1,51 @@
-@import  "../constants"
- 
-.layout
-  padding: 1rem 2rem
-  margin-left: auto
-  margin-right: auto
+@import '../constants.styl'
+
+pop-shadow = 0px 2px 5px 0px rgba(0,0,0,0.27), 0px 1px 1px 0px rgba(0,0,0,0.15)
+
+.overlay
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+  background: primary-background
+  color: primary
+  font-size: 14px
+  border: 2px primary solid
+  border-radius: 5px
+  width: 94%
+  max-width: 640px
+  max-height: 85%
+  height: initial
+  display: block
+  position: fixed
+  left: 50%
+  transform: translateX(-50%)
+  top: 6.5%
+  padding: 0
+  margin: 0
+  box-shadow: pop-shadow
+  z-index: 15
+  overflow: auto
+
+.section
+  margin: 0
+  padding: 14px 12px
+  color: primary
+  &:not(:last-child)
+    border-bottom: 1px solid secondary
+ &.info
+  background-color: secondary-background
+
+.title
+  font-size: inherit
+  font-weight: bold
+  margin: 0
+
+.overlayBackground
+  overflow-x: auto
+  -webkit-overflow-scrolling: touch
+  background-color: overlay-background
   width: 100%
-  max-width: 1207px
-  @media (max-width: smallViewport)
-    padding-left: 20px
-    padding-right: 20px
-
-.container
-  display: flex
-  align-items: center
-  justify-content: center
-  flex-direction: column
-  margin: 20px 0
-
-.content
-  display: flex
-  border: 1px solid #ded
-  background-color: mediumpurple
-
-.about
-  padding: 1rem
-
-.logo
-  width: 70px
-
-.whatIsGlitch
-  width: 215px
-  color: white
-
-.form
-  max-width: 260px
-  background-color: white
-  padding: 2rem
+  height: 100%
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 10
+  cursor: default
