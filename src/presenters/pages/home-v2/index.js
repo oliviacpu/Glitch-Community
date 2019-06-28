@@ -63,14 +63,14 @@ const TopPicks = ({ children }) => (
 );
 
 const AppsWeLove = ({ content }) => {
-  const [featuredDomain, setFeaturedDomain] = useState(content[0].domain)
+  const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
 
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ domain, title, description, img }) => (
           <a key={domain} href={`/~${domain}`} className={styles.plainLink}>
-            <img src={img} alt=""/>
+            <img src={img} alt="" />
             <h4 className={styles.h4}>{title}</h4>
             <p>{description}</p>
           </a>
@@ -97,8 +97,8 @@ const AppsWeLove = ({ content }) => {
       </div>
     </section>
   );
-}
-  
+};
+
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>Curated collections</h3>
@@ -241,11 +241,11 @@ const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <Home 
-        data={{ ...compiledData, cultureZine: window.ZINE_POSTS.slice(0, 4) }} 
-        loggedIn={!!currentUser.login} 
-        hasProjects={currentUser.projects.length > 0} 
-        />
+      <Home
+        data={{ ...compiledData, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
+        loggedIn={!!currentUser.login}
+        hasProjects={currentUser.projects.length > 0}
+      />
     </Layout>
   );
 };

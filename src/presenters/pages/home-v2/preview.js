@@ -36,7 +36,7 @@ const HomePreview = () => (
       {(data) => (
         <>
           <PreviewBanner data={data} />
-          <Home data={{ ...data,  cultureZine: window.ZINE_POSTS.slice(0, 4) }} />
+          <Home data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }} />
         </>
       )}
     </DataLoader>
