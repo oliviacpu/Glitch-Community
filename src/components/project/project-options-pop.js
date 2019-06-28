@@ -1,44 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-function leaveProjectPop({ currentUser, event, project, leaveProject }) {
-  const isTeamProject = () => {
-    for (const team of currentUser.teams) {
-      if (project.teamIds.includes(team.id)) {
-        return true;
-      }
+const isTeamProject = ({ currentUser, project }) => {
+  for (const team of currentUser.teams) {
+    if (project.teamIds.includes(team.id)) {
+      return true;
     }
-    return false;
-  };
+  }
+  return false;
+};
 
-  if (isTeamProject({ currentUser })) {
+const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
+  if (isTeamProject({ currentUser, project })) {
     leaveProject(project.id, event);
     return;
   }
 
-  console.log("leaveProjectPop called");
-  return (
-    <PopoverDialog focusOnDialog align="left">
-      <PopoverTitle>Leave {project.domain}</PopoverTitle>
-      <PopoverActions>
-        <ActionDescription>
-          Once you leave this project, you'll lose access to it unless someone else invites you back.
-          Are you sure you want to leave ${project.domain}?
-        </ActionDescription>
-      </PopoverActions>
-      <PopoverActions type="dangerZone">
-        <PopoverMenuButton size="small" label={`Leave ${project.domain}`} type="dangerZone" emoji="wave" onClick={() => leaveProject(project.id, event)} />
-      </PopoverActions>
-    </PopoverDialog>
-  );
-}
+  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
+    project.domain
+  }?`;
+  if (window.confirm(prompt)) {
+    leaveProject(project.id, event);
+  }
+};
 
 const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
   const isAnon = !(currentUser && currentUser.login);
@@ -73,7 +64,7 @@ const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions
       leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
     leaveProject:
       leaveProject && project.permissions.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
-        ? (event) => leaveProjectPop(event, project, leaveProject)
+        ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
         : null,
     removeProjectFromTeam:
       removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
