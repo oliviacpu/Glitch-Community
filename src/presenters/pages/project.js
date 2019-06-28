@@ -36,6 +36,9 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
+function getCollections(api) {
+  return getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)
+}
 const IncludedInCollections = ({ projectId }) => (
   <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
