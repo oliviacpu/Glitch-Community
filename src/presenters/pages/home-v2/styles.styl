@@ -223,19 +223,28 @@
   margin: 0
   padding: 0
   list-style-type: none
-  
-.appsWeLoveItem
+  flex: 1 0 auto
+
+.appItemWap
   padding: u2 u4 u2 u2
   margin-right: "-%s" %u1
   border-radius: u1 0 0 u1
   &.active
     background-color: #eee
-  
-.appsWeLoveEmbed
-  display: block
-  min-height: 400px
-  flex: 1 0 66%
+
+.appItem
+  display: flex
+
+.appAvatar
+  width: 80px
+  margin-right: u2 
+.appContent
+  flex; 1 0 auto
     
+.appsWeLoveEmbed
+  min-height: 500px
+  flex: 0 0 66%
+  
 .appsWeLoveProfile
   position: relative
   z-index: 1

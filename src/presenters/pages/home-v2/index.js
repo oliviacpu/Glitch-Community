@@ -62,15 +62,6 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const AppItem = ({ id, domain, title, description }) => (
-  <span className={styles.appItem}>
-    <img src={getAvatarUrl({ id })} alt="" className={styles.appAvatar}/>
-    <span className={styles.appContent}>
-      <h4 className={styles.h4}>{title}</h4>
-      <p>{description}</p>                 
-    </span>
-  </span>
-)
 
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
@@ -78,22 +69,30 @@ const AppsWeLove = ({ content }) => {
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
-        {content.map((project) => (
-          <a key={project.id} href={`/~${project.domain}`} className={styles.plainLink}>
-            <AppItem {...project} />
+        {content.map(({ id, title, description, domain }) => (
+          <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItem)}>
+            <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar}/>
+            <div className={styles.appContent}>
+              <h4 className={styles.h4}>{title}</h4>
+              <p>{description}</p>                 
+            </div>
           </a>
         ))}
       </div>
       <div className={styles.appsWeLoveBigLayout}>
         <ul className={styles.appsWeLoveList}>
-          {content.map((project) => (
-            <li key={project.id} className={classnames(styles.appsWeLoveItem, featuredDomain === project.domain && styles.active)}>
-              <div className={styles.appsWeLoveProfile}>
-                <ProfileList layout="row" users={project.users} />
+          {content.map(({ id, title, description, domain, users }) => (
+            <li key={id} className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
+              <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar}/>
+              <div className={styles.appContent}>
+                <div className={styles.appsWeLoveProfile}>
+                  <ProfileList layout="row" users={users} />
+                </div>
+                <TransparentButton onClick={() => setFeaturedDomain(domain)}>
+                  <h4 className={styles.h4}>{title}</h4>
+                  <p>{description}</p>                
+                </TransparentButton>
               </div>
-              <TransparentButton onClick={() => setFeaturedDomain(project.domain)} className={styles.plainLink}>
-                <AppItem {...project} />
-              </TransparentButton>
             </li>
           ))}
         </ul>
