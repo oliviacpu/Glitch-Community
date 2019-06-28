@@ -50,44 +50,6 @@ const FeatureCallouts = ({ content }) => (
   </section>
 );
 
-const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
-  <section id="unified-stories" className={styles.unifiedStories}>
-    <div className={styles.unifiedStoriesHeadline}>
-      <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
-      {hed
-        .trim()
-        .split('\n')
-        .map((line, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <h2 key={i}>
-            <Mark color="white">{line}</Mark>
-          </h2>
-        ))}
-      <img src={featuredImage} alt={featuredImageDescription} />
-    </div>
-    <div className={styles.unifiedStoriesPreview}>
-      <h3 className={styles.h3}>{dek}</h3>
-      <Markdown>{summary}</Markdown>
-      <Button href={href}>
-        {cta} <Arrow />
-      </Button>
-    </div>
-    <div className={styles.unifiedStoriesRelatedContent}>
-      <h3>Featuring</h3>
-      <ul>
-        {relatedContent.map((related) => (
-          <li key={related.href}>
-            <a href={related.href} className={styles.plainLink}>
-              <h4>{related.title}</h4>
-              <p>{related.source}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-);
-
 const TopPicks = ({ children }) => (
   <section id="top-picks">
     <h2 className={styles.h2}>
@@ -153,12 +115,56 @@ const CuratedCollections = ({ content }) => (
   </section>
 );
 
-const CultureZine = ({ content }) => (
-  <section id="culture-zine" className={styles.cultureZine}>
+const TechMeetsCulture = ({ children }) => (
+  <section>
     <h2 className={styles.h2}>
       <Mark color="#CBC3FF">Where tech meets culture</Mark>
     </h2>
     <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+    {children}
+  </section>
+);
+
+const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
+  <section id="unified-stories" className={styles.unifiedStories}>
+    <div className={styles.unifiedStoriesHeadline}>
+      <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
+      {hed
+        .trim()
+        .split('\n')
+        .map((line, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <h2 key={i}>
+            <Mark color="white">{line}</Mark>
+          </h2>
+        ))}
+      <img src={featuredImage} alt={featuredImageDescription} />
+    </div>
+    <div className={styles.unifiedStoriesPreview}>
+      <h3 className={styles.h3}>{dek}</h3>
+      <Markdown>{summary}</Markdown>
+      <Button href={href}>
+        {cta} <Arrow />
+      </Button>
+    </div>
+    <div className={styles.unifiedStoriesRelatedContent}>
+      <h3>Featuring</h3>
+      <ul>
+        {relatedContent.map((related) => (
+          <li key={related.href}>
+            <a href={related.href} className={styles.plainLink}>
+              <h4>{related.title}</h4>
+              <p>{related.source}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+);
+
+const CultureZine = ({ content }) => (
+  <section id="culture-zine" className={styles.cultureZine}>
     <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
       {({ content: cultureZineItems }) => (
         <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
@@ -221,8 +227,10 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
       <FeaturedEmbed content={data.featuredEmbed} />
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
-    <UnifiedStories content={data.unifiedStories} />
-    <CultureZine content={window.ZINE_POSTS.slice(0, 4)} />
+    <TechMeetsCulture>
+      <UnifiedStories content={data.unifiedStories} />
+      <CultureZine content={data.cultureZine} />
+    </TechMeetsCulture>
     <BuildingOnGlitch content={data.buildingOnGlitch} />
     <MadeInGlitch />
     <ReportButton reportedType="home" />
@@ -233,7 +241,11 @@ const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
   return (
     <Layout>
-      <Home data={compiledData} loggedIn={!!currentUser.login} hasProjects={currentUser.projects.length > 0} />
+      <Home 
+        data={{ ...compiledData, cultureZine: window.ZINE_POSTS.slice(0, 4) }} 
+        loggedIn={!!currentUser.login} 
+        hasProjects={currentUser.projects.length > 0} 
+        />
     </Layout>
   );
 };
