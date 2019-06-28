@@ -216,12 +216,12 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
     {loggedIn && <Questions />}
-    <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
-      <FeaturedEmbed content={data.featuredEmbed} />
       <AppsWeLove content={data.appsWeLove} />
+      <FeaturedEmbed content={data.featuredEmbed} />
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
+    <UnifiedStories content={data.unifiedStories} />
     <CultureZine content={window.ZINE_POSTS.slice(0, 4)} />
     <BuildingOnGlitch content={data.buildingOnGlitch} />
     <MadeInGlitch />
