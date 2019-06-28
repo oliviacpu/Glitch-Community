@@ -20,29 +20,24 @@
 .subtitle
   margin-left: u3
   margin-bottom: 2.5em
-    
-.featureCalloutsRow
-  --gap: u4
-  margin-left: auto
-  margin-right: auto
-  li
-    margin-bottom: 2em
-
-@media(max-width: mediumViewport)
-  .featureCalloutsRow
-    width: 80%
-    text-align: center
-    
+  
 .plainLink
   color: inherit
   text-decoration: none
   &:hover
     text-decoration: none
     
+
 .featureCalloutsContainer
-  margin-top: 1em
+  margin-top: 1em 2em auto
     
-.featureCalloutsImageWrap
+.featureCalloutsRow
+  text-align: center
+  --gap: u3
+  @media(min-width: mediumViewport)
+    text-align: left
+    
+.featureCalloutsImage
   height: 145px
   background-size: contain
   background-repeat: no-repeat
@@ -50,19 +45,11 @@
   display: flex
   align-items: center
   justify-content: center
-    
-.featureCalloutsImage
-  margin-top: -10px
-  width: 90%
-  max-width: 275px
-  max-height: 100%
-  display: block
-  
-.featureCalloutsText
+
+.featureCalloutsHeader
   margin-top: "-%s" % u4
-  h2
-    font-size: t3
-    font-weight: 600
+  font-size: t3
+  font-weight: 600
   
 .unifiedStories
   display: flex

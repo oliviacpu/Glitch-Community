@@ -35,15 +35,13 @@ const FeatureCallouts = ({ content }) => (
     <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
       {({ label, description, backgroundSrc, href, color, id }) => (
         <>
-          <a href={href} style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImageWrap}>
+          <a href={href} style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImage}>
             {calloutImages[id]()}
           </a>
-          <div className={styles.featureCalloutsText}>
-            <h2>
-              <Mark color={color}>{label}</Mark>
-            </h2>
-            <p>{description}</p>
-          </div>
+          <h2 className={styles.featureCalloutsHeader}>
+            <Mark color={color}>{label}</Mark>
+          </h2>
+          <p>{description}</p>
         </>
       )}
     </Row>
