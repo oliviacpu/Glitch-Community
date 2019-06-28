@@ -127,8 +127,9 @@ async function getCachedUser(sharedUser) {
   }
 }
 
-const getSuperUserHelpers = (api, cachedUser) => {
+const getSuperUserHelpers = (cachedUser) => {
   const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
+  const api = getAPIForToken(cachedUser ? cachedUser.persistentToken : null);
 
   return {
     toggleSuperUser: async () => {
@@ -246,7 +247,7 @@ export const CurrentUserProvider = ({ children }) => {
       setSharedUser(undefined);
       setCachedUser(undefined);
     },
-    superUserHelpers: getSuperUserHelpers(api, cachedUser),
+    superUserHelpers: getSuperUserHelpers(cachedUser),
   };
 
   return <Context.Provider value={userProps}>{children}</Context.Provider>;
