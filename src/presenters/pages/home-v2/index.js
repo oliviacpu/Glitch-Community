@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button';
@@ -83,21 +84,19 @@ const AppsWeLove = ({ content }) => {
   
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
-      <h3 className={styles.h3}>Apps we love</h3>
       <div className={styles.appsWeLoveLayout}>
         <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
           {({ domain, title, description, img, users }) => (
-            <>
+            <div className={classnames(styles.appsWeLoveItem, featuredDomain === domain && styles.active)}>
               <div className={styles.appsWeLoveProfile}>
                 <ProfileList layout="row" users={users} />
               </div>
-              <di
               <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.plainLink}>
                 <MaskImage maskClass="speechBubble" src={img} alt="" />
                 <h4 className={styles.h4}>{title}</h4>
                 <p>{description}</p>
               </TransparentButton>
-            </>
+            </div>
           )}
         </Row>
         <div className={styles.appsWeLoveEmbed}>

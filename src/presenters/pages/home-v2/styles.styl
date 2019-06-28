@@ -206,11 +206,22 @@
 .appsWeLoveLayout
   display: flex
   
+.appsWeLoveRow
+  --gap: 1px
+  
+@media (min-width: mediumViewport)
+  .appsWeLoveItem
+    padding: u2 u3 u2 u2
+    margin-right: "-%s" %u1
+    border-radius: u1 0 0 u1
+    &.active
+      background-color: #eee
+  
+  
 .appsWeLoveEmbed
   display: none
   @media (min-width: mediumViewport)
     display: block
-    margin-left: u2
     flex: 1 0 66%
     
 .appsWeLoveProfile
@@ -218,7 +229,7 @@
   z-index: 1
   margin-bottom: 3px
 
-.appsWeLoveRow, .curatedCollectionRow
+.curatedCollectionRow
   --gap: u3
 
 .curatedCollectionsContainer
