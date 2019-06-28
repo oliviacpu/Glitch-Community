@@ -36,16 +36,15 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-function getCollections(api) {
-  return getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)
-}
+const filteredCollections = (collections) => collections.filter((c) => c.user || c.team);
+
 const IncludedInCollections = ({ projectId }) => (
   <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
       collections.length > 0 && (
         <>
           <Heading tagName="h2">Included in Collections</Heading>
-          <Row items={collections}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
+          <Row items={filteredCollections(collections)}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
         </>
       )
     }
@@ -118,10 +117,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
 
   return (
     <section>
-      <PopoverWithButton
-        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
-        buttonText="Delete Project"
-      >
+      <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText="Delete Project">
         {({ togglePopover }) => (
           <PopoverDialog align="left" wide>
             <PopoverActions>
