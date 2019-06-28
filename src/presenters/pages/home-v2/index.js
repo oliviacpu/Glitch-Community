@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pluralize from 'react-pluralize';
 
 import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
@@ -77,27 +78,36 @@ const FeaturedEmbed = ({ content: { domain, title, description, href, image } })
   </figure>
 );
 
-const AppsWeLove = ({ content }) => (
-  <section id="apps-we-love" className={styles.appsWeLoveContainer}>
-    <h3 className={styles.h3}>Apps we love</h3>
-    <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
-      {({ domain, title, description, img, users }) => (
-        <>
-          <div className={styles.appsWeLoveProfile}>
-            <ProfileList layout="row" users={users} />
-          </div>
-          <a href={`https://${domain}.glitch.me`} className={styles.plainLink}>
-            <MaskImage maskClass="speechBubble" src={img} alt="" />
-            <h4 className={styles.h4}>{title}</h4>
-
-            <p>{description}</p>
-          </a>
-        </>
-      )}
-    </Row>
-  </section>
-);
-
+const AppsWeLove = ({ content }) => {
+  const [featuredDomain, setFeaturedDomain] = useState(content[0].domain)
+  
+  return (
+    <section id="apps-we-love" className={styles.appsWeLoveContainer}>
+      <h3 className={styles.h3}>Apps we love</h3>
+      <div className={styles.appsWeLoveLayout}>
+        <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
+          {({ domain, title, description, img, users }) => (
+            <>
+              <div className={styles.appsWeLoveProfile}>
+                <ProfileList layout="row" users={users} />
+              </div>
+              <di
+              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.plainLink}>
+                <MaskImage maskClass="speechBubble" src={img} alt="" />
+                <h4 className={styles.h4}>{title}</h4>
+                <p>{description}</p>
+              </TransparentButton>
+            </>
+          )}
+        </Row>
+        <div className={styles.appsWeLoveEmbed}>
+          <Embed domain={featuredDomain} />
+        </div>
+      </div>
+    </section>
+  );
+}
+  
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>Curated collections</h3>
@@ -224,7 +234,6 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     {loggedIn && <Questions />}
     <TopPicks>
       <AppsWeLove content={data.appsWeLove} />
-      <FeaturedEmbed content={data.featuredEmbed} />
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
     <TechMeetsCulture>
