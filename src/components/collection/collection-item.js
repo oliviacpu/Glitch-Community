@@ -65,8 +65,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
       </div>
       <CollectionLink collection={collection} className={styles.footerLink}>
         {`View ${projects.length >= 3 ? 'all' : ''} `}
-        <Pluralize count={projects.length} singular="project" />
-        <Arrow />
+        <Pluralize count={projects.length} singular="project" /> <Arrow />
       </CollectionLink>
     </>
   );
