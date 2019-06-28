@@ -100,13 +100,15 @@ const TwoFactorSettings = () => {
           <Text>Keep these somewhere safe in case you lose your authenticator</Text>
           {backupCodes ? (
             <>
-              <ul className={styles.backupCodes}>
-                {backupCodes.map((backupCode) => (
-                  <li className={styles.backupCode} key={backupCode}>
-                    {backupCode}
-                  </li>
-                ))}
-              </ul>
+              {backupCodes.length > 0 && (
+                <ul className={styles.backupCodes}>
+                  {backupCodes.map((backupCode) => (
+                    <li className={styles.backupCode} key={backupCode}>
+                      {backupCode}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <Button type="tertiary" size="small" onClick={resetBackupCodes}>Generate New Codes</Button>
             </>
           ) : <Loader />}
