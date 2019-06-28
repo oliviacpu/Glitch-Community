@@ -225,7 +225,8 @@
   list-style-type: none
   flex: 1 0 auto
 
-.appItemWap
+.appItemWrap
+  position: relative
   padding: u2 u4 u2 u2
   margin-right: "-%s" %u1
   border-radius: u1 0 0 u1
@@ -244,11 +245,21 @@
 .appsWeLoveEmbed
   min-height: 500px
   flex: 0 0 66%
-  
-.appsWeLoveProfile
   position: relative
   z-index: 1
-  margin-bottom: 3px
+  
+.profileListPlaceholder
+  height: 36px
+  display: block
+  
+.appsWeLoveProfileWrap
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  z-index: 1
+  padding-left: 80px + u2 + u2
+  padding-top: u2
 
 .curatedCollectionRow
   --gap: u3

@@ -62,7 +62,6 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
 
@@ -71,10 +70,10 @@ const AppsWeLove = ({ content }) => {
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
           <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItem)}>
-            <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar}/>
+            <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
             <div className={styles.appContent}>
               <h4 className={styles.h4}>{title}</h4>
-              <p>{description}</p>                 
+              <p>{description}</p>
             </div>
           </a>
         ))}
@@ -83,15 +82,18 @@ const AppsWeLove = ({ content }) => {
         <ul className={styles.appsWeLoveList}>
           {content.map(({ id, title, description, domain, users }) => (
             <li key={id} className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
-              <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar}/>
-              <div className={styles.appContent}>
+              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
+                <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+                <span className={styles.appContent}>
+                  <span className={styles.profileListPlaceholder} />
+                  <h4 className={styles.h4}>{title}</h4>
+                  <p>{description}</p>
+                </span>
+              </TransparentButton>
+              <div className={styles.appsWeLoveProfileWrap}>
                 <div className={styles.appsWeLoveProfile}>
                   <ProfileList layout="row" users={users} />
                 </div>
-                <TransparentButton onClick={() => setFeaturedDomain(domain)}>
-                  <h4 className={styles.h4}>{title}</h4>
-                  <p>{description}</p>                
-                </TransparentButton>
               </div>
             </li>
           ))}
