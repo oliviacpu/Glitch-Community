@@ -83,14 +83,16 @@ function usersMatch(a, b) {
   return a && b && a.id === b.id && a.persistentToken === b.persistentToken;
 }
 
-async function getAnonUser(api) {
+async function getAnonUser() {
+  const api = getAPIForToken();
   const { data } = await api.post('users/anon');
   return data;
 }
 
-async function getSharedUser(api, persistentToken) {
+async function getSharedUser(persistentToken) {
   if (!persistentToken) return undefined;
-
+  const api = getAPIForToken(persistentToken);
+  
   try {
     return await getSingleItem(api, `v1/users/by/persistentToken?persistentToken=${persistentToken}`, persistentToken);
   } catch (error) {
@@ -99,9 +101,10 @@ async function getSharedUser(api, persistentToken) {
   }
 }
 
-async function getCachedUser(api, sharedUser) {
+async function getCachedUser(sharedUser) {
   if (!sharedUser) return undefined;
   if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
+  const api = getAPIForToken(sharedUser.persistentToken);
   try {
     const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
     const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
@@ -182,14 +185,13 @@ export const CurrentUserProvider = ({ children }) => {
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
 
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
-  const api = getAPIForToken(persistentToken);
 
   const load = useDebouncedAsync(async () => {
     let sharedOrAnonUser = sharedUser;
 
     // If we're signed out create a new anon user
     if (!sharedOrAnonUser) {
-      sharedOrAnonUser = await getAnonUser(api);
+      sharedOrAnonUser = await getAnonUser();
       setSharedUser(sharedOrAnonUser);
     }
 
@@ -198,7 +200,7 @@ export const CurrentUserProvider = ({ children }) => {
       setCachedUser(undefined);
     }
 
-    const newCachedUser = await getCachedUser(api, sharedOrAnonUser);
+    const newCachedUser = await getCachedUser(sharedOrAnonUser);
 
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
@@ -207,7 +209,7 @@ export const CurrentUserProvider = ({ children }) => {
       if (usersMatch(sharedOrAnonUser, sharedUserRef.current)) {
         // The user wasn't changed, so we need to fix it
         setFetched(false);
-        const newSharedUser = await getSharedUser(api, sharedOrAnonUser.persistentToken);
+        const newSharedUser = await getSharedUser(sharedOrAnonUser.persistentToken);
         setSharedUser(newSharedUser);
         logSharedUserError(sharedUser, newSharedUser);
       }
@@ -226,7 +228,6 @@ export const CurrentUserProvider = ({ children }) => {
     load();
     // for easier debugging
     window.currentUser = cachedUser;
-    window.api = api;
   }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken, sharedUser && sharedUser.id, sharedUser && sharedUser.persistentToken]);
 
   const userProps = {
