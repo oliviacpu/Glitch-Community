@@ -16,7 +16,7 @@ import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Mark from 'Components/mark';
 import { useCurrentUser } from 'State/current-user';
-import { getEditorUrl } from 'Models/project';
+import { getEditorUrl, getAvatarUrl } from 'Models/project';
 
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
@@ -62,35 +62,41 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
+const AppItem = ({ id, domain, title, description }) => (
+  <span className={styles.appItem}>
+    <img src={getAvatarUrl({ id })} alt="" className={styles.appAvatar}/>
+    <span className={styles.appContent}>
+      <h4 className={styles.h4}>{title}</h4>
+      <p>{description}</p>                 
+    </span>
+  </span>
+)
+
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
 
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
-        {content.map(({ domain, title, description, img }) => (
-          <a key={domain} href={`/~${domain}`} className={styles.plainLink}>
-            <img src={img} alt="" />
-            <h4 className={styles.h4}>{title}</h4>
-            <p>{description}</p>
+        {content.map((project) => (
+          <a key={project.id} href={`/~${project.domain}`} className={styles.plainLink}>
+            <AppItem {...project} />
           </a>
         ))}
       </div>
       <div className={styles.appsWeLoveBigLayout}>
-        <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
-          {({ domain, title, description, img, users }) => (
-            <div className={classnames(styles.appsWeLoveItem, featuredDomain === domain && styles.active)}>
+        <ul className={styles.appsWeLoveList}>
+          {content.map((project) => (
+            <li key={project.id} className={classnames(styles.appsWeLoveItem, featuredDomain === project.domain && styles.active)}>
               <div className={styles.appsWeLoveProfile}>
-                <ProfileList layout="row" users={users} />
+                <ProfileList layout="row" users={project.users} />
               </div>
-              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.plainLink}>
-                <MaskImage maskClass="speechBubble" src={img} alt="" />
-                <h4 className={styles.h4}>{title}</h4>
-                <p>{description}</p>
+              <TransparentButton onClick={() => setFeaturedDomain(project.domain)} className={styles.plainLink}>
+                <AppItem {...project} />
               </TransparentButton>
-            </div>
-          )}
-        </Row>
+            </li>
+          ))}
+        </ul>
         <div className={styles.appsWeLoveEmbed}>
           <Embed domain={featuredDomain} />
         </div>
@@ -223,12 +229,12 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
     {loggedIn && <Questions />}
+    <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
       <AppsWeLove content={data.appsWeLove} />
       <CuratedCollections content={data.curatedCollections} />
     </TopPicks>
     <TechMeetsCulture>
-      <UnifiedStories content={data.unifiedStories} />
       <CultureZine content={data.cultureZine} />
     </TechMeetsCulture>
     <BuildingOnGlitch content={data.buildingOnGlitch} />
