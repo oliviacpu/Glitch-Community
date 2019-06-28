@@ -87,7 +87,6 @@ function PopoverSearch({
   placeholder,
 }) {
   const { inputRef, activeIndex } = useActiveIndex(results, onSubmit);
-  console.log(inputRef, activeIndex)
   return (
     <>
       <PopoverInfo>
