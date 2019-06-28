@@ -72,7 +72,7 @@ const TwoFactorSettings = () => {
 
   const getBackupCodes = async () => {
     if (twoFactorEnabled) {
-      const { data } = await api.get(`users/${currentUser.id}/tfa/backupCodes`);
+      const { data } = await api.get(`users/${currentUser.id}/tfa/backupCodes?cache=${Date.now()}`);
       setBackupCodes(data.backupCodes);
     } else {
       setBackupCodes(null);
@@ -81,6 +81,12 @@ const TwoFactorSettings = () => {
   React.useEffect(() => {
     getBackupCodes();
   }, [currentUser.id, twoFactorEnabled]);
+
+  const resetBackupCodes = async () => {
+    setBackupCodes(null);
+    await api.post('user/tfa/resetBackupCodes');
+    await getBackupCodes();
+  };
 
   return (
     <>
@@ -93,9 +99,16 @@ const TwoFactorSettings = () => {
           <Heading tagName="h3">Backup Codes</Heading>
           <Text>Keep these somewhere safe in case you lose your authenticator</Text>
           {backupCodes ? (
-            <ul className={styles.backupCodes}>
-              {backupCodes.map((backupCode) => <li className={styles.backupCode}>{backupCode}</li>)}
-            </ul>
+            <>
+              <ul className={styles.backupCodes}>
+                {backupCodes.map((backupCode) => (
+                  <li className={styles.backupCode} key={backupCode}>
+                    {backupCode}
+                  </li>
+                ))}
+              </ul>
+              <Button type="tertiary" size="small" onClick={resetBackupCodes}>Generate New Codes</Button>
+            </>
           ) : <Loader />}
         </>
       ) : (
