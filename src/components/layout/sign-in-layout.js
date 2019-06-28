@@ -7,31 +7,7 @@ import Heading from 'Components/text/heading';
 
 import styles from './auth-layout.styl';
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import styles from './overlays.styl';
-
-export const Overlay = ({ children, className }) => {
-  const overlayClass = classNames(styles.overlay, className);
-  return (
-    <div className={overlayClass}>
-      {children}
-    </div>
-  );
-};
-Overlay.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  ariaLabelledBy: PropTypes.string,
-  ariaModal: PropTypes.bool,
-};
-Overlay.defaultProps = {
-  className: null,
-  ariaLabelledBy: '',
-  ariaModal: false,
-};
 
 export const OverlaySection = ({ children, type }) => {
   const sectionClass = classNames(styles.section, styles[type]);
@@ -64,7 +40,9 @@ const SignInLayout = ({ children }) => (
         <Logo />
       </Link>
     </div>
-    <div className={styles.form}>{children}</div>
+    <div className={styles.overlay}>
+      {children}
+    </div>
   </div>
 );
 
