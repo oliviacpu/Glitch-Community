@@ -202,27 +202,36 @@
   p
     margin: 0
     color: fg1
+  .subtitle
+    margin-bottom: u1
     
-.appsWeLoveLayout
-  display: flex
+.appsWeLoveSmallLayout
+  img
+    width: 100%
+  a + a
+    display: block
+    margin-top: u2
+  @media (min-width: mediumViewport)
+    display: none
+    
+.appsWeLoveBigLayout
+  display: none
+  @media (min-width: mediumViewport)
+    display: flex
   
 .appsWeLoveRow
   --gap: 1px
   
-@media (min-width: mediumViewport)
-  .appsWeLoveItem
-    padding: u2 u3 u2 u2
-    margin-right: "-%s" %u1
-    border-radius: u1 0 0 u1
-    &.active
-      background-color: #eee
-  
+.appsWeLoveItem
+  padding: u2 u4 u2 u2
+  margin-right: "-%s" %u1
+  border-radius: u1 0 0 u1
+  &.active
+    background-color: #eee
   
 .appsWeLoveEmbed
-  display: none
-  @media (min-width: mediumViewport)
-    display: block
-    flex: 1 0 66%
+  display: block
+  flex: 1 0 66%
     
 .appsWeLoveProfile
   position: relative

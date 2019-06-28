@@ -62,29 +62,21 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const FeaturedEmbed = ({ content: { domain, title, description, href, image } }) => (
-  <figure className={styles.featuredEmbed}>
-    <a href={href} className={styles.plainLink}>
-      <img className={styles.featuredEmbedImg} src={image} alt="" />
-    </a>
-    <figcaption className={styles.featuredEmbedCaption}>
-      <div className={styles.featuredEmbedText}>
-        <h3 className={styles.h3}>{title}</h3>
-        <Markdown>{description}</Markdown>
-      </div>
-    </figcaption>
-    <div className={styles.featuredEmbedWrap}>
-      <Embed domain={domain} />
-    </div>
-  </figure>
-);
-
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain)
-  
+
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
-      <div className={styles.appsWeLoveLayout}>
+      <div className={styles.appsWeLoveSmallLayout}>
+        {content.map(({ domain, title, description, img }) => (
+          <a key={domain} href={`/~${domain}`} className={styles.plainLink}>
+            <img src={img} alt=""/>
+            <h4 className={styles.h4}>{title}</h4>
+            <p>{description}</p>
+          </a>
+        ))}
+      </div>
+      <div className={styles.appsWeLoveBigLayout}>
         <Row items={content.map((data) => ({ ...data, id: data.domain }))} className={styles.appsWeLoveRow} minWidth="235px">
           {({ domain, title, description, img, users }) => (
             <div className={classnames(styles.appsWeLoveItem, featuredDomain === domain && styles.active)}>
