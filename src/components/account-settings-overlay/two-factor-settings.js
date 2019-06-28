@@ -91,7 +91,7 @@ const TwoFactorSettings = () => {
           {done && <Notification type="success" persistent>Successfully enabled two-factor authentication</Notification>}
           <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>Disable Authenticator App</Button>
           <Heading tagName="h3">Backup Codes</Heading>
-          <Text>Keep these somewhere safe in case you lose you authenticator</Text>
+          <Text>Keep these somewhere safe in case you lose your authenticator</Text>
           {backupCodes ? (
             <ul className={styles.backupCodes}>
               {backupCodes.map((backupCode) => <li className={styles.backupCode}>{backupCode}</li>)}
