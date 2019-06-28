@@ -21,6 +21,7 @@ const TwoFactorSettings = () => {
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
+  const [backupCodes, setBackupCodes] = useState(null);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
@@ -67,6 +68,13 @@ const TwoFactorSettings = () => {
       setWorking(false);
     }
   };
+  
+  const getBackupCodes = async () => {
+    
+  };
+  React.useEffect(() => {
+    
+  }, [twoFactorEnabled]);
 
   return (
     <>
