@@ -11,6 +11,7 @@ export const NotificationsProvider = (props) => {
   const [notifications, setNotifications] = useState([]);
 
   const remove = (id) => {
+    console.log(...notifications)
     setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
   };
 
@@ -22,7 +23,6 @@ export const NotificationsProvider = (props) => {
     };
 
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
-    console.log(notifications)
     if (notification.persistent) {
       const updateNotification = (updatedContent) => {
         setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, updatedContent } : n)));
