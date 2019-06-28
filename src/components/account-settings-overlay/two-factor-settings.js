@@ -70,11 +70,16 @@ const TwoFactorSettings = () => {
   };
   
   const getBackupCodes = async () => {
-    
+    if (twoFactorEnabled) {
+      const { data } = await api.get(`users/${currentUser.id}/tfa/backupCodes`);
+      setBackupCodes(data.backupCodes);
+    } else {
+      setBackupCodes(null);
+    }
   };
   React.useEffect(() => {
-    
-  }, [twoFactorEnabled]);
+    getBackupCodes()
+  }, [currentUser.id, twoFactorEnabled]);
 
   return (
     <>
