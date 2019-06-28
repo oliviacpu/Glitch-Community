@@ -67,6 +67,10 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     { origin: 'Add Project collection' },
   );
 
+  const onSubmit = (event) => {
+    console.log("event", event)
+  }
+
   /* eslint-disable no-shadow */
   const { visibleProjects, excludingExactMatch } = useMemo(
     () => {
@@ -87,6 +91,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       <PopoverSearch
         value={query}
         onChange={setQuery}
+        onSubmit={onSubmit}
         results={visibleProjects}
         labelText="Project name or URL"
         placeholder="Search by project name or URL"
