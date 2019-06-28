@@ -59,7 +59,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const isUser = user && user.id === currentUser.id;
   const isCollectionOwner = collection && userOrTeamIsAuthor({ collection, user: currentUser });
   const isTeamMember = team && userIsOnTeam({ team, user: currentUser });
-  const projectTeam = team || currentUser.teams.find((t) => project.teamIds.includes(t.id));
+  const projectTeam = currentUser.teams.find((t) => project.teamIds.includes(t.id));
   const isProfileOwner = isUser || isCollectionOwner || isTeamMember;
   const canAddNote = collection ? isCollectionOwner : isProjectAdmin;
 

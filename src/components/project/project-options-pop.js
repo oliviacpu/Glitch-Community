@@ -21,10 +21,10 @@ const PopoverMenuItems = ({ children }) =>
       ),
   );
 
-const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
+const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover }) => {
   const { currentUser } = useCurrentUser();
   // TODO: replace this with a multi-popover pane
-  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject && ((project) => {
+  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
       projectOptions.leaveProject(project);
       return;
@@ -99,7 +99,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           }}
         >
           {({ addToCollection }) => (
-            <ProjectOptionsContent projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
+            <ProjectOptionsContent project={project} projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
           )}
         </MultiPopover>
       )}
