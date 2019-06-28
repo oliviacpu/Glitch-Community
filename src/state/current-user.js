@@ -131,10 +131,11 @@ async function getCachedUser(sharedUser) {
 
 const getSuperUserHelpers = (cachedUser) => {
   const superUserFeature = cachedUser && cachedUser.features && cachedUser.features.find((feature) => feature.name === 'super_user');
-  const api = getAPIForToken(cachedUser ? cachedUser.persistentToken : null);
 
   return {
     toggleSuperUser: async () => {
+      if (!cachedUser) return;
+      const api = getAPIForToken(cachedUser.persistentToken);
       await api.post(`https://support-toggle.glitch.me/support/${superUserFeature ? 'disable' : 'enable'}`);
       window.scrollTo(0, 0);
       window.location.reload();
