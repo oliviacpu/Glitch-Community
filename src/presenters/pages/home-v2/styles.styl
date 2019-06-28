@@ -38,18 +38,33 @@
     text-align: left
     
 .featureCalloutsImage
-  height: 145px
+  height: 70px
   background-size: contain
   background-repeat: no-repeat
   background-position: center
-  display: flex
-  align-items: center
-  justify-content: center
-
+  // display: flex
+  // align-items: center
+  // justify-content: center
+  svg
+    height: 100%
+  @media(min-width: mediumViewport)
+    height: 145px
+    
 .featureCalloutsHeader
-  margin-top: "-%s" % u4
+  display: flex
+  flex-direction: row
+  align-items: center
+  @media(min-width: mediumViewport)
+    flex-direction: column
+    
+.featureCalloutsTitle
   font-size: t3
   font-weight: 600
+  margin-left: "-%s" % u3
+  @media(min-width: mediumViewport)
+    margin-top: "-%s" % u3
+    margin-left: 0
+
   
 .unifiedStories
   display: flex

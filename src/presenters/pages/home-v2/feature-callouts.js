@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './animations.styl';
 
 export const Discover = () => (
-  <svg id="svg106" version="1.1" viewBox="0 0 280 125" height="110" width="290" className={styles.feature}>
+  <svg id="svg106" version="1.1" viewBox="0 0 240 125" className={styles.feature}>
     <defs id="defs10">
       <ellipse id="path-1" cx="16.799999" cy="14.954068" rx="16.799999" ry="7.8000002" />
       <path
@@ -321,7 +321,7 @@ export const Discover = () => (
 );
 
 export const Dreams = () => (
-  <svg width="150px" height="119px" viewBox="0 0 184 119" className={styles.feature}>
+  <svg viewBox="0 0 184 119" className={styles.feature}>
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-29-19-xlarge-banner" transform="translate(-535.000000, -620.000000)">
         <g id="Group-32" transform="translate(489.000000, 605.267418)">
@@ -479,7 +479,7 @@ export const Dreams = () => (
 );
 
 export const Teams = () => (
-  <svg id="teams" width="160px" height="115px" viewBox="0 0 194 115" className={styles.feature}>
+  <svg id="teams" viewBox="0 0 194 115" className={styles.feature}>
     <g id="Design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="05-21-19" transform="translate(-517.000000, -627.000000)">
         <g id="team-animation" transform="translate(518.852039, 628.307670)">
