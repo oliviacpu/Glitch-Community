@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
+import { withRouter } from 'react-router-dom';
 
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
@@ -15,8 +16,10 @@ import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Mark from 'Components/mark';
+import PreviewContainer from 'Components/containers/preview-container';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
+import { useAPI } from 'State/api';
 
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
@@ -243,6 +246,34 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     <ReportButton reportedType="home" />
   </div>
 );
+
+export const HomePreview = withRouter(({ history }) => {
+  const api = useAPI();
+  const onPublish = async (data) => {
+    try {
+      await api.post(`${window.location.origin}/api/home`, data);
+      history.push('/');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <Layout>
+      <PreviewContainer
+        get={() => api.get('https://community-home-editor.glitch.me/home.json').then((res) => res.data)}
+        onPublish={onPublish}
+        previewMessage={
+          <>
+            This is a live preview of edits done with <a href="https://community-home-editor.glitch.me">Community Home Editor.</a>
+          </>
+        }
+      >
+        {(data) => <Home data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }} />}
+      </PreviewContainer>
+    </Layout>
+  );
+});
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
