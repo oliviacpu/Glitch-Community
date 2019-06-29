@@ -20,8 +20,7 @@ import CollectionPage from './collection';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
-import NewHomePage from './home-v2';
-import NewHomePagePreview from './home-v2/preview';
+import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
 import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
