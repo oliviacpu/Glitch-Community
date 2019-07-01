@@ -400,21 +400,24 @@ function Help() {
 }
 
 function VSCode() {
-  const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562003906428';
+  const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485';
   
   return (
     <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
-        <Mark color="#d3f3e6">Something something</Mark>
+        <Mark color="#d3f3e6">Glitch on VSCode</Mark>
       </Heading>
-      <Text className={styles.sectionDescription}>Build with Glitch on VSCode</Text>
+      <Text className={styles.sectionDescription}>Something something something</Text>
 
       <div className={styles.helpLinks}>
         <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Install the Glitch VSCode extension</Heading>
           <Text>
-            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" />} imagePosition="left" >
-              Download extension <span aria-hidden="true">&rarr;</span>
+            Something about editing Glitch projects in VSCode
+          </Text>
+          <Text>
+            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="18" height="18" />} imagePosition="left" >
+              Download Extension <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
         </div>
@@ -422,11 +425,11 @@ function VSCode() {
         <hr />
 
         <div className={styles.helpLinkSection}>
-          <Heading tagName="h3">Support Forum</Heading>
-          <Text>Personalized support for your app-specific questions.</Text>
+          <Heading tagName="h3">Something about GitHub</Heading>
+          <Text>More about GitHub</Text>
           <Text>
             <Button href="https://support.glitch.com">
-              Forums <span aria-hidden="true">&rarr;</span>
+              View the Source <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
         </div>
