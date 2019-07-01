@@ -7,6 +7,7 @@ import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
+import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
@@ -14,8 +15,6 @@ import { useProjectMembers } from 'State/project';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
-
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
@@ -39,6 +38,8 @@ const ProfileListLoader = ({ project }) => (
   </VisibilityContainer>
 );
 
+const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
+
 const ProjectItem = ({ project, projectOptions }) => {
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
@@ -49,11 +50,11 @@ const ProjectItem = ({ project, projectOptions }) => {
             const animatedProjectOptions = pickBy(
               {
                 ...projectOptions,
-                addPin: (id) => slideUp('addPin', id),
-                removePin: (id) => slideDown('removePin', id),
-                deleteProject: (id) => slideDown('deleteProject', id),
-                removeProjectFromTeam: (id) => slideDown('removeProjectFromTeam', id),
-                featureProject: (id) => slideUp('featureProject', id),
+                addPin: bind(slideUp, 'addPin'),
+                removePin: bind(slideDown, 'removePin'),
+                deleteProject: bind(slideDown, 'deleteProject'),
+                removeProjectFromTeam: bind(slideDown, 'removeProjectFromTeam'),
+                featureProject: bind(slideUp, 'featureProject'),
               },
               (_, key) => projectOptions[key],
             );
@@ -75,7 +76,7 @@ const ProjectItem = ({ project, projectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon /> : null} imagePosition="left">
+                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                           <span className={styles.projectDomain}>{project.domain}</span>
                         </Button>
                       </div>

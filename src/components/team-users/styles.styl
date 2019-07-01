@@ -7,8 +7,6 @@
   display: flex
   flex-flow: row wrap
   align-items: center
-  li:last-of-type
-    margin-left: 10px
   
 .teamMember, .invitedMember
   margin-right: -7px
@@ -36,6 +34,9 @@
   img
     width: 44px
     height: 44px
+
+.invitedMember + .addButtonWrap
+  margin-left: 10px
   
 .nameLoginWrap
   display: inline-block
