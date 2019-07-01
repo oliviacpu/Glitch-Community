@@ -78,10 +78,12 @@ function WhatIsGlitch() {
   const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
   const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
   const videoEl = useRef(null);
+  const track = useTracker('Create Page Video Clicked')
   
   const playVideo = () => {
     setHasPlayed(true);
     videoEl.current.play();
+    track();
   };
 
   return (
@@ -103,7 +105,7 @@ function WhatIsGlitch() {
           <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
             <Button
               decorative
-              image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" />}
+              image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
               imagePosition="left"
             >
               Watch Video
