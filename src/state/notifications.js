@@ -11,7 +11,6 @@ export const NotificationsProvider = (props) => {
   const [notifications, setNotifications] = useState([]);
 
   const remove = (id) => {
-    console.log(...notifications)
     setNotifications((prevNotifications) => prevNotifications.filter((n) => n.id !== id));
   };
 

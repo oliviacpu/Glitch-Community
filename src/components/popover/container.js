@@ -83,7 +83,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
   const before = outer ? outer(toggleState) : null;
-
+  console.log("toggleState", toggleState)
   return (
     <PopoverToggleContext.Provider value={toggleState}>
       {before}
