@@ -126,7 +126,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       );
     });
 
-    togglePopover();
+    // togglePopover();
   };
 
   return (
