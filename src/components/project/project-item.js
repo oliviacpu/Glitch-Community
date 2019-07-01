@@ -12,6 +12,8 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
+import { useProjectOptions } from 'State/project-options';
+import { useCurrentUser } from 'State/current-user';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -22,8 +24,6 @@ const getLinkBodyStyles = (project) =>
   classnames(styles.linkBody, {
     [styles.private]: project.private,
   });
-
-const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProfileListWithData = ({ project }) => {
   const { value: members } = useProjectMembers(project.id);
@@ -40,7 +40,9 @@ const ProfileListLoader = ({ project }) => (
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
-const ProjectItem = ({ project, projectOptions }) => {
+const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
+  const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -62,7 +64,7 @@ const ProjectItem = ({ project, projectOptions }) => {
             return (
               <div className={styles.container}>
                 <header className={styles.header}>
-                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
+                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
                   <div className={styles.projectOptionsContainer}>

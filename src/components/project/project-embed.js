@@ -4,9 +4,10 @@ import classNames from 'classnames/bind';
 
 import Embed from 'Components/project/embed';
 import ReportButton from 'Components/report-abuse-pop';
+import { EditButton, RemixButton } from 'Components/project/project-actions';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { EditButton, RemixButton } from 'Components/project/project-actions';
+import { useProjectOptions } from 'State/project-options';
 import AddProjectToCollection from './add-project-to-collection-pop';
 
 import styles from './project-embed.styl';
@@ -14,6 +15,7 @@ import styles from './project-embed.styl';
 const cx = classNames.bind(styles);
 
 const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
+  const projectOptions = useProjectOptions(project, addProjectToCollection ? { addProjectToCollection } : {});
   const { currentUser } = useCurrentUser();
   const isMember = currentUser.projects.some(({ id }) => id === project.id);
   const trackRemix = useTracker('Click Remix', {
@@ -29,9 +31,9 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
 
   const bottomRight = (
     <>
-      {currentUser.login && (
+      {projectOptions.addProjectToCollection && (
         <div className={styles.addToCollectionWrap}>
-          <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
+          <AddProjectToCollection project={project} addProjectToCollection={projectOptions.addProjectToCollection} fromProject />
         </div>
       )}
       <RemixButton name={project.domain} isMember={isMember} onClick={trackRemix} />
