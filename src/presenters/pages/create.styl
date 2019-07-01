@@ -88,17 +88,14 @@ u5 = 50px
   max-width: 410px
   height: 350px
   margin-left: -2rem
-  @media (min-width: 500px)
-    height: 350px
-    margin-left: auto
-    margin-right: -2rem
+  margin-right: -2rem
+  @media (min-width: 420px)
+    margin: auto
   @media (min-width: mediumSmallViewport)
     height: 360px
-    margin-right: auto
   @media (min-width: mediumViewport)
     flex: 2
   @media (min-width: mediumLargeViewport)
-    margin-left: 0
     flex: 1.5
   @media (min-width: hugeViewport)
     flex: 2.2
@@ -113,8 +110,10 @@ u5 = 50px
       margin-left: 0
       font-size: inherit
   @media (min-width: smallViewport)
-    left: 100px
+    left: 95px
     top: 25px
+  @media (min-width: mediumViewport)
+    left: 105px
   @media (min-width: largeViewport)
     left: 120px
     top: 30px
