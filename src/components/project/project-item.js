@@ -7,6 +7,7 @@ import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
+import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
@@ -16,8 +17,6 @@ import { useCurrentUser } from 'State/current-user';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
-
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
@@ -79,7 +78,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon /> : null} imagePosition="left">
+                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                           <span className={styles.projectDomain}>{project.domain}</span>
                         </Button>
                       </div>

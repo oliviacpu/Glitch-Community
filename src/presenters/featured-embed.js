@@ -6,6 +6,7 @@ import Embed from 'Components/project/embed';
 import MaskImage from 'Components/images/mask-image';
 import Link, { WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
+import Arrow from 'Components/arrow';
 
 const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) => (
   <div className="featured-embed">
@@ -23,7 +24,7 @@ const FeaturedEmbed = ({ image, mask, title, appDomain, blogUrl, body, color }) 
           <div dangerouslySetInnerHTML={{ __html: body }} />
           <div className="button-wrap">
             <Button decorative size="small">
-              Learn More <span aria-hidden="true">→</span>
+              Learn More <Arrow />
             </Button>
           </div>
         </div>

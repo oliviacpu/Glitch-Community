@@ -16,6 +16,7 @@ import EditCollectionColor from 'Components/collection/edit-collection-color-pop
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
+import Arrow from 'Components/arrow';
 import { useCollectionCurator } from 'State/collection';
 
 import styles from './container.styl';
@@ -121,7 +122,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>
-            View all <Pluralize count={collection.projects.length} singular="project" /> <span aria-hidden>→</span>
+            View all <Pluralize count={collection.projects.length} singular="project" /> <Arrow />
           </CollectionLink>
         )}
       </div>

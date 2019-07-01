@@ -6,6 +6,7 @@ import Loader from 'Components/loader';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink, WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
+import Arrow from 'Components/arrow';
 import SignInPop from 'Components/sign-in-pop';
 import { getAvatarStyle, getLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
@@ -45,9 +46,9 @@ const RecentProjects = () => {
   const isAnonymousUser = !currentUser.login;
 
   return (
-    <section>
+    <section data-cy="recent-projects">
       <Heading tagName="h2">
-        <UserLink user={currentUser}>Your Projects <span aria-hidden="true">→</span></UserLink>
+        <UserLink user={currentUser}>Your Projects <Arrow /></UserLink>
       </Heading>
       {isAnonymousUser && <SignInNotice />}
       <CoverContainer type="user" item={currentUser}>
