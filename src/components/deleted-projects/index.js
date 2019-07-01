@@ -15,6 +15,7 @@ import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useTrackedFunc } from 'State/segment-analytics';
+import useUniqueId from 'Hooks/use-unique-id';
 
 import styles from './deleted-projects.styl';
 
