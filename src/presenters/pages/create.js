@@ -72,20 +72,29 @@ function Banner() {
   );
 }
 
-const WhatIsGlitch = () => (
-  <section className={classNames(styles.section, styles.whatIsGlitch)}>
-    <div>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#d7a6f9">What is Glitch?</Mark>
-      </Heading>
-      <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
-        <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
-        <Text size="16px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+function WhatIsGlitch() {
+  const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
+  const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
+
+  return (
+    <section className={classNames(styles.section, styles.whatIsGlitch)}>
+      <div>
+        <Heading className={styles.h2} tagName="h2">
+          <Mark color="#d7a6f9">What is Glitch?</Mark>
+        </Heading>
+        <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
+          <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
+          <Text size="16px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+        </div>
       </div>
-    </div>
-    <div className={styles.whatIsGlitchVideo} />
-  </section>
-);
+      <div className={styles.whatIsGlitchVideo}>
+        <video className={styles.whatIsGlitchVideo} poster={videoCard} controls>
+          <source src={video} />
+        </video>
+      </div>
+    </section>
+  );
+};
 
 const FRAMEWORK_STARTERS = [
   {
