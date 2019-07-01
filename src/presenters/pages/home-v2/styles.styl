@@ -308,7 +308,8 @@
   background-size: cover
   background-repeat: no-repeat
   padding: 1em 2em
-  h2, p, ul
+  // TODO: not `p` here 
+  h2, .subtitle, ul
     transform: skewY(-2deg)
 
 .cultureZineContainer
@@ -344,13 +345,22 @@
   display: flex
   flex-direction: column
   margin: "-%s" % u1
+  .startBuildingImageWrap
+    background-repeat: no-repeat
+    height: 120px
+    background-size: inherit
+  
   img
-    height: 25%
+    height: 60%
     width: auto
+    margin-left: 20px
+    margin-top: 10px
   a
     display: block
     margin: u1
+    margin-bottom: u4
   h3
+    margin-top: 0
     font-size: t4
 
 @media (min-width: mediumViewport)
@@ -358,20 +368,3 @@
     flex-direction: row
     a
       width: 50%
-
-.previewBanner
-  background-color: yellow
-  padding: u4 u3
-  display: flex
-  flex-flow: row wrap
-  align-items: center
-  margin-top: u1
-  p
-    margin: 0
-    flex: 1 0 auto
-    font-size: t4
-    font-weight: bold
-  & > *
-    margin-left: u1
-    
-    

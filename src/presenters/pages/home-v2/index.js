@@ -194,15 +194,22 @@ const CultureZine = ({ content }) => (
   </section>
 );
 
+const buildingImageMasks = [
+  'https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fdevelopers-mask.svg?v=1561647984894',
+  'https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fteams-mask.svg?v=1561647985925',
+];
+
 const BuildingOnGlitch = ({ content }) => (
   <section id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
       <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
-      {content.map(({ href, img, title, description, cta }) => (
+      {content.map(({ href, img, title, description, cta }, index) => (
         <a key={href} href={href} className={styles.plainLink}>
-          <img src={img} alt="" />
+          <div className={styles.startBuildingImageWrap} style={{ backgroundImage: `url(${buildingImageMasks[index]})` }}>
+            <img src={img} alt="" />
+          </div>
           <h3>{title}</h3>
           <p>{description}</p>
           <Button decorative>
