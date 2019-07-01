@@ -244,7 +244,8 @@ u5 = 50px
     width: 45px
     height: auto
 .platformStartersGrid
-  max-width: 300px
+  @media (max-width: mediumSmallViewport)
+    max-width: 300px
 .platformStarter
   display: flex
   flex-wrap: nowrap
@@ -280,10 +281,12 @@ u5 = 50px
   &.1
     width: 80%
   &.2
+    position: relative
     width: 65%
+    z-index: 1
   + .smallScreencap
     transform: translate(50%, -40%)
-    z-index: -1
+    z-index: 0
     margin-bottom: -30%
 @media (min-width: mediumViewport)
   .screencapBlob

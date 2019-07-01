@@ -78,8 +78,8 @@ function WhatIsGlitch() {
   const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
   const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
   const videoEl = useRef(null);
-  const track = useTracker('Create Page Video Clicked')
-  
+  const track = useTracker('Create Page Video Clicked');
+
   const playVideo = () => {
     setHasPlayed(true);
     videoEl.current.play();
@@ -351,24 +351,31 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
     </>
   );
 
+  // return (
+  //   <section className={styles.section}>
+  //     <VisibilityContainer>
+  //       {({ wasEverVisible }) =>
+  //         wasEverVisible ? (
+  //           <>
+  //             <Info title={title} description={description} markColor={markColor} />
+  //             <Videos video={video} smallVideos={smallVideos} />
+  //             <Highlights highlights={highlights} />
+  //           </>
+  //         ) : (
+  //           <>
+  //             <Info title={title} description={description} markColor={markColor} />
+  //             <div aria-hidden="true" style={{ height: '500px' }} />
+  //           </>
+  //         )
+  //       }
+  //     </VisibilityContainer>
+  //   </section>
+  // );
   return (
     <section className={styles.section}>
-      <VisibilityContainer>
-        {({ wasEverVisible }) =>
-          wasEverVisible ? (
-            <>
-              <Info title={title} description={description} markColor={markColor} />
-              <Videos video={video} smallVideos={smallVideos} />
-              <Highlights highlights={highlights} />
-            </>
-          ) : (
-            <>
-              <Info title={title} description={description} markColor={markColor} />
-              <div aria-hidden="true" style={{ height: '500px' }} />
-            </>
-          )
-        }
-      </VisibilityContainer>
+      <Info title={title} description={description} markColor={markColor} />
+      <Videos video={video} smallVideos={smallVideos} />
+      <Highlights highlights={highlights} />
     </section>
   );
 }
