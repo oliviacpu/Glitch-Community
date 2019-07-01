@@ -5,6 +5,7 @@ import { isFragment } from 'react-is';
 
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
 const usePopoverToggle = ({ startOpen, onOpen }) => {
+  console.log({ startOpen, onOpen })
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   console.log("new status", status)
   const openPopover = (event) => {
@@ -81,8 +82,7 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {  
-  let toggleState;
-  useEffect= usePopoverToggle({ startOpen, onOpen });
+  const toggleState = usePopoverToggle({ startOpen, onOpen });
 
   const inner = children(toggleState);
   if (isFragment(inner)) {
