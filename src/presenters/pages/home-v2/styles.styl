@@ -64,13 +64,28 @@
     margin-bottom: u2
     margin-left: 0
 
-  
 .unifiedStories
+  position: relative
+  border-radius: u1
+  margin-top: u2
+  background: #F5F5F5
+  transform: skewY(-2deg)
+  width: 99vw
+  position: relative
+  content: ''
+  left: 50%
+  right: 50%
+  margin-left: -50vw
+  margin-right: -50vw
+  overflow: hidden
+  
+/* NEW STUFF */
+.unifiedStoriesContainer
   display: flex
   flex-direction: column
-  background-color: bg2
-  border-radius: u1
-  margin-top: u2 !important
+  max-width: 1207px
+  margin: 0 auto
+  padding: 1em
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -81,12 +96,19 @@
   font-weight: bold
   font-size: t1
   margin-bottom: u4
-  
+  transform: skewY(2deg)
+
 .unifiedStoriesHeadline
-  background: #bdbdbd
+  background-color: #bdbdbd
+  margin: -1em
   padding: u4
   border-top-left-radius: u1
   border-bottom-left-radius: u1
+  background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Funified-headline-background.svg?v=1561647625197')
+  background-size: cover
+  background-repeat: no-repeat
+  transform: skewY(2deg)
+  
   h2
     font-size: t5
     margin: 0
@@ -100,12 +122,14 @@
 .unifiedStoriesPreview
   padding: u4
   margin-right: u4
+  transform: skewY(2deg)
   p
     line-height: 1.4
 
 .unifiedStoriesRelatedContent
   padding: u4
   margin-top: u3
+  transform: skewY(2deg)
   ul
     margin: 0
     padding: 0
@@ -123,7 +147,7 @@
     font-size: t2
     
 @media (min-width: mediumViewport)
-  .unifiedStories
+  .unifiedStoriesContainer
     flex-direction: row
     align-items: flex-start
     flex-wrap: wrap
@@ -139,62 +163,6 @@
     flex: 0 0 350px
   .unifiedStoriesPreview
     flex: 1 1 100px
-
-.featuredEmbed
-  margin: 0
-  background-color: bg1
-  border-radius: u1
-  position: relative
-  margin-bottom: u2
-  
-.featuredEmbedImg
-  max-height: 150px
-  position: absolute
-  right: 0
-  top: "-%s" % u4
-  -webkit-mask-image: url(https://cdn.glitch.com/3cef6b25-69ba-4fa9-aa32-cff0fedce195%2Fmask-4.svg)
-  object-fit: contain
-  mask-size: contain
-  mask-repeat: no-repeat
-  mask-position: center
-  mask-type: luminance
-  @media(max-width: mediumViewport)
-    left: 0
-    
-.featuredEmbedWrap
-  height: 80vh
-  max-height: 500px
-  padding: 0px u3 u3 u3
-  
-.featuredEmbedCaption
-  width: 55%
-  margin-top: u4
-  padding: u3
-  display: flex
-  flex-direction: column
-  border-radius: u1
-  @media(max-width: mediumViewport)
-    width: 100%
-    padding-top: 140px
-  @media(min-width: largeViewport)
-    width: 70%
-
-.featuredEmbedText
-  max-width: 100%
-  flex: 1 0 auto
-  margin-bottom: u3
-  h4
-    margin-top: 0
-  p
-    margin: 0
-  p + p
-    margin-top: u1
-  
-@media (min-width: mediumViewport)
-  .featuredEmbedCaption
-    flex-direction: row
-  .featuredEmbedProfileWrap
-    flex: 0 0 u5
 
 .appsWeLoveContainer
   margin-top: 2em
@@ -325,8 +293,32 @@
   --gap: u1
   --min-width: 200px
 
+.cultureZine
+  position: relative
+  background: #F5F5F5
+  transform: skewY(2deg)
+  width: 99vw
+  position: relative
+  content: ''
+  left: 50%
+  right: 50%
+  margin-left: -50vw
+  margin-right: -50vw
+  background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fculture-zine-pattern.svg?v=1561587572773')
+  background-size: cover
+  background-repeat: no-repeat
+  padding: 1em 2em
+  h2, p, ul
+    transform: skewY(-2deg)
+
+.cultureZineContainer
+  max-width: 1207px
+  margin: 0 auto
+  padding: 0 1em
+  
 .cultureZineRow
   --min-width: 180px
+  transform: skewY(0deg) !important
   
 .cultureZineImageWrap
   padding: 0 0 53%
