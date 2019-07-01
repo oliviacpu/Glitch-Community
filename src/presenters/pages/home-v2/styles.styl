@@ -72,11 +72,10 @@
 
 .unifiedStories
   position: relative
-  border-radius: u1
   margin-top: u2
   background: #F5F5F5
   transform: skewY(-2deg)
-  width: 99vw
+  width: 100vw
   position: relative
   content: ''
   left: 50%
@@ -90,7 +89,7 @@
   flex-direction: column
   max-width: 1207px
   margin: 0 auto
-  padding: 1em
+  padding: 0
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -103,17 +102,16 @@
   margin-bottom: u4
   transform: skewY(2deg)
 
-.unifiedStoriesHeadline
+.unifiedStoriesHeadlineWrap
   background-color: #bdbdbd
-  margin: -1em
-  padding: u4
-  border-top-left-radius: u1
-  border-bottom-left-radius: u1
+  margin: -2em 0
   background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Funified-headline-background.svg?v=1561647625197')
   background-size: cover
   background-repeat: no-repeat
-  transform: skewY(2deg)
   
+.unifiedStoriesHeadline
+  transform: skewY(2deg)
+  padding: u5 u4 u3
   h2
     font-size: t5
     margin: 0
@@ -156,7 +154,7 @@
     flex-direction: row
     align-items: flex-start
     flex-wrap: wrap
-  .unifiedStoriesHeadline
+  .unifiedStoriesHeadlineWrap
     flex: 0 0 100%
   .unifiedStoriesPreview
     flex: 1 1 300px
@@ -164,7 +162,7 @@
     flex: 0 0 215px
 
 @media (min-width: largeViewport)
-  .unifiedStoriesHeadline
+  .unifiedStoriesHeadlineWrap
     flex: 0 0 350px
   .unifiedStoriesPreview
     flex: 1 1 100px
