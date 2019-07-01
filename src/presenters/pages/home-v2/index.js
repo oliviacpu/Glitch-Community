@@ -17,6 +17,7 @@ import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
+import DataLoader from 'Components/data-loader';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
@@ -24,7 +25,6 @@ import { useAPI } from 'State/api';
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
 import { Discover, Dreams, Teams } from './feature-callouts';
-import compiledData from '../../../curated/home.json';
 import styles from './styles.styl';
 
 const Arrow = () => <span aria-hidden="true">→</span>;
@@ -287,13 +287,17 @@ export const HomePreview = withRouter(({ history }) => {
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
   return (
-    <Layout>
-      <Home
-        data={{ ...compiledData, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
-        loggedIn={!!currentUser.login}
-        hasProjects={currentUser.projects.length > 0}
-      />
-    </Layout>
+    <DataLoader get={(api) => api.get(`${window.location.origin}/api/home`)} renderLoader={() => null}>
+      {({ data }) => (
+        <Layout>
+          <Home
+            data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
+            loggedIn={!!currentUser.login}
+            hasProjects={currentUser.projects.length > 0}
+          />
+        </Layout>
+      )}
+    </DataLoader>
   );
 };
 export default HomeWithProductionData;

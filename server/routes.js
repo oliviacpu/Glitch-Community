@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
 const fs = require('fs');
+const path = require('path');
 const util = require('util');
 const dayjs = require('dayjs');
 const punycode = require('punycode');
@@ -201,6 +202,10 @@ module.exports = function(external) {
       CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
     });
+  });
+  
+  app.get('/api/home', async (req, res) => {
+    res.sendFile(path.join(__dirname, '../src/curated/home.json'));
   });
 
   app.post('/api/home', async (req, res) => {
