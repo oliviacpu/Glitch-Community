@@ -35,6 +35,7 @@ import MoreIdeas from 'Components/more-ideas';
 import Footer from 'Components/footer';
 import RecentProjects from 'Components/recent-projects';
 import Notification from 'Components/notification';
+import Progress from 'Components/fields/progress';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
@@ -551,7 +552,7 @@ storiesOf('Recent Projects', module)
 storiesOf('Notification', module)
   .add('info', () => (
     <Notification>
-      Uploading image <progress value="0" />
+      Uploading image <Progress value={0} />
     </Notification>
   ))
   .add('persistent', () => <Notification persistent>This notification will be here forever</Notification>)
