@@ -235,7 +235,7 @@ function Starters() {
         {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
       </div>
 
-      <div className={classNames(styles.startersSection, styles.startersGrid)}>
+      <div className={classNames(styles.startersSection, styles.startersGrid, styles.platformStartersGrid)}>
         <div className={styles.startersInfo} style={{ backgroundImage: `url(${platformBlob})` }}>
           <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
             Platform starters
