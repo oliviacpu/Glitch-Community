@@ -6,6 +6,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
 import { TeamLink, UserLink } from 'Components/link';
+import Arrow from 'Components/arrow';
 import { getDisplayName } from 'Models/user';
 import styles from './styles.styl';
 
@@ -64,7 +65,7 @@ function RelatedProjects({ project }) {
               projects && projects.length > 0 && (
                 <>
                   <h2>
-                    <TeamLink team={team}>More by {team.name} →</TeamLink>
+                    <TeamLink team={team}>More by {team.name} <Arrow /></TeamLink>
                   </h2>
                   <RelatedProjectsBody projects={projects} type="team" item={team} />
                 </>
@@ -80,7 +81,7 @@ function RelatedProjects({ project }) {
               projects && projects.length > 0 && (
                 <>
                   <h2>
-                    <UserLink user={user}>More by {getDisplayName(user)} →</UserLink>
+                    <UserLink user={user}>More by {getDisplayName(user)} <Arrow /></UserLink>
                   </h2>
                   <RelatedProjectsBody projects={projects} type="user" item={user} />
                 </>

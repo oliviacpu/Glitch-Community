@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
+import Arrow from 'Components/arrow';
 import styles from './results-list.styl';
 
 const ResultsList = ({ scroll, items, className, children }) => (
@@ -52,7 +53,7 @@ export const ResultItem = ({ className, onClick, href, children, active, selecte
       {href && (
         <div className={styles.linkButtonWrap}>
           <Button size="small" href={href} newTab>
-            View <span aria-hidden="true">→</span>
+            View <Arrow />
           </Button>
         </div>
       )}

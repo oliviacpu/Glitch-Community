@@ -6,7 +6,7 @@ import TextInput from 'Components/inputs/text-input';
 import TextArea from 'Components/inputs/text-area';
 import WrappingTextInput from 'Components/inputs/wrapping-text-input';
 import MarkdownInput from 'Components/inputs/markdown-input';
-
+import Arrow from 'Components/arrow';
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
 import CollectionNameInput from 'Components/fields/collection-name-input';
@@ -74,7 +74,7 @@ inputStory.add('optimistic', () => <ProperTextInputs />);
 
 inputStory.add('errors', () => (
   <div style={{ maxWidth: '200px' }}>
-    <p>input error icon → <InputErrorIcon /></p>
+    <p>input error icon <Arrow /> <InputErrorIcon /></p>
     <p><InputErrorMessage>This is an error message</InputErrorMessage></p>
   </div>
 ));

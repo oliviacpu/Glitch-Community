@@ -8,6 +8,7 @@ import Loader from 'Components/loader';
 import SmallCollectionItem from 'Components/collection/collection-item-small';
 import Heading from 'Components/text/heading';
 import Row from 'Components/containers/row';
+import Arrow from 'Components/arrow';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 import { getSingleItem } from 'Shared/api';
@@ -59,9 +60,9 @@ const MoreCollections = ({ currentCollection, collections }) => {
       <div className={styles.moreByLinkWrap}>
         <Heading tagName="h2">
           {isUserCollection ? (
-            <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} →</UserLink>
+            <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} <Arrow /></UserLink>
           ) : (
-            <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} →</TeamLink>
+            <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} <Arrow /></TeamLink>
           )}
         </Heading>
       </div>
