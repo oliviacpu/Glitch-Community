@@ -8,6 +8,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   console.log("new status", status)
   const openPopover = (event) => {
+    console.log("openPopover called")
     if (event && event.detail === 0) {
       setStatus('openedFromKeyboard');
     } else {
@@ -17,7 +18,10 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
       onOpen();
     }
   };
-  const closePopover = () => setStatus('closed');
+  const closePopover = () => {
+    console.log("closePopover called")
+    setStatus('closed');
+  }
 
   const togglePopover = (event) => {
     console.log("togglePopover called")
@@ -64,7 +68,6 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
 
 class UnmonitoredComponent extends React.Component {
   handleClickOutside() {
-    console.log("handleClickOutside")
     this.props.onClickOutside();
   }
 
@@ -77,9 +80,9 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 export const PopoverToggleContext = createContext(null);
 
-const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
-  console.log({ children, onOpen, outer, startOpen })
-  const toggleState = usePopoverToggle({ startOpen, onOpen });
+const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {  
+  let toggleState;
+  useEffect= usePopoverToggle({ startOpen, onOpen });
 
   const inner = children(toggleState);
   if (isFragment(inner)) {
