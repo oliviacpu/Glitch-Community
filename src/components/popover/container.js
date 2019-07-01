@@ -82,7 +82,7 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {  
-  const toggleState = usePopoverToggle({ startOpen, onOpen });
+  const toggleState = usePopoverToggle({ startOpen, onOpen }); // this keeps getting called everytime children updates
 
   const inner = children(toggleState);
   if (isFragment(inner)) {
