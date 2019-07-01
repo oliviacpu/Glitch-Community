@@ -23,14 +23,6 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     baseDomain: project.domain,
   });
 
-<<<<<<< HEAD
-=======
-  const bottomLeft = isMember ? (
-    <EditButton name={project.id} isMember={isMember} size="small" />
-  ) : (
-    <ReportButton reportedType="project" reportedModel={project} />
-  );
-
   const bottomRight = (
     <>
       {projectOptions.addProjectToCollection && (
@@ -42,7 +34,6 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     </>
   );
 
->>>>>>> dd1cdd190d3c99e7bc2da5fd8da3e7d42c98ecc4
   return (
     <section className={styles.projectEmbed}>
       {top}
@@ -51,22 +42,15 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
-<<<<<<< HEAD
-          {(isAuthorized) ? <EditButton name={project.id} isMember={isAuthorized} size="small" /> : <ReportButton reportedType="project" reportedModel={project} /> }
+          {isMember ? (<EditButton name={project.id} isMember={isMember} size="small" />) : (<ReportButton reportedType="project" reportedModel={project} />)}
         </div>
         <div className={cx({ right: true, buttonWrap: true })}>
-          {currentUser.login && (
+          {projectOptions.addProjectToCollection && (
             <div className={styles.addToCollectionWrap}>
-              <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
+              <AddProjectToCollection project={project} addProjectToCollection={projectOptions.addProjectToCollection} fromProject />
             </div>
           )}
-          <RemixButton name={project.domain} isMember={isAuthorized} onClick={trackRemix} />
-=======
-          {bottomLeft}
-        </div>
-        <div className={cx({ right: true, buttonWrap: true })}>
-          {bottomRight}
->>>>>>> dd1cdd190d3c99e7bc2da5fd8da3e7d42c98ecc4
+          <RemixButton name={project.domain} isMember={isMember} onClick={trackRemix} />
         </div>
       </div>
     </section>
