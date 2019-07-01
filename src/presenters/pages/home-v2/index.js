@@ -130,7 +130,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
   <section id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesContainer}>
       <div className={styles.unifiedStoriesHeadline}>
-        <div className={styles.unskew}>
+        <div className={styles.unifiedStoriesContentWrap}>
           {hed
             .trim()
             .split('\n')
@@ -144,25 +144,29 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         </div>
       </div>
       <div className={styles.unifiedStoriesPreview}>
-        <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
-        <h3 className={styles.h3}>{dek}</h3>
-        <Markdown>{summary}</Markdown>
-        <Button href={href}>
-          {cta} <Arrow />
-        </Button>
+        <div className={styles.unifiedStoriesContentWrap}>
+          <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
+          <h3 className={styles.h3}>{dek}</h3>
+          <Markdown>{summary}</Markdown>
+          <Button href={href}>
+            {cta} <Arrow />
+          </Button>
+        </div>
       </div>
       <div className={styles.unifiedStoriesRelatedContent}>
-        <h3>Stories</h3>
-        <ul>
-          {relatedContent.map((related) => (
-            <li key={related.href}>
-              <a href={related.href} className={styles.plainLink}>
-                <h4>{related.title}</h4>
-                <p>{related.source}</p>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className={styles.unifiedStoriesContentWrap}>
+          <h3>Stories</h3>
+          <ul>
+            {relatedContent.map((related) => (
+              <li key={related.href}>
+                <a href={related.href} className={styles.plainLink}>
+                  <h4>{related.title}</h4>
+                  <p>{related.source}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </section>
