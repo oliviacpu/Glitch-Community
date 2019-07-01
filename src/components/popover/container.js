@@ -5,11 +5,8 @@ import { isFragment } from 'react-is';
 
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
 const usePopoverToggle = ({ startOpen, onOpen }) => {
-  console.log({ startOpen, onOpen })
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
-  console.log("new status", status)
   const openPopover = (event) => {
-    console.log("openPopover called")
     if (event && event.detail === 0) {
       setStatus('openedFromKeyboard');
     } else {
@@ -20,12 +17,10 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
     }
   };
   const closePopover = () => {
-    console.log("closePopover called")
     setStatus('closed');
-  }
+  };
 
   const togglePopover = (event) => {
-    console.log("togglePopover called")
     if (status === 'closed') {
       openPopover(event);
     } else {
@@ -81,12 +76,9 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 
 export const PopoverToggleContext = createContext(null);
 
-const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {  
-  
-  const toggleState = usePopoverToggle({ startOpen, onOpen }); // this keeps getting called everytime children updates
-  useEffect(() => {
-    console.log("mounted", children)
-  },[])
+const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
+  const toggleState = usePopoverToggle({ startOpen, onOpen });
+
   const inner = children(toggleState);
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
