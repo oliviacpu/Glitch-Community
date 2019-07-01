@@ -400,6 +400,8 @@ function Help() {
 }
 
 function VSCode() {
+  const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562003906428';
+  
   return (
     <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
@@ -410,10 +412,9 @@ function VSCode() {
       <div className={styles.helpLinks}>
         <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Install the Glitch VSCode extension</Heading>
-          <Text></Text>
           <Text>
-            <Button href="https://glitch.com/help">
-              Help Center <span aria-hidden="true">&rarr;</span>
+            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" />} imagePosition="left" >
+              Download extension <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
         </div>
