@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar, ProjectAvatar, CollectionAvatar } from 'Components/images/avatar';
 import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
+import Arrow from 'Components/arrow';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
@@ -73,7 +74,7 @@ const CollectionResult = ({ value: collection }) => (
 
 const SeeAllResults = ({ query, selected }) => (
   <Link to={`/search?q=${query}`} className={classnames(styles.seeAllResults, selected && styles.selected)}>
-    See all results →
+    See all results <Arrow />
   </Link>
 );
 

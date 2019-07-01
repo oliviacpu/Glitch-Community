@@ -5,7 +5,6 @@ import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
-import { useCollectionReload } from 'State/collection';
 import { getSingleItem } from 'Shared/api';
 
 function useUserPageGetters() {
@@ -24,7 +23,7 @@ export function useUserEditor(initialUser) {
   });
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAsset, uploadAssetSizes } = useUploader();
-  const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getCoverImagePolicy } = assets.useAssetPolicy();
   const {
     updateItem,
@@ -33,10 +32,8 @@ export function useUserEditor(initialUser) {
     addPinnedProject,
     removePinnedProject,
     undeleteProject,
-    addProjectToCollection,
   } = useAPIHandlers();
   const { getDeletedProject, getProject } = useUserPageGetters();
-  const reloadCollectionProjects = useCollectionReload();
 
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
@@ -125,10 +122,6 @@ export function useUserEditor(initialUser) {
       }));
     }, handleError),
     setDeletedProjects: (_deletedProjects) => setUser((prev) => ({ ...prev, _deletedProjects })),
-    addProjectToCollection: withErrorHandler(async (project, collection) => {
-      await addProjectToCollection({ project, collection });
-      reloadCollectionProjects([collection]);
-    }, handleCustomError),
     featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
