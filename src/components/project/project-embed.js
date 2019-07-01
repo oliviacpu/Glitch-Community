@@ -20,28 +20,6 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
     baseDomain: project.domain,
   });
 
-  const BottomLeft = () => {
-    if (isAuthorized) {
-      return <EditButton name={project.id} isMember={isAuthorized} size="small" />;
-    }
-    return <ReportButton reportedType="project" reportedModel={project} />;
-  };
-
-  const BottomRight = () => (
-    <>
-      {currentUser.login && (
-        <div className={styles.addToCollectionWrap}>
-          <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
-        </div>
-      )}
-      <RemixButton name={project.domain} isMember={isAuthorized} onClick={trackRemix} />
-    </>
-  );
-  
-  useEffect(() => {
-    console.log("project embed mounted")
-  }, [])
-
   return (
     <section className={styles.projectEmbed}>
       {top}
@@ -50,10 +28,15 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
-          <BottomLeft />
+          {(isAuthorized) ? <EditButton name={project.id} isMember={isAuthorized} size="small" /> : <ReportButton reportedType="project" reportedModel={project} /> }
         </div>
         <div className={cx({ right: true, buttonWrap: true })}>
-          <BottomRight />
+          {currentUser.login && (
+            <div className={styles.addToCollectionWrap}>
+              <AddProjectToCollection project={project} currentUser={currentUser} addProjectToCollection={addProjectToCollection} fromProject />
+            </div>
+          )}
+          <RemixButton name={project.domain} isMember={isAuthorized} onClick={trackRemix} />
         </div>
       </div>
     </section>
