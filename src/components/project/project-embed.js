@@ -37,6 +37,10 @@ const ProjectEmbed = ({ project, top, isAuthorized, addProjectToCollection }) =>
       <RemixButton name={project.domain} isMember={isAuthorized} onClick={trackRemix} />
     </>
   );
+  
+  useEffect(() => {
+    console.log("project embed mounted")
+  }, [])
 
   return (
     <section className={styles.projectEmbed}>

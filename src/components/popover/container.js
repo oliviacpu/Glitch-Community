@@ -82,8 +82,11 @@ const MonitoredComponent = onClickOutside(UnmonitoredComponent);
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {  
+  
   const toggleState = usePopoverToggle({ startOpen, onOpen }); // this keeps getting called everytime children updates
-
+  useEffect(() => {
+    console.log("mounted", children)
+  },[])
   const inner = children(toggleState);
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
