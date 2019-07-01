@@ -23,17 +23,6 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     baseDomain: project.domain,
   });
 
-  const bottomRight = (
-    <>
-      {projectOptions.addProjectToCollection && (
-        <div className={styles.addToCollectionWrap}>
-          <AddProjectToCollection project={project} addProjectToCollection={projectOptions.addProjectToCollection} fromProject />
-        </div>
-      )}
-      <RemixButton name={project.domain} isMember={isMember} onClick={trackRemix} />
-    </>
-  );
-
   return (
     <section className={styles.projectEmbed}>
       {top}
