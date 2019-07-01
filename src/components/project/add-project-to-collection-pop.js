@@ -125,8 +125,6 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         { type: 'success' },
       );
     });
-
-    // togglePopover();
   };
 
   return (
@@ -187,7 +185,6 @@ const AddProjectToCollection = ({ project, addProjectToCollection }) => (
             <CreateCollectionWithProject
               addProjectToCollection={(...args) => {
                 addProjectToCollection(...args);
-                togglePopover();
               }}
               project={project}
             />
