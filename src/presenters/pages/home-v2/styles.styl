@@ -47,9 +47,10 @@
   @media(min-width: mediumViewport)
     height: 145px
     padding: u3
+    width: 100%
     svg
       height: 100px
-      margin-top: u2
+      margin: u2 auto 0
     
     
 .featureCalloutsHeader
@@ -64,9 +65,10 @@
   font-weight: 600
   margin-left: t2
   @media(min-width: mediumViewport)
-    margin-top: "-%s" % u2
+    margin-top: "-%s" % u3
     margin-bottom: u2
     margin-left: 0
+    align-self: flex-start
 
 .unifiedStories
   position: relative
@@ -82,8 +84,7 @@
   margin-left: -50vw
   margin-right: -50vw
   overflow: hidden
-  
-/* NEW STUFF */
+
 .unifiedStoriesContainer
   display: flex
   flex-direction: column
@@ -299,21 +300,23 @@
 
 .cultureZine
   position: relative
-  background: #F5F5F5
-  transform: skewY(2deg)
-  width: 99vw
-  position: relative
-  content: ''
-  left: 50%
-  right: 50%
-  margin-left: -50vw
-  margin-right: -50vw
-  background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fculture-zine-pattern.svg?v=1561587572773')
-  background-size: cover
-  background-repeat: no-repeat
   padding: 1em 2em
-  h2, .subtitle, ul
-    transform: skewY(-2deg)
+  &:before
+    position: absolute
+    z-index: -1
+    content: ''
+    top: 0
+    width: 100vw
+    height: 100%
+    transform: skewY(2deg)
+    left: 50%
+    right: 50%
+    margin-left: -50vw
+    margin-right: -50vw
+    background-color: #F5F5F5
+    background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fculture-zine-pattern.svg?v=1561587572773')
+    background-size: cover
+    background-repeat: no-repeat
 
 .cultureZineContainer
   max-width: 1207px
@@ -322,7 +325,7 @@
   
 .cultureZineRow
   --min-width: 180px
-  transform: skewY(0deg) !important
+  position: relative
   
 .cultureZineImageWrap
   padding: 0 0 53%
@@ -336,7 +339,6 @@
   margin-left: auto
   margin-right: auto  
   border-radius: u1
-  background-color: bg1
 
   h4
     margin: u1 0
