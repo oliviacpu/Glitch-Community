@@ -73,6 +73,7 @@ function Banner() {
 }
 
 function WhatIsGlitch() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
   const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
 
@@ -87,14 +88,22 @@ function WhatIsGlitch() {
           <Text size="16px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
         </div>
       </div>
-      <div className={styles.whatIsGlitchVideo}>
-        <video className={styles.whatIsGlitchVideo} poster={videoCard} controls>
+      <div className={styles.whatIsGlitchVideoContainer}>
+        <video className={styles.whatIsGlitchVideo} poster={videoCard} controls={isPlaying}>
           <source src={video} />
         </video>
+        <div className={styles.whatIsGlitchVideoButton}>
+          <Button
+            image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" />}
+            imagePosition="left"
+          >
+            Watch Video
+          </Button>
+        </div>
       </div>
     </section>
   );
-};
+}
 
 const FRAMEWORK_STARTERS = [
   {
@@ -401,7 +410,7 @@ function Help() {
 
 function VSCode() {
   const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485';
-  
+
   return (
     <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
@@ -412,11 +421,9 @@ function VSCode() {
       <div className={styles.helpLinks}>
         <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Install the Glitch VSCode extension</Heading>
+          <Text>Something about editing Glitch projects in VSCode</Text>
           <Text>
-            Something about editing Glitch projects in VSCode
-          </Text>
-          <Text>
-            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="18" height="18" />} imagePosition="left" >
+            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="18" height="18" />} imagePosition="left">
               Download Extension <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
@@ -439,14 +446,7 @@ function VSCode() {
 }
 
 function Remix() {
-  const allApps = [
-    'starter-chartjs',
-    'starter-leaflet',
-    'starter-react',
-    'data-dashboard',
-    'hello-tensorflow',
-    'airtable-example',
-  ];
+  const allApps = ['starter-chartjs', 'starter-leaflet', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
   const api = useAPI();
   const [apps, setApps] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
