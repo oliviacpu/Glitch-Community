@@ -76,6 +76,11 @@ function WhatIsGlitch() {
   const [isPlaying, setIsPlaying] = useState(false);
   const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
   const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
+  const videoEl = null;
+  
+  const playVideo = () => {
+    
+  };
 
   return (
     <section className={classNames(styles.section, styles.whatIsGlitch)}>
@@ -89,17 +94,20 @@ function WhatIsGlitch() {
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
-        <video className={styles.whatIsGlitchVideo} poster={videoCard} controls={isPlaying}>
+        <video ref={videoEl} className={styles.whatIsGlitchVideo} poster={videoCard} controls>
           <source src={video} />
         </video>
-        <div className={styles.whatIsGlitchVideoButton}>
-          <Button
-            image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" />}
-            imagePosition="left"
-          >
-            Watch Video
-          </Button>
-        </div>
+        {!isPlaying && (
+          <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
+            <Button
+              decorative
+              image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" />}
+              imagePosition="left"
+            >
+              Watch Video
+            </Button>
+          </TransparentButton>
+        )}
       </div>
     </section>
   );
