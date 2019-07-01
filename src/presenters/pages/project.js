@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -12,7 +11,7 @@ import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
-import ProjectDomainInput from 'Components/fields/project-domain-input';
+import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
@@ -22,6 +21,7 @@ import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } f
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
+import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
@@ -48,37 +48,6 @@ const IncludedInCollections = ({ projectId }) => (
     }
   </DataLoader>
 );
-
-const PrivateTooltip = 'Only members can view code';
-const PublicTooltip = 'Visible to everyone';
-
-const PrivateBadge = () => (
-  <TooltipContainer
-    type="info"
-    id="private-project-badge-tooltip"
-    tooltip={PrivateTooltip}
-    target={<span className="project-badge private-project-badge" />}
-  />
-);
-
-const PrivateToggle = ({ isPrivate, setPrivate }) => {
-  const tooltip = isPrivate ? PrivateTooltip : PublicTooltip;
-  const classBase = 'button-tertiary button-on-secondary-background project-badge';
-  const className = isPrivate ? 'private-project-badge' : 'public-project-badge';
-
-  return (
-    <TooltipContainer
-      type="action"
-      id="toggle-private-button-tooltip"
-      target={<button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" />}
-      tooltip={tooltip}
-    />
-  );
-};
-PrivateToggle.propTypes = {
-  isPrivate: PropTypes.bool.isRequired,
-  setPrivate: PropTypes.func.isRequired,
-};
 
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
@@ -115,10 +84,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
 
   return (
     <section>
-      <PopoverWithButton
-        buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }}
-        buttonText="Delete Project"
-      >
+      <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText="Delete Project">
         {({ togglePopover }) => (
           <PopoverDialog align="left" wide>
             <PopoverActions>
@@ -163,6 +129,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
+  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
     <main>
       <section id="info">
@@ -174,19 +141,24 @@ const ProjectPage = ({ project: initialProject }) => {
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}
         >
-          <Heading tagName="h1">
-            {isAuthorized ? (
-              <ProjectDomainInput
-                domain={domain}
-                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-              />
-            ) : (
-              <>
-                {!currentUser.isSupport && suspendedReason ? 'suspended project' : domain} {project.private && <PrivateBadge />}
-              </>
-            )}
-          </Heading>
+          {isAuthorized ? (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">
+                <OptimisticTextInput
+                  labelText="Project Domain"
+                  value={project.domain}
+                  onChange={updateDomainAndSync}
+                  placeholder="Name your project"
+                />
+              </Heading>
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+            </div>
+          ) : (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+              {project.private && <PrivateBadge />}
+            </div>
+          )}
           {users.length + teams.length > 0 && (
             <div>
               <ProfileList hasLinks teams={teams} users={users} layout="block" />

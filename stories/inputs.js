@@ -10,7 +10,6 @@ import MarkdownInput from 'Components/inputs/markdown-input';
 import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import OptimisticMarkdownInput from 'Components/fields/optimistic-markdown-input';
 import CollectionNameInput from 'Components/fields/collection-name-input';
-import ProjectDomainInput from 'Components/fields/project-domain-input';
 import UserNameInput from 'Components/fields/user-name-input';
 import UserLoginInput from 'Components/fields/user-login-input';
 
@@ -65,7 +64,6 @@ const ProperTextInputs = () => {
       <p><OptimisticTextInput {...useOptimisticProps('value')} placeholder="Live field, type error to get an error" /></p>
       <p><OptimisticMarkdownInput {...useOptimisticProps('value')} placeholder="Live markdown, type error to get an error" /></p>
       <p>Collection name <CollectionNameInput {...useOptimisticProps('name')} /></p>
-      <p>Project domain <ProjectDomainInput {...useOptimisticProps('domain')} /></p>
       <p>User name <UserNameInput {...useOptimisticProps('name')} /></p>
       <p>User login <UserLoginInput {...useOptimisticProps('login')} /></p>
     </div>
