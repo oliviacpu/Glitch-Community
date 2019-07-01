@@ -399,6 +399,41 @@ function Help() {
   );
 }
 
+function VSCode() {
+  return (
+    <section className={classNames(styles.section, styles.help)}>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#d3f3e6">Something something</Mark>
+      </Heading>
+      <Text className={styles.sectionDescription}>Build with Glitch on VSCode</Text>
+
+      <div className={styles.helpLinks}>
+        <div className={styles.helpLinkSection}>
+          <Heading tagName="h3">Install the Glitch VSCode extension</Heading>
+          <Text></Text>
+          <Text>
+            <Button href="https://glitch.com/help">
+              Help Center <span aria-hidden="true">&rarr;</span>
+            </Button>
+          </Text>
+        </div>
+
+        <hr />
+
+        <div className={styles.helpLinkSection}>
+          <Heading tagName="h3">Support Forum</Heading>
+          <Text>Personalized support for your app-specific questions.</Text>
+          <Text>
+            <Button href="https://support.glitch.com">
+              Forums <span aria-hidden="true">&rarr;</span>
+            </Button>
+          </Text>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Remix() {
   const allApps = [
     'starter-chartjs',
@@ -549,6 +584,7 @@ const CreatePage = () => (
         <Starters />
         <Collaborate />
         <YourAppIsLive />
+        <VSCode />
         <Help />
         <Remix />
         <Categories />
