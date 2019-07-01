@@ -62,7 +62,7 @@ function RelatedProjects({ project }) {
         <li key={team.id}>
           <DataLoader get={(api) => getProjects(api, { type: 'team', id: team.id, ignoreProjectId })}>
             {(projects) =>
-              projects && (
+              projects && projects.length > 0 && (
                 <>
                   <h2>
                     <TeamLink team={team}>More by {team.name} <Arrow /></TeamLink>
@@ -78,7 +78,7 @@ function RelatedProjects({ project }) {
         <li key={user.id}>
           <DataLoader get={(api) => getProjects(api, { type: 'user', id: user.id, ignoreProjectId })}>
             {(projects) =>
-              projects && (
+              projects && projects.length > 0 && (
                 <>
                   <h2>
                     <UserLink user={user}>More by {getDisplayName(user)} <Arrow /></UserLink>

@@ -20,7 +20,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
     description = _.trim(description);
 
     if (!description || description.length === 0) {
-      setTimeout(() => hideNote(project.id), 500);
+      setTimeout(() => hideNote(project), 500);
     }
   }
 
@@ -39,7 +39,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
           authorized={isAuthorized}
           description={project.note || ''}
           placeholder="Share why you love this app."
-          update={(note) => updateNote({ note, projectId: project.id })}
+          update={(note) => updateNote({ note, project })}
           onBlur={hideEmptyNote}
           allowImages
         />

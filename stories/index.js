@@ -399,8 +399,6 @@ storiesOf('ProjectEmbed', module)
     provideContext({ currentUser: {} }, () => (
       <ProjectEmbed
         project={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: null }}
         addProjectToCollection={addProjectToCollection}
       />
     )),
@@ -410,8 +408,6 @@ storiesOf('ProjectEmbed', module)
     provideContext({ currentUser: { login: '@sarahzinger' } }, () => (
       <ProjectEmbed
         project={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: '@sarahzinger' }}
         addProjectToCollection={addProjectToCollection}
       />
     )),
@@ -419,8 +415,6 @@ storiesOf('ProjectEmbed', module)
   .add('owns project, is logged in', () => (
     <ProjectEmbed
       project={{ id: '123', domain: 'community-staging' }}
-      isAuthorized={true}
-      currentUser={{ login: '@sarahzinger' }}
       addProjectToCollection={addProjectToCollection}
     />
   ));
@@ -434,7 +428,6 @@ storiesOf('FeaturedProject', module)
       <FeaturedProject
         featuredProject={{ id: '123', domain: 'community-staging' }}
         isAuthorized={true}
-        currentUser={{ login: '@sarahzinger' }}
         addProjectToCollection={addProjectToCollection}
         unfeatureProject={unfeatureProject}
       />

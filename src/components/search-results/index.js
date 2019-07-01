@@ -14,7 +14,7 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { useAPI } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './search-results.styl';
@@ -40,11 +40,11 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
 
 function ProjectResult({ result }) {
   const { currentUser } = useCurrentUser();
-  const api = useAPI();
+  const { addProjectToCollection } = useAPIHandlers();
 
   const props = { project: result, projectOptions: {} };
   if (currentUser.login) {
-    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
+    props.projectOptions.addProjectToCollection = (project, collection) => addProjectToCollection({ project, collection });
   }
 
   return <ProjectItem {...props} />;
