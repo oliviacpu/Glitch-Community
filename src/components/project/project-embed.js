@@ -23,23 +23,6 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     baseDomain: project.domain,
   });
 
-  const bottomLeft = isMember ? (
-    <EditButton name={project.id} isMember={isMember} size="small" />
-  ) : (
-    <ReportButton reportedType="project" reportedModel={project} />
-  );
-
-  const bottomRight = (
-    <>
-      {projectOptions.addProjectToCollection && (
-        <div className={styles.addToCollectionWrap}>
-          <AddProjectToCollection project={project} addProjectToCollection={projectOptions.addProjectToCollection} fromProject />
-        </div>
-      )}
-      <RemixButton name={project.domain} isMember={isMember} onClick={trackRemix} />
-    </>
-  );
-
   return (
     <section className={styles.projectEmbed}>
       {top}
@@ -48,10 +31,15 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
-          {bottomLeft}
+          {isMember ? (<EditButton name={project.id} isMember={isMember} size="small" />) : (<ReportButton reportedType="project" reportedModel={project} />)}
         </div>
         <div className={cx({ right: true, buttonWrap: true })}>
-          {bottomRight}
+          {projectOptions.addProjectToCollection && (
+            <div className={styles.addToCollectionWrap}>
+              <AddProjectToCollection project={project} addProjectToCollection={projectOptions.addProjectToCollection} fromProject />
+            </div>
+          )}
+          <RemixButton name={project.domain} isMember={isMember} onClick={trackRemix} />
         </div>
       </div>
     </section>

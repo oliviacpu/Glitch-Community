@@ -85,7 +85,7 @@ export function useCollectionProjects(collection) {
 }
 
 export function useCollectionReload() {
-  const { reloadCollectionProjects } = useContext(CollectionReloadContext);
+  const reloadCollectionProjects = useContext(CollectionReloadContext);
   return reloadCollectionProjects;
 }
 
