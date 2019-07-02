@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition, sampleSize } from 'lodash';
@@ -23,11 +23,15 @@ import styles from './container.styl';
 
 const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, preview, funcs }) => {
   const { value: curator } = useCollectionCurator(collection);
+  const [previewProjects, setPreviewProjects] = useState(sampleSize(collection.projects, 3));
+  useEffect(() => {
+    setPreviewProjects(sampleSize(collection.projects, 3));
+  }, [collection]);
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
   if (preview) {
-    projects = sampleSize(collection.projects, 3);
+    projects = previewProjects;
   }
   if (showFeaturedProject && collection.featuredProjectId) {
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
