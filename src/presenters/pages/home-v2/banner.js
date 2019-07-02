@@ -5,11 +5,10 @@ import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
+import Arrow from 'Components/arrow';
 import { useTracker } from 'State/segment-analytics';
 
 import styles from './banner.styl';
-
-const Arrow = () => <span aria-hidden="true">→</span>;
 
 const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795';
 const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4_720.mp4?v=1561656950182';

@@ -18,6 +18,7 @@ import Layout from 'Components/layout';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import DataLoader from 'Components/data-loader';
+import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
@@ -26,8 +27,6 @@ import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
 import { Discover, Dreams, Teams } from './feature-callouts';
 import styles from './styles.styl';
-
-const Arrow = () => <span aria-hidden="true">→</span>;
 
 const calloutImages = {
   apps: () => <Discover />,
@@ -177,7 +176,9 @@ const CultureZine = ({ content }) => (
       <h2 className={styles.h2}>
         <Mark color="#CBC3FF">Where tech meets culture</Mark>
       </h2>
-      <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+      <p className={styles.subtitle}>
+        Code is shaping the world around us. We’ll help you understand where it’s going. <a href="https://glitch.com/culture/">Read more <Arrow /></a>
+      </p>
       <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
         {({ content: cultureZineItems }) => (
           <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
