@@ -17,21 +17,15 @@ import styles from './styles.styl';
 
 // Create Team 🌿
 
-const CreateTeamSubmitButton = ({ disabled }) => {
-  const onClick = useTracker('Create Team submitted');
-  return (
-    <Button size="small" emoji="thumbsUp" onClick={onClick} disabled={disabled}>
-      Create Team
-    </Button>
-  );
-};
-
 function CreateTeamPopBase(props) {
-  const [state, setState] = useState({
+  const trackSubmit = useTracker('Create Team submitted');
+  const [teamName, setTeamName] = useState('');
+  const [state, replaceState] = useState({
     teamName: '',
     isLoading: false,
     error: '',
   });
+  const setState = ()
 
   const validate = async (name) => {
     if (name) {
@@ -87,6 +81,7 @@ function CreateTeamPopBase(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ isLoading: true });
+    trackSubmit();
     try {
       let description = 'A team that makes things';
       try {
@@ -133,7 +128,13 @@ function CreateTeamPopBase(props) {
           <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
           <div className={styles.teamUrlPreview}>/@{_.kebabCase(state.teamName || placeholder)}</div>
 
-          {state.isLoading ? <Loader /> : <CreateTeamSubmitButton disabled={state.error} />}
+          {state.isLoading ? (
+            <Loader /> 
+          ): (
+            <Button submit size="small" emoji="thumbsUp" disabled={!!state.error}>
+              Create Team
+            </Button>
+          )}
         </form>
       </PopoverActions>
       <PopoverInfo>
