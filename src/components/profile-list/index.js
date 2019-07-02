@@ -138,7 +138,7 @@ export const ProfileItem = ({ user, team, glitchTeam, size }) => (
   <ProfileList layout="block" users={maybeList(user)} teams={maybeList(team)} glitchTeam={glitchTeam} size={size} />
 );
 
-const ProfileList = ({ size, users, teams, layout, glitchTeam }) => {
+const ProfileList = React.memo(({ size, users, teams, layout, glitchTeam }) => {
   if (glitchTeam) {
     return <GlitchTeamList />;
   }
@@ -152,7 +152,7 @@ const ProfileList = ({ size, users, teams, layout, glitchTeam }) => {
   }
 
   return <BlockContainer size={size} users={users} teams={teams} />;
-};
+});
 
 ProfileList.propTypes = {
   layout: PropTypes.oneOf(['row', 'block']).isRequired,

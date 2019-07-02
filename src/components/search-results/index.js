@@ -14,8 +14,6 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { useAPI } from 'State/api';
-import { useCurrentUser } from 'State/current-user';
 
 import styles from './search-results.styl';
 
@@ -38,18 +36,6 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
   );
 };
 
-function ProjectResult({ result }) {
-  const { currentUser } = useCurrentUser();
-  const api = useAPI();
-
-  const props = { project: result, projectOptions: {} };
-  if (currentUser.login) {
-    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-  }
-
-  return <ProjectItem {...props} />;
-}
-
 const groups = [
   { id: 'team', label: 'Teams' },
   { id: 'user', label: 'Users' },
@@ -60,7 +46,7 @@ const groups = [
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ProjectResult,
+  project: ({ result }) => <ProjectItem project={result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 

@@ -9,6 +9,7 @@ import { useCurrentUser } from '../../state/current-user';
 
 import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
+import ResetPasswordPage from './reset-password';
 import OauthSignIn from './signin';
 import JoinTeamPage from './join-team';
 import QuestionsPage from './questions';
@@ -100,6 +101,11 @@ const Router = () => (
         path="/login/email"
         exact
         render={({ location }) => <EmailTokenLoginPage key={location.key} token={parse(location.search, 'token')} />}
+      />
+      <Route
+        path="/login/reset-password"
+        exact
+        render={({ location }) => <ResetPasswordPage key={location.key} loginToken={parse(location.search, 'loginToken')} resetPasswordToken={parse(location.search, 'resetPasswordToken')} />}
       />
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />

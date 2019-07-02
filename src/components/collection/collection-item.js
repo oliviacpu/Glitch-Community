@@ -15,6 +15,7 @@ import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
+import Arrow from 'Components/arrow';
 import { isDarkColor } from 'Models/collection';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
@@ -64,8 +65,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
       </div>
       <CollectionLink collection={collection} className={styles.footerLink}>
         {`View ${projects.length >= 3 ? 'all' : ''} `}
-        <Pluralize count={projects.length} singular="project" />
-        <span aria-hidden="true"> →</span>
+        <Pluralize count={projects.length} singular="project" /> <Arrow />
       </CollectionLink>
     </>
   );
@@ -82,7 +82,7 @@ const CollectionCurator = ({ collection }) => {
   return <ProfileItem {...curator} />;
 };
 
-const CollectionCuratorLoader = ({ collection }) => (
+export const CollectionCuratorLoader = ({ collection }) => (
   <VisibilityContainer>
     {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
   </VisibilityContainer>

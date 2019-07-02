@@ -40,7 +40,22 @@ export function sortProjectsByLastAccess(projects) {
   });
 }
 
+export const MEMBER_ACCESS_LEVEL = 20;
+export const ADMIN_ACCESS_LEVEL = 30;
+
 export function userIsProjectMember({ project, user }) {
-  if (!user) return false;
+  if (!user || !project || !project.permissions) return false;
   return project.permissions.some(({ userId }) => user.id === userId);
+}
+
+export function userIsProjectAdmin({ project, user }) {
+  if (!user || !project) return false;
+  return project.permissions.some(({ userId, accessLevel }) => user.id === userId && accessLevel >= ADMIN_ACCESS_LEVEL);
+}
+
+export function userIsOnlyProjectAdmin({ project, user }) {
+  if (!user || !project) return false;
+  const adminCount = project.permissions.filter((p) => p.accessLevel >= ADMIN_ACCESS_LEVEL).length;
+  if (adminCount > 1) return false;
+  return userIsProjectAdmin({ project, user });
 }
