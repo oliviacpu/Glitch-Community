@@ -83,19 +83,20 @@ const AppsWeLove = ({ content }) => {
       <div className={styles.appsWeLoveBigLayout}>
         <ul className={styles.appsWeLoveList}>
           {content.map(({ id, title, description, domain, users }) => (
-            <li key={id} className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
-              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
-                <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
-                <span className={styles.appContent}>
-                  <span className={styles.profileListPlaceholder} />
-                  <h4 className={styles.h4}>{title}</h4>
-                  <p>{description}</p>
-                </span>
-              </TransparentButton>
+            <li key={id} className={styles.appsWeLoveListItem}>
               <div className={styles.appsWeLoveProfileWrap}>
                 <div className={styles.appsWeLoveProfile}>
                   <ProfileList layout="row" users={users} />
                 </div>
+              </div>
+              <div className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
+                <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
+                  <span className={styles.appContent}>
+                    <h4 className={styles.h4}>{title}</h4>
+                    <p>{description}</p>
+                  </span>
+                  <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+                </TransparentButton>
               </div>
             </li>
           ))}

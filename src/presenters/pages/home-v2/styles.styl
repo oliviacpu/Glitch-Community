@@ -179,7 +179,6 @@
   background-color: bg1
 .appItemMini + .appItemMini
   margin-top: u2
-    
   
 .appsWeLoveSmallLayout
   display: block
@@ -197,17 +196,25 @@
   list-style-type: none
   flex: 1 1 auto
 
+.appsWeLoveListItem
+  margin-top: u2
+  
 .appItemWrap
   position: relative
-  padding: u2 u4 u2 u2
-  margin-right: "-%s" %u1
+  padding-right: u4
+  margin-right: "-%s" % u1
   border-radius: u1 0 0 u1
   &.active
-    background-color: #eee
+    background-color: rgb(213, 254, 255)	
 
 .appItem
   display: flex
-  
+  border-radius: u1
+  padding: u3 u2 u2
+  background-color: bg1
+.active .appItem
+  background-color: transparent
+    
 .appAvatar
   width: 32px
   height: 32px
@@ -229,14 +236,11 @@
   display: block
   
 .appsWeLoveProfileWrap
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
+  position: relative
   z-index: 1
-  padding-left: 80px + u2 + u2
-  padding-top: u2
-
+  padding-left: u2
+  margin-bottom: "-%s" % u4
+  
 .curatedCollectionRow
   --gap: u3
 
