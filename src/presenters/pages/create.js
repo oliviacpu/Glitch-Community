@@ -485,7 +485,7 @@ function Remix() {
     fetchApps(sampleSize(allApps, 5));
   }, []);
 
-  const Embeds = () => (
+  const embeds = (
     <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
       <TabList className={styles.remixAppTabs}>
         {apps.map((app) => (
@@ -511,7 +511,7 @@ function Remix() {
     </Tabs>
   );
 
-  const Info = () => (
+  const info = (
     <Heading className={styles.h2} tagName="h2">
       <Mark color="#FBF2B8">Remix any app to get started</Mark>
     </Heading>
@@ -523,11 +523,11 @@ function Remix() {
         {({ wasEverVisible }) =>
           wasEverVisible ? (
             <>
-              <Info />
-              <Embeds />
+              {info}
+              {embeds}
             </>
           ) : (
-            <Info />
+            info
           )
         }
       </VisibilityContainer>
