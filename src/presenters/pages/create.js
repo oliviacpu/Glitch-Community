@@ -75,7 +75,7 @@ function Banner() {
 
 function WhatIsGlitch() {
   const [hasPlayed, setHasPlayed] = useState(false);
-  const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1561999693309';
+  const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1562095877722';
   const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
   const videoEl = useRef(null);
   const track = useTracker('Create Page Video Clicked');
@@ -487,19 +487,6 @@ function Remix() {
     // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
     setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
   }, []);
-  // useEffect(() => {
-  //   const fetchApps = async (domains) => {
-  //     const url = `/v1/projects/by/domain?domain=${domains.join('&domain=')}`;
-  //     const { data } = await api.get(url);
-  //     // API returns alphabetized results, shuffle the projects
-  //     data = shuffle(values(data));
-  //     // 
-  //     const leaflet = remove(data, (app => app.domain === 'starter-leaflet'));
-  //     setApps(values(data));
-  //   };
-  //   // we always want to include starter-leaflet because it's pretty and we want it to be the first tab
-  //   fetchApps(['starter-leaflet'].concat(sampleSize(appsToRandomize, 4)));
-  // }, []);
 
   const embeds = (
     <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
@@ -535,21 +522,23 @@ function Remix() {
 
   return (
     <section className={classNames(styles.section, styles.remix)}>
-      <VisibilityContainer>
-        {({ wasEverVisible }) =>
-          wasEverVisible ? (
-            <>
-              {info}
-              {embeds}
-            </>
-          ) : (
-            info
-          )
-        }
-      </VisibilityContainer>
+      {info}
+      {embeds}
     </section>
   );
-}
+//   <VisibilityContainer>
+//         {({ wasEverVisible }) =>
+//           wasEverVisible ? (
+//             <>
+//               {info}
+//               {embeds}
+//             </>
+//           ) : (
+//             info
+//           )
+//         }
+//       </VisibilityContainer>
+// }
 
 function Categories() {
   const categories = [
