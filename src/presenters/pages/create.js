@@ -439,7 +439,7 @@ function VSCode() {
   return (
     <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
-        <Mark color="#d3f3e6">Glitch on VSCode</Mark>
+        <Mark color="#aad6fb">Glitch for VSCode</Mark>
       </Heading>
       <Text className={styles.sectionDescription}>Something something something</Text>
 
