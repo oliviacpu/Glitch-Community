@@ -99,9 +99,12 @@ function WhatIsGlitch() {
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
         <video ref={videoEl} className={styles.whatIsGlitchVideo} poster={videoCard} controls={hasPlayed}>
-          <track default kind="captions"
-           srclang="en"
-           src="/media/examples/friday.vtt"/>
+          <track
+            default
+            kind="captions"
+            srcLang="en"
+            src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate.vtt?v=1562082827674"
+          />
           <source src={video} />
         </video>
         {!hasPlayed && (
