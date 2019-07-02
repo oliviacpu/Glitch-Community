@@ -15,7 +15,6 @@ import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
-import VisibilityContainer from 'Components/visibility-container';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -442,11 +441,12 @@ function VSCode() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#aad6fb">Glitch for VS Code</Mark>
       </Heading>
-      
+
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Install the Glitch extension to build Glitch apps in VS Code. With collaborative editing, instant updates, and access to the console, you have the full power of Glitch within VS Code.
+        Install the Glitch extension to build Glitch apps in VS Code. With collaborative editing, instant updates, and access to the console, you have
+        the full power of Glitch within VS Code.
       </Text>
-        
+
       <Text className={styles.sectionDescription}>
         <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
           Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
