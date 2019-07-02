@@ -1,8 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import useUserPref from './user-prefs';
-
-export const Context = React.createContext();
 
 //  Dev Toggles!
 //
@@ -38,16 +34,10 @@ const toggleData = [
 //   return showNewFeature ? <NewFeature /> : null;
 // };
 
-export const DevTogglesProvider = ({ children }) => {
-  const defaultEnabledToggles = toggleData.filter((toggle) => toggle.enabledByDefault).map((toggle) => toggle.name);
-  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', defaultEnabledToggles);
-  return <Context.Provider value={{ enabledToggles, toggleData, setEnabledToggles }}>{children}</Context.Provider>;
+export const useDevToggles = () => {
+  const [enabledToggles, setEnabledToggles] = useUserPref('devToggles', []);
+  return { enabledToggles, toggleData, setEnabledToggles };
 };
-DevTogglesProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export const useDevToggles = () => React.useContext(Context);
 
 const useDevToggle = (toggle) => {
   const { enabledToggles } = useDevToggles();
