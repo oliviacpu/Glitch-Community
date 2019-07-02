@@ -442,19 +442,16 @@ function VSCode() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#aad6fb">Glitch for VSCode</Mark>
       </Heading>
-      <div className={styles.sectionDescription}>
-        <Text>
-          Build Glitch apps in Visual Studio Code with the Glitch extension.
-        </Text>
+      
+      <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
+        Install the Glitch extension to build Glitch apps in VSCode. With collaborative editing, instant updates, and access to the console, you have the full power of Glitch within VSCode.
+      </Text>
         
-        <Text>Love VSCode? You're not alone. Install the Glitch extension to build Glitch apps in VSCode. With output logs and the console, you have access to the full power of Glitch within VS Code.</Text>
-        
-        <Text>
-          <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
-            Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
-          </Button>
-        </Text>
-      </div>
+      <Text className={styles.sectionDescription}>
+        <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
+          Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
+        </Button>
+      </Text>
     </section>
   );
 }
