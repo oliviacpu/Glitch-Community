@@ -325,7 +325,7 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
         <div className={styles.blob}>
           <Image src={blob} alt="" />
         </div>
-        <div className={classNames(styles[imageName], styles.blobImage)}>
+        <div className={classNames(styles[imageName], styles.screencapBlobImage, styles.blobImage)}>
           <Image src={image} alt="" />
         </div>
       </div>
@@ -471,74 +471,55 @@ function VSCode() {
 }
 
 function Remix() {
-  const leaflet = {id: '4e131691-974a-4b1f-95e5-47137b94043d', domain: 'starter-leaflet'};
+  const leaflet = { id: '4e131691-974a-4b1f-95e5-47137b94043d', domain: 'starter-leaflet' };
   const appsToRandomize = [
-    {id: '2330a90c-9520-4c02-8db2-4e3078a69b69', domain: 'airtable-example'},
-    {id: '824edd48-c9bd-4aee-a3fb-561bb97344ed', domain: 'data-dashboard'},
-    {id: 'c7a5b6bb-bafd-445e-a0f8-ef41115c9432', domain: 'hello-tensorflow'},
-    {id: '71d3e262-edb4-456f-8703-48a1247b894f', domain: 'starter-react'},
-    {id: '6d6f0669-c096-4acb-be5c-ea064712c918', domain: 'starter-chartjs'},
+    { id: '2330a90c-9520-4c02-8db2-4e3078a69b69', domain: 'airtable-example' },
+    { id: '824edd48-c9bd-4aee-a3fb-561bb97344ed', domain: 'data-dashboard' },
+    { id: 'c7a5b6bb-bafd-445e-a0f8-ef41115c9432', domain: 'hello-tensorflow' },
+    { id: '71d3e262-edb4-456f-8703-48a1247b894f', domain: 'starter-react' },
+    { id: '6d6f0669-c096-4acb-be5c-ea064712c918', domain: 'starter-chartjs' },
   ];
-  
+
   const [currentTab, setCurrentTab] = useState(0);
   const [apps, setApps] = useState([]);
-  
+
   useEffect(() => {
     // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
     setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
   }, []);
 
-  const embeds = (
-    
-  );
-
-  const info = (
-    <Heading className={styles.h2} tagName="h2">
-      <Mark color="#FBF2B8">Remix any app to get started</Mark>
-    </Heading>
-  );
-
   return (
     <section className={classNames(styles.section, styles.remix)}>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#FBF2B8">Remix any app to get started</Mark>
+      </Heading>
 
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-      <TabList className={styles.remixAppTabs}>
-        {apps.map((app) => (
-          <Tab className={styles.remixAppTab} key={app.domain}>
-            <ProjectAvatar project={app} hideTooltip />
-            <Text size="14px">{app.domain}</Text>
-          </Tab>
-        ))}
-      </TabList>
+        <TabList className={styles.remixAppTabs}>
+          {apps.map((app) => (
+            <Tab className={styles.remixAppTab} key={app.domain}>
+              <ProjectAvatar project={app} hideTooltip />
+              <Text size="14px">{app.domain}</Text>
+            </Tab>
+          ))}
+        </TabList>
 
-      {apps.map((app, i) => (
-        <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-          <div className={styles.embedContainer}>
-            <Embed domain={app.domain} />
-          </div>
-          <div className={styles.embedRemixBtn}>
-            <RemixButton type="cta" emoji="microphone" app={app}>
-              Remix your own
-            </RemixButton>
-          </div>
-        </TabPanel>
-      ))}
-    </Tabs>
+        {apps.map((app, i) => (
+          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+            <div className={styles.embedContainer}>
+              <Embed domain={app.domain} />
+            </div>
+            <div className={styles.embedRemixBtn}>
+              <RemixButton type="cta" emoji="microphone" app={app}>
+                Remix your own
+              </RemixButton>
+            </div>
+          </TabPanel>
+        ))}
+      </Tabs>
     </section>
   );
-//   <VisibilityContainer>
-//         {({ wasEverVisible }) =>
-//           wasEverVisible ? (
-//             <>
-//               {info}
-//               {embeds}
-//             </>
-//           ) : (
-//             info
-//           )
-//         }
-//       </VisibilityContainer>
-// }
+}
 
 function Categories() {
   const categories = [
