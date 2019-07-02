@@ -75,8 +75,9 @@ const CollectionPage = ({ owner, name }) => {
   return (
   <Layout>
     <DataLoader get={get}>
-      {(collection) =>
-        collection ? (
+      {(collection) => {
+        console.log("got a collection to render", collection)
+        return collection ? (
           <AnalyticsContext
             properties={{ origin: 'collection' }}
             context={{
@@ -88,6 +89,8 @@ const CollectionPage = ({ owner, name }) => {
         ) : (
           <NotFound name={name} />
         )
+      }
+        
       }
     </DataLoader>
   </Layout>
