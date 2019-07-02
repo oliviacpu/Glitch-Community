@@ -117,6 +117,7 @@ export function userOrTeamIsAuthor({ collection, user }) {
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
+  console.log("inside useCollectionEditor", collection.name)
   const {
     updateItem,
     deleteItem,

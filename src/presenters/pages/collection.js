@@ -19,7 +19,10 @@ import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } fr
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
+  console.log("initialCollection", {initialCollection})
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
+  console.log(collection.name)
+
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
   const funcs = {
@@ -36,7 +39,6 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       return result;
     },
   };
-
   return (
     <>
       <Helmet title={collection.name} />

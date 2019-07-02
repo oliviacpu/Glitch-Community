@@ -5,15 +5,11 @@ import { useAPI } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
 const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException }) => {
-  const [{ status, value }, setState] = useState({ status: 'loading', value: null });
+  const [{ status, value}, setState] = useState({ status: 'loading', value: null, });
   const api = useAPI();
   if (value === null || !Array.isArray(value)) {
     console.log("data loader is rendering and the status is", status, "and the value is", value)    
   }
-  
-  useEffect(() => {
-    setState({ status: 'loading', value: null })
-  }, [get])
   
   useEffect(() => {
     console.log("inside useEffect")
@@ -39,7 +35,8 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       console.log("setting isCurrent to false for this get", get)
       isCurrent = false;
     };
-  }, [api]); // this used to be [api], it does eventually load with the right stuff but it doesn't render which I think means is current is not right?
+  }, [get]); 
+  
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
