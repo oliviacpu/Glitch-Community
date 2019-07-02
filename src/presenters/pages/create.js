@@ -440,11 +440,11 @@ function VSCode() {
   return (
     <section className={classNames(styles.section, styles.help)}>
       <Heading className={styles.h2} tagName="h2">
-        <Mark color="#aad6fb">Glitch for VSCode</Mark>
+        <Mark color="#aad6fb">Glitch for VS Code</Mark>
       </Heading>
       
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Install the Glitch extension to build Glitch apps in VSCode. With collaborative editing, instant updates, and access to the console, you have the full power of Glitch within VSCode.
+        Install the Glitch extension to build Glitch apps in VS Code. With collaborative editing, instant updates, and access to the console, you have the full power of Glitch within VS Code.
       </Text>
         
       <Text className={styles.sectionDescription}>
