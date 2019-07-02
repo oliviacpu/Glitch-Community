@@ -489,7 +489,19 @@ function Remix() {
   }, []);
 
   const embeds = (
-    <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+    
+  );
+
+  const info = (
+    <Heading className={styles.h2} tagName="h2">
+      <Mark color="#FBF2B8">Remix any app to get started</Mark>
+    </Heading>
+  );
+
+  return (
+    <section className={classNames(styles.section, styles.remix)}>
+
+      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
       <TabList className={styles.remixAppTabs}>
         {apps.map((app) => (
           <Tab className={styles.remixAppTab} key={app.domain}>
@@ -512,18 +524,6 @@ function Remix() {
         </TabPanel>
       ))}
     </Tabs>
-  );
-
-  const info = (
-    <Heading className={styles.h2} tagName="h2">
-      <Mark color="#FBF2B8">Remix any app to get started</Mark>
-    </Heading>
-  );
-
-  return (
-    <section className={classNames(styles.section, styles.remix)}>
-      {info}
-      {embeds}
     </section>
   );
 //   <VisibilityContainer>
