@@ -12,7 +12,7 @@ import Arrow from 'Components/arrow';
 import { UserLink, TeamLink } from 'Components/link';
 import { getDisplayName } from 'Models/user';
 import { getSingleItem } from 'Shared/api';
-import { useCollectionContext } from 'State/collection';
+import { useCollectionContext, useCollectionCurator } from 'State/collection';
 
 import styles from './styles.styl';
 
@@ -49,6 +49,7 @@ function useCollectionsWithProjects(collections) {
 }
 
 const MoreCollections = ({ currentCollection, collections }) => {
+  const curator = useCollectionCurator(currentCollection);
   const collectionsWithProjects = useCollectionsWithProjects(collections);
   if (!collectionsWithProjects) return <Loader />;
   if (!collectionsWithProjects.length) return null;
@@ -60,9 +61,9 @@ const MoreCollections = ({ currentCollection, collections }) => {
       <div className={styles.moreByLinkWrap}>
         <Heading tagName="h2">
           {isUserCollection ? (
-            <UserLink user={currentCollection.user}>More by {getDisplayName(currentCollection.user)} <Arrow /></UserLink>
+            <UserLink user={currentCollection.user}>More by {getDisplayName(curator ? curator.user : currentCollection.user)} <Arrow /></UserLink>
           ) : (
-            <TeamLink team={currentCollection.team}>More from {currentCollection.team.name} <Arrow /></TeamLink>
+            <TeamLink team={currentCollection.team}>More from {curator ? curator.team.name : `@${currentCollection.team.url}`} <Arrow /></TeamLink>
           )}
         </Heading>
       </div>
