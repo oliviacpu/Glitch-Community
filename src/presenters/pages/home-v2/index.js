@@ -64,10 +64,9 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
-const domains = ['starter-chartjs', 'starter-leaflet', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
-
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
+  const handleArrows = () => {};
 
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
@@ -83,10 +82,16 @@ const AppsWeLove = ({ content }) => {
         ))}
       </div>
       <div className={styles.appsWeLoveBigLayout}>
-        <ul className={styles.appsWeLoveList}>
+        <ul className={styles.appsWeLoveList} role="tablist">
           {content.map(({ id, title, description, domain, users }) => (
             <li key={id} className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
-              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
+              <TransparentButton 
+                onClick={() => setFeaturedDomain(domain)} className={styles.appItem}
+                aria-selected={featuredDomain === domain}
+                aria-controls={`panel-${domain}`}
+                tabIndex={featuredDomain === domain ? 0 : -1}
+                onKeyDown={handleArrows}
+              >
                 <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
                 <span className={styles.appContent}>
                   <span className={styles.profileListPlaceholder} />
@@ -102,8 +107,8 @@ const AppsWeLove = ({ content }) => {
             </li>
           ))}
         </ul>
-        <div className={styles.appsWeLoveEmbed}>
-          <Embed domain={domains[content.findIndex(p => p.domain === featuredDomain)]} />
+        <div id={`panel-${featuredDomain}`} className={styles.appsWeLoveEmbed} role="tabpanel">
+          <Embed domain={featuredDomain} />
         </div>
       </div>
     </section>
