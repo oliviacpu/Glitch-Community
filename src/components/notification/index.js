@@ -36,7 +36,9 @@ Notification.defaultProps = {
   inline: false,
 };
 
-export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
+export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => {
+  console.log(url)
+  return (
   <>
     <Text>
       {`Added ${projectDomain} `}
@@ -48,7 +50,7 @@ export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }
       </Button>
     )}
   </>
-);
+)};
 
 AddProjectToCollectionMsg.propTypes = {
   projectDomain: PropTypes.string.isRequired,

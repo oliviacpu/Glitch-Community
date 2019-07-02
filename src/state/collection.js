@@ -11,7 +11,7 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
     console.log("getting collections with projects")
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
-      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
+      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}&cacheBust=${Date.now()}`),
     ]);
     return { ...collection, projects };
   } catch (error) {
