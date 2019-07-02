@@ -11,7 +11,7 @@ function loadScript(src) {
   }
 }
 
-const WiVideo = ({ videoId }) => {
+const WistiaVideo = ({ videoId }) => {
   useEffect(() => {
     loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
     loadScript('//fast.wistia.com/assets/external/E-v1.js');
@@ -24,3 +24,5 @@ const WiVideo = ({ videoId }) => {
     </div>
   );
 };
+
+export default WistiaVideo;

@@ -6,23 +6,18 @@ import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays'
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
 import Arrow from 'Components/arrow';
+import WistiaVideo from 'Components/wistia-video';
 import { useTracker } from 'State/segment-analytics';
 
 import styles from './banner.styl';
 
-const videoPoster = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795';
-const videoSrc = 'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fhomepage_v4_720.mp4?v=1561656950182';
-
-const Video = ({ poster, src, onClick, controls }) => (
-  <video poster={poster} onClick={onClick} controls={controls}>
-    <source type="video/mp4" src={src} />
-  </video>
-);
 
 const OverlayVideoBody = () => (
   <Overlay>
     <OverlaySection type="actions">
-      <Video poster={videoPoster} src={videoSrc} controls />
+      <div className={styles.overlayVideoWrap}>
+        <WistiaVideo videoId="z2ksbcs34d"/>
+      </div>
     </OverlaySection>
   </Overlay>
 );
@@ -50,13 +45,14 @@ const OverlayVideo = () => {
 };
 
 const InlineVideo = () => {
-  const [status, setStatus] = useState('init'); // init | playing | paused
+  const [showVideo, setStatus] = useState('init'); // init | playing | paused
   const track = useTracker();
 
-  const onClick = (e) => {
+  const onClick = () => {
     if (status === 'init') {
       track('Watch Video clicked');
-      e.target.play();
+      
+      // e.target.play();
       setTimeout(() => {
         setStatus('playing');  
       });
@@ -65,10 +61,10 @@ const InlineVideo = () => {
 
   return (
     <div className={classnames(styles.bannerVideo, styles[status])}>
-      <Video onClick={onClick} poster={videoPoster} controls={status !== 'init'} src={videoSrc} />
+      <WistiaVideo videoId="z2ksbcs34d"/>
       {status === 'init' && (
         <div className={styles.bannerVideoButtonWrap}>
-          <Button decorative emoji="playButton">Watch Video</Button>
+          <Button onClick={onClick} emoji="playButton">Watch Video</Button>
         </div>
       )}
     </div>
