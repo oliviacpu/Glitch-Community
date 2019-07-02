@@ -71,7 +71,7 @@ const AppsWeLove = ({ content }) => {
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
-          <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItem)}>
+          <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
             <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
             <div className={styles.appContent}>
               <h4 className={styles.h4}>{title}</h4>

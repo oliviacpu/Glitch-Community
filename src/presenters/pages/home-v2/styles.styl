@@ -172,17 +172,25 @@
     margin: 0
     color: fg1
     
-.appsWeLoveSmallLayout
-  .appItem + .appItem
-    margin-top: u2
-  @media (min-width: mediumViewport)
-    display: none
+.appItemMini
+  display: flex
+  padding: u2
+  border-radius: u1
+  background-color: bg1
+.appItemMini + .appItemMini
+  margin-top: u2
     
+  
+.appsWeLoveSmallLayout
+  display: block
 .appsWeLoveBigLayout
   display: none
-  @media (min-width: mediumViewport)
+@media (min-width: mediumViewport)
+  .appsWeLoveSmallLayout
+    display: none
+  .appsWeLoveBigLayout
     display: flex
-  
+
 .appsWeLoveList
   margin: 0
   padding: 0
@@ -199,9 +207,13 @@
 
 .appItem
   display: flex
-
+  
 .appAvatar
-  width: 80px
+  width: 32px
+  height: 32px
+  flex: 0 0 auto
+  border-radius: u1
+    
 .appContent
   flex: 1 1 auto
   margin-left: u2

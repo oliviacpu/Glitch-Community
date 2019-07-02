@@ -56,19 +56,16 @@ const InlineVideo = () => {
   const onClick = (e) => {
     if (status === 'init') {
       track('Watch Video clicked');
-    }
-    if (status === 'playing') {
-      e.target.pause();
-      setStatus('paused');
-    } else {
       e.target.play();
-      setStatus('playing');
+      setTimeout(() => {
+        setStatus('playing');  
+      });
     }
   };
 
   return (
     <div className={classnames(styles.bannerVideo, styles[status])}>
-      <Video onClick={onClick} poster={videoPoster} src={videoSrc} />
+      <Video onClick={onClick} poster={videoPoster} controls={status !== 'init'} src={videoSrc} />
       {status === 'init' && (
         <div className={styles.bannerVideoButtonWrap}>
           <Button decorative emoji="playButton">Watch Video</Button>
