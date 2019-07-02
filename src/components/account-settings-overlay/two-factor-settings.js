@@ -5,6 +5,7 @@ import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
 import TextInput from 'Components/inputs/text-input';
 import Button from 'Components/buttons/button';
+import Loader from 'Components/loader';
 import Notification from 'Components/notification';
 
 import { useAPI } from 'State/api';
@@ -21,6 +22,7 @@ const TwoFactorSettings = () => {
   const [secret, setSecret] = useState(undefined);
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
+  const [backupCodes, setBackupCodes] = useState(null);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
@@ -68,15 +70,52 @@ const TwoFactorSettings = () => {
     }
   };
 
+  const getBackupCodes = async () => {
+    if (twoFactorEnabled) {
+      const { data } = await api.get(`users/${currentUser.id}/tfa/backupCodes?cache=${Date.now()}`);
+      setBackupCodes(data.backupCodes);
+    } else {
+      setBackupCodes(null);
+    }
+  };
+  React.useEffect(() => {
+    getBackupCodes();
+  }, [currentUser.id, twoFactorEnabled]);
+
+  const resetBackupCodes = async () => {
+    setBackupCodes(null);
+    await api.post('user/tfa/resetBackupCodes');
+    await getBackupCodes();
+  };
+
   return (
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
-      {done && !twoFactorEnabled && <Notification type="success" persistent>Successfully disabled two-factor authentication</Notification>}
-      {done && twoFactorEnabled && <Notification type="success" persistent>Successfully enabled two-factor authentication</Notification>}
-      {twoFactorEnabled && <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>Disable Authenticator App</Button>}
-      {!twoFactorEnabled &&
+      {twoFactorEnabled ? (
         <>
+          {done && <Notification type="success" persistent>Successfully enabled two-factor authentication</Notification>}
+          <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>Disable Authenticator App</Button>
+          <Heading tagName="h3">Backup Codes</Heading>
+          <Text>Keep these somewhere safe in case you lose your authenticator</Text>
+          {backupCodes ? (
+            <>
+              {backupCodes.length > 0 && (
+                <ul className={styles.backupCodes}>
+                  {backupCodes.map((backupCode) => (
+                    <li className={styles.backupCode} key={backupCode}>
+                      {backupCode}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <Button type="tertiary" size="small" onClick={resetBackupCodes}>Generate New Codes</Button>
+            </>
+          ) : <Loader />}
+        </>
+      ) : (
+        <>
+          {done && <Notification type="success" persistent>Successfully disabled two-factor authentication</Notification>}
           <Button type="tertiary" size="small" disabled={!!secret || working} onClick={generateSecret}>Enable Authenticator App</Button>
           {secret &&
             <form className={styles.accountSettingsForm} onSubmit={verifyCode}>
@@ -86,7 +125,7 @@ const TwoFactorSettings = () => {
             </form>
           }
         </>
-      }
+      )}
     </>
   );
 };
