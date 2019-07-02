@@ -67,11 +67,10 @@ CollectionPageContents.propTypes = {
 
 const CollectionPage = ({ owner, name }) => {
   console.log("loading the collection Page", owner, name)
-  const get = (api) => {
+  const get = React.useCallback((api) => {
     console.log("calling the get in the data loader with ", owner, name)
     return getCollectionWithProjects(api, { owner, name })
-  }
-
+  }, [owner, name])
   return (
   <Layout>
     <DataLoader get={get}>

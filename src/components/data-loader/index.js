@@ -7,11 +7,13 @@ import { captureException } from '../../utils/sentry';
 const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException }) => {
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });
   const api = useAPI();
+  console.log("data loader is rendering")
   useEffect(() => {
+    console.log("inside useEffect")
     let isCurrent = true;
     get(api).then(
       (data) => {
-        console.log("got new data", isCurrent)
+        console.log("got new data after the get, isCurrent is", isCurrent)
         if (!isCurrent) return;
         console.log("setting state with data", data)
         setState({ status: 'ready', value: data });
@@ -26,9 +28,10 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       },
     );
     return () => {
+      console.log("setting isCurrent to false")
       isCurrent = false;
     };
-  }, [api]);
+  }, [api, get]);
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
