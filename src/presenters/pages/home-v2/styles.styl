@@ -206,6 +206,8 @@
   border-radius: u1 0 0 u1
   &.active
     background-color: rgb(213, 254, 255)	
+  &:hover
+    background-color: bg2
 
 .appItem
   display: flex
@@ -238,8 +240,8 @@
 .appsWeLoveProfileWrap
   position: relative
   z-index: 1
-  padding-left: u2
-  margin-bottom: "-%s" % u4
+  padding-left: u3
+  margin-bottom: "-%s" % (u2 + u2)
   
 .curatedCollectionRow
   --gap: u3
