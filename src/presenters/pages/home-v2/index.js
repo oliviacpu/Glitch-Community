@@ -119,7 +119,7 @@ const CuratedCollections = ({ content }) => (
           <p>{description}</p>
           <span className={styles.curatedCollectionButtonWrap}>
             <Button decorative>
-              View <Pluralize count={count} singular="Project" /><Arrow />
+              View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
           </span>
         </CuratedCollectionContainer>
@@ -180,7 +180,7 @@ const CultureZine = ({ content }) => (
         <Mark color="#CBC3FF">Where tech meets culture</Mark>
       </h2>
       <p className={styles.subtitle}>
-        Code is shaping the world around us. We’ll help you understand where it’s going. <a href="https://glitch.com/culture/">Read more <Arrow /></a>
+        Code is shaping the world around us. We’ll help you understand where it’s going.
       </p>
       <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
         {({ content: cultureZineItems }) => (
@@ -199,6 +199,11 @@ const CultureZine = ({ content }) => (
           </Row>
         )}
       </Row>
+      <div className={styles.readMoreLink}>
+        <Button href="https://glitch.com/culture/">
+          Read more on Culture <Arrow />
+        </Button>
+      </div>
     </div>
   </section>
 );
