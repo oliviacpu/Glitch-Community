@@ -44,13 +44,8 @@ const DeletedProject = ({ project, onClick }) => {
     <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
-<<<<<<< HEAD
-          <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-          <span className={styles.projectName}>{domain}</span>
-=======
           <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
-          <div className={styles.projectName}>{project.domain}</div>
->>>>>>> c9b0edfbc3392c3bfd389d7b687c4c3410f5fbb2
+          <span className={styles.projectName}>{project.domain}</span>
           <div className={styles.buttonWrap}>
             <Button size="small" decorative>
               Undelete
