@@ -22,8 +22,8 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 };
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
-  console.log("getCollectionProjectsFromAPI", withCacheBust)
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+  console.log("getCollectionProjectsFromAPI", cacheBust)
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
