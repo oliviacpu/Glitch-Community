@@ -65,7 +65,9 @@ CollectionPageContents.propTypes = {
 };
 
 
-const CollectionPage = ({ owner, name }) => (
+const CollectionPage = ({ owner, name }) => {
+  console.log("loading the collection Page", owner, name)
+  return (
   <Layout>
     <DataLoader get={(api) => {
         console.log("calling the get in the data loader with ", owner, name)
@@ -87,6 +89,6 @@ const CollectionPage = ({ owner, name }) => (
       }
     </DataLoader>
   </Layout>
-);
+)};
 
 export default CollectionPage;
