@@ -7,27 +7,12 @@ import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Component
 import VisibilityContainer from 'Components/visibility-container';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { CollectionAvatar } from 'Components/images/avatar';
-import { createAPIHook } from 'State/api';
-import { getSingleItem } from 'Shared/api';
+import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-result-item.styl';
 
-const useCurator = createAPIHook(async (api, collection) => {
-  if (collection.userIDs.length) {
-    const id = collection.userIDs[0];
-    const user = await getSingleItem(api, `/v1/users/by/id?id=${id}`, id);
-    return { user };
-  }
-  if (collection.teamIDs.length) {
-    const id = collection.teamIDs[0];
-    const team = await getSingleItem(api, `/v1/teams/by/id?id=${id}`, id);
-    return { team };
-  }
-  return {};
-});
-
 const ProfileItemWithData = ({ collection }) => {
-  const { value: curator } = useCurator(collection);
+  const { value: curator } = useCollectionCurator(collection);
   return (
     <>
       {curator ? (<VisuallyHidden>by</VisuallyHidden>) : null}

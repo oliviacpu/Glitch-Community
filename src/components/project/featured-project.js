@@ -33,7 +33,6 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
 const FeaturedProject = ({
   addProjectToCollection,
   collection,
-  currentUser,
   displayNewNote,
   featuredProject,
   hideNote,
@@ -53,12 +52,10 @@ const FeaturedProject = ({
               updateNote={updateNote}
               isAuthorized={isAuthorized}
               unfeatureProject={animateAndUnfeatureProject}
-              createNote={collection ? () => displayNewNote(featuredProject.id) : null}
+              createNote={collection ? () => displayNewNote(featuredProject) : null}
             />
           }
           project={featuredProject}
-          isAuthorized={isAuthorized}
-          currentUser={currentUser}
           addProjectToCollection={addProjectToCollection}
         />
       )}
@@ -67,8 +64,7 @@ const FeaturedProject = ({
 );
 
 FeaturedProject.propTypes = {
-  addProjectToCollection: PropTypes.func.isRequired,
-  currentUser: PropTypes.object.isRequired,
+  addProjectToCollection: PropTypes.func,
   featuredProject: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   unfeatureProject: PropTypes.func.isRequired,
@@ -80,6 +76,7 @@ FeaturedProject.propTypes = {
 
 FeaturedProject.defaultProps = {
   collection: null,
+  addProjectToCollection: null,
   displayNewNote: () => {},
   hideNote: () => {},
   updateNote: () => {},

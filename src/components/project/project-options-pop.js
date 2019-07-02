@@ -8,70 +8,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import { AddProjectToCollectionBase } from './add-project-to-collection-pop';
 
-const isTeamProject = ({ currentUser, project }) => {
-  for (const team of currentUser.teams) {
-    if (project.teamIds.includes(team.id)) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const promptThenLeaveProject = ({ event, project, leaveProject, currentUser }) => {
-  if (isTeamProject({ currentUser, project })) {
-    leaveProject(project.id, event);
-    return;
-  }
-
-  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-    project.domain
-  }?`;
-  if (window.confirm(prompt)) {
-    leaveProject(project.id, event);
-  }
-};
-
-const determineProjectOptionsFunctions = ({ currentUser, project, projectOptions }) => {
-  const isAnon = !(currentUser && currentUser.login);
-  const projectUserIds = project.permissions.map(({ userId }) => userId);
-  const isProjectMember = currentUser && projectUserIds.includes(currentUser.id);
-  const currentUserProjectPermissions = currentUser && project.permissions.find((p) => p.userId === currentUser.id);
-  const isProjectAdmin = currentUserProjectPermissions && currentUserProjectPermissions.accessLevel === 30;
-  const {
-    isAuthorized,
-    featureProject,
-    addPin,
-    removePin,
-    displayNewNote,
-    addProjectToCollection,
-    joinTeamProject,
-    leaveTeamProject,
-    leaveProject,
-    removeProjectFromTeam,
-    deleteProject,
-    removeProjectFromCollection,
-  } = projectOptions;
-
-  return {
-    featureProject: featureProject && !project.private && !isAnon && isAuthorized ? () => featureProject(project.id) : null,
-    addPin: addPin && !isAnon && isAuthorized ? () => addPin(project.id) : null,
-    removePin: removePin && !isAnon && isAuthorized ? () => removePin(project.id) : null,
-    displayNewNote:
-      !(project.note || project.isAddingANewNote) && displayNewNote && !isAnon && isAuthorized ? () => displayNewNote(project.id) : null,
-    addProjectToCollection: addProjectToCollection && !isAnon ? addProjectToCollection : null,
-    joinTeamProject: joinTeamProject && !isProjectMember && !isAnon && isAuthorized ? () => joinTeamProject(project.id, currentUser.id) : null,
-    leaveTeamProject:
-      leaveTeamProject && isProjectMember && !isAnon && !isProjectAdmin && isAuthorized ? () => leaveTeamProject(project.id, currentUser.id) : null,
-    leaveProject:
-      leaveProject && project.permissions.length > 1 && isProjectMember && !isProjectAdmin && isAuthorized
-        ? (event) => promptThenLeaveProject({ event, project, leaveProject, currentUser })
-        : null,
-    removeProjectFromTeam:
-      removeProjectFromTeam && !removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromTeam(project.id) : null,
-    deleteProject: !removeProjectFromCollection && deleteProject && isProjectAdmin ? () => deleteProject(project.id) : null,
-    removeProjectFromCollection: removeProjectFromCollection && !isAnon && isAuthorized ? () => removeProjectFromCollection(project) : null,
-  };
-};
+const isTeamProject = ({ currentUser, project }) => currentUser.teams.some((team) => project.teamIds.includes(team.id));
 
 /* eslint-disable react/no-array-index-key */
 const PopoverMenuItems = ({ children }) =>
@@ -84,9 +21,22 @@ const PopoverMenuItems = ({ children }) =>
       ),
   );
 
-const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
-  const onClickLeaveTeamProject = useTrackedFunc(projectOptions.leaveTeamProject, 'Leave Project clicked');
-  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject, 'Leave Project clicked');
+const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover }) => {
+  const { currentUser } = useCurrentUser();
+  // TODO: replace this with a multi-popover pane
+  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject && (() => {
+    if (isTeamProject({ currentUser, project })) {
+      projectOptions.leaveProject(project);
+      return;
+    }
+
+    const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
+      project.domain
+    }?`;
+    if (window.confirm(prompt)) {
+      projectOptions.leaveProject(project);
+    }
+  }), 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (
@@ -102,7 +52,6 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
           [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
           [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
           [
-            { onClick: onClickLeaveTeamProject, label: 'Leave Project', emoji: 'wave' },
             { onClick: onClickLeaveProject, label: 'Leave Project', emoji: 'wave' },
           ],
           [
@@ -117,13 +66,9 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover }) => {
 };
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
-  const { currentUser } = useCurrentUser();
-  projectOptions = determineProjectOptionsFunctions({ currentUser, project, projectOptions });
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
 
-  if (noProjectOptions) {
-    return null;
-  }
+  if (noProjectOptions) return null;
 
   const toggleBeforeAction = (togglePopover) =>
     mapValues(
@@ -154,7 +99,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           }}
         >
           {({ addToCollection }) => (
-            <ProjectOptionsContent projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
+            <ProjectOptionsContent project={project} projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
           )}
         </MultiPopover>
       )}

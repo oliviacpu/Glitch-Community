@@ -8,7 +8,6 @@ import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
-import DataLoader from 'Components/data-loader';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import Emoji from 'Components/images/emoji';
@@ -32,19 +31,6 @@ import styles from './team.styl';
 function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
-
-const TeamPageCollections = ({ collections, team }) => {
-  const { currentUser } = useCurrentUser();
-  return (
-    <CollectionsList
-      title="Collections"
-      collections={collections.map((collection) => ({ ...collection, team }))}
-      maybeCurrentUser={currentUser}
-      maybeTeam={team}
-      isAuthorized={userIsOnTeam({ team, user: currentUser })}
-    />
-  );
-};
 
 const Beta = () => (
   <a href="/teams/" target="_blank" className={styles.beta}>
@@ -127,15 +113,7 @@ function TeamPage({ team: initialTeam }) {
 
   const updateUrl = (url) => funcs.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
 
-  const projectOptions = {
-    addProjectToCollection: funcs.addProjectToCollection,
-    deleteProject: funcs.deleteProject,
-    leaveTeamProject: funcs.leaveTeamProject,
-    removeProjectFromTeam: funcs.removeProject,
-    joinTeamProject: funcs.joinTeamProject,
-    featureProject: funcs.featureProject,
-    isAuthorized: currentUserIsOnTeam,
-  };
+  const projectOptions = { ...funcs, team };
 
   return (
     <main className={styles.container}>
@@ -196,10 +174,7 @@ function TeamPage({ team: initialTeam }) {
           }
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
-          projectOptions={{
-            removePin: funcs.removePin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -212,24 +187,19 @@ function TeamPage({ team: initialTeam }) {
           isAuthorized={currentUserIsOnTeam}
           enablePagination
           enableFiltering={recentProjects.length > 6}
-          projectOptions={{
-            addPin: funcs.addPin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
       {team.projects.length === 0 && currentUserIsOnTeam && <ProjectPals />}
 
       {/* TEAM COLLECTIONS */}
-      <ErrorBoundary>
-        <DataLoader
-          get={(api) => api.get(`collections?teamId=${team.id}`)}
-          renderLoader={() => <TeamPageCollections team={team} collections={team.collections} />}
-        >
-          {({ data }) => <TeamPageCollections team={team} collections={data} />}
-        </DataLoader>
-      </ErrorBoundary>
+      <CollectionsList
+        title="Collections"
+        collections={team.collections.map((collection) => ({ ...collection, team }))}
+        maybeTeam={team}
+        isAuthorized={currentUserIsOnTeam}
+      />
 
       {currentUserIsOnTeam && (
         <ErrorBoundary>

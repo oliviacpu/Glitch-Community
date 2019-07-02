@@ -53,7 +53,7 @@ export function teamAdmins({ team }) {
 }
 
 export function userIsOnTeam({ user, team }) {
-  return !!user && team.users.some(({ id }) => user.id === id);
+  return !!user && !!team && !!team.teamPermissions && team.teamPermissions.some(({ userId }) => user.id === userId);
 }
 
 export function userCanJoinTeam({ user, team }) {

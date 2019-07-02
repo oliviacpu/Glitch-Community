@@ -43,6 +43,10 @@ Cypress.Commands.add('signIn', () => {
   window.localStorage.setItem('cachedUser', JSON.stringify(cachedUser));
 });
 
+Cypress.Commands.add('enableDevToggles', (devToggles) => {
+  window.localStorage.setItem('community-userPrefs', JSON.stringify({ devToggles }));
+});
+
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //
