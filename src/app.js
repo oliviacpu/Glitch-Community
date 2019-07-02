@@ -7,6 +7,7 @@ import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
 import { LocalStorageProvider } from 'State/local-storage';
 import { ProjectContextProvider } from 'State/project';
+import { CollectionContextProvider } from 'State/collection';
 import { NotificationsProvider } from 'State/notifications';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
@@ -24,11 +25,13 @@ const App = () => (
               <CurrentUserProvider>
                 <APIContextProvider>
                   <ProjectContextProvider>
-                    <>
-                      <SuperUserBanner />
-                      <OfflineNotice />
-                      <Router />
-                    </>
+                    <CollectionContextProvider>
+                      <>
+                        <SuperUserBanner />
+                        <OfflineNotice />
+                        <Router />
+                      </>
+                    </CollectionContextProvider>
                   </ProjectContextProvider>
                 </APIContextProvider>
               </CurrentUserProvider>
