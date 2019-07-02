@@ -442,31 +442,12 @@ function VSCode() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#aad6fb">Glitch for VSCode</Mark>
       </Heading>
-      <Text className={styles.sectionDescription}>Something something something</Text>
-
-      <div className={styles.helpLinks}>
-        <div className={styles.helpLinkSection}>
-          <Heading tagName="h3">Install the Glitch VSCode extension</Heading>
-          <Text>Something about editing Glitch projects in VSCode</Text>
-          <Text>
-            <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="18" height="18" />} imagePosition="left">
-              Download Extension <span aria-hidden="true">&rarr;</span>
-            </Button>
-          </Text>
-        </div>
-
-        <hr />
-
-        <div className={styles.helpLinkSection}>
-          <Heading tagName="h3">Something about GitHub</Heading>
-          <Text>More about GitHub</Text>
-          <Text>
-            <Button href="https://support.glitch.com">
-              View the Source <span aria-hidden="true">&rarr;</span>
-            </Button>
-          </Text>
-        </div>
-      </div>
+      <Text className={styles.sectionDescription}>Build Glitch apps in Visual Studio Code with the Glitch extension.</Text>
+      <Text>
+        <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
+          Download from the Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
+        </Button>
+      </Text>
     </section>
   );
 }
@@ -600,7 +581,7 @@ const CreatePage = () => (
         <Starters />
         <Collaborate />
         <YourAppIsLive />
-        <WistiaVideo videoId='vxosqp0d7h'/>
+        <WistiaVideo videoId="vxosqp0d7h" />
         <VSCode />
         <Help />
         <Remix />
