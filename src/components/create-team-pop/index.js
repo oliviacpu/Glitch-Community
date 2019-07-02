@@ -65,7 +65,7 @@ const CreateTeamPop = withRouter(({ history }) => {
     }
   };
 
-  const debouncedValidate = debounce(validate, 200);
+  const [debouncedValidate] = useState(() => debounce(validate, 200));
   useEffect(() => {
     const getName = async () => {
       const teamName = await getTeamPair();
