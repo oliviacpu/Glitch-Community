@@ -60,13 +60,12 @@ const InlineVideo = () => {
         <WistiaVideo videoId="z2ksbcs34d"/>
       ) : (
         <>
-        <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
-          <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
+          <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
+            <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
+          </TransparentButton>
           <span className={styles.bannerVideoButton}>
-            
+            <Button decorative emoji="playButton">Watch Video</Button>
           </span>
-        </TransparentButton>
-          <Button emoji="playButton">Watch Video</Button>
         </>
       )}
     </div>
