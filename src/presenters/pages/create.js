@@ -99,6 +99,9 @@ function WhatIsGlitch() {
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
         <video ref={videoEl} className={styles.whatIsGlitchVideo} poster={videoCard} controls={hasPlayed}>
+          <track default kind="captions"
+           srclang="en"
+           src="/media/examples/friday.vtt"/>
           <source src={video} />
         </video>
         {!hasPlayed && (
