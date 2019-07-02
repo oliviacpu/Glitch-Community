@@ -12,7 +12,6 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
       getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
     ]);
-    console.log("projects", projects)
     return { ...collection, projects };
   } catch (error) {
     if (error && error.response && error.response.status === 404) return null;
