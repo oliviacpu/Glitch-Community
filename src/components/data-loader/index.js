@@ -12,9 +12,6 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
   }
   
   useEffect(() => {
-  }, [get])
-  
-  useEffect(() => {
     console.log("inside useEffect")
     let isCurrent = true;
     get(api).then(
@@ -37,7 +34,7 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       console.log("setting isCurrent to false")
       isCurrent = false;
     };
-  }, [api]);
+  }, [get]); // this used to be [api], it does eventually load with the right stuff but it doesn't render which I think means is current is not right?
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
