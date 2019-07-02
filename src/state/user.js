@@ -104,7 +104,8 @@ export function useUserEditor(initialUser) {
     deleteProject: withErrorHandler(async (project) => {
       await deleteItem({ project });
       const { data } = await getDeletedProject({ project });
-      const deletedProjectWithPermission = { ...data, permission: project.permission };
+      const permission = project.permissions.find((p) => p.userId === currentUser.id);
+      const deletedProjectWithPermission = { ...data, permission };
       setUser((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
