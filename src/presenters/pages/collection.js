@@ -66,9 +66,7 @@ CollectionPageContents.propTypes = {
 
 const CollectionPage = ({ owner, name }) => {
   const get = React.useCallback(
-    (api) => {
-      return getCollectionWithProjects(api, { owner, name });
-    },
+    (api) => getCollectionWithProjects(api, { owner, name }),
     [owner, name],
   );
 
