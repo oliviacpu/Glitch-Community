@@ -10,6 +10,10 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
   if (value === null || !Array.isArray(value)) {
     console.log("data loader is rendering and the status is", status, "and the value is", value)    
   }
+  
+  useEffect(() => {
+  }, [get])
+  
   useEffect(() => {
     console.log("inside useEffect")
     let isCurrent = true;
@@ -33,7 +37,7 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       console.log("setting isCurrent to false")
       isCurrent = false;
     };
-  }, [api, get]);
+  }, [api]);
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
