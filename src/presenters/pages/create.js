@@ -471,7 +471,7 @@ function VSCode() {
 }
 
 function Remix() {
-  const allApps = ['starter-chartjs', 'starter-leaflet', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
+  const appsToRandomize = ['starter-chartjs', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
   const api = useAPI();
   const [apps, setApps] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
@@ -482,7 +482,7 @@ function Remix() {
       const { data } = await api.get(url);
       setApps(values(data));
     };
-    fetchApps(sampleSize(allApps, 5));
+    fetchApps(sampleSize(appsToRandomize, 4).concat(['starter-leaflet']));
   }, []);
 
   const embeds = (
