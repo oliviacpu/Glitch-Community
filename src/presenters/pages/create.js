@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle } from 'lodash';
+import { values, sampleSize, shuffle, remove } from 'lodash';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -471,7 +471,16 @@ function VSCode() {
 }
 
 function Remix() {
-  const appsToRandomize = ['starter-chartjs', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
+  const leaflet = {id: '4e131691-974a-4b1f-95e5-47137b94043d', domain: 'starter-leaflet'};
+  const appsToRandomize = [
+    {id: '6d6f0669-c096-4acb-be5c-ea064712c918', domain: 'starter-chartjs'},
+    {id: '', domain: 'starter-reac'},
+    {id: '', domain: 'data-dashboard'},
+    {id: '', domain: 'hello-tensorflow'},
+    {id: '', domain: 'airtable-example'},
+    
+    
+    , 't', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
   const api = useAPI();
   const [apps, setApps] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
@@ -481,9 +490,9 @@ function Remix() {
       const url = `/v1/projects/by/domain?domain=${domains.join('&domain=')}`;
       const { data } = await api.get(url);
       // API returns alphabetized results, shuffle the projects
-      data = shuffle(data);
+      data = shuffle(values(data));
       // 
-      const leaflet = remove()
+      const leaflet = remove(data, (app => app.domain === 'starter-leaflet'));
       setApps(values(data));
     };
     // we always want to include starter-leaflet because it's pretty and we want it to be the first tab
