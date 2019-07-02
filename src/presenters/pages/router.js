@@ -115,7 +115,7 @@ const Router = () => (
       <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
       <Route path="/@:owner/:name" exact render={({ match }) => {
-          console.log("router")
+          console.log("router", match.params)
           return <CollectionPage owner={match.params.owner} name={match.params.name} />
         }} />
 
