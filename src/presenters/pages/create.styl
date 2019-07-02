@@ -118,7 +118,7 @@ u5 = 50px
   flex: 100%
   order: -1
   text-align: center
-  z-index: 3
+  z-index: 1
   margin-bottom: -40px
   @media (min-width: mediumSmallViewport)
     img
@@ -271,6 +271,10 @@ u5 = 50px
   left: 50%
   bottom: 5px
   transform: translateX(-50%)
+  &.live
+    width: 60%
+    @media (min-width: mediumLargeViewport)
+      bottom: 10px
 .screencap
   border-radius: u1
   box-shadow: 4px 4px #c3c3c3
