@@ -443,8 +443,11 @@ function VSCode() {
       </Heading>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Install the Glitch extension to build Glitch apps in VS Code. With collaborative editing, instant updates, and access to the console, you have
-        the full power of Glitch within VS Code.
+        Install the Glitch extension to build Glitch apps in VS Code, the most widely used developer environment.
+      </Text>
+        
+      <Text  className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
+        With collaborative editing, instant updates, and access to the console, it's the full power of the Glitch editor within VS Code.
       </Text>
 
       <Text className={styles.sectionDescription}>
