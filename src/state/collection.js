@@ -8,12 +8,10 @@ import { captureException } from 'Utils/sentry';
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
   try {
-    console.log("getting collections with projects with this url", fullUrl)
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
       getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}&cacheBust=${Date.now()}`),
     ]);
-    console.log("got back these projects", projects)
     return { ...collection, projects };
   } catch (error) {
     if (error && error.response && error.response.status === 404) return null;
@@ -24,7 +22,6 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  console.log("getCollectionProjectsFromAPI", cacheBust)
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
@@ -59,23 +56,27 @@ export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState({});
   const api = useAPI();
 
-  const getCollectionProjects = useCallback((collection) => {
-    if (responses[collection.id] && responses[collection.id].projects) {
-      return responses[collection.id].projects;
-    }
-    loadCollectionProjects(api, [collection], setResponses);
-    return loadingResponse;
-  }, [responses, api]);
+  const getCollectionProjects = useCallback(
+    (collection) => {
+      if (responses[collection.id] && responses[collection.id].projects) {
+        return responses[collection.id].projects;
+      }
+      loadCollectionProjects(api, [collection], setResponses);
+      return loadingResponse;
+    },
+    [responses, api],
+  );
 
-  const reloadCollectionProjects = useCallback((collections) => {
-    loadCollectionProjects(api, collections, setResponses, true);
-  }, [api]);
+  const reloadCollectionProjects = useCallback(
+    (collections) => {
+      loadCollectionProjects(api, collections, setResponses, true);
+    },
+    [api],
+  );
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -117,12 +118,11 @@ export function userOrTeamIsAuthor({ collection, user }) {
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
-  console.log("inside useCollectionEditor", collection.name, initialCollection)
-  
+
   React.useEffect(() => {
-    setCollection(initialCollection)
-  }, [initialCollection])
-  
+    setCollection(initialCollection);
+  }, [initialCollection]);
+
   const {
     updateItem,
     deleteItem,

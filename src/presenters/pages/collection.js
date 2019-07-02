@@ -19,7 +19,6 @@ import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } fr
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
-  console.log("initialCollection", {initialCollection})
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
@@ -65,38 +64,34 @@ CollectionPageContents.propTypes = {
   }).isRequired,
 };
 
-
 const CollectionPage = ({ owner, name }) => {
-  // console.log("loading the collection Page", owner, name)
-  // const get = React.useCallback((api) => {
-  //   console.log("calling the get with ", owner, name)
-  //   return getCollectionWithProjects(api, { owner, name })
-  // }, [owner, name])
+  const get = React.useCallback(
+    (api) => {
+      return getCollectionWithProjects(api, { owner, name });
+    },
+    [owner, name],
+  );
+
   return (
-  <Layout>
-    <DataLoader get={(api) => {
-    console.log("calling the get with ", owner, name)
-    return getCollectionWithProjects(api, { owner, name })
-  }}>
-      {(collection) => {
-        console.log("got a collection to render", collection)
-        return collection ? (
-          <AnalyticsContext
-            properties={{ origin: 'collection' }}
-            context={{
-              groupId: collection.team ? collection.team.id.toString() : '0',
-            }}
-          >
-            <CollectionPageContents collection={collection} />
-          </AnalyticsContext>
-        ) : (
-          <NotFound name={name} />
-        )
-      }
-        
-      }
-    </DataLoader>
-  </Layout>
-)};
+    <Layout>
+      <DataLoader get={get}>
+        {(collection) =>
+          collection ? (
+            <AnalyticsContext
+              properties={{ origin: 'collection' }}
+              context={{
+                groupId: collection.team ? collection.team.id.toString() : '0',
+              }}
+            >
+              <CollectionPageContents collection={collection} />
+            </AnalyticsContext>
+          ) : (
+            <NotFound name={name} />
+          )
+        }
+      </DataLoader>
+    </Layout>
+  );
+};
 
 export default CollectionPage;

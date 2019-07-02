@@ -15,6 +15,7 @@ export { WrappingLink, TrackedExternalLink };
 const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
 
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+  console.log({ to })
   if (typeof to === 'string') {
     const currentUrl = new URL(window.location.href);
     const targetUrl = new URL(to, currentUrl);

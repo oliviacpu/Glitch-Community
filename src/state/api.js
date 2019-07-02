@@ -140,11 +140,7 @@ export const useAPIHandlers = () => {
       deleteItem: (entityArgs) => api.delete(`/${entityPath(entityArgs)}`),
 
       // collections
-      addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`)
-      .then(stuff => {
-        console.log("patch has completed")
-        return stuff
-      }),
+      addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
       removeProjectFromCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/remove/${project.id}`),
