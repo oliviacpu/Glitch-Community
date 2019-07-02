@@ -104,10 +104,12 @@ export function useUserEditor(initialUser) {
     deleteProject: withErrorHandler(async (project) => {
       await deleteItem({ project });
       const { data } = await getDeletedProject({ project });
+      const permission = project.permissions.find((p) => p.userId === currentUser.id);
+      const deletedProjectWithPermission = { ...data, permission };
       setUser((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
-        _deletedProjects: [data, ...prev._deletedProjects], // eslint-disable-line no-underscore-dangle
+        _deletedProjects: [deletedProjectWithPermission, ...prev._deletedProjects], // eslint-disable-line no-underscore-dangle
       }));
     }, handleError),
     undeleteProject: withErrorHandler(async (project) => {
