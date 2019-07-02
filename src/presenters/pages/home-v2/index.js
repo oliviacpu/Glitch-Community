@@ -58,9 +58,9 @@ const FeatureCallouts = ({ content }) => (
 const TopPicks = ({ children }) => (
   <section id="top-picks">
     <h2 className={styles.h2}>
-      <Mark color="#BCFCFF">Today's top picks</Mark>
+      <Mark color="#BCFCFF">Fresh apps</Mark>
     </h2>
-    <p className={styles.subtitle}>Apps you’ll only find here on Glitch, built by our community of creators.</p>
+    <p className={styles.subtitle}>The latest and greatest projects on Glitch, built by our community of creators.</p>
     {children}
   </section>
 );
@@ -145,7 +145,6 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       </div>
       <div className={styles.unifiedStoriesPreview}>
         <div className={styles.unifiedStoriesContentWrap}>
-          <div className={styles.unifiedStoriesFeatureLabel}>Feature</div>
           <h3 className={styles.h3}>{dek}</h3>
           <Markdown>{summary}</Markdown>
           <Button href={href}>
@@ -155,7 +154,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
       </div>
       <div className={styles.unifiedStoriesRelatedContent}>
         <div className={styles.unifiedStoriesContentWrap}>
-          <h3>Stories</h3>
+          <h3>Related</h3>
           <ul>
             {relatedContent.map((related) => (
               <li key={related.href}>

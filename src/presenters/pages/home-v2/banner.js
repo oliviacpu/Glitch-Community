@@ -116,12 +116,12 @@ const Banner = () => (
         <br />
         <Mark color="#1D9AF9">friendly community</Mark>
         <br />
-        <Unmarked>where everyone can</Unmarked>
+        <Unmarked>where everyone</Unmarked>
         <br />
-        <Mark color="#18B576">create the web</Mark>
+        <Mark color="#18B576">builds the web</Mark>
       </h1>
       <div className={styles.bannerCopyAndButtons}>
-        <p>Discover, build, and share millions of apps and websites — for free</p>
+        <p>Simple, powerful, free tools to create and use millions of apps.</p>
 
         <Button type="cta" href="#top-picks">
           Start Creating <Arrow />
