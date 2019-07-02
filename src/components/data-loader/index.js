@@ -12,13 +12,18 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
   }
   
   useEffect(() => {
+    setState({ status: 'loading', value: null })
+  }, [get])
+  
+  useEffect(() => {
     console.log("inside useEffect")
     let isCurrent = true;
     get(api).then(
       (data) => {
-        console.log("got new data after the get, isCurrent is", isCurrent)
+        if (!Array.isArray(data)) {
+          console.log("got new data after the get, isCurrent is", isCurrent, "data is", data)
+        }
         if (!isCurrent) return;
-        console.log("setting state with data", data)
         setState({ status: 'ready', value: data });
       },
       (error) => {
@@ -31,10 +36,10 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       },
     );
     return () => {
-      console.log("setting isCurrent to false")
+      console.log("setting isCurrent to false for this get", get)
       isCurrent = false;
     };
-  }, [get]); // this used to be [api], it does eventually load with the right stuff but it doesn't render which I think means is current is not right?
+  }, [api]); // this used to be [api], it does eventually load with the right stuff but it doesn't render which I think means is current is not right?
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
