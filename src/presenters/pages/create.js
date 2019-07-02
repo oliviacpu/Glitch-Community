@@ -12,6 +12,7 @@ import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
+import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
@@ -599,6 +600,7 @@ const CreatePage = () => (
         <Starters />
         <Collaborate />
         <YourAppIsLive />
+        <WistiaVideo videoId='vxosqp0d7h'/>
         <VSCode />
         <Help />
         <Remix />
