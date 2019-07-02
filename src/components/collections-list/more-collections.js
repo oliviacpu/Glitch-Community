@@ -60,10 +60,13 @@ const MoreCollections = ({ currentCollection, collections }) => {
     <>
       <div className={styles.moreByLinkWrap}>
         <Heading tagName="h2">
-          {isUserCollection ? (
-            <UserLink user={currentCollection.user}>More by {getDisplayName(curator ? curator.user : currentCollection.user)} <Arrow /></UserLink>
+          {curator.status === 'ready' ? (
+            <>
+              {curator.value.user && <UserLink user={curator.value.user}>More by {getDisplayName(curator.value.user)} <Arrow /></UserLink>}
+              {curator.value.team && <TeamLink team={curator.value.team}>More from {curator.value.team.name} <Arrow /></TeamLink>}
+            </>
           ) : (
-            <TeamLink team={currentCollection.team}>More from {curator ? curator.team.name : `@${currentCollection.team.url}`} <Arrow /></TeamLink>
+            <>More collections</>
           )}
         </Heading>
       </div>
