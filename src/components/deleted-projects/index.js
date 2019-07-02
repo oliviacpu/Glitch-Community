@@ -73,6 +73,7 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
       {(project) => {
         const canUndelete = project.permission && project.permission.accessLevel === 30 && undelete;
+        if (!canUndelete) { console.log(project) }
         const onClick = canUndelete ? () => undeleteTracked(project) : null;
 
         return <DeletedProject project={project} onClick={onClick} />;
