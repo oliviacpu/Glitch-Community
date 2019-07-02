@@ -35,7 +35,7 @@ QuestionTimer.propTypes = {
 async function load(api, max) {
   const kaomoji = sample(kaomojis);
   try {
-    const { data } = await api.get(`projects/questions?cache=${});
+    const { data } = await api.get(`projects/questions?cache=${Date.now()}`);
     const questions = data
       .map((q) => JSON.parse(q.details))
       .filter((q) => !!q)
