@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize } from 'lodash';
+import { values, sampleSize, shuffle } from 'lodash';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -480,9 +480,14 @@ function Remix() {
     const fetchApps = async (domains) => {
       const url = `/v1/projects/by/domain?domain=${domains.join('&domain=')}`;
       const { data } = await api.get(url);
+      // API returns alphabetized results, shuffle the projects
+      data = shuffle(data);
+      // 
+      const leaflet = remove()
       setApps(values(data));
     };
-    fetchApps(sampleSize(appsToRandomize, 4).concat(['starter-leaflet']));
+    // we always want to include starter-leaflet because it's pretty and we want it to be the first tab
+    fetchApps(['starter-leaflet'].concat(sampleSize(appsToRandomize, 4)));
   }, []);
 
   const embeds = (
@@ -495,7 +500,7 @@ function Remix() {
           </Tab>
         ))}
       </TabList>
-      
+
       {apps.map((app, i) => (
         <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
           <div className={styles.embedContainer}>
