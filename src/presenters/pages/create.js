@@ -284,8 +284,8 @@ function YourAppIsLive() {
   const smallVideo1 = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
   const smallVideo2 = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-small-app.mp4?v=1560959054771';
   const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1561575626899';
-  const mic = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1561575404922';
+  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
+  const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
   return (
     <ScreencapSection
@@ -295,8 +295,8 @@ function YourAppIsLive() {
       video={video}
       smallVideos={[smallVideo1, smallVideo2]}
       blob={blob}
-      image={mic}
-      imageName="mic"
+      image={live}
+      imageName="live"
       markColor="#9fe9ff"
     />
   );
