@@ -64,6 +64,8 @@ const TopPicks = ({ children }) => (
   </section>
 );
 
+const domains = ['starter-chartjs', 'starter-leaflet', 'starter-react', 'data-dashboard', 'hello-tensorflow', 'airtable-example'];
+
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
 
@@ -101,7 +103,7 @@ const AppsWeLove = ({ content }) => {
           ))}
         </ul>
         <div className={styles.appsWeLoveEmbed}>
-          <Embed domain={featuredDomain} />
+          <Embed domain={domains[content.findIndex(p => p.domain === featuredDomain)]} />
         </div>
       </div>
     </section>
