@@ -8,6 +8,7 @@ import { captureException } from 'Utils/sentry';
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
   try {
+    console.log("getting collections with projects")
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
       getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
@@ -21,6 +22,7 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 };
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
+  console.log("getCollectionProjectsFromAPI", withCacheBust)
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
