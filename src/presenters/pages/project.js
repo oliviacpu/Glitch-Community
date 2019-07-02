@@ -153,12 +153,12 @@ const ProjectPage = ({ project: initialProject }) => {
                   placeholder="Name your project"
                 />
               </Heading>
-              <div className={styles.privateToggleWrap}><PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} /></div>
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </div>
           ) : (
             <div className={styles.headingWrap}>
               <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
-              {project.private && <div className={styles.privateToggleWrap}><PrivateBadge /></div>}
+              {project.private && <PrivateBadge />}
             </div>
           )}
           {users.length + teams.length > 0 && (
