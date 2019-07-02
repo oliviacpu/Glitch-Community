@@ -21,7 +21,6 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
   const { currentUser } = useCurrentUser();
   console.log("initialCollection", {initialCollection})
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
-  console.log(collection.name)
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
@@ -68,14 +67,17 @@ CollectionPageContents.propTypes = {
 
 
 const CollectionPage = ({ owner, name }) => {
-  console.log("loading the collection Page", owner, name)
-  const get = React.useCallback((api) => {
-    console.log("calling the get with ", owner, name)
-    return getCollectionWithProjects(api, { owner, name })
-  }, [owner, name])
+  // console.log("loading the collection Page", owner, name)
+  // const get = React.useCallback((api) => {
+  //   console.log("calling the get with ", owner, name)
+  //   return getCollectionWithProjects(api, { owner, name })
+  // }, [owner, name])
   return (
   <Layout>
-    <DataLoader get={get}>
+    <DataLoader get={(api) => {
+    console.log("calling the get with ", owner, name)
+    return getCollectionWithProjects(api, { owner, name })
+  }}>
       {(collection) => {
         console.log("got a collection to render", collection)
         return collection ? (

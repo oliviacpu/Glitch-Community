@@ -35,7 +35,7 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       console.log("setting isCurrent to false for this get", get)
       isCurrent = false;
     };
-  }, [get]); 
+  }, [api, get]); 
   
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
