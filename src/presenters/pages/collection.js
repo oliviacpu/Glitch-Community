@@ -70,7 +70,7 @@ const CollectionPage = ({ owner, name }) => {
     [owner, name],
   );
 
-  return (l
+  return (
     <Layout>
       <DataLoader get={get}>
         {(collection) =>

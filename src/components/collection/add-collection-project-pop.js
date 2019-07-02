@@ -61,7 +61,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       togglePopover();
       // add project to page if successful & show notification
       await addProjectToCollection(project, collection);
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success',  });
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
     },
     'Project Added to Collection',
     { origin: 'Add Project collection' },
