@@ -66,7 +66,6 @@ const TopPicks = ({ children }) => (
 
 const AppsWeLove = ({ content }) => {
   const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
-  const handleArrows = () => {};
 
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
@@ -82,16 +81,10 @@ const AppsWeLove = ({ content }) => {
         ))}
       </div>
       <div className={styles.appsWeLoveBigLayout}>
-        <ul className={styles.appsWeLoveList} role="tablist">
+        <ul className={styles.appsWeLoveList}>
           {content.map(({ id, title, description, domain, users }) => (
             <li key={id} className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
-              <TransparentButton 
-                onClick={() => setFeaturedDomain(domain)} className={styles.appItem}
-                aria-selected={featuredDomain === domain}
-                aria-controls={`panel-${domain}`}
-                tabIndex={featuredDomain === domain ? 0 : -1}
-                onKeyDown={handleArrows}
-              >
+              <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
                 <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
                 <span className={styles.appContent}>
                   <span className={styles.profileListPlaceholder} />
@@ -107,7 +100,7 @@ const AppsWeLove = ({ content }) => {
             </li>
           ))}
         </ul>
-        <div id={`panel-${featuredDomain}`} className={styles.appsWeLoveEmbed} role="tabpanel">
+        <div className={styles.appsWeLoveEmbed}>
           <Embed domain={featuredDomain} />
         </div>
       </div>
@@ -124,7 +117,7 @@ const CuratedCollections = ({ content }) => (
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <Button decorative>
-            View <Pluralize count={count} singular="project" /> <Arrow />
+            View <Pluralize count={count} singular="Project" /> <Arrow />
           </Button>
         </CuratedCollectionContainer>
       )}

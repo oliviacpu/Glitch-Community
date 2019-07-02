@@ -36,7 +36,7 @@ const OverlayVideo = () => {
     };
     return (
       <>
-        <Button onClick={onClick}>Watch Video</Button>
+        <Button onClick={onClick} emoji="playButton">Watch Video</Button>
         {visible && <OverlayBackground />}
       </>
     );
@@ -71,7 +71,7 @@ const InlineVideo = () => {
       <Video onClick={onClick} poster={videoPoster} src={videoSrc} />
       {status === 'init' && (
         <div className={styles.bannerVideoButtonWrap}>
-          <Button decorative>Watch Video</Button>
+          <Button decorative emoji="playButton">Watch Video</Button>
         </div>
       )}
     </div>
@@ -122,7 +122,7 @@ const Banner = () => (
       <div className={styles.bannerCopyAndButtons}>
         <p>Simple, powerful, free tools to create and use millions of apps.</p>
 
-        <Button type="cta" href="#top-picks">
+        <Button type="cta" href="/create">
           Start Creating <Arrow />
         </Button>
         <div className={styles.watchVideoBtnWrap}>
