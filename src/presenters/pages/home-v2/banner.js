@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
 import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
@@ -45,27 +46,28 @@ const OverlayVideo = () => {
 };
 
 const InlineVideo = () => {
-  const [showVideo, setStatus] = useState('init'); // init | playing | paused
+  const [showVideo, setShowVideo] = useState(false);
   const track = useTracker();
 
-  const onClick = () => {
-    if (status === 'init') {
-      track('Watch Video clicked');
-      
-      // e.target.play();
-      setTimeout(() => {
-        setStatus('playing');  
-      });
-    }
+  const onClick = () => {   
+    track('Watch Video clicked');
+    setShowVideo(true);
   };
 
   return (
     <div className={classnames(styles.bannerVideo, styles[status])}>
-      <WistiaVideo videoId="z2ksbcs34d"/>
-      {status === 'init' && (
-        <div className={styles.bannerVideoButtonWrap}>
-          <Button onClick={onClick} emoji="playButton">Watch Video</Button>
-        </div>
+      {showVideo ? (
+        <WistiaVideo videoId="z2ksbcs34d"/>
+      ) : (
+        <>
+        <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
+          <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
+          <span className={styles.bannerVideoButton}>
+            
+          </span>
+        </TransparentButton>
+          <Button emoji="playButton">Watch Video</Button>
+        </>
       )}
     </div>
   );
