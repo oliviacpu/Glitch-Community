@@ -486,7 +486,7 @@ function Remix() {
   }, []);
 
   const embeds = (
-    <Tabs selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+    <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
       <TabList className={styles.remixAppTabs}>
         {apps.map((app) => (
           <Tab className={styles.remixAppTab} key={app.domain}>
@@ -495,9 +495,9 @@ function Remix() {
           </Tab>
         ))}
       </TabList>
-
-      {apps.map((app) => (
-        <TabPanel key={app.domain}>
+      
+      {apps.map((app, i) => (
+        <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
           <div className={styles.embedContainer}>
             <Embed domain={app.domain} />
           </div>
