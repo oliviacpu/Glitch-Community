@@ -17,7 +17,7 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
-import CreatePage from './crepaate';
+import CreatePage from './create';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
