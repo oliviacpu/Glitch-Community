@@ -1,6 +1,7 @@
 @import './constants.styl'
 
 maxBannerWidth = 500px
+secondary = #C3C3C3
 
 .unmarked
   position: relative
@@ -61,7 +62,11 @@ maxBannerWidth = 500px
     left: -10px
     margin: u3 auto
     width: 180px
-  
+  button:focus,
+  a:focus
+    outline: none
+    box-shadow: 0 0 8px 4px orange
+    
 .watchVideoBtnWrap
   display: block
   margin: u3 0
@@ -71,10 +76,14 @@ maxBannerWidth = 500px
 .bannerVideoWrap
   flex: 1 1 auto
   z-index: 1
-  border-radius: u1
+  border-radius: 7px
   display: none
+  box-shadow: 4px 4px secondary
+  border: 1px solid secondary
   @media(min-width: largeViewport)
     display: block
+  img
+    border-radius: 0 0 u1 u1
   
 .bannerVideo
   position: relative
@@ -95,6 +104,11 @@ maxBannerWidth = 500px
   left: 0
   align-items: center
   justify-content: center
+  button
+    pointer-events: initial
+    &:focus
+      outline: none
+      box-shadow: 0 0 8px 4px orange
   
 .overlayVideoWrap :global,
 .bannerVideo :global

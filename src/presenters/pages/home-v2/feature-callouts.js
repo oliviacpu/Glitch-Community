@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import styles from './animations.styl';
 
 export const Discover = () => (
-  <svg version="1.1" viewBox="0 0 255 125" className={styles.feature}>
+  <svg version="1.1" viewBox="0 0 255 125" className={styles.feature} aria-label="">
     <defs>
       <ellipse cx="16.79" cy="14.95" rx="16.79" ry="7.80" />
       <path d="M 23.26,19.31 C 28.45,11.62 29.76,3.43 26.19,1.02 22.62,-1.38 15.52,2.90 10.33,10.59 5.14,18.28 3.83,26.47 7.40,28.88 10.97,31.29 18.07,27.00 23.26,19.31 Z" />
@@ -222,7 +222,7 @@ export const Discover = () => (
 );
 
 export const Dreams = () => (
-  <svg viewBox="0 0 184 119" className={styles.feature}>
+  <svg viewBox="0 0 184 119" className={styles.feature} aria-label="">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-535.00, -620.00)">
         <g transform="translate(489.00, 605.26)">
@@ -331,7 +331,7 @@ export const Dreams = () => (
 );
 
 export const Teams = () => (
-  <svg viewBox="0 0 194 115" className={styles.feature}>
+  <svg viewBox="0 0 194 115" className={styles.feature} aria-label="">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-517.00, -627.00)">
         <g transform="translate(518.85, 628.30)">

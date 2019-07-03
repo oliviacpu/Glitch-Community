@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
-import TransparentButton from 'Components/buttons/transparent-button';
 import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
 import Mark from 'Components/mark';
@@ -61,12 +60,17 @@ const InlineVideo = () => {
         <WistiaVideo videoId="z2ksbcs34d" />
       ) : (
         <>
-          <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
-            <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
-          </TransparentButton>
+          <div className={styles.bannerVideoButtonWrap}>
+            <img // eslint-disable-line
+              onClick={onClick}
+              src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
           <span className={styles.bannerVideoButton}>
-            <Button decorative emoji="playButton">
-              Watch Video
+            <Button onClick={onClick} emoji="playButton">
+                Watch Video
             </Button>
           </span>
         </>
@@ -76,7 +80,7 @@ const InlineVideo = () => {
 };
 
 const Chrome = () => (
-  <svg viewBox="0 0 578 55">
+  <svg viewBox="0 0 578 55" aria-label="">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-622, -148)" fillRule="nonzero">
         <g transform="translate(622, 148)">
