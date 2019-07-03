@@ -10,7 +10,7 @@ import { deleteCollection as deleteCollectionViaState } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
 
-const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteCollection }) => {
+const DeleteCollectionPop = withRouter(({ location, history, collection, animateAndDeleteCollection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
