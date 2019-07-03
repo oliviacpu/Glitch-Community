@@ -5,6 +5,21 @@
 export default [
   {
     id: 1,
+    title: 'Live Search',
+    body: `View search results as quickly as you can type, with autocomplete now built in.
+![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
+`,
+  },
+  {
+    id: 1,
+    title: 'Collection Notes',
+    body: `Share why you love an app by leave a note oin your collection. Notes supports markdown too!
+![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
+`,
+  },
+  
+  {
+    id: 1,
     title: 'Featured projects now live on your profile',
     body: `Have a project you're particularly proud of?  Feature it to embed the app directly at the top of your profile.
 
