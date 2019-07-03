@@ -75,8 +75,6 @@ function Banner() {
 
 function WhatIsGlitch() {
   const [hasPlayed, setHasPlayed] = useState(false);
-  const video = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video.mp4?v=1562095877722';
-  const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562002286495';
   const videoEl = useRef(null);
   const track = useTracker('Create Page Video Clicked');
 
@@ -98,16 +96,8 @@ function WhatIsGlitch() {
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
-        <WistiaVideo videoId="2vcr60pnx9" />
-        <video ref={videoEl} className={styles.whatIsGlitchVideo} poster={videoCard} controls={hasPlayed}>
-          <track
-            default
-            kind="captions"
-            srcLang="en"
-            src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate.vtt?v=1562082827674"
-          />
-          <source src={video} />
-        </video>
+        <WistiaVideo ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
+        
         {!hasPlayed && (
           <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
             <Button
