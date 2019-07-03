@@ -98,7 +98,7 @@ function WhatIsGlitch() {
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
         <WistiaVideo ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
-        
+
         {!hasPlayed && (
           <>
             <Image src={videoCard} />
@@ -266,8 +266,8 @@ function Collaborate() {
         title={title}
         description={description}
         highlights={highlights}
-        video='wdytilknrm'
-        smallVideos={['363lh0vtni']}
+        video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate.mp4?v=1562171466297"
+        smallVideos={['https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate-small.mp4?v=1562171465382']}
         blob={blob}
         image={pyramid}
         imageName="pyramid"
@@ -286,33 +286,36 @@ function YourAppIsLive() {
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
   return (
-    <div className={styles.appIsLive}>
-      <ScreencapSection
-        title={title}
-        description={description}
-        highlights={highlights}
-        video='dgmr1aos0q'
-        smallVideos={['vxosqp0d7h', 'irqymsl6hd']}
-        blob={blob}
-        image={live}
-        imageName="live"
-        markColor="#9fe9ff"
-      />
-    </div>
+    <ScreencapSection
+      title={title}
+      description={description}
+      highlights={highlights}
+      video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585"
+      smallVideos={[
+        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891',
+        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530',
+      ]}
+      blob={blob}
+      image={live}
+      imageName="live"
+      markColor="#9fe9ff"
+    />
   );
 }
 
 function ScreencapSection({ title, description, video, smallVideos, highlights, blob, image, imageName, markColor }) {
   const Videos = () => (
     <div className={styles.screencapContainer}>
-      {smallVideos.map((id) => (
-        <div className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}>
-          <WistiaVideo videoId={id} />
-        </div>
+      {smallVideos.map((v) => (
+        <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} src={v} muted autoPlay loop playsInline>
+          <source src={v}></source>
+        </video>
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <WistiaVideo videoId={video} />
+        <video src={video} muted autoPlay loop playsInline>
+          <source src={video}></source>
+        </video>
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -419,8 +422,8 @@ function VSCode() {
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
         Install the Glitch extension to build Glitch apps in VS Code, the most widely used developer environment.
       </Text>
-        
-      <Text  className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
+
+      <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
         With collaborative editing, instant updates, and access to the console, it's the full power of the Glitch editor within VS Code.
       </Text>
 
@@ -562,7 +565,6 @@ const CreatePage = () => (
         <Starters />
         <Collaborate />
         <YourAppIsLive />
-        <WistiaVideo videoId="vxosqp0d7h" />
         <VSCode />
         <Help />
         <Remix />
