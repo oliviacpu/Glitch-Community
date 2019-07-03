@@ -6,27 +6,26 @@ export default [
   {
     id: 1,
     title: 'Reorder projects in a collection',
-    body: `Click and drag to order your projects to your heart's content
-![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
+    body: `Click and drag to order projects to your heart's content.
+![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2F5d1d154785d4b724908479.gif?v=1562187111603)
 `,
   },
   {
-    id: 1,
+    id: 2,
     title: 'Live Search',
     body: `View search results as quickly as you can type, with autocomplete now built in.
 ![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
 `,
   },
   {
-    id: 1,
+    id: 3,
     title: 'Collection Notes',
-    body: `Share why you love an app by leave a note oin your collection. Notes supports markdown too!
-![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
+    body: `Share why you love an app by leave a note oin your collection. They support markdown too!
+![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fnote.gif?v=1562186723855)
 `,
   },
-  
   {
-    id: 1,
+    id: 4,
     title: 'Featured projects now live on your profile',
     body: `Have a project you're particularly proud of?  Feature it to embed the app directly at the top of your profile.
 
@@ -35,7 +34,7 @@ You can feature one project at a time -- and change or remove your featured proj
 `,
   },
   {
-    id: 2,
+    id: 5,
     title: 'Use your email to get Glitchy',
     body: `
 Don't have Facebook or GitHub, but still want to use Glitch? Want to code at the library without remembering all your logins?
@@ -45,7 +44,7 @@ Now you can sign into Glitch with just your email. Choose Sign in with Email to 
 `,
   },
   {
-    id: 3,
+    id: 6,
     title: 'Get organized with Collections',
     body: `
 Add any project to a collection and show off your favorite things, group all your related projects, collect precious memories, etc. 
