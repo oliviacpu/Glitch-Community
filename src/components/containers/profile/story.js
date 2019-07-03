@@ -1,16 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import ProfileContainer from './index';
+import { TeamProfileContainer, UserProfileContainer } from './index';
 import { users, teams } from '../../../../stories/data';
 
 storiesOf('ProfileContainer', module)
   .add('user', () => (
-    <ProfileContainer item={users.modernserf} type="user" teams={Object.values(teams)}>
+    <UserProfileContainer item={users.modernserf} teams={Object.values(teams)}>
       <p>The profile content goes here.</p>
-    </ProfileContainer>
+    </UserProfileContainer>
   ))
   .add('team', () => (
-    <ProfileContainer item={teams['example-team']} type="team">
+    <TeamProfileContainer item={teams['example-team']}>
       <p>The profile content goes here.</p>
-    </ProfileContainer>
+    </TeamProfileContainer>
   ));
