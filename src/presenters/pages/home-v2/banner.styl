@@ -1,6 +1,7 @@
 @import './constants.styl'
 
 maxBannerWidth = 500px
+secondary = #C3C3C3
 
 .unmarked
   position: relative
@@ -71,8 +72,10 @@ maxBannerWidth = 500px
 .bannerVideoWrap
   flex: 1 1 auto
   z-index: 1
-  border-radius: u1
+  border-radius: 7px
   display: none
+  box-shadow: 4px 4px secondary
+  border: 1px solid secondary
   @media(min-width: largeViewport)
     display: block
   img
