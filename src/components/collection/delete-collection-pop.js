@@ -99,6 +99,34 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
     </PopoverDialog>
   );
 }
+
+    <PopoverContainer>
+      {({ visible, togglePopover, toggleAndCall }) => (
+        <div style={{ position: 'relative' }}>
+          <TransparentButton onClick={togglePopover}>
+            <UserAvatar user={user} suffix={adminStatusDisplay(team.adminIds, user)} withinButton />
+          </TransparentButton>
+
+          {visible && (
+            <MultiPopover
+              views={{
+                remove: () => <TeamUserRemovePop user={user} userTeamProjects={userTeamProjects} onRemoveUser={toggleAndCall(removeUser)} />,
+              }}
+            >
+              {(showViews) => (
+                <TeamUserInfo
+                  user={user}
+                  team={team}
+                  onRemoveAdmin={toggleAndCall(onRemoveAdmin)}
+                  onMakeAdmin={toggleAndCall(onMakeAdmin)}
+                  onRemoveUser={() => onOrShowRemoveUser(showViews.remove, togglePopover)}
+                />
+              )}
+            </MultiPopover>
+          )}
+        </div>
+      )}
+    </PopoverContainer>
 */
 
 const DeleteCollection = ({ collection, deleteCollection }) => (
