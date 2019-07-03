@@ -81,7 +81,7 @@ function WhatIsGlitch() {
 
   const playVideo = () => {
     setHasPlayed(true);
-    videoEl.current.play();
+    videoEl.current.click();
     track();
   };
 
@@ -306,7 +306,7 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
-        <video className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} src={v} muted autoPlay loop playsInline>
+        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} src={v} muted autoPlay loop playsInline>
           <source src={v}></source>
         </video>
       ))}
