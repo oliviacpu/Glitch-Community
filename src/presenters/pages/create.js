@@ -98,6 +98,7 @@ function WhatIsGlitch() {
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
+        <WistiaVideo videoId="2vcr60pnx9" />
         <video ref={videoEl} className={styles.whatIsGlitchVideo} poster={videoCard} controls={hasPlayed}>
           <track
             default
