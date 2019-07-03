@@ -62,7 +62,11 @@ secondary = #C3C3C3
     left: -10px
     margin: u3 auto
     width: 180px
-  
+  button:focus,
+  a:focus
+    outline: none
+    box-shadow: 0 0 8px 4px orange
+    
 .watchVideoBtnWrap
   display: block
   margin: u3 0
@@ -87,9 +91,6 @@ secondary = #C3C3C3
   border-radius: 0 0 u1 u1
   cursor: pointer
   
-.bannerVideo:focus-within img
-  opacity: 0.5
-  
 .bannerVideoButtonWrap img
   width: 100%
   
@@ -105,6 +106,9 @@ secondary = #C3C3C3
   justify-content: center
   button
     pointer-events: initial
+    &:focus
+      outline: none
+      box-shadow: 0 0 8px 4px orange
   
 .overlayVideoWrap :global,
 .bannerVideo :global
