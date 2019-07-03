@@ -206,21 +206,23 @@
   padding: u3 u2 u2
   background-color: bg1
   margin-right: u3
-  &:after
+  @media (min-width: largeViewport)
+    margin-right: u5
+  &:before
+    z-index: -1
     content: ''
     position: absolute
     top: 0
-    left: 100%
+    left: 50%
     height: 100%
-    width: u5
-    margin-left: -10px
+    width: 100%
   &.active
     background-color: #DCFDFF
-    &:after
+    &:before
       background-color: #DCFDFF
   &:hover
     background-color: bg2
-    &:after
+    &:before
       background-color: bg2
     
     

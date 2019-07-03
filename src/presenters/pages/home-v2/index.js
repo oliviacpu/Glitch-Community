@@ -28,23 +28,32 @@ import CuratedCollectionContainer from './collection-container';
 import { Discover, Dreams, Teams } from './feature-callouts';
 import styles from './styles.styl';
 
-const calloutImages = {
-  apps: () => <Discover />,
-  create: () => <Dreams />,
-  teams: () => <Teams />,
-};
+const calloutGraphics = {
+  apps: {
+    component: Discover,
+    color: 'yellow',
+  },
+  create: {
+    component: Dreams,
+    color: 'pink',
+  },
+  teams: {
+    component: Teams,
+    color: 'aquamarine',
+  }
+}
 
 const FeatureCallouts = ({ content }) => (
   <section id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
-      {({ label, description, backgroundSrc, href, color, id }) => (
+      {({ label, description, backgroundSrc, href, id }) => (
         <>
           <header className={styles.featureCalloutsHeader}>
             <a href={href} style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImage}>
-              {calloutImages[id]()}
+              {React.createElement(calloutGraphics[id].component)}
             </a>
             <h2 className={styles.featureCalloutsTitle}>
-              <Mark color={color}>{label}</Mark>
+              <Mark color={calloutGraphics[id].component.}>{label}</Mark>
             </h2>
           </header>
           <p>{description}</p>
@@ -80,7 +89,7 @@ const AppsWeLove = ({ content }) => {
           </a>
         ))}
       </div>
-      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={setCurrentTab} className={styles.appsWeLoveBigLayout}>
+      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
         <TabList className={styles.appsWeLoveList}>
           {content.map(({ id, domain, title, description, users }, i) => (
             <Tab key={domain} className={styles.appsWeLoveListItem}>
@@ -109,12 +118,14 @@ const AppsWeLove = ({ content }) => {
   );
 };
 
+const collectionStyles = ['wavey', 'diagonal', 'triangle'];
+
 const CuratedCollections = ({ content }) => (
   <section id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>Curated collections</h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
-      {({ title, description, fullUrl, users, count, collectionStyle }) => (
-        <CuratedCollectionContainer collectionStyle={collectionStyle} users={users} href={`/@${fullUrl}`}>
+      {({ title, description, fullUrl, users, count }, i) => (
+        <CuratedCollectionContainer collectionStyle={collectionStyles[i]} users={users} href={`/@${fullUrl}`}>
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <span className={styles.curatedCollectionButtonWrap}>
