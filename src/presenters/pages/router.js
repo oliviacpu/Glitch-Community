@@ -70,11 +70,11 @@ const Router = () => (
   <>
     <PageChangeHandler />
     <Switch>
-      <Route path="/index-v1" exact render={({ location }) => <IndexPage key={location.key} />} />
+      <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
+      <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
 
-      <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
-      <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
-      <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+      <Route path="/home-v2" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/home-v2/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
 
       <Route
         path="/login/facebook"
