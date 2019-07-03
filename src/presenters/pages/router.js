@@ -20,6 +20,8 @@ import CollectionPage from './collection';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
+import NewHomePage from './home-v2';
+import NewHomePagePreview from './home-v2/preview';
 import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
@@ -67,6 +69,10 @@ const Router = () => (
     <Switch>
       <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
       <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
+
+      <Route path="/home-v2" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/home-v2/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+
       <Route
         path="/login/facebook"
         exact

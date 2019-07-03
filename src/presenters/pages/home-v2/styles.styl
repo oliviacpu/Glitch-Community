@@ -1,0 +1,514 @@
+u0 = 2px
+u05 = 4px
+u1 = 5px
+u2 = 10px
+u3 = 16px
+u4 = 32px
+u5 = 50px
+
+t1 = 12px
+t2 = 14px
+t3 = 16px
+t4 = 20px
+t5 = 26px
+t6 = 30px
+
+fg0 = #222
+fg1 = #555
+
+bg0 = #fff
+bg1 = #f6f6f6
+bg2 = #e5e5e5
+
+tertiary = #636363
+
+smallViewport = 414px
+mediumViewport = 670px
+largeViewport = 900px
+
+.h2
+  font-size: t5
+  margin: 0 0 u3
+  
+.h3
+  font-size: t4
+  margin: 0 0 u3
+  font-weight: 600
+  
+.h4
+  font-size: t3
+  font-weight: 600
+
+section
+  margin-top: 5em 
+  .subtitle
+    margin-left: u3
+    margin-bottom: 2.5em
+section:first-of-type
+  margin-top: 0
+  
+.mark
+  display: inline-block
+  transform: rotate(-1deg)
+  position: relative
+  left: "-%s" % u1
+  z-index: 0
+  background-color: var(--mark-color)
+  padding: u1 u2
+  border-radius: u1
+.markText
+  position: relative
+  display: inline-block
+  transform: rotate(1deg)
+  
+.unmarked
+  position: relative
+  z-index: 1
+  
+.banner
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  color: white  
+  background-size: cover
+  background-position: center
+  border-radius: u2
+  padding: u4 0px
+    
+.bannerCopyContainer
+  width: 390px
+  height: 390px
+  margin: 0 auto
+  position: relative
+  background-position: left
+  background-repeat: no-repeat
+  background-size: cover
+  background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
+  
+.bannerCopy
+  padding-bottom: u3
+  position: absolute
+  top: 50px
+  left: 65px
+  width: 360px
+  
+  h1
+    font-size: t5
+    margin: 0
+    transform: rotate(-5deg)
+  p
+    margin: u4 0 u3 u4
+    width: 260px
+  
+.bannerVideoWrap
+  background: white
+  z-index: 1
+  border: 2px solid #EAEAEA
+  display: flex
+  
+.bannerVideoChrome
+  background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbrowser.svg?v=1560654605973')
+  background-size: contain
+  background-repeat: no-repeat
+  border-radius: u1
+  width: 100%
+  height: auto
+  padding-bottom: 69%
+  position: relative
+  
+.bannerVideoInnerWrap
+  display: flex
+  height: 88%
+  position: absolute
+  width: 100%
+  bottom: 0
+  padding: u3
+  background: white
+
+.bannerVideo
+  width: 100%
+  background-color: #666
+  padding-bottom: 56%
+  
+.bannerBtnWrap
+  margin-left: 120px
+  
+.watchVideoBtnWrap
+  display: none
+  
+  
+/* VIEWPORT SPECIFIC STUFF TO KEEP TEXT ALIGNED WITH BACKGROUND IMAGE */
+largeBannerHeight = 440px
+
+@media(min-width: mediumViewport)
+  .banner
+    flex-direction: row
+    justify-content: flex-end
+    align-items: center
+    padding: u4 0px
+  .bannerCopyContainer
+    width: 500px
+    height: largeBannerHeight
+    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
+    margin-right: -20px
+  .bannerCopy
+    padding-bottom: 0
+    padding-right: u4
+  .bannerVideoWrap
+    // min-height: largeBannerHeight // this is for changing video aspect ratio
+    width: 60%
+    margin: "-%s 0" % u5
+    border-radius: u1
+    
+@media(min-width: mediumViewport) and (max-width: largeViewport)
+  .bannerVideoWrap
+    width: 55%
+  .bannerVideoChrome
+    background-size: 450px
+    
+
+@media(min-width: smallViewport) and (max-width: mediumViewport)
+  .bannerCopyContainer
+    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560537222315')
+    width: 450px
+    height: 450px
+    margin: 0 auto
+  .bannerVideoChrome
+    display: none
+  .watchVideoBtnWrap
+    display: block
+    margin: u3 0
+
+@media(max-width: smallViewport)
+  .bannerCopyContainer
+    width: 375px
+    height: 375px
+    .bannerCopy
+      top: 37px
+      p
+        margin: u3 u5
+        width: 190px
+  .watchVideoChrome
+    display: none
+  .watchVideoBtnWrap
+    display: block
+    margin: u3 0
+    
+.featureCalloutsRow
+  --gap: u4
+  margin-left: auto
+  margin-right: auto
+  li
+    margin-bottom: 2em
+  // custom margins for 'code the app of your dreams' illustration
+  li:nth-of-type(2)
+    div:nth-of-type(1)
+      margi-left: -20px
+      img
+        margin-left: 60px
+
+@media(max-width: mediumViewport)
+  .featureCalloutsRow
+    width: 80%
+    text-align: center
+    
+.plainLink
+  color: inherit
+  text-decoration: none
+  &:hover
+    text-decoration: none
+    
+.featureCalloutsContainer
+  margin-top: 1em
+    
+.featureCalloutsImageWrap
+  height: 145px
+  background-size: contain
+  background-repeat: no-repeat
+  background-position: center
+  display: flex
+  align-items: center
+  justify-content: center
+    
+.featureCalloutsImage
+  margin-top: -10px
+  width: 90%
+  max-width: 275px
+  max-height: 100%
+  display: block
+  
+.featureCalloutsText
+  margin-top: "-%s" % u4
+  h2
+    font-size: t3
+    font-weight: 600
+  
+.unifiedStories
+  display: flex
+  flex-direction: column
+  background-color: bg2
+  border-radius: u1
+  
+.unifiedStoriesFeatureLabel
+  display: inline-block
+  padding: u05 u05 0
+  border-radius: u05
+  text-transform: uppercase
+  background-color: #FFE100
+  font-weight: bold
+  font-size: t1
+  margin-bottom: u4
+  
+.unifiedStoriesHeadline
+  background: #bdbdbd
+  padding: u4
+  border-top-left-radius: u1
+  border-bottom-left-radius: u1
+  h2
+    font-size: t5
+    margin: 0
+  h2 + h2
+    margin-top: u4
+  img
+    width: 100%
+    max-width: 450px
+    margin: u4 0
+  
+.unifiedStoriesPreview
+  padding: u4
+  margin-right: u4
+  p
+    line-height: 1.4
+
+.unifiedStoriesRelatedContent
+  padding: u4
+  margin-top: u3
+  ul
+    margin: 0
+    padding: 0
+    list-style-type: none
+    li
+      margin: u3 0
+  h3
+    text-transform: uppercase
+    font-size: t1
+    margin-bottom: u3
+  h4
+    margin: 0
+  p
+    margin: 0 0 u1
+    font-size: t2
+    
+@media (min-width: mediumViewport)
+  .unifiedStories
+    flex-direction: row
+    align-items: flex-start
+    flex-wrap: wrap
+  .unifiedStoriesHeadline
+    flex: 0 0 100%
+  .unifiedStoriesPreview
+    flex: 1 1 300px
+  .unifiedStoriesRelatedContent
+    flex: 0 0 215px
+
+@media (min-width: largeViewport)
+  .unifiedStoriesHeadline
+    flex: 0 0 350px
+  .unifiedStoriesPreview
+    flex: 1 1 100px
+
+.featuredEmbed
+  margin: 0
+  background-color: bg1
+  border-radius: u1
+  position: relative
+  
+.featuredEmbedImg
+  max-height: 150px
+  position: absolute
+  right: 0
+  top: "-%s" % u4
+  -webkit-mask-image: url(https://cdn.glitch.com/3cef6b25-69ba-4fa9-aa32-cff0fedce195%2Fmask-4.svg)
+  object-fit: contain
+  mask-size: contain
+  mask-repeat: no-repeat
+  mask-position: center
+  mask-type: luminance
+  @media(max-width: mediumViewport)
+    left: 0
+    
+.featuredEmbedWrap
+  height: 80vh
+  max-height: 500px
+  margin-bottom: "-%s" % u3
+  padding: 0px u3 u3 u3
+  
+.featuredEmbedCaption
+  width: 55%
+  margin-top: u4
+  padding: u3
+  display: flex
+  flex-direction: column
+  border-radius: u1
+  @media(max-width: mediumViewport)
+    width: 100%
+    padding-top: 140px
+  @media(min-width: largeViewport)
+    width: 70%
+
+.featuredEmbedText
+  max-width: 100%
+  flex: 1 0 auto
+  margin-bottom: u3
+  h4
+    margin-top: 0
+  p
+    margin: 0
+  p + p
+    margin-top: u1
+  
+@media (min-width: mediumViewport)
+  .featuredEmbedCaption
+    flex-direction: row
+  .featuredEmbedProfileWrap
+    flex: 0 0 u5
+
+.appsWeLoveContainer
+  margin-top: 2em
+  h4
+    margin: u1 0 u05
+    font-size: t3
+  p
+    margin: 0
+    color: fg1
+    
+.appsWeLoveProfile
+  position: relative
+  z-index: 1
+  margin-bottom: 3px
+
+.appsWeLoveRow, .curatedCollectionRow
+  --gap: u3
+
+.curatedCollectionsContainer
+  margin-top: 2em
+
+.curatedCollectionContainer
+  position: relative
+  border-radius: u1
+  padding: u3
+  overflow: hidden
+  display: flex
+  height: 100%
+  
+.curatedCollectionTexture
+  position: absolute
+  transform: rotate(12deg)
+  height: 120%
+  right: u4
+  top: -20px
+  
+.curatedCollectionText
+  z-index: 1
+  flex: 1 1 100%
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  margin-right: 20px
+  a
+    white-space: nowrap
+  h4
+    margin: 0 0 u3
+  p
+    font-size: t2
+    flex: 1 0 auto
+
+.curatedCollectionUsers
+  flex: 1 0 40%
+  position: relative
+  @media(max-width: mediumViewport)
+    max-width: 200px
+    max-height: 150px
+  @media (min-width: mediumViewport)
+    flex: 1 0 30%
+    max-height: 150px
+  
+.userMask
+  height: 100%
+  max-height: 200px
+  position: relative
+  @media(max-width: mediumViewport)
+    width: 90%
+  @media(min-width: largeViewport)
+    height: 250%
+.userMaskBubbleWrap
+  position: absolute
+.userMaskBubble
+  min-width: 45px
+  min-height: 45px
+  border-radius: 50%
+  background-size: cover
+  padding-bottom: 100%
+  
+.fourBlock
+  --gap: u1
+  --min-width: 200px
+
+.cultureZineRow
+  --min-width: 180px
+  
+.cultureZineImageWrap
+  padding: 0 0 53%
+  height: 0    
+  
+.cultureZineText
+  margin-top: -10%
+  padding: 12px
+  padding-top: 20%
+  width: 90%
+  margin-left: auto
+  margin-right: auto  
+  border-radius: u1
+  background-color: bg1
+
+  h4
+    margin: u1 0
+  p
+    margin: 0  
+    color: tertiary
+
+.buildingOnGlitchRow
+  display: flex
+  flex-direction: column
+  margin: "-%s" % u1
+  img
+    height: 25%
+    width: auto
+  a
+    display: block
+    margin: u1
+  h3
+    font-size: t4
+
+@media (min-width: mediumViewport)
+  .buildingOnGlitchRow
+    flex-direction: row
+    a
+      width: 50%
+
+.previewBanner
+  background-color: yellow
+  padding: u4 u3
+  display: flex
+  flex-flow: row wrap
+  align-items: center
+  margin-top: u1
+  p
+    margin: 0
+    flex: 1 0 auto
+    font-size: t4
+    font-weight: bold
+  & > *
+    margin-left: u1
+    
+    
