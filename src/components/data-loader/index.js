@@ -40,9 +40,13 @@ DataLoader.propTypes = {
   get: PropTypes.func.isRequired,
   renderError: PropTypes.func,
   renderLoader: PropTypes.func,
+  captureException: PropTypes.func,
+  args: PropTypes.any,
 };
 DataLoader.defaultProps = {
   renderError: () => 'Something went wrong, try refreshing?',
   renderLoader: () => <Loader />,
+  captureException: undefined,
+  args: undefined,
 };
 export default DataLoader;
