@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import Button from 'Components/buttons/button';
-import TransparentButton from 'Components/buttons/transparent-button';
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
@@ -83,27 +82,25 @@ const AppsWeLove = ({ content }) => {
       </div>
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={setCurrentTab} className={styles.appsWeLoveBigLayout}>
         <TabList className={styles.appsWeLoveList}>
-          {content.map(({ id, title, description, domain, users }, i) => (
-            <Tab key={id} className={styles.appsWeLoveListItem}>
+          {content.map(({ id, domain, title, description, users }, i) => (
+            <Tab key={domain} className={styles.appsWeLoveListItem}>
               <div className={styles.appsWeLoveProfileWrap}>
                 <div className={styles.appsWeLoveProfile}>
                   <ProfileList layout="row" users={users} />
                 </div>
               </div>
-              <div className={classnames(styles.appItemWrap, i === currentTab && styles.active)}>
-                <div className={styles.appItem}>
-                  <span className={styles.appContent}>
-                    <h4 className={styles.h4}>{title}</h4>
-                    <p>{description}</p>
-                  </span>
-                  <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
-                </div>
+              <div className={classnames(styles.appItem, i === currentTab && styles.active)}>
+                <span className={styles.appContent}>
+                  <h4 className={styles.h4}>{title}</h4>
+                  <p>{description}</p>
+                </span>
+                <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
               </div>
             </Tab>
           ))}
         </TabList>
         {content.map(({ domain }, i) => (
-          <TabPanel className={styles.appsWeLoveEmbed}  hidden={currentTab !== i} key={domain}>
+          <TabPanel key={domain} className={styles.appsWeLoveEmbed} hidden={currentTab !== i}>
             <Embed domain={domain} />
           </TabPanel>
         ))}

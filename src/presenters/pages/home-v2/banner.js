@@ -12,12 +12,11 @@ import { useTracker } from 'State/segment-analytics';
 
 import styles from './banner.styl';
 
-
 const OverlayVideoBody = () => (
   <Overlay>
     <OverlaySection type="actions">
       <div className={styles.overlayVideoWrap}>
-        <WistiaVideo videoId="z2ksbcs34d"/>
+        <WistiaVideo videoId="z2ksbcs34d" />
       </div>
     </OverlaySection>
   </Overlay>
@@ -32,7 +31,9 @@ const OverlayVideo = () => {
     };
     return (
       <>
-        <Button onClick={onClick} emoji="playButton">Watch Video</Button>
+        <Button onClick={onClick} emoji="playButton">
+          Watch Video
+        </Button>
         {visible && <OverlayBackground />}
       </>
     );
@@ -49,7 +50,7 @@ const InlineVideo = () => {
   const [showVideo, setShowVideo] = useState(false);
   const track = useTracker();
 
-  const onClick = () => {   
+  const onClick = () => {
     track('Watch Video clicked');
     setShowVideo(true);
   };
@@ -57,14 +58,16 @@ const InlineVideo = () => {
   return (
     <div className={classnames(styles.bannerVideo, styles[status])}>
       {showVideo ? (
-        <WistiaVideo videoId="z2ksbcs34d"/>
+        <WistiaVideo videoId="z2ksbcs34d" />
       ) : (
         <>
           <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
             <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
           </TransparentButton>
           <span className={styles.bannerVideoButton}>
-            <Button decorative emoji="playButton">Watch Video</Button>
+            <Button decorative emoji="playButton">
+              Watch Video
+            </Button>
           </span>
         </>
       )}
@@ -80,14 +83,8 @@ const Chrome = () => (
           <g>
             <rect fill="#FFFFFF" x="0" y="0" width="578" height="396" rx="5" />
             <g>
-              <path
-                d="M5,0 L573,0 C576,0 578,2 578,5 L578,57 L0,57 L0,5 C0,2 2,0 5,0 Z"
-                fill="#847bd2"
-              />
-              <path
-                d="M0,24 L54,24 L54,11 C54,9 56,6 59,6 L122,6 C125,6 127,9 127,11 L127,24 L578,24 L578,58 L0,58 L0,24 Z"
-                fill="#d8d8f6"
-              />
+              <path d="M5,0 L573,0 C576,0 578,2 578,5 L578,57 L0,57 L0,5 C0,2 2,0 5,0 Z" fill="#847bd2" />
+              <path d="M0,24 L54,24 L54,11 C54,9 56,6 59,6 L122,6 C125,6 127,9 127,11 L127,24 L578,24 L578,58 L0,58 L0,24 Z" fill="#d8d8f6" />
               <circle fill="#E8E8E8" cx="15" cy="14" r="4" />
               <circle fill="#E8E8E8" cx="27" cy="14" r="4" />
               <circle fill="#E8E8E8" cx="39" cy="14" r="4" />
