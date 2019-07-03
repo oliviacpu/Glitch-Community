@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopoverMenu, PopoverDialog, PopoverActions } from 'Components/popover';
+import { PopoverMenu, MultiPopover, PopoverActions } from 'Components/popover';
 import DeleteCollection from 'Components/collection/delete-collection-pop';
 
 export default function CollectionOptions({ collection, deleteCollection }) {
@@ -15,7 +15,7 @@ export default function CollectionOptions({ collection, deleteCollection }) {
         >
           {(showViews) => (
             <PopoverActions type="dangerZone"
-              onClick={() => onOrShowRemoveUser(showViews.delete, togglePopover)}
+              onClick={() => showViews.delete}
             > 
             </PopoverActions>
           )}
