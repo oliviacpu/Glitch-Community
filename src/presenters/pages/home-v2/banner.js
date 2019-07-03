@@ -62,13 +62,16 @@ const InlineVideo = () => {
       ) : (
         <>
           <TransparentButton className={styles.bannerVideoButtonWrap} onClick={onClick}>
-            <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
+            <img
+              src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795"
+              alt="Watch a video to learn about Glitch"
+            />
           </TransparentButton>
-          <span className={styles.bannerVideoButton}>
+          <span className={styles.bannerVideoButton} aria-hidden="true">
             <Button decorative emoji="playButton">
                 Watch Video
-              </Button>
-            </span>
+            </Button>
+          </span>
         </>
       )}
     </div>
