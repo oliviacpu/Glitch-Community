@@ -1,30 +1,4 @@
-u0 = 2px
-u05 = 4px
-u1 = 5px
-u2 = 10px
-u3 = 16px
-u4 = 32px
-u5 = 50px
-
-t1 = 12px
-t2 = 14px
-t3 = 16px
-t4 = 20px
-t5 = 26px
-t6 = 30px
-
-fg0 = #222
-fg1 = #555
-
-bg0 = #fff
-bg1 = #f6f6f6
-bg2 = #e5e5e5
-
-tertiary = #636363
-
-smallViewport = 414px
-mediumViewport = 670px
-largeViewport = 900px
+@import './constants.styl'
 
 .h2
   font-size: t5
@@ -39,215 +13,86 @@ largeViewport = 900px
   font-size: t3
   font-weight: 600
 
-section
-  margin-top: 5em 
-  .subtitle
-    margin-left: u3
+.homeContainer
+  section + section
+    margin-top: 5em 
+    
+.subtitle
+  margin-left: u3
+  margin-bottom: u2
+  @media(min-width: mediumViewport)
     margin-bottom: 2.5em
-section:first-of-type
-  margin-top: 0
-  
-.mark
-  display: inline-block
-  transform: rotate(-1deg)
-  position: relative
-  left: "-%s" % u1
-  z-index: 0
-  background-color: var(--mark-color)
-  padding: u1 u2
-  border-radius: u1
-.markText
-  position: relative
-  display: inline-block
-  transform: rotate(1deg)
-  
-.unmarked
-  position: relative
-  z-index: 1
-  
-.banner
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-  color: white  
-  background-size: cover
-  background-position: center
-  border-radius: u2
-  padding: u4 0px
-    
-.bannerCopyContainer
-  width: 390px
-  height: 390px
-  margin: 0 auto
-  position: relative
-  background-position: left
-  background-repeat: no-repeat
-  background-size: cover
-  background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560449705287')
-  
-.bannerCopy
-  padding-bottom: u3
-  position: absolute
-  top: 50px
-  left: 65px
-  width: 360px
-  
-  h1
-    font-size: t5
-    margin: 0
-    transform: rotate(-5deg)
-  p
-    margin: u4 0 u3 u4
-    width: 260px
-  
-.bannerVideoWrap
-  background: white
-  z-index: 1
-  border: 2px solid #EAEAEA
-  display: flex
-  
-.bannerVideoChrome
-  background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbrowser.svg?v=1560654605973')
-  background-size: contain
-  background-repeat: no-repeat
-  border-radius: u1
-  width: 100%
-  height: auto
-  padding-bottom: 69%
-  position: relative
-  
-.bannerVideoInnerWrap
-  display: flex
-  height: 88%
-  position: absolute
-  width: 100%
-  bottom: 0
-  padding: u3
-  background: white
-
-.bannerVideo
-  width: 100%
-  background-color: #666
-  padding-bottom: 56%
-  
-.bannerBtnWrap
-  margin-left: 120px
-  
-.watchVideoBtnWrap
-  display: none
-  
-  
-/* VIEWPORT SPECIFIC STUFF TO KEEP TEXT ALIGNED WITH BACKGROUND IMAGE */
-largeBannerHeight = 440px
-
-@media(min-width: mediumViewport)
-  .banner
-    flex-direction: row
-    justify-content: flex-end
-    align-items: center
-    padding: u4 0px
-  .bannerCopyContainer
-    width: 500px
-    height: largeBannerHeight
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-large.svg?v=1560449704812')
-    margin-right: -20px
-  .bannerCopy
-    padding-bottom: 0
-    padding-right: u4
-  .bannerVideoWrap
-    // min-height: largeBannerHeight // this is for changing video aspect ratio
-    width: 60%
-    margin: "-%s 0" % u5
-    border-radius: u1
-    
-@media(min-width: mediumViewport) and (max-width: largeViewport)
-  .bannerVideoWrap
-    width: 55%
-  .bannerVideoChrome
-    background-size: 450px
-    
-
-@media(min-width: smallViewport) and (max-width: mediumViewport)
-  .bannerCopyContainer
-    background-image: url('https://cdn.glitch.com/2aa144c0-3b44-4c7a-ba20-0de53e442ea7%2Fbanner-small.svg?v=1560537222315')
-    width: 450px
-    height: 450px
-    margin: 0 auto
-  .bannerVideoChrome
-    display: none
-  .watchVideoBtnWrap
-    display: block
-    margin: u3 0
-
-@media(max-width: smallViewport)
-  .bannerCopyContainer
-    width: 375px
-    height: 375px
-    .bannerCopy
-      top: 37px
-      p
-        margin: u3 u5
-        width: 190px
-  .watchVideoChrome
-    display: none
-  .watchVideoBtnWrap
-    display: block
-    margin: u3 0
-    
-.featureCalloutsRow
-  --gap: u4
-  margin-left: auto
-  margin-right: auto
-  li
-    margin-bottom: 2em
-  // custom margins for 'code the app of your dreams' illustration
-  li:nth-of-type(2)
-    div:nth-of-type(1)
-      margi-left: -20px
-      img
-        margin-left: 60px
-
-@media(max-width: mediumViewport)
-  .featureCalloutsRow
-    width: 80%
-    text-align: center
     
 .plainLink
   color: inherit
   text-decoration: none
   &:hover
     text-decoration: none
-    
+
 .featureCalloutsContainer
   margin-top: 1em
     
-.featureCalloutsImageWrap
-  height: 145px
+.featureCalloutsRow
+  --gap: u4
+    
+.featureCalloutsImage
+  height: 70px
   background-size: contain
   background-repeat: no-repeat
   background-position: center
   display: flex
-  align-items: center
-  justify-content: center
+  svg
+    height: 100%
+    max-width: 100%
+  @media(min-width: mediumViewport)
+    height: 145px
+    padding: u3
+    width: 100%
+    svg
+      height: 100px
+      margin: u2 auto 0
     
-.featureCalloutsImage
-  margin-top: -10px
-  width: 90%
-  max-width: 275px
-  max-height: 100%
-  display: block
-  
-.featureCalloutsText
-  margin-top: "-%s" % u4
-  h2
-    font-size: t3
-    font-weight: 600
-  
+    
+.featureCalloutsHeader
+  display: flex
+  flex-direction: row
+  align-items: center
+  @media(min-width: mediumViewport)
+    flex-direction: column
+    
+.featureCalloutsTitle
+  font-size: t3
+  font-weight: 600
+  margin-left: t2
+  @media(min-width: mediumViewport)
+    margin-top: "-%s" % u3
+    margin-bottom: u2
+    margin-left: 0
+    align-self: flex-start
+
 .unifiedStories
+  position: relative
+  margin-top: u2
+  background: #F5F5F5
+  transform: skewY(-2deg)
+  width: 100vw
+  position: relative
+  content: ''
+  left: 50%
+  right: 50%
+  margin-left: -50vw
+  margin-right: -50vw
+  overflow: hidden
+
+.unifiedStoriesContentWrap
+  transform: skewY(2deg)
+  
+.unifiedStoriesContainer
   display: flex
   flex-direction: column
-  background-color: bg2
-  border-radius: u1
+  max-width: 1207px
+  margin: 0 auto
+  padding: 0
   
 .unifiedStoriesFeatureLabel
   display: inline-block
@@ -260,10 +105,11 @@ largeBannerHeight = 440px
   margin-bottom: u4
   
 .unifiedStoriesHeadline
-  background: #bdbdbd
-  padding: u4
-  border-top-left-radius: u1
-  border-bottom-left-radius: u1
+  background-color: #bdbdbd
+  background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Funified-headline-background.svg?v=1561647625197')
+  background-size: cover
+  background-repeat: no-repeat
+  padding: u4 u3
   h2
     font-size: t5
     margin: 0
@@ -300,7 +146,7 @@ largeBannerHeight = 440px
     font-size: t2
     
 @media (min-width: mediumViewport)
-  .unifiedStories
+  .unifiedStoriesContainer
     flex-direction: row
     align-items: flex-start
     flex-wrap: wrap
@@ -317,62 +163,6 @@ largeBannerHeight = 440px
   .unifiedStoriesPreview
     flex: 1 1 100px
 
-.featuredEmbed
-  margin: 0
-  background-color: bg1
-  border-radius: u1
-  position: relative
-  
-.featuredEmbedImg
-  max-height: 150px
-  position: absolute
-  right: 0
-  top: "-%s" % u4
-  -webkit-mask-image: url(https://cdn.glitch.com/3cef6b25-69ba-4fa9-aa32-cff0fedce195%2Fmask-4.svg)
-  object-fit: contain
-  mask-size: contain
-  mask-repeat: no-repeat
-  mask-position: center
-  mask-type: luminance
-  @media(max-width: mediumViewport)
-    left: 0
-    
-.featuredEmbedWrap
-  height: 80vh
-  max-height: 500px
-  margin-bottom: "-%s" % u3
-  padding: 0px u3 u3 u3
-  
-.featuredEmbedCaption
-  width: 55%
-  margin-top: u4
-  padding: u3
-  display: flex
-  flex-direction: column
-  border-radius: u1
-  @media(max-width: mediumViewport)
-    width: 100%
-    padding-top: 140px
-  @media(min-width: largeViewport)
-    width: 70%
-
-.featuredEmbedText
-  max-width: 100%
-  flex: 1 0 auto
-  margin-bottom: u3
-  h4
-    margin-top: 0
-  p
-    margin: 0
-  p + p
-    margin-top: u1
-  
-@media (min-width: mediumViewport)
-  .featuredEmbedCaption
-    flex-direction: row
-  .featuredEmbedProfileWrap
-    flex: 0 0 u5
-
 .appsWeLoveContainer
   margin-top: 2em
   h4
@@ -382,12 +172,88 @@ largeBannerHeight = 440px
     margin: 0
     color: fg1
     
-.appsWeLoveProfile
+.appItemMini
+  display: flex
+  padding: u2
+  border-radius: u1
+  background-color: bg1
+.appItemMini + .appItemMini
+  margin-top: u2
+  
+.appsWeLoveSmallLayout
+  display: block
+.appsWeLoveBigLayout
+  display: none
+@media (min-width: mediumViewport)
+  .appsWeLoveSmallLayout
+    display: none
+  .appsWeLoveBigLayout
+    display: flex
+
+.appsWeLoveList
+  margin: 0
+  padding: 0
+  list-style-type: none
+  flex: 1 1 auto
+
+.appsWeLoveListItem
+  margin-top: u2
+  
+.appItem
+  display: flex
+  border-radius: u1
+  position: relative
+  padding: u3 u2 u2
+  background-color: bg1
+  margin-right: u3
+  @media (min-width: largeViewport)
+    margin-right: u5
+  &:before
+    z-index: -1
+    content: ''
+    position: absolute
+    top: 0
+    left: 50%
+    height: 100%
+    width: 100%
+  &.active
+    background-color: #DCFDFF
+    &:before
+      background-color: #DCFDFF
+  &:hover
+    background-color: bg2
+    &:before
+      background-color: bg2
+    
+    
+    
+.appAvatar
+  width: 32px
+  height: 32px
+  flex: 0 0 auto
+  border-radius: u1
+    
+.appContent
+  flex: 1 1 auto
+  margin-left: u2
+    
+.appsWeLoveEmbed
+  min-height: 500px
+  flex: 0 0 66%
   position: relative
   z-index: 1
-  margin-bottom: 3px
-
-.appsWeLoveRow, .curatedCollectionRow
+  
+.profileListPlaceholder
+  height: 36px
+  display: block
+  
+.appsWeLoveProfileWrap
+  position: relative
+  z-index: 1
+  padding-left: u3
+  margin-bottom: "-%s" % (u2 + u2)
+  
+.curatedCollectionRow
   --gap: u3
 
 .curatedCollectionsContainer
@@ -400,6 +266,9 @@ largeBannerHeight = 440px
   overflow: hidden
   display: flex
   height: 100%
+  
+.curatedCollectionButtonWrap
+  white-space: nowrap
   
 .curatedCollectionTexture
   position: absolute
@@ -454,8 +323,29 @@ largeBannerHeight = 440px
   --gap: u1
   --min-width: 200px
 
+.cultureZine
+  position: relative
+  padding: u2 0 u3
+  &:before
+    position: absolute
+    z-index: -1
+    content: ''
+    top: 0
+    width: 100vw
+    height: 100%
+    transform: skewY(2deg)
+    left: 50%
+    right: 50%
+    margin-left: -50vw
+    margin-right: -50vw
+    background-color: #F5F5F5
+    background-image: url('https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fculture-zine-pattern.svg?v=1561587572773')
+    background-size: cover
+    background-repeat: no-repeat
+  
 .cultureZineRow
   --min-width: 180px
+  position: relative
   
 .cultureZineImageWrap
   padding: 0 0 53%
@@ -469,7 +359,6 @@ largeBannerHeight = 440px
   margin-left: auto
   margin-right: auto  
   border-radius: u1
-  background-color: bg1
 
   h4
     margin: u1 0
@@ -477,17 +366,30 @@ largeBannerHeight = 440px
     margin: 0  
     color: tertiary
 
+.readMoreLink
+  padding: u3 0 0
+  text-align: right
+    
 .buildingOnGlitchRow
   display: flex
   flex-direction: column
   margin: "-%s" % u1
+  .startBuildingImageWrap
+    background-repeat: no-repeat
+    height: 120px
+    background-size: inherit
+  
   img
-    height: 25%
+    height: 60%
     width: auto
+    margin-left: 20px
+    margin-top: 10px
   a
     display: block
     margin: u1
+    margin-bottom: u4
   h3
+    margin-top: 0
     font-size: t4
 
 @media (min-width: mediumViewport)
@@ -495,20 +397,3 @@ largeBannerHeight = 440px
     flex-direction: row
     a
       width: 50%
-
-.previewBanner
-  background-color: yellow
-  padding: u4 u3
-  display: flex
-  flex-flow: row wrap
-  align-items: center
-  margin-top: u1
-  p
-    margin: 0
-    flex: 1 0 auto
-    font-size: t4
-    font-weight: bold
-  & > *
-    margin-left: u1
-    
-    

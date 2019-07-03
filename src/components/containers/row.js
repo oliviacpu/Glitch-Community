@@ -26,9 +26,9 @@ export const RowItem = ({ as: Component = 'div', className, children, ...props }
 
 const Row = ({ items, children, count, gap, minWidth, className, style }) => (
   <RowContainer as="ul" className={className} style={style} count={count} gap={gap} minWidth={minWidth}>
-    {items.slice(0, count).map((item) => (
+    {items.slice(0, count).map((item, index) => (
       <RowItem as="li" key={item.id}>
-        {children(item)}
+        {children(item, index)}
       </RowItem>
     ))}
     {count > items.length && range(0, count - items.length).map((i) => <li key={`filler-${i}`} className={styles.filler} />)}

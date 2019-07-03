@@ -17,12 +17,11 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
-import CreatePage from './create';
+import CreatePage from './crepaate';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
-import NewHomePage from './home-v2';
-import NewHomePagePreview from './home-v2/preview';
+import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
 import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
