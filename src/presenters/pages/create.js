@@ -433,6 +433,12 @@ function VSCode() {
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
         With collaborative editing, instant updates, and access to the console, it's the full power of the Glitch editor within VS Code.
       </Text>
+
+      <Text className={styles.sectionDescription}>
+        <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
+          Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
+        </Button>
+      </Text>
       
       <div className={styles.screencapContainer}>
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
@@ -442,12 +448,6 @@ function VSCode() {
         </div>
       </div>
 
-
-      <Text className={styles.sectionDescription}>
-        <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
-          Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
-        </Button>
-      </Text>
     </section>
   );
 }
