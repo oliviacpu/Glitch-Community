@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { getOwnerLink, getLink } from 'Models/collection';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
-import { PopoverDialog, PopoverActions, MultiPopover, MultiPopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
+import { PopoverDialog, PopoverActions, PopoverTitle, MultiPopover, MultiPopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
 import { deleteCollection as deleteCollectionViaState } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
@@ -34,7 +34,7 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteC
 
   return (
     <PopoverDialog focusOnDialog align="left">
-      <MultiPopoverTitle>Delete {collection.name}</MultiPopoverTitle>
+      <PopoverTitle>Delete {collection.name}</PopoverTitle>
       <PopoverActions>
         <Image height="98px" width="auto" src={illustration} alt="" />
         <ActionDescription>
@@ -131,7 +131,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
 
 const DeleteCollection = ({ collection, deleteCollection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    <MultiPopover views={() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />} />
+    {() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />}
   </PopoverWithButton>
 );
 
