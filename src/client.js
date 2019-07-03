@@ -1,5 +1,3 @@
-/* globals EDITOR_URL */
-
 import './polyfills';
 
 // Init our dayjs plugins
@@ -8,8 +6,9 @@ import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
 import { render } from 'react-dom';
-import convertPlugin from '../shared/dayjs-convert';
-import { captureException, configureScope } from './utils/sentry';
+import convertPlugin from 'Shared/dayjs-convert';
+import { captureException, configureScope } from 'Utils/sentry';
+import { EDITOR_URL } from 'Utils/constants';
 import App from './app';
 
 dayjs.extend(relativeTimePlugin);

@@ -1,7 +1,6 @@
-/* global APP_URL */
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import { APP_URL } from 'Utils/constants';
 import Image from 'Components/images/image';
 import styles from './embed.styl';
 

@@ -1,9 +1,10 @@
-/* globals APP_URL analytics */
+/* globals analytics */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { captureException } from 'Utils/sentry';
+import { APP_URL } from 'Utils/constants';
 
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
