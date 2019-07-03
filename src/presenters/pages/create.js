@@ -81,7 +81,7 @@ function WhatIsGlitch() {
 
   const playVideo = () => {
     setHasPlayed(true);
-    videoEl.current.play();
+    videoEl.current.click();
     track();
   };
 
@@ -98,25 +98,24 @@ function WhatIsGlitch() {
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
         <WistiaVideo ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
-        
-        {!hasPlayed && (
-          <>
-            <Image  src={videoCard} />
-            <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
-              <Button
-                decorative
-                image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
-                imagePosition="left"
-              >
-                Watch Video
-              </Button>
-            </TransparentButton>
-          </>
-        )}
       </div>
     </section>
   );
 }
+
+// {!hasPlayed && (
+//   <>
+//     <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
+//       <Button
+//         decorative
+//         image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
+//         imagePosition="left"
+//       >
+//         Watch Video
+//       </Button>
+//     </TransparentButton>
+//   </>
+// )}
 
 const FRAMEWORK_STARTERS = [
   {
@@ -257,23 +256,23 @@ function Collaborate() {
     'Work on public or private projects',
     'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
   ];
-  const smallVideo = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-collaborate.mp4?v=1561489721760';
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069';
   const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
 
   return (
-    <ScreencapSection
-      title={title}
-      description={description}
-      highlights={highlights}
-      video={video}
-      smallVideos={[smallVideo]}
-      blob={blob}
-      image={pyramid}
-      imageName="pyramid"
-      markColor="#c9c4fa"
-    />
+    <div className={styles.collaborate}>
+      <ScreencapSection
+        title={title}
+        description={description}
+        highlights={highlights}
+        video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate.mp4?v=1562171466297"
+        smallVideos={['https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate-small.mp4?v=1562171465382']}
+        blob={blob}
+        image={pyramid}
+        imageName="pyramid"
+        markColor="#c9c4fa"
+      />
+    </div>
   );
 }
 
@@ -282,9 +281,6 @@ function YourAppIsLive() {
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
   const highlights = ['Supports custom domains'];
-  const smallVideo1 = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
-  const smallVideo2 = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-small-app.mp4?v=1560959054771';
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
@@ -293,8 +289,11 @@ function YourAppIsLive() {
       title={title}
       description={description}
       highlights={highlights}
-      video={video}
-      smallVideos={[smallVideo1, smallVideo2]}
+      video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585"
+      smallVideos={[
+        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891',
+        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530',
+      ]}
       blob={blob}
       image={live}
       imageName="live"
@@ -307,14 +306,16 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
-        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
-          <source src={v} />
+        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} src={v} muted autoPlay loop playsInline>
+          <source src={v}></source>
         </video>
       ))}
 
-      <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
-        <source src={video} />
-      </video>
+      <div className={classNames(styles.screencap, styles.bigScreencap)}>
+        <video src={video} muted autoPlay loop playsInline>
+          <source src={video}></source>
+        </video>
+      </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
         <div className={styles.blob}>
@@ -352,26 +353,6 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
     </>
   );
 
-  // return (
-  //   <section className={styles.section}>
-  //     <VisibilityContainer>
-  //       {({ wasEverVisible }) =>
-  //         wasEverVisible ? (
-  //           <>
-  //             <Info title={title} description={description} markColor={markColor} />
-  //             <Videos video={video} smallVideos={smallVideos} />
-  //             <Highlights highlights={highlights} />
-  //           </>
-  //         ) : (
-  //           <>
-  //             <Info title={title} description={description} markColor={markColor} />
-  //             <div aria-hidden="true" style={{ height: '500px' }} />
-  //           </>
-  //         )
-  //       }
-  //     </VisibilityContainer>
-  //   </section>
-  // );
   return (
     <section className={styles.section}>
       <Info title={title} description={description} markColor={markColor} />
@@ -440,8 +421,8 @@ function VSCode() {
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
         Install the Glitch extension to build Glitch apps in VS Code, the most widely used developer environment.
       </Text>
-        
-      <Text  className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
+
+      <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
         With collaborative editing, instant updates, and access to the console, it's the full power of the Glitch editor within VS Code.
       </Text>
 
@@ -583,7 +564,6 @@ const CreatePage = () => (
         <Starters />
         <Collaborate />
         <YourAppIsLive />
-        <WistiaVideo videoId="vxosqp0d7h" />
         <VSCode />
         <Help />
         <Remix />

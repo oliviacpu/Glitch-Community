@@ -160,11 +160,11 @@ u5 = 50px
   @media (max-width: mediumViewport)
     margin: auto
     order: -1
-  img
-    position: absolute
-    top: 0
-    width: 100%
-    height: auto
+  // img
+  //   position: absolute
+  //   top: 0
+  //   width: 100%
+  //   height: auto
 .whatIsGlitchVideoButton
   position: absolute
   left: 0
@@ -458,10 +458,19 @@ u5 = 50px
     height: 50px
     margin: 0 auto u1 auto
 
-// wistia embeds
+ // wistia embeds
 .whatIsGlitchVideoContainer :global
+  .wistia_responsive_padding
+    padding: 56.25% 0 0 0
+    position: relative
+  .wistia_responsive_wrapper
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
   .wistia_embed
     width: 100%
-    height: 350px
+    height: 100%
     border-radius: u1
     overflow: hidden
