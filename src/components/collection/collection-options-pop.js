@@ -7,11 +7,20 @@ export default function CollectionOptions({ collection, deleteCollection }) {
   return (
     <PopoverMenu>
       {() => (
-        <PopoverDialog focusOnDialog align="right">
-          <PopoverActions type="dangerZone">
-            <DeleteCollection collection={collection} deleteCollection={deleteCollection} />
-          </PopoverActions>
-        </PopoverDialog>
+        
+        <MultiPopover
+          views={{
+            delete: () => <DeleteCollection collection={collection} deleteCollection={deleteCollection} />,
+          }}
+        >
+          {(showViews) => (
+            <PopoverActions type="dangerZone"
+              onClick={() => onOrShowRemoveUser(showViews.delete, togglePopover)}
+            > 
+            </PopoverActions>
+          )}
+        </MultiPopover>
+
       )}
     </PopoverMenu>
   );
