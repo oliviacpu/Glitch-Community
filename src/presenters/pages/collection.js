@@ -64,27 +64,25 @@ CollectionPageContents.propTypes = {
   }).isRequired,
 };
 
-const CollectionPage = ({ owner, name }) => {
-  return (
-    <Layout>
-      <DataLoader get={(api, { owner, name }) => getCollectionWithProjects(api, { owner, name })} args={}>
-        {(collection) =>
-          collection ? (
-            <AnalyticsContext
-              properties={{ origin: 'collection' }}
-              context={{
-                groupId: collection.team ? collection.team.id.toString() : '0',
-              }}
-            >
-              <CollectionPageContents collection={collection} />
-            </AnalyticsContext>
-          ) : (
-            <NotFound name={name} />
-          )
-        }
-      </DataLoader>
-    </Layout>
-  );
-};
+const CollectionPage = ({ owner, name }) => (
+  <Layout>
+    <DataLoader get={(api, args) => getCollectionWithProjects(api, args)} args={{ owner, name }}>
+      {(collection) =>
+        collection ? (
+          <AnalyticsContext
+            properties={{ origin: 'collection' }}
+            context={{
+              groupId: collection.team ? collection.team.id.toString() : '0',
+            }}
+          >
+            <CollectionPageContents collection={collection} />
+          </AnalyticsContext>
+        ) : (
+          <NotFound name={name} />
+        )
+      }
+    </DataLoader>
+  </Layout>
+);
 
 export default CollectionPage;

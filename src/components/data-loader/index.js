@@ -4,13 +4,13 @@ import Loader from 'Components/loader';
 import { useAPI } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
-const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException }) => {
+const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException, args }) => {
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });
   const api = useAPI();
 
   useEffect(() => {
     let isCurrent = true;
-    get(api).then(
+    get(api, args).then(
       (data) => {
         if (!isCurrent) return;
         setState({ status: 'ready', value: data });
@@ -28,7 +28,7 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       isCurrent = false;
       setState({ status: 'loading', value: null });
     };
-  }, [api, get]);
+  }, [api, args]);
 
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
