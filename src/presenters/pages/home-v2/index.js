@@ -201,7 +201,7 @@ const CultureZine = ({ content }) => (
       </Row>
       <div className={styles.readMoreLink}>
         <Button href="https://glitch.com/culture/">
-          Read more on Culture <Arrow />
+          Read More on Culture <Arrow />
         </Button>
       </div>
     </div>
@@ -237,7 +237,7 @@ const BuildingOnGlitch = ({ content }) => (
 
 const MadeInGlitch = () => (
   <section className="made-in-glitch">
-    <Text>Of course, this site was made on Glitch too</Text>
+    <Text>Of course, this site was made on Glitch too.</Text>
     <Button href={getEditorUrl('community')} emoji="carpStreamer">
       View Source
     </Button>
