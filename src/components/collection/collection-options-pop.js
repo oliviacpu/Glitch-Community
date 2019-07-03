@@ -1,26 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopoverMenu, MultiPopover, PopoverActions } from 'Components/popover';
+import { PopoverMenu, PopoverDialog, PopoverMenuButton, PopoverActions } from 'Components/popover';
 import DeleteCollection from 'Components/collection/delete-collection-pop';
+
+const deleteCollection = (collection, deleteCollection) => {
+  (<DeleteCollection collection={collection} deleteCollection={deleteCollection} />);
+};
 
 export default function CollectionOptions({ collection, deleteCollection }) {
   return (
     <PopoverMenu>
       {() => (
-        
-        <MultiPopover
-          views={{
-            delete: () => <DeleteCollection collection={collection} deleteCollection={deleteCollection} />,
-          }}
-        >
-          {(showViews) => (
-            <PopoverActions type="dangerZone"
-              onClick={() => showViews.delete}
-            > 
-            </PopoverActions>
-          )}
-        </MultiPopover>
-
+        <PopoverDialog focusOnDialog align="right">
+          <PopoverActions type="dangerZone">
+            <PopoverMenuButton onClick={deleteCollection(collection, deleteCollection)} label="Delete Collection" emoji="bomb" />
+          </PopoverActions>
+        </PopoverDialog>
       )}
     </PopoverMenu>
   );

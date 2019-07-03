@@ -139,7 +139,9 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
-      {currentUserIsAuthor && <DeleteCollection collection={collection} />}
+      {currentUserIsAuthor &&   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+    {() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />}
+  </PopoverWithButton><DeleteCollection collection={collection} />}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
