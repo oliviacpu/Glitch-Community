@@ -22,7 +22,7 @@ const PreviewContainer = ({ children, get, onPublish, previewMessage }) => {
                 Publish
               </Button>
             ) : (
-              <Button type="cta" disabled>
+              <Button type="cta" decorative disabled>
                 Log in to publish
               </Button>
             )}

@@ -53,7 +53,7 @@ const FeatureCallouts = ({ content }) => (
               {React.createElement(calloutGraphics[id].component)}
             </a>
             <h2 className={styles.featureCalloutsTitle}>
-              <Mark color={calloutGraphics[id].component.}>{label}</Mark>
+              <Mark color={calloutGraphics[id].color}>{label}</Mark>
             </h2>
           </header>
           <p>{description}</p>
