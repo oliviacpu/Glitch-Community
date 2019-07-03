@@ -5,6 +5,13 @@
 export default [
   {
     id: 1,
+    title: 'Reorder projects in a collection',
+    body: `Click and drag to order your projects to your heart's content
+![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
+`,
+  },
+  {
+    id: 1,
     title: 'Live Search',
     body: `View search results as quickly as you can type, with autocomplete now built in.
 ![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803)
