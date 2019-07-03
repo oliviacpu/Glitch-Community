@@ -67,7 +67,7 @@ CollectionPageContents.propTypes = {
 const CollectionPage = ({ owner, name }) => {
   return (
     <Layout>
-      <DataLoader get={(api) => getCollectionWithProjects(api, { owner, name })}>
+      <DataLoader get={(api, { owner, name }) => getCollectionWithProjects(api, { owner, name })} args={}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
