@@ -101,7 +101,6 @@ function WhatIsGlitch() {
 
         {!hasPlayed && (
           <>
-            <Image src={videoCard} />
             <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
               <Button
                 decorative
