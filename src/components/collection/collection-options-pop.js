@@ -30,6 +30,8 @@ CollectionOptions.defaultProps = {
   deleteCollection: null,
 };
 /*
+<PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+
 function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
   const [selectedProjects, setSelectedProjects] = useState([]);
   function selectAllProjects() {

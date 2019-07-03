@@ -8,6 +8,7 @@ import { isDarkColor, getLink } from 'Models/collection';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
+import { PopoverWithButton } from 'Components/popover';
 import NotFound from 'Components/errors/not-found';
 import { ProfileItem } from 'Components/profile-list';
 import ProjectsList from 'Components/containers/projects-list';
@@ -139,9 +140,10 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
         </article>
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
       </main>
-      {currentUserIsAuthor &&   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />}
-  </PopoverWithButton><DeleteCollection collection={collection} />}
+      {currentUserIsAuthor &&
+        <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+          {() => <DeleteCollection collection={collection} />}
+        </PopoverWithButton>}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
