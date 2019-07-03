@@ -1,5 +1,5 @@
 import { lightColors } from 'Models/user';
-import { }
+import { CDN_URL } from 'Utils/constants';
 
 const cacheBuster = Math.floor(Math.random() * 1000);
 
