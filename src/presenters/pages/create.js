@@ -441,6 +441,16 @@ function VSCode() {
       </Text>
       
       <div className={styles.screencapContainer}>
+        <video 
+          className={classNames(styles.screencap, styles.smallScreencap)}
+          src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}
+          muted
+          autoPlay
+          loop
+          playsInline
+          >
+          <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}/>
+        </video>
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <video src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} muted autoPlay loop playsInline>
             <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} />
