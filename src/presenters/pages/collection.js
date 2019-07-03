@@ -65,14 +65,9 @@ CollectionPageContents.propTypes = {
 };
 
 const CollectionPage = ({ owner, name }) => {
-  const get = React.useCallback(
-    (api) => getCollectionWithProjects(api, { owner, name }),
-    [owner, name],
-  );
-
   return (
     <Layout>
-      <DataLoader get={get}>
+      <DataLoader get={(api, { owner, name }) => getCollectionWithProjects(api, { owner, name })}>
         {(collection) =>
           collection ? (
             <AnalyticsContext
