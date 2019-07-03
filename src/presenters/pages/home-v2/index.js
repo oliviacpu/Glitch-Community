@@ -17,7 +17,6 @@ import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
-import DataLoader from 'Components/data-loader';
 import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
@@ -312,17 +311,13 @@ export const HomePreview = withRouter(({ history }) => {
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
   return (
-    <DataLoader get={(api) => api.get(`${window.location.origin}/api/home`)} renderLoader={() => null}>
-      {({ data }) => (
-        <Layout>
-          <Home
-            data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
-            loggedIn={!!currentUser.login}
-            hasProjects={currentUser.projects.length > 0}
-          />
-        </Layout>
-      )}
-    </DataLoader>
+    <Layout>
+      <Home
+        data={{ ...window.HOME_CONTENT, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
+        loggedIn={!!currentUser.login}
+        hasProjects={currentUser.projects.length > 0}
+      />
+    </Layout>
   );
 };
 export default HomeWithProductionData;
