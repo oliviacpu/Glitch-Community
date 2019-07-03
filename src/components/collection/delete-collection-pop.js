@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { getOwnerLink, getLink } from 'Models/collection';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
-import { PopoverDialog, PopoverActions, MultiPopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
+import { PopoverDialog, PopoverActions, MultiPopover, MultiPopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
 import { deleteCollection as deleteCollectionViaState } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
@@ -131,7 +131,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
 
 const DeleteCollection = ({ collection, deleteCollection }) => (
   <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-    {() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />}
+    <MultiPopover views={() => <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />} />
   </PopoverWithButton>
 );
 
