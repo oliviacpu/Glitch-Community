@@ -7,7 +7,7 @@ import rootTeams from '../../curated/teams';
 
 import { useCurrentUser } from '../../state/current-user';
 
-import IndexPage from './index';
+// import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
 import ResetPasswordPage from './reset-password';
 import OauthSignIn from './signin';
@@ -70,11 +70,9 @@ const Router = () => (
   <>
     <PageChangeHandler />
     <Switch>
-      <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
-      <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
-
-      <Route path="/home-v2" exact render={({ location }) => <NewHomePage key={location.key} />} />
-      <Route path="/home-v2/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+      <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
 
       <Route
         path="/login/facebook"
