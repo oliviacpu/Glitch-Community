@@ -20,7 +20,7 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteC
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
     try {
-      if (window.location.pathname === getLink(collection)) {
+      if (location.pathname === getLink(collection)) {
         deleteCollectionViaState(api, collection);
         history.push(getOwnerLink(collection));
       } else {
