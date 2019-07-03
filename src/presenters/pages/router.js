@@ -17,6 +17,7 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
+import CreatePage from './create';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
@@ -52,14 +53,17 @@ const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
 
-  useEffect(() => {
-    if (isUpdate.current) {
-      window.scrollTo(0, 0);
-      reload();
-    }
-    isUpdate.current = true;
-    track();
-  }, [location.key]);
+  useEffect(
+    () => {
+      if (isUpdate.current) {
+        window.scrollTo(0, 0);
+        reload();
+      }
+      isUpdate.current = true;
+      track();
+    },
+    [location.key],
+  );
   return null;
 });
 
@@ -139,6 +143,12 @@ const Router = () => (
           const query = parse(location.search, 'q');
           return <SearchPage key={query} query={query} activeFilter={parse(location.search, 'activeFilter')} />;
         }}
+      />
+
+      <Route
+        path="/create"
+        exact
+        render={({ location }) => <CreatePage key={location.key} />}
       />
 
       {categories.map((category) => (
