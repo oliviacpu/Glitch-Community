@@ -76,6 +76,7 @@ function Banner() {
 function WhatIsGlitch() {
   const [hasPlayed, setHasPlayed] = useState(false);
   const videoEl = useRef(null);
+  const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562165737562';
   const track = useTracker('Create Page Video Clicked');
 
   const playVideo = () => {
@@ -99,15 +100,18 @@ function WhatIsGlitch() {
         <WistiaVideo ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
         
         {!hasPlayed && (
-          <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
-            <Button
-              decorative
-              image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
-              imagePosition="left"
-            >
-              Watch Video
-            </Button>
-          </TransparentButton>
+          <>
+            <Image className={styles.whatIsGlitchVideo} src={videoCard} />
+            <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
+              <Button
+                decorative
+                image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
+                imagePosition="left"
+              >
+                Watch Video
+              </Button>
+            </TransparentButton>
+          </>
         )}
       </div>
     </section>
