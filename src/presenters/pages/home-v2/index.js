@@ -189,9 +189,7 @@ const CultureZine = ({ content }) => (
       <h2 className={styles.h2}>
         <Mark color="#CBC3FF">Where tech meets culture</Mark>
       </h2>
-      <p className={styles.subtitle}>
-        Code is shaping the world around us. We’ll help you understand where it’s going.
-      </p>
+      <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
       <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
         {({ content: cultureZineItems }) => (
           <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
@@ -219,14 +217,8 @@ const CultureZine = ({ content }) => (
 );
 
 const buildingGraphics = [
-  {
-    img: 'https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fdevelopers.svg?v=1560084581954',
-    mask: 'https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fdevelopers-mask.svg?v=1561647984894',
-  },
-  {
-    img: 'https://cdn.glitch.com/fea4026e-9552-4533-a838-40d5a5b6b175%2Fteams.svg?v=1560127524970',
-    mask: 'https://cdn.glitch.com/c258d08b-9412-4115-816c-30444c24e1eb%2Fteams-mask.svg?v=1561647985925',
-  },
+  'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fdevelopers.svg?v=1562169495767',
+  'https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Fteams.svg?v=1562169496523',
 ];
 
 const BuildingOnGlitch = ({ content }) => (
@@ -237,8 +229,8 @@ const BuildingOnGlitch = ({ content }) => (
     <div className={styles.buildingOnGlitchRow}>
       {content.map(({ href, title, description, cta }, index) => (
         <a key={href} href={href} className={styles.plainLink}>
-          <div className={styles.startBuildingImageWrap} style={{ backgroundImage: `url(${buildingGraphics[index].mask})` }}>
-            <img src={buildingGraphics[index].img} alt="" />
+          <div className={styles.startBuildingImageWrap}>
+            <img src={buildingGraphics[index]} alt="" />
           </div>
           <h3>{title}</h3>
           <p>{description}</p>
