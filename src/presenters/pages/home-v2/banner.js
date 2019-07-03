@@ -76,7 +76,7 @@ const InlineVideo = () => {
 };
 
 const Chrome = () => (
-  <svg viewBox="0 0 578 55">
+  <svg viewBox="0 0 578 55" aria-label="">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-622, -148)" fillRule="nonzero">
         <g transform="translate(622, 148)">

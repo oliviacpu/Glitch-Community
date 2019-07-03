@@ -98,10 +98,10 @@ const AppsWeLove = ({ content }) => {
                 </div>
               </div>
               <div className={classnames(styles.appItem, i === currentTab && styles.active)}>
-                <span className={styles.appContent}>
+                <div className={styles.appContent}>
                   <h4 className={styles.h4}>{title}</h4>
                   <p>{description}</p>
-                </span>
+                </div>
                 <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
               </div>
             </Tab>
