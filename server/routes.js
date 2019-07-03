@@ -85,7 +85,6 @@ module.exports = function(external) {
       ZINE_POSTS: JSON.stringify(zine),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
-      CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
     });
   }
