@@ -61,11 +61,14 @@ const InlineVideo = () => {
         <WistiaVideo videoId="z2ksbcs34d" />
       ) : (
         <>
-          <div className={styles.bannerVideoButtonWrap} onClick={onClick}>{/* eslint-disable-line */}
-            <img src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795" alt="" />
+          <div className={styles.bannerVideoButtonWrap} onClick={onClick}>
+            <img
+              src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795"
+              alt=""
+            />
           </div>
           <span className={styles.bannerVideoButton}>
-            <Button emoji="playButton" onClick={onClick}>
+            <Button onClick={onClick} emoji="playButton">
                 Watch Video
             </Button>
           </span>
