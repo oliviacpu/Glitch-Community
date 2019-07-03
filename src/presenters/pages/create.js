@@ -257,25 +257,23 @@ function Collaborate() {
     'Work on public or private projects',
     'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
   ];
-  const smallVideo = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-collaborate.mp4?v=1561489721760';
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Fcollaboration-large.mp4?v=1560968406269';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069';
   const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
 
   return (
-    <section className={styles.collaborate}>
+    <div className={styles.collaborate}>
       <ScreencapSection
         title={title}
         description={description}
         highlights={highlights}
-        video={video}
-        smallVideos={[smallVideo]}
+        video='wdytilknrm'
+        smallVideos={['363lh0vtni']}
         blob={blob}
         image={pyramid}
         imageName="pyramid"
         markColor="#c9c4fa"
       />
-    </section>
+    </div>
   );
 }
 
@@ -284,26 +282,23 @@ function YourAppIsLive() {
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
   const highlights = ['Supports custom domains'];
-  const smallVideo1 = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmedium-live.mp4?v=1561489723907';
-  const smallVideo2 = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-small-app.mp4?v=1560959054771';
-  const video = 'https://cdn.glitch.com/170fbc25-c897-4ada-867b-7253ece0859a%2Flive-large.mp4?v=1560957595266';
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
   return (
-    <section className={styles.appIsLive}>
+    <div className={styles.appIsLive}>
       <ScreencapSection
         title={title}
         description={description}
         highlights={highlights}
-        video={video}
-        smallVideos={[smallVideo1, smallVideo2]}
+        video='dgmr1aos0q'
+        smallVideos={['vxosqp0d7h', 'irqymsl6hd']}
         blob={blob}
         image={live}
         imageName="live"
         markColor="#9fe9ff"
       />
-    </section>
+    </div>
   );
 }
 
