@@ -101,7 +101,7 @@ function WhatIsGlitch() {
         
         {!hasPlayed && (
           <>
-            <Image  src={videoCard} />
+            <Image src={videoCard} />
             <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
               <Button
                 decorative
@@ -263,17 +263,19 @@ function Collaborate() {
   const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
 
   return (
-    <ScreencapSection
-      title={title}
-      description={description}
-      highlights={highlights}
-      video={video}
-      smallVideos={[smallVideo]}
-      blob={blob}
-      image={pyramid}
-      imageName="pyramid"
-      markColor="#c9c4fa"
-    />
+    <section className={styles.collaborate}>
+      <ScreencapSection
+        title={title}
+        description={description}
+        highlights={highlights}
+        video={video}
+        smallVideos={[smallVideo]}
+        blob={blob}
+        image={pyramid}
+        imageName="pyramid"
+        markColor="#c9c4fa"
+      />
+    </section>
   );
 }
 
@@ -289,32 +291,34 @@ function YourAppIsLive() {
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
   return (
-    <ScreencapSection
-      title={title}
-      description={description}
-      highlights={highlights}
-      video={video}
-      smallVideos={[smallVideo1, smallVideo2]}
-      blob={blob}
-      image={live}
-      imageName="live"
-      markColor="#9fe9ff"
-    />
+    <section className={styles.appIsLive}>
+      <ScreencapSection
+        title={title}
+        description={description}
+        highlights={highlights}
+        video={video}
+        smallVideos={[smallVideo1, smallVideo2]}
+        blob={blob}
+        image={live}
+        imageName="live"
+        markColor="#9fe9ff"
+      />
+    </section>
   );
 }
 
 function ScreencapSection({ title, description, video, smallVideos, highlights, blob, image, imageName, markColor }) {
   const Videos = () => (
     <div className={styles.screencapContainer}>
-      {smallVideos.map((v) => (
-        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} autoPlay playsInline loop muted>
-          <source src={v} />
-        </video>
+      {smallVideos.map((id) => (
+        <div className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}>
+          <WistiaVideo videoId={id} />
+        </div>
       ))}
 
-      <video className={classNames(styles.screencap, styles.bigScreencap)} autoPlay playsInline loop muted>
-        <source src={video} />
-      </video>
+      <div className={classNames(styles.screencap, styles.bigScreencap)}>
+        <WistiaVideo videoId={video} />
+      </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
         <div className={styles.blob}>
@@ -352,26 +356,6 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
     </>
   );
 
-  // return (
-  //   <section className={styles.section}>
-  //     <VisibilityContainer>
-  //       {({ wasEverVisible }) =>
-  //         wasEverVisible ? (
-  //           <>
-  //             <Info title={title} description={description} markColor={markColor} />
-  //             <Videos video={video} smallVideos={smallVideos} />
-  //             <Highlights highlights={highlights} />
-  //           </>
-  //         ) : (
-  //           <>
-  //             <Info title={title} description={description} markColor={markColor} />
-  //             <div aria-hidden="true" style={{ height: '500px' }} />
-  //           </>
-  //         )
-  //       }
-  //     </VisibilityContainer>
-  //   </section>
-  // );
   return (
     <section className={styles.section}>
       <Info title={title} description={description} markColor={markColor} />
