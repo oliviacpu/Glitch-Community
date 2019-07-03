@@ -10,7 +10,7 @@ import { deleteCollection as deleteCollectionViaState } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useAPI } from 'State/api';
 
-const DeleteCollection = withRouter(({ history, collection, animateAndDeleteCollection }) => {
+const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteCollection }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
@@ -49,6 +49,10 @@ const DeleteCollection = withRouter(({ history, collection, animateAndDeleteColl
     </PopoverDialog>
   );
 });
+
+const DeleteCollection = ({ collection, deleteCollection }) => (
+  <DeleteCollectionPop collection={collection} animateAndDeleteCollection={deleteCollection} />
+);
 
 DeleteCollection.propTypes = {
   collection: PropTypes.shape({
