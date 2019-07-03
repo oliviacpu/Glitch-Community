@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 import { withRouter } from 'react-router-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
@@ -65,7 +66,7 @@ const TopPicks = ({ children }) => (
 );
 
 const AppsWeLove = ({ content }) => {
-  const [featuredDomain, setFeaturedDomain] = useState(content[0].domain);
+  const [currentTab, setCurrentTab] = useState(0);
 
   return (
     <section id="apps-we-love" className={styles.appsWeLoveContainer}>
@@ -80,31 +81,33 @@ const AppsWeLove = ({ content }) => {
           </a>
         ))}
       </div>
-      <div className={styles.appsWeLoveBigLayout}>
-        <ul className={styles.appsWeLoveList}>
-          {content.map(({ id, title, description, domain, users }) => (
-            <li key={id} className={styles.appsWeLoveListItem}>
+      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={setCurrentTab} className={styles.appsWeLoveBigLayout}>
+        <TabList className={styles.appsWeLoveList}>
+          {content.map(({ id, title, description, domain, users }, i) => (
+            <Tab key={id} className={styles.appsWeLoveListItem}>
               <div className={styles.appsWeLoveProfileWrap}>
                 <div className={styles.appsWeLoveProfile}>
                   <ProfileList layout="row" users={users} />
                 </div>
               </div>
-              <div className={classnames(styles.appItemWrap, featuredDomain === domain && styles.active)}>
-                <TransparentButton onClick={() => setFeaturedDomain(domain)} className={styles.appItem}>
+              <div className={classnames(styles.appItemWrap, i === currentTab && styles.active)}>
+                <div className={styles.appItem}>
                   <span className={styles.appContent}>
                     <h4 className={styles.h4}>{title}</h4>
                     <p>{description}</p>
                   </span>
                   <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
-                </TransparentButton>
+                </div>
               </div>
-            </li>
+            </Tab>
           ))}
-        </ul>
-        <div className={styles.appsWeLoveEmbed}>
-          <Embed domain={featuredDomain} />
-        </div>
-      </div>
+        </TabList>
+        {content.map(({ domain }, i) => (
+          <TabPanel className={styles.appsWeLoveEmbed}  hidden={currentTab !== i} key={domain}>
+            <Embed domain={domain} />
+          </TabPanel>
+        ))}
+      </Tabs>
     </section>
   );
 };
