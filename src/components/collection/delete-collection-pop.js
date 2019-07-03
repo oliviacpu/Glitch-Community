@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { getOwnerLink } from 'Models/collection';
+import { getOwnerLink, getLink } from 'Models/collection';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
 import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverWithButton, PopoverMenuButton } from 'Components/popover';
@@ -20,7 +20,7 @@ const DeleteCollectionPop = withRouter(({ history, collection, animateAndDeleteC
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
     try {
-      if (window.location.pathname !== getOwnerLink(collection)) {
+      if (window.location.pathname === getLink(collection)) {
         deleteCollectionViaState(api, collection);
         history.push(getOwnerLink(collection));
       } else {
