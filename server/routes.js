@@ -2,7 +2,6 @@ const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
 const fs = require('fs');
-const path = require('path');
 const util = require('util');
 const dayjs = require('dayjs');
 const punycode = require('punycode');
@@ -15,7 +14,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { saveHomeDataToFile } = require('./home');
+const { getHomeData, saveHomeDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -51,7 +50,8 @@ module.exports = function(external) {
   async function render(res, title, description, image = imageDefault) {
     let built = true;
 
-    const zine = (await getZine()) || [];
+    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
+
     let scripts = [];
     let styles = [];
 
@@ -84,7 +84,8 @@ module.exports = function(external) {
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
-      ZINE_POSTS: JSON.stringify(zine),
+      ZINE_POSTS: JSON.stringify(zine || []),
+      HOME_CONTENT: JSON.stringify(homeContent),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       CONSTANTS: constants,
@@ -205,7 +206,8 @@ module.exports = function(external) {
   });
   
   app.get('/api/home', async (req, res) => {
-    res.sendFile(path.join(__dirname, '../src/curated/home.json'));
+    const data = await getHomeData();
+    res.send(data);
   });
 
   app.post('/api/home', async (req, res) => {
