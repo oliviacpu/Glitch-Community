@@ -10,6 +10,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
@@ -43,11 +44,9 @@ const Beta = () => (
 );
 
 const ProjectPals = () => (
-  <aside className="inline-banners add-project-to-empty-team-banner">
-    <div className="description-container">
-      <img className="project-pals" src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
-      <div className="description">Add projects to share them with your team</div>
-    </div>
+  <aside className={styles.addProjectToEmptyTeam}>
+    <Image src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
+    <Text>Add projects to share them with your team</Text>
   </aside>
 );
 
