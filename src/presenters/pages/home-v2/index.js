@@ -47,14 +47,14 @@ const FeatureCallouts = ({ content }) => (
     <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
       {({ label, description, backgroundSrc, href, id }) => (
         <>
-          <header className={styles.featureCalloutsHeader}>
-            <a href={href} style={{ backgroundImage: `url('${backgroundSrc}')` }} className={styles.featureCalloutsImage}>
+          <a href={href} className={classnames(styles.plainLink, styles.featureCalloutsHeader)}>
+            <div className={styles.featureCalloutsImage} style={{ backgroundImage: `url('${backgroundSrc}')` }}>
               {React.createElement(calloutGraphics[id].component)}
-            </a>
+            </div>
             <h2 className={styles.featureCalloutsTitle}>
               <Mark color={calloutGraphics[id].color}>{label}</Mark>
             </h2>
-          </header>
+          </a>
           <p>{description}</p>
         </>
       )}
@@ -168,7 +168,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         <div className={styles.unifiedStoriesContentWrap}>
           <h3>Related</h3>
           <ul>
-            {relatedContent.map((related) => (
+            {relatedContent.filter((related) => !!related.href).map((related) => (
               <li key={related.href}>
                 <a href={related.href} className={styles.plainLink}>
                   <h4>{related.title}</h4>
@@ -255,7 +255,7 @@ const MadeInGlitch = () => (
 // loggedIn and hasProjects are passed as props instead of pulled from context
 // because we want the preview to show what an anonymous user would see
 export const Home = ({ data, loggedIn, hasProjects }) => (
-  <div className={styles.homeContainer}>
+  <main className={styles.homeContainer}>
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
@@ -269,7 +269,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     <BuildingOnGlitch content={data.buildingOnGlitch} />
     <MadeInGlitch />
     <ReportButton reportedType="home" />
-  </div>
+  </main>
 );
 
 export const HomePreview = withRouter(({ history }) => {

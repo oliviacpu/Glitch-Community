@@ -66,9 +66,9 @@ const InlineVideo = () => {
           </TransparentButton>
           <span className={styles.bannerVideoButton}>
             <Button decorative emoji="playButton">
-              Watch Video
-            </Button>
-          </span>
+                Watch Video
+              </Button>
+            </span>
         </>
       )}
     </div>
