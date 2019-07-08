@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
 import Button from 'Components/buttons/button';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, ActionDescription } from 'Components/popover';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -30,15 +30,14 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
   }
   return (
     <PopoverDialog wide focusOnDialog align="right">
+      <PopoverTitle>Leave {project.domain}</PopoverTitle>
       <PopoverActions>
         <ActionDescription>
-        Once you leave this project, you'll lose access to it unless someone else invites you back.
-
-        Are you sure you want to leave {project.domain}?
+          Are you sure you want to leave? You'll lose access to this project unless someone else invites you back.
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button>
+        <Button /* onClick={useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')} */>
           Leave Project
         </Button>
       </PopoverActions>
