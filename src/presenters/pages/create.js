@@ -14,6 +14,7 @@ import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
+import VisibilityContainer from 'Componenents/visibility-container';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -52,7 +53,7 @@ function Banner() {
     <section className={classNames(styles.section, styles.banner)}>
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
-          <Heading className={styles.bannerTagline} tagName="h1">
+          <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
             <Mark color="#fbf2b8">Create</Mark>
             <Unmarked>the app of your dreams</Unmarked>
           </Heading>
@@ -141,12 +142,12 @@ const FrameworkStarterItem = (app) => (
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
-    <span>
+    <div>
       <Heading tagName="h4">{app.name}</Heading>
       <RemixButton app={app} size="small">
         Remix {app.name} starter
       </RemixButton>
-    </span>
+    </div>
   </div>
 );
 
@@ -559,7 +560,7 @@ function Categories() {
 }
 
 const CreatePage = () => (
-  <div style={{ background: '#f5f5f5' }}>
+  <div style={{ maxWidth: '100vw', overflow: 'hidden', background: '#f5f5f5' }}>
     <Layout>
       <main className={styles.main}>
         <Banner />

@@ -16,7 +16,11 @@ const Heading = ({ children, className, tagName: TagName, ariaLabel }) => {
   };
 
   headingClassNameObj[TagName] = true;
-  return <TagName aria-label={ariaLabel} className={classNames(cx(headingClassNameObj), className)}>{children}</TagName>;
+  return (
+    <TagName aria-label={ariaLabel} className={classNames(cx(headingClassNameObj), className)}>
+      {children}
+    </TagName>
+  );
 };
 
 Heading.propTypes = {
@@ -29,6 +33,6 @@ Heading.propTypes = {
 
 Heading.defaultProps = {
   ariaLabel: null,
-}
+};
 
 export default Heading;
