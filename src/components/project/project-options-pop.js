@@ -26,10 +26,12 @@ const PopoverMenuItems = ({ children }) =>
 const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
   const illustration = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fwave.png?v=1502123444938';
+  const track = useTrackedFunc(leaveProject, 'Leave Project clicked');
   if (isTeamProject({ currentUser, project })) {
-    useTrackedFunc(leaveProject, 'Leave Project clicked (team)');
+    track(project);
     return null;
   }
+
   return (
     <PopoverDialog wide focusOnDialog align="right">
       <PopoverTitle>Leave {project.domain}</PopoverTitle>
@@ -40,7 +42,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => {console.log('clicked')}/* useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')*/}>
+        <Button type="dangerZone" onClick={() => { track(project); }}>
           Leave Project
         </Button>
       </PopoverActions>
