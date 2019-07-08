@@ -413,7 +413,7 @@ function VSCode() {
       </Text>
 
       <Text className={styles.sectionDescription}>
-        <Button href="https://glitch.com/help" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
+        <Button href="https://marketplace.visualstudio.com/items?itemName=glitch.glitch" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
           Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
@@ -457,37 +457,42 @@ function Remix() {
     setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
   }, []);
 
+  const remixTabs = (
+    <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+      <TabList className={styles.remixAppTabs}>
+        {apps.map((app) => (
+          <Tab className={styles.remixAppTab} key={app.domain}>
+            <ProjectAvatar project={app} hideTooltip />
+            <Text size="14px">{app.domain}</Text>
+          </Tab>
+        ))}
+      </TabList>
+
+      {apps.map((app, i) => (
+        <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+          <div className={styles.embedContainer}>
+            <Embed domain={app.domain} />
+          </div>
+          <div className={styles.embedRemixBtn}>
+            <RemixButton type="cta" emoji="microphone" app={app}>
+              Remix your own
+            </RemixButton>
+          </div>
+        </TabPanel>
+      ))}
+    </Tabs>
+  );
+
   return (
     <section className={classNames(styles.section, styles.remix)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#FBF2B8">Remix any app to get started</Mark>
-      </Heading>
-
-      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-        <TabList className={styles.remixAppTabs}>
-          {apps.map((app) => (
-            <Tab className={styles.remixAppTab} key={app.domain}>
-              <ProjectAvatar project={app} hideTooltip />
-              <Text size="14px">{app.domain}</Text>
-            </Tab>
-          ))}
-        </TabList>
-
-        {apps.map((app, i) => (
-          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-            <div className={styles.embedContainer}>
-              <Embed domain={app.domain} />
-            </div>
-            <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix your own
-              </RemixButton>
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
+      <VisibilityContainer>
+        <Heading className={styles.h2} tagName="h2">
+          <Mark color="#FBF2B8">Remix any app to get started</Mark>
+        </Heading>
+        {({ wasEverVisible }) => wasEverVisible && remixTabs}
+      </VisibilityContainer>
     </section>
-  );
+  )
 }
 
 function Categories() {
@@ -565,7 +570,7 @@ const CreatePage = () => (
       <main className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <Starters />
+        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible ? <Starters /> : null)}</VisibilityContainer>
         <Collaborate />
         <YourAppIsLive />
         <VSCode />
