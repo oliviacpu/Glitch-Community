@@ -24,12 +24,13 @@ const PopoverMenuItems = ({ children }) =>
 const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover }) => {
   const { currentUser } = useCurrentUser();
   // TODO: replace this with a multi-popover pane
-  const leaveProjectPopover = useTrackedFunc(projectOptions.leaveProject && (() => {
+  const LeaveProjectPopover = useTrackedFunc(projectOptions.leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
       projectOptions.leaveProject(project);
       return;
     }
     console.log("in popover");
+    return(
     <PopoverDialog focusOnDialog align="left">
       <PopoverActions>
         Test
@@ -39,6 +40,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
       </PopoverActions>
 
     </PopoverDialog>
+      );
 
   /*  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
       project.domain
@@ -48,22 +50,61 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
     }
     
     /*
-    <PopoverDialog focusOnDialog align="left">
-      <PopoverTitle>Delete {team.name}</PopoverTitle>
+    export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
+  const [collectionType, setCollectionType] = useState('user');
+  const [query, setQuery] = useState('');
+  const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
+  const { currentUser } = useCurrentUser();
+  const { createNotification } = useNotifications();
+
+  const addProjectTo = (collection) => {
+    addProjectToCollection(project, collection).then(() => {
+      createNotification(
+        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
+        { type: 'success' },
+      );
+    });
+
+    togglePopover();
+  };
+
+  return (
+    <PopoverDialog wide align="right">
+
+      {fromProject && <AddProjectPopoverTitle project={project} />}
+
+      {currentUser.teams.length > 0 && (
+        <PopoverActions>
+          <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
+        </PopoverActions>
+      )}
+
+      <PopoverSearch
+        value={query}
+        onChange={setQuery}
+        status={status}
+        results={collections}
+        onSubmit={addProjectTo}
+        placeholder="Filter collections"
+        labelText="Filter collections"
+        renderItem={({ item: collection, active }) => (
+          <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
+        )}
+        renderNoResults={() => (
+          <PopoverInfo>
+            <NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} />
+          </PopoverInfo>
+        )}
+      />
+
       <PopoverActions>
-        <Image height="98px" width="auto" src={illustration} alt="" />
-        <ActionDescription>
-          Deleting {team.name} will remove this team page. No projects will be deleted, but only current project members will be able to edit them.
-        </ActionDescription>
-      </PopoverActions>
-      <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteTeam}>
-          Delete {team.name}
-          {teamIsDeleting && <Loader />}
+        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
+          Add to a new collection
         </Button>
       </PopoverActions>
-
     </PopoverDialog>
+  );
+};
     */
   }), 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
@@ -81,7 +122,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
           [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
           [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
           [
-            { onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
+            { onClick: LeaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
           ],
           [
             { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
