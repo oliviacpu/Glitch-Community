@@ -197,17 +197,15 @@ function Starters() {
         <Mark color="#F9DB91">Starters for all developers</Mark>
       </Heading>
       <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="16px">
-        Remixable working apps mean you never have to start from scratch. You can even{' '}
-        <Link to="https://glitch.com/help/import-git/">clone a git repo from services like GitHub and GitLab</Link> to make a copy and deploy on
-        Glitch.
+        You never have to start from scratch: Just start remixing an existing starter app, or <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on Glitch.
       </Text>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
         <div className={styles.startersInfo} style={{ backgroundImage: `url(${frameworkBlob})` }}>
           <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
-            Framework starters
+            Framework Starters
           </Heading>
-          <Text size="16px">Build off the most popular JavaScript frameworks</Text>
+          <Text size="16px">Build off the most popular JavaScript frameworks.</Text>
         </div>
         {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
       </div>
@@ -215,9 +213,9 @@ function Starters() {
       <div className={classNames(styles.startersSection, styles.startersGrid, styles.platformStartersGrid)}>
         <div className={styles.startersInfo} style={{ backgroundImage: `url(${platformBlob})` }}>
           <Heading className={classNames(styles.startersHeading, styles.h3)} tagName="h3">
-            Platform starters
+            Platform Starters
           </Heading>
-          <Text size="16px">Your favorite companies use Glitch to share quickstart apps for getting up and running with their APIs.</Text>
+          <Text size="16px">Your favorite companies use Glitch to share apps that get you up and running with their APIs.</Text>
         </div>
         {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
       </div>
@@ -226,9 +224,9 @@ function Starters() {
 }
 
 function Collaborate() {
-  const title = 'Build collaboratively';
+  const title = 'Code together';
   const description =
-    'Invite friends to work alongside you, right in the same project. Anyone with a browser can jump in and pick up where you left off.';
+    'Invite friends to work with you on public or private projects. Anyone with a browser can jump in and pick up where you left off, and private .env files keep secrets like API keys, well, secret.';
   const highlights = [
     'Work on public or private projects',
     'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
@@ -256,7 +254,7 @@ function Collaborate() {
 function YourAppIsLive() {
   const title = 'Your app is live, instantly';
   const description =
-    "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL. Share or embed your app anywhere, and invite others to check out your code or remix it.";
+    "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL (or your custom domain!). Share or embed anywhere, and invite anyone to check out your code or remix it.";
   const highlights = ['Supports custom domains'];
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
@@ -356,15 +354,15 @@ function Help() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#f8d3c9">Help whenever you need it</Mark>
       </Heading>
-      <Text className={styles.sectionDescription}>Still have questions about Glitch? We're here to lend a hand.</Text>
+      <Text className={styles.sectionDescription}>Our community loves lending a hand. Ask away!</Text>
 
       <div className={styles.helpLinks}>
         <div className={styles.helpLinkSection}>
           <Heading tagName="h3">Help Center</Heading>
-          <Text>The best place to find answers to FAQs.</Text>
+          <Text>The best place to find answers about Glitch</Text>
           <Text>
             <Button href="https://glitch.com/help">
-              Help Center <span aria-hidden="true">&rarr;</span>
+              Read FAQs <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
         </div>
@@ -385,7 +383,7 @@ function Help() {
           <Text>Personalized support for your app-specific questions.</Text>
           <Text>
             <Button href="https://support.glitch.com">
-              Forums <span aria-hidden="true">&rarr;</span>
+              Get Support <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
         </div>
@@ -404,7 +402,7 @@ function VSCode() {
       </Heading>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Install the Glitch extension to build Glitch apps in VS Code, the most widely used developer environment.
+        Already using Visual Studio Code? Get all the power of the Glitch editor right in your favorite tool — including real-time collaboration, code rewind, and live previews.
       </Text>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
