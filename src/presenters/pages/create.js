@@ -54,8 +54,8 @@ function Banner() {
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
           <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
-            <Mark color="#fbf2b8">Create</Mark>
-            <Unmarked>the app of your dreams</Unmarked>
+            <Mark color="#fbf2b8">Code</Mark>
+            <Unmarked>your next app. Now it's live. Just like that.</Unmarked>
           </Heading>
           <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
           <div className={styles.bannerRemixBtn}>
