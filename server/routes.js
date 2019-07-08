@@ -203,7 +203,10 @@ module.exports = function(external) {
   });
   
   app.get('/create', async (req, res) => {
-    await render(res, 'Glitch - Create');
+    const title = 'Glitch - Create';
+    const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
+    const image = 
+    await render(res, title, description, , );
   });
 
   app.get('*', async (req, res) => {
