@@ -171,16 +171,25 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const useDebouncedAsync = (fn) => {
   const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
-  const [pending, se]
-  const workingRef = useValueRef(working);
-  return async (...args) => {
+  const [pending, setPending] = useState(false); // Set true if fn is called while working
+  const debouncedFn = async () => {
+    if (working) {
+      setPending(true);
+      return;
+    }
+    setWorking(true);
+    setPending(false);
     // delay loading a moment so both items from storage have a chance to update
     await sleep(1);
-    if (workingRef.current) return;
-    setWorking(true);
-    await fn(...args);
+    await fn();
     setWorking(false);
   };
+  useEffect(() => {
+    if (!working && pending) {
+      debouncedFn();
+    }
+  }, [working, pending]);
+  return debouncedFn;
 };
 
 export const CurrentUserProvider = ({ children }) => {
