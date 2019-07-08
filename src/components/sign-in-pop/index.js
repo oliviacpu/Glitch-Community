@@ -138,7 +138,7 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In <Emoji name="email" />
+        Email Sign In&nbsp;<Emoji name="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
