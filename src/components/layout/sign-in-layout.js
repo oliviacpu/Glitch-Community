@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
-import Heading from 'Components/text/heading';
 
-import styles from './auth-layout.styl';
-
-import classNames from 'classnames';
+import styles from './sign-in-layout.styl';
 
 export const OverlaySection = ({ children, type }) => {
   const sectionClass = classNames(styles.section, styles[type]);
@@ -22,15 +20,16 @@ export const OverlayBackground = () => <div className={styles.overlayBackground}
 
 const SignInLayout = ({ children }) => (
   <div className={styles.layout}>
-    <div className={styles.logo}>
-      <Link to="/">
-        <Logo />
-      </Link>
-    </div>
-    <div className={styles.overlay}>
-      <Heading className={styles.title}>
-        Sign In
-      </Heading>
+    <div className={styles.container}>
+      <div className={styles.logo}>
+        <Link to="/">
+          <Logo />
+        </Link>
+      </div>
+      <div className={styles.overlay}>
+        <h1 className={styles.title}>Sign In</h1>
+        {children}
+      </div>
     </div>
   </div>
 );
