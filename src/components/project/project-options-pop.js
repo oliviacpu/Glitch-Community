@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
 import Button from 'Components/buttons/button';
+import Image from 'Components/images/image';
 import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -24,6 +25,7 @@ const PopoverMenuItems = ({ children }) =>
 
 const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
+  const illustration = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fwave.png?v=1502123444938';
   if (isTeamProject({ currentUser, project })) {
     useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
     return null;
@@ -32,12 +34,13 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
     <PopoverDialog wide focusOnDialog align="right">
       <PopoverTitle>Leave {project.domain}</PopoverTitle>
       <PopoverActions>
+        <Image height="98px" width="auto" src={illustration} alt="" />
         <ActionDescription>
           Are you sure you want to leave? You'll lose access to this project unless someone else invites you back.
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button /* onClick={useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')} */>
+        <Button type="dangerZone" onClick={console.log('clicked')/* useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')*/}>
           Leave Project
         </Button>
       </PopoverActions>
