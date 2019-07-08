@@ -23,12 +23,13 @@ const PopoverMenuItems = ({ children }) =>
 
 const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
+  console.log("in popover");
   useTrackedFunc(leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
-      leaveProject(project);
+      useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
       return null;
     }
-    console.log("in popover");
+    console.log("in trackedfunc");
     return (
     <PopoverDialog focusOnDialog align="left">
       <PopoverActions>
