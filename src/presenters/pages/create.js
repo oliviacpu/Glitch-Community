@@ -139,7 +139,7 @@ const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c
 const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <span className={styles.frameworkLogo}>
-      <Image src={app.logo} alt="" />
+      <Image src={app.logo} alt={app.name} />
     </span>
     <div>
       <Heading tagName="h4">{app.name}</Heading>

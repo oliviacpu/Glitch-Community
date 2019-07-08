@@ -50,7 +50,7 @@ Avatar.defaultProps = {
 
 export const TeamAvatar = ({ team, size, hideTooltip }) => (
   <Avatar
-    name=""
+    name={team.name}
     src={getTeamAvatarUrl({ ...team, size })}
     srcFallback={DEFAULT_TEAM_AVATAR}
     type="team"
