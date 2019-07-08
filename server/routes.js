@@ -46,7 +46,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, title, description, image = imageDefault) {
+  async function render(res, title, description, image = imageDefault, socialTitle) {
     let built = true;
 
     const zine = (await getZine()) || [];
@@ -75,6 +75,7 @@ module.exports = function(external) {
 
     res.render('index.ejs', {
       title,
+      socialTitle,
       description,
       image,
       scripts,
@@ -204,9 +205,10 @@ module.exports = function(external) {
   
   app.get('/create', async (req, res) => {
     const title = 'Glitch - Create';
+    const socialTitle = 'Get Started Creating on Glitch';
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
-    const image = 
-    await render(res, title, description, , );
+    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
+    await render(res, title, description, image, socialTitle);
   });
 
   app.get('*', async (req, res) => {
