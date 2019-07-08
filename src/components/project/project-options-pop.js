@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -23,25 +24,25 @@ const PopoverMenuItems = ({ children }) =>
 
 const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
-  console.log("in popover");
-  useTrackedFunc(leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
       useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
       return null;
     }
-    console.log("in trackedfunc");
     return (
-    <PopoverDialog focusOnDialog align="left">
+    <PopoverDialog wide focusOnDialog align="left">
       <PopoverActions>
-        Test
+        `Once you leave this project, you'll lose access to it unless someone else invites you back.
+        
+        Are you sure you want to leave ${project.domain}?`
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        TestAgain
+        <Button>
+          Leave Project
+        </Button>
       </PopoverActions>
 
     </PopoverDialog>
       );
-      }), 'Leave Project clicked');
 }
 
   /*  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
