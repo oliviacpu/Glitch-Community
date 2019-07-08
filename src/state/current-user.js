@@ -175,7 +175,6 @@ const useDebouncedAsync = (fn) => {
   return async (...args) => {
     // delay loading a moment so both items from storage have a chance to update
     await sleep(1);
-    console.log(workingRef.current);
     if (workingRef.current) return;
     setWorking(true);
     await fn(...args);
