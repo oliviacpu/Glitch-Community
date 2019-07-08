@@ -42,8 +42,12 @@ const calloutGraphics = {
   },
 };
 
+const HomeSection = ({ className = '', ...props }) => (
+  <section className={classnames(styles.homeSection, className)} {...props} />
+);
+
 const FeatureCallouts = ({ content }) => (
-  <section id="feature-callouts" className={styles.featureCalloutsContainer}>
+  <HomeSection id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
       {({ label, description, backgroundSrc, href, id }) => (
         <>
@@ -59,24 +63,24 @@ const FeatureCallouts = ({ content }) => (
         </>
       )}
     </Row>
-  </section>
+  </HomeSection>
 );
 
 const TopPicks = ({ children }) => (
-  <section id="top-picks">
+  <HomeSection id="top-picks">
     <h2 className={styles.h2}>
       <Mark color="#BCFCFF">Fresh apps</Mark>
     </h2>
     <p className={styles.subtitle}>The latest and greatest projects on Glitch, built by our community of creators.</p>
     {children}
-  </section>
+  </HomeSection>
 );
 
 const AppsWeLove = ({ content }) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
-    <section id="apps-we-love" className={styles.appsWeLoveContainer}>
+    <HomeSection id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
           <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
@@ -113,14 +117,14 @@ const AppsWeLove = ({ content }) => {
           </TabPanel>
         ))}
       </Tabs>
-    </section>
+    </HomeSection>
   );
 };
 
 const collectionStyles = ['wavey', 'diagonal', 'triangle'];
 
 const CuratedCollections = ({ content }) => (
-  <section id="curated-collections" className={styles.curatedCollectionsContainer}>
+  <HomeSection id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>Curated collections</h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count }, i) => (
@@ -135,11 +139,11 @@ const CuratedCollections = ({ content }) => (
         </CuratedCollectionContainer>
       )}
     </Row>
-  </section>
+  </HomeSection>
 );
 
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
-  <section id="unified-stories" className={styles.unifiedStories}>
+  <HomeSection id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesContainer}>
       <div className={styles.unifiedStoriesHeadline}>
         <div className={styles.unifiedStoriesContentWrap}>
@@ -180,11 +184,11 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         </div>
       </div>
     </div>
-  </section>
+  </HomeSection>
 );
 
 const CultureZine = ({ content }) => (
-  <section id="culture-zine" className={styles.cultureZine}>
+  <HomeSection id="culture-zine" className={styles.cultureZine}>
     <div className={styles.cultureZineContainer}>
       <h2 className={styles.h2}>
         <Mark color="#CBC3FF">Where tech meets culture</Mark>
@@ -213,7 +217,7 @@ const CultureZine = ({ content }) => (
         </Button>
       </div>
     </div>
-  </section>
+  </HomeSection>
 );
 
 const buildingGraphics = [
@@ -222,7 +226,7 @@ const buildingGraphics = [
 ];
 
 const BuildingOnGlitch = ({ content }) => (
-  <section id="building-on-glitch" className={styles.buildingOnGlitch}>
+  <HomeSection id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
       <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
@@ -240,16 +244,16 @@ const BuildingOnGlitch = ({ content }) => (
         </a>
       ))}
     </div>
-  </section>
+  </HomeSection>
 );
 
 const MadeInGlitch = () => (
-  <section className={styles.madeInGlitch}>
+  <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
     <Button href={getEditorUrl('community')} emoji="carpStreamer">
       View Source
     </Button>
-  </section>
+  </HomeSection>
 );
 
 // loggedIn and hasProjects are passed as props instead of pulled from context
