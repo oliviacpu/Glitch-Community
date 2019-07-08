@@ -22,13 +22,14 @@ const PopoverMenuItems = ({ children }) =>
   );
 
 const LeaveProjectPopover = ({ project, leaveProject }) => {
+  const { currentUser } = useCurrentUser();
   useTrackedFunc(leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
       leaveProject(project);
       return;
     }
     console.log("in popover");
-    return(
+    return (
     <PopoverDialog focusOnDialog align="left">
       <PopoverActions>
         Test
@@ -39,6 +40,8 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
 
     </PopoverDialog>
       );
+      }), 'Leave Project clicked');
+}
 
   /*  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
       project.domain
@@ -104,25 +107,9 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
   );
 };
     */
-  }), 'Leave Project clicked');
-}
+
 
 const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover, leaveProjectPopover }) => {
-  const { currentUser } = useCurrentUser();
-  // TODO: replace this with a multi-popover pane
-  const LeaveProjectPopover = useTrackedFunc(projectOptions.leaveProject && (() => {
-    if (isTeamProject({ currentUser, project })) {
-      projectOptions.leaveProject(project);
-      return;
-    }
-
-    const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-      project.domain
-    }?`;
-    if (window.confirm(prompt)) {
-      projectOptions.leaveProject(project);
-    }
-  }), 'Leave Project clicked');
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (
