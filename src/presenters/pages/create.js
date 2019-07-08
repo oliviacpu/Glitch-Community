@@ -54,13 +54,13 @@ function Banner() {
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
           <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
-            <Mark color="#fbf2b8">Create</Mark>
-            <Unmarked>the app of your dreams</Unmarked>
+            <Mark color="#fbf2b8">Code your next app</Mark>
+            <Unmarked>Now it's on the web. Just like that.</Unmarked>
           </Heading>
-          <Text>Whether you're new to code or an experienced developer, Glitch is the fastest tool for turning your ideas into web apps.</Text>
+          <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
           <div className={styles.bannerRemixBtn}>
             <RemixButton app={{ id: '929980a8-32fc-4ae7-a66f-dddb3ae4912c', domain: 'hello-webpage' }} type="cta">
-              Remix Hello World
+              Start Remixing
             </RemixButton>
           </div>
         </div>
@@ -80,11 +80,11 @@ function WhatIsGlitch() {
     <section className={classNames(styles.section, styles.whatIsGlitch)}>
       <div>
         <Heading className={styles.h2} tagName="h2">
-          <Mark color="#d7a6f9">What is Glitch?</Mark>
+          <Mark color="#d7a6f9">Okay sure, but how?</Mark>
         </Heading>
         <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
-          <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys your code as you type.</Text>
-          <Text size="16px">Use Glitch to build anything from static webpages to fullstack Node apps.</Text>
+          <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.</Text>
+          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to fullstack Node apps.</Text>
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
