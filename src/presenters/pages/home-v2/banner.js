@@ -63,7 +63,7 @@ const InlineVideo = () => {
           <div className={styles.bannerVideoPoster} onClick={onClick} aria-hidden="true" />
           <span className={styles.bannerVideoButton}>
             <Button onClick={onClick} emoji="playButton">
-                Watch Video
+              Watch Video
             </Button>
           </span>
         </>
