@@ -5,19 +5,18 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import SignInLayout from 'Components/layout/sign-in-layout';
-import PopoverContainer from 'Components/popover/container';
-import Text from 'Components/text/text';
-import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
+import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import { useCurrentUser } from 'State/current-user';
 
+const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
-  const signInMessage = 'Please Sign In to continue.';
+  // const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
+  // const signInMessage = 'Please Sign In to continue.';
 
   useEffect(() => {
     if (isSignedIn) {
@@ -31,11 +30,14 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   return (
     <SignInLayout>
-      <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
-      {!isSignedIn && <PopoverContainer>{() => <SignInPop align="none" />}</PopoverContainer>}
+      <div>
+        <SignInButtons />
+      </div>
     </SignInLayout>
   );
 };
+
+// <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,

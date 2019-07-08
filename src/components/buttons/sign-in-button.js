@@ -58,8 +58,10 @@ const companies = {
   },
 };
 
-const SignInButton = ({ company, onClick }) => {
-  const { name, emoji, href } = companies[company];
+export const companyNames = Object.keys(companies);
+
+const SignInButton = ({ companyName, onClick }) => {
+  const { name, emoji, href } = companies[companyName];
 
   return (
     <div style={{ marginBottom: '10px' }}>
@@ -71,7 +73,7 @@ const SignInButton = ({ company, onClick }) => {
 };
 
 SignInButton.propTypes = {
-  company: PropTypes.oneOf(Object.keys(companies)).isRequired,
+  companyName: PropTypes.oneOf(companyNames).isRequired,
 };
 
 export default SignInButton;
