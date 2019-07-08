@@ -201,6 +201,10 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
+  
+  app.get('/create', async (req, res) => {
+    await render(res, 'Glitch - Create');
+  });
 
   app.get('*', async (req, res) => {
     await render(res, 'Glitch', `The ${constants.tagline}`);
