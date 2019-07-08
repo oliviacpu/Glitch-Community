@@ -18,6 +18,7 @@ import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } from 'State/collection';
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
+  console.log("yo")
   const { currentUser } = useCurrentUser();
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
