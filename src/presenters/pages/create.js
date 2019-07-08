@@ -54,8 +54,8 @@ function Banner() {
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
           <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
-            <Mark color="#fbf2b8">Create</Mark>
-            <Unmarked>the app of your dreams</Unmarked>
+            <Mark color="#fbf2b8">Code</Mark>
+            <Unmarked>your next app. Now it's live. Just like that.</Unmarked>
           </Heading>
           <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
           <div className={styles.bannerRemixBtn}>
@@ -139,7 +139,7 @@ const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c
 const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <span className={styles.frameworkLogo}>
-      <Image src={app.logo} alt="" />
+      <Image src={app.logo} alt={app.name} />
     </span>
     <div>
       <Heading tagName="h4">{app.name}</Heading>
@@ -395,8 +395,8 @@ function VSCode() {
       </Heading>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Already using Visual Studio Code? Get all the power of the Glitch editor right in your favorite tool—including real-time collaboration, code
-        rewind, and live previews.
+        Already using Visual Studio Code? Get all the power of the Glitch editor right in VS Code—including real-time collaboration, code rewind, and
+        live previews.
       </Text>
 
       <Text className={styles.sectionDescription}>
