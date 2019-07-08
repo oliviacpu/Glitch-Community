@@ -66,6 +66,8 @@ const InlineVideo = () => {
               src="https://cdn.glitch.com/616994fe-f0e3-4501-89a7-295079b3cb8c%2Ftablet_scene_30.jpg?v=1561660860795"
               alt=""
               aria-hidden="true"
+              width="960"
+              height="540"
             />
           </div>
           <span className={styles.bannerVideoButton}>
@@ -108,20 +110,21 @@ const Banner = () => (
       <h1>
         <Unmarked>Glitch is the</Unmarked>
         <br />
-        <Mark color="#1D9AF9">friendly community</Mark>
+        <Mark color="#1596F9">friendly community</Mark>
         <br />
         <Unmarked>where everyone</Unmarked>
         <br />
-        <Mark color="#18B576">builds the web</Mark>
+        <Mark color="#16A76D">builds the web</Mark>
       </h1>
       <div className={styles.bannerCopyAndButtons}>
         <p>Simple, powerful, free tools to create and use millions of apps.</p>
-
-        <Button type="cta" href="/create">
-          Start Creating <Arrow />
-        </Button>
-        <div className={styles.watchVideoBtnWrap}>
-          <OverlayVideo />
+        <div className={styles.bannerButtonWrap}>
+          <Button type="cta" href="/create">
+            Start Creating <Arrow />
+          </Button>
+          <div className={styles.watchVideoBtnWrap}>
+            <OverlayVideo />
+          </div>
         </div>
       </div>
     </div>
