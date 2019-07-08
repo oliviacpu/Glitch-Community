@@ -141,6 +141,10 @@ u5 = 50px
 .bannerRemixBtn
   width: 100%
   margin: 25px 0 0 95px
+  a:focus,
+  button:focus
+    outline: none
+    box-shadow: 0 0 8px 4px orange
 
 // what is glitch
 .whatIsGlitch
@@ -265,6 +269,7 @@ u5 = 50px
     margin: u4 40px u2 40px
   video
     max-width: 100%
+    border-radius: u1
 .screencapBlob
   display: none
 .screencapBlobImage
@@ -299,6 +304,8 @@ u5 = 50px
     display: none
   .bigScreencap
     display: block
+    video
+      display: block
 .screencapHighlights
   display: flex
   flex-wrap: wrap

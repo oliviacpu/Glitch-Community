@@ -31,7 +31,6 @@ application models -> presenter -> DOM
 - [Stylus](http://stylus-lang.com/)
 - [Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/)
 
-
 ```
   ___     ___      ___
  {o,o}   {o.o}    {o,o}

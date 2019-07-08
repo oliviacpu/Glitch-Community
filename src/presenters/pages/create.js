@@ -53,7 +53,7 @@ function Banner() {
     <section className={classNames(styles.section, styles.banner)}>
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
-          <Heading className={styles.bannerTagline} tagName="h1">
+          <Heading className={styles.bannerTagline} tagName="h1" ariaLabel='Create the app of your dreams'>
             <Mark color="#fbf2b8">Create</Mark>
             <Unmarked>the app of your dreams</Unmarked>
           </Heading>
@@ -164,12 +164,12 @@ const FrameworkStarterItem = (app) => (
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
-    <span>
+    <div>
       <Heading tagName="h4">{app.name}</Heading>
       <RemixButton app={app} size="small">
         Remix {app.name} starter
       </RemixButton>
-    </span>
+    </div>
   </div>
 );
 
@@ -306,14 +306,22 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
-        <video key={v} className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])} src={v} muted autoPlay loop playsInline>
-          <source src={v}></source>
+        <video
+          key={v}
+          className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
+          src={v}
+          muted
+          autoPlay
+          loop
+          playsInline
+        >
+          <source src={v} />
         </video>
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
         <video src={video} muted autoPlay loop playsInline>
-          <source src={video}></source>
+          <source src={video} />
         </video>
       </div>
 
@@ -431,6 +439,25 @@ function VSCode() {
           Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
+      
+      <div className={styles.screencapContainer}>
+        <video 
+          className={classNames(styles.screencap, styles.smallScreencap)}
+          src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}
+          muted
+          autoPlay
+          loop
+          playsInline
+          >
+          <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}/>
+        </video>
+        <div className={classNames(styles.screencap, styles.bigScreencap)}>
+          <video src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} muted autoPlay loop playsInline>
+            <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} />
+          </video>
+        </div>
+      </div>
+
     </section>
   );
 }
