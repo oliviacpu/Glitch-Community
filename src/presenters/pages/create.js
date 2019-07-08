@@ -53,7 +53,7 @@ function Banner() {
     <section className={classNames(styles.section, styles.banner)}>
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
-          <Heading className={styles.bannerTagline} tagName="h1">
+          <Heading className={styles.bannerTagline} tagName="h1" ariaLabel='Create the app of your dreams'>
             <Mark color="#fbf2b8">Create</Mark>
             <Unmarked>the app of your dreams</Unmarked>
           </Heading>
@@ -164,12 +164,12 @@ const FrameworkStarterItem = (app) => (
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
-    <span>
+    <div>
       <Heading tagName="h4">{app.name}</Heading>
       <RemixButton app={app} size="small">
         Remix {app.name} starter
       </RemixButton>
-    </span>
+    </div>
   </div>
 );
 
