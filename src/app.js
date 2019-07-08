@@ -5,8 +5,7 @@ import { LiveAnnouncer } from 'react-aria-live';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
-import { UserPrefsProvider } from 'State/user-prefs';
-import { DevTogglesProvider } from 'State/dev-toggles';
+import { LocalStorageProvider } from 'State/local-storage';
 import { ProjectContextProvider } from 'State/project';
 import { CollectionContextProvider } from 'State/collection';
 import { NotificationsProvider } from 'State/notifications';
@@ -20,27 +19,25 @@ const App = () => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <BrowserRouter>
       <NotificationsProvider>
-        <UserPrefsProvider>
-          <DevTogglesProvider>
-            <LiveAnnouncer>
-              <AnalyticsContext context={{ groupId: '0' }}>
-                <CurrentUserProvider>
-                  <APIContextProvider>
-                    <ProjectContextProvider>
-                      <CollectionContextProvider>
-                        <>
-                          <SuperUserBanner />
-                          <OfflineNotice />
-                          <Router />
-                        </>
-                      </CollectionContextProvider>
-                    </ProjectContextProvider>
-                  </APIContextProvider>
-                </CurrentUserProvider>
-              </AnalyticsContext>
-            </LiveAnnouncer>
-          </DevTogglesProvider>
-        </UserPrefsProvider>
+        <LocalStorageProvider>
+          <LiveAnnouncer>
+            <AnalyticsContext context={{ groupId: '0' }}>
+              <CurrentUserProvider>
+                <APIContextProvider>
+                  <ProjectContextProvider>
+                    <CollectionContextProvider>
+                      <>
+                        <SuperUserBanner />
+                        <OfflineNotice />
+                        <Router />
+                      </>
+                    </CollectionContextProvider>
+                  </ProjectContextProvider>
+                </APIContextProvider>
+              </CurrentUserProvider>
+            </AnalyticsContext>
+          </LiveAnnouncer>
+        </LocalStorageProvider>
       </NotificationsProvider>
     </BrowserRouter>
   </ErrorBoundary>

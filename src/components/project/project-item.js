@@ -7,15 +7,16 @@ import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
+import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
+import { useProjectOptions } from 'State/project-options';
+import { useCurrentUser } from 'State/current-user';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
-
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
 
 const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
@@ -23,8 +24,6 @@ const getLinkBodyStyles = (project) =>
   classnames(styles.linkBody, {
     [styles.private]: project.private,
   });
-
-const hasOptions = (projectOptions) => Object.keys(projectOptions).length > 0;
 
 const ProfileListWithData = ({ project }) => {
   const { value: members } = useProjectMembers(project.id);
@@ -41,7 +40,9 @@ const ProfileListLoader = ({ project }) => (
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
-const ProjectItem = ({ project, projectOptions }) => {
+const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
+  const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -63,7 +64,7 @@ const ProjectItem = ({ project, projectOptions }) => {
             return (
               <div className={styles.container}>
                 <header className={styles.header}>
-                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasOptions(projectOptions) })}>
+                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
                   <div className={styles.projectOptionsContainer}>
@@ -77,7 +78,7 @@ const ProjectItem = ({ project, projectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon /> : null} imagePosition="left">
+                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                           <span className={styles.projectDomain}>{project.domain}</span>
                         </Button>
                       </div>

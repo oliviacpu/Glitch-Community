@@ -113,15 +113,7 @@ function TeamPage({ team: initialTeam }) {
 
   const updateUrl = (url) => funcs.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
 
-  const projectOptions = {
-    addProjectToCollection: funcs.addProjectToCollection,
-    deleteProject: funcs.deleteProject,
-    leaveTeamProject: funcs.leaveTeamProject,
-    removeProjectFromTeam: funcs.removeProject,
-    joinTeamProject: funcs.joinTeamProject,
-    featureProject: funcs.featureProject,
-    isAuthorized: currentUserIsOnTeam,
-  };
+  const projectOptions = { ...funcs, team };
 
   return (
     <main className={styles.container}>
@@ -182,10 +174,7 @@ function TeamPage({ team: initialTeam }) {
           }
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
-          projectOptions={{
-            removePin: funcs.removePin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -198,10 +187,7 @@ function TeamPage({ team: initialTeam }) {
           isAuthorized={currentUserIsOnTeam}
           enablePagination
           enableFiltering={recentProjects.length > 6}
-          projectOptions={{
-            addPin: funcs.addPin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 

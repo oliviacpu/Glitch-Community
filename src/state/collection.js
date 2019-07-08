@@ -1,11 +1,9 @@
-import React, { useState, useMemo, useContext, createContext } from 'react';
+import React, { useState, useCallback, useContext, createContext } from 'react';
 
 import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
-
-const CollectionContext = createContext();
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
@@ -51,38 +49,43 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
   });
 }
 
+const CollectionProjectContext = createContext();
+const CollectionReloadContext = createContext();
+
 export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState({});
   const api = useAPI();
 
-  const value = useMemo(
-    () => ({
-      getCollectionProjects: (collection) => {
-        if (responses[collection.id] && responses[collection.id].projects) {
-          return responses[collection.id].projects;
-        }
-        loadCollectionProjects(api, [collection], setResponses);
-        return loadingResponse;
-      },
-      reloadCollectionProjects: (collections) => {
-        loadCollectionProjects(api, collections, setResponses, true);
-      },
-    }),
-    [responses, api],
-  );
+  const getCollectionProjects = useCallback((collection) => {
+    if (responses[collection.id] && responses[collection.id].projects) {
+      return responses[collection.id].projects;
+    }
+    loadCollectionProjects(api, [collection], setResponses);
+    return loadingResponse;
+  }, [responses, api]);
 
-  return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
+  const reloadCollectionProjects = useCallback((collections) => {
+    loadCollectionProjects(api, collections, setResponses, true);
+  }, [api]);
+
+  return (
+    <CollectionProjectContext.Provider value={getCollectionProjects}>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
+        {children}
+      </CollectionReloadContext.Provider>
+    </CollectionProjectContext.Provider>
+  );
 };
 
-export const useCollectionContext = () => useContext(CollectionContext);
+export const useCollectionContext = () => useContext(CollectionProjectContext);
 
 export function useCollectionProjects(collection) {
-  const { getCollectionProjects } = useContext(CollectionContext);
+  const getCollectionProjects = useContext(CollectionProjectContext);
   return getCollectionProjects(collection);
 }
 
 export function useCollectionReload() {
-  const { reloadCollectionProjects } = useContext(CollectionContext);
+  const reloadCollectionProjects = useContext(CollectionReloadContext);
   return reloadCollectionProjects;
 }
 
