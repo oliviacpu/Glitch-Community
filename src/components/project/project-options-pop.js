@@ -42,7 +42,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => { track(project); }}>
+        <Button type="dangerZone" onClick={() => {console.log('clicked')}/* useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')*/}>
           Leave Project
         </Button>
       </PopoverActions>
