@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle, remove } from 'lodash';
+import { values, sampleSize, shuffle } from 'lodash';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -9,7 +9,6 @@ import Text from 'Components/text/text';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
-import TransparentButton from 'Components/buttons/transparent-button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
@@ -53,7 +52,7 @@ function Banner() {
     <section className={classNames(styles.section, styles.banner)}>
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
-          <Heading className={styles.bannerTagline} tagName="h1" ariaLabel='Create the app of your dreams'>
+          <Heading className={styles.bannerTagline} tagName="h1">
             <Mark color="#fbf2b8">Create</Mark>
             <Unmarked>the app of your dreams</Unmarked>
           </Heading>
@@ -74,16 +73,8 @@ function Banner() {
 }
 
 function WhatIsGlitch() {
-  const [hasPlayed, setHasPlayed] = useState(false);
   const videoEl = useRef(null);
-  const videoCard = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcreate-page-video-card.png?v=1562165737562';
-  const track = useTracker('Create Page Video Clicked');
-
-  const playVideo = () => {
-    setHasPlayed(true);
-    videoEl.current.click();
-    track();
-  };
+  const trackPlayVideo = useTracker('Create Page Video Clicked');
 
   return (
     <section className={classNames(styles.section, styles.whatIsGlitch)}>
@@ -97,25 +88,11 @@ function WhatIsGlitch() {
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
-        <WistiaVideo ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
+        <WistiaVideo onClick={trackPlayVideo} ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
       </div>
     </section>
   );
 }
-
-// {!hasPlayed && (
-//   <>
-//     <TransparentButton onClick={playVideo} className={styles.whatIsGlitchVideoButton}>
-//       <Button
-//         decorative
-//         image={<Image height="13" width="auto" src="https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg" alt="" />}
-//         imagePosition="left"
-//       >
-//         Watch Video
-//       </Button>
-//     </TransparentButton>
-//   </>
-// )}
 
 const FRAMEWORK_STARTERS = [
   {
@@ -164,12 +141,12 @@ const FrameworkStarterItem = (app) => (
     <span className={styles.frameworkLogo}>
       <Image src={app.logo} alt="" />
     </span>
-    <div>
+    <span>
       <Heading tagName="h4">{app.name}</Heading>
       <RemixButton app={app} size="small">
         Remix {app.name} starter
       </RemixButton>
-    </div>
+    </span>
   </div>
 );
 
@@ -439,25 +416,24 @@ function VSCode() {
           Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
-      
+
       <div className={styles.screencapContainer}>
-        <video 
+        <video
           className={classNames(styles.screencap, styles.smallScreencap)}
-          src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}
+          src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096"
           muted
           autoPlay
           loop
           playsInline
-          >
-          <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096'}/>
+        >
+          <source src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096" />
         </video>
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
-          <video src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} muted autoPlay loop playsInline>
-            <source src={'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854'} />
+          <video src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854" muted autoPlay loop playsInline>
+            <source src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854" />
           </video>
         </div>
       </div>
-
     </section>
   );
 }
