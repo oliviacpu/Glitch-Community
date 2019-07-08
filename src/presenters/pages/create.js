@@ -54,8 +54,8 @@ function Banner() {
       <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
         <div className={styles.bannerText}>
           <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
-            <Mark color="#fbf2b8">Code your next app</Mark>
-            <Unmarked>Now it's on the web. Just like that.</Unmarked>
+            <Mark color="#fbf2b8">Create</Mark>
+            <Unmarked>the app of your dreams</Unmarked>
           </Heading>
           <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
           <div className={styles.bannerRemixBtn}>
@@ -144,7 +144,7 @@ const FrameworkStarterItem = (app) => (
     <div>
       <Heading tagName="h4">{app.name}</Heading>
       <RemixButton app={app} size="small">
-        Remix {app.name} starter
+        Remix {app.name} Starter
       </RemixButton>
     </div>
   </div>
@@ -197,7 +197,8 @@ function Starters() {
         <Mark color="#F9DB91">Starters for all developers</Mark>
       </Heading>
       <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="16px">
-        You never have to start from scratch: Just start remixing an existing starter app, or <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on Glitch.
+        You never have to start from scratch: Just start remixing an existing starter app, or{' '}
+        <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on Glitch.
       </Text>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
@@ -392,21 +393,31 @@ function Help() {
   );
 }
 
+function Tools() {
+  return (
+    <div className={styles.section}>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#aad6fb">We play nice with the tools you already use</Mark>
+      </Heading>
+      <Text className={styles.sectionDescription}>Work seamlessly with all your favorite developer tools.</Text>
+      <VSCode />
+      <GitHub />
+    </div>
+  );
+}
+
 function VSCode() {
   const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485';
 
   return (
     <section className={classNames(styles.section, styles.help)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#aad6fb">Glitch for VS Code</Mark>
+      <Heading className={styles.h2} tagName="h3">
+        Visual Studio extension (beta)
       </Heading>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Already using Visual Studio Code? Get all the power of the Glitch editor right in your favorite tool — including real-time collaboration, code rewind, and live previews.
-      </Text>
-
-      <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        With collaborative editing, instant updates, and access to the console, it's the full power of the Glitch editor within VS Code.
+        Already using Visual Studio Code? Get all the power of the Glitch editor right in your favorite tool—including real-time collaboration, code
+        rewind, and live previews.
       </Text>
 
       <Text className={styles.sectionDescription}>
@@ -436,6 +447,26 @@ function VSCode() {
           </video>
         </div>
       </div>
+    </section>
+  );
+}
+
+function GitHub() {
+  return (
+    <section className={styles.section}>
+      <Heading className={styles.h3} tagName="h3">
+        GitHub import and export
+      </Heading>
+
+      <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
+        Move your projects effortlessly to and from GitHub, and make a ‘try it on Glitch’ button for your repo.
+      </Text>
+
+      <Text className={styles.sectionDescription}>
+        <Button href="https://glitch.com/help/import-git/">
+          Find Out How <span aria-hidden="true">&rarr;</span>
+        </Button>
+      </Text>
     </section>
   );
 }
@@ -480,7 +511,7 @@ function Remix() {
             </div>
             <div className={styles.embedRemixBtn}>
               <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix your own
+                Remix Your Own
               </RemixButton>
             </div>
           </TabPanel>
@@ -565,10 +596,10 @@ const CreatePage = () => (
       <main className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <Starters />)}</VisibilityContainer>
+        <VisibilityContainer>{({ wasEverVisible }) => wasEverVisible && <Starters />}</VisibilityContainer>
         <Collaborate />
-        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <YourAppIsLive />)}</VisibilityContainer>
-        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <VSCode />)}</VisibilityContainer>
+        <YourAppIsLive />
+        <Tools />
         <Help />
         <Remix />
         <Categories />
