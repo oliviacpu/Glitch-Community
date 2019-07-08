@@ -24,94 +24,29 @@ const PopoverMenuItems = ({ children }) =>
 
 const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
-    if (isTeamProject({ currentUser, project })) {
-      useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
-      return null;
-    }
-    return (
-    <PopoverDialog wide focusOnDialog align="left">
+  if (isTeamProject({ currentUser, project })) {
+    useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
+    return null;
+  }
+  return (
+    <PopoverDialog wide focusOnDialog align="right">
       <PopoverActions>
-        `Once you leave this project, you'll lose access to it unless someone else invites you back.
-        
-        Are you sure you want to leave ${project.domain}?`
+        <ActionDescription>
+        Once you leave this project, you'll lose access to it unless someone else invites you back.
+
+        Are you sure you want to leave {project.domain}?
+        </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
         <Button>
           Leave Project
         </Button>
       </PopoverActions>
-
-    </PopoverDialog>
-      );
-}
-
-  /*  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-      project.domain
-    }?`;
-    if (window.confirm(prompt)) {
-      projectOptions.leaveProject(project);
-    }
-    
-    /*
-export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
-  const [collectionType, setCollectionType] = useState('user');
-  const [query, setQuery] = useState('');
-  const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
-  const { currentUser } = useCurrentUser();
-  const { createNotification } = useNotifications();
-
-  const addProjectTo = (collection) => {
-    addProjectToCollection(project, collection).then(() => {
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        { type: 'success' },
-      );
-    });
-
-    togglePopover();
-  };
-
-  return (
-    <PopoverDialog wide align="right">
-
-      {fromProject && <AddProjectPopoverTitle project={project} />}
-
-      {currentUser.teams.length > 0 && (
-        <PopoverActions>
-          <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
-        </PopoverActions>
-      )}
-
-      <PopoverSearch
-        value={query}
-        onChange={setQuery}
-        status={status}
-        results={collections}
-        onSubmit={addProjectTo}
-        placeholder="Filter collections"
-        labelText="Filter collections"
-        renderItem={({ item: collection, active }) => (
-          <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
-        )}
-        renderNoResults={() => (
-          <PopoverInfo>
-            <NoResults project={project} collectionsWithProject={collectionsWithProject} query={query} />
-          </PopoverInfo>
-        )}
-      />
-
-      <PopoverActions>
-        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
-          Add to a new collection
-        </Button>
-      </PopoverActions>
     </PopoverDialog>
   );
 };
-    */
 
-
-const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover, leaveProjectPopover }) => {
+const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leaveProjectPopover }) => {
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (
@@ -176,7 +111,6 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
         >
           {({ addToCollection, leaveProject }) => (
             <ProjectOptionsContent
-              project={project}
               projectOptions={toggleBeforeAction(togglePopover)}
               addToCollectionPopover={addToCollection}
               leaveProjectPopover={leaveProject}
