@@ -395,8 +395,8 @@ function VSCode() {
       </Heading>
 
       <Text className={classNames(styles.sectionDescription, styles.vscodeSectionDescription)}>
-        Already using Visual Studio Code? Get all the power of the Glitch editor right in your favorite tool—including real-time collaboration, code
-        rewind, and live previews.
+        Already using Visual Studio Code? Get all the power of the Glitch editor right in VS Code—including real-time collaboration, code rewind, and
+        live previews.
       </Text>
 
       <Text className={styles.sectionDescription}>
