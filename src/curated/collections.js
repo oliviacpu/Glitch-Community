@@ -5,7 +5,8 @@
 export const featuredCollections = [
   { owner: 'glitch', name: 'glitch-this-week-july-3-2019' },
   { owner: 'glitch', name: 'css-magic' },
-  { owner: 'glitch', name: 'enlightening-games' }
+  { owner: 'glitch', name: 'enlightening-games' },
+  { owner: 'sarahzinger', name: 'test'}
 ];
 
 // More ideas is populated from this team

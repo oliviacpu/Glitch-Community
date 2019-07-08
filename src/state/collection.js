@@ -169,7 +169,14 @@ export function useCollectionEditor(initialCollection) {
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
-
+    deleteProject: withErrorHandler(async (project) => {
+      await deleteItem({ project });
+      setCollection((prev) => ({
+        ...prev,
+        projects: prev.projects.filter((p) => p.id !== project.id),
+      }));
+    }, handleError),
+    
     updateNameAndUrl: ({ name, url }) => updateFields({ name, url }).catch(handleErrorForInput),
 
     displayNewNote: (projectId) => updateProject({ isAddingANewNote: true }, projectId),
