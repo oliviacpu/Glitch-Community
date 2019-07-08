@@ -228,10 +228,6 @@ function Collaborate() {
   const title = 'Code together';
   const description =
     'Invite friends to work with you on public or private projects. Anyone with a browser can jump in and pick up where you left off, and private .env files keep secrets like API keys, well, secret.';
-  const highlights = [
-    'Work on public or private projects',
-    'Secrets like API keys are stored in a private .env file only accessible to your collaborators',
-  ];
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069';
   const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
 
@@ -240,7 +236,6 @@ function Collaborate() {
       <ScreencapSection
         title={title}
         description={description}
-        highlights={highlights}
         video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate.mp4?v=1562171466297"
         smallVideos={['https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate-small.mp4?v=1562171465382']}
         blob={blob}
@@ -256,7 +251,6 @@ function YourAppIsLive() {
   const title = 'Your app is live, instantly';
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL (or your custom domain!). Share or embed anywhere, and invite anyone to check out your code or remix it.";
-  const highlights = ['Supports custom domains'];
   const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
   const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
 
@@ -264,7 +258,6 @@ function YourAppIsLive() {
     <ScreencapSection
       title={title}
       description={description}
-      highlights={highlights}
       video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585"
       smallVideos={[
         'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891',
@@ -278,7 +271,7 @@ function YourAppIsLive() {
   );
 }
 
-function ScreencapSection({ title, description, video, smallVideos, highlights, blob, image, imageName, markColor }) {
+function ScreencapSection({ title, description, video, smallVideos, blob, image, imageName, markColor }) {
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
@@ -312,19 +305,6 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
     </div>
   );
 
-  const Highlights = () => (
-    <div className={styles.screencapHighlights}>
-      {highlights.map((highlight) => (
-        <div key={highlight} className={styles.screencapHighlight}>
-          <hr className={styles.screencapSquiggle} style={{ '--color': markColor }} />
-          <Text className={styles.screencapHighlight} key={Date.now()}>
-            {highlight}
-          </Text>
-        </div>
-      ))}
-    </div>
-  );
-
   const Info = () => (
     <>
       <Heading className={styles.h2} tagName="h2">
@@ -341,7 +321,6 @@ function ScreencapSection({ title, description, video, smallVideos, highlights, 
     <section className={styles.section}>
       <Info title={title} description={description} markColor={markColor} />
       <Videos video={video} smallVideos={smallVideos} />
-      <Highlights highlights={highlights} />
     </section>
   );
 }
