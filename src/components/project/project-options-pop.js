@@ -21,7 +21,7 @@ const PopoverMenuItems = ({ children }) =>
       ),
   );
 
-const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover }) => {
+const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover, leaveProjectPopover }) => {
   const { currentUser } = useCurrentUser();
   // TODO: replace this with a multi-popover pane
   const LeaveProjectPopover = useTrackedFunc(projectOptions.leaveProject && (() => {
@@ -166,7 +166,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
               />
             ),
             createCollection: () => <CreateCollectionWithProject project={project} addProjectToCollection={projectOptions.addProjectToCollection} />,
-            leaveProject: () => <CreateCollectionWithProject project={project} leaveProject={projectOptions.leaveProject} />,
+            leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} />,
           }}
         >
           {({ addToCollection, leaveProject }) => (
