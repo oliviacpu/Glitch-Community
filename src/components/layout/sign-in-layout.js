@@ -18,19 +18,6 @@ OverlaySection.propTypes = {
   type: PropTypes.oneOf(['info', 'actions']).isRequired,
 };
 
-export const OverlayTitle = ({ children, id }) => (
-  <h1 className={styles.title} id={id}>
-    {children}
-  </h1>
-);
-OverlayTitle.propTypes = {
-  children: PropTypes.node.isRequired,
-  id: PropTypes.string,
-};
-OverlayTitle.defaultProps = {
-  id: '', // for aria labelled by purposes only
-};
-
 export const OverlayBackground = () => <div className={styles.overlayBackground} role="presentation" tabIndex={-1} />;
 
 const SignInLayout = ({ children }) => (
@@ -41,7 +28,9 @@ const SignInLayout = ({ children }) => (
       </Link>
     </div>
     <div className={styles.overlay}>
-      {children}
+      <Heading className={styles.title}>
+        Sign In
+      </Heading>
     </div>
   </div>
 );

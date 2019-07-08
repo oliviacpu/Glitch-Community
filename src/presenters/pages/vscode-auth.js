@@ -4,12 +4,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import SignInLayout from 'Components/layout/sign-in-layout';
 import PopoverContainer from 'Components/popover/container';
 import Text from 'Components/text/text';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
 
-import styles from './vscode-auth.styl';
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
@@ -30,10 +30,10 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   }, []);
 
   return (
-    <div className={styles.content}>
+    <SignInLayout>
       <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
       {!isSignedIn && <PopoverContainer>{() => <SignInPop align="none" />}</PopoverContainer>}
-    </div>
+    </SignInLayout>
   );
 };
 
