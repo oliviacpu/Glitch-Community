@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
 import { values, sampleSize, shuffle } from 'lodash';
@@ -14,7 +14,7 @@ import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
-import VisibilityContainer from 'Componenents/visibility-container';
+import VisibilityContainer from 'Components/visibility-container';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -74,7 +74,6 @@ function Banner() {
 }
 
 function WhatIsGlitch() {
-  const videoEl = useRef(null);
   const trackPlayVideo = useTracker('Create Page Video Clicked');
 
   return (
@@ -89,7 +88,7 @@ function WhatIsGlitch() {
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
-        <WistiaVideo onClick={trackPlayVideo} ref={videoEl} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
+        <WistiaVideo onClick={trackPlayVideo} className={styles.whatIsGlitchVideo} videoId="2vcr60pnx9" />
       </div>
     </section>
   );
@@ -413,7 +412,11 @@ function VSCode() {
       </Text>
 
       <Text className={styles.sectionDescription}>
-        <Button href="https://marketplace.visualstudio.com/items?itemName=glitch.glitch" image={<Image src={vscodeIcon} alt="" width="17" height="17" />} imagePosition="left">
+        <Button
+          href="https://marketplace.visualstudio.com/items?itemName=glitch.glitch"
+          image={<Image src={vscodeIcon} alt="" width="17" height="17" />}
+          imagePosition="left"
+        >
           Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
@@ -457,42 +460,36 @@ function Remix() {
     setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
   }, []);
 
-  const remixTabs = (
-    <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-      <TabList className={styles.remixAppTabs}>
-        {apps.map((app) => (
-          <Tab className={styles.remixAppTab} key={app.domain}>
-            <ProjectAvatar project={app} hideTooltip />
-            <Text size="14px">{app.domain}</Text>
-          </Tab>
-        ))}
-      </TabList>
-
-      {apps.map((app, i) => (
-        <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-          <div className={styles.embedContainer}>
-            <Embed domain={app.domain} />
-          </div>
-          <div className={styles.embedRemixBtn}>
-            <RemixButton type="cta" emoji="microphone" app={app}>
-              Remix your own
-            </RemixButton>
-          </div>
-        </TabPanel>
-      ))}
-    </Tabs>
-  );
-
   return (
     <section className={classNames(styles.section, styles.remix)}>
-      <VisibilityContainer>
-        <Heading className={styles.h2} tagName="h2">
-          <Mark color="#FBF2B8">Remix any app to get started</Mark>
-        </Heading>
-        {({ wasEverVisible }) => wasEverVisible && remixTabs}
-      </VisibilityContainer>
+      <Heading className={styles.h2} tagName="h2">
+        <Mark color="#FBF2B8">Remix any app to get started</Mark>
+      </Heading>
+      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+        <TabList className={styles.remixAppTabs}>
+          {apps.map((app) => (
+            <Tab className={styles.remixAppTab} key={app.domain}>
+              <ProjectAvatar project={app} hideTooltip />
+              <Text size="14px">{app.domain}</Text>
+            </Tab>
+          ))}
+        </TabList>
+
+        {apps.map((app, i) => (
+          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+            <div className={styles.embedContainer}>
+              <Embed domain={app.domain} />
+            </div>
+            <div className={styles.embedRemixBtn}>
+              <RemixButton type="cta" emoji="microphone" app={app}>
+                Remix your own
+              </RemixButton>
+            </div>
+          </TabPanel>
+        ))}
+      </Tabs>
     </section>
-  )
+  );
 }
 
 function Categories() {
@@ -570,10 +567,10 @@ const CreatePage = () => (
       <main className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible ? <Starters /> : null)}</VisibilityContainer>
+        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <Starters />)}</VisibilityContainer>
         <Collaborate />
-        <YourAppIsLive />
-        <VSCode />
+        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <YourAppIsLive />)}</VisibilityContainer>
+        <VisibilityContainer>{({ wasEverVisible }) => (wasEverVisible && <VSCode />)}</VisibilityContainer>
         <Help />
         <Remix />
         <Categories />
