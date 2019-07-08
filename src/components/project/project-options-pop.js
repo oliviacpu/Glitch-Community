@@ -29,8 +29,18 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
       projectOptions.leaveProject(project);
       return;
     }
+    console.log("in popover");
+    <PopoverDialog focusOnDialog align="left">
+      <PopoverActions>
+        Test
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        TestAgain
+      </PopoverActions>
 
-    const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
+    </PopoverDialog>
+
+  /*  const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
       project.domain
     }?`;
     if (window.confirm(prompt)) {
