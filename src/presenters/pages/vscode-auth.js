@@ -9,6 +9,8 @@ import PasswordLogin from 'Components/sign-in/password-login';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './vscode-auth.styl'
+
 const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
 
 const VSCodeAuth = ({ insiders, openProject }) => {
@@ -31,7 +33,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   return (
     <SignInLayout>
-      <div>
+      <div className={styles.content}>
         <PasswordLogin />
         <SignInButtons />
       </div>
