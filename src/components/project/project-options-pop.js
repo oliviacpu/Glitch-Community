@@ -27,7 +27,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
   const { currentUser } = useCurrentUser();
   const illustration = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fwave.png?v=1502123444938';
   if (isTeamProject({ currentUser, project })) {
-    useTrackedFunc(leaveProject(project), 'Leave Project clicked (team)');
+    useTrackedFunc(leaveProject, 'Leave Project clicked (team)');
     return null;
   }
   return (
@@ -40,7 +40,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={console.log('clicked')/* useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')*/}>
+        <Button type="dangerZone" onClick={() => {console.log('clicked')}/* useTrackedFunc(leaveProject(project), 'Leave Project clicked (individual)')*/}>
           Leave Project
         </Button>
       </PopoverActions>
