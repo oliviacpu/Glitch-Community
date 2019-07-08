@@ -29,7 +29,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
       projectOptions.leaveProject(project);
       return;
     }
-    console.log("in leaveProjectPopover");
+
     const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
       project.domain
     }?`;
