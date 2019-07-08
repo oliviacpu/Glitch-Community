@@ -34,7 +34,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
     <PopoverDialog wide focusOnDialog align="right">
       <PopoverTitle>Leave {project.domain}</PopoverTitle>
       <PopoverActions>
-        <Image height="98px" width="auto" src={illustration} alt="" />
+        <Image height="50px" width="auto" src={illustration} alt="" />
         <ActionDescription>
           Are you sure you want to leave? You'll lose access to this project unless someone else invites you back.
         </ActionDescription>
