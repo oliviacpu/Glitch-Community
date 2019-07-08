@@ -27,8 +27,10 @@ const SignInLayout = ({ children }) => (
         </Link>
       </div>
       <div className={styles.overlay}>
-        <h1 className={styles.title}>Sign In</h1>
-        {children}
+        <section className={classNames(styles.section, styles.info)}>
+          <h1 className={styles.title}>Sign In</h1>
+        </section>
+        <section className={classNames(styles.section, styles.actions)}>{children}</section>
       </div>
     </div>
   </div>
