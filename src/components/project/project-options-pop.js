@@ -26,7 +26,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
   useTrackedFunc(leaveProject && (() => {
     if (isTeamProject({ currentUser, project })) {
       leaveProject(project);
-      return;
+      return null;
     }
     console.log("in popover");
     return (
@@ -51,7 +51,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
     }
     
     /*
-    export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
+export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
   const [collectionType, setCollectionType] = useState('user');
   const [query, setQuery] = useState('');
   const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
