@@ -205,7 +205,7 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
-
+  
   app.get('/api/home', async (req, res) => {
     const data = await getHomeData();
     res.send(data);
@@ -232,7 +232,11 @@ module.exports = function(external) {
   });
 
   app.get('*', async (req, res) => {
-    await render(res, 'Glitch', `The ${constants.tagline}`);
+    const title = 'Glitch';
+    const socialTitle = 'Glitch: The friendly community where everyone builds the web';
+    const description = 'Simple, powerful, free tools to create and use millions of apps.';
+    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
+    await render(res, title, description, image, socialTitle);
   });
 
   return app;

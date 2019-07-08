@@ -244,8 +244,8 @@ const BuildingOnGlitch = ({ content }) => (
 );
 
 const MadeInGlitch = () => (
-  <section className="made-in-glitch">
-    <Text>Of course, this site was made on Glitch too.</Text>
+  <section className={styles.madeInGlitch}>
+    <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
     <Button href={getEditorUrl('community')} emoji="carpStreamer">
       View Source
     </Button>
