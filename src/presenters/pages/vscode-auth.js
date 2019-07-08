@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import SignInLayout from 'Components/layout/sign-in-layout';
+import PasswordLogin from 'Components/sign-in/password-login';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import { useCurrentUser } from 'State/current-user';
 
@@ -31,6 +32,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   return (
     <SignInLayout>
       <div>
+        <PasswordLogin />
         <SignInButtons />
       </div>
     </SignInLayout>
