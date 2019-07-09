@@ -15,7 +15,9 @@ const keyImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d15665
 const SignInButtons = () => (
   <div className={styles.signInButtons}>
     {companyNames.map((companyName) => (
-      <div key={companyName} className={styles.signInButton}><SignInButton short companyName={companyName} /></div>
+      <div key={companyName} className={styles.signInButton}>
+        <SignInButton short companyName={companyName} />
+      </div>
     ))}
   </div>
 );
@@ -34,19 +36,17 @@ const SignInLayout = () => (
       </Link>
     </div>
     <div className={styles.overlay}>
-      <section className={styles.titleSection}>
+      <section className={styles.title}>
         <h1>Sign In</h1>
       </section>
-      <section className={styles.section}>
-        <div className={styles.content}>
-          <div className={styles.oauthSection}>
-            <SignInButtons />
-            <TermsAndConditions />
-          </div>
-          <div className={styles.passwordSection}>
-            <div className={styles.keyImage}>
-              <Image src={keyImageUrl} alt="Door and key illustration"/>
-            </div>
+      <section className={styles.content}>
+        <div className={styles.oauthSection}>
+          <SignInButtons />
+          <TermsAndConditions />
+        </div>
+        <div className={styles.passwordSection}>
+          <div className={styles.keyImage}>
+            <Image src={keyImageUrl} alt="Door and key illustration" width={250} />
           </div>
         </div>
       </section>
