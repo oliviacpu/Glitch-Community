@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 
 import Text from 'Components/text/text';
@@ -9,8 +8,6 @@ import Notification from 'Components/notification';
 import Loader from 'Components/loader';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useAPI } from 'State/api';
-import { useCurrentUser } from 'State/current-user';
-import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
