@@ -1,9 +1,8 @@
 import React from 'react';
-import classNames from 'classnames';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
-import Text from 'Components/text/text';
+import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import PasswordLogin from 'Components/sign-in/password-login';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
@@ -19,6 +18,12 @@ const SignInButtons = () => (
         <SignInButton short companyName={companyName} />
       </div>
     ))}
+  </div>
+);
+
+const MagicCodeButton = () => (
+  <div className={styles.signInButtons}>
+    <Button emoji="loveLetter">Magic Code via Email</Button>
   </div>
 );
 
@@ -41,12 +46,15 @@ const SignInLayout = () => (
       </section>
       <section className={styles.content}>
         <div className={styles.oauthSection}>
-          <SignInButtons />
+          <div>
+            <SignInButtons />
+            <MagicCodeButton />
+          </div>
           <TermsAndConditions />
         </div>
         <div className={styles.passwordSection}>
           <div className={styles.keyImage}>
-            <Image src={keyImageUrl} alt="Door and key illustration" width={250} />
+            <Image src={keyImageUrl} alt="Door and key illustration" width={200} />
           </div>
         </div>
       </section>
