@@ -4,10 +4,13 @@ import classNames from 'classnames';
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
 import Text from 'Components/text/text';
+import Image from 'Components/images/image';
 import PasswordLogin from 'Components/sign-in/password-login';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 
 import styles from './sign-in-layout.styl';
+
+const keyImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d15665%2Foauth-key.svg?1544466885907';
 
 const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
 
@@ -30,12 +33,11 @@ const SignInLayout = () => (
       </section>
       <section className={classNames(styles.section, styles.actions)}>
         <div className={styles.content}>
-          <PasswordLogin />
           <div>
-            <Text>You can sign in without a password too.</Text>
             <SignInButtons />
             <TermsAndConditions />
           </div>
+          <Image src={keyImageUrl} alt="" width="370px" />
         </div>
       </section>
     </div>
