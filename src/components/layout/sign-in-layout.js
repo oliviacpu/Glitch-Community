@@ -7,6 +7,7 @@ import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import Image from 'Components/images/image';
 import PasswordLogin from 'Components/sign-in/password-login';
 import UseMagicCode from 'Components/sign-in/use-magic-code';
+import GetMagicCode from 'Components/sign-in/get-magic-code';
 
 import useDevToggle from 'State/dev-toggles';
 
@@ -44,7 +45,6 @@ const TermsAndConditions = () => (
 );
 
 const SignInLayout = () => {
-  const userPasswordEnabled = useDevToggle('User Passwords');
   return (
     <div className={styles.layout}>
       <div className={styles.logo}>
@@ -57,19 +57,42 @@ const SignInLayout = () => {
           <h1>Sign In</h1>
         </section>
         <section className={styles.content}>
-          <div className={styles.oAuth}>
-            <div>
-              <SignInButtons />
-              <MagicCodeButton />
-            </div>
-            <TermsAndConditions />
-          </div>
-          <div className={styles.passwordAuth}>{userPasswordEnabled ? <UseMagicCode /> : <KeyImage />}</div>
+          <Magic />
         </section>
       </div>
     </div>
   );
 };
 
-const KeyImage = () => <Image src={keyImageUrl} alt="Door and key illustration" width={200} />;
+const Main = () => {
+  const userPasswordEnabled = useDevToggle('User Passwords');
+  return (
+    <>
+      <div className={styles.oAuth}>
+        <div>
+          <SignInButtons />
+          <MagicCodeButton />
+        </div>
+        <TermsAndConditions />
+      </div>
+      <div className={styles.passwordAuth}>
+        {userPasswordEnabled ? <PasswordLogin /> : <Image src={keyImageUrl} alt="Door and key illustration" width={200} />}
+      </div>
+    </>
+  );
+};
+
+const Magic = () => {
+  const userPasswordEnabled = useDevToggle('User Passwords');
+  return (
+    <>
+      <div className={styles.oAuth}>
+        <GetMagicCode />
+      </div>
+      <div className={styles.passwordAuth}>
+        <UseMagicCode />
+      </div>
+    </>
+  );
+};
 export default SignInLayout;
