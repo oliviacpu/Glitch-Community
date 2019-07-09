@@ -60,9 +60,5 @@ const SignInLayout = () => (
   </div>
 );
 
-const KeyImage = () => (
-  <div className={styles.keyImage}>
-    <Image src={keyImageUrl} alt="Door and key illustration" width={200} />
-  </div>
-);
+const KeyImage = () => <Image src={keyImageUrl} alt="Door and key illustration" width={200} />;
 export default SignInLayout;

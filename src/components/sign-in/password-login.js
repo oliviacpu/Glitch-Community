@@ -10,6 +10,8 @@ import useDebouncedValue from 'Hooks/use-debounced-value';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
+import styles from './styles.styl';
+
 function useEmail() {
   const [email, setEmail] = useState('');
   const debouncedEmail = useDebouncedValue(email, 500);
@@ -77,13 +79,17 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
           disabled={working}
           testingId="sign-in-password"
         />
-        <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>
-          Sign in
-        </Button>
+        <div className={styles.submitWrap}>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>
+            Sign in
+          </Button>
+        </div>
       </form>
-      <Button size="small" type="tertiary" onClick={showForgotPassword}>
-        Forgot Password
-      </Button>
+      <div className={styles.submitWrap}>
+        <Button size="small" type="tertiary" onClick={showForgotPassword}>
+          Forgot Password
+        </Button>
+      </div>
     </div>
   );
 };
