@@ -12,7 +12,7 @@ import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
 
-const UseMagicCode = ({ align, showTwoFactor }) => {
+const UseMagicCode = () => {
   const { login } = useCurrentUser();
   const api = useAPI();
   const [code, setCode] = useState('');
@@ -41,7 +41,10 @@ const UseMagicCode = ({ align, showTwoFactor }) => {
   return (
     <div>
       <Text>Now paste the code here to sign in.</Text>
-      {status === 'loading' ? <Loader /> : <form onSubmit={onSubmit} style={{ marginBottom: 10 }} data-cy="sign-in-code-form">
+      {status === 'loading' ? (
+        <Loader />
+      ) : (
+        <form onSubmit={onSubmit} style={{ marginBottom: 10 }} data-cy="sign-in-code-form">
           <TextInput
             value={code}
             onChange={setCode}
@@ -56,7 +59,8 @@ const UseMagicCode = ({ align, showTwoFactor }) => {
               Sign In
             </Button>
           </div>
-        </form>}
+        </form>
+      )}
       {status === 'done' && (
         <Notification persistent type="success">
           Success!
