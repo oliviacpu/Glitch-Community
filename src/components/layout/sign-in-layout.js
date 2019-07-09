@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
 import Button from 'Components/buttons/button';
+import TransparentButton from 'Components/buttons/transparent-button';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import Image from 'Components/images/image';
 import PasswordLogin from 'Components/sign-in/password-login';
@@ -37,12 +38,17 @@ const SignInLayout = () => {
       </div>
       <div className={styles.overlay}>
         <section className={styles.title}>
+          {page === 'main' && <h1>Sign In</h1>}
           {page === 'magic' && (
-            <span className={styles.backArrow}>
-              <span className="left-arrow icon" />
-            </span>
+            <TransparentButton onClick={showMainPage}>
+              <div className={styles.magicCode}>
+                <span className={styles.backArrow}>
+                  <span className="left-arrow icon" />
+                </span>
+                <h1>Magic Code via Email</h1>
+              </div>
+            </TransparentButton>
           )}
-          <h1>Sign In</h1>
         </section>
         <section className={styles.content}>
           {page === 'main' && (
