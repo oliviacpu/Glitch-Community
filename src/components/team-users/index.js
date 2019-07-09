@@ -29,10 +29,9 @@ function InvitedUser({ user, team, onRevokeInvite }) {
   // resend the invite
   const resendInvite = async () => {
     try {
-      await inviteUserToTeam({ team, user});
+      await inviteUserToTeam({ team, user });
       createNotification(`Resent invite to ${user.name}!`, { type: 'success' });
     } catch (error) {
-      console.log("error", error)
       captureException(error);
       createNotification('Invite not sent, try again later', { type: 'error' });
     }
