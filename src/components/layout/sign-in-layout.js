@@ -45,21 +45,24 @@ const SignInLayout = () => (
         <h1>Sign In</h1>
       </section>
       <section className={styles.content}>
-        <div className={styles.oauthSection}>
+        <div className={styles.oAuth}>
           <div>
             <SignInButtons />
             <MagicCodeButton />
           </div>
           <TermsAndConditions />
         </div>
-        <div className={styles.passwordSection}>
-          <div className={styles.keyImage}>
-            <Image src={keyImageUrl} alt="Door and key illustration" width={200} />
-          </div>
+        <div className={styles.passwordAuth}>
+          <PasswordLogin />
         </div>
       </section>
     </div>
   </div>
 );
 
+const KeyImage = () => (
+  <div className={styles.keyImage}>
+    <Image src={keyImageUrl} alt="Door and key illustration" width={200} />
+  </div>
+);
 export default SignInLayout;
