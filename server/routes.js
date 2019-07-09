@@ -235,7 +235,7 @@ module.exports = function(external) {
     const title = 'Glitch';
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
-    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
+    const image = `${CDN_URL}/f4cb0655-1095-4765-8ca4-20e0c58bb65f%2Fsocial-banner.png?v=1562682143754`;
     await render(res, title, description, image, socialTitle);
   });
 
