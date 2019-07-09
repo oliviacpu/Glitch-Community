@@ -47,7 +47,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = constants.APP_URL }) {
+  async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL }) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -95,7 +95,7 @@ module.exports = function(external) {
     });
   }
 
-  const { CDN_URL } = constants.current;
+  const { CDN_URL, APP_URL } = constants.current;
 
   app.use(
     helmet.contentSecurityPolicy({
@@ -113,7 +113,7 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
-    const canonicalUrl = `${constants.APP_URL}/~${domain}`;
+    const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
     if (!project) {
       await render(res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
@@ -142,7 +142,7 @@ module.exports = function(external) {
 
   app.get('/@:name', async (req, res) => {
     const { name } = req.params;
-    const canonicalUrl = `${constants.APP_URL}/@${name}`;
+    const canonicalUrl = `${APP_URL}/@${name}`;
     const team = await getTeam(name);
     if (team) {
       // detect if team uses default description "an adjectivy team that does adjectivy things"
@@ -183,7 +183,7 @@ module.exports = function(external) {
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
-    const canonicalUrl = `${constants.APP_URL}/@${name}/${collection}`;
+    const canonicalUrl = `${APP_URL}/@${name}/${collection}`;
     const collectionObj = await getCollection(name, collection);
     const author = name;
 
@@ -232,7 +232,7 @@ module.exports = function(external) {
     const socialTitle = 'Get Started Creating on Glitch';
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
-    const canonicalUrl = `${constants.APP_DOMAIN}/create`;
+    const canonicalUrl = `${APP_URL}/create`;
     await render(res, { title, description, image, socialTitle, canonicalUrl });
   });
 
@@ -241,7 +241,7 @@ module.exports = function(external) {
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
     const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
-    await render(res, { title, description, image, socialTitle, });
+    await render(res, { title, description, image, socialTitle });
   });
 
   return app;
