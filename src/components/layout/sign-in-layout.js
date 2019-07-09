@@ -37,6 +37,11 @@ const SignInLayout = () => {
       </div>
       <div className={styles.overlay}>
         <section className={styles.title}>
+          {page === 'magic' && (
+            <span className={styles.backArrow}>
+              <span className="left-arrow icon" />
+            </span>
+          )}
           <h1>Sign In</h1>
         </section>
         <section className={styles.content}>
@@ -56,7 +61,9 @@ const SignInLayout = () => {
                       ))}
                   </div>
                   <div className={styles.signInButtons}>
-                    <Button emoji="loveLetter" onClick={showMagicPage}>Magic Code via Email</Button>
+                    <Button emoji="loveLetter" onClick={showMagicPage}>
+                      Magic Code via Email
+                    </Button>
                   </div>
                 </div>
                 <TermsAndConditions />

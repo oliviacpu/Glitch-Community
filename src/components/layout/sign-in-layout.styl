@@ -36,6 +36,8 @@ pop-shadow = 0px 2px 5px 0px rgba(0,0,0,0.27), 0px 1px 1px 0px rgba(0,0,0,0.15)
   color: primary
   
 .title
+  display: flex
+  align-items: center
   margin: 0
   padding: 14px 12px
   color: primary
@@ -45,6 +47,14 @@ pop-shadow = 0px 2px 5px 0px rgba(0,0,0,0.27), 0px 1px 1px 0px rgba(0,0,0,0.15)
     font-size: inherit
     font-weight: bold
     margin: 0
+
+.backArrow
+  margin-bottom: 3px
+  padding: 1px 3px 3px
+  border-radius: 3px
+  opacity: 0.7
+.title:hover .backArrow
+  background-color: section-line
   
 .oAuth
   width: 50%
