@@ -12,7 +12,7 @@ import styles from './sign-in-layout.styl';
 
 const keyImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d15665%2Foauth-key.svg?1544466885907';
 
-const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
+const SignInButtons = () => <div className={styles.signInButtons}>{companyNames.map((companyName) => <SignInButton short companyName={companyName} />)}</div>;
 
 const TermsAndConditions = () => (
   <div className={styles.termsAndConditions}>
