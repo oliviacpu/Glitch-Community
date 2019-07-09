@@ -60,7 +60,7 @@ const GetMagicCode = () => {
     <div>
       <Text>Send a temporary code to your email.</Text>
       {status === 'ready' && (
-        <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
+        <form onSubmit={onSubmit} style={{ marginBottom: 10 }}>
           <TextInput
             type="email"
             labelText="Email address"
@@ -74,7 +74,7 @@ const GetMagicCode = () => {
             testingId="sign-in-email"
           />
           <div className={styles.submitWrap}>
-            <Button emoji="loveLetter" disabled={!isEnabled} onClick={onSubmit}>
+            <Button emoji="loveLetter" disabled={!isEnabled || validationError} onClick={onSubmit}>
               Send a Code
             </Button>
           </div>

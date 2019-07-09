@@ -41,8 +41,7 @@ const UseMagicCode = ({ align, showTwoFactor }) => {
   return (
     <div>
       <Text>Now paste the code here to sign in.</Text>
-      {status === 'ready' && (
-        <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
+      {status === 'loading' ? <Loader /> : <form onSubmit={onSubmit} style={{ marginBottom: 10 }} data-cy="sign-in-code-form">
           <TextInput
             value={code}
             onChange={setCode}
@@ -57,9 +56,7 @@ const UseMagicCode = ({ align, showTwoFactor }) => {
               Sign In
             </Button>
           </div>
-        </form>
-      )}
-      {status === 'loading' && <Loader />}
+        </form>}
       {status === 'done' && (
         <Notification persistent type="success">
           Success!

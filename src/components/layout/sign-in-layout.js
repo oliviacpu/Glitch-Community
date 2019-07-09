@@ -23,7 +23,6 @@ const TermsAndConditions = () => (
 );
 
 const SignInLayout = () => {
-  const userPasswordEnabled = useDevToggle('User Passwords');
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const [page, setPage] = useState('main');
   const showMainPage = () => setPage('main');
@@ -75,7 +74,7 @@ const SignInLayout = () => {
                 <TermsAndConditions />
               </div>
               <div className={styles.passwordAuth}>
-                {userPasswordEnabled ? <PasswordLogin /> : <Image src={keyImageUrl} alt="Door and key illustration" width={200} />}
+                <Image src={keyImageUrl} alt="Door and key illustration" width={200} />
               </div>
             </>
           )}
