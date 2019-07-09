@@ -83,7 +83,7 @@ function WhatIsGlitch() {
         </Heading>
         <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
           <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.</Text>
-          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to fullstack Node apps.</Text>
+          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to full-stack Node apps.</Text>
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
