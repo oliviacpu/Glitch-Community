@@ -3,9 +3,12 @@
  */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs'
 
 import SignInLayout from 'Components/layout/sign-in-layout';
+
 import { useCurrentUser } from 'State/current-user';
+import useLocalStorage from 'State/local-storage';
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
@@ -14,6 +17,10 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
 
+  const [, setDestination] = useLocalStorage('destinationAfterAuth');
+
+  const setDestinationAnd = (then) =>
+    
   useEffect(() => {
     if (isSignedIn) {
       setTimeout(() => {

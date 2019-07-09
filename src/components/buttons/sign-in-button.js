@@ -4,8 +4,6 @@ import dayjs from 'dayjs';
 
 import Button from 'Components/buttons/button';
 
-import useLocalStorage from 'State/local-storage';
-
 /* global FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL */
 
 function facebookAuthLink() {
@@ -65,19 +63,6 @@ export const companyNames = Object.keys(companies);
 
 const SignInButton = ({ companyName, onClick, short }) => {
   const { name, emoji, href } = companies[companyName];
-
-  const [, setDestination] = useLocalStorage('destinationAfterAuth');
-
-  const setDestinationAnd = (then) =>
-    setDestination({
-      expires: dayjs()
-        .add(10, 'minutes')
-        .toISOString(),
-      to: {
-        pathname: location.pathname,
-        search: location.search,
-      },
-    });
 
   return (
     <div style={{ marginBottom: '10px' }}>
