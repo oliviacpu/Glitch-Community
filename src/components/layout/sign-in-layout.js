@@ -55,9 +55,7 @@ const SignInLayout = () => {
                 <div>
                   <div className={styles.signInButtons}>
                     {companyNames
-                      .filter((companyName) => {
-                        return companyName !== 'slack' || slackAuthEnabled;
-                      })
+                      .filter((companyName) => companyName !== 'slack' || slackAuthEnabled)
                       .map((companyName) => (
                         <div key={companyName} className={styles.signInButton}>
                           <SignInButton short companyName={companyName} />
