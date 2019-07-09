@@ -40,9 +40,9 @@ const UseMagicCode = ({ align, showTwoFactor }) => {
 
   return (
     <div>
+      <Text>Now paste the code here to sign in.</Text>
       {status === 'ready' && (
         <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
-          <Text>Now paste the code here to sign in.</Text>
           <TextInput
             value={code}
             onChange={setCode}

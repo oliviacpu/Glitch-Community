@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 
+import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
@@ -57,6 +58,7 @@ const GetMagicCode = () => {
 
   return (
     <div>
+      <Text>Send a temporary code to your email.</Text>
       {status === 'ready' && (
         <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
           <TextInput

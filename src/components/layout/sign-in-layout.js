@@ -86,10 +86,10 @@ const Magic = () => {
   const userPasswordEnabled = useDevToggle('User Passwords');
   return (
     <>
-      <div className={styles.oAuth}>
+      <div className={styles.getCode}>
         <GetMagicCode />
       </div>
-      <div className={styles.passwordAuth}>
+      <div className={styles.useCode}>
         <UseMagicCode />
       </div>
     </>
