@@ -5,7 +5,6 @@ import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import Loader from 'Components/loader';
-import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
@@ -25,7 +24,8 @@ const UseMagicCode = () => {
     try {
       const { data } = await api.post(`/auth/email/${code}`);
       if (data.tfaToken) {
-        showTwoFactor(data.tfaToken);
+        // TODO: Support 2FA here
+        setStatus('error');
       } else {
         login(data);
         setStatus('done');
