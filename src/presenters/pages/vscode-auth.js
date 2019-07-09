@@ -24,7 +24,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     }
   }, [isSignedIn]);
 
-  return isSignedIn ? redirectMessage : <SignInLayout />;
+  return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
 
 VSCodeAuth.propTypes = {
