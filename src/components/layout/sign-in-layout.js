@@ -6,7 +6,6 @@ import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import Image from 'Components/images/image';
-import PasswordLogin from 'Components/sign-in/password-login';
 import UseMagicCode from 'Components/sign-in/use-magic-code';
 import GetMagicCode from 'Components/sign-in/get-magic-code';
 
