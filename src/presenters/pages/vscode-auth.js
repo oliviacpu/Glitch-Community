@@ -22,7 +22,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
         window.location.assign(redirectUrl);
       }, 3000);
     }
-  }, []);
+  }, [isSignedIn]);
 
   return isSignedIn ? redirectMessage : <SignInLayout />;
 };
