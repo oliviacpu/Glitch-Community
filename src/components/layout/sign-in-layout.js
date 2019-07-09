@@ -43,7 +43,9 @@ const SignInLayout = () => (
             <SignInButtons />
             <TermsAndConditions />
           </div>
-          <Image src={keyImageUrl} alt="" width="370px" />
+          <div>
+            <Image src={keyImageUrl} alt="" width="370px" />
+          </div>
         </div>
       </section>
     </div>
