@@ -20,18 +20,16 @@ export const OverlayBackground = () => <div className={styles.overlayBackground}
 
 const SignInLayout = ({ children }) => (
   <div className={styles.layout}>
-    <div className={styles.container}>
-      <div className={styles.logo}>
-        <Link to="/">
-          <Logo />
-        </Link>
-      </div>
-      <div className={styles.overlay}>
-        <section className={classNames(styles.section, styles.info)}>
-          <h1 className={styles.title}>Sign In</h1>
-        </section>
-        <section className={classNames(styles.section, styles.actions)}>{children}</section>
-      </div>
+    <div className={styles.logo}>
+      <Link to="/">
+        <Logo />
+      </Link>
+    </div>
+    <div className={styles.overlay}>
+      <section className={classNames(styles.section, styles.info)}>
+        <h1 className={styles.title}>Sign In</h1>
+      </section>
+      <section className={classNames(styles.section, styles.actions)}>{children}</section>
     </div>
   </div>
 );

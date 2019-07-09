@@ -19,7 +19,6 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   const isSignedIn = persistentToken && login;
 
   // const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
-  // const signInMessage = 'Please Sign In to continue.';
 
   useEffect(() => {
     if (isSignedIn) {
@@ -41,7 +40,7 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   );
 };
 
-// <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
+// {isSignedIn ? redirectMessage : <SignInLayout />}
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,
