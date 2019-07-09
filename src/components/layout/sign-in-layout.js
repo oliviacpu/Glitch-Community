@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Link from 'Components/link';
@@ -25,7 +24,9 @@ const SignInLayout = () => (
       <section className={classNames(styles.section, styles.actions)}>
         <div className={styles.content}>
           <PasswordLogin />
-          <SignInButtons />
+          <div>
+            <SignInButtons />
+          </div>
         </div>
       </section>
     </div>

@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 import SignInLayout from 'Components/layout/sign-in-layout';
 import { useCurrentUser } from 'State/current-user';
 
-import styles from './vscode-auth.styl';
-
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
