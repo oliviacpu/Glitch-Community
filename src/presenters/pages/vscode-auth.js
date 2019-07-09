@@ -5,20 +5,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import SignInLayout from 'Components/layout/sign-in-layout';
-import PasswordLogin from 'Components/sign-in/password-login';
-import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import { useCurrentUser } from 'State/current-user';
 
-import styles from './vscode-auth.styl'
-
-const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
+import styles from './vscode-auth.styl';
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
-  // const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
+  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
 
   useEffect(() => {
     if (isSignedIn) {
@@ -30,17 +26,8 @@ const VSCodeAuth = ({ insiders, openProject }) => {
     }
   }, []);
 
-  return (
-    <SignInLayout>
-      <div className={styles.content}>
-        <PasswordLogin />
-        <SignInButtons />
-      </div>
-    </SignInLayout>
-  );
+  return isSignedIn ? redirectMessage : <SignInLayout />;
 };
-
-// {isSignedIn ? redirectMessage : <SignInLayout />}
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,

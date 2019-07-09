@@ -4,21 +4,14 @@ import classNames from 'classnames';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
+import PasswordLogin from 'Components/sign-in/password-login';
+import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 
 import styles from './sign-in-layout.styl';
 
-export const OverlaySection = ({ children, type }) => {
-  const sectionClass = classNames(styles.section, styles[type]);
-  return <section className={sectionClass}>{children}</section>;
-};
-OverlaySection.propTypes = {
-  children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['info', 'actions']).isRequired,
-};
+const SignInButtons = () => companyNames.map((companyName) => <SignInButton companyName={companyName} />);
 
-export const OverlayBackground = () => <div className={styles.overlayBackground} role="presentation" tabIndex={-1} />;
-
-const SignInLayout = ({ children }) => (
+const SignInLayout = () => (
   <div className={styles.layout}>
     <div className={styles.logo}>
       <Link to="/">
@@ -29,13 +22,14 @@ const SignInLayout = ({ children }) => (
       <section className={classNames(styles.section, styles.info)}>
         <h1 className={styles.title}>Sign In</h1>
       </section>
-      <section className={classNames(styles.section, styles.actions)}>{children}</section>
+      <section className={classNames(styles.section, styles.actions)}>
+        <div className={styles.content}>
+          <PasswordLogin />
+          <SignInButtons />
+        </div>
+      </section>
     </div>
   </div>
 );
-
-SignInLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default SignInLayout;
