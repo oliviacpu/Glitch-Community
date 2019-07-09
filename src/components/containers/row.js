@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import { range } from 'lodash';
 import styles from './row.styl';
 
-const Row = ({ items, children, count, gap, minWidth, className, style }) => (
-  <ul
+export const RowContainer = ({ as: Component = 'div', className, style, count, gap, minWidth, children }) => (
+  <Component
     className={classnames(styles.row, className)}
     style={{
       ...style,
@@ -14,13 +14,25 @@ const Row = ({ items, children, count, gap, minWidth, className, style }) => (
       '--min-width': minWidth,
     }}
   >
-    {items.slice(0, count).map((item) => (
-      <li key={item.id} className={styles.item}>
-        {children(item)}
-      </li>
+    {children}
+  </Component>
+);
+
+export const RowItem = ({ as: Component = 'div', className, children, ...props }) => (
+  <Component className={classnames(styles.item, className)} {...props}>
+    {children}
+  </Component>
+);
+
+const Row = ({ items, children, count, gap, minWidth, className, style }) => (
+  <RowContainer as="ul" className={className} style={style} count={count} gap={gap} minWidth={minWidth}>
+    {items.slice(0, count).map((item, index) => (
+      <RowItem as="li" key={item.id}>
+        {children(item, index)}
+      </RowItem>
     ))}
     {count > items.length && range(0, count - items.length).map((i) => <li key={`filler-${i}`} className={styles.filler} />)}
-  </ul>
+  </RowContainer>
 );
 
 Row.propTypes = {
