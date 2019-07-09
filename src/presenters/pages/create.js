@@ -14,7 +14,6 @@ import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
-import VisibilityContainer from 'Components/visibility-container';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -575,7 +574,7 @@ const CreatePage = () => (
       <main className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <VisibilityContainer>{({ wasEverVisible }) => wasEverVisible && <Starters />}</VisibilityContainer>
+        <Starters />
         <Collaborate />
         <YourAppIsLive />
         <Tools />
