@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
@@ -15,29 +15,6 @@ import styles from './sign-in-layout.styl';
 
 const keyImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d15665%2Foauth-key.svg?1544466885907';
 
-const SignInButtons = () => {
-  const slackAuthEnabled = useDevToggle('Slack Auth');
-  return (
-    <div className={styles.signInButtons}>
-      {companyNames
-        .filter((companyName) => {
-          return companyName !== 'slack' || slackAuthEnabled;
-        })
-        .map((companyName) => (
-          <div key={companyName} className={styles.signInButton}>
-            <SignInButton short companyName={companyName} />
-          </div>
-        ))}
-    </div>
-  );
-};
-
-const MagicCodeButton = () => (
-  <div className={styles.signInButtons}>
-    <Button emoji="loveLetter">Magic Code via Email</Button>
-  </div>
-);
-
 const TermsAndConditions = () => (
   <div className={styles.termsAndConditions}>
     By signing into Glitch, you agree to our <Link to="/legal/#tos">Terms of Services</Link> and <Link to="/legal/#privacy">Privacy Statement</Link>
@@ -45,6 +22,12 @@ const TermsAndConditions = () => (
 );
 
 const SignInLayout = () => {
+  const userPasswordEnabled = useDevToggle('User Passwords');
+  const slackAuthEnabled = useDevToggle('Slack Auth');
+  const [page, setPage] = useState('main');
+  const showMainPage = () => setPage('main');
+  const showMagicPage = () => setPage('magic');
+
   return (
     <div className={styles.layout}>
       <div className={styles.logo}>
@@ -57,42 +40,47 @@ const SignInLayout = () => {
           <h1>Sign In</h1>
         </section>
         <section className={styles.content}>
-          <Magic />
+          {page === 'main' && (
+            <>
+              <div className={styles.oAuth}>
+                <div>
+                  <div className={styles.signInButtons}>
+                    {companyNames
+                      .filter((companyName) => {
+                        return companyName !== 'slack' || slackAuthEnabled;
+                      })
+                      .map((companyName) => (
+                        <div key={companyName} className={styles.signInButton}>
+                          <SignInButton short companyName={companyName} />
+                        </div>
+                      ))}
+                  </div>
+                  <div className={styles.signInButtons}>
+                    <Button emoji="loveLetter" onClick={showMagicPage}>Magic Code via Email</Button>
+                  </div>
+                </div>
+                <TermsAndConditions />
+              </div>
+              <div className={styles.passwordAuth}>
+                {userPasswordEnabled ? <PasswordLogin /> : <Image src={keyImageUrl} alt="Door and key illustration" width={200} />}
+              </div>
+            </>
+          )}
+          {page === 'magic' && (
+            <>
+              <div className={styles.getCode}>
+                <GetMagicCode />
+                <TermsAndConditions />
+              </div>
+              <div className={styles.useCode}>
+                <UseMagicCode />
+              </div>
+            </>
+          )}
         </section>
       </div>
     </div>
   );
 };
 
-const Main = () => {
-  const userPasswordEnabled = useDevToggle('User Passwords');
-  return (
-    <>
-      <div className={styles.oAuth}>
-        <div>
-          <SignInButtons />
-          <MagicCodeButton />
-        </div>
-        <TermsAndConditions />
-      </div>
-      <div className={styles.passwordAuth}>
-        {userPasswordEnabled ? <PasswordLogin /> : <Image src={keyImageUrl} alt="Door and key illustration" width={200} />}
-      </div>
-    </>
-  );
-};
-
-const Magic = () => {
-  const userPasswordEnabled = useDevToggle('User Passwords');
-  return (
-    <>
-      <div className={styles.getCode}>
-        <GetMagicCode />
-      </div>
-      <div className={styles.useCode}>
-        <UseMagicCode />
-      </div>
-    </>
-  );
-};
 export default SignInLayout;
