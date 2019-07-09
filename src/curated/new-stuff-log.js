@@ -6,7 +6,7 @@ export default [
   {
     id: 6,
     title: 'Reorder projects in a collection',
-    body: `Click and drag to order projects to your heart's content.
+    body: `Click and drag to reorder projects to your heart's content.
 ![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2F5d1d154785d4b724908479.gif?v=1562187111603)
 `,
   },
@@ -20,7 +20,7 @@ export default [
   {
     id: 4,
     title: 'Collection Notes',
-    body: `Share why you love an app by leave a note oin your collection. They support markdown too!
+    body: `Adding an app to your collection?  Leave a note to share why you love it! Notes support Markdown too, if you want to get **fancy** with formatting
 ![](https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fnote.gif?v=1562186723855)
 `,
   },
