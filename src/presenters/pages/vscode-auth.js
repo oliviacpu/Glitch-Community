@@ -3,7 +3,7 @@
  */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 import SignInLayout from 'Components/layout/sign-in-layout';
 
@@ -19,8 +19,6 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
 
-  const setDestinationAnd = (then) =>
-    
   useEffect(() => {
     if (isSignedIn) {
       setTimeout(() => {
@@ -28,6 +26,16 @@ const VSCodeAuth = ({ insiders, openProject }) => {
         const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`;
         window.location.assign(redirectUrl);
       }, 3000);
+    } else {
+      setDestination({
+        expires: dayjs()
+          .add(10, 'minutes')
+          .toISOString(),
+        to: {
+          pathname: location.pathname,
+          search: location.search,
+        },
+      });
     }
   }, [isSignedIn]);
 
