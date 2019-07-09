@@ -51,7 +51,6 @@ const UseMagicCode = () => {
             type="text"
             labelText="sign in code"
             placeholder="cute-unique-cosmos"
-            autoFocus
             testingId="sign-in-code"
           />
           <div className={styles.submitWrap}>
@@ -71,7 +70,7 @@ const UseMagicCode = () => {
           <Notification persistent type="error">
             Error
           </Notification>
-          <div>Code not found or already used. Try signing in with email.</div>
+          <Text>Code not found or already used. Try signing in with email.</Text>
         </>
       )}
     </div>
