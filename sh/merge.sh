@@ -8,6 +8,10 @@ if [ "$1" == "-h" ]; then
   exit 0
 fi
 
+curl https://community.glitch.me/api/home > src/curated/home.json
+git add src/curated/home.json
+git commit -m "update home page content"
+
 git checkout master
 git pull
 git pull live master
