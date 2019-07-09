@@ -39,12 +39,14 @@ const SignInLayout = () => (
       </section>
       <section className={classNames(styles.section, styles.actions)}>
         <div className={styles.content}>
-          <div>
+          <div className={styles.oauthSection}>
             <SignInButtons />
             <TermsAndConditions />
           </div>
-          <div>
-            <Image src={keyImageUrl} alt="" width="370px" />
+          <div className={styles.passwordSection}>
+            <div className={styles.keyImage}>
+              <Image src={keyImageUrl} />
+            </div>
           </div>
         </div>
       </section>
