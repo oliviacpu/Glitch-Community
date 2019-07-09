@@ -3,9 +3,10 @@ import React from 'react';
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
 import Button from 'Components/buttons/button';
+import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import Image from 'Components/images/image';
 import PasswordLogin from 'Components/sign-in/password-login';
-import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
+import UseMagicCode from 'Components/sign-in/use-magic-code';
 
 import useDevToggle from 'State/dev-toggles';
 
@@ -63,7 +64,7 @@ const SignInLayout = () => {
             </div>
             <TermsAndConditions />
           </div>
-          <div className={styles.passwordAuth}>{userPasswordEnabled ? <PasswordLogin /> : <KeyImage />}</div>
+          <div className={styles.passwordAuth}>{userPasswordEnabled ? <UseMagicCode /> : <KeyImage />}</div>
         </section>
       </div>
     </div>

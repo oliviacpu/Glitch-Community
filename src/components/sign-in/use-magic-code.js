@@ -1,4 +1,18 @@
-const SignInWithCode = ({ align, showTwoFactor }) => {
+import React, { useState } from 'react';
+
+import Text from 'Components/text/text';
+import Button from 'Components/buttons/button';
+import TextInput from 'Components/inputs/text-input';
+import Notification from 'Components/notification';
+import Loader from 'Components/loader';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import { captureException } from 'Utils/sentry';
+
+import styles from './styles.styl';
+
+const UseMagicCode = ({ align, showTwoFactor }) => {
   const { login } = useCurrentUser();
   const api = useAPI();
   const [code, setCode] = useState('');
@@ -28,7 +42,7 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
     <div>
       {status === 'ready' && (
         <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
-          Now paste the code here to sign in.
+          <Text>Now paste the code here to sign in.</Text>
           <TextInput
             value={code}
             onChange={setCode}
@@ -39,7 +53,7 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
             testingId="sign-in-code"
           />
           <div className={styles.submitWrap}>
-            <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
+            <Button disabled={!isEnabled} onClick={onSubmit}>
               Sign In
             </Button>
           </div>
@@ -62,3 +76,5 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
     </div>
   );
 };
+
+export default UseMagicCode;
