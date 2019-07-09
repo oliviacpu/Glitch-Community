@@ -36,17 +36,19 @@ pop-shadow = 0px 2px 5px 0px rgba(0,0,0,0.27), 0px 1px 1px 0px rgba(0,0,0,0.15)
 
 .section
   margin: 0
+  padding: 0 12px
+  color: primary
+  
+.titleSection
+  margin: 0
   padding: 14px 12px
   color: primary
-  &:not(:last-child)
-    border-bottom: 1px solid secondary
- &.info
   background-color: secondary-background
-
-.title
-  font-size: inherit
-  font-weight: bold
-  margin: 0
+  border-bottom: 1px solid secondary
+  h1
+    font-size: inherit
+    font-weight: bold
+    margin: 0
 
 .content
   display: flex
@@ -55,10 +57,13 @@ pop-shadow = 0px 2px 5px 0px rgba(0,0,0,0.27), 0px 1px 1px 0px rgba(0,0,0,0.15)
   display: flex
   flex-grow: 1
   flex-direction: column
-  align-content: space-between
 
 .signInButtons
   display: flex
+  flex-wrap: wrap
+  
+.signInButton
+  margin-right: 0.5rem
 
 .termsAndConditions
   font-size: 13px
