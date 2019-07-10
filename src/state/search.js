@@ -91,11 +91,12 @@ function useSearchProvider(provider, query, params, deps) {
 
     allByKeys(mapValues(selectedProviders, (index) => index(query, params)))
       .then((res) => {
-      console.log("res", res)
+        console.log("res", res, selectedProviders)
         dispatch({ type: 'ready', payload: res });
       })
       .catch(handleError);
   }, [query, ...deps]);
+  console.log("hi", provider, query, params, deps)
   return state;
 }
 
