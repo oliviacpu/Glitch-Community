@@ -56,7 +56,7 @@ export function userIsProjectAdmin({ project, user }) {
 export function userIsOnlyProjectAdmin({ project, user }) {
   if (!user || !project) return false;
   const adminCount = project.permissions.filter((p) => p.accessLevel >= ADMIN_ACCESS_LEVEL).length;
-  console.log(project.permissions)
+  console.log(project.permissions) // TODO this is not empty but also does not include accessLevels for some reason?
   if (adminCount > 1) return false;
   return userIsProjectAdmin({ project, user });
 }
