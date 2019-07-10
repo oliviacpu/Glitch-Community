@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { pickBy } from 'lodash';
 
 import { useCurrentUser } from 'State/current-user';
@@ -47,16 +47,18 @@ async function getPermissions(api, domain, withCacheBust) {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export const useProjectOptions = async (project, { user, team, collection, ...options } = {}) => {
+export const useProjectOptions = (project, { user, team, collection, ...options } = {}) => {
   const { currentUser } = useCurrentUser();
   const defaultProjectOptions = useDefaultProjectOptions();
   const projectOptions = { ...defaultProjectOptions, ...options };
   
-  if (!project.permissions && project.domain) {
-    const api = useAPI();
-    const permissions = await getPermissions(api, project.domain)
-    project.permissions = permissions
-  }
+  useEffect(async() => {
+    if (!project.permissions && project.domain) {
+      const api = useAPI();
+      const permissions = await getPermissions(api, project.domain)
+      project.permissions = permissions
+    }
+  })
 
   const isPinned = useMemo(() => {
     if (user) return user.pins.some(({ id }) => id === project.id);
