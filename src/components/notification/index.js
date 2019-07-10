@@ -11,12 +11,19 @@ const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
-  
-  let message = '';
-  useEffect(() => {
-    console.log(el.current)
-    // message = el.current;
-  }, [el]);
+  const [message, setMessage] = useState('');
+
+  useEffect(
+    () => {
+      if (el.children) {
+        const textNodes = el.children.filter((child) => child.tagName === 'p');
+        setMessage(textNodes.reduce((str, node) => str + node.innerText));
+      } else {
+        setMessage(el.current.innerText);
+      }
+    },
+    [el],
+  );
 
   const className = cx({
     notification: true,
@@ -25,12 +32,13 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
     persistent,
     inline,
   });
-  
+
   return (
     <>
-      <LiveMessage aria-live="polite" message={`${type}: ${message}`} />}
+      <LiveMessage aria-live="polite" message={`${type}: ${message}`} />
       <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
         {children}
+        message: {message}
       </aside>
     </>
   );
