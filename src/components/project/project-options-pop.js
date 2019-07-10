@@ -23,7 +23,7 @@ const PopoverMenuItems = ({ children }) =>
       ),
   );
 
-const LeaveProjectPopover = ({ project, leaveProject }) => {
+const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
   const { currentUser } = useCurrentUser();
   const illustration = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fwave.png?v=1502123444938';
   const trackLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
@@ -42,7 +42,7 @@ const LeaveProjectPopover = ({ project, leaveProject }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => { trackLeaveProject(project); }}>
+        <Button type="dangerZone" onClick={() => { trackLeaveProject(project); togglePopover(); }}>
           Leave Project
         </Button>
       </PopoverActions>
@@ -110,7 +110,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
               />
             ),
             createCollection: () => <CreateCollectionWithProject project={project} addProjectToCollection={projectOptions.addProjectToCollection} />,
-            leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} />,
+            leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} togglePopover={togglePopover} />,
           }}
         >
           {({ addToCollection, leaveProject }) => (
