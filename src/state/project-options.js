@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { pickBy } from 'lodash';
 
 import { useCurrentUser } from 'State/current-user';
@@ -8,7 +8,6 @@ import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
-import { useAPI } from 'State/api';
 import { getSingleItem } from 'Shared/api';
 
 const bind = (fn, ...args) => {
@@ -40,9 +39,12 @@ const useDefaultProjectOptions = () => {
   };
 };
 
-async function getPermissions(api, domain, withCacheBust) {
-  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain)
+export async function getPermissions(api, domain) {
+  try {
+    const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain)
+  } catch (error) {
+    
+  }
   return project.permissions;
 }
 
@@ -51,14 +53,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const { currentUser } = useCurrentUser();
   const defaultProjectOptions = useDefaultProjectOptions();
   const projectOptions = { ...defaultProjectOptions, ...options };
-  
-  useEffect(async() => {
-    if (!project.permissions && project.domain) {
-      const api = useAPI();
-      const permissions = await getPermissions(api, project.domain)
-      project.permissions = permissions
-    }
-  })
 
   const isPinned = useMemo(() => {
     if (user) return user.pins.some(({ id }) => id === project.id);
