@@ -46,9 +46,9 @@ export const ResultItem = ({ className, onClick, href, children, active, selecte
   return (
     <div className={classnames(className, styles.resultItem, href && styles.withLink, selected && styles.selected)}>
       <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={buttonRef}>
-        <div className={styles.resultWrap}>
+        <span className={styles.resultWrap}>
           {children}
-        </div>
+        </span>
       </TransparentButton>
       {href && (
         <div className={styles.linkButtonWrap}>
