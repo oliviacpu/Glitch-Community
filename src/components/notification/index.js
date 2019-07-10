@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LiveMessage, LiveAnnouncer } from 'react-aria-live';
+import { LiveMessage } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -11,15 +11,6 @@ const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
-  const [message, setMessage] = useState('');
-
-  useEffect(
-    () => {
-      console.log('useeffect');
-      setMessage(el.current.innerText);
-    },
-    [el],
-  );
 
   const className = cx({
     notification: true,
@@ -31,10 +22,9 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   return (
     <>
-      <LiveMessage aria-live="polite" message={`${type}: ${message}`} />
+      {el && el.current && <LiveMessage aria-live="polite" message={`${type}: ${el.current.innerText}`} />}
       <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
         {children}
-        <button onClick={() => setMessage('butts')}>Click for butts</button>
       </aside>
     </>
   );
