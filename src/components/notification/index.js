@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LiveMessage } from 'react-aria-live';
+import { LiveMessage, LiveAnnouncer } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
