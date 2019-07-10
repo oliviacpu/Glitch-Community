@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LiveMessage } from 'react-aria-live';
 
@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
   
-  useEffect(() => )
+  useEffect(() => {});
 
   const className = cx({
     notification: true,
