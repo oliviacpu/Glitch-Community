@@ -3,7 +3,7 @@ const path = require('path');
 const axios = require('axios');
 
 const { API_URL } = require('./constants').current;
-const { getSingleItem, getAllPages } = require('Shared/api');
+const { getAllPages } = require('Shared/api');
 
 const GLITCH_TEAM_ID = 74;
 
