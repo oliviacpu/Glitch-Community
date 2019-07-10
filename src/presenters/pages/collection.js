@@ -24,11 +24,6 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
 
   const funcs = {
     ...baseFuncs,
-    onDeleteCollection: () => {
-      if (!window.confirm('Are you sure you want to delete your collection?')) return;
-      baseFuncs.deleteCollection();
-      history.push(getOwnerLink(collection));
-    },
     onNameChange: async (name) => {
       const url = kebabCase(name);
       const result = await funcs.updateNameAndUrl({ name, url });
@@ -43,16 +38,12 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       <main>
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
-        {currentUserIsAuthor && (
-          <Button type="dangerZone" size="small" emoji="bomb" onClick={funcs.onDeleteCollection}>
-            Delete Collection
-          </Button>
-        )}
+        {currentUserIsAuthor &&
+          <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+            {() => <DeleteCollection collection={collection} />}
+          </PopoverWithButton>
+        }
       </main>
-      {currentUserIsAuthor &&
-        <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
-          {() => <DeleteCollection collection={collection} />}
-        </PopoverWithButton>}
       <MoreCollectionsContainer collection={collection} />
     </>
   );
