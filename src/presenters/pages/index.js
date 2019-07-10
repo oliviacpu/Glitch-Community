@@ -54,7 +54,6 @@ const WhatIsGlitch = () => {
           <Heading tagName="h1">
             <Image src={witchSmall} srcSet={[`${witchLarge} 1000w`]} alt={whatsGlitchAlt} width="100%" />
           </Heading>
-
           <OverlayVideo>
             <span className="video">
               <Button decorative emoji="playButton" imagePosition="left">
