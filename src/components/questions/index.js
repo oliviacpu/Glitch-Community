@@ -76,10 +76,9 @@ function Questions({ max }) {
 
   return (
     <section className={styles.container}>
-      <Heading tagName="h2" className={styles.helpHeader}>
-        <Link to="/questions">Help Others, Get Thanks <Arrow /></Link>
+      <Heading tagName="h2">
+        <Link to="/questions">Help Others, Get Thanks <Arrow /></Link> <QuestionTimer animating={!loading} callback={reload} />
       </Heading>
-      <QuestionTimer animating={!loading} callback={reload} />
       <div>
         {questions.length ? (
           <ErrorBoundary>
