@@ -1,4 +1,5 @@
-/* globals CDN_URL */
+import { CDN_URL } from 'Utils/constants';
+
 const cacheBuster = Math.floor(Math.random() * 1000);
 
 export const ANON_AVATAR_URL = 'https://cdn.glitch.com/f6949da2-781d-4fd5-81e6-1fdd56350165%2Fanon-user-on-project-avatar.svg?1488556279399';
