@@ -14,13 +14,12 @@ import { UserProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { useUserEditor } from 'State/user';
 
-import AuthDescription from '../includes/auth-description';
-import UserEditor from '../user-editor';
-import ProjectsLoader from '../projects-loader';
 import styles from './user.styl';
 
 function syncPageToLogin(login) {
@@ -68,36 +67,31 @@ NameAndLogin.defaultProps = {
   login: '',
 };
 
-// has science gone too far?
-const UserPage = ({
-  user: {
-    // has science gone too far?
-    _deletedProjects,
-    featuredProjectId,
-    ...user
-  },
-  isAuthorized,
-  isSupport,
-  maybeCurrentUser,
-  updateDescription,
-  updateName,
-  updateLogin,
-  uploadCover,
-  clearCover,
-  uploadAvatar,
-  addPin,
-  removePin,
-  leaveProject,
-  deleteProject,
-  undeleteProject,
-  featureProject,
-  unfeatureProject,
-  setDeletedProjects,
-  addProjectToCollection,
-}) => {
+const UserPage = ({ user: initialUser }) => {
+  const [user, funcs] = useUserEditor(initialUser);
+  const {
+    updateDescription,
+    updateName,
+    updateLogin,
+    uploadCover,
+    clearCover,
+    uploadAvatar,
+    undeleteProject,
+    unfeatureProject,
+    setDeletedProjects,
+    addProjectToCollection,
+  } = funcs;
+  const projectOptions = { ...funcs, user };
+  const { _deletedProjects, featuredProjectId } = user;
+
+  const { currentUser: maybeCurrentUser } = useCurrentUser();
+  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+  const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;
+
   const pinnedSet = new Set(user.pins.map(({ id }) => id));
   // filter featuredProject out of both pinned & recent projects
-  const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
+  const sortedProjects = orderBy(user.projects, (project) => project.updatedAt, ['desc']);
+  const [pinnedProjects, recentProjects] = partition(sortedProjects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
@@ -143,7 +137,7 @@ const UserPage = ({
       {/* Pinned Projects */}
       {pinnedProjects.length > 0 && (
         <ProjectsList
-          data-cy="pinned-projects"
+          dataCy="pinned-projects"
           layout="grid"
           title={
             <>
@@ -151,14 +145,7 @@ const UserPage = ({
             </>
           }
           projects={pinnedProjects}
-          projectOptions={{
-            removePin,
-            featureProject,
-            leaveProject,
-            deleteProject,
-            addProjectToCollection,
-            isAuthorized,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -177,20 +164,13 @@ const UserPage = ({
       {/* Recent Projects */}
       {recentProjects.length > 0 && (
         <ProjectsList
-          data-cy="recent-projects"
+          dataCy="recent-projects"
           layout="grid"
           title="Recent Projects"
           projects={recentProjects}
           enablePagination
           enableFiltering={recentProjects.length > 6}
-          projectOptions={{
-            addPin,
-            featureProject,
-            leaveProject,
-            deleteProject,
-            addProjectToCollection,
-            isAuthorized,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -214,12 +194,6 @@ const UserPage = ({
 };
 
 UserPage.propTypes = {
-  clearCover: PropTypes.func.isRequired,
-  maybeCurrentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-  leaveProject: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  uploadCover: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string,
     login: PropTypes.string,
@@ -234,31 +208,14 @@ UserPage.propTypes = {
     projects: PropTypes.array.isRequired,
     teams: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
-    _deletedProjects: PropTypes.array.isRequired,
   }).isRequired,
-  addProjectToCollection: PropTypes.func.isRequired,
-  featureProject: PropTypes.func.isRequired,
-  unfeatureProject: PropTypes.func.isRequired,
 };
 
-const UserPageContainer = ({ user }) => {
-  const { currentUser: maybeCurrentUser } = useCurrentUser();
-  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+const UserPageContainer = ({ user }) => (
+  <AnalyticsContext properties={{ origin: 'user' }}>
+    <Helmet title={user.name || (user.login ? `@${user.login}` : `User ${user.id}`)} />
+    <UserPage user={user} />
+  </AnalyticsContext>
+);
 
-  return (
-    <AnalyticsContext properties={{ origin: 'user' }}>
-      <UserEditor initialUser={user}>
-        {(userFromEditor, funcs, isAuthorized) => (
-          <>
-            <Helmet title={userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)} />
-            <ProjectsLoader projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-              {(projects) => <UserPage {...{ isAuthorized, maybeCurrentUser, isSupport }} user={{ ...userFromEditor, projects }} {...funcs} />}
-            </ProjectsLoader>
-          </>
-        )}
-      </UserEditor>
-    </AnalyticsContext>
-  );
-};
 export default UserPageContainer;

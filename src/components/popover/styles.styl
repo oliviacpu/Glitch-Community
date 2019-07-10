@@ -45,7 +45,7 @@
     color: primary
     background-color: warning-background
     
-.popoverSection + .popoverSection
+.popoverSection:not(:first-child)
   border-top: 1px solid secondary
     
 .popoverActions,
@@ -66,8 +66,7 @@
   font-weight: bold
 
 .backArrow
-  margin-top: -3px
-  padding: 1px 3px
+  padding: 1px 3px 3px
   border-radius: 3px
   opacity: 0.7
 .popoverTitle:hover .backArrow
@@ -87,6 +86,7 @@
 .arrowPadding
   padding: 10px 10px 8px
   border-radius: 5px
+  display: block
   &:hover
     background-color: section-line
       
@@ -96,10 +96,11 @@
   height: 8px
   opacity: 0.4
   background-repeat: no-repeat
+  display: block
   
 .arrowPadding:hover .downArrow
   opacity: 1
-    
+  
 .popoverMenuWrap .popoverWrap
   width: fit-content
   

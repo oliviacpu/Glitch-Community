@@ -55,19 +55,6 @@ body
   color: primary
   margin: 0
 
-.content
-  padding: 1rem 2rem
-  margin-left: auto
-  margin-right: auto
-  width: 100%
-  max-width: 1207px
-  @media (max-width: smallViewport)
-    padding-left: 20px
-    padding-right: 20px
-
-.header-wrap
-  margin-top: 16px    
-
 h1
   font-weight: bold
   font-size: 22px
@@ -104,9 +91,6 @@ hr
 .visible
   display: inherit !important
 
-.general-link
-  color: link !important
-
 .centered
   display: flex
   flex-direction: row
@@ -114,9 +98,14 @@ hr
   justify-content: center
 
 button,
-input,
-textarea
+input
   font-family: sansserif
+  
+button
+  text-align: left
+  font-size: 14px
+  line-height: 14px
+  font-weight: 600
 
 main,
 section
@@ -140,9 +129,6 @@ section
 .warning
   background-color: warning-background
 
-.legible-background
-  background-color: white
-
 .avatar
   display: inline-block
   width: 32px
@@ -163,19 +149,34 @@ section
 [data-href]
   cursor: pointer
 
-.status-badge
-  font-weight: 600
-  font-size: 12px
-  line-height: 14px
-  vertical-align: middle
-  margin: 0
-  .status
-    padding-top: 2px
-    padding-bottom: 0px
-    border-radius: 5px
-    padding-left: 5px
-    padding-right: 5px
-    display: inline-block
-  .admin
-    margin-top: 2px
-    background-color: admin
+// styles for index.ejs
+// There will always be a little special sauce here, since these styles have to work
+// in a no-react environment.
+#fallback
+  #fallback-img
+    padding: calc(20%) 0
+    margin: 0 auto
+  .error-msg 
+    background: secondary-background 
+    border: 3px solid black
+    border-radius: 10px
+    h1, p
+      margin: 20px
+
+@media(min-width: 700px)
+  #fallback
+    main
+      width: 700px
+      position: absolute
+      top: 40%
+      left: 50%
+      transform: translate(-50%, -40%)
+    #fallback-img
+      padding: 0
+      float: left
+      margin-right: 40px
+    .error-msg
+      float: left
+      width: 350px
+      margin-top: 65px
+

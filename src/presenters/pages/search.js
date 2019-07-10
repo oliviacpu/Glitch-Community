@@ -6,9 +6,8 @@ import { withRouter } from 'react-router-dom';
 import SearchResults from 'Components/search-results';
 import NotFound from 'Components/errors/not-found';
 import MoreIdeas from 'Components/more-ideas';
+import Layout from 'Components/layout';
 import { useAlgoliaSearch } from 'State/search';
-
-import Layout from '../layout';
 
 const SearchPage = withRouter(({ query, activeFilter, history }) => {
   const searchResults = useAlgoliaSearch(query);

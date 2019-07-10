@@ -7,14 +7,11 @@ import { withInfo } from '@storybook/addon-info';
 import { MemoryRouter } from 'react-router-dom';
 
 // initialize globals
-window.CDN_URL = 'https://cdn.glitch.com';
-window.EDITOR_URL = 'https://glitch.com/edit/';
-window.APP_URL = 'https://glitch.com';
+window.RUNNING_ON = 'production';
 
 
 dayjs.extend(relativeTimePlugin);
 dayjs.extend(convertPlugin);
-
 
 const enableLinks = (story) => <MemoryRouter>{story()}</MemoryRouter>;
 

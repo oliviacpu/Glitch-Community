@@ -15,7 +15,7 @@ const MaskImage = ({ maskClass: controlledMaskClass, ...props }) => {
 };
 
 MaskImage.propTypes = {
-  maskClass: PropTypes.oneOf([...maskClasses, ...maskClassesWithDash]),
+  maskClass: PropTypes.oneOf(['speechBubble', ...maskClasses, ...maskClassesWithDash]),
 };
 
 MaskImage.defaultProps = {

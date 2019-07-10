@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 
 import PopoverContainer from './container';
 import PopoverDialog from './dialog';
@@ -58,9 +57,9 @@ export const MultiPopoverTitle = ({ children }) => {
   return (
     <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
       <PopoverTitle>
-        <div className={styles.backArrow}>
-          <div className="left-arrow icon" />
-        </div>
+        <span className={styles.backArrow}>
+          <span className="left-arrow icon" />
+        </span>
         &nbsp;
         {children}
       </PopoverTitle>
@@ -107,10 +106,10 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
         <div>
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
-              <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} />
-              </div>
-              <div className={globalStyles.visuallyHidden}>{label}</div>
+              <span className={styles.arrowPadding}>
+                <span className={styles.downArrow} />
+              </span>
+              <span className={globalStyles.visuallyHidden}>{label}</span>
             </TransparentButton>
           </div>
           {popoverProps.visible && renderChildren(popoverProps)}
@@ -134,9 +133,9 @@ PopoverMenu.defaultProps = {
 // Use with PopoverMenu so that popover can correctly adjust to fit the content
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
   <div className={styles.menuButtonWrap}>
-    <Button size="small" type="tertiary" onClick={onClick} hasEmoji>
+    <Button size="small" type="tertiary" emoji={emoji} onClick={onClick}>
       <div className={styles.popoverButtonContent}>
-        {label} <Emoji name={emoji} />
+        {label}
       </div>
     </Button>
   </div>

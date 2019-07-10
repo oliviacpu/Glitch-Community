@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
-import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
+import Layout from 'Components/layout';
+import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 
-import Layout from '../layout';
 import TeamPage from './team';
 import UserPage from './user';
 

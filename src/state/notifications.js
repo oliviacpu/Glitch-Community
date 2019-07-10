@@ -16,13 +16,12 @@ export const NotificationsProvider = (props) => {
 
   const create = (content, opts = {}) => {
     const notification = {
-      id: `${Date.now()}{Math.random()}`,
+      id: `${Date.now()}${Math.random()}`,
       content,
       ...opts,
     };
 
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
-
     if (notification.persistent) {
       const updateNotification = (updatedContent) => {
         setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, updatedContent } : n)));

@@ -1,6 +1,6 @@
-import React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import { getLink } from 'Models/team';
 import { useAPI } from 'State/api';
@@ -8,54 +8,37 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { captureException } from 'Utils/sentry';
 
-class JoinTeamPageBase extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirect: null,
-    };
-  }
+const JoinTeamPage = withRouter(({ history, teamUrl, joinToken }) => {
+  const api = useAPI();
+  const { login: replaceCurrentUser } = useCurrentUser();
+  const { createNotification } = useNotifications();
 
-  async componentDidMount() {
-    try {
-      // Suppress the authorization header to prevent user merging
-      const { data: user } = await this.props.api.post(`/teams/join/${this.props.joinToken}`);
-      if (user) {
-        this.props.replaceCurrentUser(user);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: user } = await api.post(`/teams/join/${joinToken}`);
+        if (user) {
+          replaceCurrentUser(user);
+        }
+        createNotification('Invitation accepted');
+      } catch (error) {
+        // The team is real but the token didn't work
+        // Maybe it's been used already or expired?
+        console.log('Team invite error', error && error.response && error.response.data);
+        if (error && error.response.status !== 401) {
+          captureException(error);
+        }
+        createNotification('Invite failed, try asking your teammate to resend the invite', { type: 'error' });
       }
-      this.props.createNotification('Invitation accepted');
-    } catch (error) {
-      // The team is real but the token didn't work
-      // Maybe it's been used already or expired?
-      console.log('Team invite error', error && error.response && error.response.data);
-      if (error && error.response.status !== 401) {
-        captureException(error);
-      }
-      this.props.createNotification('Invite failed, try asking your teammate to resend the invite', { type: 'error' });
-    }
-    this.setState({ redirect: getLink({ url: this.props.teamUrl }) });
-  }
+      history.push(getLink({ url: teamUrl }));
+    })();
+  }, []);
 
-  render() {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />;
-    }
-    return null;
-  }
-}
-JoinTeamPageBase.propTypes = {
-  api: PropTypes.any.isRequired,
+  return null;
+});
+
+JoinTeamPage.propTypes = {
   teamUrl: PropTypes.string.isRequired,
   joinToken: PropTypes.string.isRequired,
-  createNotification: PropTypes.func.isRequired,
-  replaceCurrentUser: PropTypes.func.isRequired,
 };
-
-const JoinTeamPage = (props) => {
-  const api = useAPI();
-  const { login } = useCurrentUser();
-  const notify = useNotifications();
-  return <JoinTeamPageBase replaceCurrentUser={login} api={api} {...notify} {...props} />;
-};
-
 export default JoinTeamPage;

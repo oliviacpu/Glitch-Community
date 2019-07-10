@@ -45,3 +45,5 @@ OverlayTitle.propTypes = {
 OverlayTitle.defaultProps = {
   id: '', // for aria labelled by purposes only
 };
+
+export const OverlayBackground = () => <div className={styles.overlayBackground} role="presentation" tabIndex={-1} />;

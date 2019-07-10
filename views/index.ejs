@@ -16,13 +16,13 @@
     <!-- facebook open graph tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://glitch.com">
-    <meta property="og:title" content="<%= title %>">
+    <meta property="og:title" content="<%= socialTitle || title %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:image" content="<%= image %>">
     <!-- twitter card tags (stacks with og: tags) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@glitch">
-    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:title" content="<%= socialTitle || title %>">
     <meta name="twitter:description" content="<%= description %>">
     <meta name="twitter:image" content="<%= image %>">
     <meta name="twitter:url" content="https://glitch.com">
@@ -31,35 +31,17 @@
     <% for (let i = 0; i < styles.length; ++i) { %>
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
+    
     <!-- <noscript><style>#fallback, #fallback-noscript { display: inline-block !important; } #fallback-img {display: block !important}</style></noscript> -->
   </head>
   <body>
     <script>
       var RUNNING_ON = '<%= RUNNING_ON %>';
-      var CONSTANTS = <%- JSON.stringify(CONSTANTS) %>;
-      var _env;
-      if (RUNNING_ON === 'development') {
-        _env = 'development';
-      } else if (RUNNING_ON === 'staging') {
-        _env = 'staging';
-      } else if (document.location.hostname.indexOf('glitch.development') >= 0) {
-        _env = 'development';
-      } else if (document.location.hostname.indexOf('staging.glitch.com') >= 0) {
-        _env = 'staging';
-      } else {
-        _env = 'production';
-      }
-      var API_URL = CONSTANTS[_env].API_URL;
-      var APP_URL = CONSTANTS[_env].APP_URL;
-      var CDN_URL = CONSTANTS[_env].CDN_URL;
-      var EDITOR_URL = CONSTANTS[_env].EDITOR_URL;
-      var FACEBOOK_CLIENT_ID = CONSTANTS[_env].FACEBOOK_CLIENT_ID;
-      var GITHUB_CLIENT_ID = CONSTANTS[_env].GITHUB_CLIENT_ID;
-      var PROJECTS_DOMAIN = CONSTANTS[_env].PROJECTS_DOMAIN;
       var ENVIRONMENT = '<%= ENVIRONMENT %>';
       var EXTERNAL_ROUTES = <%- EXTERNAL_ROUTES %>;
       var PROJECT_DOMAIN = '<%= PROJECT_DOMAIN %>';
       var ZINE_POSTS = <%- ZINE_POSTS %>;
+      var HOME_CONTENT = <%- HOME_CONTENT %>;
       var BUILD_COMPLETE = <%- BUILD_COMPLETE %>;
       var BUILD_TIMESTAMP = '<%= BUILD_TIMESTAMP %>';
     </script>
@@ -67,11 +49,11 @@
       <div class="content">
         <header>
           <a href="/">
-            <img class="logo" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" width="70px" alt="Glitch">
+            <img class="logo" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" width="70" alt="Glitch">
           </a>
         </header>
           <main>
-            <img id="fallback-img" style="display: none" src="https://cdn.glitch.com/dbd73211-c667-4832-9229-c27f4cb66f5c%2Fmagikarp-illust.svg?1542746418939"/>
+            <img id="fallback-img" alt="" style="display: none" src="https://cdn.glitch.com/dbd73211-c667-4832-9229-c27f4cb66f5c%2Fmagikarp-illust.svg?1542746418939"/>
             <div class="error-msg" id="fallback-noscript" style="display: none">
               <h1>The web browser that you're using does not support Javascript</h1>
               <p>Since Glitch requires Javascript to run, please try using Glitch in a different web browser.</p>

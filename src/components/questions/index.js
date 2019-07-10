@@ -7,9 +7,10 @@ import { sample } from 'lodash';
 import Heading from 'Components/text/heading';
 import Link from 'Components/link';
 import Grid from 'Components/containers/grid';
+import ErrorBoundary from 'Components/error-boundary';
+import Arrow from 'Components/arrow';
 import QuestionItem from './item';
 
-import ErrorBoundary from '../../presenters/includes/error-boundary';
 import { captureException } from '../../utils/sentry';
 import { useAPI } from '../../state/api';
 import styles from './questions.styl';
@@ -76,7 +77,7 @@ function Questions({ max }) {
   return (
     <section className={styles.container}>
       <Heading tagName="h2">
-        <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={reload} />
+        <Link to="/questions">Help Others, Get Thanks <Arrow /></Link> <QuestionTimer animating={!loading} callback={reload} />
       </Heading>
       <div>
         {questions.length ? (

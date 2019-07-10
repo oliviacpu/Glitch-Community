@@ -8,12 +8,12 @@
   flex-flow: row wrap
   align-items: center
   
-.teamMember
+.teamMember, .invitedMember
   margin-right: -7px
 
 .teamMember + li
   margin-left: 10px
-.teamMember + li.teamMember
+.teamMember + li.teamMember, .invitedMember + li.invitedMember
   margin-left: 0
   
 .whitelistedDomainIconWrap
@@ -21,13 +21,36 @@
   text-align: center
   
 .whitelistedDomain,
-.invitedMember,
 .addButtonWrap,
 .joinButtonWrap
   margin: 0 3px
   
 .invitedMember img
   opacity: 0.5
+
+.invitedMember .avatar 
+  display: inline-block
+  vertical-align: middle
+  img
+    width: 44px
+    height: 44px
+
+.invitedMember + .addButtonWrap
+  margin-left: 10px
+  
+.nameLoginWrap
+  display: inline-block
+  vertical-align: middle
+  padding-left: 10px
+
+.name,
+.userLogin
+  margin: 0
+.name
+  font-weight: bold
+.userLogin
+  font-weight: 600
+  color: text-on-secondary-background
   
 .projectsList
   label

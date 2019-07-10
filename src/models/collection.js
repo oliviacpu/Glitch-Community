@@ -1,8 +1,8 @@
-/* global CDN_URL */
-
 import { kebabCase } from 'lodash';
 import randomColor from 'randomcolor';
 import { hex as getHexContrastRatio } from 'wcag-contrast';
+
+import { CDN_URL } from 'Utils/constants';
 
 import { getLink as getTeamLink } from './team';
 import { getLink as getUserLink } from './user';
@@ -17,6 +17,7 @@ export const getContrastWithLightText = (hex) => getHexContrastRatio(hex, '#fff'
 export const getContrastWithDarkText = (hex) => getHexContrastRatio(hex, '#222');
 
 export const isDarkColor = (hex) => {
+  if (!hex.startsWith('#')) return false;
   const contrastWithLightText = getContrastWithLightText(hex);
   const contrastWithDarkText = getContrastWithDarkText(hex);
   return contrastWithLightText > contrastWithDarkText;

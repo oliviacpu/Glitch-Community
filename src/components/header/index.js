@@ -1,13 +1,13 @@
-/* global EDITOR_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { EDITOR_URL } from 'Utils/constants';
 import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
 import SignInPop from 'Components/sign-in-pop';
+import UserOptionsPop from 'Components/user-options-pop';
 import Link, { TrackedExternalLink } from 'Components/link';
 import { useCurrentUser } from 'State/current-user';
-import UserOptionsPop from '../../presenters/pop-overs/user-options-pop';
 import NewProjectPop from './new-project-pop';
 import Logo from './logo';
 import styles from './header.styl';
@@ -20,7 +20,7 @@ const ResumeCoding = () => (
   </TrackedExternalLink>
 );
 
-const Header = ({ searchQuery, showNewStuffOverlay }) => {
+const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   return (
     <header role="banner" className={styles.header}>
@@ -48,7 +48,13 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           )}
           {!!currentUser && currentUser.login && (
             <li className={styles.buttonWrap}>
-              <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} superUserHelpers={superUserHelpers} />
+              <UserOptionsPop
+                user={currentUser}
+                signOut={clear}
+                showAccountSettingsOverlay={showAccountSettingsOverlay}
+                showNewStuffOverlay={showNewStuffOverlay}
+                superUserHelpers={superUserHelpers}
+              />
             </li>
           )}
         </ul>
@@ -59,12 +65,12 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
 
 Header.propTypes = {
   searchQuery: PropTypes.string,
-  showNewStuffOverlay: PropTypes.func,
+  showAccountSettingsOverlay: PropTypes.func.isRequired,
+  showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
   searchQuery: '',
-  showNewStuffOverlay: () => {},
 };
 
 export default Header;

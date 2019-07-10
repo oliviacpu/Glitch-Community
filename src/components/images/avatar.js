@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
+import CollectionAvatarBase from 'Components/collection/defaultAvatar';
+import { hexToRgbA } from 'Utils/color';
 
 import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 import styles from './avatar.styl';
 
 // UserAvatar
@@ -45,10 +48,10 @@ Avatar.defaultProps = {
   hideTooltip: false,
 };
 
-export const TeamAvatar = ({ team, hideTooltip }) => (
+export const TeamAvatar = ({ team, size, hideTooltip }) => (
   <Avatar
     name={team.name}
-    src={getTeamAvatarUrl({ ...team, size: 'small' })}
+    src={getTeamAvatarUrl({ ...team, size })}
     srcFallback={DEFAULT_TEAM_AVATAR}
     type="team"
     hideTooltip={hideTooltip}
@@ -61,9 +64,11 @@ TeamAvatar.propTypes = {
     hasAvatarImage: PropTypes.bool.isRequired,
   }).isRequired,
   hideTooltip: PropTypes.bool,
+  size: PropTypes.oneOf(['small', 'large']),
 };
 TeamAvatar.defaultProps = {
   hideTooltip: false,
+  size: 'small',
 };
 
 export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton }) => (
@@ -94,4 +99,34 @@ UserAvatar.defaultProps = {
   suffix: '',
   hideTooltip: false,
   withinButton: false,
+};
+
+export const ProjectAvatar = ({ project, hasAlt }) => (
+  <Avatar
+    name={hasAlt ? project.domain : ''}
+    src={getProjectAvatarUrl(project.id)}
+    srcFallback={FALLBACK_AVATAR_URL}
+    type="team"
+    hideTooltip
+  />
+);
+
+ProjectAvatar.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+  }).isRequired,
+  hasAlt: PropTypes.bool,
+};
+
+ProjectAvatar.defaultProps = {
+  hasAlt: false,
+};
+
+export const CollectionAvatar = ({ collection }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} />;
+
+CollectionAvatar.propTypes = {
+  collection: PropTypes.shape({
+    coverColor: PropTypes.string.isRequired,
+  }).isRequired,
 };

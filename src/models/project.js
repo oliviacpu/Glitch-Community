@@ -1,4 +1,4 @@
-/* global CDN_URL EDITOR_URL PROJECTS_DOMAIN */
+import { CDN_URL, EDITOR_URL, PROJECTS_DOMAIN } from 'Utils/constants';
 
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Ffallback-project-avatar.svg?1528812220123';
 
@@ -38,4 +38,24 @@ export function sortProjectsByLastAccess(projects) {
     }
     return Date.parse(b.lastAccess) - Date.parse(a.lastAccess);
   });
+}
+
+export const MEMBER_ACCESS_LEVEL = 20;
+export const ADMIN_ACCESS_LEVEL = 30;
+
+export function userIsProjectMember({ project, user }) {
+  if (!user || !project || !project.permissions) return false;
+  return project.permissions.some(({ userId }) => user.id === userId);
+}
+
+export function userIsProjectAdmin({ project, user }) {
+  if (!user || !project) return false;
+  return project.permissions.some(({ userId, accessLevel }) => user.id === userId && accessLevel >= ADMIN_ACCESS_LEVEL);
+}
+
+export function userIsOnlyProjectAdmin({ project, user }) {
+  if (!user || !project) return false;
+  const adminCount = project.permissions.filter((p) => p.accessLevel >= ADMIN_ACCESS_LEVEL).length;
+  if (adminCount > 1) return false;
+  return userIsProjectAdmin({ project, user });
 }

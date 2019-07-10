@@ -69,7 +69,7 @@ const Failure = ({ value }) => (
       </InfoDescription>
     </PopoverInfo>
     <PopoverActions>
-      <textarea className={`content-editable ${styles.textArea}`} value={value} readOnly />
+      <textarea className={styles.manualReport} value={value} readOnly />
     </PopoverActions>
   </>
 );

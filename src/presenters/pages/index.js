@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
-import Link from 'Components/link';
+import Button from 'Components/buttons/button';
 import MoreIdeas from 'Components/more-ideas';
 import Questions from 'Components/questions';
 import ReportButton from 'Components/report-abuse-pop';
 import RecentProjects from 'Components/recent-projects';
+import Layout from 'Components/layout';
 import { getEditorUrl } from 'Models/project';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 
-import Layout from '../layout';
 import Featured from '../featured';
 import OverlayVideo from '../overlays/overlay-video';
 
@@ -45,7 +45,6 @@ const WhatIsGlitch = () => {
   const remix = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fremix-illustration.svg?1543508529783';
   const collaborate = 'https://cdn.glitch.com/a67e7e84-c063-4c8e-a7fc-f4c7ab86186f%2Fcollaborate-illustration.svg?1543508686482';
 
-  const play = 'https://cdn.glitch.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg';
   const whatsGlitchAlt = "Glitch is the friendly community where you'll find the app of your dreams";
 
   return (
@@ -55,12 +54,12 @@ const WhatIsGlitch = () => {
           <Heading tagName="h1">
             <Image src={witchSmall} srcSet={[`${witchLarge} 1000w`]} alt={whatsGlitchAlt} width="100%" />
           </Heading>
-
           <OverlayVideo>
-            <div className="button video">
-              <Image src={play} className="play-button" alt="How it works" width="" height="" />
-              <span>How it works</span>
-            </div>
+            <span className="video">
+              <Button decorative emoji="playButton" imagePosition="left">
+                How it works
+              </Button>
+            </span>
           </OverlayVideo>
         </figure>
 
@@ -82,9 +81,9 @@ const WhatIsGlitch = () => {
 const MadeInGlitch = () => (
   <section className="made-in-glitch">
     <Text>Of course, this site was made on Glitch too</Text>
-    <Link to={getEditorUrl('community')} className="button button-link has-emoji">
-      View Source <span className="emoji carp_streamer" />
-    </Link>
+    <Button href={getEditorUrl('community')} emoji="carpStreamer">
+      View Source
+    </Button>
   </section>
 );
 

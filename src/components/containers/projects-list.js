@@ -23,7 +23,7 @@ const containers = {
   gridCompact: (props) => <Grid className={styles.projectsGridCompact} {...props} />,
 };
 
-const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions, fetchMembers }) => {
+const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, layout, projectOptions }) => {
   const Container = containers[layout];
   return (
     <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
@@ -40,7 +40,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
               />
             </div>
           )}
-          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} fetchMembers={fetchMembers} />
+          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
         </>
       )}
     </Container>
@@ -50,7 +50,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
 const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
 const paginationReducer = (oldState, action) => {
-  switch (action) {
+  switch (action.type) {
     case 'next':
       return {
         page: oldState.page + 1,
@@ -68,6 +68,12 @@ const paginationReducer = (oldState, action) => {
         expanded: true,
         totalPages: oldState.totalPages,
         announce: 'Showing all pages',
+      };
+    case 'restart':
+      return {
+        ...oldState,
+        page: 1,
+        announce: `Showing page 1 of ${action.totalPages}`,
       };
     default:
       return {};
@@ -93,7 +99,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       prevButtonRef.current.focus();
     }
 
-    dispatchState('next');
+    dispatchState({ type: 'next' });
   };
 
   const onPreviousButtonClick = () => {
@@ -101,13 +107,18 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
       nextButtonRef.current.focus();
     }
 
-    dispatchState('previous');
+    dispatchState({ type: 'previous' });
   };
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * projectsPerPage;
     projects = projects.slice(startIdx, startIdx + projectsPerPage);
   }
+
+  useEffect(() => {
+    dispatchState({ type: 'restart', totalPages: numPages });
+  }, [numProjects]);
+
   return (
     <>
       {children(projects)}
@@ -125,7 +136,7 @@ const PaginationController = ({ enabled, projects, projectsPerPage, children }) 
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
             </Button>
           </div>
-          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState('expand')}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
             Show all <Badge>{numProjects}</Badge>
           </Button>
         </div>
@@ -197,17 +208,16 @@ function ProjectsList({
   enablePagination,
   enableSorting,
   onReorder,
-  fetchMembers,
   projectsPerPage,
   collection,
   noteOptions,
   projectOptions,
-  ...props
+  dataCy,
 }) {
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
-        <article {...props} className={classNames(styles.projectsContainer)}>
+        <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
@@ -223,7 +233,6 @@ function ProjectsList({
                   sortable={enableSorting && paginatedProjects.length === projects.length}
                   onReorder={onReorder}
                   projectOptions={projectOptions}
-                  fetchMembers={fetchMembers}
                 />
               )}
             </PaginationController>
@@ -242,11 +251,11 @@ ProjectsList.propTypes = {
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
   enableSorting: (props) => props.enableSorting && props.layout === 'row' && new Error('Sortable rows are not supported'),
-  fetchMembers: PropTypes.bool,
   projectsPerPage: PropTypes.number,
   collection: PropTypes.object,
   noteOptions: PropTypes.object,
   projectOptions: PropTypes.object,
+  dataCy: PropTypes.string,
 };
 
 ProjectsList.defaultProps = {
@@ -255,11 +264,11 @@ ProjectsList.defaultProps = {
   enableFiltering: false,
   enablePagination: false,
   enableSorting: false,
-  fetchMembers: false,
   projectsPerPage: 6,
   collection: null,
   noteOptions: {},
   projectOptions: {},
+  dataCy: null,
 };
 
 export default ProjectsList;

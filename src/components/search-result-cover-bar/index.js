@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import { getCoverUrl as getTeamCoverUrl } from 'Models/team';
 import { getCoverUrl as getUserCoverUrl, lightColors } from 'Models/user';
-import { hexToRgbA } from '../../presenters/includes/collection-avatar';
+import { hexToRgbA } from 'Utils/color';
 import styles from './search-result-cover-bar.styl';
 
 const cacheBuster = Math.floor(Math.random() * 1000);
