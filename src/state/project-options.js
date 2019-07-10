@@ -9,6 +9,7 @@ import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
 import { getSingleItem } from 'Shared/api';
+import { captureException } from 'Utils/sentry';
 
 const bind = (fn, ...args) => {
   if (!fn) return null;
@@ -41,11 +42,12 @@ const useDefaultProjectOptions = () => {
 
 export async function getPermissions(api, domain) {
   try {
-    const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain)
+    const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
+    return project.permissions;
   } catch (error) {
-    
+    captureException(error);
+    return [];
   }
-  return project.permissions;
 }
 
 // eslint-disable-next-line import/prefer-default-export

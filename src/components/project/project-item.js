@@ -48,11 +48,11 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     const fillInPermissions = async () => {
       if (project.permissions.length === 0 && project.domain) {
         const permissions = await getPermissions(api, project.domain);
-        project.permissions = permissions
+        project.permissions = permissions;
       }
-    }
-    fillInPermissions()
-  }, [])
+    };
+    fillInPermissions();
+  }, []);
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);

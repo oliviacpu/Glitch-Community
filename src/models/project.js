@@ -1,4 +1,4 @@
-import { CDN_URL, EDITOR_URL, PROJECTS_DOMAIN } from 'Utils/constants';
+/* global CDN_URL EDITOR_URL PROJECTS_DOMAIN */
 
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Ffallback-project-avatar.svg?1528812220123';
 
@@ -56,7 +56,6 @@ export function userIsProjectAdmin({ project, user }) {
 export function userIsOnlyProjectAdmin({ project, user }) {
   if (!user || !project) return false;
   const adminCount = project.permissions.filter((p) => p.accessLevel >= ADMIN_ACCESS_LEVEL).length;
-  console.log(project.permissions) // TODO this is not empty but also does not include accessLevels for some reason?
   if (adminCount > 1) return false;
   return userIsProjectAdmin({ project, user });
 }

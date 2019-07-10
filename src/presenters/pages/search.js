@@ -11,7 +11,6 @@ import { useAlgoliaSearch } from 'State/search';
 
 const SearchPage = withRouter(({ query, activeFilter, history }) => {
   const searchResults = useAlgoliaSearch(query);
-  console.log("searchResults", searchResults)
   const setActiveFilter = (filter) => {
     history.push(`/search?q=${query}&activeFilter=${filter}`);
   };
