@@ -8,6 +8,7 @@ import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
+import { getSingleItem } from 'Shared/api';
 
 const bind = (fn, ...args) => {
   if (!fn) return null;
@@ -38,11 +39,22 @@ const useDefaultProjectOptions = () => {
   };
 };
 
+async function getPermissions(api, projectId, withCacheBust) {
+  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+  const permissions = await getSingleItem(api, `/v1/projects/by/id/${projectId}${cacheBust}`)
+  return permissions;
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export const useProjectOptions = (project, { user, team, collection, ...options } = {}) => {
+export const useProjectOptions = async (project, { user, team, collection, ...options } = {}) => {
   const { currentUser } = useCurrentUser();
   const defaultProjectOptions = useDefaultProjectOptions();
   const projectOptions = { ...defaultProjectOptions, ...options };
+  
+  if (!project.permissions) {
+    const permissions = await getSingleItem(api, project.id, "permissions");
+    project.permissions = permissions
+  }
 
   const isPinned = useMemo(() => {
     if (user) return user.pins.some(({ id }) => id === project.id);
@@ -54,7 +66,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const isProjectMember = userIsProjectMember({ project, user: currentUser });
   const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
   const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });
-  console.log(isOnlyProjectAdmin)
 
   const isUser = user && user.id === currentUser.id;
   const isCollectionOwner = collection && userOrTeamIsAuthor({ collection, user: currentUser });
