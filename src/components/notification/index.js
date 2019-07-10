@@ -19,6 +19,8 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
     persistent,
     inline,
   });
+  
+  console.log({el});
 
   return (
     <>
