@@ -15,9 +15,10 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   useEffect(
     () => {
-      if (el.children) {
-        const textNodes = el.children.filter((child) => child.tagName === 'p');
-        setMessage(textNodes.reduce((str, node) => str + node.innerText));
+      if (el.current.children) {
+        const textNodes = [...el.current.children].filter((child) => child.tagName === 'p');
+        console.log({ textNodes });
+        setMessage(textNodes.reduce((str, node) => str + node.innerText), '');
       } else {
         setMessage(el.current.innerText);
       }
@@ -38,7 +39,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
       <LiveMessage aria-live="polite" message={`${type}: ${message}`} />
       <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
         {children}
-        message: {message}
+        <button>test</button>
       </aside>
     </>
   );
