@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import useUniqueId from 'Hooks/use-unique-id';
@@ -11,7 +11,11 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
-  const [mouseLeaveTimer, setMouseLeaveTimer] = useState(null);
+  const [mousedOut, setMousedOut] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setTooltipIsActive(false), 500);
+  }, [mousedOut]);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
@@ -47,7 +51,6 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   } else if (type === 'action') {
     // action tooltips are visible on hover and focus, click triggers a separate action
     // they should always be populated with their content, even when they are "hidden"
-
     role = 'tooltip';
     extendedTarget = React.cloneElement(target, {
       'aria-labelledby': id,
@@ -57,7 +60,6 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   } else if (type === 'info') {
     // info tooltips are visible on hover and focus, they provide supplementary info
     // they should be empty when not "visible", and populated when they are
-
     role = 'status';
     extendedTarget = React.cloneElement(target, {
       'aria-describedby': id,
@@ -83,7 +85,7 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   };
   
   const onMouseLeave = () => {
-    setMouseLeaveTimer(() => setTooltipIsActive(false), 200);
+    setMouseLeaveTimer(() => setTooltipIsActive(false), 500);
   };
 
   return (
