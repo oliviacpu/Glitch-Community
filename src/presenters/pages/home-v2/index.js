@@ -131,11 +131,11 @@ const CuratedCollections = ({ content }) => (
         <CuratedCollectionContainer collectionStyle={collectionStyles[i]} users={users} href={`/@${fullUrl}`}>
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
-          <span className={styles.curatedCollectionButtonWrap}>
+          <div className={styles.curatedCollectionButtonWrap}>
             <Button decorative>
               View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
-          </span>
+          </div>
         </CuratedCollectionContainer>
       )}
     </Row>
