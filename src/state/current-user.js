@@ -159,19 +159,11 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
   captureMessage('Invalid cachedUser');
 };
 
-const useValueRef = (value) => {
-  const ref = useRef(value);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref;
-};
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const useDebouncedAsync = (fn) => {
-  const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
-  const [pending, setPending] = useState(false); // Set true if fn is called while working
+  const [working, setWorking] = useState(false); // tracks if fn is currently running
+  const [pending, setPending] = useState(false); // run fn again whenever it finishes
   const debouncedFn = async () => {
     if (working) {
       setPending(true);
@@ -199,7 +191,10 @@ export const CurrentUserProvider = ({ children }) => {
   const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
   // put sharedUser in a ref so that we can access its current value in load(),
   // even if it was changed elsewhwere
-  const sharedUserRef = useValueRef(sharedUser);
+  const sharedUserRef = useRef(sharedUser);
+  useEffect(() => {
+    sharedUserRef.current = sharedUser;
+  }, [sharedUser]);
 
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
