@@ -8,6 +8,7 @@ import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
+import { useAPI } from 'State/api';
 import { getSingleItem } from 'Shared/api';
 
 const bind = (fn, ...args) => {
@@ -39,10 +40,10 @@ const useDefaultProjectOptions = () => {
   };
 };
 
-async function getPermissions(api, projectId, withCacheBust) {
+async function getPermissions(api, domain, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  const permissions = await getSingleItem(api, `/v1/projects/by/id/${projectId}${cacheBust}`)
-  return permissions;
+  const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain)
+  return project.permissions;
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -51,8 +52,9 @@ export const useProjectOptions = async (project, { user, team, collection, ...op
   const defaultProjectOptions = useDefaultProjectOptions();
   const projectOptions = { ...defaultProjectOptions, ...options };
   
-  if (!project.permissions) {
-    const permissions = await getSingleItem(api, project.id, "permissions");
+  if (!project.permissions && project.domain) {
+    const api = useAPI();
+    const permissions = await getPermissions(api, project.domain)
     project.permissions = permissions
   }
 

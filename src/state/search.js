@@ -121,7 +121,7 @@ const formatByType = {
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    permissions: [],
+    permissions: null,
     teamIds: project.teams,
     private: project.isPrivate,
   }),
