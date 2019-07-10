@@ -11,6 +11,8 @@ const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
+  
+  useEffect(() => )
 
   const className = cx({
     notification: true,
@@ -19,6 +21,10 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
     persistent,
     inline,
   });
+
+  console.log({ el })
+  if (el && el.current) console.log(el.current)
+  if (el && el.current) console.log(el.current.innerText)
 
   return (
     <>
