@@ -11,6 +11,12 @@ const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
+  
+  let message = '';
+  useEffect(() => {
+    console.log(el.current)
+    // message = el.current;
+  }, [el]);
 
   const className = cx({
     notification: true,
@@ -19,10 +25,10 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
     persistent,
     inline,
   });
-
+  
   return (
     <>
-      {el && el.current && <LiveMessage aria-live="polite" message={`${type}: ${el.current.innerText}`} />}
+      <LiveMessage aria-live="polite" message={`${type}: ${message}`} />}
       <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
