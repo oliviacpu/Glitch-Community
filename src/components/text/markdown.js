@@ -42,7 +42,7 @@ const Markdown = ({ children, length, allowImages, renderAsPlaintext }) => {
   }
 
   return (
-    <div
+    <span
       className={className}
       dangerouslySetInnerHTML={{ __html: rendered }} // eslint-disable-line react/no-danger
     />

@@ -16,13 +16,13 @@
     <!-- facebook open graph tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://glitch.com">
-    <meta property="og:title" content="<%= title %>">
+    <meta property="og:title" content="<%= socialTitle || title %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:image" content="<%= image %>">
     <!-- twitter card tags (stacks with og: tags) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@glitch">
-    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:title" content="<%= socialTitle || title %>">
     <meta name="twitter:description" content="<%= description %>">
     <meta name="twitter:image" content="<%= image %>">
     <meta name="twitter:url" content="https://glitch.com">
@@ -31,6 +31,7 @@
     <% for (let i = 0; i < styles.length; ++i) { %>
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
+    
     <!-- <noscript><style>#fallback, #fallback-noscript { display: inline-block !important; } #fallback-img {display: block !important}</style></noscript> -->
   </head>
   <body>
@@ -40,6 +41,7 @@
       var EXTERNAL_ROUTES = <%- EXTERNAL_ROUTES %>;
       var PROJECT_DOMAIN = '<%= PROJECT_DOMAIN %>';
       var ZINE_POSTS = <%- ZINE_POSTS %>;
+      var HOME_CONTENT = <%- HOME_CONTENT %>;
       var BUILD_COMPLETE = <%- BUILD_COMPLETE %>;
       var BUILD_TIMESTAMP = '<%= BUILD_TIMESTAMP %>';
     </script>

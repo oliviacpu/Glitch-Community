@@ -14,6 +14,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
+const { getHomeData, saveHomeDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -46,10 +47,11 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, title, description, image = imageDefault) {
+  async function render(res, title, description, image = imageDefault, socialTitle) {
     let built = true;
 
-    const zine = (await getZine()) || [];
+    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
+
     let scripts = [];
     let styles = [];
 
@@ -75,6 +77,7 @@ module.exports = function(external) {
 
     res.render('index.ejs', {
       title,
+      socialTitle,
       description,
       image,
       scripts,
@@ -82,7 +85,8 @@ module.exports = function(external) {
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
-      ZINE_POSTS: JSON.stringify(zine),
+      ZINE_POSTS: JSON.stringify(zine || []),
+      HOME_CONTENT: JSON.stringify(homeContent),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,
@@ -200,9 +204,38 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
+  
+  app.get('/api/home', async (req, res) => {
+    const data = await getHomeData();
+    res.send(data);
+  });
+
+  app.post('/api/home', async (req, res) => {
+    const persistentToken = req.headers.authorization;
+    const data = req.body;
+    try {
+      await saveHomeDataToFile({ persistentToken, data });
+      res.sendStatus(200);
+    } catch (e) {
+      console.warn(e);
+      res.sendStatus(403);
+    }
+  });
+
+  app.get('/create', async (req, res) => {
+    const title = 'Glitch - Create';
+    const socialTitle = 'Get Started Creating on Glitch';
+    const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
+    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
+    await render(res, title, description, image, socialTitle);
+  });
 
   app.get('*', async (req, res) => {
-    await render(res, 'Glitch', `The ${constants.tagline}`);
+    const title = 'Glitch';
+    const socialTitle = 'Glitch: The friendly community where everyone builds the web';
+    const description = 'Simple, powerful, free tools to create and use millions of apps.';
+    const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
+    await render(res, title, description, image, socialTitle);
   });
 
   return app;
