@@ -6,12 +6,11 @@ import { getOwnerLink, getLink } from 'Models/collection';
 import Image from 'Components/images/image';
 import Loader from 'Components/loader';
 import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverMenuButton } from 'Components/popover';
-import { deleteCollection as deleteCollectionViaState } from 'State/collection';
+import { useCollectionEditor } from 'State/collection';
 import { useNotifications } from 'State/notifications';
-import { useAPI } from 'State/api';
 
 const DeleteCollectionPop = withRouter(({ location, history, collection, animateAndDeleteCollection }) => {
-  const api = useAPI();
+  const [coll, baseFuncs] = useCollectionEditor(collection);
   const { createNotification } = useNotifications();
   const [collectionIsDeleting, setCollectionIsDeleting] = useState(false);
   const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
@@ -20,8 +19,8 @@ const DeleteCollectionPop = withRouter(({ location, history, collection, animate
     if (collectionIsDeleting) return;
     setCollectionIsDeleting(true);
     try {
-      if (location.pathname === getLink(collection)) {
-        deleteCollectionViaState(api, collection);
+      if (location.pathname === getLink(coll)) {
+        baseFuncs.deleteCollection();
         history.push(getOwnerLink(collection));
       } else {
         animateAndDeleteCollection(collection.id);
