@@ -78,7 +78,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
+                        <Button decorative disabled={!!project.suspendedReason} image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                           <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
                         </Button>
                       </div>
