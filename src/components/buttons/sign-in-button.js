@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
 
-/* global FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL */
+import { FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL } from 'Utils/constants';
 
 function facebookAuthLink() {
   const params = new URLSearchParams();
