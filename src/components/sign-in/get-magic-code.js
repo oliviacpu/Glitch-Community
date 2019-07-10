@@ -13,8 +13,6 @@ import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
 
-
-
 const GetMagicCode = () => {
   const api = useAPI();
   const [email, setEmail, validationError] = useEmail();
