@@ -81,7 +81,7 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leavePr
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
-  console.log(project.domain, projectOptions);
+  // console.log(project.domain, projectOptions);
   if (noProjectOptions) return null;
 
   const toggleBeforeAction = (togglePopover) =>
@@ -94,7 +94,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           action(...args);
         }),
     );
-
+  console.log(toggleBeforeActio)
   return (
     <PopoverMenu>
       {({ togglePopover }) => (
