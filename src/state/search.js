@@ -91,6 +91,7 @@ function useSearchProvider(provider, query, params, deps) {
 
     allByKeys(mapValues(selectedProviders, (index) => index(query, params)))
       .then((res) => {
+      console.log("res", res)
         dispatch({ type: 'ready', payload: res });
       })
       .catch(handleError);
