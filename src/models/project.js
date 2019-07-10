@@ -56,6 +56,7 @@ export function userIsProjectAdmin({ project, user }) {
 export function userIsOnlyProjectAdmin({ project, user }) {
   if (!user || !project) return false;
   const adminCount = project.permissions.filter((p) => p.accessLevel >= ADMIN_ACCESS_LEVEL).length;
+  console.log(project.permissions)
   if (adminCount > 1) return false;
   return userIsProjectAdmin({ project, user });
 }

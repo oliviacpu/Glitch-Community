@@ -54,6 +54,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const isProjectMember = userIsProjectMember({ project, user: currentUser });
   const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
   const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });
+  console.log(isOnlyProjectAdmin)
 
   const isUser = user && user.id === currentUser.id;
   const isCollectionOwner = collection && userOrTeamIsAuthor({ collection, user: currentUser });
