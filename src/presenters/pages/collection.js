@@ -4,13 +4,13 @@ import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 import { kebabCase } from 'lodash';
 
-import { getLink, getOwnerLink } from 'Models/collection';
-import Button from 'Components/buttons/button';
+import { getLink } from 'Models/collection';
+import { PopoverWithButton } from 'Components/popover';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
 import CollectionContainer from 'Components/collection/container';
 import MoreCollectionsContainer from 'Components/collections-list/more-collections';
-
+import DeleteCollection from 'Components/collection/delete-collection-pop';
 import Layout from 'Components/layout';
 import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
@@ -24,11 +24,6 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
 
   const funcs = {
     ...baseFuncs,
-    onDeleteCollection: () => {
-      if (!window.confirm('Are you sure you want to delete your collection?')) return;
-      baseFuncs.deleteCollection();
-      history.push(getOwnerLink(collection));
-    },
     onNameChange: async (name) => {
       const url = kebabCase(name);
       const result = await funcs.updateNameAndUrl({ name, url });
@@ -43,11 +38,11 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       <main>
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
-        {currentUserIsAuthor && (
-          <Button type="dangerZone" size="small" emoji="bomb" onClick={funcs.onDeleteCollection}>
-            Delete Collection
-          </Button>
-        )}
+        {currentUserIsAuthor &&
+          <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+            {() => <DeleteCollection collection={collection} />}
+          </PopoverWithButton>
+        }
       </main>
       <MoreCollectionsContainer collection={collection} />
     </>
