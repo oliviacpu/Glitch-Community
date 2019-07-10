@@ -60,10 +60,7 @@ Notification.defaultProps = {
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
   <>
-    <Text>
-      {`Added ${projectDomain} `}
-      {collectionName && `to collection ${collectionName}`}
-    </Text>
+    {`Added ${projectDomain} `}{collectionName && `to collection ${collectionName}`}
     {url && (
       <Button href={url} rel="noopener noreferrer" size="small" type="tertiary">
         Take me there
