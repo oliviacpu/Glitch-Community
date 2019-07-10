@@ -94,7 +94,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           action(...args);
         }),
     );
-  console.log(toggleBeforeActio)
+
   return (
     <PopoverMenu>
       {({ togglePopover }) => (
