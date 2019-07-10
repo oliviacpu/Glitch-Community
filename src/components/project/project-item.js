@@ -42,6 +42,7 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const projectOptions = useProjectOptions(project, providedProjectOptions);
+  console.log(project.domain, projectOptions);
   const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
