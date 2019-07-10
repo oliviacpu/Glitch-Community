@@ -11,6 +11,7 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
+  const [mouseLeaveTimer, setMouseLeaveTimer] = useState(null);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
@@ -75,12 +76,21 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
       </div>
     );
   }
+  
+  const onMouseEnter = () => {
+    clearTimeout(mouseLeaveTimer);
+    setTooltipIsActive(true);
+  };
+  
+  const onMouseLeave = () => {
+    setMouseLeaveTimer(() => setTooltipIsActive(false), 200);
+  };
 
   return (
     <div className={tooltipContainerClassName}>
       <div
-        onMouseEnter={() => setTooltipIsActive(true)}
-        onMouseLeave={() => setTooltipIsActive(false)}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onFocus={() => setTooltipIsActive(true)}
         onBlur={() => setTooltipIsActive(false)}
       >
