@@ -18,7 +18,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
       if (el.current.children) {
         const textNodes = [...el.current.children].filter((child) => child.tagName === 'p');
         console.log({ textNodes });
-        setMessage(textNodes.reduce((str, node) => str + node.innerText), '');
+        setMessage(textNodes.reduce((str, node) => str + node.innerText, ''));
       } else {
         setMessage(el.current.innerText);
       }
