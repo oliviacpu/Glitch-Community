@@ -114,17 +114,20 @@ const formatByType = {
     ...team,
     id: Number(team.objectID.replace('team-', '')),
   }),
-  project: (project) => ({
+  project: (project) => {
+    console.log(project.permissions)
+    return {
     description: '',
     showAsGlitchTeam: false,
     ...project,
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    permissions: project.members.map((userId) => ({ userId })),
+    permissions: [],
     teamIds: project.teams,
     private: project.isPrivate,
-  }),
+  }
+  },
   collection: (collection) => ({
     coverColor: '#eee',
     color: '#eee',
