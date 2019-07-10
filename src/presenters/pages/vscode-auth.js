@@ -3,13 +3,12 @@
  */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
-import PopoverContainer from 'Components/popover/container';
-import Text from 'Components/text/text';
-import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
+import SignInLayout from 'Components/layout/sign-in-layout';
+
 import { useCurrentUser } from 'State/current-user';
-
-import styles from './vscode-auth.styl';
+import useLocalStorage from 'State/local-storage';
 
 const VSCodeAuth = ({ insiders, openProject }) => {
   const { currentUser } = useCurrentUser();
@@ -17,7 +16,8 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   const isSignedIn = persistentToken && login;
 
   const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
-  const signInMessage = 'Please Sign In to continue.';
+
+  const [, setDestination] = useLocalStorage('destinationAfterAuth');
 
   useEffect(() => {
     if (isSignedIn) {
@@ -26,15 +26,20 @@ const VSCodeAuth = ({ insiders, openProject }) => {
         const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`;
         window.location.assign(redirectUrl);
       }, 3000);
+    } else {
+      setDestination({
+        expires: dayjs()
+          .add(10, 'minutes')
+          .toISOString(),
+        to: {
+          pathname: location.pathname,
+          search: location.search,
+        },
+      });
     }
-  }, []);
+  }, [isSignedIn]);
 
-  return (
-    <div className={styles.content}>
-      <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
-      {!isSignedIn && <PopoverContainer>{() => <SignInPop align="none" />}</PopoverContainer>}
-    </div>
-  );
+  return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
 
 VSCodeAuth.propTypes = {

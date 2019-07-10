@@ -1,9 +1,9 @@
-/* globals API_URL */
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize } from 'lodash';
+import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
-import { useCurrentUser } from './current-user';
+import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
 export const Context = createContext();
 

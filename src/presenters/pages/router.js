@@ -7,7 +7,7 @@ import rootTeams from '../../curated/teams';
 
 import { useCurrentUser } from '../../state/current-user';
 
-import IndexPage from './index';
+// import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
 import ResetPasswordPage from './reset-password';
 import OauthSignIn from './signin';
@@ -17,9 +17,11 @@ import ProjectPage from './project';
 import { TeamPage, UserPage, TeamOrUserPage } from './team-or-user';
 import CategoryPage from './category';
 import CollectionPage from './collection';
+import CreatePage from './create';
 import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
+import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
 import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
@@ -50,14 +52,17 @@ const PageChangeHandler = withRouter(({ location }) => {
   const { reload } = useCurrentUser();
   const isUpdate = useRef(false);
 
-  useEffect(() => {
-    if (isUpdate.current) {
-      window.scrollTo(0, 0);
-      reload();
-    }
-    isUpdate.current = true;
-    track();
-  }, [location.key]);
+  useEffect(
+    () => {
+      if (isUpdate.current) {
+        window.scrollTo(0, 0);
+        reload();
+      }
+      isUpdate.current = true;
+      track();
+    },
+    [location.key],
+  );
   return null;
 });
 
@@ -65,8 +70,10 @@ const Router = () => (
   <>
     <PageChangeHandler />
     <Switch>
-      <Route path="/" exact render={({ location }) => <IndexPage key={location.key} />} />
-      <Route path="/index.html" exact strict render={({ location }) => <IndexPage key={location.key} />} />
+      <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
+      <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+
       <Route
         path="/login/facebook"
         exact
@@ -133,6 +140,12 @@ const Router = () => (
           const query = parse(location.search, 'q');
           return <SearchPage key={query} query={query} activeFilter={parse(location.search, 'activeFilter')} />;
         }}
+      />
+
+      <Route
+        path="/create"
+        exact
+        render={({ location }) => <CreatePage key={location.key} />}
       />
 
       {categories.map((category) => (
