@@ -32,7 +32,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   return (
     <>
       <LiveMessage aria-live="polite" message={`${type}: ${message}`} />
-      <aside aria-live="assertive" ref={el} className={className} onAnimationEnd={remove}>
+      <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
         {children}
         <button onClick={() => setMessage('butts')}>Click for butts</button>
       </aside>
