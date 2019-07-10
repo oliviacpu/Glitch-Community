@@ -19,6 +19,6 @@ const SuperUserBanner = () => {
       <Button onClick={toggleSuperUser}>Click to disable</Button>
     </div>
   );
-};  
+};
 
 export default SuperUserBanner;

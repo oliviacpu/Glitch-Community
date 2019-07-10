@@ -18,7 +18,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <aside className={className} onAnimationEnd={remove}>
+    <aside role="alert" className={className} onAnimationEnd={remove}>
       {children}
     </aside>
   );
