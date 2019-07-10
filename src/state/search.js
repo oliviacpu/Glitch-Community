@@ -114,9 +114,7 @@ const formatByType = {
     ...team,
     id: Number(team.objectID.replace('team-', '')),
   }),
-  project: (project) => {
-    console.log(project.permissions)
-    return {
+  project: (project) => ({
     description: '',
     showAsGlitchTeam: false,
     ...project,
@@ -126,8 +124,7 @@ const formatByType = {
     permissions: [],
     teamIds: project.teams,
     private: project.isPrivate,
-  }
-  },
+  }),
   collection: (collection) => ({
     coverColor: '#eee',
     color: '#eee',

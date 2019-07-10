@@ -41,6 +41,7 @@ const ProfileListLoader = ({ project }) => (
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  console.log("project", project)
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
