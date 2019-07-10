@@ -13,7 +13,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
     notification: true,
     success: type === 'success',
     error: type === 'error',
-    persistent: true,
+    persistent,
     inline,
   });
 
