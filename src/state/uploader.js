@@ -3,11 +3,12 @@ import React from 'react';
 import { uploadAsset, uploadAssetSizes } from 'Utils/assets';
 import { captureException } from 'Utils/sentry';
 import { useNotifications } from 'State/notifications';
+import Progress from 'Components/fields/progress';
 
 const NotifyUploading = ({ progress }) => (
   <>
     Uploading asset
-    <progress value={progress} />
+    <Progress value={progress} />
   </>
 );
 const NotifyError = ({ error }) => {

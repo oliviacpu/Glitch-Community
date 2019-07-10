@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { sumBy } from 'lodash';
 
+import Progress from 'Components/fields/progress';
 import styles from './styles.styl';
 
 const MAX_REFERRERS = 4;
@@ -14,7 +15,7 @@ const ReferrerItem = ({ count, total, description }) => {
   return (
     <li>
       {count.toLocaleString('en')} – {description}
-      <progress value={progress} max="100" />
+      <Progress value={progress} max={100} />
     </li>
   );
 };

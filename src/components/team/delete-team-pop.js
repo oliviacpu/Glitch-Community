@@ -5,14 +5,14 @@ import Loader from 'Components/loader';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
-import { useAPI } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
 // import { teamAdmins } from 'Models/team';
 
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
 const DeleteTeamPop = withRouter(({ history, team }) => {
-  const api = useAPI();
+  const { deleteItem } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [teamIsDeleting, setTeamIsDeleting] = useState(false);
 
@@ -20,7 +20,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
     if (teamIsDeleting) return;
     setTeamIsDeleting(true);
     try {
-      await api.delete(`teams/${team.id}`);
+      await deleteItem({ team });
       history.push('/');
     } catch (error) {
       console.error('deleteTeam', error, error.response);

@@ -14,7 +14,10 @@ import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
+import VisibilityContainer from 'Components/visibility-container';
+import Arrow from 'Components/arrow';
 import { isDarkColor } from 'Models/collection';
+import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -25,48 +28,73 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
-const ProjectsPreview = ({ collection, isAuthorized }) => {
-  const isLoading = !collection.projects;
-  if (isLoading) {
+const ProjectsLoading = () => (
+  <div className={classNames(styles.projectsContainer, styles.empty)}>
+    <Loader />
+  </div>
+);
+
+const CollectionProjects = ({ collection, isAuthorized }) => {
+  const { value: projects } = useCollectionProjects(collection);
+
+  if (!projects) return <ProjectsLoading />;
+
+  if (projects.length === 0 && isAuthorized) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Loader />
+        <Text>
+          This collection is empty – add some projects <Emoji name="index" />
+        </Text>
       </div>
     );
   }
-  if (collection.projects.length > 0) {
+  if (projects.length === 0 && !isAuthorized) {
     return (
+      <div className={classNames(styles.projectsContainer, styles.empty)}>
+        <Text>No projects to see in this collection just yet.</Text>
+      </div>
+    );
+  }
+
+  return (
+    <>
       <div className={styles.projectsContainer}>
-        <Row className={styles.projectsList} items={collection.projects} count={3}>
+        <Row className={styles.projectsList} items={projects} count={3}>
           {(project) => <ProjectItemSmall project={project} />}
         </Row>
       </div>
-    );
-  }
-
-  const emptyState = isAuthorized ? (
-    <Text>
-      {'This collection is empty – add some projects '}
-      <Emoji name="index" />
-    </Text>
-  ) : (
-    <Text>No projects to see in this collection just yet.</Text>
+      <CollectionLink collection={collection} className={styles.footerLink}>
+        {`View ${projects.length >= 3 ? 'all' : ''} `}
+        <Pluralize count={projects.length} singular="project" /> <Arrow />
+      </CollectionLink>
+    </>
   );
-  return <div className={classNames(styles.projectsContainer, styles.empty)}>{emptyState}</div>;
 };
 
-ProjectsPreview.propTypes = {
-  collection: PropTypes.object.isRequired,
+const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionProjects collection={collection} isAuthorized={isAuthorized} /> : <ProjectsLoading />)}
+  </VisibilityContainer>
+);
+
+const CollectionCurator = ({ collection }) => {
+  const { value: curator } = useCollectionCurator(collection);
+  return <ProfileItem {...curator} />;
 };
 
+export const CollectionCuratorLoader = ({ collection }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
+  </VisibilityContainer>
+);
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection || (() => {})}>
+  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
           <div className={styles.header}>
-            <div className={styles.curator}>{showCurator && <ProfileItem user={collection.user} team={collection.team} />}</div>
+            <div className={styles.curator}>{showCurator && <CollectionCuratorLoader collection={collection} />}</div>
             {isAuthorized && <CollectionOptions collection={collection} deleteCollection={animateAndDeleteCollection} />}
           </div>
         )}
@@ -80,9 +108,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
           <div className={styles.nameDescriptionContainer}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative>
-                <div className={styles.name}>{collection.name}</div>
-              </Button>
+              <Button decorative>{collection.name}</Button>
             </div>
             <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>
@@ -90,15 +116,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
         </CollectionLink>
 
-        <ProjectsPreview collection={collection} isAuthorized={isAuthorized} />
-
-        {collection.projects && collection.projects.length > 0 && (
-          <CollectionLink collection={collection} className={styles.footerLink}>
-            {`View ${collection.projects.length >= 3 ? 'all' : ''} `}
-            <Pluralize count={collection.projects.length} singular="project" />
-            <span aria-hidden="true"> →</span>
-          </CollectionLink>
-        )}
+        <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} />
       </div>
     )}
   </AnimationContainer>
@@ -110,9 +128,6 @@ CollectionItem.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     coverColor: PropTypes.string.isRequired,
-    projects: PropTypes.array,
-    user: PropTypes.object,
-    team: PropTypes.object,
   }).isRequired,
   deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
@@ -120,7 +135,7 @@ CollectionItem.propTypes = {
 };
 
 CollectionItem.defaultProps = {
-  deleteCollection: null,
+  deleteCollection: () => {},
   isAuthorized: false,
   showCurator: false,
 };

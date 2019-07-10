@@ -57,9 +57,9 @@ export const MultiPopoverTitle = ({ children }) => {
   return (
     <TransparentButton onClick={() => setActiveView(defaultView)} aria-label="go back">
       <PopoverTitle>
-        <div className={styles.backArrow}>
-          <div className="left-arrow icon" />
-        </div>
+        <span className={styles.backArrow}>
+          <span className="left-arrow icon" />
+        </span>
         &nbsp;
         {children}
       </PopoverTitle>
@@ -106,10 +106,10 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
         <div>
           <div className={styles.buttonWrap}>
             <TransparentButton onClick={popoverProps.togglePopover}>
-              <div className={styles.arrowPadding}>
-                <div className={styles.downArrow} />
-              </div>
-              <div className={globalStyles.visuallyHidden}>{label}</div>
+              <span className={styles.arrowPadding}>
+                <span className={styles.downArrow} />
+              </span>
+              <span className={globalStyles.visuallyHidden}>{label}</span>
             </TransparentButton>
           </div>
           {popoverProps.visible && renderChildren(popoverProps)}

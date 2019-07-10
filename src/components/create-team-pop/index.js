@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { kebabCase, debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
-import { MultiPopoverTitle, PopoverDialog, PopoverSection, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
+import { MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { getPredicates, getTeamPair } from 'Models/words';
@@ -17,29 +16,29 @@ import styles from './styles.styl';
 
 // Create Team 🌿
 
-const CreateTeamSubmitButton = ({ disabled }) => {
-  const onClick = useTracker('Create Team submitted');
-  return (
-    <Button size="small" emoji="thumbsUp" onClick={onClick} disabled={disabled}>
-      Create Team
-    </Button>
-  );
-};
-
-function CreateTeamPopBase(props) {
-  const [state, setState] = useState({
+const CreateTeamPop = withRouter(({ history }) => {
+  const api = useAPI();
+  const trackSubmit = useTracker('Create Team submitted');
+  const [state, replaceState] = useState({
     teamName: '',
     isLoading: false,
     error: '',
   });
+  const setState = (valOrFn) => {
+    if (typeof valOrFn === 'function') {
+      replaceState((prevState) => ({ ...prevState, ...valOrFn(prevState) }));
+    } else {
+      replaceState((prevState) => ({ ...prevState, ...valOrFn }));
+    }
+  };
 
   const validate = async (name) => {
     if (name) {
-      const url = _.kebabCase(name);
+      const url = kebabCase(name);
       let error = null;
 
       try {
-        const { data } = await props.api.get(`userId/byLogin/${url}`);
+        const { data } = await api.get(`userId/byLogin/${url}`);
         if (data !== 'NOT FOUND') {
           error = 'Name in use, try another';
         }
@@ -50,7 +49,7 @@ function CreateTeamPopBase(props) {
       }
 
       try {
-        const { data } = await props.api.get(`teamId/byUrl/${url}`);
+        const { data } = await api.get(`teamId/byUrl/${url}`);
         if (data !== 'NOT FOUND') {
           error = 'Team already exists, try another';
         }
@@ -66,7 +65,7 @@ function CreateTeamPopBase(props) {
     }
   };
 
-  const debouncedValidate = _.debounce(validate, 200);
+  const [debouncedValidate] = useState(() => debounce(validate, 200));
   useEffect(() => {
     const getName = async () => {
       const teamName = await getTeamPair();
@@ -87,6 +86,7 @@ function CreateTeamPopBase(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setState({ isLoading: true });
+    trackSubmit();
     try {
       let description = 'A team that makes things';
       try {
@@ -95,9 +95,9 @@ function CreateTeamPopBase(props) {
       } catch (error) {
         // Just use the plain description
       }
-      const { data } = await props.api.post('teams', {
+      const { data } = await api.post('teams', {
         name: state.teamName,
-        url: _.kebabCase(state.teamName),
+        url: kebabCase(state.teamName),
         hasAvatarImage: false,
         coverColor: '',
         location: '',
@@ -106,7 +106,7 @@ function CreateTeamPopBase(props) {
         hasCoverImage: false,
         isVerified: false,
       });
-      props.history.push(getLink(data));
+      history.push(getLink(data));
     } catch (error) {
       const message = error && error.response && error.response.data && error.response.data.message;
       setState({
@@ -120,11 +120,9 @@ function CreateTeamPopBase(props) {
 
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
-      <PopoverSection>
-        <MultiPopoverTitle>
-          Create Team <Emoji name="herb" inTitle />
-        </MultiPopoverTitle>
-      </PopoverSection>
+      <MultiPopoverTitle>
+        Create Team <Emoji name="herb" inTitle />
+      </MultiPopoverTitle>
 
       <PopoverInfo>
         <InfoDescription>Showcase your projects in one place, manage collaborators, and view analytics</InfoDescription>
@@ -133,9 +131,15 @@ function CreateTeamPopBase(props) {
       <PopoverActions>
         <form onSubmit={handleSubmit}>
           <TextInput autoFocus labelText={placeholder} value={state.teamName} onChange={handleChange} placeholder={placeholder} error={state.error} />
-          <div className={styles.teamUrlPreview}>/@{_.kebabCase(state.teamName || placeholder)}</div>
+          <div className={styles.teamUrlPreview}>/@{kebabCase(state.teamName || placeholder)}</div>
 
-          {state.isLoading ? <Loader /> : <CreateTeamSubmitButton disabled={state.error} />}
+          {state.isLoading ? (
+            <Loader />
+          ) : (
+            <Button submit size="small" emoji="thumbsUp" disabled={!!state.error}>
+              Create Team
+            </Button>
+          )}
         </form>
       </PopoverActions>
       <PopoverInfo>
@@ -143,16 +147,6 @@ function CreateTeamPopBase(props) {
       </PopoverInfo>
     </PopoverDialog>
   );
-}
-
-CreateTeamPopBase.propTypes = {
-  api: PropTypes.any.isRequired,
-};
-
-const CreateTeamPop = withRouter((props) => {
-  const api = useAPI();
-
-  return <CreateTeamPopBase api={api} {...props} />;
 });
 
 export default CreateTeamPop;

@@ -43,28 +43,61 @@ const writeToStorage = (name, value) => {
   }
 };
 
-const useLocalStorage = (name, defaultValue) => {
-  const [rawValue, setValueInMemory] = React.useState(() => readFromStorage(name));
+const Context = React.createContext([() => undefined, () => {}]);
+
+const LocalStorageProvider = ({ children }) => {
+  const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
-    const reload = (event) => {
-      if (event.storageArea === storage && event.key === name) {
-        setValueInMemory(readFromStorage(name));
+    const onStorage = (event) => {
+      if (event.storageArea === storage) {
+        if (event.key) {
+          setCache((oldCache) => {
+            const newCache = new Map(oldCache);
+            newCache.delete(event.key);
+            return newCache;
+          });
+        } else {
+          setCache(new Map());
+        }
       }
     };
-    window.addEventListener('storage', reload, { passive: true });
+    window.addEventListener('storage', onStorage, { passive: true });
     return () => {
-      window.removeEventListener('storage', reload, { passive: true });
+      window.removeEventListener('storage', onStorage, { passive: true });
     };
-  }, [name]);
+  }, []);
+
+  const getValue = (name) => {
+    if (!cache.has(name)) {
+      const value = readFromStorage(name);
+      setCache((oldCache) => new Map([...oldCache, [name, value]]));
+      return value;
+    }
+    return cache.get(name);
+  };
+
+  const setValue = (name, value) => {
+    writeToStorage(name, value);
+    setCache((oldCache) => new Map([...oldCache, [name, value]]));
+  };
+
+  return (
+    <Context.Provider value={[getValue, setValue]}>
+      {children}
+    </Context.Provider>
+  );
+};
+
+const useLocalStorage = (name, defaultValue) => {
+  const [getRawValue, setRawValue] = React.useContext(Context);
+  const rawValue = getRawValue(name);
 
   const value = rawValue !== undefined ? rawValue : defaultValue;
-  const setValue = (newValue) => {
-    setValueInMemory(newValue);
-    writeToStorage(name, newValue);
-  };
+  const setValue = (newValue) => setRawValue(name, newValue);
 
   return [value, setValue];
 };
 
 export default useLocalStorage;
+export { LocalStorageProvider };

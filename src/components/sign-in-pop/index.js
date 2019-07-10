@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { parseOneAddress } from 'email-addresses';
-import { debounce } from 'lodash';
 
 import Button from 'Components/buttons/button';
+import SignInButton from 'Components/buttons/sign-in-button';
 import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import Notification from 'Components/notification';
 import Loader from 'Components/loader';
+import TwoFactorForm from 'Components/sign-in/two-factor-form';
 import { PopoverWithButton, MultiPopover, MultiPopoverTitle, PopoverDialog, PopoverActions, PopoverInfo } from 'Components/popover';
+import useDebouncedValue from 'Hooks/use-debounced-value';
 import useLocalStorage from 'State/local-storage';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -19,46 +21,6 @@ import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
-
-/* global GITHUB_CLIENT_ID, FACEBOOK_CLIENT_ID, APP_URL, API_URL */
-
-function githubAuthLink() {
-  const params = new URLSearchParams();
-  params.append('client_id', GITHUB_CLIENT_ID);
-  params.append('scope', 'user:email');
-  params.append('redirect_uri', `${APP_URL}/login/github`);
-  return `https://github.com/login/oauth/authorize?${params}`;
-}
-
-function facebookAuthLink() {
-  const params = new URLSearchParams();
-  params.append('client_id', FACEBOOK_CLIENT_ID);
-  params.append('scope', 'email');
-  params.append('redirect_uri', `${APP_URL}/login/facebook`);
-  return `https://www.facebook.com/v2.9/dialog/oauth?${params}`;
-}
-
-function googleAuthLink() {
-  const params = new URLSearchParams();
-  const callbackURL = `${APP_URL}/login/google`;
-  params.append('callbackURL', callbackURL);
-  return `${API_URL}/auth/google?${params}`;
-}
-
-function slackAuthLink() {
-  const params = new URLSearchParams();
-  const callbackURL = `${APP_URL}/login/slack`;
-  params.append('callbackURL', callbackURL);
-  return `${API_URL}/auth/slack?${params}`;
-}
-
-const SignInPopButton = ({ company, emoji, href, onClick }) => (
-  <div style={{ marginBottom: '10px' }}>
-    <Button href={href} onClick={onClick} size="small" emoji={emoji}>
-      Sign in with {company}
-    </Button>
-  </div>
-);
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
@@ -69,23 +31,78 @@ const SignInCodeSection = ({ onClick }) => (
 );
 
 function useEmail() {
-  const [email, setEmailValue] = useState('');
-  const [validationError, setValidationError] = useState(null);
-  const validate = useMemo(
-    () =>
-      debounce((value) => {
-        const isValidEmail = parseOneAddress(value) !== null;
-        setValidationError(isValidEmail ? null : 'Enter a valid email address');
-      }),
-    [],
+  const [email, setEmail] = useState('');
+  const debouncedEmail = useDebouncedValue(email, 500);
+  const validationError = useMemo(
+    () => {
+      const isValidEmail = parseOneAddress(debouncedEmail) !== null;
+      return isValidEmail || !debouncedEmail ? null : 'Enter a valid email address';
+    },
+    [debouncedEmail],
   );
-
-  const setEmail = (value) => {
-    setEmailValue(value);
-    validate(value);
-  };
   return [email, setEmail, validationError];
 }
+
+const ForgotPasswordHandler = ({ align }) => {
+  const api = useAPI();
+  const [email, setEmail, validationError] = useEmail();
+  const [{ status, errorMessage }, setState] = useState({ status: 'active', errorMessage: null });
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setState({ status: 'working', error: null });
+
+    try {
+      await api.post('email/sendResetPasswordEmail', { emailAddress: email });
+      setState({ status: 'done', error: null });
+    } catch (error) {
+      const message = error && error.response && error.response.data && error.response.data.message;
+      setState({ status: 'done', errorMessage: message || 'Something went wrong' });
+    }
+  };
+
+  const isWorking = status === 'working';
+  const isDone = status === 'done';
+  const isEnabled = email.length > 0 && !isWorking;
+  return (
+    <PopoverDialog align={align}>
+      <MultiPopoverTitle>Forgot Password</MultiPopoverTitle>
+      <PopoverActions>
+        {!isDone && (
+          <form onSubmit={onSubmit}>
+            <TextInput
+              type="email"
+              labelText="Email address"
+              value={email}
+              onChange={setEmail}
+              placeholder="your@email.com"
+              error={validationError}
+              disabled={isWorking}
+              testingId="reset-password-email"
+            />
+            <div className={styles.submitWrap}>
+              <Button size="small" disabled={!isEnabled} submit>
+                Send Reset Password Link
+              </Button>
+            </div>
+          </form>
+        )}
+        {isDone && !errorMessage && (
+          <>
+            <Notification type="success" persistent>Almost Done</Notification>
+            <div>Reset your password by clicking the link sent to {email}.</div>
+          </>
+        )}
+        {isDone && errorMessage && (
+          <>
+            <Notification type="error" persistent>Error</Notification>
+            <div>{errorMessage}</div>
+          </>
+        )}
+      </PopoverActions>
+    </PopoverDialog>
+  );
+};
 
 const EmailHandler = ({ align, showView }) => {
   const api = useAPI();
@@ -136,6 +153,7 @@ const EmailHandler = ({ align, showView }) => {
               placeholder="new@user.com"
               error={isEnabled && !isFocused && validationError}
               autoFocus
+              testingId="sign-in-email"
             />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
@@ -167,7 +185,7 @@ const EmailHandler = ({ align, showView }) => {
   );
 };
 
-const SignInWithCode = ({ align }) => {
+const SignInWithCode = ({ align, showTwoFactor }) => {
   const { login } = useCurrentUser();
   const api = useAPI();
   const [code, setCode] = useState('');
@@ -179,8 +197,12 @@ const SignInWithCode = ({ align }) => {
     setStatus('loading');
     try {
       const { data } = await api.post(`/auth/email/${code}`);
-      login(data);
-      setStatus('done');
+      if (data.tfaToken) {
+        showTwoFactor(data.tfaToken);
+      } else {
+        login(data);
+        setStatus('done');
+      }
     } catch (error) {
       if (error && error.response && error.response.status !== 401) {
         captureException(error);
@@ -194,9 +216,9 @@ const SignInWithCode = ({ align }) => {
       <MultiPopoverTitle>Use a sign in code</MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
-          <form onSubmit={onSubmit} style={{ marginBottom: 0 }}>
+          <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
             Paste your temporary sign in code below
-            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus />
+            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus testingId="sign-in-code" />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Sign In
@@ -204,6 +226,7 @@ const SignInWithCode = ({ align }) => {
             </div>
           </form>
         )}
+        {status === 'loading' && <Loader />}
         {status === 'done' && <Notification persistent type="success">Success!</Notification>}
         {status === 'error' && (
           <>
@@ -216,9 +239,71 @@ const SignInWithCode = ({ align }) => {
   );
 };
 
+const TwoFactorSignIn = ({ align, token }) => (
+  <PopoverDialog align={align}>
+    <MultiPopoverTitle>Two factor auth <Emoji name="key" /></MultiPopoverTitle>
+    <PopoverActions>
+      <TwoFactorForm initialToken={token} />
+    </PopoverActions>
+  </PopoverDialog>
+);
+
+const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
+  const [emailAddress, setEmail, emailValidationError] = useEmail();
+  const [password, setPassword] = useState('');
+  const [working, setWorking] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const api = useAPI();
+  const { login } = useCurrentUser();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setWorking(true);
+    setErrorMessage(null);
+
+    try {
+      const { data } = await api.post('user/login', { emailAddress, password });
+      // leave working=true because logging in will hide the sign in pop
+      if (data.tfaToken) {
+        showTwoFactor(data.tfaToken);
+      } else {
+        login(data);
+      }
+    } catch (error) {
+      let message = error.response && error.response.data && error.response.data.message;
+      if (!message || error.response.status === 401) {
+        message = 'Failed to sign in, try again?';
+      }
+      setErrorMessage(message);
+      setWorking(false);
+    }
+  };
+
+  return (
+    <PopoverActions>
+      {!!errorMessage && <Notification type="error" persistent>{errorMessage}</Notification>}
+      <form data-cy="sign-in-form" onSubmit={handleSubmit}>
+        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
+        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
+        <div className={styles.submitWrap}>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
+        </div>
+      </form>
+      <div className={styles.submitWrap}>
+        <Button size="small" type="tertiary" onClick={showForgotPassword}>
+          Forgot Password
+        </Button>
+      </div>
+    </PopoverActions>
+  );
+};
+
 export const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
+  const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
+  const [tfaToken, setTfaToken] = React.useState('');
+
   const onClick = () =>
     setDestination({
       expires: dayjs()
@@ -235,11 +320,18 @@ export const SignInPopBase = withRouter(({ location, align }) => {
     next();
   };
 
+  const setTwoFactorAnd = (next) => (token) => {
+    setTfaToken(token);
+    next();
+  };
+
   return (
     <MultiPopover
       views={{
         email: (showView) => <EmailHandler align={align} showView={showView} />,
-        signInCode: () => <SignInWithCode align={align} />,
+        signInCode: (showView) => <SignInWithCode align={align} showTwoFactor={setTwoFactorAnd(showView.twoFactor)} />,
+        twoFactor: () => <TwoFactorSignIn align={align} token={tfaToken} />,
+        forgotPassword: () => <ForgotPasswordHandler align={align} />,
       }}
     >
       {(showView) => (
@@ -253,11 +345,14 @@ export const SignInPopBase = withRouter(({ location, align }) => {
               <Link to="/legal/#privacy">Privacy Statement</Link>
             </div>
           </PopoverInfo>
+          {userPasswordEnabled && (
+            <PasswordLoginSection showTwoFactor={setTwoFactorAnd(showView.twoFactor)} showForgotPassword={showView.forgotPassword} />
+          )}
           <PopoverActions>
-            <SignInPopButton href={facebookAuthLink()} company="Facebook" emoji="facebook" onClick={onClick} />
-            <SignInPopButton href={githubAuthLink()} company="GitHub" emoji="octocat" onClick={onClick} />
-            <SignInPopButton href={googleAuthLink()} company="Google" emoji="google" onClick={onClick} />
-            {slackAuthEnabled && <SignInPopButton href={slackAuthLink()} company="Slack" emoji="slack" onClick={onClick} />}
+            <SignInButton companyName="facebook" onClick={onClick} />
+            <SignInButton companyName="github" onClick={onClick} />
+            <SignInButton companyName="google" onClick={onClick} />
+            {slackAuthEnabled && <SignInButton companyName="slack" onClick={onClick} />}
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email
             </Button>

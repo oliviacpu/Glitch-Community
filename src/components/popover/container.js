@@ -6,7 +6,6 @@ import { isFragment } from 'react-is';
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
 const usePopoverToggle = ({ startOpen, onOpen }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
-
   const openPopover = (event) => {
     if (event && event.detail === 0) {
       setStatus('openedFromKeyboard');
@@ -17,7 +16,9 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
       onOpen();
     }
   };
-  const closePopover = () => setStatus('closed');
+  const closePopover = () => {
+    setStatus('closed');
+  };
 
   const togglePopover = (event) => {
     if (status === 'closed') {
@@ -61,17 +62,9 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
   );
 };
 
-class UnmonitoredComponent extends React.Component {
-  handleClickOutside() {
-    this.props.onClickOutside();
-  }
-
-  render() {
-    return this.props.children;
-  }
-}
-
-const MonitoredComponent = onClickOutside(UnmonitoredComponent);
+const MonitoredComponent = onClickOutside(({ children }) => children, {
+  handleClickOutside: (component) => component.props.onClickOutside,
+});
 
 export const PopoverToggleContext = createContext(null);
 
@@ -83,7 +76,6 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
   const before = outer ? outer(toggleState) : null;
-
   return (
     <PopoverToggleContext.Provider value={toggleState}>
       {before}

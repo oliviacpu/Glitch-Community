@@ -14,79 +14,78 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = React.forwardRef(
-  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji }, ref) => {
-    const className = cx({
-      btn: true,
-      cta: type === 'cta',
-      small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
-      tertiary: ['tertiary', 'dangerZone'].includes(type),
-      dangerZone: type === 'dangerZone',
-      unstyled: type === 'dropDown',
-      hasImage: emoji || image,
-      hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
-      hasSunglassesEmoji: emoji === 'sunglasses',
-      padLeft: (image || emoji) && imagePosition === 'left',
-      matchBackground: matchBackground === true,
-      active,
-      hover,
-      decorative,
-    });
+const Button = React.forwardRef(({
+  onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji,
+}, ref) => {
+  const className = cx({
+    btn: true,
+    cta: type === 'cta',
+    small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
+    tertiary: ['tertiary', 'dangerZone'].includes(type),
+    dangerZone: type === 'dangerZone',
+    unstyled: type === 'dropDown',
+    hasImage: emoji || image,
+    hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
+    hasSunglassesEmoji: emoji === 'sunglasses',
+    padLeft: (image || emoji) && imagePosition === 'left',
+    matchBackground: matchBackground === true,
+    active,
+    hover,
+    decorative,
+  });
 
-    const content = (
-      <>
-        {children}
-        {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
-        {image && <ButtonImage image={image} position={imagePosition} />}
-      </>
-    );
+  const content = (
+    <>
+      {children}
+      {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
+      {image && <ButtonImage image={image} position={imagePosition} />}
+    </>
+  );
 
-    if (href) {
-      let targetProps = {};
-      if (newTab) {
-        targetProps = {
-          target: '_blank',
-          rel: 'noopener noreferrer',
-        };
-      }
-
-      return (
-        <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
-          {content}
-        </Link>
-      );
+  if (href) {
+    let targetProps = {};
+    if (newTab) {
+      targetProps = {
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      };
     }
-
-    if (decorative) {
-      return (
-        <span className={className} disabled={disabled}>
-          {content}
-        </span>
-      );
-    }
-
     return (
-      <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
+      <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
         {content}
-      </button>
+      </Link>
     );
-  },
-);
+  }
+
+  if (decorative) {
+    return (
+      <span className={className} disabled={disabled}>
+        {content}
+      </span>
+    );
+  }
+
+  return (
+    <button ref={ref} onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
+      {content}
+    </button>
+  );
+});
 
 Button.propTypes = {
   /** element(s) to display in the button */
   children: PropTypes.node.isRequired,
   /** callback when button clicked */
   onClick: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'onClick', 'href', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'onClick', 'href', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
   /** OR link when button clicked */
   href: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'href', 'onClick', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'href', 'onClick', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
@@ -98,6 +97,8 @@ Button.propTypes = {
   type: PropTypes.oneOf(TYPES),
   /** size of button */
   size: PropTypes.oneOf(SIZES),
+  /** button submits a form */
+  submit: PropTypes.bool,
   /** whether or not the button's hover state should be active */
   hover: PropTypes.bool,
   /** whether or not the button should match its background */
@@ -120,6 +121,7 @@ Button.defaultProps = {
   disabled: false,
   type: null,
   size: null,
+  submit: false,
   hover: false,
   matchBackground: false,
   active: false,
@@ -137,7 +139,7 @@ const ButtonImage = ({ image, position, up1 }) => {
     up1,
   });
 
-  return <div className={className}>{image}</div>;
+  return <span className={className}>{image}</span>;
 };
 
 ButtonImage.propTypes = {

@@ -1,13 +1,15 @@
-/* globals APP_URL analytics */
+/* globals analytics */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { captureException } from '../../utils/sentry';
+import { captureException } from 'Utils/sentry';
+import { APP_URL } from 'Utils/constants';
 
-import useLocalStorage from '../../state/local-storage';
-import { useAPI } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import TwoFactorCodePage from './two-factor-code';
 import { EmailErrorPage, OauthErrorPage } from './error';
 
 // The Editor may embed /login/* endpoints in an iframe in order to share code.
@@ -50,20 +52,23 @@ const LoginPage = ({ provider, url }) => {
   const [state, setState] = React.useState({ status: 'active' });
   const setDone = () => setState({ status: 'done' });
   const setError = (title, message) => setState({ status: 'error', title, message });
+  const setTwoFactor = (token) => setState({ status: 'tfa', token });
 
   const perform = async () => {
     try {
       const { data } = await api.post(url);
-      if (data.id <= 0) {
+      if (data.tfaToken) {
+        setTwoFactor(data.tfaToken);
+      } else if (!data.id || data.id <= 0) {
         throw new Error(`Bad user id (${data.id}) after ${provider} login`);
+      } else {
+        console.log('LOGGED IN', data.id);
+        login(data);
+
+        setDone();
+        analytics.track('Signed In', { provider });
+        notifyParent({ success: true, details: { provider } });
       }
-
-      console.log('LOGGED IN', data.id);
-      login(data);
-
-      setDone();
-      analytics.track('Signed In', { provider });
-      notifyParent({ success: true, details: { provider } });
     } catch (error) {
       const errorData = error && error.response && error.response.data;
       setError(undefined, errorData && errorData.message);
@@ -100,6 +105,9 @@ const LoginPage = ({ provider, url }) => {
       return <EmailErrorPage title={errorTitle} description={errorMessage} />;
     }
     return <OauthErrorPage title={errorTitle} description={errorMessage} />;
+  }
+  if (state.status === 'tfa') {
+    return <TwoFactorCodePage initialToken={state.token} onSuccess={setDone} />;
   }
   return <div className="content" />;
 };
