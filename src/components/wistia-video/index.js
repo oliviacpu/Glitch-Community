@@ -14,7 +14,6 @@ function loadScript(src) {
 const WistiaVideo = ({ videoId }) => {
   useEffect(() => {
     loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
-    loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }, []);
   return (
     <div className="wistia_responsive_padding">

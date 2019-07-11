@@ -47,13 +47,18 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, title, description, image = imageDefault, socialTitle) {
+  async function render(res, opts = {}) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
     let scripts = [];
     let styles = [];
+    
+    if (opts.wistiaVideoId) {
+      scripts.push('//fast.wistia.com/assets/external/E-v1.js');
+      scripts.push(`//fast.wistia.com/embed/medias/${opts.wistiaVideoId}.jsonp`);
+    }
 
     try {
       const stats = JSON.parse(await readFilePromise('build/stats.json'));
@@ -75,11 +80,12 @@ module.exports = function(external) {
       built = false;
     }
 
+    const { title, socialTitle, description, socialTitle, image } = opts;
     res.render('index.ejs', {
       title,
       socialTitle,
       description,
-      image,
+      image || imageDefault,
       scripts,
       styles,
       BUILD_COMPLETE: built,
