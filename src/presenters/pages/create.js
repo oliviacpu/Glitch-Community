@@ -473,6 +473,9 @@ function Remix() {
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
       </Heading>
+      
+      <VisibilityContainer>
+        {({ wasEverVisible }) => wasEverVisible && (
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
         <TabList className={styles.remixAppTabs}>
           {apps.map((app) => (
