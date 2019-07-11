@@ -18,9 +18,6 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   };
   const closePopover = () => {
     setStatus('closed');
-    if (triggerButtonRef && triggerButtonRef.current) {
-      triggerButtonRef.current.focus();
-    }
   };
 
   const togglePopover = (event) => {
@@ -45,6 +42,9 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setStatus('closed');
+      }
+      if (triggerButtonRef && triggerButtonRef.current) {
+        triggerButtonRef.current.focus();
       }
     };
     window.addEventListener('keyup', keyHandler);
@@ -90,7 +90,8 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
-  triggerButtonRef: PropTypes.object.isRequired,
+  /* ref to the button that opened the popover. Used to reset focus back to that button after the user closes the popover by pressing escape */
+  triggerButtonRef: PropTypes.object,
   onOpen: PropTypes.func,
   outer: PropTypes.func,
   startOpen: PropTypes.bool,
@@ -99,6 +100,7 @@ PopoverContainer.defaultProps = {
   onOpen: null,
   outer: null,
   startOpen: false,
+  triggerButtonRef: null,
 };
 
 export default PopoverContainer;
