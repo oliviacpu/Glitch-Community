@@ -10,7 +10,7 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 import { PrivateIcon } from 'Components/private-badge';
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-item.styl';

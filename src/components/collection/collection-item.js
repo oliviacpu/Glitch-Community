@@ -16,7 +16,7 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
 import CollectionOptions from './collection-options-pop';
