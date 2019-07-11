@@ -89,7 +89,6 @@ module.exports = function(external) {
       HOME_CONTENT: JSON.stringify(homeContent),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
-      CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
     });
   }
@@ -235,7 +234,7 @@ module.exports = function(external) {
     const title = 'Glitch';
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
-    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
+    const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
     await render(res, title, description, image, socialTitle);
   });
 
