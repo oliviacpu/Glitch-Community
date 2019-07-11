@@ -10,14 +10,22 @@ function Video({ sources, ...props }) {
     };
   }, []);
 
-  const [visibleSources, setVisibleSources] = useState([]);
-  useEffect(() => {
-    setVisibleSources(sources.filter((s) => windowWidth >= s.minWidth).map(s => s.src));
-  }, [windowWidth]);
+  const filterVideos = () => sources.filter((s) => windowWidth >= s.minWidth);
 
+  const [visibleVideos, setVisibleVideos] = useState(filterVideos());
+  useEffect(
+    () => {
+      setVisibleVideos(filterVideos());
+    },
+    [windowWidth],
+  );
+
+  console.log(visibleVideos);
   return (
     <video {...props}>
-      {visibleSources.map(src => (<source key={src} src={src} />))}
+      {visibleVideos.map((video) => (
+        <source key={video.src} src={video.src} />
+      ))}
     </video>
   );
 }
