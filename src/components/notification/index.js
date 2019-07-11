@@ -13,19 +13,22 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
   const [message, setMessage] = useState('');
 
+  // TODO <Text> in notification font weight is wrong
+  // may not need to check length of messages and stuff
   useEffect(
     () => {
       console.log(el.current);
       if (el.current.children && el.current.children.length) {
         const textNodes = [...el.current.children].filter((child) => ['p', 'P'].includes(child.tagName));
-        console.log(textNodes);
         const messageStr = textNodes.reduce((str, node) => str + node.innerText, '');
-        setMessage(`${type}: ${messageStr}`);
-      } else {
+        if (messageStr.length) {
+          setMessage(`${type}: ${messageStr}`);
+        }
+      } else if (el.current.innerText.length) {
         setMessage(`${type}: ${el.current.innerText}`);
       }
     },
-    [el],
+    [el.current],
   );
 
   const className = cx({
@@ -38,8 +41,8 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   return (
     <LiveAnnouncer>
-      <LiveMessage aria-live="polite" message={message} />
-      <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
+      <LiveMessage aria-live="assertive" message={message} />
+      <aside ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
     </LiveAnnouncer>
