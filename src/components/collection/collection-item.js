@@ -110,7 +110,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
             <div className={styles.itemButtonWrap}>
               <Button decorative>{collection.name}</Button>
             </div>
-            <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
+            <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>
             </div>
           </div>

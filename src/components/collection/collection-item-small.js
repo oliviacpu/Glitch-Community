@@ -61,12 +61,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
             </div>
           </div>
         </div>
-        <div
-          className={styles.description}
-          style={{
-            color: isDarkColor(collection.coverColor) ? 'white' : '',
-          }}
-        >
+        <div className={classnames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
           <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>
