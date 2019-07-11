@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-/* Usage
-<Video className="whatever" src={[{ minWidth: '0', src: '' }, { minWidth: '750', src: ''}]} />
-*/
-
 function Video({ sources, ...props }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
