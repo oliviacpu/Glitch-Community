@@ -277,7 +277,6 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
         <video
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-          src={v}
           muted
           autoPlay
           loop
@@ -288,7 +287,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <video src={video} muted autoPlay loop playsInline>
+        <video muted autoPlay loop playsInline>
           <source src={video} />
         </video>
       </div>
