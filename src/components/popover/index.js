@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, createContext } from 'react';
+import React, { useState, useContext, useMemo, createContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
 import TransparentButton from 'Components/buttons/transparent-button';
@@ -70,22 +70,25 @@ MultiPopoverTitle.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => (
-  <div className={styles.popoverWithButtonWrap}>
-    <PopoverContainer onOpen={onOpen}>
-      {(popoverProps) => (
-        <div>
-          <div className={styles.buttonWrap}>
-            <Button {...buttonProps} onClick={popoverProps.togglePopover}>
-              {buttonText}
-            </Button>
+export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => {
+  const buttonRef = useRef();
+  return (
+    <div className={styles.popoverWithButtonWrap}>
+      <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
+        {(popoverProps) => (
+          <div>
+            <div className={styles.buttonWrap}>
+              <Button {...buttonProps} ref={buttonRef} onClick={popoverProps.togglePopover}>
+                {buttonText}
+              </Button>
+            </div>
+            {popoverProps.visible && renderChildren(popoverProps)}
           </div>
-          {popoverProps.visible && renderChildren(popoverProps)}
-        </div>
-      )}
-    </PopoverContainer>
-  </div>
-);
+        )}
+      </PopoverContainer>
+    </div>
+  );
+};
 
 PopoverWithButton.propTypes = {
   buttonProps: PropTypes.object,
@@ -134,9 +137,7 @@ PopoverMenu.defaultProps = {
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
   <div className={styles.menuButtonWrap}>
     <Button size="small" type="tertiary" emoji={emoji} onClick={onClick}>
-      <div className={styles.popoverButtonContent}>
-        {label}
-      </div>
+      <div className={styles.popoverButtonContent}>{label}</div>
     </Button>
   </div>
 );

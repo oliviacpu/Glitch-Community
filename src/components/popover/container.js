@@ -18,7 +18,9 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   };
   const closePopover = () => {
     setStatus('closed');
-    triggerButtonRef.focus();
+    if (triggerButtonRef && triggerButtonRef.current) {
+      triggerButtonRef.current.focus();
+    }
   };
 
   const togglePopover = (event) => {
@@ -88,7 +90,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
-  triggerButtonRef: PropTypes.func.isRequired,
+  triggerButtonRef: PropTypes.object.isRequired,
   onOpen: PropTypes.func,
   outer: PropTypes.func,
   startOpen: PropTypes.bool,
