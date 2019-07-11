@@ -17,7 +17,6 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   // may not need to check length of messages and stuff
   useEffect(
     () => {
-      console.log(el.current);
       if (el.current.children && el.current.children.length) {
         const textNodes = [...el.current.children].filter((child) => ['p', 'P'].includes(child.tagName));
         const messageStr = textNodes.reduce((str, node) => str + node.innerText, '');
