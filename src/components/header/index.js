@@ -1,7 +1,7 @@
-/* global EDITOR_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { EDITOR_URL } from 'Utils/constants';
 import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
 import SignInPop from 'Components/sign-in-pop';

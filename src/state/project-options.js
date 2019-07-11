@@ -17,7 +17,7 @@ const bind = (fn, ...args) => {
 const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
 const useDefaultProjectOptions = () => {
-  const { addProjectToCollection, joinTeamProject, removeUserFromProject, deleteProject } = useAPIHandlers();
+  const { addProjectToCollection, joinTeamProject, removeUserFromProject } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const { handleError, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
@@ -35,7 +35,6 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
-    deleteProject: (project) => deleteProject({ project }).catch(handleError),
   };
 };
 

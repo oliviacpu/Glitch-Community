@@ -108,7 +108,13 @@ const Router = () => (
       <Route
         path="/login/reset-password"
         exact
-        render={({ location }) => <ResetPasswordPage key={location.key} loginToken={parse(location.search, 'loginToken')} resetPasswordToken={parse(location.search, 'resetPasswordToken')} />}
+        render={({ location }) => (
+          <ResetPasswordPage
+            key={location.key}
+            loginToken={parse(location.search, 'loginToken')}
+            resetPasswordToken={parse(location.search, 'resetPasswordToken')}
+          />
+        )}
       />
 
       <Route path="/signin" exact render={({ location }) => <OauthSignIn key={location.key} />} />
@@ -121,7 +127,11 @@ const Router = () => (
 
       <Route path="/@:name" exact render={({ location, match }) => <TeamOrUserPage key={location.key} name={match.params.name} />} />
 
-      <Route path="/@:owner/:name" exact render={({ match }) => <CollectionPage owner={match.params.owner} name={match.params.name} />} />
+      <Route
+        path="/@:owner/:name"
+        exact
+        render={({ match }) => <CollectionPage owner={match.params.owner} name={match.params.name} />}
+      />
 
       <Route
         path="/user/:id(\d+)"

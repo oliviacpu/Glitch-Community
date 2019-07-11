@@ -1,8 +1,8 @@
-/* global CDN_URL */
-
 import { kebabCase } from 'lodash';
 import randomColor from 'randomcolor';
 import { hex as getHexContrastRatio } from 'wcag-contrast';
+
+import { CDN_URL } from 'Utils/constants';
 
 import { getLink as getTeamLink } from './team';
 import { getLink as getUserLink } from './user';
