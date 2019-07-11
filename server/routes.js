@@ -232,7 +232,7 @@ module.exports = function(external) {
     const socialTitle = 'Get Started Creating on Glitch';
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
-    await render(res, { title, socialTitle, description, image });
+    await render(res, { title, socialTitle, description, image, wistiaVideoId: '2vcr60pnx9'});
   });
 
   app.get('*', async (req, res) => {
