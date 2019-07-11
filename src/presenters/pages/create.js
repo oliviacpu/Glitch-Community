@@ -11,6 +11,7 @@ import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
+import Video from 'Components/video';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
@@ -274,22 +275,19 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
-        <video
+        <Video
+          sources={[{ src: v, minWidth: 0 }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
           muted
           autoPlay
           loop
           playsInline
-        >
-          <source src={v} />
-        </video>
+        />
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <video muted autoPlay loop playsInline>
-          <source src={video} />
-        </video>
+        <Video muted autoPlay loop playsInline sources={[{ src: video, minWidth: 1000 }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>

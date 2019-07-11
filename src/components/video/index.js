@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 <Video className="whatever" src={[{ minWidth: '0', src: '' }, { minWidth: '750', src: ''}]} />
 */
 
-function Video({ sources }) {
-  const [windowWidth, setWindowWidth] = useState(0);
+function Video({ sources, ...props }) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
@@ -20,8 +20,10 @@ function Video({ sources }) {
   }, [windowWidth]);
 
   return (
-    <video>
-      {visibleSources.map()
+    <video {...props}>
+      {visibleSources.map(src => (<source key={src} src={src} />))}
     </video>
   );
 }
+
+export default Video;
