@@ -1,20 +1,21 @@
 const { envs } = require('Shared/constants');
 /* globals RUNNING_ON */
 
-let currentEnv;
+let env;
 if (RUNNING_ON === 'development') {
-  currentEnv = 'development';
+  env = 'development';
 } else if (RUNNING_ON === 'staging') {
-  currentEnv = 'staging';
+  env = 'staging';
 } else if (RUNNING_ON === 'production') {
-  currentEnv = 'production';
+  env = 'production';
 } else if (document.location.hostname.indexOf('glitch.development') >= 0) {
-  currentEnv = 'development';
+  env = 'development';
 } else if (document.location.hostname.indexOf('staging.glitch.com') >= 0) {
-  currentEnv = 'staging';
+  env = 'staging';
 } else {
-  currentEnv = 'production';
+  env = 'production';
 }
+const currentEnv = env;
 
 const {
   APP_URL,
@@ -27,6 +28,7 @@ const {
 } = envs[currentEnv];
 
 export {
+  currentEnv,
   APP_URL,
   API_URL,
   EDITOR_URL,
