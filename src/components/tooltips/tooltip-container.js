@@ -70,16 +70,18 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   if (!fallback) {
     tooltipNode = (
       <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
+        {!align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
         {type === 'info' || shouldShowTooltip ? tooltip : null}
+        {align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
       </div>
     );
   }
-  
+
   const onMouseEnter = () => {
     clearTimeout(timer);
     setTooltipIsActive(true);
   };
-  
+
   const onMouseLeave = () => {
     const mouseOutTimer = setTimeout(() => setTooltipIsActive(false), 500);
     setTimer(mouseOutTimer);
@@ -87,12 +89,7 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
 
   return (
     <div className={tooltipContainerClassName}>
-      <div
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onFocus={() => setTooltipIsActive(true)}
-        onBlur={() => setTooltipIsActive(false)}
-      >
+      <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>
       {tooltipNode}
