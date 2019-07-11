@@ -18,9 +18,9 @@ import Router from './presenters/pages/router';
 const App = () => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <BrowserRouter>
-      <NotificationsProvider>
-        <LocalStorageProvider>
-          <LiveAnnouncer>
+      <LiveAnnouncer>
+        <NotificationsProvider>
+          <LocalStorageProvider>
             <AnalyticsContext context={{ groupId: '0' }}>
               <CurrentUserProvider>
                 <APIContextProvider>
@@ -36,9 +36,9 @@ const App = () => (
                 </APIContextProvider>
               </CurrentUserProvider>
             </AnalyticsContext>
-          </LiveAnnouncer>
-        </LocalStorageProvider>
-      </NotificationsProvider>
+          </LocalStorageProvider>
+        </NotificationsProvider>
+      </LiveAnnouncer>
     </BrowserRouter>
   </ErrorBoundary>
 );

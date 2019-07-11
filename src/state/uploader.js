@@ -4,10 +4,11 @@ import { uploadAsset, uploadAssetSizes } from 'Utils/assets';
 import { captureException } from 'Utils/sentry';
 import { useNotifications } from 'State/notifications';
 import Progress from 'Components/fields/progress';
+import Text from 'Components/text/text';
 
 const NotifyUploading = ({ progress }) => (
   <>
-    Uploading asset
+    <Text>Uploading asset</Text>
     <Progress value={progress} />
   </>
 );
