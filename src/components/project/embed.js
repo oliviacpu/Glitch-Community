@@ -30,12 +30,12 @@ const Embed = ({ domain }) => (
       // Embed iframe for app
       <iframe
         className={styles.embedIframe}
-        src={`${APP_URL}/embed/#!/embed/${domain}?path=README.md&previewSize=100`}
         title={`${domain} on Glitch`}
         allow="geolocation; microphone; camera; midi; encrypted-media"
         height="100%"
         width="100%"
         allowvr="yes"
+        src={`${APP_URL}/embed/#!/embed/${domain}?path=README.md&previewSize=100`}
       />
     ) : (
       // Error message if JS not supported
