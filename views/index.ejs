@@ -37,26 +37,6 @@
   <body>
     <script>
       var RUNNING_ON = '<%= RUNNING_ON %>';
-      var CONSTANTS = <%- JSON.stringify(CONSTANTS) %>;
-      var _env;
-      if (RUNNING_ON === 'development') {
-        _env = 'development';
-      } else if (RUNNING_ON === 'staging') {
-        _env = 'staging';
-      } else if (document.location.hostname.indexOf('glitch.development') >= 0) {
-        _env = 'development';
-      } else if (document.location.hostname.indexOf('staging.glitch.com') >= 0) {
-        _env = 'staging';
-      } else {
-        _env = 'production';
-      }
-      var API_URL = CONSTANTS[_env].API_URL;
-      var APP_URL = CONSTANTS[_env].APP_URL;
-      var CDN_URL = CONSTANTS[_env].CDN_URL;
-      var EDITOR_URL = CONSTANTS[_env].EDITOR_URL;
-      var FACEBOOK_CLIENT_ID = CONSTANTS[_env].FACEBOOK_CLIENT_ID;
-      var GITHUB_CLIENT_ID = CONSTANTS[_env].GITHUB_CLIENT_ID;
-      var PROJECTS_DOMAIN = CONSTANTS[_env].PROJECTS_DOMAIN;
       var ENVIRONMENT = '<%= ENVIRONMENT %>';
       var EXTERNAL_ROUTES = <%- EXTERNAL_ROUTES %>;
       var PROJECT_DOMAIN = '<%= PROJECT_DOMAIN %>';
