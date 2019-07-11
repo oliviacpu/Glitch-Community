@@ -11,7 +11,7 @@
 import * as Sentry from '@sentry/browser';
 
 export * from '@sentry/browser';
-const SentryHelpers = require('../../shared/sentryHelpers');
+const SentryHelpers = require('Shared/sentryHelpers');
 
 let beforeSendFailed = false;
 let beforeBreadcrumbFailed = false;
