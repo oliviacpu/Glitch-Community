@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LiveMessage } from 'react-aria-live';
+import { LiveAnnouncer, LiveMessage } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -15,15 +15,13 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   useEffect(
     () => {
-      // plaintext
-      if (!el.current.children) {
-        setMessage(el.current.innerText)
-      }
+      console.log(el.current);
       if (el.current.children) {
-        console.log([...el.current.children])
-        const textNodes = [...el.current.children].filter((child) => child.elementType === 'p');
-        console.log({ textNodes });
+        const textNodes = [...el.current.children].filter((child) => ['p', 'P'].includes(child.tagName));
+        console.log(textNodes);
         setMessage(textNodes.reduce((str, node) => str + node.innerText, ''));
+      } else {
+        setMessage(el.current.innerText);
       }
     },
     [el],
@@ -38,13 +36,12 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <>
+    <LiveAnnouncer>
       <LiveMessage aria-live="polite" message={`${type}: ${message}`} />
       <aside aria-live="polite" ref={el} className={className} onAnimationEnd={remove}>
-        <p>{children}</p>
-        <button>test</button>
+        {children}
       </aside>
-    </>
+    </LiveAnnouncer>
   );
 };
 
@@ -62,7 +59,10 @@ Notification.defaultProps = {
 
 export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }) => (
   <>
-    {`Added ${projectDomain} `}{collectionName && `to collection ${collectionName}`}
+    <Text>
+      {`Added ${projectDomain} `}
+      {collectionName && `to collection ${collectionName}`}
+    </Text>
     {url && (
       <Button href={url} rel="noopener noreferrer" size="small" type="tertiary">
         Take me there
