@@ -12,3 +12,5 @@ function useEmail() {
   }, [debouncedEmail]);
   return [email, setEmail, validationError];
 }
+
+export default useEmail;
