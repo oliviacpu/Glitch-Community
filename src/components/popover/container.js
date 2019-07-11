@@ -4,7 +4,7 @@ import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
 
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
-const usePopoverToggle = ({ startOpen, onOpen }) => {
+const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   const openPopover = (event) => {
     if (event && event.detail === 0) {
@@ -18,6 +18,7 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
   };
   const closePopover = () => {
     setStatus('closed');
+    triggerButtonRef.focus();
   };
 
   const togglePopover = (event) => {
@@ -68,8 +69,8 @@ const MonitoredComponent = onClickOutside(({ children }) => children, {
 
 export const PopoverToggleContext = createContext(null);
 
-const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
-  const toggleState = usePopoverToggle({ startOpen, onOpen });
+const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef }) => {
+  const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
 
   const inner = children(toggleState);
   if (isFragment(inner)) {
@@ -87,6 +88,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  triggerButtonRef: PropTypes.func.isRequired,
   onOpen: PropTypes.func,
   outer: PropTypes.func,
   startOpen: PropTypes.bool,
