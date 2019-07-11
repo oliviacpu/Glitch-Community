@@ -122,7 +122,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        { type: 'success' },
+        { type: 'success', persistent: true },
       );
     });
 
