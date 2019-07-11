@@ -15,13 +15,15 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   useEffect(
     () => {
+      // plaintext
+      if (!el.current.children) {
+        setMessage(el.current.innerText)
+      }
       if (el.current.children) {
         console.log([...el.current.children])
         const textNodes = [...el.current.children].filter((child) => child.elementType === 'p');
         console.log({ textNodes });
         setMessage(textNodes.reduce((str, node) => str + node.innerText, ''));
-      } else {
-        setMessage(el.current.innerText);
       }
     },
     [el],
