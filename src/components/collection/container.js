@@ -4,7 +4,7 @@ import Pluralize from 'react-pluralize';
 import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
 
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';

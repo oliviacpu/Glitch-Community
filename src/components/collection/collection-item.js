@@ -16,7 +16,7 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
 import CollectionOptions from './collection-options-pop';
@@ -110,7 +110,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
             <div className={styles.itemButtonWrap}>
               <Button decorative>{collection.name}</Button>
             </div>
-            <div className={styles.description} style={{ color: isDarkColor(collection.coverColor) ? 'white' : '' }}>
+            <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>
             </div>
           </div>

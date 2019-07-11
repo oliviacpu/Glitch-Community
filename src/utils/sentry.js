@@ -1,4 +1,4 @@
-/* globals BUILD_TIMESTAMP, ENVIRONMENT, PROJECT_DOMAIN, _env */
+/* globals BUILD_TIMESTAMP, ENVIRONMENT, PROJECT_DOMAIN */
 
 //
 // This utility wraps the Sentry library so that we can guarantee
@@ -9,9 +9,10 @@
 //
 
 import * as Sentry from '@sentry/browser';
+import { currentEnv } from './constants';
 
 export * from '@sentry/browser';
-const SentryHelpers = require('../../shared/sentryHelpers');
+const SentryHelpers = require('Shared/sentryHelpers');
 
 let beforeSendFailed = false;
 let beforeBreadcrumbFailed = false;
@@ -30,7 +31,7 @@ try {
         return null;
       }
       try {
-        return SentryHelpers.beforeSend(PROJECT_DOMAIN, _env, event);
+        return SentryHelpers.beforeSend(PROJECT_DOMAIN, currentEnv, event);
       } catch (error) {
         console.error(error);
         if (!beforeSendFailed) {
