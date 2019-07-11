@@ -16,15 +16,17 @@ const SearchPage = withRouter(({ query, activeFilter, history }) => {
   };
 
   return (
-    <Layout searchQuery={query}>
-      {!!query && <Helmet title={`Search for ${query}`} />}
-      {query ? (
-        <SearchResults query={query} searchResults={searchResults} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} />
-      ) : (
-        <NotFound name="anything" />
-      )}
+    <>
+      <Layout searchQuery={query}>
+        {!!query && <Helmet title={`Search for ${query}`} />}
+        {query ? (
+          <SearchResults query={query} searchResults={searchResults} activeFilter={activeFilter || 'all'} setActiveFilter={setActiveFilter} />
+        ) : (
+          <NotFound name="anything" />
+        )}
+      </Layout>
       <MoreIdeas />
-    </Layout>
+    </>
   );
 });
 
