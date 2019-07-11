@@ -102,7 +102,9 @@ PopoverWithButton.defaultProps = {
   onOpen: null,
 };
 
-export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
+export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
+    const buttonRef = useRef();
+  return (
   <div className={styles.popoverMenuWrap}>
     <PopoverContainer onOpen={onOpen}>
       {(popoverProps) => (
@@ -119,8 +121,8 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => (
         </div>
       )}
     </PopoverContainer>
-  </div>
-);
+  </div>)
+}
 
 PopoverMenu.propTypes = {
   label: PropTypes.string,
