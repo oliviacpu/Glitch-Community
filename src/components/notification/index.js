@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LiveAnnouncer, LiveMessage } from 'react-aria-live';
+import { LiveMessage } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -13,8 +13,6 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   const el = useRef(null);
   const [message, setMessage] = useState('');
 
-  // TODO <Text> in notification font weight is wrong
-  // may not need to check length of messages and stuff
   useEffect(
     () => {
       if (el.current.children && el.current.children.length) {
@@ -39,12 +37,12 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <LiveAnnouncer>
-      <LiveMessage aria-live="assertive" message={message} />
+    <>
+      <LiveMessage aria-live="polite" message={message} />
       <aside ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
-    </LiveAnnouncer>
+    </>
   );
 };
 
