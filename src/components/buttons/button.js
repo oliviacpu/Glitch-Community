@@ -15,7 +15,7 @@ export const SIZES = ['small'];
  */
 
 const Button = React.forwardRef(({
-  onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji,
+  onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji, ariaPressed,
 }, ref) => {
   const className = cx({
     btn: true,
@@ -66,7 +66,7 @@ const Button = React.forwardRef(({
   }
 
   return (
-    <button ref={ref} onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
+    <button ref={ref} onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'} aria-pressed={ariaPressed}>
       {content}
     </button>
   );
@@ -113,6 +113,7 @@ Button.propTypes = {
   imagePosition: PropTypes.oneOf(['left', 'right']),
   /** emoji name */
   emoji: PropTypes.string,
+  ariaPressed: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -130,6 +131,7 @@ Button.defaultProps = {
   image: null,
   imagePosition: 'right',
   emoji: null,
+  ariaPressed: null,
 };
 
 const ButtonImage = ({ image, position, up1 }) => {

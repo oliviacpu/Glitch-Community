@@ -50,7 +50,7 @@ const Secret = () => {
       <ul>
         {toggleData.map(({ name, description }) => (
           <li key={name} className={isEnabled(name) ? styles.lit : ''}>
-            <Button title={description} aria-pressed={() => isEnabled(name)} onClick={() => toggleTheToggle(name)}>
+            <Button title={description} ariaPressed={isEnabled(name) ? 'true' : 'false'} onClick={() => toggleTheToggle(name)}>
               {name}
             </Button>
           </li>
