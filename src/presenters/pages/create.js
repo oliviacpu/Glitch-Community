@@ -476,29 +476,31 @@ function Remix() {
       
       <VisibilityContainer>
         {({ wasEverVisible }) => wasEverVisible && (
-      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-        <TabList className={styles.remixAppTabs}>
-          {apps.map((app) => (
-            <Tab className={styles.remixAppTab} key={app.domain}>
-              <ProjectAvatar project={app} hideTooltip />
-              <Text size="14px">{app.domain}</Text>
-            </Tab>
-          ))}
-        </TabList>
+          <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+            <TabList className={styles.remixAppTabs}>
+              {apps.map((app) => (
+                <Tab className={styles.remixAppTab} key={app.domain}>
+                  <ProjectAvatar project={app} hideTooltip />
+                  <Text size="14px">{app.domain}</Text>
+                </Tab>
+              ))}
+            </TabList>
 
-        {apps.map((app, i) => (
-          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-            <div className={styles.embedContainer}>
-              <Embed domain={app.domain} />
-            </div>
-            <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix Your Own
-              </RemixButton>
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
+            {apps.map((app, i) => (
+              <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+                <div className={styles.embedContainer}>
+                  <Embed domain={app.domain} />
+                </div>
+                <div className={styles.embedRemixBtn}>
+                  <RemixButton type="cta" emoji="microphone" app={app}>
+                    Remix Your Own
+                  </RemixButton>
+                </div>
+              </TabPanel>
+            ))}
+          </Tabs>
+        )}
+      </VisibilityContainer>
     </section>
   );
 }
