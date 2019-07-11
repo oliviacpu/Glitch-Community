@@ -24,6 +24,7 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
       } else if (el.current.innerText.length) {
         setMessage(`${type}: ${el.current.innerText}`);
       }
+      console.log({ message });
     },
     [el.current],
   );
@@ -38,7 +39,8 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
 
   return (
     <>
-      <LiveMessage aria-live="polite" message={message} />
+      <button onClick={() => setMessage('test')}>Test</button>
+      <LiveMessage clearOnUnmount aria-live="polite" message={message} />
       <aside ref={el} className={className} onAnimationEnd={remove}>
         {children}
       </aside>
