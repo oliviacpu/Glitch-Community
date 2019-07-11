@@ -103,26 +103,27 @@ PopoverWithButton.defaultProps = {
 };
 
 export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
-    const buttonRef = useRef();
+  const buttonRef = useRef();
   return (
-  <div className={styles.popoverMenuWrap}>
-    <PopoverContainer onOpen={onOpen}>
-      {(popoverProps) => (
-        <div>
-          <div className={styles.buttonWrap}>
-            <TransparentButton onClick={popoverProps.togglePopover}>
-              <span className={styles.arrowPadding}>
-                <span className={styles.downArrow} />
-              </span>
-              <span className={globalStyles.visuallyHidden}>{label}</span>
-            </TransparentButton>
+    <div className={styles.popoverMenuWrap}>
+      <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
+        {(popoverProps) => (
+          <div>
+            <div className={styles.buttonWrap}>
+              <TransparentButton onClick={popoverProps.togglePopover} ref={buttonRef}>
+                <span className={styles.arrowPadding}>
+                  <span className={styles.downArrow} />
+                </span>
+                <span className={globalStyles.visuallyHidden}>{label}</span>
+              </TransparentButton>
+            </div>
+            {popoverProps.visible && renderChildren(popoverProps)}
           </div>
-          {popoverProps.visible && renderChildren(popoverProps)}
-        </div>
-      )}
-    </PopoverContainer>
-  </div>)
-}
+        )}
+      </PopoverContainer>
+    </div>
+  );
+};
 
 PopoverMenu.propTypes = {
   label: PropTypes.string,
