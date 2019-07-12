@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { LiveMessage } from 'react-aria-live';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -9,6 +10,24 @@ import styles from './styles.styl';
 const cx = classNames.bind(styles);
 
 const Notification = ({ children, type, persistent, inline, remove }) => {
+  const el = useRef(null);
+  const [message, setMessage] = useState('');
+
+  useEffect(
+    () => {
+      if (el.current.children && el.current.children.length) {
+        const textNodes = [...el.current.children].filter((child) => ['p', 'P'].includes(child.tagName));
+        const messageStr = textNodes.reduce((str, node) => str + node.innerText, '');
+        if (messageStr.length) {
+          setMessage(`${type}: ${messageStr}`);
+        }
+      } else if (el.current.innerText.length) {
+        setMessage(`${type}: ${el.current.innerText}`);
+      }
+    },
+    [el.current],
+  );
+
   const className = cx({
     notification: true,
     success: type === 'success',
@@ -18,9 +37,12 @@ const Notification = ({ children, type, persistent, inline, remove }) => {
   });
 
   return (
-    <aside className={className} onAnimationEnd={remove}>
-      {children}
-    </aside>
+    <>
+      <LiveMessage aria-live="polite" message={message} />
+      <aside ref={el} className={className} onAnimationEnd={remove}>
+        {children}
+      </aside>
+    </>
   );
 };
 

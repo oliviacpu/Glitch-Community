@@ -118,6 +118,11 @@ export function userOrTeamIsAuthor({ collection, user }) {
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
+
+  React.useEffect(() => {
+    setCollection(initialCollection);
+  }, [initialCollection]);
+
   const {
     updateItem,
     deleteItem,

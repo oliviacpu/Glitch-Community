@@ -38,7 +38,6 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
       hash: targetUrl.hash,
     };
   }
-
   return (
     <RouterLink to={to} {...props} innerRef={ref}>
       {children}

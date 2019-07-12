@@ -4,12 +4,13 @@ import Loader from 'Components/loader';
 import { useAPI } from '../../state/api';
 import { captureException } from '../../utils/sentry';
 
-const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException }) => {
+const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException, args }) => {
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });
   const api = useAPI();
+
   useEffect(() => {
     let isCurrent = true;
-    get(api).then(
+    get(api, args).then(
       (data) => {
         if (!isCurrent) return;
         setState({ status: 'ready', value: data });
@@ -25,8 +26,10 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
     );
     return () => {
       isCurrent = false;
+      setState({ status: 'loading', value: null });
     };
-  }, [api]);
+  }, [api, args]);
+
   if (status === 'ready') return children(value);
   if (status === 'error') return renderError(value);
   return renderLoader();
@@ -37,9 +40,13 @@ DataLoader.propTypes = {
   get: PropTypes.func.isRequired,
   renderError: PropTypes.func,
   renderLoader: PropTypes.func,
+  captureException: PropTypes.func,
+  args: PropTypes.any,
 };
 DataLoader.defaultProps = {
   renderError: () => 'Something went wrong, try refreshing?',
   renderLoader: () => <Loader />,
+  captureException: undefined,
+  args: undefined,
 };
 export default DataLoader;

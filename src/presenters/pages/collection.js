@@ -20,6 +20,7 @@ import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } fr
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
+
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
   const funcs = {
@@ -31,7 +32,6 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       return result;
     },
   };
-
   return (
     <>
       <Helmet title={collection.name} />
@@ -59,10 +59,9 @@ CollectionPageContents.propTypes = {
   }).isRequired,
 };
 
-
 const CollectionPage = ({ owner, name }) => (
   <Layout>
-    <DataLoader get={(api) => getCollectionWithProjects(api, { owner, name })}>
+    <DataLoader get={(api, args) => getCollectionWithProjects(api, args)} args={{ owner, name }}>
       {(collection) =>
         collection ? (
           <AnalyticsContext
