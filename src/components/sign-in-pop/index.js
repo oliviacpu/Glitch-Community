@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -338,7 +338,7 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
   );
 };
 
-export const SignInPopBase = withRouter(({ location, align, triggerButtonRef }) => {
+export const SignInPopBase = withRouter(({ location, align }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
@@ -404,14 +404,12 @@ export const SignInPopBase = withRouter(({ location, align, triggerButtonRef }) 
   );
 });
 
-const SignInPopContainer = ({ align }) => {
-  const buttonRef = useRef();
-  return (
-    <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
-      {() => <SignInPopBase align={align} triggerButtonRef={buttonRef} />}
-    </PopoverWithButton>
-  );
-};
+const SignInPopContainer = ({ align }) => (
+  <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
+    {() => <SignInPopBase align={align} />}
+  </PopoverWithButton>
+);
+
 SignInPopContainer.propTypes = {
   align: PropTypes.string.isRequired,
 };
