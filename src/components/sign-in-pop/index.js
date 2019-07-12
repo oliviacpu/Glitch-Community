@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -33,13 +33,10 @@ const SignInCodeSection = ({ onClick }) => (
 function useEmail() {
   const [email, setEmail] = useState('');
   const debouncedEmail = useDebouncedValue(email, 500);
-  const validationError = useMemo(
-    () => {
-      const isValidEmail = parseOneAddress(debouncedEmail) !== null;
-      return isValidEmail || !debouncedEmail ? null : 'Enter a valid email address';
-    },
-    [debouncedEmail],
-  );
+  const validationError = useMemo(() => {
+    const isValidEmail = parseOneAddress(debouncedEmail) !== null;
+    return isValidEmail || !debouncedEmail ? null : 'Enter a valid email address';
+  }, [debouncedEmail]);
   return [email, setEmail, validationError];
 }
 
@@ -89,13 +86,17 @@ const ForgotPasswordHandler = ({ align }) => {
         )}
         {isDone && !errorMessage && (
           <>
-            <Notification type="success" persistent>Almost Done</Notification>
+            <Notification type="success" persistent>
+              Almost Done
+            </Notification>
             <div>Reset your password by clicking the link sent to {email}.</div>
           </>
         )}
         {isDone && errorMessage && (
           <>
-            <Notification type="error" persistent>Error</Notification>
+            <Notification type="error" persistent>
+              Error
+            </Notification>
             <div>{errorMessage}</div>
           </>
         )}
@@ -138,7 +139,8 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In&nbsp;<Emoji name="email" />
+        Email Sign In&nbsp;
+        <Emoji name="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -218,7 +220,15 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
         {status === 'ready' && (
           <form onSubmit={onSubmit} style={{ marginBottom: 0 }} data-cy="sign-in-code-form">
             Paste your temporary sign in code below
-            <TextInput value={code} onChange={setCode} type="text" labelText="sign in code" placeholder="cute-unique-cosmos" autoFocus testingId="sign-in-code" />
+            <TextInput
+              value={code}
+              onChange={setCode}
+              type="text"
+              labelText="sign in code"
+              placeholder="cute-unique-cosmos"
+              autoFocus
+              testingId="sign-in-code"
+            />
             <div className={styles.submitWrap}>
               <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Sign In
@@ -227,10 +237,16 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
           </form>
         )}
         {status === 'loading' && <Loader />}
-        {status === 'done' && <Notification persistent type="success">Success!</Notification>}
+        {status === 'done' && (
+          <Notification persistent type="success">
+            Success!
+          </Notification>
+        )}
         {status === 'error' && (
           <>
-            <Notification persistent type="error">Error</Notification>
+            <Notification persistent type="error">
+              Error
+            </Notification>
             <div>Code not found or already used. Try signing in with email.</div>
           </>
         )}
@@ -241,7 +257,9 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
 
 const TwoFactorSignIn = ({ align, token }) => (
   <PopoverDialog align={align}>
-    <MultiPopoverTitle>Two factor auth <Emoji name="key" /></MultiPopoverTitle>
+    <MultiPopoverTitle>
+      Two factor auth <Emoji name="key" />
+    </MultiPopoverTitle>
     <PopoverActions>
       <TwoFactorForm initialToken={token} />
     </PopoverActions>
@@ -281,12 +299,34 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
 
   return (
     <PopoverActions>
-      {!!errorMessage && <Notification type="error" persistent>{errorMessage}</Notification>}
+      {!!errorMessage && (
+        <Notification type="error" persistent>
+          {errorMessage}
+        </Notification>
+      )}
       <form data-cy="sign-in-form" onSubmit={handleSubmit}>
-        <TextInput placeholder="your@email.com" labelText="email" value={emailAddress} error={emailValidationError} onChange={setEmail} disabled={working} testingId="sign-in-email" />
-        <TextInput placeholder="password" type="password" labelText="password" value={password} onChange={setPassword} disabled={working} testingId="sign-in-password" />
+        <TextInput
+          placeholder="your@email.com"
+          labelText="email"
+          value={emailAddress}
+          error={emailValidationError}
+          onChange={setEmail}
+          disabled={working}
+          testingId="sign-in-email"
+        />
+        <TextInput
+          placeholder="password"
+          type="password"
+          labelText="password"
+          value={password}
+          onChange={setPassword}
+          disabled={working}
+          testingId="sign-in-password"
+        />
         <div className={styles.submitWrap}>
-          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>Sign in</Button>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>
+            Sign in
+          </Button>
         </div>
       </form>
       <div className={styles.submitWrap}>
@@ -298,7 +338,7 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
   );
 };
 
-export const SignInPopBase = withRouter(({ location, align }) => {
+export const SignInPopBase = withRouter(({ location, align, triggerButtonRef }) => {
   const slackAuthEnabled = useDevToggle('Slack Auth');
   const userPasswordEnabled = useDevToggle('User Passwords');
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
@@ -364,12 +404,14 @@ export const SignInPopBase = withRouter(({ location, align }) => {
   );
 });
 
-const SignInPopContainer = ({ align }) => (
-  <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
-    {() => <SignInPopBase align={align} />}
-  </PopoverWithButton>
-);
-
+const SignInPopContainer = ({ align }) => {
+  const buttonRef = useRef();
+  return (
+    <PopoverWithButton buttonProps={{ size: 'small' }} buttonText="Sign in">
+      {() => <SignInPopBase align={align} triggerButtonRef={buttonRef} />}
+    </PopoverWithButton>
+  );
+};
 SignInPopContainer.propTypes = {
   align: PropTypes.string.isRequired,
 };
