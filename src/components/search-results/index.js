@@ -45,20 +45,22 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
+const PermissionsLoader = ({ project }) => {
+  const api = useAPI();
+  React.useEffect(() => {
+    async function fillInPermissions() {
+      const permissions = await getProjectPermissions(api, project.domain);
+      project.permissions = permissions;
+    }
+    fillInPermissions();
+  }, []);
+  return <ProjectItem project={project} />;
+};
+
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => {
-    const api = useAPI();
-    React.useEffect(() => {
-      async function fillInPermissions(){
-        const permissions = await getProjectPermissions(api, result.domain);
-        result.permissions = permissions;
-      };
-      fillInPermissions();
-    }, []);
-    return <ProjectItem project={result} />
-  },
+  project: ({ result }) => <PermissionsLoader project={result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
