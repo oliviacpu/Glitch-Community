@@ -18,7 +18,7 @@ const KNOWN_DISTRIBUTION_SCHEMES = new Set([
 
 const VSCodeAuth = ({ insiders, scheme }) => {
   if (!scheme) { scheme = insiders ? 'vscode-insiders' : 'vscode'; }
-  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = "vscode"; }
+  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = 'vscode'; }
 
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
