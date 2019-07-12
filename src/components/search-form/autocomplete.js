@@ -55,9 +55,9 @@ const ProjectResult = ({ value: project }) => (
 );
 
 const CollectionLink = ({ collection, children, ...props }) => (
-  <a href={`/@${collection.fullUrl}`} {...props}>
+  <Link to={`/@${collection.fullUrl}`} {...props}>
     {children}
-  </a>
+  </Link>
 );
 
 const CollectionResult = ({ value: collection }) => (

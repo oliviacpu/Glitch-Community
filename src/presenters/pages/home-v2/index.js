@@ -295,7 +295,7 @@ export const HomePreview = withRouter(({ history }) => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <a href="https://community-home-editor.glitch.me">Community Home Editor.</a>
+            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
           </>
         }
       >
