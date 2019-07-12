@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 // import Emoji from 'Components/images/emoji';
 // import Link from 'Components/link';
 import styles from './button.styl';
-
+console.log(styles)
 const cx = classNames.bind(styles);
 
 // export const TYPES = ['tertiary', 'cta', 'dangerZone', 'dropDown'];
