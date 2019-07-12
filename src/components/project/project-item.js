@@ -12,10 +12,8 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
-import { getPermissions, useProjectOptions } from 'State/project-options';
+import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
-import { useAPI } from 'State/api';
-
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -43,16 +41,6 @@ const ProfileListLoader = ({ project }) => (
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
-  const api = useAPI();
-  React.useEffect(() => {
-    const fillInPermissions = async () => {
-      if (project.permissions.length === 0 && project.domain) {
-        const permissions = await getPermissions(api, project.domain);
-        project.permissions = permissions;
-      }
-    };
-    fillInPermissions();
-  }, []);
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
