@@ -59,9 +59,9 @@ const Button = React.forwardRef(({
 
   if (decorative) {
     return (
-      <span className={className} disabled={disabled}>
+      <div className={className} disabled={disabled}>
         {content}
-      </span>
+      </div>
     );
   }
 

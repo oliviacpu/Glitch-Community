@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
 
-import { getContrastWithDarkText, getContrastWithLightText } from 'Models/collection';
+import { getContrastWithDarkText, getContrastWithLightText } from 'Utils/color';
 import TextInput from 'Components/inputs/text-input';
 import ColorInput from 'Components/inputs/color';
 import Button from 'Components/buttons/button';
