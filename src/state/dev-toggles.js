@@ -8,7 +8,7 @@ import useUserPref from './user-prefs';
 //
 
 // Define your dev toggles here.
-// We can only have three.
+// We can only have three... err ok four.
 // Users can enable them with the /secret page.
 const toggleData = [
   {
@@ -23,7 +23,11 @@ const toggleData = [
     name: 'User Passwords',
     description: 'Enable users to set a password for their account',
   },
-].slice(0, 3); // <-- Yeah really, only 3.  If you need more, clean up one first.
+  {
+    name: 'My Stuff',
+    description: 'One click add to a collection',
+  },
+].slice(0, 4); // <-- Yeah really, only 3...or rather 4.  If you need more, clean up one first.
 
 // Usage:
 //
