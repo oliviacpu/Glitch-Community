@@ -15,6 +15,7 @@ function Video({ sources, ...props }) {
   useEffect(
     () => {
       setVisibleVideos(filterVideos());
+      console.log(visibleVideos);
     },
     [windowWidth],
   );
