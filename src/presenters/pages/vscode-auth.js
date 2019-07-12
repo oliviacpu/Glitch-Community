@@ -17,9 +17,9 @@ const KNOWN_DISTRIBUTION_SCHEMES = new Set([
 ]);
 
 const VSCodeAuth = ({ insiders, openProject, scheme }) => {
-  scheme = scheme || insiders ? 'vscode-insiders' : 'vscode';
-  if (!KNOW)
-  debugger;
+  if (!scheme) { scheme = insiders ? 'vscode-insiders' : 'vscode'; }
+  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = "vscode"; }
+
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
@@ -59,7 +59,7 @@ VSCodeAuth.propTypes = {
 VSCodeAuth.defaultProps = {
   insiders: false,
   openProject: false,
-  scheme: ""
+  scheme: '',
 };
 
 export default VSCodeAuth;
