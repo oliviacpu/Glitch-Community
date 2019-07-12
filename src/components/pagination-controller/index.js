@@ -6,9 +6,7 @@ import Image from 'Components/images/image';
 import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
 
-import { CDN_URL } from 'Shared/constants';
 import styles from './styles.styl';
-
 
 const paginationReducer = (oldState, action) => {
   switch (action.type) {
@@ -84,7 +82,7 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
     [numItems],
   );
 
-  const arrow = `${CDN_URL}/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269`;
+  const arrow = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
   return (
     <>
