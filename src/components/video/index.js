@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 function Video({ sources, ...props }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -29,5 +30,23 @@ function Video({ sources, ...props }) {
     </video>
   );
 }
+
+Video.propTypes = {
+  captionTrack: PropTypes.string,
+  muted: PropTypes.bool,
+  autoPlay: PropTypes.bool,
+  loop: PropTypes.bool,
+  controls: PropTypes.bool,
+  poster: PropTypes.string,
+};
+
+Video.defaultProps = {
+  muted: false,
+  autoPlay: false,
+  loop: false,
+  controls: false,
+  poster: '',
+
+};
 
 export default Video;
