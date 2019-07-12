@@ -16,7 +16,7 @@ const KNOWN_DISTRIBUTION_SCHEMES = new Set([
   'vscodium',
 ]);
 
-const VSCodeAuth = ({ insiders, openProject, scheme }) => {
+const VSCodeAuth = ({ insiders, scheme }) => {
   if (!scheme) { scheme = insiders ? 'vscode-insiders' : 'vscode'; }
   if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = "vscode"; }
 
@@ -31,7 +31,7 @@ const VSCodeAuth = ({ insiders, openProject, scheme }) => {
   useEffect(() => {
     if (isSignedIn) {
       setTimeout(() => {
-        const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`;
+        const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}`;
         window.location.assign(redirectUrl);
       }, 3000);
     } else {
@@ -52,13 +52,11 @@ const VSCodeAuth = ({ insiders, openProject, scheme }) => {
 
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,
-  openProject: PropTypes.bool,
   scheme: PropTypes.string,
 };
 
 VSCodeAuth.defaultProps = {
   insiders: false,
-  openProject: false,
   scheme: '',
 };
 
