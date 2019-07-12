@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';
-import { addBreadcrumb } from 'Utils/sentry';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';
 
@@ -15,13 +14,9 @@ export { WrappingLink, TrackedExternalLink };
 
 const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
 
-const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+const Link = withRouter(React.forwardRef(({ to, children, location, ...props }, ref) => {
   if (typeof to === 'string') {
-    addBreadcrumb({
-      level: 'info',
-      message: `window-location: ${JSON.stringify(window.location)}`,
-    });
-    const currentUrl = new URL(window.location.href);
+    const currentUrl = new URL(location.href);
     const targetUrl = new URL(to, currentUrl);
 
     if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
@@ -43,7 +38,7 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
       {children}
     </RouterLink>
   );
-});
+}));
 Link.propTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   children: PropTypes.node.isRequired,
