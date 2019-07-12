@@ -10,7 +10,7 @@ import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
 import Link from 'Components/link';
-import Embed from 'Components /project/embed';
+import Embed from 'Components/project/embed';
 import Video from 'Components/video';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
@@ -136,8 +136,8 @@ const FRAMEWORK_STARTERS = [
   },
 ];
 const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
-const frameworkBlob = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217';
-const platformBlob = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539';
+const frameworkBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217`;
+const platformBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539`;
 
 const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
@@ -254,17 +254,17 @@ function YourAppIsLive() {
   const title = 'Your app is live, instantly';
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL (or your custom domain!). Share or embed anywhere, and invite anyone to check out your code or remix it.";
-  const blob = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
-  const live = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
+  const blob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731`;
+  const live = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737`;
 
   return (
     <ScreencapSection
       title={title}
       description={description}
-      video="${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585"
+      video={`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585`}
       smallVideos={[
-        '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891',
-        '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530',
+        `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891`,
+        `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530`,
       ]}
       blob={blob}
       image={live}
@@ -325,8 +325,8 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
 }
 
 function Help() {
-  const blob = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561575218038';
-  const ambulance = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561575219950';
+  const blob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561575218038`;
+  const ambulance = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561575219950`;
 
   return (
     <section className={classNames(styles.section, styles.help)}>
@@ -385,7 +385,7 @@ function Tools() {
 }
 
 function VSCode() {
-  const vscodeIcon = '${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485';
+  const vscodeIcon = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485`;
 
   return (
     <section className={classNames(styles.section, styles.help)}>
@@ -411,22 +411,20 @@ function VSCode() {
       <div className={styles.screencapContainer}>
         <Video
           className={classNames(styles.screencap, styles.smallScreencap)}
+          sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096`, minWidth: 0, maxWidth: 799 }]}
           muted
           autoPlay
           loop
-          captionTrack=`${CDN_URL}/d495650d-c651-418d-a4bc-d0574c3a3816%2Fempty-caption-track.vtt?v=1562940632157`
-        >
-          <source src=`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096` />
-        </Video>
+          track={emptyCaptionTrack}
+        />
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <Video
+            sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 800 }]}
             muted
             autoPlay
             loop
-            captionTrack=`${CDN_URL}/d495650d-c651-418d-a4bc-d0574c3a3816%2Fempty-caption-track.vtt?v=1562940632157`
-          >
-            <source src=`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854` />
-          </Video>
+            track={emptyCaptionTrack}
+          />
         </div>
       </div>
     </section>

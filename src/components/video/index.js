@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Video({ sources, ...props }) {
+function Video({ sources, track, ...props }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -26,6 +26,7 @@ function Video({ sources, ...props }) {
     <video {...props}>
       {visibleVideos.map((video) => (
         <source key={video.src} src={video.src} />
+        <track src={track} srclang="en" />
       ))}
     </video>
   );
@@ -33,7 +34,7 @@ function Video({ sources, ...props }) {
 
 Video.propTypes = {
   // use empty-caption-track.vtt in /assets if the video doesn't have words
-  captionTrack: PropTypes.string.required,
+  track: PropTypes.string.isRequired,
   muted: PropTypes.bool,
   autoPlay: PropTypes.bool,
   loop: PropTypes.bool,
