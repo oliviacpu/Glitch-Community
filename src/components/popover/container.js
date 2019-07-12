@@ -42,9 +42,9 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setStatus('closed');
-      }
-      if (triggerButtonRef && triggerButtonRef.current) {
-        triggerButtonRef.current.focus();
+        if (triggerButtonRef && triggerButtonRef.current) {
+          triggerButtonRef.current.focus();
+        }
       }
     };
     window.addEventListener('keyup', keyHandler);
