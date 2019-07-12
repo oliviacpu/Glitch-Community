@@ -279,18 +279,17 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
         <Video
-          sources={[{ src: v, minWidth: 0, maxWidth: 799 }]}
+          sources={[{ src: v, minWidth: 0, maxWidth: 799, track: emptyCaptionTrack }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
           muted
           autoPlay
           loop
-          playsInline
         />
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video muted autoPlay loop playsInline sources={[{ src: video, minWidth: 800 }]} />
+        <Video muted autoPlay loop sources={[{ src: video, minWidth: 800, track: emptyCaptionTrack }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -411,7 +410,14 @@ function VSCode() {
       <div className={styles.screencapContainer}>
         <Video
           className={classNames(styles.screencap, styles.smallScreencap)}
-          sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096`, minWidth: 0, maxWidth: 799 }]}
+          sources={[
+            {
+              src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096`,
+              minWidth: 0,
+              maxWidth: 799,
+              track: emptyCaptionTrack,
+            },
+          ]}
           muted
           autoPlay
           loop
@@ -419,11 +425,12 @@ function VSCode() {
         />
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <Video
-            sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 800 }]}
+            sources={[
+              { src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 800, track: emptyCaptionTrack },
+            ]}
             muted
             autoPlay
             loop
-            track={emptyCaptionTrack}
           />
         </div>
       </div>

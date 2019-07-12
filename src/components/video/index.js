@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Video({ sources, track, ...props }) {
+function Video({ sources, ...props }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -20,21 +20,22 @@ function Video({ sources, track, ...props }) {
     },
     [windowWidth],
   );
-
-  console.log(visibleVideos);
+  
+  // disabling
   return (
-    <video {...props}>
+    <video {...props}>{/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
-        <source key={video.src} src={video.src} />
-        <track src={track} srclang="en" />
+        <>
+          <track kind="captions" src="" srcLang="en" />
+          <source key={video.src} src={video.src} />
+        </>
       ))}
     </video>
   );
 }
 
 Video.propTypes = {
-  // use empty-caption-track.vtt in /assets if the video doesn't have words
-  track: PropTypes.string.isRequired,
+  sources: PropTypes.array.isRequired,
   muted: PropTypes.bool,
   autoPlay: PropTypes.bool,
   loop: PropTypes.bool,
