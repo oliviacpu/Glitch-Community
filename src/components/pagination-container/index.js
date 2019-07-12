@@ -39,6 +39,7 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
     page: 1,
     totalPages: numPages,
     announce: '',
+    expanded: false,
   });
   const prevButtonRef = useRef();
   const nextButtonRef = useRef();
