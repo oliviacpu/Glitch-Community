@@ -10,7 +10,7 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 import { PrivateIcon } from 'Components/private-badge';
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-item.styl';
@@ -61,12 +61,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
             </div>
           </div>
         </div>
-        <div
-          className={styles.description}
-          style={{
-            color: isDarkColor(collection.coverColor) ? 'white' : '',
-          }}
-        >
+        <div className={classnames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
           <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>
