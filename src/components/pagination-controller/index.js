@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react';
+import classNames from 'classnames/bind';
+import styles from './styles.styl';
+import { CDN_URL } from 'Shared/constants';
 
 const paginationReducer = (oldState, action) => {
   switch (action.type) {
@@ -71,21 +74,23 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
     dispatchState({ type: 'restart', totalPages: numPages });
   }, [numItems]);
 
+  const arrow = `${CDN_URL}/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269`;
+
   return (
     <>
       {children(items)}
       {canPaginate && (
-        <div className={styles.viewControls}>
+        <div className={styles.controls}>
           <div className={styles.paginationControls}>
             <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
-              <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
+              <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
             </Button>
             {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
             <div data-cy="page-numbers" className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
             <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
-              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
+              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
             </Button>
           </div>
           <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>

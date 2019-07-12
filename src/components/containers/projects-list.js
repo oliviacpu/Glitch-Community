@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import classNames from 'classnames/bind';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
@@ -9,6 +8,7 @@ import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
+import PaginationController from 'Components/pagination-controller';
 import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
@@ -44,87 +44,6 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
         </>
       )}
     </Container>
-  );
-};
-
-const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
-
-const PaginationController = ({ enabled, items, itemsPerPage, children }) => {
-  const numItems = items.length;
-  const numPages = Math.ceil(numItems / itemsPerPage);
-  
-  const [state, dispatchState] = useReducer(paginationReducer, {
-    page: 1,
-    totalPages: numPages,
-    announce: '',
-  })
-  
-  const prevButtonRef = useRef();
-  const nextButtonRef = useRef();
-}
-
-const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
-  const numProjects = projects.length;
-  const numPages = Math.ceil(projects.length / projectsPerPage);
-
-  const [state, dispatchState] = useReducer(paginationReducer, {
-    page: 1,
-    totalPages: numPages,
-    announce: '',
-  });
-  const prevButtonRef = useRef();
-  const nextButtonRef = useRef();
-
-  const canPaginate = enabled && !state.expanded && projectsPerPage < numProjects;
-
-  const onNextButtonClick = () => {
-    if (state.page + 1 === numPages) {
-      prevButtonRef.current.focus();
-    }
-
-    dispatchState({ type: 'next' });
-  };
-
-  const onPreviousButtonClick = () => {
-    if (state.page - 1 === 1) {
-      nextButtonRef.current.focus();
-    }
-
-    dispatchState({ type: 'previous' });
-  };
-
-  if (canPaginate) {
-    const startIdx = (state.page - 1) * projectsPerPage;
-    projects = projects.slice(startIdx, startIdx + projectsPerPage);
-  }
-
-  useEffect(() => {
-    dispatchState({ type: 'restart', totalPages: numPages });
-  }, [numProjects]);
-
-  return (
-    <>
-      {children(projects)}
-      {canPaginate && (
-        <div className={styles.viewControls}>
-          <div className={styles.paginationControls}>
-            <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
-              <Image alt="Previous" className={styles.paginationArrow} src={arrowSrc} />
-            </Button>
-            {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
-            <div data-cy="page-numbers" className={styles.pageNumbers}>
-              {state.page} / {numPages}
-            </div>
-            <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
-              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrowSrc} />
-            </Button>
-          </div>
-          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
-            Show all <Badge>{numProjects}</Badge>
-          </Button>
-        </div>
-      )}
-    </>
   );
 };
 
@@ -206,7 +125,7 @@ function ProjectsList({
             {filterInput}
           </div>
           {renderProjects((filteredProjects) => (
-            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+            <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
                 <ProjectsUL
                   projects={paginatedProjects}
