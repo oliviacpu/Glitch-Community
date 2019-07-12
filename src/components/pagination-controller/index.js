@@ -1,7 +1,14 @@
-import React, { useEffect, useState, useRef, useReducer } from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
+
+import Badge from 'Components/badges/badge';
+import Button from 'Components/buttons/button';
+import Image from 'Components/images/image';
+import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
-import styles from './styles.styl';
+
 import { CDN_URL } from 'Shared/constants';
+import styles from './styles.styl';
+
 
 const paginationReducer = (oldState, action) => {
   switch (action.type) {
@@ -70,9 +77,12 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
     items = items.slice(startIdx, startIdx + itemsPerPage);
   }
 
-  useEffect(() => {
-    dispatchState({ type: 'restart', totalPages: numPages });
-  }, [numItems]);
+  useEffect(
+    () => {
+      dispatchState({ type: 'restart', totalPages: numPages });
+    },
+    [numItems],
+  );
 
   const arrow = `${CDN_URL}/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269`;
 
@@ -100,4 +110,6 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
       )}
     </>
   );
-};
+}
+
+export default PaginationController;

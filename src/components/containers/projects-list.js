@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 
 import Text from 'Components/text/text';
-import Button from 'Components/buttons/button';
-import Badge from 'Components/badges/badge';
 import TextInput from 'Components/inputs/text-input';
 import Heading from 'Components/text/heading';
 import Image from 'Components/images/image';
@@ -13,7 +11,7 @@ import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
-import { LiveMessage } from 'react-aria-live';
+import classNames from 'classnames/bind';
 
 import styles from './projects-list.styl';
 

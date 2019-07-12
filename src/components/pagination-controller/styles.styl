@@ -2,3 +2,13 @@
   display: flex
   justify-content: space-between
   margin: 1rem 0
+
+// hide pagination controls on mobile
+.paginationControls
+  @media (max-width: mediumViewport)
+    display: none
+    
+.paginationArrow
+  margin-bottom: 2px
+  &.next
+    transform: rotate(180deg)
