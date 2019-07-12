@@ -49,36 +49,19 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
 
 const arrowSrc = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
-const paginationReducer = (oldState, action) => {
-  switch (action.type) {
-    case 'next':
-      return {
-        page: oldState.page + 1,
-        totalPages: oldState.totalPages,
-        announce: `Showing page ${oldState.page + 1} of ${oldState.totalPages}`,
-      };
-    case 'previous':
-      return {
-        page: oldState.page - 1,
-        totalPages: oldState.totalPages,
-        announce: `Showing page ${oldState.page - 1} of ${oldState.totalPages}`,
-      };
-    case 'expand':
-      return {
-        expanded: true,
-        totalPages: oldState.totalPages,
-        announce: 'Showing all pages',
-      };
-    case 'restart':
-      return {
-        ...oldState,
-        page: 1,
-        announce: `Showing page 1 of ${action.totalPages}`,
-      };
-    default:
-      return {};
-  }
-};
+const PaginationController = ({ enabled, items, itemsPerPage, children }) => {
+  const numItems = items.length;
+  const numPages = Math.ceil(numItems / itemsPerPage);
+  
+  const [state, dispatchState] = useReducer(paginationReducer, {
+    page: 1,
+    totalPages: numPages,
+    announce: '',
+  })
+  
+  const prevButtonRef = useRef();
+  const nextButtonRef = useRef();
+}
 
 const PaginationController = ({ enabled, projects, projectsPerPage, children }) => {
   const numProjects = projects.length;
