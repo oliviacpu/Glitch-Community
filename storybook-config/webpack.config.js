@@ -31,6 +31,7 @@ module.exports = async ({ config, mode }) => {
     include: path.resolve(__dirname, '..'),
   });
   
+  console.log("hi sarah", appConfig.resolve, appConfig.context)
   config.resolve = {
       extensions: appConfig.resolve.extensions,
       alias: {

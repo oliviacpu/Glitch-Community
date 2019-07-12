@@ -1,26 +1,8 @@
 import React from 'react';
+import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import Button from '../components/Button';
-
-storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => (
-    <Button onClick={action('clicked')}>
-      <span role="img" aria-label="so cool">
-        😀 😎 👍 💯
-      </span>
-    </Button>
-  ));
-
-
-
-
-// import React from 'react';
-// import { mapValues, sumBy, memoize } from 'lodash';
-// import { storiesOf } from '@storybook/react';
 // import 'Components/global.styl';
-// import Button from 'Components/buttons/button';
+import Button from 'Components/buttons/button';
 // import CheckboxButton from 'Components/buttons/checkbox-button';
 // import Emoji from 'Components/images/emoji';
 // import TooltipContainer from 'Components/tooltips/tooltip-container';
@@ -64,12 +46,12 @@ storiesOf('Button', module)
 // import { users, teams, projects, collections } from './data';
 // import { withState, provideContext } from './util';
 
-// const helloAlert = () => {
-//   alert('hello');
-// };
+const helloAlert = () => {
+  alert('hello');
+};
 
-// storiesOf('Button', module)
-//   .add('regular', () => <Button onClick={helloAlert}>Hello Button</Button>)
+storiesOf('Button', module)
+  .add('regular', () => <Button onClick={helloAlert}>Hello Button</Button>)
 //   .add('cta', () => (
 //     <Button type="cta" onClick={helloAlert}>
 //       CTA Button
