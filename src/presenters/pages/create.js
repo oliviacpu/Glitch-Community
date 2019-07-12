@@ -14,6 +14,8 @@ import Embed from 'Components/project/embed';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
+import VisibilityContainer from 'Components/visibility-container';
+import LazyLoader from 'Components/lazy-loader';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -83,7 +85,7 @@ function WhatIsGlitch() {
         </Heading>
         <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
           <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.</Text>
-          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to full-stack Node apps.</Text>
+          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to fullstack Node apps.</Text>
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
@@ -468,34 +470,41 @@ function Remix() {
   }, []);
 
   return (
-    <section className={classNames(styles.section, styles.remix)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#FBF2B8">Remix any app to get started</Mark>
-      </Heading>
-      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-        <TabList className={styles.remixAppTabs}>
-          {apps.map((app) => (
-            <Tab className={styles.remixAppTab} key={app.domain}>
-              <ProjectAvatar project={app} hideTooltip />
-              <Text size="14px">{app.domain}</Text>
-            </Tab>
-          ))}
-        </TabList>
+    <VisibilityContainer>
+      {({ wasEverVisible }) => (
+        <section className={classNames(styles.section, styles.remix)}>
+          <Heading className={styles.h2} tagName="h2">
+            <Mark color="#FBF2B8">Remix any app to get started</Mark>
+          </Heading>
 
-        {apps.map((app, i) => (
-          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-            <div className={styles.embedContainer}>
-              <Embed domain={app.domain} />
-            </div>
-            <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix Your Own
-              </RemixButton>
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
-    </section>
+          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
+            <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+              <TabList className={styles.remixAppTabs}>
+                {apps.map((app) => (
+                  <Tab className={styles.remixAppTab} key={app.domain}>
+                    <ProjectAvatar project={app} hideTooltip />
+                    <Text size="14px">{app.domain}</Text>
+                  </Tab>
+                ))}
+              </TabList>
+
+              {apps.map((app, i) => (
+                <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+                  <div className={styles.embedContainer}>
+                    <Embed domain={app.domain} />
+                  </div>
+                  <div className={styles.embedRemixBtn}>
+                    <RemixButton type="cta" emoji="microphone" app={app}>
+                      Remix Your Own
+                    </RemixButton>
+                  </div>
+                </TabPanel>
+              ))}
+            </Tabs>
+          </LazyLoader>
+        </section>
+      )}
+    </VisibilityContainer>
   );
 }
 
@@ -574,7 +583,7 @@ const CreatePage = () => (
       <main className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <Starters />
+        <VisibilityContainer>{({ wasEverVisible }) => wasEverVisible && <Starters />}</VisibilityContainer>
         <Collaborate />
         <YourAppIsLive />
         <Tools />
