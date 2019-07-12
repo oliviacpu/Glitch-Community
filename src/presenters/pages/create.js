@@ -279,7 +279,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
         <Video
-          sources={[{ src: v, minWidth: 0, maxWidth: 799, track: emptyCaptionTrack }]}
+          sources={[{ src: v, minWidth: 0, maxWidth: 669, track: emptyCaptionTrack }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
           muted
@@ -289,7 +289,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video muted autoPlay loop sources={[{ src: video, minWidth: 800, track: emptyCaptionTrack }]} />
+        <Video muted autoPlay loop sources={[{ src: video, minWidth: 670, track: emptyCaptionTrack }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -414,7 +414,7 @@ function VSCode() {
             {
               src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096`,
               minWidth: 0,
-              maxWidth: 799,
+              maxWidth: 669,
               track: emptyCaptionTrack,
             },
           ]}
@@ -426,7 +426,7 @@ function VSCode() {
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <Video
             sources={[
-              { src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 800, track: emptyCaptionTrack },
+              { src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 670, track: emptyCaptionTrack },
             ]}
             muted
             autoPlay
