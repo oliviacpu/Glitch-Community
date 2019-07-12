@@ -32,7 +32,8 @@ function Video({ sources, ...props }) {
 }
 
 Video.propTypes = {
-  captionTrack: PropTypes.string,
+  // use empty-caption-track.vtt in /assets if the video doesn't have words
+  captionTrack: PropTypes.string.required,
   muted: PropTypes.bool,
   autoPlay: PropTypes.bool,
   loop: PropTypes.bool,
