@@ -41,11 +41,11 @@ const Markdown = ({ children, length, allowImages, renderAsPlaintext }) => {
     className = '';
 
     // in many cases we use the renderAsPlaintext prop to put markdown in a paragraph
-    // <div> can't be a descendent of a <p>, so use span
+    // <div> can't be a descendant of a <p>, so use span
     return <span className={className}>{rendered}</span>;
   }
 
-  // use <div> here, because <p> and other markup can't be a descendent of a <span>
+  // use <div> here, because <p> and other markup can't be a descendant of a <span>
   return (
     <div
       className={className}
