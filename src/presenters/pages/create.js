@@ -276,7 +276,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
         <Video
-          sources={[{ src: v, minWidth: 0 }]}
+          sources={[{ src: v, minWidth: 0, maxWidth: 799 }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
           muted
@@ -287,7 +287,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video muted autoPlay loop playsInline sources={[{ src: video, minWidth: 1000 }]} />
+        <Video muted autoPlay loop playsInline sources={[{ src: video, minWidth: 800 }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
