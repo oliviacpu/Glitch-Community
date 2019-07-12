@@ -29,10 +29,10 @@ addDecorator(
 );
 
 function loadStories() {
-  require('../stories/index.js');
-  require('../stories/inputs.js');
-  require('Components/overlays/story');
-  require('Components/new-stuff/story');
+  // require('../stories/index.js');
+  // require('../stories/inputs.js');
+  // require('Components/overlays/story');
+  // require('Components/new-stuff/story.js');
 
   // You can require as many stories as you need.
 }
