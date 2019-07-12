@@ -2,7 +2,7 @@ import React from 'react';
 import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 // import 'Components/global.styl';
-import Button from 'Components/buttons/button';
+import Button from '../src/components/buttons/button';
 // import CheckboxButton from 'Components/buttons/checkbox-button';
 // import Emoji from 'Components/images/emoji';
 // import TooltipContainer from 'Components/tooltips/tooltip-container';
