@@ -10,7 +10,16 @@ import SignInLayout from 'Components/layout/sign-in-layout';
 import { useCurrentUser } from 'State/current-user';
 import useLocalStorage from 'State/local-storage';
 
-const VSCodeAuth = ({ insiders, openProject }) => {
+const KNOWN_DISTRIBUTION_SCHEMES = new Set([
+  'vscode',
+  'vscode-insiders',
+  'vscodium',
+]);
+
+const VSCodeAuth = ({ insiders, openProject, scheme }) => {
+  scheme = scheme || insiders ? 'vscode-insiders' : 'vscode';
+  if (!KNOW)
+  debugger;
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
@@ -22,7 +31,6 @@ const VSCodeAuth = ({ insiders, openProject }) => {
   useEffect(() => {
     if (isSignedIn) {
       setTimeout(() => {
-        const scheme = insiders ? 'vscode-insiders' : 'vscode';
         const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`;
         window.location.assign(redirectUrl);
       }, 3000);
@@ -45,11 +53,13 @@ const VSCodeAuth = ({ insiders, openProject }) => {
 VSCodeAuth.propTypes = {
   insiders: PropTypes.bool,
   openProject: PropTypes.bool,
+  scheme: PropTypes.string,
 };
 
 VSCodeAuth.defaultProps = {
   insiders: false,
   openProject: false,
+  scheme: ""
 };
 
 export default VSCodeAuth;
