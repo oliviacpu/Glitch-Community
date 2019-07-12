@@ -10,7 +10,11 @@ function Video({ sources, ...props }) {
     };
   }, []);
 
-  const filterVideos = () => sources.filter((s) => windowWidth >= s.minWidth);
+  const filterVideos = () => sources.filter((s) => {
+    console.log(typeof windowWidth);
+    console.log(typeof s.minWidth);
+    return windowWidth >= s.minWidth;
+  });
 
   const [visibleVideos, setVisibleVideos] = useState(filterVideos());
   useEffect(
