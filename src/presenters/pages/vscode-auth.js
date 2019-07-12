@@ -16,15 +16,14 @@ const KNOWN_DISTRIBUTION_SCHEMES = new Set([
   'vscodium',
 ]);
 
-const VSCodeAuth = ({ insiders, scheme }) => {
-  if (!scheme) { scheme = insiders ? 'vscode-insiders' : 'vscode'; }
+const VSCodeAuth = ({ scheme }) => {
   if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = 'vscode'; }
 
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
 
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
+  const redirectMessage = "You are being redirected. (If you aren't sent back to your editor, try signing in with an email code.)";
 
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
 
@@ -50,14 +49,8 @@ const VSCodeAuth = ({ insiders, scheme }) => {
   return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
 
-VSCodeAuth.propTypes = {
-  insiders: PropTypes.bool,
-  scheme: PropTypes.string,
-};
+VSCodeAuth.propTypes = {scheme: PropTypes.string};
 
-VSCodeAuth.defaultProps = {
-  insiders: false,
-  scheme: '',
-};
+VSCodeAuth.defaultProps = {scheme: ''};
 
 export default VSCodeAuth;

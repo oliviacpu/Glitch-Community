@@ -173,7 +173,7 @@ const Router = () => (
         path="/vscode-auth"
         exact
         render={({ location }) => (
-          <VSCodeAuth key={location.key} insiders={parse(location.search, 'insiders')} scheme={parse(location.search, 'scheme')} />
+          <VSCodeAuth key={location.key} scheme={parse(location.search, 'scheme')} />
         )}
       />
 
