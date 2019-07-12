@@ -52,6 +52,9 @@ export const CollectionLink = ({ collection, children, ...props }) => (
 CollectionLink.propTypes = {
   collection: PropTypes.oneOfType([
     PropTypes.shape({
+      fullUrl: PropTypes.string.isRequired,
+    }),
+    PropTypes.shape({
       team: PropTypes.PropTypes.shape({
         url: PropTypes.string.isRequired,
       }).isRequired,

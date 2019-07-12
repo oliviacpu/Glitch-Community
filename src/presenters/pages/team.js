@@ -20,6 +20,7 @@ import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
+import Link from 'Components/link';
 import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -33,13 +34,13 @@ function syncPageToUrl(team) {
 }
 
 const Beta = () => (
-  <a href="/teams/" target="_blank" className={styles.beta}>
+  <Link to="/teams/" target="_blank" className={styles.beta}>
     <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
     <div>
       <Heading tagName="h4">Teams are in beta</Heading>
       <Text>Learn More</Text>
     </div>
-  </a>
+  </Link>
 );
 
 const ProjectPals = () => (

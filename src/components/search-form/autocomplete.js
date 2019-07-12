@@ -2,12 +2,12 @@ import React from 'react';
 import classnames from 'classnames';
 import MaskImage from 'Components/images/mask-image';
 import { TeamAvatar, UserAvatar, ProjectAvatar, CollectionAvatar } from 'Components/images/avatar';
-import Link, { TeamLink, UserLink, ProjectLink } from 'Components/link';
+import Link, { TeamLink, UserLink, ProjectLink, CollectionLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import styles from './autocomplete.styl';
 
 const StarterKitResult = ({ value: starterKit }) => (
-  <a href={starterKit.url} className={styles.resultContainer}>
+  <Link to={starterKit.url} className={styles.resultContainer}>
     <div className={styles.avatarContainer}>
       <MaskImage src={starterKit.imageURL} />
     </div>
@@ -15,7 +15,7 @@ const StarterKitResult = ({ value: starterKit }) => (
       <div className={styles.infoPrimary}>{starterKit.name}</div>
       <div className={styles.infoSecondary}>{starterKit.description}</div>
     </div>
-  </a>
+  </Link>
 );
 
 const TeamResult = ({ value: team }) => (
@@ -52,12 +52,6 @@ const ProjectResult = ({ value: project }) => (
       <div className={styles.infoSecondary}>{project.description}</div>
     </div>
   </ProjectLink>
-);
-
-const CollectionLink = ({ collection, children, ...props }) => (
-  <Link to={`/@${collection.fullUrl}`} {...props}>
-    {children}
-  </Link>
 );
 
 const CollectionResult = ({ value: collection }) => (
