@@ -17,7 +17,7 @@ const KNOWN_DISTRIBUTION_SCHEMES = new Set([
 ]);
 
 const VSCodeAuth = ({ scheme }) => {
-  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) { scheme = 'vscode'; }
+  const isValidApp = KNOWN_DISTRIBUTION_SCHEMES.has(scheme)
 
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
@@ -51,6 +51,6 @@ const VSCodeAuth = ({ scheme }) => {
 
 VSCodeAuth.propTypes = { scheme: PropTypes.string };
 
-VSCodeAuth.defaultProps = { scheme: '' };
+VSCodeAuth.defaultProps = { scheme: 'vscode' };
 
 export default VSCodeAuth;
