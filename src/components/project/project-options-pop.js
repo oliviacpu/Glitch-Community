@@ -16,7 +16,7 @@ const isTeamProject = ({ currentUser, project }) => currentUser.teams.some((team
 const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
-      group.some((item) => item.visible) && (
+      group.some((item) => item.onClick) && (
         <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
           {group.map((item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
         </PopoverActions>
@@ -58,20 +58,20 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leavePr
       <PopoverMenuItems>
         {[
           [
-            { visible: projectOptions.featureProject, onClick: projectOptions.featureProject, label: 'Feature', emoji: 'clapper' },
-            { visible: projectOptions.addPin, onClick: projectOptions.addPin, label: 'Pin', emoji: 'pushpin' },
-            { visible: projectOptions.removePin, onClick: projectOptions.removePin, label: 'Un-Pin', emoji: 'pushpin' },
+            { onClick: projectOptions.featureProject, label: 'Feature', emoji: 'clapper' },
+            { onClick: projectOptions.addPin, label: 'Pin', emoji: 'pushpin' },
+            { onClick: projectOptions.removePin, label: 'Un-Pin', emoji: 'pushpin' },
           ],
-          [{ visible: projectOptions.displayNewNote, onClick: projectOptions.displayNewNote, label: 'Add Note', emoji: 'spiralNotePad' }],
-          [{ visible: projectOptions.addProjectToCollection, onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
-          [{ visible: projectOptions.joinTeamProject, onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
+          [{ onClick: projectOptions.displayNewNote, label: 'Add Note', emoji: 'spiralNotePad' }],
+          [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
+          [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
           [
-            { visible: projectOptions.leaveProject, onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
+            { onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
           ],
           [
-            { visible: projectOptions.removeProjectFromTeam, onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
-            { visible: projectOptions.deleteProject, onClick: onClickDeleteProject, label: 'Delete Project', emoji: 'bomb', dangerZone: true },
-            { visible: projectOptions.removeProjectFromCollection, onClick: projectOptions.removeProjectFromCollection, label: 'Remove from Collection', emoji: 'thumbsDown', dangerZone: true },
+            { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
+            { onClick: onClickDeleteProject, label: 'Delete Project', emoji: 'bomb', dangerZone: true },
+            { onClick: projectOptions.removeProjectFromCollection, label: 'Remove from Collection', emoji: 'thumbsDown', dangerZone: true },
           ],
         ]}
       </PopoverMenuItems>
@@ -117,7 +117,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
             <ProjectOptionsContent
               projectOptions={toggleBeforeAction(togglePopover)}
               addToCollectionPopover={addToCollection}
-              leaveProjectPopover={leaveProject}
+              leaveProjectPopover={projectOptions.leaveProject && leaveProject}
             />
           )}
         </MultiPopover>
