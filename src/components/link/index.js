@@ -70,11 +70,16 @@ CollectionLink.propTypes = {
   ]).isRequired,
 };
 
-export const ProjectLink = ({ project, children, ...props }) => (
-  <Link to={getProjectLink(project)} {...props}>
-    {children}
-  </Link>
-);
+export const ProjectLink = ({ project, children, ...props }) => {
+  if (project.suspendedReason) {
+    return <span {...props}>{children}</span>;
+  }
+  return (
+    <Link to={getProjectLink(project)} {...props}>
+      {children}
+    </Link>
+  );
+};
 ProjectLink.propTypes = {
   project: PropTypes.shape({
     domain: PropTypes.string.isRequired,
