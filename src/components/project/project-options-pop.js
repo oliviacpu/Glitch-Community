@@ -81,6 +81,7 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leavePr
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
+  // const showLeaveButton = !!projectOptions.leaveProject;
 
   if (noProjectOptions) return null;
 
@@ -113,11 +114,11 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
             leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} togglePopover={togglePopover} />,
           }}
         >
-          {({ addToCollection, leaveProject }) => (
+          {({ addToCollection }) => (
             <ProjectOptionsContent
               projectOptions={toggleBeforeAction(togglePopover)}
               addToCollectionPopover={addToCollection}
-              leaveProjectPopover={leaveProject}
+              // leaveProjectPopover={showLeaveButton}
             />
           )}
         </MultiPopover>
