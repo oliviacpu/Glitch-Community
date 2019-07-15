@@ -2,8 +2,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 
-import { Button } from './';
-import { withState, provideContext } from '../../../stories/util';
+import Button, { CheckboxButton } from './button';
+import Emoji from 'Components/images/emoji';
+
+import { withState } from '../../../stories/util';
 
 const story = storiesOf('Buttons', module);
 
@@ -15,7 +17,7 @@ storiesOf('Button', module)
   .add('regular', () => <Button onClick={helloAlert}>Hello Button</Button>)
   .add('cta', () => (
     <Button type="cta" onClick={helloAlert}>
-      CTA Button
+      CTA Button!
     </Button>
   ))
   .add('small', () => (

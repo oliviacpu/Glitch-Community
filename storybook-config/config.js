@@ -33,6 +33,7 @@ function loadStories() {
   require('../stories/inputs.js');
   require('Components/overlays/story');
   require('Components/new-stuff/story');
+  require('Components/buttons/story'); //todo do this dynamically instead?
 
   // You can require as many stories as you need.
 }
