@@ -4,9 +4,9 @@ import 'Components/global.styl';
 
 import Button from './button';
 import CheckboxButton from './checkbox-button'
+import BookmarkButton from './bookmark-button'
 import Emoji from 'Components/images/emoji';
 import Image from 'Components/images/image';
-
 import { withState } from '../../../stories/util';
 
 const story = storiesOf('Buttons', module);
@@ -65,4 +65,7 @@ storiesOf('Button', module)
         </p>
       </>
     )),
-  );
+  )
+  .add('BookmarkButton', () => (
+    <BookmarkButton />
+  ))

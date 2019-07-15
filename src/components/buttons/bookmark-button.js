@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './BookmarkButton.scss';
+import styles from './bookmark-button.styl';
 
-//TODO: should this extend off button, think about aria pressed
+//TODO: should this extend off button, think about aria pressed,f
 
 const filledSrc = "https://cdn.glitch.com/710951eb-510b-47e9-987b-85954cc2b188%2Fatms-btn-filled-no-check.svg?v=1562962370155";
 const emptySrc = "https://cdn.glitch.com/710951eb-510b-47e9-987b-85954cc2b188%2Fatms-btn-empty.svg?v=1562962355974";
