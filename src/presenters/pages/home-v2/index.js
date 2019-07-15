@@ -22,6 +22,7 @@ import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
+import { useGlobals } from 'S'
 
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';

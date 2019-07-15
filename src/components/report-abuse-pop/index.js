@@ -14,7 +14,6 @@ import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverT
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
-import { APP_URL } from 'Utils/constants';
 
 import styles from './styles.styl';
 
