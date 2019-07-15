@@ -1,5 +1,5 @@
 const { envs } = require('Shared/constants');
-/* globals RUNNING_ON */
+/* global RUNNING_ON */
 
 let env;
 if (RUNNING_ON === 'development') {
