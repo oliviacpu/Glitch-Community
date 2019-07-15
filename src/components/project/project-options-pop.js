@@ -82,7 +82,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     );
 
   return (
-    <PopoverMenu>
+    <PopoverMenu label={`Project Options for ${project.domain}`}>
       {({ togglePopover }) => (
         <MultiPopover
           views={{
