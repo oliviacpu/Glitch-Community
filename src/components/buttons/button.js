@@ -113,7 +113,7 @@ Button.propTypes = {
   imagePosition: PropTypes.oneOf(['left', 'right']),
   /** emoji name */
   emoji: PropTypes.string,
-  ariaPressed: PropTypes.bool,
+  ariaPressed: PropTypes.string,
 };
 
 Button.defaultProps = {
