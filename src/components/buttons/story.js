@@ -2,8 +2,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 
-import Button, { CheckboxButton } from './button';
+import Button from './button';
+import CheckboxButton from './checkbox-button'
 import Emoji from 'Components/images/emoji';
+import Image from 'Components/images/image';
 
 import { withState } from '../../../stories/util';
 
