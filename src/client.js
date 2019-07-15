@@ -37,7 +37,10 @@ window.bootstrap = () => {
     <BrowserRouter>
       <GlobalsProvider
         origin={window.location.origin}
-        ZINE_POSTS={window.ZINE_POSTS} HOME_CONTENT={window.HOME_CONTENT}>
+        ZINE_POSTS={window.ZINE_POSTS}
+        HOME_CONTENT={window.HOME_CONTENT}
+        EXTERNAL_ROUTES={window.EXTERNAL_ROUTES}
+      >
         <App />
       </GlobalsProvider>
     </BrowserRouter>
