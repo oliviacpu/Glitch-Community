@@ -10,8 +10,8 @@ const QuestionsPage = () => (
     <Helmet title="Questions" />
     <main>
       <Questions max={12} />
-      <MoreIdeas />
     </main>
+    <MoreIdeas />
   </Layout>
 );
 

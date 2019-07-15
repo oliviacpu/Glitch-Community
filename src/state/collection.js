@@ -56,23 +56,27 @@ export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState({});
   const api = useAPI();
 
-  const getCollectionProjects = useCallback((collection) => {
-    if (responses[collection.id] && responses[collection.id].projects) {
-      return responses[collection.id].projects;
-    }
-    loadCollectionProjects(api, [collection], setResponses);
-    return loadingResponse;
-  }, [responses, api]);
+  const getCollectionProjects = useCallback(
+    (collection) => {
+      if (responses[collection.id] && responses[collection.id].projects) {
+        return responses[collection.id].projects;
+      }
+      loadCollectionProjects(api, [collection], setResponses);
+      return loadingResponse;
+    },
+    [responses, api],
+  );
 
-  const reloadCollectionProjects = useCallback((collections) => {
-    loadCollectionProjects(api, collections, setResponses, true);
-  }, [api]);
+  const reloadCollectionProjects = useCallback(
+    (collections) => {
+      loadCollectionProjects(api, collections, setResponses, true);
+    },
+    [api],
+  );
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -114,6 +118,11 @@ export function userOrTeamIsAuthor({ collection, user }) {
 
 export function useCollectionEditor(initialCollection) {
   const [collection, setCollection] = useState(initialCollection);
+
+  React.useEffect(() => {
+    setCollection(initialCollection);
+  }, [initialCollection]);
+
   const {
     updateItem,
     deleteItem,
@@ -169,6 +178,13 @@ export function useCollectionEditor(initialCollection) {
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
+    deleteProject: withErrorHandler(async (project) => {
+      await deleteItem({ project });
+      setCollection((prev) => ({
+        ...prev,
+        projects: prev.projects.filter((p) => p.id !== project.id),
+      }));
+    }, handleError),
 
     updateNameAndUrl: ({ name, url }) => updateFields({ name, url }).catch(handleErrorForInput),
 

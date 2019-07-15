@@ -5,7 +5,7 @@ import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from 'Utils/sentry';
 import useLocalStorage from './local-storage';
-import { getAPIForToken } from './api';
+import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
 export const Context = React.createContext();
 
@@ -162,15 +162,26 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const useDebouncedAsync = (fn) => {
-  const [working, setWorking] = useState(false); // Used to prevent simultaneous loading
-  return async (...args) => {
-    if (working) return;
+  const [working, setWorking] = useState(false); // tracks if fn is currently running
+  const [pending, setPending] = useState(false); // run fn again whenever it finishes
+  const debouncedFn = async () => {
+    if (working) {
+      setPending(true);
+      return;
+    }
     setWorking(true);
+    setPending(false);
     // delay loading a moment so both items from storage have a chance to update
     await sleep(1);
-    await fn(...args);
+    await fn();
     setWorking(false);
   };
+  useEffect(() => {
+    if (!working && pending) {
+      debouncedFn();
+    }
+  }, [working, pending]);
+  return debouncedFn;
 };
 
 export const CurrentUserProvider = ({ children }) => {

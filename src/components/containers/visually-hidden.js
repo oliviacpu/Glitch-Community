@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '../global.styl';
 
-const VisuallyHidden = ({ children, as: Component }) => (
-  <Component className={visuallyHidden}>{children}</Component>
+const VisuallyHidden = ({ children, as: Component, ...props }) => (
+  <Component className={visuallyHidden} {...props}>{children}</Component>
 );
 VisuallyHidden.propTypes = {
   children: PropTypes.node.isRequired,

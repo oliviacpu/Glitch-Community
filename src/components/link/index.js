@@ -33,7 +33,6 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
       hash: targetUrl.hash,
     };
   }
-
   return (
     <RouterLink to={to} {...props} innerRef={ref}>
       {children}
@@ -53,6 +52,9 @@ export const CollectionLink = ({ collection, children, ...props }) => (
 CollectionLink.propTypes = {
   collection: PropTypes.oneOfType([
     PropTypes.shape({
+      fullUrl: PropTypes.string.isRequired,
+    }),
+    PropTypes.shape({
       team: PropTypes.PropTypes.shape({
         url: PropTypes.string.isRequired,
       }).isRequired,
@@ -68,11 +70,16 @@ CollectionLink.propTypes = {
   ]).isRequired,
 };
 
-export const ProjectLink = ({ project, children, ...props }) => (
-  <Link to={getProjectLink(project)} {...props}>
-    {children}
-  </Link>
-);
+export const ProjectLink = ({ project, children, ...props }) => {
+  if (project.suspendedReason) {
+    return <span {...props}>{children}</span>;
+  }
+  return (
+    <Link to={getProjectLink(project)} {...props}>
+      {children}
+    </Link>
+  );
+};
 ProjectLink.propTypes = {
   project: PropTypes.shape({
     domain: PropTypes.string.isRequired,

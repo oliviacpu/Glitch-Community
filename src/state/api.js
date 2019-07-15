@@ -1,9 +1,9 @@
-/* globals API_URL */
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize } from 'lodash';
+import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
-import { useCurrentUser } from './current-user';
+import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
 export const Context = createContext();
 
@@ -147,18 +147,7 @@ export const useAPIHandlers = () => {
 
       // projects
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
-      updateProjectDomain: ({ project }) =>
-        api.post(
-          `/project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
-          {},
-          {
-            transformRequest: (data, headers) => {
-              // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
-              delete headers.Authorization;
-              return data;
-            },
-          },
-        ),
+      updateProjectDomain: ({ project }) => api.post(`/project/domainChanged?projectId=${project.id}`),
       undeleteProject: ({ project }) => api.post(`/projects/${project.id}/undelete`),
 
       // teams

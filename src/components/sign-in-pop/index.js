@@ -138,7 +138,7 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In <Emoji name="email" />
+        Email Sign In&nbsp;<Emoji name="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -349,10 +349,10 @@ export const SignInPopBase = withRouter(({ location, align }) => {
             <PasswordLoginSection showTwoFactor={setTwoFactorAnd(showView.twoFactor)} showForgotPassword={showView.forgotPassword} />
           )}
           <PopoverActions>
-            <SignInButton company="facebook" onClick={onClick} />
-            <SignInButton company="github" onClick={onClick} />
-            <SignInButton company="google" onClick={onClick} />
-            {slackAuthEnabled && <SignInButton company="slack" onClick={onClick} />}
+            <SignInButton companyName="facebook" onClick={onClick} />
+            <SignInButton companyName="github" onClick={onClick} />
+            <SignInButton companyName="google" onClick={onClick} />
+            {slackAuthEnabled && <SignInButton companyName="slack" onClick={onClick} />}
             <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
               Sign in with Email
             </Button>

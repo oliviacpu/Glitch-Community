@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from 'Components/buttons/button';
 
-/* global FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL */
+import { FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL } from 'Utils/constants';
 
 function facebookAuthLink() {
   const params = new URLSearchParams();
@@ -58,20 +58,27 @@ const companies = {
   },
 };
 
-const SignInButton = ({ company, onClick }) => {
-  const { name, emoji, href } = companies[company];
+export const companyNames = Object.keys(companies);
+
+const SignInButton = ({ companyName, onClick, short }) => {
+  const { name, emoji, href } = companies[companyName];
 
   return (
     <div style={{ marginBottom: '10px' }}>
       <Button href={href} onClick={onClick} size="small" emoji={emoji}>
-        Sign in with {name}
+        {short ? name : `Sign in with ${name}`}
       </Button>
     </div>
   );
 };
 
 SignInButton.propTypes = {
-  company: PropTypes.oneOf(Object.keys(companies)).isRequired,
+  companyName: PropTypes.oneOf(companyNames).isRequired,
+  short: PropTypes.bool,
+};
+
+SignInButton.defaultProps = {
+  short: false,
 };
 
 export default SignInButton;

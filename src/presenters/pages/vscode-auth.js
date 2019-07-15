@@ -3,48 +3,54 @@
  */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
-import PopoverContainer from 'Components/popover/container';
-import Text from 'Components/text/text';
-import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
+import SignInLayout from 'Components/layout/sign-in-layout';
+
 import { useCurrentUser } from 'State/current-user';
+import useLocalStorage from 'State/local-storage';
 
-import styles from './vscode-auth.styl';
+const KNOWN_DISTRIBUTION_SCHEMES = new Set(['vscode', 'vscode-insiders', 'vscodium']);
 
-const VSCodeAuth = ({ insiders, openProject }) => {
+const VSCodeAuth = ({ scheme }) => {
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
+  const isValidApp = KNOWN_DISTRIBUTION_SCHEMES.has(scheme);
 
-  const redirectMessage = "You are being redirected. (If you aren't sent back to VSCode, try signing in with an email code.)";
-  const signInMessage = 'Please Sign In to continue.';
+  const redirectMessage = "You are being redirected. (If you aren't sent back to your editor, try signing in with an email code.)";
+
+  const [, setDestination] = useLocalStorage('destinationAfterAuth');
 
   useEffect(() => {
+    if (!isValidApp) return;
     if (isSignedIn) {
       setTimeout(() => {
-        const scheme = insiders ? 'vscode-insiders' : 'vscode';
-        const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}&openProject=${openProject}`;
+        const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}`;
         window.location.assign(redirectUrl);
       }, 3000);
+    } else {
+      setDestination({
+        expires: dayjs()
+          .add(10, 'minutes')
+          .toISOString(),
+        to: {
+          pathname: location.pathname,
+          search: location.search,
+        },
+      });
     }
-  }, []);
+  }, [isSignedIn, isValidApp]);
 
-  return (
-    <div className={styles.content}>
-      <Text>{isSignedIn ? redirectMessage : signInMessage}</Text>
-      {!isSignedIn && <PopoverContainer>{() => <SignInPop align="none" />}</PopoverContainer>}
-    </div>
-  );
+  if (!isValidApp) {
+    return <div style={{ margin: 20 }}>This is an invalid sign-in link. (Try again, or try signing in with an email code.)</div>;
+  }
+
+  return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
 
-VSCodeAuth.propTypes = {
-  insiders: PropTypes.bool,
-  openProject: PropTypes.bool,
-};
+VSCodeAuth.propTypes = { scheme: PropTypes.string };
 
-VSCodeAuth.defaultProps = {
-  insiders: false,
-  openProject: false,
-};
+VSCodeAuth.defaultProps = { scheme: 'vscode' };
 
 export default VSCodeAuth;
