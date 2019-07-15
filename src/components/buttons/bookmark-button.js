@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './bookmark-button.styl';
 
-//TODO: should this extend off button, think about aria pressed, fix asset urls
+//TODO: should this extend off button, think about aria pressed
 const CHECKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fcheck.svg?v=1563224340442";
 const EMPTY_BOOKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-empty.svg?v=1563224340818";
 const FILLED_BOOKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-filled-no-check.svg?v=1563224341311";
 
-const Halo = ({ hasBookmarked }) => {
+const Halo = ({ isBookmarked }) => {
   return (
-    <svg className={`${styles.halo} ${hasBookmarked ? styles.haloAnimated : ''}`} width="54px" height="29px" viewbox="0 0 54 29" version="1.1" xmlns="http://www.w3.org/2000/svg" > 
+    <svg className={`${styles.halo} ${isBookmarked ? styles.haloAnimated : ''}`} width="54px" height="29px" viewbox="0 0 54 29" version="1.1" xmlns="http://www.w3.org/2000/svg" > 
       <g id="Bookmark-v5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Artboard" transform="translate(-57.000000, -14.000000)">
           <g transform="translate(57.000000, 14.000000)">
@@ -24,22 +24,30 @@ const Halo = ({ hasBookmarked }) => {
   );
 }
 
-const BookmarkButton = ({ action }) => {
-  const [state, setState] = React.useState({
-    hasBookmarked: false
-  });
+const BookmarkButton = ({ action, initialIsBookmarked }) => {
+  const [isBookmarked, setIsBookmarked] = React.useState(initialIsBookmarked);
   const onClick = () => {
-    setState({ hasBookmarked: !state.hasBookmarked });
+    setIsBookmarked(!isBookmarked);
     if (action) action();
   }
   
   return (
     <button className={styles.bookmarkButton} onClick={onClick}>
-      <Halo hasBookmarked={state.hasBookmarked} />
-      <img src={state.hasBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK}  />
-      <img className={`${styles.check} ${state.hasBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} />
+      <Halo isBookmarked={isBookmarked} />
+      <img src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK}  />
+      <img className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} />
     </button>
   );
+}
+
+BookmarkButton.propTypes = {
+  action: React.PropTypes.function,
+  initialIsBookmarked: React.PropTypes.bool,
+}
+
+BookmarkButton.defaultPropTypes = {
+  action: undefined,
+  initialIsBookmarked: false,
 }
 
 export default BookmarkButton
