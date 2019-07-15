@@ -1,6 +1,8 @@
-import { APP_URL } from 'Utils/constants';
+import { getConstants } from 'Utils/constants';
 import { getLink, getDisplayName } from 'Models/user';
 import { getUrlForModel, getDisplayNameForModel } from './models';
+
+const { APP_URL } = getConstants(location.origin, window.RUNNING_ON);
 
 export const getAbuseReportTitle = (model, modelType) => {
   if (modelType === 'home') {
