@@ -6,6 +6,8 @@ import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
 import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+
 import convertPlugin from 'Shared/dayjs-convert';
 import { captureException, configureScope } from 'Utils/sentry';
 import { EDITOR_URL } from 'Utils/constants';
@@ -31,7 +33,7 @@ window.bootstrap = () => {
 
   const dom = document.createElement('div');
   document.body.appendChild(dom);
-  render(<App />, dom);
+  render(<BrowserRouter><App /></BrowserRouter>, dom);
 };
 
 // Make sure react exists because that's an issue that is happening
