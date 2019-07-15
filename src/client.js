@@ -35,7 +35,9 @@ window.bootstrap = () => {
   document.body.appendChild(dom);
   render((
     <BrowserRouter>
-      <GlobalsProvider origin={window.location.origin} ZINE_POSTS={window.ZINE_POSTS} HOME_CONTENT={window.HOME_CONTENT}>
+      <GlobalsProvider
+        origin={window.location.origin}
+        ZINE_POSTS={window.ZINE_POSTS} HOME_CONTENT={window.HOME_CONTENT}>
         <App />
       </GlobalsProvider>
     </BrowserRouter>

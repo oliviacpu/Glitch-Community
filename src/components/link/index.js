@@ -13,13 +13,11 @@ import TrackedExternalLink from './tracked-external-link';
 
 export { WrappingLink, TrackedExternalLink };
 
-const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
-
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
-  const { origin } = useGlobals();
+  const { origin, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
     const targetUrl = new URL(to, origin);
-    if (targetUrl.origin !== origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
+    if (targetUrl.origin !== origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route))) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}

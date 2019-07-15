@@ -22,7 +22,7 @@ import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
-import { useGlobals } from 'S'
+import { useGlobals } from 'State/globals';
 
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
@@ -280,9 +280,10 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
 
 export const HomePreview = withRouter(({ history }) => {
   const api = useAPI();
+  const { origin, ZINE_POSTS } = useGlobals();
   const onPublish = async (data) => {
     try {
-      await api.post(`${window.location.origin}/api/home`, data);
+      await api.post(`${origin}/api/home`, data);
       history.push('/');
     } catch (e) {
       console.error(e);
@@ -300,7 +301,7 @@ export const HomePreview = withRouter(({ history }) => {
           </>
         }
       >
-        {(data) => <Home data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }} />}
+        {(data) => <Home data={{ ...data, cultureZine: ZINE_POSTS.slice(0, 4) }} />}
       </PreviewContainer>
     </Layout>
   );
@@ -308,10 +309,11 @@ export const HomePreview = withRouter(({ history }) => {
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
+  const { HOME_CONTENT, ZINE_POSTS } = useGlobals();
   return (
     <Layout>
       <Home
-        data={{ ...window.HOME_CONTENT, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
+        data={{ ...HOME_CONTENT, cultureZine: ZINE_POSTS.slice(0, 4) }}
         loggedIn={!!currentUser.login}
         hasProjects={currentUser.projects.length > 0}
       />
