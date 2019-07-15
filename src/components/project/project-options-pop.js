@@ -16,7 +16,7 @@ const isTeamProject = ({ currentUser, project }) => currentUser.teams.some((team
 const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
-      group.some((item) => item.onClick) && (
+      group.some((item) => item.visible || item.onClick) && (
         <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
           {group.map((item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
         </PopoverActions>
@@ -58,15 +58,15 @@ const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leavePr
       <PopoverMenuItems>
         {[
           [
-            { onClick: projectOptions.featureProject, label: 'Feature', emoji: 'clapper' },
-            { onClick: projectOptions.addPin, label: 'Pin', emoji: 'pushpin' },
-            { onClick: projectOptions.removePin, label: 'Un-Pin', emoji: 'pushpin' },
+            { visible: projectOptions.featureProject, onClick: projectOptions.featureProject, label: 'Feature', emoji: 'clapper' },
+            { visible: projectOptions.addPin, onClick: projectOptions.addPin, label: 'Pin', emoji: 'pushpin' },
+            { visible: projectOptions.removePin, onClick: projectOptions.removePin, label: 'Un-Pin', emoji: 'pushpin' },
           ],
           [{ onClick: projectOptions.displayNewNote, label: 'Add Note', emoji: 'spiralNotePad' }],
           [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
           [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
           [
-            { onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
+            { visible: projectOptions.leaveProject, onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
           ],
           [
             { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
