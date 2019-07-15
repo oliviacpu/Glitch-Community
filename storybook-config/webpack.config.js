@@ -8,7 +8,6 @@ module.exports = async ({ config, mode }) => {
   // 'PRODUCTION' is used when building the static version of storybook.
 
   // Make whatever fine-grained changes you need
-
   config.module.rules.push({
     test: /\.styl$/,
     use: [
@@ -32,12 +31,12 @@ module.exports = async ({ config, mode }) => {
   });
   
   config.resolve = {
-      extensions: appConfig.resolve.extensions,
-      alias: {
-        ...appConfig.resolve.alias,
-        ...config.resolve.alias,
-      },
+    extensions: appConfig.resolve.extensions,
+    alias: {
+      ...appConfig.resolve.alias,
+      ...config.resolve.alias,
     },
+  },
   
   config.context = appConfig.context;
 

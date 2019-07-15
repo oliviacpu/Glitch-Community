@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import * as assets from 'Utils/assets';
 
-import { useAPI } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useUploader from 'State/uploader';
@@ -12,61 +12,33 @@ import { useProjectReload } from 'State/project';
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
 
-export const updateTeam = (api, team, changes) => api.patch(`teams/${team.id}`, changes);
-export const joinTeam = (api, team) => api.post(`teams/${team.id}/join`);
-
-export async function inviteEmail(api, emailAddress, team) {
-  await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
-    emailAddress,
-  });
-}
-
-export async function inviteUserToTeam(api, user, team) {
-  await api.post(`teams/${team.id}/sendJoinTeamEmail`, {
-    userId: user.id,
-  });
-}
-export const updateUserAccessLevel = (api, userId, team, accessLevel) =>
-  api.patch(`teams/${team.id}/users/${userId}`, {
-    access_level: accessLevel,
-  });
-export const removeUserFromTeam = (api, userId, team) => api.delete(`teams/${team.id}/users/${userId}`);
-
-export const deleteProject = (api, projectId) => api.delete(`/projects/${projectId}`);
-
-export const addProjectToTeam = (api, project, team) => api.post(`teams/${team.id}/projects/${project.id}`);
-export const removeProjectFromTeam = (api, projectId, team) => api.delete(`teams/${team.id}/projects/${projectId}`);
-
-export const addPinnedProject = (api, projectId, team) => api.post(`teams/${team.id}/pinned-projects/${projectId}`);
-export const removePinnedProject = (api, projectId, team) => api.delete(`teams/${team.id}/pinned-projects/${projectId}`);
-
-export async function addProjectToCollection(api, project, collection) {
-  await api.patch(`collections/${collection.id}/add/${project.id}`);
-}
-
-export async function addUserToProject(api, projectId, team) {
-  await api.post(`/teams/${team.id}/projects/${projectId}/join`);
-}
-
-export async function removeUserFromProject(api, projectId, userId) {
-  await api.delete(`/projects/${projectId}/authorization`, {
-    data: {
-      targetUserId: userId,
-    },
-  });
-}
-
+// eslint-disable-next-line import/prefer-default-export
 export function useTeamEditor(initialTeam) {
-  const api = useAPI();
   const { currentUser, update: updateCurrentUser } = useCurrentUser();
   const { uploadAssetSizes } = useUploader();
   const { createNotification } = useNotifications();
-  const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
+  const { handleError, handleErrorForInput } = useErrorHandlers();
+  const { getAvatarImagePolicy, getCoverImagePolicy } = assets.useAssetPolicy();
   const reloadProjectMembers = useProjectReload();
+  const {
+    updateItem,
+    deleteItem,
+    joinTeam,
+    inviteEmailToTeam,
+    inviteUserToTeam,
+    removeUserFromProject,
+    removeUserFromTeam,
+    addProjectToTeam,
+    removeProjectFromTeam,
+    addPinnedProject,
+    removePinnedProject,
+    updateUserAccessLevel,
+    joinTeamProject,
+  } = useAPIHandlers();
   const [team, setTeam] = useState({ ...initialTeam });
 
   async function updateFields(changes) {
-    const { data } = await updateTeam(api, team, changes);
+    const { data } = await updateItem({ team }, changes);
     setTeam((prev) => ({ ...prev, ...data }));
     if (currentUser) {
       const teamIndex = currentUser.teams.findIndex(({ id }) => id === team.id);
@@ -78,11 +50,11 @@ export function useTeamEditor(initialTeam) {
     }
   }
 
-  function updatePermissions(projectId, permissions) {
+  function updatePermissions(project, permissions) {
     setTeam((prev) => ({
       ...prev,
       projects: prev.projects.map((p) => {
-        if (p.id !== projectId) return p;
+        if (p.id !== project.id) return p;
         return {
           ...p,
           permissions,
@@ -91,21 +63,21 @@ export function useTeamEditor(initialTeam) {
     }));
   }
 
-  function removePermissions(userId, projectIds) {
+  function removePermissions(user, projects) {
     setTeam((prev) => ({
       ...prev,
       projects: prev.projects.map((p) => {
-        if (!projectIds.includes(p.id)) return p;
+        if (!projects.some((project) => project.id === p.id)) return p;
         return {
           ...p,
-          permissions: p.permissions.filter((perm) => perm.userId !== userId),
+          permissions: p.permissions.filter((perm) => perm.userId !== user.id),
         };
       }),
     }));
   }
 
-  function removeUserAdmin(id) {
-    const index = team.adminIds.indexOf(id);
+  function removeUserAdmin(user) {
+    const index = team.adminIds.indexOf(user.id);
     if (index !== -1) {
       setTeam((prev) => ({
         ...prev,
@@ -121,7 +93,7 @@ export function useTeamEditor(initialTeam) {
     updateUrl: (url) => updateFields({ url }).catch(handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     joinTeam: withErrorHandler(async () => {
-      await joinTeam(api, team);
+      await joinTeam({ team });
       setTeam((prev) => ({
         ...prev,
         users: [...prev.users, currentUser],
@@ -131,30 +103,30 @@ export function useTeamEditor(initialTeam) {
         updateCurrentUser({ teams: [...teams, team] });
       }
     }, handleError),
-    inviteEmail: (email) => inviteEmail(api, email, team).catch(handleError),
-    inviteUser: (user) => inviteUserToTeam(api, user, team).catch(handleError),
-    removeUserFromTeam: withErrorHandler(async (userId, projectIds) => {
+    inviteEmail: (email) => inviteEmailToTeam({ team }, email).catch(handleError),
+    inviteUser: (user) => inviteUserToTeam({ user, team }).catch(handleError),
+    removeUserFromTeam: withErrorHandler(async (user, projects) => {
       // Kick them out of every project at once, and wait until it's all done
-      await Promise.all(projectIds.map((projectId) => removeUserFromProject(api, projectId, userId)));
+      await Promise.all(projects.map((project) => removeUserFromProject({ project, user })));
       // Now remove them from the team. Remove them last so if something goes wrong you can do this over again
-      await removeUserFromTeam(api, userId, team);
-      removeUserAdmin(userId);
+      await removeUserFromTeam({ user, team });
+      removeUserAdmin(user);
       setTeam((prev) => ({
         ...prev,
-        users: prev.users.filter((u) => u.id !== userId),
+        users: prev.users.filter((u) => u.id !== user.id),
       }));
-      if (currentUser && currentUser.id === userId) {
+      if (currentUser && currentUser.id === user.id) {
         const teams = currentUser.teams.filter(({ id }) => id !== team.id);
         updateCurrentUser({ teams });
       }
       // update projects so that this user no longer appears in member lists
-      reloadProjectMembers(projectIds);
-      removePermissions(userId, projectIds);
+      reloadProjectMembers(projects.map((project) => project.id));
+      removePermissions(user, projects);
     }, handleError),
     uploadAvatar: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getTeamAvatarImagePolicy(api, team.id);
+          const { data: policy } = await getAvatarImagePolicy({ team });
           await uploadAssetSizes(blob, policy, assets.AVATAR_SIZES);
 
           const image = await assets.blobToImage(blob);
@@ -169,7 +141,7 @@ export function useTeamEditor(initialTeam) {
     uploadCover: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getTeamCoverImagePolicy(api, team.id);
+          const { data: policy } = await getCoverImagePolicy({ team });
           await uploadAssetSizes(blob, policy, assets.COVER_SIZES);
 
           const image = await assets.blobToImage(blob);
@@ -183,69 +155,68 @@ export function useTeamEditor(initialTeam) {
       ),
     clearCover: () => updateFields({ hasCoverImage: false }).catch(handleError),
     addProject: withErrorHandler(async (project) => {
-      await addProjectToTeam(api, project, team);
+      await addProjectToTeam({ project, team });
       setTeam((prev) => ({
         ...prev,
         projects: [project, ...prev.projects],
       }));
     }, handleError),
-    removeProject: withErrorHandler(async (projectId) => {
-      await removeProjectFromTeam(api, projectId, team);
+    removeProject: withErrorHandler(async (project) => {
+      await removeProjectFromTeam({ project, team });
       setTeam((prev) => ({
         ...prev,
-        projects: prev.projects.filter((p) => p.id !== projectId),
+        projects: prev.projects.filter((p) => p.id !== project.id),
       }));
     }, handleError),
-    deleteProject: withErrorHandler(async (projectId) => {
-      await deleteProject(api, projectId);
+    deleteProject: withErrorHandler(async (project) => {
+      await deleteItem({ project });
       setTeam((prev) => ({
         ...prev,
-        projects: prev.projects.filter((p) => p.id !== projectId),
+        projects: prev.projects.filter((p) => p.id !== project.id),
       }));
     }, handleError),
-    addPin: withErrorHandler(async (projectId) => {
-      await addPinnedProject(api, projectId, team);
+    addPin: withErrorHandler(async (project) => {
+      await addPinnedProject({ project, team });
       setTeam((prev) => ({
         ...prev,
-        teamPins: [...prev.teamPins, { projectId }],
+        teamPins: [...prev.teamPins, { projectId: project.id }],
       }));
     }, handleError),
-    removePin: withErrorHandler(async (projectId) => {
-      await removePinnedProject(api, projectId, team);
+    removePin: withErrorHandler(async (project) => {
+      await removePinnedProject({ project, team });
       setTeam((prev) => ({
         ...prev,
-        teamPins: prev.teamPins.filter((p) => p.projectId !== projectId),
+        teamPins: prev.teamPins.filter((p) => p.projectId !== project.id),
       }));
     }, handleError),
     updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
-    updateUserPermissions: withErrorHandler(async (userId, accessLevel) => {
+    updateUserPermissions: withErrorHandler(async (user, accessLevel) => {
       if (accessLevel === MEMBER_ACCESS_LEVEL && team.adminIds.length <= 1) {
         createNotification('A team must have at least one admin', { type: 'error' });
         return false;
       }
-      await updateUserAccessLevel(api, userId, team, accessLevel);
+      await updateUserAccessLevel({ user, team }, accessLevel);
       if (accessLevel === ADMIN_ACCESS_LEVEL) {
         setTeam((prev) => ({
           ...prev,
-          counter: prev.adminIds.push(userId),
+          counter: prev.adminIds.push(user.id),
         }));
       } else {
-        removeUserAdmin(userId);
+        removeUserAdmin(user);
       }
       return null;
     }, handleError),
-    joinTeamProject: withErrorHandler(async (projectId) => {
-      const { data: updatedProject } = await addUserToProject(api, projectId, team);
-      updatePermissions(projectId, updatedProject.users.map((user) => user.projectPermission));
-      reloadProjectMembers([projectId]);
+    joinTeamProject: withErrorHandler(async (project) => {
+      const { data: updatedProject } = await joinTeamProject({ team, project });
+      updatePermissions(project, updatedProject.users.map((user) => user.projectPermission));
+      reloadProjectMembers([project.id]);
     }, handleError),
-    leaveTeamProject: withErrorHandler(async (projectId) => {
-      await removeUserFromProject(api, projectId, currentUser.id);
-      removePermissions(currentUser.id, [projectId]);
-      reloadProjectMembers([projectId]);
+    leaveProject: withErrorHandler(async (project) => {
+      await removeUserFromProject({ project, user: currentUser });
+      removePermissions(currentUser, [project]);
+      reloadProjectMembers([project.id]);
     }, handleError),
-    addProjectToCollection: (project, collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
-    featureProject: (id) => updateFields({ featured_project_id: id }).catch(handleError),
+    featureProject: (project) => updateFields({ featured_project_id: project.id }).catch(handleError),
     unfeatureProject: () => updateFields({ featured_project_id: null }).catch(handleError),
   };
   return [team, funcs];

@@ -11,13 +11,12 @@
  * TODO: Allow login via username/password when that becomes available
  */
 
-/* globals API_URL */
-
 import React from 'react';
 
 import PopoverContainer from 'Components/popover/container';
 import { SignInPopBase as SignInPop } from 'Components/sign-in-pop';
 import { useCurrentUser } from 'State/current-user';
+import { API_URL } from 'Utils/constants';
 
 import styles from './signin.styl';
 

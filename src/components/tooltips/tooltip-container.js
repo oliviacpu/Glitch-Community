@@ -33,7 +33,7 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
     persistent,
     fallback,
   });
-  const tooltipFallbackClassName = fallback ? 'fallback' : '';
+  const tooltipFallbackClassName = fallback ? styles.fallback : '';
 
   let role;
   let extendedTarget;
@@ -70,14 +70,14 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={`${tooltipClassName} tooltip`} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
+      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
     );
   }
 
   return (
-    <div className={`${tooltipContainerClassName} tooltip-container`}>
+    <div className={tooltipContainerClassName}>
       <div
         onMouseEnter={() => setTooltipIsActive(true)}
         onMouseLeave={() => setTooltipIsActive(false)}

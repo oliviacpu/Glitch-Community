@@ -35,6 +35,7 @@ import MoreIdeas from 'Components/more-ideas';
 import Footer from 'Components/footer';
 import RecentProjects from 'Components/recent-projects';
 import Notification from 'Components/notification';
+import Progress from 'Components/fields/progress';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
@@ -399,8 +400,6 @@ storiesOf('ProjectEmbed', module)
     provideContext({ currentUser: {} }, () => (
       <ProjectEmbed
         project={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: null }}
         addProjectToCollection={addProjectToCollection}
       />
     )),
@@ -410,8 +409,6 @@ storiesOf('ProjectEmbed', module)
     provideContext({ currentUser: { login: '@sarahzinger' } }, () => (
       <ProjectEmbed
         project={{ id: '123', domain: 'community-staging' }}
-        isAuthorized={false}
-        currentUser={{ login: '@sarahzinger' }}
         addProjectToCollection={addProjectToCollection}
       />
     )),
@@ -419,8 +416,6 @@ storiesOf('ProjectEmbed', module)
   .add('owns project, is logged in', () => (
     <ProjectEmbed
       project={{ id: '123', domain: 'community-staging' }}
-      isAuthorized={true}
-      currentUser={{ login: '@sarahzinger' }}
       addProjectToCollection={addProjectToCollection}
     />
   ));
@@ -434,7 +429,6 @@ storiesOf('FeaturedProject', module)
       <FeaturedProject
         featuredProject={{ id: '123', domain: 'community-staging' }}
         isAuthorized={true}
-        currentUser={{ login: '@sarahzinger' }}
         addProjectToCollection={addProjectToCollection}
         unfeatureProject={unfeatureProject}
       />
@@ -558,7 +552,7 @@ storiesOf('Recent Projects', module)
 storiesOf('Notification', module)
   .add('info', () => (
     <Notification>
-      Uploading image <progress value="0" />
+      Uploading image <Progress value={0} />
     </Notification>
   ))
   .add('persistent', () => <Notification persistent>This notification will be here forever</Notification>)

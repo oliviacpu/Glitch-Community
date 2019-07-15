@@ -1,12 +1,10 @@
-import React, { useState, useMemo, useContext, createContext } from 'react';
+import React, { useState, useCallback, useContext, createContext } from 'react';
 
 import useUploader from 'State/uploader';
-import { useAPI } from 'State/api';
+import { useAPI, useAPIHandlers } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
-
-export const ProjectContext = createContext();
 
 export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({
@@ -16,25 +14,6 @@ export async function getProjectByDomain(api, domain) {
   });
   return { ...project, teams, users };
 }
-
-export const updateProject = (api, project, changes) => api.patch(`projects/${project.id}`, changes);
-
-export const addProjectToCollection = (api, project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-
-export const deleteProject = (api, project) => api.delete(`projects/${project.id}`);
-
-export const updateProjectDomain = (api, project) =>
-  api.post(
-    `project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
-    {},
-    {
-      transformRequest: (data, headers) => {
-        // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
-        delete headers.Authorization;
-        return data;
-      },
-    },
-  );
 
 async function getMembers(api, projectId, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
@@ -71,37 +50,40 @@ function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust)
   });
 }
 
+const ProjectMemberContext = createContext();
+const ProjectReloadContext = createContext();
 export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
   const api = useAPI();
 
-  const value = useMemo(
-    () => ({
-      getProjectMembers: (projectId) => {
-        if (projectResponses[projectId] && projectResponses[projectId].members) {
-          return projectResponses[projectId].members;
-        }
-        loadProjectMembers(api, [projectId], setProjectResponses);
-        return loadingResponse;
-      },
-      reloadProjectMembers: (projectIds) => {
-        loadProjectMembers(api, projectIds, setProjectResponses, true);
-      },
-    }),
-    [projectResponses, api],
-  );
+  const getProjectMembers = useCallback((projectId) => {
+    if (projectResponses[projectId] && projectResponses[projectId].members) {
+      return projectResponses[projectId].members;
+    }
+    loadProjectMembers(api, [projectId], setProjectResponses);
+    return loadingResponse;
+  }, [projectResponses, api]);
 
-  return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
+  const reloadProjectMembers = useCallback((projectIds) => {
+    loadProjectMembers(api, projectIds, setProjectResponses, true);
+  }, [api]);
+
+  return (
+    <ProjectMemberContext.Provider value={getProjectMembers}>
+      <ProjectReloadContext.Provider value={reloadProjectMembers}>
+        {children}
+      </ProjectReloadContext.Provider>
+    </ProjectMemberContext.Provider>
+  );
 };
 
 export function useProjectMembers(projectId) {
-  const { getProjectMembers } = useContext(ProjectContext);
+  const getProjectMembers = useContext(ProjectMemberContext);
   return getProjectMembers(projectId);
 }
 
 export function useProjectReload() {
-  const { reloadProjectMembers } = useContext(ProjectContext);
-  return reloadProjectMembers;
+  return useContext(ProjectReloadContext);
 }
 
 export function useProjectEditor(initialProject) {
@@ -110,11 +92,12 @@ export function useProjectEditor(initialProject) {
     _avatarCache: Date.now(),
   });
   const { uploadAsset } = useUploader();
-  const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-  const api = useAPI();
+  const { handleError, handleErrorForInput } = useErrorHandlers();
+  const { getAvatarImagePolicy } = assets.useAssetPolicy();
+  const { updateItem, deleteItem, updateProjectDomain } = useAPIHandlers();
 
   async function updateFields(changes) {
-    await updateProject(api, project, changes);
+    await updateItem({ project }, changes);
     setProject((prev) => ({
       ...prev,
       ...changes,
@@ -124,19 +107,18 @@ export function useProjectEditor(initialProject) {
   const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
   const funcs = {
-    addProjectToCollection: (collection) => addProjectToCollection(api, project, collection).catch(handleCustomError),
-    deleteProject: () => deleteProject(api, project).catch(handleError),
+    deleteProject: () => deleteItem({ project }).catch(handleError),
     updateDomain: withErrorHandler(async (domain) => {
       await updateFields({ domain });
       // don't await this because the project domain has already changed and I don't want to delay other things updating
-      updateProjectDomain(api, project);
+      updateProjectDomain({ project });
     }, handleErrorForInput),
     updateDescription: (description) => updateFields({ description }).catch(handleErrorForInput),
     updatePrivate: (isPrivate) => updateFields({ private: isPrivate }).catch(handleError),
     uploadAvatar: () =>
       assets.requestFile(
         withErrorHandler(async (blob) => {
-          const { data: policy } = await assets.getProjectAvatarImagePolicy(api, project.id);
+          const { data: policy } = await getAvatarImagePolicy({ project });
           await uploadAsset(blob, policy, '', { cacheControl: 60 });
           setProject((prev) => ({
             ...prev,

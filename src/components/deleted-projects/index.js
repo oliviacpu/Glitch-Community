@@ -18,13 +18,13 @@ import { useTrackedFunc } from 'State/segment-analytics';
 
 import styles from './deleted-projects.styl';
 
-const DeletedProject = ({ id, domain, onClick }) => {
+const DeletedProject = ({ project, onClick }) => {
   // non-admin members of projects and super users can't undelete
   if (!onClick) {
     return (
       <div className={styles.deletedProject}>
-        <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-        <div className={styles.projectName}>{domain}</div>
+        <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
+        <div className={styles.projectName}>{project.domain}</div>
         <TooltipContainer
           type="action"
           id="undelete-project"
@@ -44,8 +44,8 @@ const DeletedProject = ({ id, domain, onClick }) => {
     <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
-          <img className={styles.avatar} src={getAvatarUrl(id)} alt="" />
-          <div className={styles.projectName}>{domain}</div>
+          <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
+          <span className={styles.projectName}>{project.domain}</span>
           <div className={styles.buttonWrap}>
             <Button size="small" decorative>
               Undelete
@@ -57,8 +57,10 @@ const DeletedProject = ({ id, domain, onClick }) => {
   );
 };
 DeletedProject.propTypes = {
-  id: PropTypes.string.isRequired,
-  domain: PropTypes.string.isRequired,
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+  }).isRequired,
   onClick: PropTypes.func,
 };
 DeletedProject.defaultProps = {
@@ -69,11 +71,11 @@ export const DeletedProjectsList = ({ deletedProjects, undelete }) => {
   const undeleteTracked = useTrackedFunc(undelete, 'Undelete clicked');
   return (
     <Grid items={deletedProjects} className={styles.deletedProjectsContainer}>
-      {({ id, domain, permission }) => {
-        const canUndelete = permission && permission.accessLevel === 30 && undelete;
-        const onClick = canUndelete ? () => undeleteTracked(id) : null;
+      {(project) => {
+        const canUndelete = project.permission && project.permission.accessLevel === 30 && undelete;
+        const onClick = canUndelete ? () => undeleteTracked(project) : null;
 
-        return <DeletedProject id={id} domain={domain} onClick={onClick} />;
+        return <DeletedProject project={project} onClick={onClick} />;
       }}
     </Grid>
   );

@@ -6,9 +6,12 @@ import classnames from 'classnames';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
-
 import { CollectionAvatar } from 'Components/images/avatar';
-import { isDarkColor } from '../../models/collection';
+import VisibilityContainer from 'Components/visibility-container';
+import Arrow from 'Components/arrow';
+import { PrivateIcon } from 'Components/private-badge';
+import { isDarkColor } from 'Utils/color';
+import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-item.styl';
 
@@ -17,7 +20,16 @@ const collectionColorStyles = (collection) => ({
   border: collection.coverColor,
 });
 
-const PrivateIcon = () => <span className="project-badge private-project-badge" aria-label="private" />;
+const CollectionCurator = ({ collection }) => {
+  const { value: curator } = useCollectionCurator(collection);
+  return <ProfileItem {...curator} />;
+};
+
+const CollectionCuratorLoader = ({ collection }) => (
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
+  </VisibilityContainer>
+);
 
 const CollectionLink = ({ collection, children }) => (
   <a href={`/@${collection.fullUrl}`} className={styles.smallCollectionLink}>
@@ -29,7 +41,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
     {showCurator && (
       <div className={styles.curator}>
-        <ProfileItem user={collection.user} team={collection.team} />
+        <CollectionCuratorLoader collection={collection} />
       </div>
     )}
     <CollectionLink collection={collection}>
@@ -43,24 +55,18 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
           </div>
           <div className={styles.collectionNameWrap}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative>
-                {collection.private && <PrivateIcon />}
+              <Button decorative image={collection.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
                 <div className={styles.collectionName}>{collection.name}</div>
               </Button>
             </div>
           </div>
         </div>
-        <div
-          className={styles.description}
-          style={{
-            color: isDarkColor(collection.coverColor) ? 'white' : '',
-          }}
-        >
+        <div className={classnames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
           <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>
       <div className={styles.smallProjectCount}>
-        <Pluralize count={collection.projects.length} singular="project" /> →
+        <Pluralize count={collection.projects.length} singular="project" /> <Arrow />
       </div>
     </CollectionLink>
   </div>

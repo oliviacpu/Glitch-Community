@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
-import { isDarkColor } from 'Models/collection';
-import { ProfileItem } from 'Components/profile-list';
+import { isDarkColor } from 'Utils/color';
 import AuthDescription from 'Components/fields/auth-description';
+import { CollectionCuratorLoader } from 'Components/collection/collection-item';
 
 import styles from './note.styl';
 
@@ -20,7 +20,7 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
     description = _.trim(description);
 
     if (!description || description.length === 0) {
-      setTimeout(() => hideNote(project.id), 500);
+      setTimeout(() => hideNote(project), 500);
     }
   }
 
@@ -39,13 +39,13 @@ const Note = ({ collection, project, updateNote, hideNote, isAuthorized }) => {
           authorized={isAuthorized}
           description={project.note || ''}
           placeholder="Share why you love this app."
-          update={(note) => updateNote({ note, projectId: project.id })}
+          update={(note) => updateNote({ note, project })}
           onBlur={hideEmptyNote}
           allowImages
         />
       </div>
       <div className={styles.user}>
-        <ProfileItem user={collection.user} team={collection.team} />
+        <CollectionCuratorLoader collection={collection} />
       </div>
     </div>
   );

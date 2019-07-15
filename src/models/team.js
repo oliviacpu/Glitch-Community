@@ -1,5 +1,6 @@
 import { lightColors } from 'Models/user';
-/* globals CDN_URL */
+import { CDN_URL } from 'Utils/constants';
+
 const cacheBuster = Math.floor(Math.random() * 1000);
 
 export const DEFAULT_TEAM_AVATAR = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fdefault-team-avatar.svg?1503510366819';
@@ -53,7 +54,7 @@ export function teamAdmins({ team }) {
 }
 
 export function userIsOnTeam({ user, team }) {
-  return !!user && team.users.some(({ id }) => user.id === id);
+  return !!user && !!team && !!team.teamPermissions && team.teamPermissions.some(({ userId }) => user.id === userId);
 }
 
 export function userCanJoinTeam({ user, team }) {

@@ -29,6 +29,7 @@ const TextInput = forwardRef(({
   placeholder,
   postfix,
   prefix,
+  testingId,
   type,
   value,
   ...props
@@ -55,6 +56,7 @@ const TextInput = forwardRef(({
           className={inputClassName}
           disabled={disabled}
           id={uniqueId}
+          data-cy={testingId}
           maxLength={maxLength}
           name={name}
           onChange={(evt) => onChange(evt.target.value)}
@@ -92,6 +94,7 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   postfix: PropTypes.node,
   prefix: PropTypes.node,
+  testingId: PropTypes.string,
   type: PropTypes.oneOf(TYPES),
   value: PropTypes.string.isRequired,
 };
@@ -109,6 +112,7 @@ TextInput.defaultProps = {
   placeholder: undefined,
   postfix: null,
   prefix: null,
+  testingId: undefined,
   type: 'text',
 };
 

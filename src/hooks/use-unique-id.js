@@ -7,7 +7,7 @@ const useUniqueId = () => {
     counter += 1;
     return counter;
   });
-  return `input-${uniqueId}`;
+  return `unique-${uniqueId}`;
 };
 
 export default useUniqueId;

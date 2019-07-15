@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
@@ -13,6 +13,7 @@ import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
 
@@ -69,7 +70,7 @@ TeamList.propTypes = {
 
 // User Options 🧕
 
-const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewStuffOverlay, superUserHelpers }) => {
+const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showAccountSettingsOverlay, showNewStuffOverlay, superUserHelpers }) => {
   const { superUserFeature, canBecomeSuperUser, toggleSuperUser } = superUserHelpers;
 
   const trackLogout = useTracker('Logout');
@@ -77,6 +78,12 @@ const UserOptionsPop = ({ togglePopover, showCreateTeam, user, signOut, showNewS
   const clickNewStuff = (event) => {
     togglePopover();
     showNewStuffOverlay();
+    event.stopPropagation();
+  };
+
+  const clickAccountSettings = (event) => {
+    togglePopover();
+    showAccountSettingsOverlay();
     event.stopPropagation();
   };
 
@@ -95,6 +102,8 @@ Are you sure you want to sign out?`)
     window.analytics.reset();
     signOut();
   };
+
+  const userPasswordEnabled = useDevToggle('User Passwords');
 
   return (
     <PopoverDialog className={styles.userOptionsPop} align="right">
@@ -134,6 +143,13 @@ Are you sure you want to sign out?`)
             Support
           </Button>
         </div>
+        {userPasswordEnabled && (
+          <div className={styles.buttonWrap}>
+            <Button size="small" type="tertiary" emoji="key" onClick={clickAccountSettings}>
+              Account Settings
+            </Button>
+          </div>
+        )}
         <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
           Sign Out
         </Button>
@@ -147,6 +163,7 @@ UserOptionsPop.propTypes = {
   showCreateTeam: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   signOut: PropTypes.func.isRequired,
+  showAccountSettingsOverlay: PropTypes.func.isRequired,
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
@@ -158,14 +175,15 @@ function CheckForCreateTeamHash(props) {
 
 export default function UserOptionsAndCreateTeamPopContainer(props) {
   const avatarStyle = { backgroundColor: props.user.color };
+  const buttonRef = useRef();
 
   return (
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
-        <PopoverContainer startOpen={createTeamOpen}>
+        <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
+              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
                     <UserAvatar user={props.user} withinButton style={avatarStyle} />
