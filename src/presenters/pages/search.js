@@ -24,8 +24,8 @@ const SearchPage = withRouter(({ query, activeFilter, history }) => {
         ) : (
           <NotFound name="anything" />
         )}
+        <MoreIdeas />
       </Layout>
-      <MoreIdeas />
     </>
   );
 });
