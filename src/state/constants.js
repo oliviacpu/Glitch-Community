@@ -1,9 +1,27 @@
-import { createContext } from 'react';
+import React, { createContext, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 const { envs } = require('Shared/constants');
-/* global RUNNING_ON */
 
+const Context = createContext();
 
+export const ConstantsProvider = ({ origin, runningOn }) => {
+  let envFromOrigin = 'production';
+  if (origin.contains('staging.glitch.com')) {
+    envFromOrigin = 'staging';
+  } else if (origin.contains('glitch.development')) {
+    envFromOrigin = 'development';
+  }
+  const currentEnv = envs[runningOn] ? runningOn : envFromOrigin;
+};
+ConstantsProvider.propTypes = {
+  origin: PropTypes.string.isRequired,
+  runningOn: PropTypes.string.isRequired,
+};
+
+export const useConstants = () => useContext(Context);
+
+export default useConstants;
 
 let env;
 if (RUNNING_ON === 'development') {
