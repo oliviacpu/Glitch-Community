@@ -9,7 +9,7 @@
 //
 
 import * as Sentry from '@sentry/browser';
-import { getCurrentEnv } from './constants';
+import { currentEnv } from './constants';
 
 export * from '@sentry/browser';
 const SentryHelpers = require('Shared/sentryHelpers');
@@ -31,7 +31,7 @@ try {
         return null;
       }
       try {
-        return SentryHelpers.beforeSend(PROJECT_DOMAIN, getCurrentEnv(location.origin, window.RUNNING_ON), event);
+        return SentryHelpers.beforeSend(PROJECT_DOMAIN, currentEnv, event);
       } catch (error) {
         console.error(error);
         if (!beforeSendFailed) {
