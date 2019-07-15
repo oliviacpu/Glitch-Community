@@ -10,7 +10,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import convertPlugin from 'Shared/dayjs-convert';
 import { captureException, configureScope } from 'Utils/sentry';
-import { EDITOR_URL } from 'Utils/constants';
+import { getConstants } from 'Utils/constants';
+import { ConstantsProvider } from 'State/constants';
 import App from './app';
 
 dayjs.extend(relativeTimePlugin);
@@ -19,8 +20,7 @@ dayjs.extend(convertPlugin);
 // This function is used in index.ejs to set up the app
 window.bootstrap = () => {
   if (location.hash.startsWith('#!/')) {
-    // eslint-disable-line no-restricted-globals
-    window.location.replace(EDITOR_URL + window.location.hash);
+    window.location.replace(getConstants(window.location.origin, window.RUNNING_ON).EDITOR_URL + window.location.hash);
     return;
   }
   // Mark that bootstrapping has occurred,
@@ -33,7 +33,13 @@ window.bootstrap = () => {
 
   const dom = document.createElement('div');
   document.body.appendChild(dom);
-  render(<BrowserRouter><App /></BrowserRouter>, dom);
+  render((
+    <BrowserRouter>
+      <ConstantsProvider origin={location.origin} runningOn={window.RUNNING_ON}>
+        <App />
+      </ConstantsProvider>
+    </BrowserRouter>
+  ), dom);
 };
 
 // Make sure react exists because that's an issue that is happening
