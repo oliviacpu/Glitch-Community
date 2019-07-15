@@ -11,6 +11,7 @@ import { BrowserRouter } from 'react-router-dom';
 import convertPlugin from 'Shared/dayjs-convert';
 import { captureException, configureScope } from 'Utils/sentry';
 import { EDITOR_URL } from 'Utils/constants';
+import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
 dayjs.extend(relativeTimePlugin);
@@ -34,9 +35,9 @@ window.bootstrap = () => {
   document.body.appendChild(dom);
   render((
     <BrowserRouter>
-      <ConstantsProvider origin={location.origin} runningOn={window.RUNNING_ON}>
+      <GlobalsProvider origin={window.location.origin} ZINE_POSTS={window.ZINE_POSTS} HOME_CONTENT={window.HOME_CONTENT}>
         <App />
-      </ConstantsProvider>
+      </GlobalsProvider>
     </BrowserRouter>
   ), dom);
 };

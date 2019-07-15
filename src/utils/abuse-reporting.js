@@ -1,5 +1,6 @@
 import { getLink, getDisplayName } from 'Models/user';
-import { getUrlForModel, getDisplayNameForModel } from './models';
+import { getUrlForModel, getDisplayNameForModel } from 'Utils/models';
+import { APP_URL } from 'Utils/constants';
 
 export const getAbuseReportTitle = (model, modelType) => {
   if (modelType === 'home') {
@@ -23,12 +24,12 @@ const pickEmailForReport = (currentUser, submitterEmail) => {
  * mega-method to compose the body of an abuse report
  */
 
-export const getAbuseReportBody = (appUrl, currentUser, submitterEmail, reportedType, reportedModel, message) => {
+export const getAbuseReportBody = (currentUser, submitterEmail, reportedType, reportedModel, message) => {
   let thingIdentifiers;
   if (reportedType === 'home') {
-    thingIdentifiers = `- [Glitch Home Page](${appUrl})`;
+    thingIdentifiers = `- [Glitch Home Page](${APP_URL})`;
   } else {
-    const glitchLink = appUrl + getUrlForModel(reportedModel, reportedType);
+    const glitchLink = APP_URL + getUrlForModel(reportedModel, reportedType);
     const capitalizedReportedType = capitalize(reportedType);
     thingIdentifiers = `
 - ${capitalizedReportedType} Name: [${getDisplayNameForModel(reportedModel, reportedType) || 'Anonymous user'}](${glitchLink})
@@ -38,7 +39,7 @@ export const getAbuseReportBody = (appUrl, currentUser, submitterEmail, reported
 
   return `${thingIdentifiers}
 
-- Submitted by: [${getDisplayName(currentUser)}](${appUrl}${getLink(currentUser)})
+- Submitted by: [${getDisplayName(currentUser)}](${APP_URL}${getLink(currentUser)})
 
 - Contact: ${pickEmailForReport(currentUser, submitterEmail)}
 
