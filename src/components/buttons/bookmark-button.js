@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './bookmark-button.styl';
 
-//TODO: should this extend off button, think about aria pressed,f
-
-const filledSrc = "https://cdn.glitch.com/710951eb-510b-47e9-987b-85954cc2b188%2Fatms-btn-filled-no-check.svg?v=1562962370155";
-const emptySrc = "https://cdn.glitch.com/710951eb-510b-47e9-987b-85954cc2b188%2Fatms-btn-empty.svg?v=1562962355974";
+//TODO: should this extend off button, think about aria pressed, fix asset urls
+const CHECKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fcheck.svg?v=1563224340442";
+const EMPTY_BOOKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-empty.svg?v=1563224340818";
+const FILLED_BOOKMARK = "https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-filled-no-check.svg?v=1563224341311";
 
 const Halo = ({ hasBookmarked }) => {
   return (
@@ -36,8 +36,8 @@ const BookmarkButton = ({ action }) => {
   return (
     <button className={styles.bookmarkButton} onClick={onClick}>
       <Halo hasBookmarked={state.hasBookmarked} />
-      <img src={state.hasBookmarked ? filledSrc : emptySrc}  />
-      <img className={`${styles.check} ${state.hasBookmarked ? styles.checkAnimated : ''}`} src="https://cdn.glitch.com/710951eb-510b-47e9-987b-85954cc2b188%2Fcheck.svg?v=1562962412386" />
+      <img src={state.hasBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK}  />
+      <img className={`${styles.check} ${state.hasBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} />
     </button>
   );
 }
