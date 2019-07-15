@@ -11,6 +11,7 @@ import Notification from 'Components/notification';
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
+import { useConstants } from 'State/constants';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
@@ -92,7 +93,8 @@ function ReportAbusePop({ reportedType, reportedModel }) {
     setEmailError(validateEmail(value, currentUser));
   };
 
-  const formatRaw = () => getAbuseReportBody(currentUser, email, reportedType, reportedModel, reason);
+  const { APP_URL } = useConstants();
+  const formatRaw = () => getAbuseReportBody(APP_URL, currentUser, email, reportedType, reportedModel, reason);
 
   const submitReport = async (e) => {
     e.preventDefault();
