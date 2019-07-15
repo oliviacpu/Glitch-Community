@@ -13,19 +13,17 @@ import useLocalStorage from 'State/local-storage';
 const KNOWN_DISTRIBUTION_SCHEMES = new Set(['vscode', 'vscode-insiders', 'vscodium']);
 
 const VSCodeAuth = ({ scheme }) => {
-  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) {
-    return <div style={{ margin: 20 }}>This is an invalid sign-in link. (Try again, or try signing in with an email code.)</div>;
-  }
-
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
   const isSignedIn = persistentToken && login;
+  const isValidApp = KNOWN_DISTRIBUTION_SCHEMES.has(scheme);
 
   const redirectMessage = "You are being redirected. (If you aren't sent back to your editor, try signing in with an email code.)";
 
   const [, setDestination] = useLocalStorage('destinationAfterAuth');
 
   useEffect(() => {
+    if (!isValidApp) return;
     if (isSignedIn) {
       setTimeout(() => {
         const redirectUrl = `${scheme}://glitch.glitch/token?token=${persistentToken}`;
@@ -42,7 +40,11 @@ const VSCodeAuth = ({ scheme }) => {
         },
       });
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, isValidApp]);
+
+  if (!isValidApp) {
+    return <div style={{ margin: 20 }}>This is an invalid sign-in link. (Try again, or try signing in with an email code.)</div>;
+  }
 
   return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
