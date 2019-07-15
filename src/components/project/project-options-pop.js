@@ -114,11 +114,11 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
             leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} togglePopover={togglePopover} />,
           }}
         >
-          {({ addToCollection }) => (
+          {({ addToCollection, leaveProject }) => (
             <ProjectOptionsContent
               projectOptions={toggleBeforeAction(togglePopover)}
               addToCollectionPopover={addToCollection}
-              // leaveProjectPopover={showLeaveButton}
+              leaveProjectPopover={leaveProject}
             />
           )}
         </MultiPopover>
