@@ -10,14 +10,12 @@ import SignInLayout from 'Components/layout/sign-in-layout';
 import { useCurrentUser } from 'State/current-user';
 import useLocalStorage from 'State/local-storage';
 
-const KNOWN_DISTRIBUTION_SCHEMES = new Set([
-  'vscode',
-  'vscode-insiders',
-  'vscodium',
-]);
+const KNOWN_DISTRIBUTION_SCHEMES = new Set(['vscode', 'vscode-insiders', 'vscodium']);
 
 const VSCodeAuth = ({ scheme }) => {
-  const isValidApp = KNOWN_DISTRIBUTION_SCHEMES.has(scheme)
+  if (!KNOWN_DISTRIBUTION_SCHEMES.has(scheme)) {
+    return <div style={{ margin: 20 }}>This is an invalid sign-in link. (Try again, or try signing in with an email code.)</div>;
+  }
 
   const { currentUser } = useCurrentUser();
   const { persistentToken, login } = currentUser;
