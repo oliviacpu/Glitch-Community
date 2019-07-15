@@ -5,7 +5,7 @@ import DeleteCollection from 'Components/collection/delete-collection-pop';
 
 export default function CollectionOptions({ collection, deleteCollection }) {
   return (
-    <PopoverMenu>
+    <PopoverMenu label={`Collection options for ${collection.name}`}>
       {() => (
         <DeleteCollection collection={collection} deleteCollection={deleteCollection} />
       )}
