@@ -49,8 +49,8 @@ const VSCodeAuth = ({ scheme }) => {
   return isSignedIn ? <div style={{ margin: 20 }}>{redirectMessage}</div> : <SignInLayout />;
 };
 
-VSCodeAuth.propTypes = {scheme: PropTypes.string};
+VSCodeAuth.propTypes = { scheme: PropTypes.string };
 
-VSCodeAuth.defaultProps = {scheme: ''};
+VSCodeAuth.defaultProps = { scheme: '' };
 
 export default VSCodeAuth;
