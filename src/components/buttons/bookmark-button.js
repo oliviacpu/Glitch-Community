@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'Components/images/image'
+import Image from 'Components/images/image';
+
 import styles from './bookmark-button.styl';
 
 const CHECKMARK = 'https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fcheck.svg?v=1563224340442';
@@ -68,7 +69,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'}>
       <Halo isBookmarked={isBookmarked} />
       <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt={isBookmarked ? "filled bookmark" : "empty bookmark"}/>
-      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="checkmark"/>
+      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="checkmark" width="10px" height="10px"/>
     </button>
   );
 };
