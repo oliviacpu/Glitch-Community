@@ -60,7 +60,7 @@ const findStorage = (storageRef) => {
 const Context = React.createContext([() => undefined, () => {}]);
 
 const LocalStorageProvider = ({ children }) => {
-  const storageRef = React.useRef(undefined); // undefined means we haven't tried to read anything, null means no storage found
+  const storageRef = React.useRef(undefined);
   const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
