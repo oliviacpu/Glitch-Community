@@ -6,7 +6,7 @@ import TextInput from 'Components/inputs/text-input';
 
 import styles from './styles.styl';
 
-function FilterController({ enabled, placeholder, items, children, searchPrompt }) {
+function FilterController({ matchRule, enabled, placeholder, items, children, searchPrompt }) {
   const [filter, setFilter] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -17,6 +17,7 @@ function FilterController({ enabled, placeholder, items, children, searchPrompt 
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
+      setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
