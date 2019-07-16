@@ -62,6 +62,7 @@ const LocalStorageProvider = ({ children }) => {
     setCache(new Map());
   }, []);
   React.useEffect(() => {
+    console.log(storage);
     const onStorage = (event) => {
       if (event.storageArea === storage) {
         if (event.key) {
@@ -82,8 +83,10 @@ const LocalStorageProvider = ({ children }) => {
   }, [storage]);
 
   const getValue = (name) => {
+    console.log(name);
     if (!cache.has(name)) {
       const value = readFromStorage(storage, name);
+      console.log('load ', value);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
