@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
@@ -14,8 +14,15 @@ import styles from './styles.styl';
 
 const Layout = withRouter(({ children, searchQuery, history }) => {
   const focusFirst = useEffect(() => {
-    if (window.location.href.split('#'))
-  });
+    const [url, hash] = window.location.href.split('#');
+    if (hash) {
+      const firstHeading  = document.querySelectorAll(`#${hash} > h1:first-of-type, #${hash} > h2:first-of-type`)[0];
+      
+      firstHeading.setAttribute('tabIndex', -1);
+      firstHeading.focus();
+    }
+  }, []);
+  
   return (
   <div className={styles.content}>
     <Helmet title="Glitch" />
