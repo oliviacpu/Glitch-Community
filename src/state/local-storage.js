@@ -51,22 +51,17 @@ const writeToStorage = (storage, name, value) => {
   }
 };
 
-const findStorage = (storageRef) => {
-  if (storageRef.current === undefined) {
-    storageRef.current = getStorage();
-  }
-};
-
 const Context = React.createContext([() => undefined, () => {}]);
 
 const LocalStorageProvider = ({ children }) => {
-  const storageRef = React.useRef(undefined);
+  const [storage, setStorage] = React.useState(null);
   const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
-    findStorage(storageRef);
+    setStorage(getStorage());
+    setCache(new Map());
     const onStorage = (event) => {
-      if (event.storageArea === storageRef.current) {
+      if (event.storageArea === storage) {
         if (event.key) {
           setCache((oldCache) => {
             const newCache = new Map(oldCache);
@@ -86,8 +81,7 @@ const LocalStorageProvider = ({ children }) => {
 
   const getValue = (name) => {
     if (!cache.has(name)) {
-      findStorage(storageRef);
-      const value = readFromStorage(storageRef, name);
+      const value = readFromStorage(storage, name);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
@@ -95,8 +89,7 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
-    findStorage(storageRef);
-    writeToStorage(storageRef, name, value);
+    writeToStorage(storage, name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
