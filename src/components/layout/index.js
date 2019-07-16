@@ -9,11 +9,11 @@ import Footer from 'Components/footer';
 import AccountSettingsContainer from 'Components/account-settings-overlay';
 import NewStuffContainer from 'Components/new-stuff';
 import ErrorBoundary from 'Components/error-boundary';
-import { useAutoFocus } from 'Hooks/use-auto-focus';
+import { useFocusFirst } from 'Hooks/use-focus-first';
 import styles from './styles.styl';
 
 const Layout = withRouter(({ children, searchQuery, history }) => {
-  useAutoFocus();
+  useFocusFirst();
   
   return (
   <div className={styles.content}>
