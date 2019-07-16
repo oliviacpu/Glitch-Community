@@ -11,6 +11,7 @@ import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
+import filterStyles from '../filter-controller/styles.styl';
 
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
@@ -50,14 +51,17 @@ function CollectionsList({
     return null;
   }
 
-  const matchFn = (collection, filter) => collection.title.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
+  const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
   return (
-    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+    <FilterController matchFn={matchFn} searchPrompt={'find a collection'} enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
       {({ filterInput, renderItems }) => (
         <>
           <article data-cy="collections" className={styles.collections}>
-            <Heading tagName="h2">{title}</Heading>
-            {filterInput}
+            <div className={filterStyles.header}>
+              <Heading tagName="h2">{title}</Heading>
+              {filterInput}
+            </div>
+            
             {canMakeCollections && (
               <>
                 <CreateCollectionButton team={maybeTeam} />
