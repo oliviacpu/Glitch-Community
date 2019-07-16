@@ -45,8 +45,17 @@ export const getAPIForToken = memoize((persistentToken) => {
 });
 
 export function APIContextProvider({ children }) {
+  const [pendingRequests, setPendingRequests] = useState([]);
   const { persistentToken } = useCurrentUser();
   const api = getAPIForToken(persistentToken);
+  if (!persistentToken) {
+    // stall get requests until we load or generate a user
+    api.get = (...args) => {
+      setPendingRequests([...pendingRequests, {
+        cmd: 'get', args,
+      }]);
+    };
+  }
   return <Context.Provider value={api}>{children}</Context.Provider>;
 }
 
