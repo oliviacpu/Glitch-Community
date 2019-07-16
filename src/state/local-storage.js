@@ -59,6 +59,8 @@ const LocalStorageProvider = ({ children }) => {
 
   React.useEffect(() => {
     setStorage(getStorage());
+  }, []);
+  React.useEffect(() => {
     setCache(new Map());
     const onStorage = (event) => {
       if (event.storageArea === storage) {
@@ -77,7 +79,7 @@ const LocalStorageProvider = ({ children }) => {
     return () => {
       window.removeEventListener('storage', onStorage, { passive: true });
     };
-  }, []);
+  }, [storage]);
 
   const getValue = (name) => {
     if (!cache.has(name)) {
