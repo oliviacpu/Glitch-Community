@@ -9,7 +9,16 @@ const getStorage = () => {
     storage.removeItem('test');
     return storage;
   } catch (error) {
-    console.warn('Local storage not available, using memory store');
+    console.warn('Local storage not available');
+  }
+  try {
+    const storage = window.sessionStorage;
+    storage.setItem('test', 'test');
+    storage.getItem('test');
+    storage.removeItem('test');
+    return storage;
+  } catch (error) {
+    console.warn('Session storage not available');
   }
   return null;
 };
@@ -42,13 +51,20 @@ const writeToStorage = (storage, name, value) => {
   }
 };
 
+const findStorage = (storageRef) => {
+  if (storageRef.current === undefined) {
+    storageRef.current = getStorage();
+  }
+};
+
 const Context = React.createContext([() => undefined, () => {}]);
 
 const LocalStorageProvider = ({ children }) => {
-  const storageRef = React.useRef(undefined);
+  const storageRef = React.useRef(undefined); // undefined means we haven't tried to read anything, null means no storage found
   const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
+    findStorage(storageRef);
     const onStorage = (event) => {
       if (event.storageArea === storageRef.current) {
         if (event.key) {
@@ -70,7 +86,8 @@ const LocalStorageProvider = ({ children }) => {
 
   const getValue = (name) => {
     if (!cache.has(name)) {
-      const value = readFromStorage(storageRef.current, name);
+      findStorage(storageRef);
+      const value = readFromStorage(storageRef, name);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
@@ -78,7 +95,8 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
-    writeToStorage(storageRef.current, name, value);
+    findStorage(storageRef);
+    writeToStorage(storageRef, name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
