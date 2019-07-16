@@ -20,7 +20,7 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enableFilter }) {
+function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enablePagination, placeholder }) {
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -50,6 +50,27 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       )}
 
       <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+        <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
+              {(paginatedCollections) => (
+            <Grid items={paginatedCollections}>
+              {(collection) => (
+                <CollectionItem
+                  collection={collection}
+                  isAuthorized={isAuthorized}
+                  deleteCollection={() => deleteCollection(collection)}
+                  showCurator={showCurator}
+                />
+              )}
+            </Grid>
+          )}
+        </PaginationController>
+      </FilterController>
+    </article>
+  );
+}
+
+/*
+      <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
         <Grid items={orderedCollections}>
           {(collection) => (
             <CollectionItem
@@ -61,9 +82,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           )}
         </Grid>
       </FilterController>
-    </article>
-  );
-}
+  */
 
 CollectionsList.propTypes = {
   collections: PropTypes.array.isRequired,
@@ -71,12 +90,14 @@ CollectionsList.propTypes = {
   title: PropTypes.node.isRequired,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
+  placeholder: PropTypes.node,
 };
 
 CollectionsList.defaultProps = {
   maybeTeam: undefined,
   isAuthorized: false,
   showCurator: false,
+  placeholder: null,
 };
 
 export default CollectionsList;
