@@ -5,13 +5,10 @@ import { useNotifications } from 'State/notifications';
 const PersistentNotification = ({ children }) => {
   const { createNotification } = useNotifications();
 
-  useEffect(
-    () => {
-      const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
-      return removeNotification;
-    },
-    [children],
-  );
+  useEffect(() => {
+    const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
+    return removeNotification;
+  }, [children]);
 
   return null;
 };
