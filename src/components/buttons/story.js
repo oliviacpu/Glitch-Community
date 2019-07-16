@@ -9,7 +9,6 @@ import Emoji from 'Components/images/emoji';
 import Image from 'Components/images/image';
 import { withState } from '../../../stories/util';
 
-const story = storiesOf('Buttons', module);
 
 const helloAlert = () => {
   alert('hello');
