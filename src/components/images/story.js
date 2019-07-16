@@ -4,6 +4,7 @@ import 'Components/global.styl';
 
 import Image from 'Components/images/image';
 import MaskImage from 'Components/images/mask-image';
+import { BookmarkAvatar } from 'Components/images/avatar';
 
 import { withState } from '../../../stories/util';
 
@@ -51,3 +52,6 @@ storiesOf('MaskImage', module)
       </div>
     )),
   );
+
+storiesOf('BookmarkAvatar', module)
+  .add('regular', () => <BookmarkAvatar />)
