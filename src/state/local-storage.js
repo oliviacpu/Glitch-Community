@@ -105,7 +105,7 @@ const LocalStorageProvider = ({ children }) => {
 };
 
 const useLocalStorage = (name, defaultValue) => {
-  const [getRawValue, setRawValue,  ready] = React.useContext(Context);
+  const [getRawValue, setRawValue, ready] = React.useContext(Context);
   const rawValue = getRawValue(name);
 
   const value = rawValue !== undefined ? rawValue : defaultValue;

@@ -199,8 +199,6 @@ export const CurrentUserProvider = ({ children }) => {
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
 
-  const persistentToken = sharedUser ? sharedUser.persistentToken : null;
-
   const load = useDebouncedAsync(async () => {
     let sharedOrAnonUser = sharedUser;
 
@@ -243,11 +241,17 @@ export const CurrentUserProvider = ({ children }) => {
     if (ready) load();
     // for easier debugging
     window.currentUser = cachedUser;
-  }, [ready, cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken, sharedUser && sharedUser.id, sharedUser && sharedUser.persistentToken]);
+  }, [
+    ready,
+    cachedUser && cachedUser.id,
+    cachedUser && cachedUser.persistentToken,
+    sharedUser && sharedUser.id,
+    sharedUser && sharedUser.persistentToken,
+  ]);
 
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
-    persistentToken,
+    persistentToken: sharedUser ? sharedUser.persistentToken : null,
     fetched: !!cachedUser && fetched,
     reload: load,
     login: (data) => {
