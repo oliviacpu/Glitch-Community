@@ -58,7 +58,13 @@ function ProjectsList({
   dataCy,
 }) {
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} searchPrompt={'find a project'} items={projects}>
+    <FilterController
+      matchRule={(p, filter) => p.domain.includes(filter) || p.description.toLowerCase().includes(filter)}
+      enabled={enableFiltering}
+      placeholder={placeholder}
+      searchPrompt={'find a project'}
+      items={projects}
+    >
       {({ filterInput, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>

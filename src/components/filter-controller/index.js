@@ -17,8 +17,8 @@ function FilterController({ matchRule, enabled, placeholder, items, children, se
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
-      setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
+      setFilteredItems(items.filter(matchRule));
+      // setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
       setFilteredItems([]);
