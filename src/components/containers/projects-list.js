@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
 
-import Text from 'Components/text/text';
-import TextInput from 'Components/inputs/text-input';
 import Heading from 'Components/text/heading';
-import Image from 'Components/images/image';
 import PaginationController from 'Components/pagination-controller';
+import FilterController from 'Components/filter-controller';
 import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
@@ -61,7 +58,7 @@ function ProjectsList({
   dataCy,
 }) {
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
+    <FilterController enabled={enableFiltering} placeholder={placeholder} items={projects}>
       {({ filterInput, renderProjects }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>
