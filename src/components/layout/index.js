@@ -12,7 +12,11 @@ import ErrorBoundary from 'Components/error-boundary';
 
 import styles from './styles.styl';
 
-const Layout = withRouter(({ children, searchQuery, history }) => (
+const Layout = withRouter(({ children, searchQuery, history }) => {
+  const focusFirst = useEffect(() => {
+    if (window.location.href.split('#'))
+  });
+  return (
   <div className={styles.content}>
     <Helmet title="Glitch" />
     <NewStuffContainer>
@@ -32,7 +36,9 @@ const Layout = withRouter(({ children, searchQuery, history }) => (
       <ReactKonami easterEgg={() => history.push('/secret')} />
     </ErrorBoundary>
   </div>
-));
+);
+});
+                          
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   searchQuery: PropTypes.string,
