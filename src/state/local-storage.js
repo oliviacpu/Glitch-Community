@@ -1,5 +1,5 @@
 import React from 'react';
-import { captureException } from '../utils/sentry';
+import { captureException } from 'Utils/sentry';
 
 const getStorage = () => {
   try {
@@ -13,9 +13,8 @@ const getStorage = () => {
   }
   return null;
 };
-const storage = getStorage();
 
-const readFromStorage = (name) => {
+const readFromStorage = (storage, name) => {
   if (storage) {
     try {
       const raw = storage.getItem(name);
@@ -29,7 +28,7 @@ const readFromStorage = (name) => {
   return undefined;
 };
 
-const writeToStorage = (name, value) => {
+const writeToStorage = (storage, name, value) => {
   if (storage) {
     try {
       if (value !== undefined) {
@@ -46,11 +45,12 @@ const writeToStorage = (name, value) => {
 const Context = React.createContext([() => undefined, () => {}]);
 
 const LocalStorageProvider = ({ children }) => {
+  const storageRef = React.useRef(undefined);
   const [cache, setCache] = React.useState(new Map());
 
   React.useEffect(() => {
     const onStorage = (event) => {
-      if (event.storageArea === storage) {
+      if (event.storageArea === storageRef.current) {
         if (event.key) {
           setCache((oldCache) => {
             const newCache = new Map(oldCache);
@@ -70,7 +70,7 @@ const LocalStorageProvider = ({ children }) => {
 
   const getValue = (name) => {
     if (!cache.has(name)) {
-      const value = readFromStorage(name);
+      const value = readFromStorage(storageRef.current, name);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
@@ -78,7 +78,7 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
-    writeToStorage(name, value);
+    writeToStorage(storageRef.current, name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
