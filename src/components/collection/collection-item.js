@@ -71,10 +71,14 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   );
 };
 
-const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
+/*
   <VisibilityContainer>
     {({ wasEverVisible }) => (wasEverVisible ? <CollectionProjects collection={collection} isAuthorized={isAuthorized} /> : <ProjectsLoading />)}
   </VisibilityContainer>
+*/
+
+const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
+  <CollectionProjects collection={collection} isAuthorized={isAuthorized} />
 );
 
 const CollectionCurator = ({ collection }) => {
