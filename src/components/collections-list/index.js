@@ -49,37 +49,39 @@ function CollectionsList({
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
+
+  const matchFn = (collection, filter) => collection.title.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
       {({ filterInput, renderItems }) => (
         <>
-        <article data-cy="collections" className={styles.collections}>
-          <Heading tagName="h2">{title}</Heading>
-          {filterInput}
-          {canMakeCollections && (
-            <>
-              <CreateCollectionButton team={maybeTeam} />
-              {!hasCollections && <CreateFirstCollection />}
-            </>
-          )}
+          <article data-cy="collections" className={styles.collections}>
+            <Heading tagName="h2">{title}</Heading>
+            {filterInput}
+            {canMakeCollections && (
+              <>
+                <CreateCollectionButton team={maybeTeam} />
+                {!hasCollections && <CreateFirstCollection />}
+              </>
+            )}
 
-          {renderItems((filteredProjects) => (
-            <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage}>
-              {(paginatedCollections) => (
-                <Grid items={paginatedCollections}>
-                  {(collection) => (
-                    <CollectionItem
-                      collection={collection}
-                      isAuthorized={isAuthorized}
-                      deleteCollection={() => deleteCollection(collection)}
-                      showCurator={showCurator}
-                    />
-                  )}
-                </Grid>
-              )}
-            </PaginationController>
-          ))}
-        </article>
+            {renderItems((filteredProjects) => (
+              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage}>
+                {(paginatedCollections) => (
+                  <Grid items={paginatedCollections}>
+                    {(collection) => (
+                      <CollectionItem
+                        collection={collection}
+                        isAuthorized={isAuthorized}
+                        deleteCollection={() => deleteCollection(collection)}
+                        showCurator={showCurator}
+                      />
+                    )}
+                  </Grid>
+                )}
+              </PaginationController>
+            ))}
+          </article>
         </>
       )}
     </FilterController>

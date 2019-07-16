@@ -57,15 +57,9 @@ function ProjectsList({
   projectOptions,
   dataCy,
 }) {
-  const filterProjectsFn = ()
+  const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
   return (
-    <FilterController
-      matchFn={(project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter)}
-      enabled={enableFiltering}
-      placeholder={placeholder}
-      searchPrompt={'find a project'}
-      items={projects}
-    >
+    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt={'find a project'} items={projects}>
       {({ filterInput, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>

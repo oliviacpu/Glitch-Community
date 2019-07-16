@@ -18,8 +18,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredItems(items.filter((p) => matchFn.call(p, lowercaseFilter)));
-      // setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
+      setFilteredItems(items.filter((p) => matchFn.call(null, p, lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
       setFilteredItems([]);
