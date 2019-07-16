@@ -20,7 +20,17 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enablePagination, placeholder }) {
+function CollectionsList({
+  collections: rawCollections,
+  title,
+  isAuthorized,
+  maybeTeam,
+  showCurator,
+  enableFiltering,
+  enablePagination,
+  collectionsPerPage,
+  placeholder,
+}) {
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -40,49 +50,41 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
     return null;
   }
   return (
-    <article data-cy="collections" className={styles.collections}>
-      <Heading tagName="h2">{title}</Heading>
-      {canMakeCollections && (
+    <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+      {({ filterInput, renderItems }) => (
         <>
-          <CreateCollectionButton team={maybeTeam} />
-          {!hasCollections && <CreateFirstCollection />}
+        <article data-cy="collections" className={styles.collections}>
+          <Heading tagName="h2">{title}</Heading>
+          {filterInput}
+          {canMakeCollections && (
+            <>
+              <CreateCollectionButton team={maybeTeam} />
+              {!hasCollections && <CreateFirstCollection />}
+            </>
+          )}
+
+          {renderItems((filteredProjects) => (
+            <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage}>
+              {(paginatedCollections) => (
+                <Grid items={paginatedCollections}>
+                  {(collection) => (
+                    <CollectionItem
+                      collection={collection}
+                      isAuthorized={isAuthorized}
+                      deleteCollection={() => deleteCollection(collection)}
+                      showCurator={showCurator}
+                    />
+                  )}
+                </Grid>
+              )}
+            </PaginationController>
+          ))}
+        </article>
         </>
       )}
-
-      <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
-        <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
-              {(paginatedCollections) => (
-            <Grid items={paginatedCollections}>
-              {(collection) => (
-                <CollectionItem
-                  collection={collection}
-                  isAuthorized={isAuthorized}
-                  deleteCollection={() => deleteCollection(collection)}
-                  showCurator={showCurator}
-                />
-              )}
-            </Grid>
-          )}
-        </PaginationController>
-      </FilterController>
-    </article>
+    </FilterController>
   );
 }
-
-/*
-      <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
-        <Grid items={orderedCollections}>
-          {(collection) => (
-            <CollectionItem
-              collection={collection}
-              isAuthorized={isAuthorized}
-              deleteCollection={() => deleteCollection(collection)}
-              showCurator={showCurator}
-            />
-          )}
-        </Grid>
-      </FilterController>
-  */
 
 CollectionsList.propTypes = {
   collections: PropTypes.array.isRequired,
@@ -90,6 +92,7 @@ CollectionsList.propTypes = {
   title: PropTypes.node.isRequired,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
+  collectionsPerPage: PropTypes.number,
   placeholder: PropTypes.node,
 };
 
@@ -97,6 +100,7 @@ CollectionsList.defaultProps = {
   maybeTeam: undefined,
   isAuthorized: false,
   showCurator: false,
+  collectionsPerPage: 6,
   placeholder: null,
 };
 
