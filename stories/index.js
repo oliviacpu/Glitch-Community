@@ -3,11 +3,8 @@ import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
 import Button from 'Components/buttons/button';
-import CheckboxButton from 'Components/buttons/checkbox-button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import Image from 'Components/images/image';
-import MaskImage from 'Components/images/mask-image';
 import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
@@ -45,7 +42,6 @@ import 'Components/questions/story';
 import 'Components/deleted-projects/story';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
-
 
 
 storiesOf('Emoji', module)
