@@ -7,7 +7,7 @@ import TextInput from 'Components/inputs/text-input';
 
 import styles from './styles.styl';
 
-function FilterController({ match, enabled, placeholder, items, children, searchPrompt }) {
+function FilterController({ matchFn, enabled, placeholder, items, children, searchPrompt }) {
   const [filter, setFilter] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -18,8 +18,7 @@ function FilterController({ match, enabled, placeholder, items, children, search
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      const filteredItems = items.filter((p) => 
-      setFilteredItems(items.filter.matchFuncapply(matchRule));
+      setFilteredItems(items.filter((p) => matchFn.call(p, lowercaseFilter)));
       // setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
@@ -64,7 +63,7 @@ function FilterController({ match, enabled, placeholder, items, children, search
 }
 
 FilterController.propTypes = {
-  match: PropTypes.array.isRequired,
+  matchFn: PropTypes.func.isRequired,
 }
 
 export default FilterController;

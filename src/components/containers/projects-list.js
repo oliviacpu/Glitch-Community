@@ -57,9 +57,10 @@ function ProjectsList({
   projectOptions,
   dataCy,
 }) {
+  const filterProjectsFn = ()
   return (
     <FilterController
-      match={['domain', 'description']}
+      matchFn={(project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter)}
       enabled={enableFiltering}
       placeholder={placeholder}
       searchPrompt={'find a project'}
