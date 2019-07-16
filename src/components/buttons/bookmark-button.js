@@ -64,7 +64,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   };
 
   return (
-    <button className={styles.bookmarkButton} onClick={onClick} ariaPressed={isBookmarked ? 'true' : 'false'}>
+    <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'}>
       <Halo isBookmarked={isBookmarked} />
       <img src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} />
       <img className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} />
