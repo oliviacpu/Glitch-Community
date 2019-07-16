@@ -17,8 +17,8 @@ const Halo = ({ isBookmarked }) => {
       viewbox="0 0 54 29"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
+      role="presentation"
     >
-      <title></title>
       <g id="Bookmark-v5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Artboard" transform="translate(-57.000000, -14.000000)">
           <g transform="translate(57.000000, 14.000000)">

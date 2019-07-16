@@ -118,7 +118,7 @@ export const BookmarkAvatar = () => (
       height="50%"
       className={styles.bookmark}
       src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-filled.svg?v=1563294366084"
-      alt="bookmark"
+      alt=""
     />
   </>
 );
