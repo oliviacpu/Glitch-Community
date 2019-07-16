@@ -6,29 +6,29 @@ import TextInput from 'Components/inputs/text-input';
 
 import styles from './styles.styl';
 
-function FilterController({ enabled, placeholder, items, children }) {
+function FilterController({ enabled, placeholder, items, children, searchPrompt }) {
   const [filter, setFilter] = useState('');
-  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
 
   const validFilter = filter.length > 1;
 
-  function filterProjects() {
+  function filterItems() {
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredProjects(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
+      setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
-      setFilteredProjects([]);
+      setFilteredItems([]);
     }
   }
 
-  useEffect(() => filterProjects(), [items]);
-  useEffect(() => debounce(filterProjects, 400)(), [filter]);
+  useEffect(() => filterItems(), [items]);
+  useEffect(() => debounce(filterItems, 400)(), [filter]);
 
   const filtering = validFilter && isDoneFiltering;
-  const displayedProjects = filtering ? filteredProjects : items;
+  const displayedItems = filtering ? filteredItems : items;
 
   return children({
     filterInput: enabled && (
@@ -38,14 +38,14 @@ function FilterController({ enabled, placeholder, items, children }) {
         name="filter"
         onChange={setFilter}
         opaque
-        placeholder="find a project"
+        placeholder={searchPrompt}
         labelText="project search"
         type="search"
         value={filter}
       />
     ),
-    renderProjects: (renderFn) => {
-      if (displayedProjects.length) return renderFn(displayedProjects);
+    renderItems: (renderFn) => {
+      if (displayedItems.length) return renderFn(displayedItems);
 
       if (filtering) {
         return (

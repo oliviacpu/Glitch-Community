@@ -58,14 +58,14 @@ function ProjectsList({
   dataCy,
 }) {
   return (
-    <FilterController enabled={enableFiltering} placeholder={placeholder} items={projects}>
-      {({ filterInput, renderProjects }) => (
+    <FilterController enabled={enableFiltering} placeholder={placeholder} searchPrompt={'find a project'} items={projects}>
+      {({ filterInput, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={styles.header}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          {renderProjects((filteredProjects) => (
+          {renderItems((filteredProjects) => (
             <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
                 <ProjectsUL

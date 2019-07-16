@@ -5,6 +5,7 @@ import Heading from 'Components/text/heading';
 import CollectionItem from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import PaginationController from 'Components/pagination-controller';
+import FilterController from 'Components/filter-controller';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -19,7 +20,7 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enablePagination }) {
+function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enableFilter }) {
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
