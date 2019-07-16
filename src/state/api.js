@@ -45,17 +45,27 @@ export const getAPIForToken = memoize((persistentToken) => {
 });
 
 export function APIContextProvider({ children }) {
-  const [pendingRequests, setPendingRequests] = useState([]);
   const { persistentToken } = useCurrentUser();
   const api = getAPIForToken(persistentToken);
+
+  const [pendingRequests, setPendingRequests] = useState([]);
   if (!persistentToken) {
-    // stall get requests until we load or generate a user
-    api.get = (...args) => {
-      setPendingRequests([...pendingRequests, {
-        cmd: 'get', args,
-      }]);
+    // stall get requests until we have a persistentToken
+    api.get = async (...args) => {
+      const apiWithToken = await new Promise((resolve) => {
+        setPendingRequests([...pendingRequests, resolve]);
+      });
+      return apiWithToken.get(...args);
     };
   }
+  useEffect(() => {
+    if (api.persistentToken && pendingRequests.length) {
+      // go back and finally make all of those requests
+      pendingRequests.forEach((request) => request(api));
+      setPendingRequests([]);
+    }
+  }, [api, pendingRequests]);
+
   return <Context.Provider value={api}>{children}</Context.Provider>;
 }
 
