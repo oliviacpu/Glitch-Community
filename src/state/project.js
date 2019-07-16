@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useEffect, createContext } from 'react';
+import React, { useState, useCallback, useContext, createContext } from 'react';
 
 import useUploader from 'State/uploader';
 import { useAPI, useAPIHandlers } from 'State/api';
@@ -92,10 +92,6 @@ export function useProjectEditor(initialProject) {
   const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
   const { updateItem, deleteItem, updateProjectDomain } = useAPIHandlers();
-
-  useEffect(() => {
-    setProject(initialProject);
-  }, [initialProject]);
 
   async function updateFields(changes) {
     await updateItem({ project }, changes);
