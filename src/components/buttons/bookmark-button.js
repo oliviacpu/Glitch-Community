@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Image from 'Components/images/image'
 import styles from './bookmark-button.styl';
 
 const CHECKMARK = 'https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fcheck.svg?v=1563224340442';
@@ -16,7 +16,7 @@ const Halo = ({ isBookmarked }) => {
       viewbox="0 0 54 29"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      title="halo celebrator sparkles"
+      title="celebratory sparkles"
     >
       <g id="Bookmark-v5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Artboard" transform="translate(-57.000000, -14.000000)">
@@ -67,8 +67,8 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   return (
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'}>
       <Halo isBookmarked={isBookmarked} />
-      <img src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt=""/>
-      <img className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} />
+      <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt={isBookmarked ? "filled bookmark" : "empty bookmark"}/>
+      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="checkmark"/>
     </button>
   );
 };
