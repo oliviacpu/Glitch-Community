@@ -56,10 +56,12 @@ const Context = React.createContext([() => undefined, () => {}]);
 const LocalStorageProvider = ({ children }) => {
   const storageRef = React.useRef(null);
   const [cache, setCache] = React.useState(new Map());
+  const [ready, setReady] = React.useState(false);
 
-    storageRef.current = getStorage();
   React.useEffect(() => {
+    storageRef.current = getStorage();
     setCache(new Map());
+    setReady(true);
 
     const onStorage = (event) => {
       if (event.storageArea === storageRef.current) {
@@ -96,21 +98,20 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   return (
-    <Context.Provider value={[getValue, setValue]}>
+    <Context.Provider value={[getValue, setValue, ready]}>
       {children}
     </Context.Provider>
   );
 };
 
 const useLocalStorage = (name, defaultValue) => {
-  const [getRawValue, setRawValue] = React.useContext(Context);
+  const [getRawValue, setRawValue,  ready] = React.useContext(Context);
   const rawValue = getRawValue(name);
-  console.log(name, rawValue);
 
   const value = rawValue !== undefined ? rawValue : defaultValue;
   const setValue = (newValue) => setRawValue(name, newValue);
 
-  return [value, setValue];
+  return [value, setValue, ready];
 };
 
 export default useLocalStorage;

@@ -188,7 +188,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [fetched, setFetched] = useState(false); // Set true on first complete load
 
   // sharedUser syncs with the editor and is authoritative on id and persistentToken
-  const [sharedUser, setSharedUser] = useLocalStorage('cachedUser', null);
+  const [sharedUser, setSharedUser, ready] = useLocalStorage('cachedUser', null);
   // put sharedUser in a ref so that we can access its current value in load(),
   // even if it was changed elsewhwere
   const sharedUserRef = useRef(sharedUser);
@@ -240,10 +240,10 @@ export const CurrentUserProvider = ({ children }) => {
   }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken]);
 
   useEffect(() => {
-    load();
+    if (ready) load();
     // for easier debugging
     window.currentUser = cachedUser;
-  }, [cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken, sharedUser && sharedUser.id, sharedUser && sharedUser.persistentToken]);
+  }, [ready, cachedUser && cachedUser.id, cachedUser && cachedUser.persistentToken, sharedUser && sharedUser.id, sharedUser && sharedUser.persistentToken]);
 
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
