@@ -29,6 +29,8 @@ import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
+import { useAutoFocus } from 'Hooks/use-auto-focus';
+
 
 import styles from './project.styl';
 
@@ -127,7 +129,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
     initialProject,
   );
-
+  useAutoFocus();
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
