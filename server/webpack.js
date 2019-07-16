@@ -12,7 +12,19 @@ function webpackExpressMiddleware() {
 
   const webpackMiddleware = require('webpack-dev-middleware');
   const stats = { children: false };
-  return webpackMiddleware(compiler, { stats, writeToDisk: true });
+  const middleware = webpackMiddleware(compiler, { stats, writeToDisk: true });
+
+  let ready = false;
+  middleware.waitUntilValid(() => {
+    ready = true;
+  });
+
+  return function(request, response, next) {
+    if (ready) {
+      return middleware(request, response, next);
+    }
+    return next();
+  };
 }
 
 module.exports = function(app) {

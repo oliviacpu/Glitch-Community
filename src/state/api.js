@@ -49,7 +49,7 @@ export function APIContextProvider({ children }) {
   const api = getAPIForToken(persistentToken);
 
   const [pendingRequests, setPendingRequests] = useState([]);
-  if (!persistentToken) {
+  if (!api.persistentToken) {
     // stall get requests until we have a persistentToken
     api.get = async (...args) => {
       const apiWithToken = await new Promise((resolve) => {
