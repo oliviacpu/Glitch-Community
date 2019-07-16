@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-export const useFocusFirst = () => {
-  useEffect(() => {
-    const [url, hash] = window.location.href.split('#');
+const useFocusFirst = () => {
+  React.useEffect(() => {
+    const [, hash] = window.location.href.split('#');
     if (hash) {
       const firstHeading = document.querySelectorAll(`#${hash} h1:first-of-type, #${hash} h2:first-of-type`)[0];
       if (firstHeading) {
@@ -12,3 +12,5 @@ export const useFocusFirst = () => {
     }
   }, []);
 };
+
+export default useFocusFirst;

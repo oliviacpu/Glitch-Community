@@ -29,7 +29,7 @@ import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
-import { useFocusFirst } from 'Hooks/use-focus-first';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 
 import styles from './project.styl';
