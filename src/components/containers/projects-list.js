@@ -59,7 +59,7 @@ function ProjectsList({
 }) {
   return (
     <FilterController
-      matchRule={(p, filter) => p.domain.includes(filter) || p.description.toLowerCase().includes(filter)}
+      match={['domain', 'description']}
       enabled={enableFiltering}
       placeholder={placeholder}
       searchPrompt={'find a project'}

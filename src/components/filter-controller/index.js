@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
@@ -6,7 +7,7 @@ import TextInput from 'Components/inputs/text-input';
 
 import styles from './styles.styl';
 
-function FilterController({ matchRule, enabled, placeholder, items, children, searchPrompt }) {
+function FilterController({ match, enabled, placeholder, items, children, searchPrompt }) {
   const [filter, setFilter] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -17,7 +18,8 @@ function FilterController({ matchRule, enabled, placeholder, items, children, se
     setIsDoneFiltering(false);
     if (validFilter) {
       const lowercaseFilter = filter.toLowerCase();
-      setFilteredItems(items.filter(matchRule));
+      const filteredItems = items.filter((p) => 
+      setFilteredItems(items.filter.matchFuncapply(matchRule));
       // setFilteredItems(items.filter((p) => p.domain.includes(lowercaseFilter) || p.description.toLowerCase().includes(lowercaseFilter)));
       setIsDoneFiltering(true);
     } else {
@@ -59,6 +61,10 @@ function FilterController({ matchRule, enabled, placeholder, items, children, se
       return placeholder;
     },
   });
+}
+
+FilterController.propTypes = {
+  match: PropTypes.array.isRequired,
 }
 
 export default FilterController;
