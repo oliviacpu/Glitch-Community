@@ -14,10 +14,11 @@ const PersistentNotification = ({ children }) => {
 };
 
 const OfflineNotice = () => {
-  const [online, setOnline] = useState(() => navigator.onLine !== false);
+  const [online, setOnline] = useState(true);
 
   useEffect(() => {
     const onNetwork = () => setOnline(navigator.onLine !== false);
+    onNetwork();
     window.addEventListener('offline', onNetwork);
     window.addEventListener('online', onNetwork);
     return () => {
