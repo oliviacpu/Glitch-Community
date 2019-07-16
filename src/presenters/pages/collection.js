@@ -35,7 +35,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
   return (
     <>
       <Helmet title={collection.name} />
-      <main>
+      <main id="main">
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
         {currentUserIsAuthor &&

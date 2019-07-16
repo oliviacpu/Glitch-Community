@@ -95,7 +95,7 @@ const UserPage = ({ user: initialUser }) => {
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className={styles.container}>
+    <main id="main" className={styles.container}>
       <section>
         <UserProfileContainer
           item={user}

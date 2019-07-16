@@ -116,7 +116,7 @@ function TeamPage({ team: initialTeam }) {
   const projectOptions = { ...funcs, team };
 
   return (
-    <main className={styles.container}>
+    <main className={styles.container} id="main">
       <section>
         <Beta />
         <TeamProfileContainer

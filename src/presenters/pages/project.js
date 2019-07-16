@@ -133,7 +133,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
-    <main>
+    <main id="main">
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
