@@ -54,4 +54,8 @@ storiesOf('MaskImage', module)
   );
 
 storiesOf('BookmarkAvatar', module)
-  .add('regular', () => <BookmarkAvatar />)
+  .add('regular', () => (
+    <div style={{ height: "100px" }}>
+      <BookmarkAvatar />
+    </div>
+  ))
