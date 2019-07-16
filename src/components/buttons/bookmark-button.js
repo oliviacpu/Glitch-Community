@@ -17,8 +17,8 @@ const Halo = ({ isBookmarked }) => {
       viewbox="0 0 54 29"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      title="celebratory sparkles"
     >
+      <title></title>
       <g id="Bookmark-v5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Artboard" transform="translate(-57.000000, -14.000000)">
           <g transform="translate(57.000000, 14.000000)">
@@ -66,10 +66,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   };
 
   return (
-    <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'}>
+    <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
       <Halo isBookmarked={isBookmarked} />
-      <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt={isBookmarked ? "filled bookmark" : "empty bookmark"}/>
-      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="checkmark" width="10px" height="10px"/>
+      <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt=""/>
+      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px"/>
     </button>
   );
 };
