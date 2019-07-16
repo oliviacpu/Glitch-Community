@@ -4,6 +4,7 @@ import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
 import CollectionItem from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
+import PaginationController from 'Components/pagination-controller';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
@@ -46,6 +47,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}
+      
       <Grid items={orderedCollections}>
         {(collection) => (
           <CollectionItem

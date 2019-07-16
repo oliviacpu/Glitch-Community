@@ -196,6 +196,8 @@ function TeamPage({ team: initialTeam }) {
       {/* TEAM COLLECTIONS */}
       <CollectionsList
         title="Collections"
+        enablePagination
+        enableFiltering={recentProjects.length > 6}
         collections={team.collections.map((collection) => ({ ...collection, team }))}
         maybeTeam={team}
         isAuthorized={currentUserIsOnTeam}
