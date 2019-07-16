@@ -19,7 +19,7 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
+function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator, enableFiltering, enablePagination }) {
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -47,17 +47,19 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
           {!hasCollections && <CreateFirstCollection />}
         </>
       )}
-      
-      <Grid items={orderedCollections}>
-        {(collection) => (
-          <CollectionItem
-            collection={collection}
-            isAuthorized={isAuthorized}
-            deleteCollection={() => deleteCollection(collection)}
-            showCurator={showCurator}
-          />
-        )}
-      </Grid>
+
+      <FilterController enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+        <Grid items={orderedCollections}>
+          {(collection) => (
+            <CollectionItem
+              collection={collection}
+              isAuthorized={isAuthorized}
+              deleteCollection={() => deleteCollection(collection)}
+              showCurator={showCurator}
+            />
+          )}
+        </Grid>
+      </FilterController>
     </article>
   );
 }
