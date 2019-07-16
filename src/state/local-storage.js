@@ -54,14 +54,15 @@ const writeToStorage = (storage, name, value) => {
 const Context = React.createContext([() => undefined, () => {}]);
 
 const LocalStorageProvider = ({ children }) => {
-  const [storage, setStorage] = React.useState(null);
+  const storageRef = React.useRef(null);
   const [cache, setCache] = React.useState(new Map());
 
+    storageRef.current = getStorage();
   React.useEffect(() => {
-    setStorage(getStorage());
     setCache(new Map());
+
     const onStorage = (event) => {
-      if (event.storageArea === storage) {
+      if (event.storageArea === storageRef.current) {
         if (event.key) {
           setCache((oldCache) => {
             const newCache = new Map(oldCache);
@@ -73,6 +74,7 @@ const LocalStorageProvider = ({ children }) => {
         }
       }
     };
+
     window.addEventListener('storage', onStorage, { passive: true });
     return () => {
       window.removeEventListener('storage', onStorage, { passive: true });
@@ -80,10 +82,8 @@ const LocalStorageProvider = ({ children }) => {
   }, []);
 
   const getValue = (name) => {
-    console.log(name);
     if (!cache.has(name)) {
-      const value = readFromStorage(storage, name);
-      console.log('load ', !!storage, value);
+      const value = readFromStorage(storageRef.current, name);
       setCache((oldCache) => new Map([...oldCache, [name, value]]));
       return value;
     }
@@ -91,7 +91,7 @@ const LocalStorageProvider = ({ children }) => {
   };
 
   const setValue = (name, value) => {
-    writeToStorage(storage, name, value);
+    writeToStorage(storageRef.current, name, value);
     setCache((oldCache) => new Map([...oldCache, [name, value]]));
   };
 
@@ -105,6 +105,7 @@ const LocalStorageProvider = ({ children }) => {
 const useLocalStorage = (name, defaultValue) => {
   const [getRawValue, setRawValue] = React.useContext(Context);
   const rawValue = getRawValue(name);
+  console.log(name, rawValue);
 
   const value = rawValue !== undefined ? rawValue : defaultValue;
   const setValue = (newValue) => setRawValue(name, newValue);
