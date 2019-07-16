@@ -59,9 +59,9 @@ const LocalStorageProvider = ({ children }) => {
 
   React.useEffect(() => {
     setStorage(getStorage());
+    setCache(new Map());
   }, []);
   React.useEffect(() => {
-    setCache(new Map());
     const onStorage = (event) => {
       if (event.storageArea === storage) {
         if (event.key) {
