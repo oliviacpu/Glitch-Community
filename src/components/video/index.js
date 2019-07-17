@@ -19,23 +19,28 @@ function Video({ sources, muted, ...props }) {
     },
     [windowWidth],
   );
-  
-  useEffect(() => {
-    console.log('validating');
-    if (!muted) {
-      for (source in visibleVideos) {
-        if (!source.track) {
-          // if using a video with background music but no lyrics or words, create a .vtt file that describes the mood of the music;
-          // 
-          return new Error(`No caption track provided for asset ${source.src}`);
+
+  useEffect(
+    () => {
+      console.log('validating');
+      if (!muted) {
+        for (let i = 0; i < visibleVideos.length; i++) {
+          const video = !visibleVideos[i];
+          if (!video.track) {
+            // if using a video with background music but no lyrics or words, create a .vtt file that describes the mood of the music;
+            //
+            return new Error(`No caption track provided for asset ${video.src}`);
+          }
         }
       }
-    }
-  }, [visibleVideos]);
+    },
+    [visibleVideos],
+  );
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
-    <video muted, {...props}>{/* eslint-disable-line jsx-a11y/media-has-caption */}
+    <video muted {...props}>
+      {/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
           {video.track && <track kind="captions" src={video.track} srcLang="en" />}
