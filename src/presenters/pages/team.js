@@ -10,6 +10,7 @@ import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
@@ -20,6 +21,7 @@ import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
+import Link from 'Components/link';
 import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -33,21 +35,19 @@ function syncPageToUrl(team) {
 }
 
 const Beta = () => (
-  <a href="/teams/" target="_blank" className={styles.beta}>
+  <Link to="/teams/" target="_blank" className={styles.beta}>
     <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
     <div>
       <Heading tagName="h4">Teams are in beta</Heading>
       <Text>Learn More</Text>
     </div>
-  </a>
+  </Link>
 );
 
 const ProjectPals = () => (
-  <aside className="inline-banners add-project-to-empty-team-banner">
-    <div className="description-container">
-      <img className="project-pals" src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
-      <div className="description">Add projects to share them with your team</div>
-    </div>
+  <aside className={styles.addProjectToEmptyTeam}>
+    <Image src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
+    <Text>Add projects to share them with your team</Text>
   </aside>
 );
 

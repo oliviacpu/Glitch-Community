@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton } from 'Components/popover';
+import Button from 'Components/buttons/button';
+import Image from 'Components/images/image';
+import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
 import { useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
@@ -21,22 +23,34 @@ const PopoverMenuItems = ({ children }) =>
       ),
   );
 
-const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover }) => {
+const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
   const { currentUser } = useCurrentUser();
-  // TODO: replace this with a multi-popover pane
-  const onClickLeaveProject = useTrackedFunc(projectOptions.leaveProject && (() => {
-    if (isTeamProject({ currentUser, project })) {
-      projectOptions.leaveProject(project);
-      return;
-    }
+  const illustration = 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fwave.png?v=1502123444938';
+  const trackLeaveProject = useTrackedFunc(leaveProject, 'Leave Project clicked');
+  if (isTeamProject({ currentUser, project })) {
+    trackLeaveProject(project);
+    return null;
+  }
 
-    const prompt = `Once you leave this project, you'll lose access to it unless someone else invites you back. \n\n Are sure you want to leave ${
-      project.domain
-    }?`;
-    if (window.confirm(prompt)) {
-      projectOptions.leaveProject(project);
-    }
-  }), 'Leave Project clicked');
+  return (
+    <PopoverDialog wide focusOnDialog align="right">
+      <PopoverTitle>Leave {project.domain}</PopoverTitle>
+      <PopoverActions>
+        <Image height="50px" width="auto" src={illustration} alt="" />
+        <ActionDescription>
+          Are you sure you want to leave? You'll lose access to this project unless someone else invites you back.
+        </ActionDescription>
+      </PopoverActions>
+      <PopoverActions type="dangerZone">
+        <Button type="dangerZone" onClick={() => { trackLeaveProject(project); togglePopover(); }}>
+          Leave Project
+        </Button>
+      </PopoverActions>
+    </PopoverDialog>
+  );
+};
+
+const ProjectOptionsContent = ({ projectOptions, addToCollectionPopover, leaveProjectPopover }) => {
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
 
   return (
@@ -52,7 +66,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
           [{ onClick: addToCollectionPopover, label: 'Add to Collection', emoji: 'framedPicture' }],
           [{ onClick: projectOptions.joinTeamProject, label: 'Join Project', emoji: 'rainbow' }],
           [
-            { onClick: onClickLeaveProject, label: 'Leave Project', emoji: 'wave' },
+            { onClick: leaveProjectPopover, label: 'Leave Project', emoji: 'wave' },
           ],
           [
             { onClick: projectOptions.removeProjectFromTeam, label: 'Remove Project', emoji: 'thumbsDown', dangerZone: true },
@@ -82,7 +96,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     );
 
   return (
-    <PopoverMenu>
+    <PopoverMenu label={`Project Options for ${project.domain}`}>
       {({ togglePopover }) => (
         <MultiPopover
           views={{
@@ -96,10 +110,15 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
               />
             ),
             createCollection: () => <CreateCollectionWithProject project={project} addProjectToCollection={projectOptions.addProjectToCollection} />,
+            leaveProject: () => <LeaveProjectPopover project={project} leaveProject={projectOptions.leaveProject} togglePopover={togglePopover} />,
           }}
         >
-          {({ addToCollection }) => (
-            <ProjectOptionsContent project={project} projectOptions={toggleBeforeAction(togglePopover)} addToCollectionPopover={addToCollection} />
+          {({ addToCollection, leaveProject }) => (
+            <ProjectOptionsContent
+              projectOptions={toggleBeforeAction(togglePopover)}
+              addToCollectionPopover={addToCollection}
+              leaveProjectPopover={projectOptions.leaveProject && leaveProject}
+            />
           )}
         </MultiPopover>
       )}

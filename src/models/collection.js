@@ -26,6 +26,9 @@ export function getOwnerLink(collection) {
 }
 
 export function getLink(collection) {
+  if (collection.fullUrl) {
+    return `/@${collection.fullUrl}`;
+  }
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 

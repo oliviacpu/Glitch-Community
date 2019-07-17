@@ -7,7 +7,6 @@ import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';
-import { addBreadcrumb } from 'Utils/sentry';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';
 
@@ -17,10 +16,6 @@ const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [
 
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
   if (typeof to === 'string') {
-    addBreadcrumb({
-      level: 'info',
-      message: `window-location: ${JSON.stringify(window.location)}`,
-    });
     const currentUrl = new URL(window.location.href);
     const targetUrl = new URL(to, currentUrl);
 
@@ -57,6 +52,9 @@ export const CollectionLink = ({ collection, children, ...props }) => (
 CollectionLink.propTypes = {
   collection: PropTypes.oneOfType([
     PropTypes.shape({
+      fullUrl: PropTypes.string.isRequired,
+    }),
+    PropTypes.shape({
       team: PropTypes.PropTypes.shape({
         url: PropTypes.string.isRequired,
       }).isRequired,
@@ -72,11 +70,16 @@ CollectionLink.propTypes = {
   ]).isRequired,
 };
 
-export const ProjectLink = ({ project, children, ...props }) => (
-  <Link to={getProjectLink(project)} {...props}>
-    {children}
-  </Link>
-);
+export const ProjectLink = ({ project, children, ...props }) => {
+  if (project.suspendedReason) {
+    return <span {...props}>{children}</span>;
+  }
+  return (
+    <Link to={getProjectLink(project)} {...props}>
+      {children}
+    </Link>
+  );
+};
 ProjectLink.propTypes = {
   project: PropTypes.shape({
     domain: PropTypes.string.isRequired,
