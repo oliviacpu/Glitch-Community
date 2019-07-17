@@ -50,29 +50,25 @@ function CollectionsListWithDevToggle(props) {
   return <CollectionsList {...props} />
 }
 
-function MyStuffCollectionLoader(collections) {
-  let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-  myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
-
+function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
-  console.log({ projects });
   
-  return myStuffCollection
-}
-
-
-function CollectionsListWithMyStuff({ collections, ...props }) {
-  let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-  
-  if (myStuffCollection.length > 0) {
-    <MyStuffCollectionLoader>
-      {(collectionsWithMyStuffLoaded) => <CollectionList collections={collectionsWithMyStuffLoaded} />}
-    </MyStuffCollectionLoader>
-  }
-  if (!collections[0].isBookmarkCollection && projects.length < 0) {
+  if (projects.length > 0) { // & user is authorized
     collections.unshift(myStuffCollection);
   }
+  return <CollectionsList collections={collections} {...props} />;
+}
 
+function CollectionsListWithMyStuff({ collections, ...props }) {
+  const myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
+  
+  if (myStuffCollection.length > 0) {
+    return (
+      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />
+    );
+  }
+  
+  collections.unshift(nullMyStuffCollection);
   return <CollectionsList collections={collections} {...props} />;
 }
 
