@@ -31,7 +31,7 @@ dependencies:
   dotenv: 8.0.0
   ejs: 2.6.2
   email-addresses: 3.0.3
-  eslint: 6.0.1
+  eslint: 5.16.0
   eslint-config-airbnb: 17.1.1
   eslint-import-resolver-alias: 1.1.2
   eslint-loader: 2.2.1
@@ -6494,7 +6494,7 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-qzm/XxIbxm/FHyH341ZrbnMUpe+5Bocte9xkmFMzPMjRaZMcXww+MpBptFvtU+79L362nqiLhekCxCxDPaUMBQ==
-  /eslint/6.0.1:
+  /eslint/5.16.0:
     dependencies:
       '@babel/code-frame': 7.0.0
       ajv: 6.10.2
@@ -6505,18 +6505,17 @@ packages:
       eslint-scope: 4.0.3
       eslint-utils: 1.4.0
       eslint-visitor-keys: 1.0.0
-      espree: 6.0.0
+      espree: 5.0.1
       esquery: 1.0.1
       esutils: 2.0.2
       file-entry-cache: 5.0.1
       functional-red-black-tree: 1.0.1
-      glob-parent: 3.1.0
+      glob: 7.1.4
       globals: 11.12.0
       ignore: 4.0.6
       import-fresh: 3.1.0
       imurmurhash: 0.1.4
       inquirer: 6.5.0
-      is-glob: 4.0.1
       js-yaml: 3.13.1
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.3.0
@@ -6525,6 +6524,7 @@ packages:
       mkdirp: 0.5.1
       natural-compare: 1.4.0
       optionator: 0.8.2
+      path-is-inside: 1.0.2
       progress: 2.0.3
       regexpp: 2.0.1
       semver: 5.7.0
@@ -6534,11 +6534,11 @@ packages:
       text-table: 0.2.0
     dev: false
     engines:
-      node: ^8.10.0 || ^10.13.0 || >=11.10.1
+      node: ^6.14.0 || ^8.10.0 || >=9.10.0
     hasBin: true
     resolution:
-      integrity: sha512-DyQRaMmORQ+JsWShYsSg4OPTjY56u1nCjAmICrE8vLWqyLKxhFXOthwMj1SA8xwfrv0CofLNVnqbfyhwCkaO0w==
-  /espree/6.0.0:
+      integrity: sha512-S3Rz11i7c8AA5JPv7xAH+dOyq/Cu/VXHiHXBPOU1k/JAM5dXqQPt3qcrhpHSorXmrpu2g0gkIBVXAqCpzfoZIg==
+  /espree/5.0.1:
     dependencies:
       acorn: 6.2.0
       acorn-jsx: /acorn-jsx/5.0.1/acorn@6.2.0
@@ -6547,7 +6547,7 @@ packages:
     engines:
       node: '>=6.0.0'
     resolution:
-      integrity: sha512-lJvCS6YbCn3ImT3yKkPe0+tJ+mH6ljhGNjHQH9mRtiO6gjhVAOhVXW1yjnwqGwTkK3bGbye+hb00nFNmu0l/1Q==
+      integrity: sha512-qWAZcWh4XE/RwzLJejfcofscgMc9CamR6Tn1+XRXNzrvUSSbiAjGOI/fggztjIi7y9VLPqnICMIPiGyr8JaZ0A==
   /esprima/4.0.1:
     dev: false
     engines:
@@ -13780,7 +13780,7 @@ specifiers:
   dotenv: ^8.0.0
   ejs: ^2.6.2
   email-addresses: ^3.0.3
-  eslint: ^6.0.1
+  eslint: ^5.16.0
   eslint-config-airbnb: ^17.1.0
   eslint-import-resolver-alias: ^1.1.2
   eslint-loader: ^2.1.2

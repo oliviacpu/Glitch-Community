@@ -54,7 +54,7 @@
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "email-addresses": "^3.0.3",
-    "eslint": "^6.0.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-loader": "^2.1.2",
@@ -110,8 +110,7 @@
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-dev-middleware": "^3.6.2",
-    "winston": "^3.2.1",
-    "regenerator-runtime": "^0.13.2"
+    "winston": "^3.2.1"
   },
   "engines": {
     "node": "10.x"
