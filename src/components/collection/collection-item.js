@@ -87,27 +87,22 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
-  return (
-    <div onClick={() => console.log("would have created a my stuff collection and redirected to it")} {...props} >
-      {children}
-    </div>
-  )
-}
+// TODO: add onclick that creates the new my stuff collection, ensure button is accessible
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
+  <div {...props}>
+    {children}
+  </div>
+);
 
 export const MyStuffItem = ({ collection }) => {
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
-        
+
   return (
     <div className={styles.collectionItem}>
-      <div className={styles.header}></div>
-      <CollectionLinkComponent
-        collection={collection}
-        className={classNames(styles.linkBody)}
-        style={collectionColorStyles(collection)}
-      >
+      <div className={styles.header} />
+      <CollectionLinkComponent collection={collection} className={classNames(styles.linkBody)} style={collectionColorStyles(collection)}>
         <div className={styles.avatarContainer}>
-          {/* TODO replace with real icon */}
+          {/* TODO replace with my stuff icon */}
           <CollectionAvatar collection={collection} />
         </div>
         <div className={styles.nameDescriptionContainer}>
@@ -119,19 +114,14 @@ export const MyStuffItem = ({ collection }) => {
           </div>
         </div>
       </CollectionLinkComponent>
-      {
-        collection.projects.length === 0 && (
-          <div className={classNames(styles.projectsContainer, styles.empty)}>
-            <Text>
-              (placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection
-            </Text>
-          </div>
-        )
-      }
-      
+      {collection.projects.length === 0 && (
+        <div className={classNames(styles.projectsContainer, styles.empty)}>
+          <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>

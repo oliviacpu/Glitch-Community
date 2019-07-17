@@ -26,17 +26,17 @@ const nullMyStuffCollection = {
   description: 'My place to save cool finds',
   coverColor: '#ffccf9',
   projects: [],
-  id: "My Stuff"
+  id: 'My Stuff',
 };
 
 function CollectionsListWithDevToggle(props) {
   const myStuffEnabled = useDevToggle('My Stuff');
-  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />
+  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
 }
 
-function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
+function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
-  
+
   if (projects.length > 0 || props.isAuthorized) {
     myStuffCollection.projects = projects;
     collections.unshift(myStuffCollection);
@@ -45,20 +45,19 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  const myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-  
-  if (myStuffCollection.length === 0 && !props.isAuthorized) {
+  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
+  if (myStuffCollection) {
+    return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
+  }
+
+  if (!props.isAuthorized) {
     return <CollectionsList collections={collections} {...props} />;
   }
-  
-  if (myStuffCollection.length === 0 && props.isAuthorized) {
+
+  if (props.isAuthorized) {
     collections.unshift(nullMyStuffCollection);
     return <CollectionsList collections={collections} {...props} />;
   }
-  
-  return (
-    <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />
-  );
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
