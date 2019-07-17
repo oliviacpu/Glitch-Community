@@ -25,7 +25,6 @@ function Video({ sources, ...props }) {
     <video {...props}>{/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
-          <track kind="captions" src={video.track} srcLang="en" />
           <source key={video.src} src={video.src} />
         </React.Fragment>
       ))}
