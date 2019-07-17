@@ -8,6 +8,8 @@ import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
+import { getSingleItem } from 'Shared/api';
+import { captureException } from 'Utils/sentry';
 
 const bind = (fn, ...args) => {
   if (!fn) return null;
@@ -37,6 +39,16 @@ const useDefaultProjectOptions = () => {
     }, handleError),
   };
 };
+
+export async function getProjectPermissions(api, domain) {
+  try {
+    const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
+    return project.permissions;
+  } catch (error) {
+    captureException(error);
+    return [];
+  }
+}
 
 // eslint-disable-next-line import/prefer-default-export
 export const useProjectOptions = (project, { user, team, collection, ...options } = {}) => {

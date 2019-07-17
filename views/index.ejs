@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- facebook open graph tags -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://glitch.com">
+    <meta property="og:url" content="<%= canonicalUrl %>">
     <meta property="og:title" content="<%= socialTitle || title %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:image" content="<%= image %>">
@@ -23,7 +23,7 @@
     <meta name="twitter:title" content="<%= socialTitle || title %>">
     <meta name="twitter:description" content="<%= description %>">
     <meta name="twitter:image" content="<%= image %>">
-    <meta name="twitter:url" content="https://glitch.com">
+    <meta name="twitter:url" content="<%= canonicalUrl %>">
     
     <link rel="stylesheet" href="https://cloud.webtype.com/css/3a8e55c6-b1f3-4659-99eb-125ae72bd084.css">
     <% for (let i = 0; i < styles.length; ++i) { %>

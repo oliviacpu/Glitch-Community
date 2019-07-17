@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { useAPI } from 'State/api';
+import { getProjectPermissions } from 'State/project-options';
+
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
@@ -14,7 +17,6 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-
 import styles from './search-results.styl';
 
 const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
@@ -43,10 +45,22 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
+const PermissionsLoader = ({ project }) => {
+  const api = useAPI();
+  React.useEffect(() => {
+    async function fillInPermissions() {
+      const permissions = await getProjectPermissions(api, project.domain);
+      project.permissions = permissions;
+    }
+    fillInPermissions();
+  }, []);
+  return <ProjectItem project={project} />;
+};
+
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => <ProjectItem project={result} />,
+  project: ({ result }) => <PermissionsLoader project={result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
