@@ -53,7 +53,8 @@ function CollectionsListWithDevToggle(props) {
 function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
   
-  if (projects.length > 0) { // & user is authorized
+  if (projects.length > 0) { // or user is authorized
+    myStuffCollection.projects = projects;
     collections.unshift(myStuffCollection);
   }
   return <CollectionsList collections={collections} {...props} />;
