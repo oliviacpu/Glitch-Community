@@ -50,12 +50,25 @@ function CollectionsListWithDevToggle(props) {
   return <CollectionsList {...props} />
 }
 
-function CollectionsListWithMyStuff({ collections, ...props }) {
+function MyStuffCollectionLoader(collections) {
   let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
   myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
 
   const { value: projects } = useCollectionProjects(myStuffCollection);
   console.log({ projects });
+  
+  return myStuffCollection
+}
+
+
+function CollectionsListWithMyStuff({ collections, ...props }) {
+  let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
+  
+  if (myStuffCollection.length > 0) {
+    <MyStuffCollectionLoader>
+      {(collectionsWithMyStuffLoaded) => <CollectionList collections={collectionsWithMyStuffLoaded} />}
+    </MyStuffCollectionLoader>
+  }
   if (!collections[0].isBookmarkCollection && projects.length < 0) {
     collections.unshift(myStuffCollection);
   }
