@@ -7,19 +7,17 @@ import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';
+import { useGlobals } from 'State/globals';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';
 
 export { WrappingLink, TrackedExternalLink };
 
-const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
-
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+  const { origin, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
-    const currentUrl = new URL(window.location.href);
-    const targetUrl = new URL(to, currentUrl);
-
-    if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
+    const targetUrl = new URL(to, origin);
+    if (targetUrl.origin !== origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route))) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}

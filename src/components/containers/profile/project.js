@@ -12,7 +12,7 @@ const getAvatarUrl = (currentUser, isAuthorized, project) => {
   if (project.suspendedReason && !isAuthorized && !currentUser.isSupport) {
     return suspendedAvatarUrl;
   }
-  return getProjectAvatarUrl(project.id).concat('?', project._avatarCache); // eslint-disable-line no-underscore-dangle
+  return getProjectAvatarUrl(project.id).concat('?', project.avatarUpdatedAt);
 };
 
 const ProjectProfileContainer = ({ currentUser, project, children, avatarActions, isAuthorized }) => (
