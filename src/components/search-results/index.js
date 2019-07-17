@@ -33,7 +33,6 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
   return (
     <>
       <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />
-      {activeFilter === 'all' && <h1>All results for {query}</h1>}
     </>
   );
 };
@@ -124,16 +123,12 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     .filter((group) => group.results.length > 0);
 
   return (
-    <main className={styles.page}>
-      {!ready && (
-        <>
-          <Loader />
-          <h1>All results for {query}</h1>
-        </>
-      )}
+    <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
         <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} query={query} />
       )}
+      {activeFilter === 'all' && <h1>All results for {query}</h1>}
+      {!ready && <Loader />}
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>
