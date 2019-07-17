@@ -107,6 +107,7 @@ export const MyStuffItem = ({ collection }) => {
         style={collectionColorStyles(collection)}
       >
         <div className={styles.avatarContainer}>
+          {/* TODO replace with real icon */}
           <CollectionAvatar collection={collection} />
         </div>
         <div className={styles.nameDescriptionContainer}>

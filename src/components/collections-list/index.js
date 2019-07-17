@@ -25,33 +25,19 @@ const nullMyStuffCollection = {
   name: 'My Stuff',
   description: 'My place to save cool finds',
   coverColor: '#ffccf9',
-  projects: []
+  projects: [],
+  id: "My Stuff"
 };
 
-
 function CollectionsListWithDevToggle(props) {
-  /*
-    Plan: 
-    - add MyStuff to ordered Collections if it doesn't exist yet
-    - first collection in orderedCollections should get rendered differently
-    - create that component
-      - not deletable
-      - when empty and not authed it doesn't show up
-      - when you click it you create it for real in the database?
-  */
-
   const myStuffEnabled = useDevToggle('My Stuff');
-  if (myStuffEnabled) {
-    return <CollectionsListWithMyStuff {...props} />
-  } 
-  
-  return <CollectionsList {...props} />
+  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />
 }
 
 function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
   
-  if (projects.length > 0) { // or user is authorized
+  if (projects.length > 0 || props.isAuthorized) {
     myStuffCollection.projects = projects;
     collections.unshift(myStuffCollection);
   }
@@ -60,16 +46,15 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-  console.log(63, myStuffCollection)
-  if (myStuffCollection.length > 0) {
-    return (
-      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />
-    );
+  
+  if (myStuffCollection.length === 0 && props.isAuthorized) {
+    collections.unshift(nullMyStuffCollection);
+    return <CollectionsList collections={collections} {...props} />;
   }
   
-  collections.unshift(nullMyStuffCollection);
-  console.log("after unshift", collections)
-  return <CollectionsList collections={collections} {...props} />;
+  return (
+    <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />
+  );
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
@@ -89,7 +74,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   const myStuffEnabled = useDevToggle('My Stuff');
-  console.log("myStuffEnabled", myStuffEnabled)
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
