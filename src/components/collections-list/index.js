@@ -21,14 +21,14 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-const createNullMyStuffCollection = () => ({
+const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: 'My Stuff',
   description: 'My place to save cool finds',
   coverColor: pickRandomColor(),
   projects: [],
   id: 'My Stuff',
-});
+};
 
 function CollectionsListWithDevToggle(props) {
   const myStuffEnabled = useDevToggle('My Stuff');
@@ -46,10 +46,9 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
+  console.log("hi")
   const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
-  React.useEffect(() => {
-    
-  })
+  
   if (myStuffCollection) {
     return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
   }
@@ -59,7 +58,7 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
   }
 
   if (props.isAuthorized) {
-    collections.unshift(createNullMyStuffCollection());
+    collections.unshift(nullMyStuffCollection);
     return <CollectionsList collections={collections} {...props} />;
   }
 }
