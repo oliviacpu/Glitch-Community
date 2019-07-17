@@ -33,7 +33,16 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const canMakeCollections = isAuthorized && !!currentUser;
 
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
+  /*
+    Plan: 
+    - add MyStuff to ordered Collections if it doesn't exist yet
+    - first collection in orderedCollections should get rendered differently
+    - create that component
+      - not deletable
+      - when empty and not authed it doesn't show up
+      - when 
+  */
+  
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
