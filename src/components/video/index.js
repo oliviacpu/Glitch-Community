@@ -15,22 +15,25 @@ function Video({ sources, muted, ...props }) {
   const [visibleVideos, setVisibleVideos] = useState(filterVideos());
   useEffect(
     () => {
-      const visibleVideos = filterVideos();
-      
+      const videos = filterVideos();
+
       // confirm that videos with audio have a caption track
       if (!muted) {
-        for (let i = 0; i < visibleVideos.length; i++) {
-          const video = visibleVideos[i];
+        for (const video of visibleVideos) {
           if (!video.track) {
-            // if using a video with background music but no lyrics or words, create a .vtt file that describes the mood of the music:
-            // WEBVTT
-            // 
-            // (cheerful polka music)
             throw new Error(`No caption track provided for asset ${video.src}`);
+
+            // if a video has words, it needs a complete caption track
+            // if the video has background music but no lyrics or words, use a .vtt file that describes the mood of the music:
+            //
+            // WEBVTT
+            //
+            // 00:01.00 --> 00:14.00
+            // (CHEERFUL POLKA MUSIC)
           }
         }
       }
-      setVisibleVideos(filterVideos());
+      setVisibleVideos(videos);
     },
     [windowWidth],
   );
