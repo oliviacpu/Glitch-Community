@@ -171,8 +171,8 @@ storiesOf('Video', module)
   .add('default', () => (
     <Video
       sources={[
-        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4', minWidth: 0, maxWidth: 669, track: 'https://cdn.glitch.com/d495650d-c651-418d-a4bc-d0574c3a3816%2Fempty-caption-track.vtt?' },
-        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4', minWidth: 700, track: 'https://cdn.glitch.com/d495650d-c651-418d-a4bc-d0574c3a3816%2Fempty-caption-track.vtt?' },
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4', minWidth: 0, maxWidth: 669, track: 'some-caption-track.vtt' },
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4', minWidth: 700, track: 'some-caption-track.vtt' },
       ]}
       muted
       autoPlay
