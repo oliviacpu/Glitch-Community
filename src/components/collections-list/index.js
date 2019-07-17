@@ -7,9 +7,10 @@ import Grid from 'Components/containers/grid';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
-
+ 
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
     <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
@@ -42,11 +43,14 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const canMakeCollections = isAuthorized && !!currentUser;
 
   let orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-  console.log(1, { orderedCollections })
-  let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
-  console.log(2, { orderedCollections })
-  myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection
-  orderedCollections.unshift(myStuffCollection)
+  
+  const myStuffEnabled = useDevToggle('My Stuff');
+  if (myStuffEnabled) {
+    // 
+    let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
+    myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection
+    orderedCollections.unshift(myStuffCollection);
+  }
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
@@ -56,7 +60,6 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       - when empty and not authed it doesn't show up
       - when you click it you create it for real in the database?
   */
-  console.log(3, {orderedCollections})
 
   if (!hasCollections && !canMakeCollections) {
     return null;
