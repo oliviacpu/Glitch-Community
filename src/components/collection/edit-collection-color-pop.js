@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import randomColor from 'randomcolor';
 import { throttle } from 'lodash';
 
 import { getContrastWithDarkText, getContrastWithLightText, pickRandomColor } from 'Utils/color';

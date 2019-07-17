@@ -33,5 +33,5 @@ export function pickRandomColor() {
   if (isGoodColorContrast(newColor)) {
     return newColor;
   }
-  pickRandomColor();
+  return pickRandomColor();
 }

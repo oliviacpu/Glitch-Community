@@ -9,6 +9,7 @@ import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
 import { useCollectionProjects } from 'State/collection';
+import { pickRandomColor } from 'Utils/color';
 
 import styles from './styles.styl';
 
@@ -20,14 +21,14 @@ const CreateFirstCollection = () => (
   </div>
 );
 
-const nullMyStuffCollection = {
+const createNullMyStuffCollection = () => ({
   isBookmarkCollection: true,
   name: 'My Stuff',
   description: 'My place to save cool finds',
-  coverColor: '#ffccf9', 
+  coverColor: pickRandomColor(),
   projects: [],
   id: 'My Stuff',
-};
+});
 
 function CollectionsListWithDevToggle(props) {
   const myStuffEnabled = useDevToggle('My Stuff');
@@ -46,6 +47,9 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
+  React.useEffect(() => {
+    
+  })
   if (myStuffCollection) {
     return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
   }
@@ -55,7 +59,7 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
   }
 
   if (props.isAuthorized) {
-    collections.unshift(nullMyStuffCollection);
+    collections.unshift(createNullMyStuffCollection());
     return <CollectionsList collections={collections} {...props} />;
   }
 }
