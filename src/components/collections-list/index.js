@@ -33,6 +33,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const canMakeCollections = isAuthorized && !!currentUser;
 
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+  let myStuffCollection = orderedCollections
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
@@ -40,9 +41,10 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
     - create that component
       - not deletable
       - when empty and not authed it doesn't show up
-      - when 
+      - when you click it you create it for real in the database?
   */
-  
+  console.log({orderedCollections})
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
