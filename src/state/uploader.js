@@ -9,7 +9,7 @@ import Text from 'Components/text/text';
 const NotifyUploading = ({ progress }) => (
   <>
     <Text>Uploading asset</Text>
-    <Progress value={0.05} />
+    <Progress value={progress} />
   </>
 );
 const NotifyError = ({ error }) => {
@@ -41,7 +41,7 @@ async function uploadWrapper(notifications, upload) {
     return result;
   }
 
-  //removeNotification();
+  removeNotification();
   notifications.createNotification('Image uploaded!');
   return result;
 }
