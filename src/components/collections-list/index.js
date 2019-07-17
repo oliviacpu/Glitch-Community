@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
-import CollectionItem from 'Components/collection/collection-item';
+import CollectionItem, { MyStuffItem } from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPIHandlers } from 'State/api';
@@ -71,15 +71,15 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
         </>
       )}
       <Grid items={orderedCollections}>
-        {(collection, idx) => {
-          console.log(idx)
-          return <CollectionItem
+        {(collection) => collection.isBookmarkCollection ?
+          <div>My stuff</div> :
+          <CollectionItem
             collection={collection}
             isAuthorized={isAuthorized}
             deleteCollection={() => deleteCollection(collection)}
             showCurator={showCurator}
           />
-        }}
+        }
       </Grid>
     </article>
   );

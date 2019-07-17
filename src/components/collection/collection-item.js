@@ -88,6 +88,31 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
+export const MyStuffItem = ({ collection }) => {
+  return (
+    <div className={styles.collectionItem}>
+      <CollectionLink
+        collection={collection}
+        className={classNames(styles.linkBody)}
+        style={collectionColorStyles(collection)}
+      >
+        <div className={styles.avatarContainer}>
+          <CollectionAvatar collection={collection} />
+        </div>
+        <div className={styles.nameDescriptionContainer}>
+          <div className={styles.itemButtonWrap}>
+            <Button decorative>{collection.name}</Button>
+          </div>
+          <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
+            <Markdown length={100}>{collection.description || ' '}</Markdown>
+          </div>
+        </div>
+      </CollectionLink>
+      <CollectionProjectsLoader collection={collection}  />
+    </div>
+  )
+}
+
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
