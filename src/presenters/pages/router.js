@@ -73,6 +73,7 @@ const Router = () => (
       <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+      <Route path="/pupdate/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
 
       <Route
         path="/login/facebook"
