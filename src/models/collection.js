@@ -1,7 +1,7 @@
 import { kebabCase } from 'lodash';
-import randomColor from 'randomcolor';
 
 import { CDN_URL } from 'Utils/constants';
+import { pickRandomColor } from 'Utils/color';
 
 import { getLink as getTeamLink } from './team';
 import { getLink as getUserLink } from './user';
@@ -32,8 +32,6 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
-export const 
-
 export async function createCollection(api, name, teamId, createNotification) {
   let description = '';
   let generatedName = false;
@@ -51,7 +49,7 @@ export async function createCollection(api, name, teamId, createNotification) {
   }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;
-  const coverColor = randomColor({ luminosity: 'light' }); // get a random color
+  const coverColor = pickRandomColor();
 
   try {
     const { data: collection } = await api.post('collections', {
