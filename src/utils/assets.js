@@ -142,8 +142,10 @@ export function requestFile(callback) {
   console.log('input created: ', input);
 }
 
-export function uploadAsset(blob, policy, key, options = {}) {
-  return S3Uploader(policy).upload({ key, blob, ...options });
+export function uploadAsset(blob, policy, key, progressHandler, options = {}) {
+  const upload = S3Uploader(policy).upload({ key, blob, ...options });
+  upload.progress(progressHandler);
+  
 }
 
 export const useAssetPolicy = () => {
