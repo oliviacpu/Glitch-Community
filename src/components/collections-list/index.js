@@ -11,7 +11,7 @@ import useDevToggle from 'State/dev-toggles';
 import { useCollectionProjects } from 'State/collection';
 
 import styles from './styles.styl';
- 
+
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
     <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
@@ -22,11 +22,40 @@ const CreateFirstCollection = () => (
 
 const nullMyStuffCollection = {
   isBookmarkCollection: true,
-  name: "My Stuff",
-  description: "My place to save cool finds",
-  fullUrl: "sarahzinger/my-stuff",
+  name: 'My Stuff',
+  description: 'My place to save cool finds',
+  fullUrl: 'sarahzinger/my-stuff',
   id: 9970,
-  coverColor: "#ffccf9"
+  coverColor: '#ffccf9',
+};
+
+function CollectionsListWithMyStuffWrapper(props) {
+  /*
+    Plan: 
+    - add MyStuff to ordered Collections if it doesn't exist yet
+    - first collection in orderedCollections should get rendered differently
+    - create that component
+      - not deletable
+      - when empty and not authed it doesn't show up
+      - when you click it you create it for real in the database?
+  */
+
+  const myStuffEnabled = useDevToggle('My Stuff');
+  if (myStuffEnabled) {
+    return <CollectionsList 
+  }
+  React.useEffect(() => {
+    if (myStuffEnabled) {
+      // find or create MyStuff Collection, move it to the front of list
+      let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
+      myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
+      const { value: projects } = useCollectionProjects(myStuffCollection);
+      console.log({ projects });
+      collections.unshift(myStuffCollection);
+    }
+  }, []);
+
+  return <CollectionsList collections={collections} {...props} />;
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
@@ -43,33 +72,9 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
-  let orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-  
+  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
   const myStuffEnabled = useDevToggle('My Stuff');
-  if (myStuffEnabled) {
-    
-  }
-  
-  React.useEffect(() => {
-    if (myStuffEnabled) {
-      // find or create MyStuff Collection, move it to the front of list
-      let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
-      myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
-      const { value: projects } = useCollectionProjects(myStuffCollection);
-      console.log({projects})
-      orderedCollections.unshift(myStuffCollection);
-    }
-  }, [])
-  
-  /*
-    Plan: 
-    - add MyStuff to ordered Collections if it doesn't exist yet
-    - first collection in orderedCollections should get rendered differently
-    - create that component
-      - not deletable
-      - when empty and not authed it doesn't show up
-      - when you click it you create it for real in the database?
-  */
 
   if (!hasCollections && !canMakeCollections) {
     return null;
@@ -84,18 +89,10 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
         </>
       )}
       <Grid items={orderedCollections}>
-        {(collection) => {
-          if (myStuffEnabled) {
-            return collection.isBookmarkCollection ?
-              <MyStuffItem collection={collection} /> :
-              <CollectionItem
-                collection={collection}
-                isAuthorized={isAuthorized}
-                deleteCollection={() => deleteCollection(collection)}
-                showCurator={showCurator}
-              />
-          }
-          return (
+        {(collection) =>
+          myStuffEnabled && collection.isBookmarkCollection ? (
+            <MyStuffItem collection={collection} />
+          ) : (
             <CollectionItem
               collection={collection}
               isAuthorized={isAuthorized}
@@ -103,7 +100,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
               showCurator={showCurator}
             />
           )
-        }}
+        }
       </Grid>
     </article>
   );
@@ -123,4 +120,4 @@ CollectionsList.defaultProps = {
   showCurator: false,
 };
 
-export default CollectionsList;
+export default CollectionsListWithMyStuffWrapper;
