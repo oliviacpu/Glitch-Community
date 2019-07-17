@@ -13,6 +13,7 @@ const api = axios.create({
 });
 
 let homeCache = null;
+let pupdateCache = null;
 
 async function getHomeData() {
   if (!homeCache) {
@@ -27,7 +28,23 @@ async function saveHomeDataToFile({ data, persistentToken }) {
   if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
 
   homeCache = data;
-  await fs.writeFile(path.join(__dirname, '../src/curated/home.json'), JSON.stringify(data), { encoding: 'utf8' });
+  await fs.writeFile(path.join(__dirname, '../src/curated/pupdate.json'), JSON.stringify(data), { encoding: 'utf8' });
 }
 
-module.exports = { getHomeData, saveHomeDataToFile };
+async function getPupdateData() {
+  if (!pupdateCache) {
+    const json = await fs.readFile(path.join(__dirname, '../src/curated/pupdate.json'));
+    pupdateCache = JSON.parse(json);
+  }
+  return pupdateCache;
+}
+
+async function savePupdateDataToFile({ data, persistentToken }) {
+  const teams = await getAllPages(api, `/v1/users/by/persistentToken/teams?persistentToken=${persistentToken}&limit=100`);
+  if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
+
+  pupdateCache = data;
+  await fs.writeFile(path.join(__dirname, '../src/curated/pupdate.json'), JSON.stringify(data), { encoding: 'utf8' });
+}
+
+module.exports = { getHomeData, saveHomeDataToFile, getPupdateData, savePupdateDataToFile };

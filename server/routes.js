@@ -14,7 +14,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { getHomeData, saveHomeDataToFile } = require('./home');
+const { getHomeData, saveHomeDataToFile, getPupdateData, savePupdateDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -219,6 +219,23 @@ module.exports = function(external) {
     const data = req.body;
     try {
       await saveHomeDataToFile({ persistentToken, data });
+      res.sendStatus(200);
+    } catch (e) {
+      console.warn(e);
+      res.sendStatus(403);
+    }
+  });
+  
+  app.get('/api/pupdate', async (req, res) => {
+    const data = await getPupdateData();
+    res.send(data);
+  });
+
+  app.post('/api/pupdate', async (req, res) => {
+    const persistentToken = req.headers.authorization;
+    const data = req.body;
+    try {
+      await savePupdateDataToFile({ persistentToken, data });
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
