@@ -289,7 +289,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video muted autoPlay loop sources={[{ src: video, minWidth: 670 }]} />
+        <Video autoPlay loop sources={[{ src: video, minWidth: 670 }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
