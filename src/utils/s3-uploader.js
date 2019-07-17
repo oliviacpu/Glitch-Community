@@ -144,8 +144,8 @@ var extractPolicyData = function(policy) {
 const isSuccess = (request) => request.status.toString()[0] === '2';
 
 var sendForm = (url, formData) => {
-  let progressHandlers = [];
-  const promise = new Promise(function(resolve, reject, notify) {
+  const progressHandlers = [];
+  const promise = new Promise(function(resolve, reject) {
     const request = new XMLHttpRequest();
 
     request.open('POST', url, true);
@@ -155,6 +155,7 @@ var sendForm = (url, formData) => {
         try {
           handler(event);
         } catch (error) {
+          console.log(handler, error);
           captureException(error);
         }
       });
