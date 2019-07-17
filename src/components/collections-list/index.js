@@ -18,6 +18,12 @@ const CreateFirstCollection = () => (
   </div>
 );
 
+const nullMyStuffCollection = {
+  isBookmarkCollection: true,
+  name: "My Stuff",
+  description: "My place to save cool finds"
+}
+
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
@@ -33,7 +39,8 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const canMakeCollections = isAuthorized && !!currentUser;
 
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-  let myStuffCollection = orderedCollections
+  let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
+  myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
