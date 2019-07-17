@@ -60,7 +60,7 @@ dependencies:
   nodemon: 1.19.1
   prop-types: 15.7.2
   punycode: 2.1.1
-  qrcode: 1.4.0
+  qrcode: 1.4.1
   quantize: 1.0.2
   randomcolor: 0.5.4
   react: 16.8.6
@@ -3222,7 +3222,7 @@ packages:
     dependencies:
       '@types/events': 3.0.0
       '@types/minimatch': 3.0.3
-      '@types/node': 12.6.6
+      '@types/node': 12.6.8
     dev: false
     resolution:
       integrity: sha512-1Bh06cbWJUHMC97acuD6UMG29nMt0Aqz1vF3guLfG+kHHJhy3AyohZFFxYk2f7Q1SQIrNwvncxAE0N/9s70F2w==
@@ -3230,10 +3230,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
-  /@types/node/12.6.6:
+  /@types/node/12.6.8:
     dev: false
     resolution:
-      integrity: sha512-SMgj3x28MkJyHdWaMv/g/ca3LYDi5gR7O8mX0VKazvFOnmlDXctSEdd/8jfSqozjKFK1R9If1QZWkafX7yQTpA==
+      integrity: sha512-aX+gFgA5GHcDi89KG5keey2zf0WfZk/HAQotEamsK2kbey+8yGKcson0hbK8E+v0NArlCJQCqMP161YhV6ZXLg==
   /@types/q/1.5.2:
     dev: false
     resolution:
@@ -10914,7 +10914,7 @@ packages:
       teleport: '>=0.2.0'
     resolution:
       integrity: sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
-  /qrcode/1.4.0:
+  /qrcode/1.4.1:
     dependencies:
       dijkstrajs: 1.0.1
       isarray: 2.0.5
@@ -10925,7 +10925,7 @@ packages:
       node: '>=4'
     hasBin: true
     resolution:
-      integrity: sha512-18u+bdSosXO0+wx6F1UUFzJz01VRfMBcb/wbBw/tKYRD0A2Vho5WQ4xz30pHwhh4IE/qhObqIs5yNO0mGdHKkA==
+      integrity: sha512-3JhHQJkKqJL4PfoM6t+B40f0GWv9eNJAJmuNx2X/sHEOLvMyvEPN8GfbdN1qmr19O8N2nLraOzeWjXocHz1S4w==
   /qs/6.5.2:
     dev: false
     engines:
@@ -13775,7 +13775,7 @@ specifiers:
   core-js: ^3.1.2
   css-loader: ^2.1.1
   d3-array: ^2.0.3
-  dayjs: ^1.8.8
+  dayjs: ^1.8.15
   details-element-polyfill: ^2.3.1
   dotenv: ^8.0.0
   ejs: ^2.6.2
