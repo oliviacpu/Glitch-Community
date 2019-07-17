@@ -38,8 +38,8 @@ export const NotificationsProvider = (props) => {
     return notification.id;
   };
 
-  const createError = (content = 'Something went wrong. Try refreshing?', opts) => {
-    create(content, ...opts);
+  const createError = (content = 'Something went wrong. Try refreshing?', opts = {}) => {
+    create(content, { type: 'error', ...opts });
   };
 
   const funcs = {
