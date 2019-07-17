@@ -8,6 +8,7 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
+import { useCollectionProjects } from 'State/collection';
 
 import styles from './styles.styl';
  
@@ -46,11 +47,20 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   
   const myStuffEnabled = useDevToggle('My Stuff');
   if (myStuffEnabled) {
-    // 
-    let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
-    myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection
-    orderedCollections.unshift(myStuffCollection);
+    
   }
+  
+  React.useEffect(() => {
+    if (myStuffEnabled) {
+      // find or create MyStuff Collection, move it to the front of list
+      let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
+      myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
+      const { value: projects } = useCollectionProjects(myStuffCollection);
+      console.log({projects})
+      orderedCollections.unshift(myStuffCollection);
+    }
+  }, [])
+  
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
@@ -74,15 +84,26 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
         </>
       )}
       <Grid items={orderedCollections}>
-        {(collection) => collection.isBookmarkCollection ?
-          <MyStuffItem collection={collection} /> :
-          <CollectionItem
-            collection={collection}
-            isAuthorized={isAuthorized}
-            deleteCollection={() => deleteCollection(collection)}
-            showCurator={showCurator}
-          />
-        }
+        {(collection) => {
+          if (myStuffEnabled) {
+            return collection.isBookmarkCollection ?
+              <MyStuffItem collection={collection} /> :
+              <CollectionItem
+                collection={collection}
+                isAuthorized={isAuthorized}
+                deleteCollection={() => deleteCollection(collection)}
+                showCurator={showCurator}
+              />
+          }
+          return (
+            <CollectionItem
+              collection={collection}
+              isAuthorized={isAuthorized}
+              deleteCollection={() => deleteCollection(collection)}
+              showCurator={showCurator}
+            />
+          )
+        }}
       </Grid>
     </article>
   );
