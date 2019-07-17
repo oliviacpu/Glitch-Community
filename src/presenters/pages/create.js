@@ -289,7 +289,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video controls sources={[{ src: video, minWidth: 670, track: 'https://cdn.glitch.com/d495650d-c651-418d-a4bc-d0574c3a3816%2Ftest.vtt?v=1563391557512' }]} />
+        <Video controls sources={[{ src: video, minWidth: 670, track: 'https://cdn.glitch.com/d495650d-c651-418d-a4bc-d0574c3a3816%2Ftest.vtt?v=1563392541154' }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -424,7 +424,7 @@ function VSCode() {
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <Video
             sources={[
-              { src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 670, },
+              { src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 670 },
             ]}
             muted
             autoPlay

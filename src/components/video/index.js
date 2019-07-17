@@ -15,26 +15,24 @@ function Video({ sources, muted, ...props }) {
   const [visibleVideos, setVisibleVideos] = useState(filterVideos());
   useEffect(
     () => {
-      setVisibleVideos(filterVideos());
-    },
-    [windowWidth],
-  );
-
-  useEffect(
-    () => {
-      console.log('validating');
+      const visibleVideos = filterVideos();
+      
+      // confirm that videos with audio have a caption track
       if (!muted) {
         for (let i = 0; i < visibleVideos.length; i++) {
-          const video = !visibleVideos[i];
+          const video = visibleVideos[i];
           if (!video.track) {
-            // if using a video with background music but no lyrics or words, create a .vtt file that describes the mood of the music;
-            //
-            return new Error(`No caption track provided for asset ${video.src}`);
+            // if using a video with background music but no lyrics or words, create a .vtt file that describes the mood of the music:
+            // WEBVTT
+            // 
+            // (cheerful polka music)
+            throw new Error(`No caption track provided for asset ${video.src}`);
           }
         }
       }
+      setVisibleVideos(filterVideos());
     },
-    [visibleVideos],
+    [windowWidth],
   );
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
