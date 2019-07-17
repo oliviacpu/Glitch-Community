@@ -47,6 +47,10 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
   
+  if (myStuffCollection.length === 0 && !props.isAuthorized) {
+    return <CollectionsList collections={collections} {...props} />;
+  }
+  
   if (myStuffCollection.length === 0 && props.isAuthorized) {
     collections.unshift(nullMyStuffCollection);
     return <CollectionsList collections={collections} {...props} />;
