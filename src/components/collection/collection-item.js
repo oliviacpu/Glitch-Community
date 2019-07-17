@@ -113,7 +113,7 @@ export const MyStuffItem = ({ collection }) => {
         collection.projects.length === 0 && (
           <div className={classNames(styles.projectsContainer, styles.empty)}>
             <Text>
-              This collection is empty – add some projects <Emoji name="index" />
+              (placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection
             </Text>
           </div>
         )
