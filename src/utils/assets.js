@@ -144,7 +144,7 @@ export function requestFile(callback) {
 
 export function uploadAsset(blob, policy, key, progressHandler, options = {}) {
   const [promise, progress] = S3Uploader(policy).upload({ key, blob, ...options });
-  progress(progressHandler);
+  if (progressHandler) progress(progressHandler);
   return promise;
 }
 

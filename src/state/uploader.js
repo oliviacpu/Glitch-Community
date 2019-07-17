@@ -41,7 +41,7 @@ async function uploadWrapper(notifications, upload) {
     return result;
   }
 
-  removeNotification();
+  //removeNotification();
   notifications.createNotification('Image uploaded!');
   return result;
 }

@@ -155,7 +155,6 @@ var sendForm = (url, formData) => {
         try {
           handler(event);
         } catch (error) {
-          console.log(handler, error);
           captureException(error);
         }
       });
