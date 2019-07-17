@@ -143,9 +143,9 @@ export function requestFile(callback) {
 }
 
 export function uploadAsset(blob, policy, key, progressHandler, options = {}) {
-  const upload = S3Uploader(policy).upload({ key, blob, ...options });
-  upload.progress(progressHandler);
-  
+  const [promise, progress] = S3Uploader(policy).upload({ key, blob, ...options });
+  progress(progressHandler);
+  return promise;
 }
 
 export const useAssetPolicy = () => {
@@ -160,8 +160,7 @@ export const useAssetPolicy = () => {
 };
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
-  const upload = uploadAsset(blob, policy, 'original');
-  upload.progress(progressHandler);
+  const upload = uploadAsset(blob, policy, 'original', progressHandler);
 
   const scaledUploads = Object.keys(sizes).map((tag) => resizeImage(blob, sizes[tag]).then((resized) => uploadAsset(resized, policy, tag)));
 
