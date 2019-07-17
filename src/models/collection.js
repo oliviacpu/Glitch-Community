@@ -32,6 +32,8 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
+export const 
+
 export async function createCollection(api, name, teamId, createNotification) {
   let description = '';
   let generatedName = false;

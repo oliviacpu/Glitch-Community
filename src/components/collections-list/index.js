@@ -24,7 +24,7 @@ const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: 'My Stuff',
   description: 'My place to save cool finds',
-  coverColor: '#ffccf9',
+  coverColor: '#ffccf9', 
   projects: [],
   id: 'My Stuff',
 };
