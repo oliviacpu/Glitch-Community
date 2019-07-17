@@ -29,8 +29,6 @@ const nullMyStuffCollection = {
 };
 
 
-
-
 function CollectionsListWithDevToggle(props) {
   /*
     Plan: 
@@ -62,7 +60,7 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props}) {
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-  
+  console.log(63, myStuffCollection)
   if (myStuffCollection.length > 0) {
     return (
       <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />
@@ -70,6 +68,7 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
   }
   
   collections.unshift(nullMyStuffCollection);
+  console.log("after unshift", collections)
   return <CollectionsList collections={collections} {...props} />;
 }
 
@@ -90,7 +89,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   const myStuffEnabled = useDevToggle('My Stuff');
-
+  console.log("myStuffEnabled", myStuffEnabled)
   if (!hasCollections && !canMakeCollections) {
     return null;
   }

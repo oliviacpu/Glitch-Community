@@ -87,11 +87,21 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
+  return (
+    <div onClick={() => console.log("would have created a my stuff collection and redirected to it")} {...props} >
+      {children}
+    </div>
+  )
+}
+
 export const MyStuffItem = ({ collection }) => {
+  const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
+        
   return (
     <div className={styles.collectionItem}>
       <div className={styles.header}></div>
-      <CollectionLink
+      <CollectionLinkComponent
         collection={collection}
         className={classNames(styles.linkBody)}
         style={collectionColorStyles(collection)}
@@ -107,7 +117,7 @@ export const MyStuffItem = ({ collection }) => {
             <Markdown length={100}>{collection.description || ' '}</Markdown>
           </div>
         </div>
-      </CollectionLink>
+      </CollectionLinkComponent>
       {
         collection.projects.length === 0 && (
           <div className={classNames(styles.projectsContainer, styles.empty)}>
