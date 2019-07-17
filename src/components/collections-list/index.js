@@ -21,7 +21,10 @@ const CreateFirstCollection = () => (
 const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: "My Stuff",
-  description: "My place to save cool finds"
+  description: "My place to save cool finds",
+  fullUrl: "sarahzinger/my-stuff",
+  id: 9970,
+  coverColor: "#ffccf9"
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
@@ -38,9 +41,12 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
-  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+  let orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+  console.log(1, { orderedCollections })
   let myStuffCollection = orderedCollections.filter(collection => collection.isBookmarkCollection);
+  console.log(2, { orderedCollections })
   myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection
+  orderedCollections.unshift(myStuffCollection)
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
@@ -50,7 +56,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       - when empty and not authed it doesn't show up
       - when you click it you create it for real in the database?
   */
-  console.log({orderedCollections})
+  console.log(3, {orderedCollections})
 
   if (!hasCollections && !canMakeCollections) {
     return null;
@@ -65,14 +71,15 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
         </>
       )}
       <Grid items={orderedCollections}>
-        {(collection) => (
-          <CollectionItem
+        {(collection, idx) => {
+          console.log(idx)
+          return <CollectionItem
             collection={collection}
             isAuthorized={isAuthorized}
             deleteCollection={() => deleteCollection(collection)}
             showCurator={showCurator}
           />
-        )}
+        }}
       </Grid>
     </article>
   );
