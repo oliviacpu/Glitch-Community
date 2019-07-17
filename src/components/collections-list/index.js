@@ -25,11 +25,13 @@ const nullMyStuffCollection = {
   name: 'My Stuff',
   description: 'My place to save cool finds',
   fullUrl: 'sarahzinger/my-stuff',
-  id: 9970,
   coverColor: '#ffccf9',
 };
 
-function CollectionsListWithMyStuffWrapper(props) {
+
+
+
+function CollectionsListWithDevToggle(props) {
   /*
     Plan: 
     - add MyStuff to ordered Collections if it doesn't exist yet
@@ -42,18 +44,21 @@ function CollectionsListWithMyStuffWrapper(props) {
 
   const myStuffEnabled = useDevToggle('My Stuff');
   if (myStuffEnabled) {
-    return <CollectionsList 
+    return <CollectionsListWithMyStuff {...props} />
+  } 
+  
+  return <CollectionsList {...props} />
+}
+
+function CollectionsListWithMyStuff({ collections, ...props }) {
+  let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
+  myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
+
+  const { value: projects } = useCollectionProjects(myStuffCollection);
+  console.log({ projects });
+  if (!collections[0].isBookmarkCollection && projects.length < 0) {
+    collections.unshift(myStuffCollection);
   }
-  React.useEffect(() => {
-    if (myStuffEnabled) {
-      // find or create MyStuff Collection, move it to the front of list
-      let myStuffCollection = collections.filter((collection) => collection.isBookmarkCollection);
-      myStuffCollection = myStuffCollection.length > 0 ? myStuffCollection[0] : nullMyStuffCollection;
-      const { value: projects } = useCollectionProjects(myStuffCollection);
-      console.log({ projects });
-      collections.unshift(myStuffCollection);
-    }
-  }, []);
 
   return <CollectionsList collections={collections} {...props} />;
 }
@@ -120,4 +125,4 @@ CollectionsList.defaultProps = {
   showCurator: false,
 };
 
-export default CollectionsListWithMyStuffWrapper;
+export default CollectionsListWithDevToggle;
