@@ -46,9 +46,8 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  console.log("hi")
   const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
-  
+
   if (myStuffCollection) {
     return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
   }
