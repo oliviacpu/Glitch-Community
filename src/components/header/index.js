@@ -25,7 +25,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   return (
     <header role="banner" className={styles.header}>
       {/* https://github.com/ReactTraining/react-router/issues/394 not supported in react router links */}
-      <a href="#main" className={styles.visibleOnFocus}>Skip to Main Content</a>
+      <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
       <Link to="/" className={styles.logoWrap}>
         <Logo />
       </Link>

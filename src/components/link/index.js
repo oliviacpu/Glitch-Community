@@ -18,8 +18,10 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
   if (typeof to === 'string') {
     const currentUrl = new URL(window.location.href);
     const targetUrl = new URL(to, currentUrl);
-
-    if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
+    
+    const [, hash] = window.location.href.split('#');
+    
+    if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route)) || hash) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}
