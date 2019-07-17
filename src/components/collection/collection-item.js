@@ -36,7 +36,6 @@ const ProjectsLoading = () => (
 
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
-  console.log("collectionProjects", collection, projects)
   if (!projects) return <ProjectsLoading />;
 
   if (projects.length === 0 && isAuthorized) {
@@ -92,6 +91,7 @@ export const MyStuffItem = ({ collection }) => {
   console.log({ collection })
   return (
     <div className={styles.collectionItem}>
+      <div className={styles.header}></div>
       <CollectionLink
         collection={collection}
         className={classNames(styles.linkBody)}
@@ -109,7 +109,16 @@ export const MyStuffItem = ({ collection }) => {
           </div>
         </div>
       </CollectionLink>
-      <CollectionProjects collection={collection} isAuthorized={true}/>
+      {
+        collection.projects.length === 0 && (
+          <div className={classNames(styles.projectsContainer, styles.empty)}>
+            <Text>
+              This collection is empty – add some projects <Emoji name="index" />
+            </Text>
+          </div>
+        )
+      }
+      
     </div>
   )
 }

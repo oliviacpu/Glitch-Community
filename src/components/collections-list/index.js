@@ -26,6 +26,7 @@ const nullMyStuffCollection = {
   description: 'My place to save cool finds',
   fullUrl: 'sarahzinger/my-stuff',
   coverColor: '#ffccf9',
+  projects: []
 };
 
 
