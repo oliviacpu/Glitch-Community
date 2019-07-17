@@ -24,7 +24,6 @@ const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: 'My Stuff',
   description: 'My place to save cool finds',
-  fullUrl: 'sarahzinger/my-stuff',
   coverColor: '#ffccf9',
   projects: []
 };

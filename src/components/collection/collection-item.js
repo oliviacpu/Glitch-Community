@@ -88,7 +88,6 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 export const MyStuffItem = ({ collection }) => {
-  console.log({ collection })
   return (
     <div className={styles.collectionItem}>
       <div className={styles.header}></div>
