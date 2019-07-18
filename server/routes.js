@@ -76,8 +76,7 @@ module.exports = function(external) {
       built = false;
     }
 
-    console.log(req.hostname);
-    console.log(await renderPage(req.url));
+    console.log(await renderPage(`${req.protocol}://${req.hostname}`, req.url));
 
     res.render('index.ejs', {
       title,
