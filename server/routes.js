@@ -5,7 +5,6 @@ const fs = require('fs');
 const util = require('util');
 const dayjs = require('dayjs');
 const punycode = require('punycode');
-const { captureException } = require('@sentry/node');
 
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
@@ -77,13 +76,7 @@ module.exports = function(external) {
       built = false;
     }
 
-    let rendered = null;
-    try {
-      rendered = await renderPage(`${req.protocol}://${req.hostname}`, req.url)
-    } catch (error) {
-      captureException(error);
-      console.error(error);
-    }
+    const rendered = await renderPage(`${req.protocol}://${req.hostname}`, req.url)
 
     res.render('index.ejs', {
       title,

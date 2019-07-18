@@ -39,4 +39,28 @@ const render = async (origin, url) => {
   );
 };
 
-module.exports = render;
+const { captureException } = require('@sentry/node');
+const dayjs = require('dayjs');
+const { Cache } = require('memory-cache');
+
+const CACHE_TIMEOUT = dayjs.convert(1, 'hour', 'ms');
+const cache = new Cache();
+
+module.exports = async (origin, url) => {
+  let promise = cache.get(origin + url);
+  let trackError = false;
+  if (!promise) {
+    trackError = true;
+    promise = render(origin, url);
+    cache.put(origin + url, promise, CACHE_TIMEOUT);
+  }
+  try {
+    return await promise;
+  } catch (error) {
+    if (trackError) {
+      console.warn(`Failed to render ${url}: ${error.toString()}`);
+      captureException(error);
+    }
+    return null;
+  }
+};
