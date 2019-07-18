@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { throttle } from 'lodash';
 
-import { getContrastWithDarkText, getContrastWithLightText, pickRandomColor } from 'Utils/color';
+import { isGoodColorContrast, pickRandomColor } from 'Utils/color';
 import TextInput from 'Components/inputs/text-input';
 import ColorInput from 'Components/inputs/color';
 import Button from 'Components/buttons/button';
@@ -26,8 +26,6 @@ const formatAndValidateHex = (hex) => {
   }
   return null;
 };
-
-const isGoodColorContrast = (hex) => getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
 
 function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
   const [color, setColor] = useState(initialColor);
