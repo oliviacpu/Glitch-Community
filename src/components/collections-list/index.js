@@ -125,6 +125,7 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
 }
 
 function CollectionsListWithDevToggle(props) {
+  console.log(props)
   const myStuffEnabled = useDevToggle('My Stuff');
   return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
 }
