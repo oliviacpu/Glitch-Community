@@ -204,6 +204,7 @@ function ProjectsList({
   projects,
   layout,
   title,
+  stringTitle,
   placeholder,
   enableFiltering,
   enablePagination,
@@ -223,7 +224,7 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          <SkipSectionButtons sectionName={title}>
+          <SkipSectionButtons sectionName={stringTitle ? stringTitle : title}>
           {renderProjects((filteredProjects) => (
             <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
@@ -250,6 +251,7 @@ ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   layout: PropTypes.oneOf(['row', 'grid', 'gridCompact']).isRequired,
   title: PropTypes.node,
+  stringTitle: PropTypes.string,
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,

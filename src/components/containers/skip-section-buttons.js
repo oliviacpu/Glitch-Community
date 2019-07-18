@@ -1,18 +1,11 @@
 import React from 'react';
 import Button from 'Components/buttons/button';
-import useUniqueId from 'Hooks/use-unique-id';
 import styles from './skip-section-buttons.styl';
+import { snakeCase} from 'lodash';
 
 const SkipSectionButtons = ({ children, sectionName }) => {
-  const beforeId = useUniqueId();
-  const afterId = useUniqueId();
-  
-  let sectionNameDisplay = sectionName;
-  console.log(sectionName);
-  if (typeof(sectionName == ) {
-    const textNodes = [sectionName].filter((child) => ['p', 'P'].includes(child.tagName));
-    sectionNameDisplay = textNodes.reduce((str, node) => str + node.innerText, '');  
-  }
+  const beforeId = `before-${snakeCase(sectionName)}`;
+  const afterId = `after-${snakeCase(sectionName)}`;
   
   return (
     <>
