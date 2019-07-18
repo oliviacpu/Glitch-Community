@@ -25,6 +25,7 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
+import { useCollectionProjects } from 'State/collection';
 
 import styles from './team.styl';
 
@@ -197,6 +198,7 @@ function TeamPage({ team: initialTeam }) {
       <CollectionsList
         title="Collections"
         enablePagination
+        optimisticRequest={useCollectionProjects}
         enableFiltering={team.collections.length > 6}
         collections={team.collections.map((collection) => ({ ...collection, team }))}
         maybeTeam={team}
