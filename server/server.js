@@ -1,9 +1,13 @@
 const express = require('express');
 const compression = require('compression');
 const constants = require('./constants');
-const moduleAlias = require('module-alias');
 
+const moduleAlias = require('module-alias');
 moduleAlias.addAliases(require('../shared/aliases'));
+
+require('@babel/register')({
+  presets: ['@babel/preset-react'],
+});
 
 const sentryHelpers = require('Shared/sentryHelpers');
 
@@ -46,7 +50,7 @@ try {
 }
 
 // Extend dayjs with our conversion plugin
-require('dayjs').extend(require('../shared/dayjs-convert'));
+require('dayjs').extend(require('Shared/dayjs-convert'));
 
 const app = express();
 app.enable('trust proxy');
