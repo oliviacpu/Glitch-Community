@@ -53,7 +53,13 @@ function CollectionsList({
 
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
   return (
-    <FilterController matchFn={matchFn} searchPrompt={'find a collection'} enabled={enableFiltering} placeholder={placeholder} items={orderedCollections}>
+    <FilterController
+      matchFn={matchFn}
+      searchPrompt={'find a collection'}
+      enabled={enableFiltering}
+      placeholder={placeholder}
+      items={orderedCollections}
+    >
       {({ filterInput, renderItems }) => (
         <>
           <article data-cy="collections" className={styles.collections}>
@@ -61,7 +67,7 @@ function CollectionsList({
               <Heading tagName="h2">{title}</Heading>
               {filterInput}
             </div>
-            
+
             {canMakeCollections && (
               <>
                 <CreateCollectionButton team={maybeTeam} />
@@ -70,7 +76,7 @@ function CollectionsList({
             )}
 
             {renderItems((filteredProjects) => (
-              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage}>
+              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage} renderOptimistically>
                 {(paginatedCollections) => (
                   <Grid items={paginatedCollections}>
                     {(collection) => (

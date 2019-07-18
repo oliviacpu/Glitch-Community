@@ -101,6 +101,7 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
             </Button>
           </div>
+          {state.expanded && items.length }
           <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
             Show all <Badge>{numItems}</Badge>
           </Button>
