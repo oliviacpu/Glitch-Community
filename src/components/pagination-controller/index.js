@@ -40,7 +40,7 @@ const paginationReducer = (oldState, action) => {
   }
 };
 
-function PaginationController({ enabled, items, itemsPerPage, renderOptimistically, useApi, children }) {
+function PaginationController({ enabled, items, itemsPerPage, fetchData, useApi, children }) {
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
 
@@ -75,13 +75,9 @@ function PaginationController({ enabled, items, itemsPerPage, renderOptimistical
     const startIdx = (state.page - 1) * itemsPerPage;
     const nextItems = items.slice(startIdx + itemsPerPage, startIdx + (itemsPerPage * 2));
     items = items.slice(startIdx, startIdx + itemsPerPage);
-    console.log(nextItems.length);
     
     if (renderOptimistically) {
-      for (let item of nextItems) {
-        console.log(item)
-        useApi(item);
-      }
+      Promise.all(nextItems.map(item => useApi(item)));
     }
   }
 

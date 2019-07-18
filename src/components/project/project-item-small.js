@@ -15,12 +15,12 @@ const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={get
 
 const getLinkBodyStyles = (project) => classnames(styles.linkBodySmall, { [styles.private]: project.private });
 
-const ProjectItemSmall = ({ project, renderOptimistically }) => (
+const ProjectItemSmall = ({ project }) => (
   <div className={styles.projectItemSmall}>
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
         <span className={styles.avatarWrap}>
-          {renderOptimistically && !project ? <img src="" alt="" /> : <ProfileAvatar project={project} />}
+          <ProfileAvatar project={project} />}
         </span>
         <Text>
           <span className={styles.projectName}>{project.domain || ''}</span>{' '}
