@@ -5,10 +5,6 @@ const constants = require('./constants');
 const moduleAlias = require('module-alias');
 moduleAlias.addAliases(require('../shared/aliases'));
 
-require('@babel/register')({
-  presets: [['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }], '@babel/preset-react'],
-});
-
 const sentryHelpers = require('Shared/sentryHelpers');
 
 // https://docs.sentry.io/error-reporting/quickstart/?platform=node
