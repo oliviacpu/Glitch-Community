@@ -158,7 +158,7 @@ const UserPage = ({ user: initialUser }) => {
           }))}
           isAuthorized={isAuthorized}
           enablePagination
-          enableFiltering={user.collections && user.collections.length > 6}
+          enableFiltering={user.collections.length > 6}
           maybeCurrentUser={maybeCurrentUser}
         />
       )}

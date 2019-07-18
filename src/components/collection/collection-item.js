@@ -38,24 +38,23 @@ const ProjectsLoading = () => (
 const CollectionProjects = ({ collection, isAuthorized, renderOptimistically }) => {
   const { value: projects } = useCollectionProjects(collection);
 
-  if (!projects && renderOptimistically) {
-    console.log('optimistic')
-    const mock = {domain: '', avatar:  ''}
-    return (
-      <>
-        <div className={styles.projectsContainer}>
-          <Row className={styles.projectsList} items={[mock, mock, mock]} count={3}>
-            {(mock) => (
-              <ProjectItemSmall project={mock} />
-            )}
-          </Row>
-        </div>
-        <CollectionLink collection={collection} className={styles.footerLink}>
-          View all projects <Arrow />
-        </CollectionLink>
-      </>
-    );
-  }
+  // if (!projects && renderOptimistically) {
+  //   const mock = {domain: ' ', avatar:  ''}
+  //   return (
+  //     <>
+  //       <div className={styles.projectsContainer}>
+  //         <Row className={styles.projectsList} items={[mock, mock, mock]} count={3}>
+  //           {(mock) => (
+  //             <ProjectItemSmall project={mock} />
+  //           )}
+  //         </Row>
+  //       </div>
+  //       <CollectionLink collection={collection} className={styles.footerLink} style={{ opacity: '0' }}>
+  //         View all projects <Arrow />
+  //       </CollectionLink>
+  //     </>
+  //   );
+  // }
 
   if (!projects) return <ProjectsLoading />;
 
