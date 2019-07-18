@@ -46,9 +46,7 @@ const CollectionProjects = ({ collection, isAuthorized, renderOptimistically }) 
         <div className={styles.projectsContainer}>
           <Row className={styles.projectsList} items={[mock, mock, mock]} count={3}>
             {(mock) => (
-              <div className={projectStyles.projectItemSmall} style={{width: '100%', height='35px'}} aria-hidden="true">
-                <div style={{ width: '25px', height: '25px' }} />
-              </div>
+              <ProjectItemSmall project={mock} />
             )}
           </Row>
         </div>
