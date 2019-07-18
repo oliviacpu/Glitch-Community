@@ -71,9 +71,16 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   );
 };
 
-const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
-  <CollectionProjects collection={collection} isAuthorized={isAuthorized} />
-);
+const CollectionProjectsLoader = ({ collection, isAuthorized, showLoader }) => {
+  if (showLoader) {
+    return (
+      <VisibilityContainer>
+        {({ wasEverVisible }) => (wasEverVisible ? <CollectionProjects collection={collection} isAuthorized={isAuthorized} /> : <ProjectsLoading />)}
+      </VisibilityContainer>
+    );
+  }
+  return <CollectionProjects collection={collection} isAuthorized={isAuthorized} />;
+};
 
 const CollectionCurator = ({ collection }) => {
   const { value: curator } = useCollectionCurator(collection);
@@ -86,7 +93,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
+const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator, showLoader }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
@@ -130,12 +137,14 @@ CollectionItem.propTypes = {
   deleteCollection: PropTypes.func,
   isAuthorized: PropTypes.bool,
   showCurator: PropTypes.bool,
+  showLoader: PropTypes.bool,
 };
 
 CollectionItem.defaultProps = {
   deleteCollection: () => {},
   isAuthorized: false,
   showCurator: false,
+  showLoader: true,
 };
 
 export default CollectionItem;

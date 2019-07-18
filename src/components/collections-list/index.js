@@ -83,7 +83,7 @@ function CollectionsList({
                 itemsPerPage={collectionsPerPage}
                 fetchDataOptimistically={useCollectionProjects}
               >
-                {(paginatedCollections) => (
+                {(paginatedCollections, isExpanded) => (
                   <Grid items={paginatedCollections}>
                     {(collection) => (
                       <CollectionItem
@@ -91,6 +91,7 @@ function CollectionsList({
                         isAuthorized={isAuthorized}
                         deleteCollection={() => deleteCollection(collection)}
                         showCurator={showCurator}
+                        showLoader={isExpanded}
                       />
                     )}
                   </Grid>
