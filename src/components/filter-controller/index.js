@@ -63,6 +63,6 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
 
 FilterController.propTypes = {
   matchFn: PropTypes.func.isRequired,
-}
+};
 
 export default FilterController;

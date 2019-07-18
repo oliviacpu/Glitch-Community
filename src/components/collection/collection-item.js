@@ -22,7 +22,6 @@ import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
-import projectStyles from '../project/project-item.styl';
 
 const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,

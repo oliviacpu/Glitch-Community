@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useReducer } from 'react';
+import PropTypes from 'prop-types';
 
 import Badge from 'Components/badges/badge';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
-import Loader from 'Components/loader';
 import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
 
@@ -73,9 +73,9 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
-    const nextItems = items.slice(startIdx + itemsPerPage, startIdx + (itemsPerPage * 2));
+    const nextItems = items.slice(startIdx + itemsPerPage, startIdx + itemsPerPage * 2);
     items = items.slice(startIdx, startIdx + itemsPerPage);
-    
+
     if (fetchDataOptimistically) {
       Promise.all(nextItems.map(fetchDataOptimistically));
     }
@@ -115,5 +115,18 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
     </>
   );
 }
+
+PaginationController.propTypes = {
+  enabled: PropTypes.bool,
+  items: PropTypes.array.isRequired,
+  itemsPerPage: PropTypes.number,
+  fetchDataOptimistically: PropTypes.func,
+};
+
+PaginationController.defaultProps = {
+  enabled: false,
+  itemsPerPage: 6,
+  fetchDataOptimistically: null,
+};
 
 export default PaginationController;
