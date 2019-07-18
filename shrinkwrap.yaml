@@ -4,6 +4,7 @@ dependencies:
   '@babel/plugin-syntax-dynamic-import': 7.2.0
   '@babel/preset-env': 7.5.4
   '@babel/preset-react': 7.0.0
+  '@babel/register': 7.5.5
   '@percy/cypress': 1.0.9
   '@sentry/browser': 4.6.6
   '@sentry/node': 4.6.6
@@ -2354,6 +2355,19 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-mzMVuIP4lqtn4du2ynEfdO0+RYcslwrZiJHXu4MGaC1ctJiW2fyaeDrtjJGs7R/KebZ1sgowcIoWf4uRpEfKEg==
+  /@babel/register/7.5.5:
+    dependencies:
+      core-js: 3.1.4
+      find-cache-dir: 2.1.0
+      lodash: 4.17.14
+      mkdirp: 0.5.1
+      pirates: 4.0.1
+      source-map-support: 0.5.12
+    dev: false
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    resolution:
+      integrity: sha512-pdd5nNR+g2qDkXZlW1yRCWFlNrAn2PPdnZUB72zjX4l1Vv4fMRRLwyf+n/idFCLI1UgVGboUU8oVziwTBiyNKQ==
   /@babel/runtime/7.3.4:
     dependencies:
       regenerator-runtime: 0.12.1
@@ -10103,6 +10117,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-h/zcD8H9kaDZ9ALUWwlBUDo6TKF8a7qBSCSEGfjTVIYeqsioSKaAX+BN7NgiMGp6iSIXZ3PxgCu8KS3b71YK5Q==
+  /node-modules-regexp/1.0.0:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
   /node-releases/1.1.24:
     dependencies:
       semver: 5.7.0
@@ -10788,6 +10808,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
+  /pirates/4.0.1:
+    dependencies:
+      node-modules-regexp: 1.0.0
+    dev: false
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-WuNqLTbMI3tmfef2TKxlQmAiLHKtFhlsCZnPIpuv2Ow0RDVO8lfy1Opf4NUzlMXLjPl+Men7AuVdX6TA+s+uGA==
   /pkg-dir/1.0.0:
     dependencies:
       find-up: 1.1.2
@@ -14158,6 +14186,7 @@ specifiers:
   '@babel/plugin-syntax-dynamic-import': ^7.2.0
   '@babel/preset-env': ^7.5.4
   '@babel/preset-react': ^7.0.0
+  '@babel/register': 7.5.5
   '@percy/cypress': ^1.0.9
   '@sentry/browser': ^4.6.6
   '@sentry/node': ^4.6.6
