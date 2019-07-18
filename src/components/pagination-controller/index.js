@@ -13,12 +13,14 @@ const paginationReducer = (oldState, action) => {
   switch (action.type) {
     case 'next':
       return {
+        ...oldState,
         page: oldState.page + 1,
         totalPages: oldState.totalPages,
         announce: `Showing page ${oldState.page + 1} of ${oldState.totalPages}`,
       };
     case 'previous':
       return {
+        ...oldState,
         page: oldState.page - 1,
         totalPages: oldState.totalPages,
         announce: `Showing page ${oldState.page - 1} of ${oldState.totalPages}`,
@@ -93,7 +95,7 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
   return (
     (
       <>
-        {children(items, state.expanded)}
+        {children(items, state.expanded )}
         {canPaginate && (
           <div className={styles.controls}>
             <div className={styles.paginationControls}>

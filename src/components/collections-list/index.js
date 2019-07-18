@@ -87,7 +87,6 @@ function CollectionsList({
                   <Grid items={paginatedCollections}>
                     {(collection) => (
                       <>
-                        isExpanded: {isExpanded}
                         <CollectionItem
                           collection={collection}
                           isAuthorized={isAuthorized}
