@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
@@ -13,11 +13,12 @@ import TrackedExternalLink from './tracked-external-link';
 
 export { WrappingLink, TrackedExternalLink };
 
-const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+const Link = withRouter(React.forwardRef(({ to, children, location, ...props }, ref) => {
   const { origin, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
-    const targetUrl = new URL(to, origin);
-    if (targetUrl.origin !== origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route))) {
+    const currentUrl = new URL(location.pathname + location.search + location.hash, origin);
+    const targetUrl = new URL(to, currentUrl);
+    if (targetUrl.origin !== currentUrl.origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route))) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}
@@ -36,7 +37,7 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
       {children}
     </RouterLink>
   );
-});
+}));
 Link.propTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   children: PropTypes.node.isRequired,
