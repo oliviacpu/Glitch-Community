@@ -8,7 +8,12 @@ import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
+<<<<<<< HEAD
 import classNames from 'classnames/bind';
+=======
+import SkipSectionButtons from 'Components/containers/skip-section-buttons';
+import { LiveMessage } from 'react-aria-live';
+>>>>>>> 💨🍱 Checkpoint
 
 import styles from './projects-list.styl';
 
@@ -66,6 +71,7 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
+          <SkipSectionButtons>
           {renderItems((filteredProjects) => (
             <PaginationController
               enabled={enablePagination}
@@ -85,6 +91,7 @@ function ProjectsList({
               )}
             </PaginationController>
           ))}
+          </SkipSectionButtons>
         </article>
       )}
     </FilterController>
