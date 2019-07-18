@@ -18,4 +18,7 @@ module.exports = {
     'object-curly-newline': OFF,
     'no-confusing-arrow': OFF,
   },
+  settings: {
+    react: { version: 'detect' },
+  },
 };
