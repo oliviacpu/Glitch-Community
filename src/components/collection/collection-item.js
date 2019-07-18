@@ -34,8 +34,24 @@ const ProjectsLoading = () => (
   </div>
 );
 
-const CollectionProjects = ({ collection, isAuthorized }) => {
+const CollectionProjects = ({ collection, isAuthorized, renderOptimistically }) => {
+  console.log({ renderOptimistically });
   const { value: projects } = useCollectionProjects(collection);
+
+  if (!projects && renderOptimistically) {
+    return (
+      <>
+        <div className={styles.projectsContainer}>
+          <Row className={styles.projectsList} items={['', '', '']} count={3}>
+            {(project) => <div aria-hidden="true" />}
+          </Row>
+        </div>
+        <CollectionLink collection={collection} className={styles.footerLink}>
+          View all projects <Arrow />
+        </CollectionLink>
+      </>
+    );
+  }
 
   if (!projects) return <ProjectsLoading />;
 
@@ -43,7 +59,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text>
-          This collection is empty – add some projects <Emoji name="index" />
+          This collection is empty – add some projec ts <Emoji name="index" />
         </Text>
       </div>
     );
@@ -77,8 +93,8 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   </VisibilityContainer>
 */
 
-const CollectionProjectsLoader = ({ collection, isAuthorized }) => (
-  <CollectionProjects collection={collection} isAuthorized={isAuthorized} />
+const CollectionProjectsLoader = ({ collection, isAuthorized, renderOptimistically }) => (
+  <CollectionProjects collection={collection} isAuthorized={isAuthorized} renderOptimistically={renderOptimistically} />
 );
 
 const CollectionCurator = ({ collection }) => {
@@ -92,7 +108,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
+const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator, renderOptimistically }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
@@ -120,7 +136,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
         </CollectionLink>
 
-        <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} />
+        <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} renderOptimistically={renderOptimistically} />
       </div>
     )}
   </AnimationContainer>

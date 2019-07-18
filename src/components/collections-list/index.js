@@ -79,6 +79,7 @@ function CollectionsList({
                         isAuthorized={isAuthorized}
                         deleteCollection={() => deleteCollection(collection)}
                         showCurator={showCurator}
+                        renderOptimistically={enablePagination}
                       />
                     )}
                   </Grid>
