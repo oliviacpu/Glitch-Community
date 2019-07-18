@@ -198,14 +198,13 @@ function TeamPage({ team: initialTeam }) {
       <CollectionsList
         title="Collections"
         enablePagination
-        optimisticRequest={useCollectionProjects}
         enableFiltering={team.collections.length > 6}
         collections={team.collections.map((collection) => ({ ...collection, team }))}
         maybeTeam={team}
         isAuthorized={currentUserIsOnTeam}
       />
 
-      {currentUserIsOnTeam && (
+      {!currentUserIsOnTeam && (
         <ErrorBoundary>
           <TeamAnalytics
             id={team.id}

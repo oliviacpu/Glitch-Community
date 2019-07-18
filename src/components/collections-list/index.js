@@ -9,6 +9,7 @@ import FilterController from 'Components/filter-controller';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
+import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 
 import styles from './styles.styl';
 import filterStyles from '../filter-controller/styles.styl';
@@ -76,7 +77,7 @@ function CollectionsList({
             )}
 
             {renderItems((filteredProjects) => (
-              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage} renderOptimistically>
+              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={collectionsPerPage} renderOptimistically useApi={useCollectionProjects}>
                 {(paginatedCollections) => (
                   <Grid items={paginatedCollections}>
                     {(collection) => (
