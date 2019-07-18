@@ -10,8 +10,8 @@ import ErrorBoundary from 'Components/error-boundary';
 import Arrow from 'Components/arrow';
 import QuestionItem from './item';
 
-import { captureException } from '../../utils/sentry';
-import { useAPI } from '../../state/api';
+import { captureException } from 'Utils/sentry';
+import { useAPI } from 'State/api';
 import styles from './questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];

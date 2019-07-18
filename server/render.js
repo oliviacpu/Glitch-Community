@@ -12,7 +12,6 @@ require('@babel/register')({
 });
 require('module-alias').addAlias('Utils', (fromPath, request) => {
   if (request === 'Utils/constants' || request === 'Utils/sentry') {
-    console.log(fromPath);
     return path.resolve(__dirname, '../src/utils/node');
   }
   return path.resolve(__dirname, '../src/utils');
