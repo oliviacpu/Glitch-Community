@@ -3,12 +3,11 @@ require('@babel/register')({
   only: [/src/],
   presets: [['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }], '@babel/preset-react'],
 });
-require('module-alias').addAlias('Utils', (fromPath, request, alias) => {
-  if (request === 'Utils/constants') {
-    console.log(fromPath, request, alias);
+require('module-alias').addAlias('Utils', (fromPath, request) => {
+  if (request === 'Utils/constants' || request === 'Utils/sentry') {
     return path.resolve(__dirname, '../src/utils/node');
   }
-  return request;
+  return path.resolve(__dirname, '../src/utils');
 });
 
 const React = require('react');
@@ -17,7 +16,7 @@ const ReactDOMServer = require('react-dom/server');
 const { StaticRouter } = require('react-router');
 const { GlobalsProvider } = require('State/globals');
 
-const Link = require('Components/link');
+const { default: Link } = require('Components/link');
 
 const { getZine } = require('./api');
 const { getHomeData } = require('./home');
@@ -27,7 +26,7 @@ const render = async (origin, url) => {
   return ReactDOMServer.renderToString(
     React.createElement(StaticRouter, { location: url },
       React.createElement(GlobalsProvider, { origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES: [] },
-        React.createElement(Link, { to: '/@Greg"' }, ['asdf']),
+        React.createElement(Link, { to: '/@Greg"' }, 'asdf'),
       ),
     )
   );
