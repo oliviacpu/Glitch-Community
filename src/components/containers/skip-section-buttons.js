@@ -6,13 +6,21 @@ import styles from './skip-section-buttons.styl';
 const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeId = useUniqueId();
   const afterId = useUniqueId();
+  
+  let sectionNameDisplay = sectionName;
+  console.log(sectionName);
+  if (typeof(sectionName == ) {
+    const textNodes = [sectionName].filter((child) => ['p', 'P'].includes(child.tagName));
+    sectionNameDisplay = textNodes.reduce((str, node) => str + node.innerText, '');  
+  }
+  
   return (
     <>
-      <Button href={`#${after}`} id={before} className={styles.visibleOnFocus}>
+      <Button href={`#${afterId}`} id={beforeId} className={styles.visibleOnFocus}>
         Skip to After {sectionName}
       </Button>
       {children}
-      <Button href={`#${before}`} id={after} className={styles.visibleOnFocus}>
+      <Button href={`#${beforeId}`} id={afterId} className={styles.visibleOnFocus}>
         Skip to Before {sectionName}
       </Button>
     </>

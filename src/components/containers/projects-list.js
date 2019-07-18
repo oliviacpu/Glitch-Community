@@ -223,7 +223,7 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          <SkipSectionButtons>
+          <SkipSectionButtons sectionName={title}>
           {renderProjects((filteredProjects) => (
             <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
