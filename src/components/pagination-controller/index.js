@@ -95,7 +95,7 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
   return (
     (
       <>
-        {children(items, state.expanded )}
+        {children(items, state.expanded)}
         {canPaginate && (
           <div className={styles.controls}>
             <div className={styles.paginationControls}>
