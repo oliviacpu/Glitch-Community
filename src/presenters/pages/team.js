@@ -27,7 +27,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
-import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './team.styl';
 
@@ -113,7 +112,6 @@ function TeamPage({ team: initialTeam }) {
   const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
   const updateUrl = (url) => funcs.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
-  useFocusFirst();
 
   const projectOptions = { ...funcs, team };
 
