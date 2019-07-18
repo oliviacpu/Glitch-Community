@@ -1,14 +1,18 @@
 const path = require('path');
+const stylus = require('stylus');
 require('@babel/register')({
   only: [/src/],
   presets: [
     ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
     '@babel/preset-react',
-    ['css-modules-transform', { preprocessCss: '', extensions: ['.styl'] }],
+  ],
+  plugins: [
+    ['css-modules-transform', { preprocessCss: (data, filename) => stylus.render(data, { filename }), extensions: ['.styl'] }],
   ],
 });
 require('module-alias').addAlias('Utils', (fromPath, request) => {
   if (request === 'Utils/constants' || request === 'Utils/sentry') {
+    console.log(fromPath);
     return path.resolve(__dirname, '../src/utils/node');
   }
   return path.resolve(__dirname, '../src/utils');
