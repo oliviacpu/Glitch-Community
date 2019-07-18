@@ -4,8 +4,11 @@ require('@babel/register')({
   presets: [['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }], '@babel/preset-react'],
 });
 require('module-alias').addAlias(
-  path.resolve(__dirname, '../src/utils/constants'),
-  path.resolve(__dirname, '../src/utils/constants-node'),
+  'Utils',
+  (fromPath, request, alias) => {
+    console.log(fromPath, request, alias);
+    return alias;
+  }
 );
 
 const React = require('react');
