@@ -9,6 +9,7 @@ import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
 import classNames from 'classnames/bind';
+import { useProjectMembers } from 'State/project';
 
 import styles from './projects-list.styl';
 import filterStyles from '../filter-controller/styles.styl';
@@ -68,7 +69,12 @@ function ProjectsList({
             {filterInput}
           </div>
           {renderItems((filteredProjects) => (
-            <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
+            <PaginationController
+              enabled={enablePagination}
+              items={filteredProjects}
+              itemsPerPage={projectsPerPage}
+              fetchDataOptimistically={useProjectMembers}
+            >
               {(paginatedProjects) => (
                 <ProjectsUL
                   projects={paginatedProjects}
