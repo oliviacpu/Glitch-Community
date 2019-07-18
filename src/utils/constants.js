@@ -2,9 +2,9 @@ const { envs } = require('Shared/constants');
 /* global RUNNING_ON */
 
 let envFromOrigin = 'production';
-if (origin.includes('staging.glitch.com')) {
+if (window.location.origin.includes('staging.glitch.com')) {
   envFromOrigin = 'staging';
-} else if (origin.includes('glitch.development')) {
+} else if (window.location.origin.includes('glitch.development')) {
   envFromOrigin = 'development';
 }
 
