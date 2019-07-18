@@ -19,7 +19,6 @@ const Button = React.forwardRef(
     {
       onClick,
       href,
-      id,
       disabled,
       type,
       size,
@@ -72,7 +71,7 @@ const Button = React.forwardRef(
         };
       }
       return (
-        <Link to={href} id={id} ref={ref} onClick={onClick} className={fullClassName} {...targetProps}>
+        <Link to={href} ref={ref} onClick={onClick} className={fullClassName} {...targetProps}>
           {content}
         </Link>
       );
@@ -94,7 +93,6 @@ const Button = React.forwardRef(
         disabled={disabled}
         type={submit ? 'submit' : 'button'}
         aria-pressed={ariaPressed}
-        id={id}
       >
         {content}
       </button>
