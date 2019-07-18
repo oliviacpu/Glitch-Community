@@ -3,7 +3,7 @@ const WARN = 1;
 const ERROR = 2;
 
 module.exports = {
-  extends: 'eslint:recommended',
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
   env: {
     es6: true, // We are writing ES6 code
     node: true, // for Node.js

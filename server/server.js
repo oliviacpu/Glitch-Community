@@ -6,7 +6,7 @@ const moduleAlias = require('module-alias');
 moduleAlias.addAliases(require('../shared/aliases'));
 
 require('@babel/register')({
-  presets: ['@babel/preset-react'],
+  presets: [['@babel/preset-env', { corejs: 3,  }], '@babel/preset-react'],
 });
 
 const sentryHelpers = require('Shared/sentryHelpers');
