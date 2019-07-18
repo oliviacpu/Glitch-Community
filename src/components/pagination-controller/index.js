@@ -90,28 +90,31 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
 
   const arrow = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
-  return (<>
-      {children(items, state.expanded)}
-      {canPaginate && (
-        <div className={styles.controls}>
-          <div className={styles.paginationControls}>
-            <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
-              <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
-            </Button>
-            {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
-            <div data-cy="page-numbers" className={styles.pageNumbers}>
-              {state.page} / {numPages}
+  return (
+    (
+      <>
+        {children(items, state.expanded)}
+        {canPaginate && (
+          <div className={styles.controls}>
+            <div className={styles.paginationControls}>
+              <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
+                <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
+              </Button>
+              {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
+              <div data-cy="page-numbers" className={styles.pageNumbers}>
+                {state.page} / {numPages}
+              </div>
+              <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
+                <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
+              </Button>
             </div>
-            <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
-              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
+            <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
+              Show all <Badge>{numItems}</Badge>
             </Button>
           </div>
-          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
-            Show all <Badge>{numItems}</Badge>
-          </Button>
-        </div>
-      )}
-    </>
+        )}
+      </>
+    )
   );
 }
 
