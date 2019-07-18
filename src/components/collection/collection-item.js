@@ -22,6 +22,7 @@ import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
+import projectStyles from '../project/project-item.styl';
 
 const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,
@@ -35,15 +36,20 @@ const ProjectsLoading = () => (
 );
 
 const CollectionProjects = ({ collection, isAuthorized, renderOptimistically }) => {
-  console.log({ renderOptimistically });
   const { value: projects } = useCollectionProjects(collection);
 
   if (!projects && renderOptimistically) {
+    console.log('optimistic')
+    const mock = {domain: '', avatar:  ''}
     return (
       <>
         <div className={styles.projectsContainer}>
-          <Row className={styles.projectsList} items={['', '', '']} count={3}>
-            {(project) => <div aria-hidden="true" />}
+          <Row className={styles.projectsList} items={[mock, mock, mock]} count={3}>
+            {(mock) => (
+              <div className={projectStyles.projectItemSmall} style={{width: '100%', height='35px'}} aria-hidden="true">
+                <div style={{ width: '25px', height: '25px' }} />
+              </div>
+            )}
           </Row>
         </div>
         <CollectionLink collection={collection} className={styles.footerLink}>
