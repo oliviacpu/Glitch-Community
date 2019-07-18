@@ -74,7 +74,7 @@ function PaginationController({ enabled, items, itemsPerPage, renderOptimistical
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
     const numItemsToRender = renderOptimistically ? startIdx + (itemsPerPage * 2) : startIdx + itemsPerPage;
-    items = items.slice(startIdx, startIdx + itemsPerPage);
+    items = items.slice(startIdx, numItemsToRender);
   }
 
   useEffect(
