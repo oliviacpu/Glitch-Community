@@ -13,7 +13,7 @@ import TrackedExternalLink from './tracked-external-link';
 
 export { WrappingLink, TrackedExternalLink };
 
-const Link = withRouter(React.forwardRef(({ to, children, location, ...props }, ref) => {
+const Link = withRouter(React.forwardRef(({ to, children, history, location, match, staticContext, ...props }, ref) => {
   const { origin, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
     const currentUrl = new URL(location.pathname + location.search + location.hash, origin);
