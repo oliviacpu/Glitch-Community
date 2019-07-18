@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useReducer } from 'react';
 import Badge from 'Components/badges/badge';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
+import Loader from 'Components/loader';
 import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
 
@@ -39,7 +40,7 @@ const paginationReducer = (oldState, action) => {
   }
 };
 
-function PaginationController({ enabled, items, itemsPerPage, children }) {
+function PaginationController({ enabled, items, itemsPerPage, renderOptimistically, children }) {
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
 
@@ -72,6 +73,7 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
+    const numItemsToRender = renderOptimistically ? startIdx + (itemsPerPage * 2) : startIdx + itemsPerPage;
     items = items.slice(startIdx, startIdx + itemsPerPage);
   }
 
@@ -101,7 +103,6 @@ function PaginationController({ enabled, items, itemsPerPage, children }) {
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
             </Button>
           </div>
-          {state.expanded && items.length }
           <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
             Show all <Badge>{numItems}</Badge>
           </Button>
