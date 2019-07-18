@@ -50,13 +50,15 @@ export function APIContextProvider({ children }) {
 
   const [pendingRequests, setPendingRequests] = useState([]);
   if (!api.persistentToken) {
-    // stall get requests until we have a persistentToken
-    api.get = async (...args) => {
-      const apiWithToken = await new Promise((resolve) => {
-        setPendingRequests([...pendingRequests, resolve]);
-      });
-      return apiWithToken.get(...args);
-    };
+    // stall requests until we have a persistentToken
+    ['get'].forEach((method) => {
+      api[method] = async (...args) => {
+        const apiWithToken = await new Promise((resolve) => {
+          setPendingRequests([...pendingRequests, resolve]);
+        });
+        return apiWithToken[method](...args);
+      };
+    });
   }
   useEffect(() => {
     if (api.persistentToken && pendingRequests.length) {
