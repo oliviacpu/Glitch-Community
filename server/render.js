@@ -3,13 +3,13 @@ require('@babel/register')({
   only: [/src/],
   presets: [['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }], '@babel/preset-react'],
 });
-require('module-alias').addAlias(
-  'Utils',
-  (fromPath, request, alias) => {
+require('module-alias').addAlias('Utils', (fromPath, request, alias) => {
+  if (request === 'Utils/constants') {
     console.log(fromPath, request, alias);
-    return alias;
+    return path.resolve(__dirname, '../src/utils/node');
   }
-);
+  return request;
+});
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
