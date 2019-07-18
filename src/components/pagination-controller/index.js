@@ -40,7 +40,7 @@ const paginationReducer = (oldState, action) => {
   }
 };
 
-function PaginationController({ enabled, items, itemsPerPage, renderOptimistically, children }) {
+function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimistically, children }) {
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
 
@@ -73,8 +73,13 @@ function PaginationController({ enabled, items, itemsPerPage, renderOptimistical
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
-    const numItemsToRender = renderOptimistically ? startIdx + (itemsPerPage * 2) : startIdx + itemsPerPage;
-    items = items.slice(startIdx, numItemsToRender);
+    items = items.slice(startIdx, startIdx + itemsPerPage);
+    nextItems = items.slice(startIdx + itemsPerPage, )
+    
+    if (fetchDataOptimistically) {
+      
+      useApi()
+    }
   }
 
   useEffect(
