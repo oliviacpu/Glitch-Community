@@ -25,7 +25,6 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
-import { useCollectionProjects } from 'State/collection';
 
 import styles from './team.styl';
 

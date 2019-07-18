@@ -20,7 +20,7 @@ const ProjectItemSmall = ({ project }) => (
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
         <span className={styles.avatarWrap}>
-          <ProfileAvatar project={project} />}
+          <ProfileAvatar project={project} />
         </span>
         <Text>
           <span className={styles.projectName}>{project.domain || ''}</span>{' '}
@@ -41,11 +41,6 @@ ProjectItemSmall.propTypes = {
     id: PropTypes.string.isRequired,
     private: PropTypes.bool,
   }).isRequired,
-  renderOptimistically: PropTypes.bool,
 };
-
-ProjectItemSmall.defaultProps = {
-  renderOptimistically: false,
-}
 
 export default ProjectItemSmall;
