@@ -86,13 +86,16 @@ function CollectionsList({
                 {(paginatedCollections, isExpanded) => (
                   <Grid items={paginatedCollections}>
                     {(collection) => (
-                      <CollectionItem
-                        collection={collection}
-                        isAuthorized={isAuthorized}
-                        deleteCollection={() => deleteCollection(collection)}
-                        showCurator={showCurator}
-                        showLoader={isExpanded}
-                      />
+                      <>
+                        isExpanded: {isExpanded}
+                        <CollectionItem
+                          collection={collection}
+                          isAuthorized={isAuthorized}
+                          deleteCollection={() => deleteCollection(collection)}
+                          showCurator={showCurator}
+                          showLoader={isExpanded}
+                        />
+                      </>
                     )}
                   </Grid>
                 )}

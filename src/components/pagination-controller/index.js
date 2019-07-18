@@ -90,9 +90,8 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
 
   const arrow = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
-  return (
-    <>
-      {children(items)}
+  return (<>
+      {children(items, state.expanded)}
       {canPaginate && (
         <div className={styles.controls}>
           <div className={styles.paginationControls}>
