@@ -30,10 +30,7 @@ const nullMyStuffCollection = {
   id: 'My Stuff',
 };
 
-function CollectionsListWithDevToggle(props) {
-  const myStuffEnabled = useDevToggle('My Stuff');
-  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
-}
+
 
 function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
@@ -43,23 +40,6 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
     collections.unshift(myStuffCollection);
   }
   return <CollectionsList collections={collections} {...props} />;
-}
-
-function CollectionsListWithMyStuff({ collections, ...props }) {
-  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
-
-  if (myStuffCollection) {
-    return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
-  }
-
-  if (!props.isAuthorized) {
-    return <CollectionsList collections={collections} {...props} />;
-  }
-
-  if (props.isAuthorized) {
-    collections.unshift(nullMyStuffCollection);
-    return <CollectionsList collections={collections} {...props} />;
-  }
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
@@ -123,5 +103,28 @@ CollectionsList.defaultProps = {
   isAuthorized: false,
   showCurator: false,
 };
+
+function CollectionsListWithMyStuff({ collections, ...props }) {
+  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
+
+  if (myStuffCollection) {
+    return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
+  }
+
+  if (!props.isAuthorized) {
+    return <CollectionsList collections={collections} {...props} />;
+  }
+
+  if (props.isAuthorized) {
+    collections.unshift(nullMyStuffCollection);
+    return <CollectionsList collections={collections} {...props} />;
+  }
+}
+
+// TODO 
+function CollectionsListWithDevToggle(props) {
+  const myStuffEnabled = useDevToggle('My Stuff');
+  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
+}
 
 export default CollectionsListWithDevToggle;
