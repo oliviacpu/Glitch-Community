@@ -53,7 +53,7 @@ export function APIContextProvider({ children }) {
     // stall get requests until we have a persistentToken
     api.get = async (...args) => {
       const apiWithToken = await new Promise((resolve) => {
-        setPendingRequests([...pendingRequests, resolve]);
+        setPendingRequests((latestPendingRequests) => [...latestPendingRequests, resolve]);
       });
       return apiWithToken.get(...args);
     };
@@ -62,7 +62,9 @@ export function APIContextProvider({ children }) {
     if (api.persistentToken && pendingRequests.length) {
       // go back and finally make all of those requests
       pendingRequests.forEach((request) => request(api));
-      setPendingRequests([]);
+      setPendingRequests((latestPendingRequests) => (
+        latestPendingRequests.filter((request) => !pendingRequests.includes(request))
+      ));
     }
   }, [api, pendingRequests]);
 
