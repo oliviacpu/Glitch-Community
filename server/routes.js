@@ -23,7 +23,10 @@ const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch,
 module.exports = function(external) {
   const app = express.Router();
 
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  // don't enforce HTTPS if building the site locally, not on glitch.com
+  if (!process.env.RUNNING_LOCALLY) {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  }
 
   // CORS - Allow pages from any domain to make requests to our API
   app.use(function(request, response, next) {
