@@ -143,7 +143,7 @@ const UserPage = ({ user: initialUser }) => {
   const { _deletedProjects, featuredProjectId } = user;
 
   useFocusFirst();
-
+  
   const { currentUser: maybeCurrentUser } = useCurrentUser();
   const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
   const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;

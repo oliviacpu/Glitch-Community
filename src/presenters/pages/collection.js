@@ -16,12 +16,10 @@ import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } from 'State/collection';
-import useFocusFirst from 'Hooks/use-focus-first';
 
 const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
-  useFocusFirst();
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
