@@ -82,10 +82,12 @@ NameAndLogin.defaultProps = {
 function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
 
-  if (projects.length > 0 || isAuthorized) {
-    myStuffCollection.projects = projects;
-    collections.unshift(myStuffCollection);
-  }
+  React.useEffect(() => {
+    if (projects && (projects.length > 0 || isAuthorized)) {
+      myStuffCollection.projects = projects;
+      collections.unshift(myStuffCollection);
+    }
+  }, [projects]);
 
   return children(collections);
 }

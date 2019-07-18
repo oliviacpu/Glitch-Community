@@ -94,6 +94,7 @@ const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
   </div>
 );
 
+// TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
