@@ -54,7 +54,7 @@ export function APIContextProvider({ children }) {
     ['get'].forEach((method) => {
       api[method] = async (...args) => {
         const apiWithToken = await new Promise((resolve) => {
-          setPendingRequests([...pendingRequests, resolve]);
+          setPendingRequests((latestPendingRequests) => [...latestPendingRequests, resolve]);
         });
         return apiWithToken[method](...args);
       };
@@ -64,7 +64,9 @@ export function APIContextProvider({ children }) {
     if (api.persistentToken && pendingRequests.length) {
       // go back and finally make all of those requests
       pendingRequests.forEach((request) => request(api));
-      setPendingRequests([]);
+      setPendingRequests((latestPendingRequests) => (
+        latestPendingRequests.filter((request) => !pendingRequests.includes(request))
+      ));
     }
   }, [api, pendingRequests]);
 
