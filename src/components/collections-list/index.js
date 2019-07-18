@@ -8,19 +8,8 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
-import { useCollectionProjects } from 'State/collection';
-import { pickRandomColor } from 'Utils/color';
 
 import styles from './styles.styl';
-
-const nullMyStuffCollection = {
-  isBookmarkCollection: true,
-  name: 'My Stuff',
-  description: 'My place to save cool finds',
-  coverColor: pickRandomColor(),
-  projects: [],
-  id: 'My Stuff',
-};
 
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
@@ -29,17 +18,6 @@ const CreateFirstCollection = () => (
     <br />
   </div>
 );
-
-function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
-  const { value: projects } = useCollectionProjects(myStuffCollection);
-
-  if (projects.length > 0 || isAuthorized) {
-    myStuffCollection.projects = projects;
-    collections.unshift(myStuffCollection);
-  }
-
-  return children(collections);
-}
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
   const { deleteItem } = useAPIHandlers();
@@ -103,30 +81,4 @@ CollectionsList.defaultProps = {
   showCurator: false,
 };
 
-function CollectionsListWithMyStuff({ collections, ...props }) {
-  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
-
-  if (myStuffCollection) {
-    return (
-      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props}>
-        {(collectionsWithMyStuff) => <CollectionsList collections={collectionsWithMyStuff} {...props} />}
-      </MyStuffCollectionLoader>
-    );
-  }
-
-  if (!props.isAuthorized) {
-    return <CollectionsList collections={collections} {...props} />;
-  }
-
-  if (props.isAuthorized) {
-    collections.unshift(nullMyStuffCollection);
-    return <CollectionsList collections={collections} {...props} />;
-  }
-}
-
-function CollectionsListWithDevToggle(props) {
-  const myStuffEnabled = useDevToggle('My Stuff');
-  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
-}
-
-export default CollectionsListWithDevToggle;
+export default CollectionsList;

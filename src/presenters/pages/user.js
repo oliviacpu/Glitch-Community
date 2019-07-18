@@ -19,8 +19,20 @@ import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
+import useDevToggle from 'State/dev-toggles';
+import { useCollectionProjects } from 'State/collection';
+import { pickRandomColor } from 'Utils/color';
 
 import styles from './user.styl';
+
+const nullMyStuffCollection = {
+  isBookmarkCollection: true,
+  name: 'My Stuff',
+  description: 'My place to save cool finds',
+  coverColor: pickRandomColor(),
+  projects: [],
+  id: 'My Stuff',
+};
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -66,6 +78,45 @@ NameAndLogin.defaultProps = {
   name: '',
   login: '',
 };
+
+function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
+  const { value: projects } = useCollectionProjects(myStuffCollection);
+
+  if (projects.length > 0 || isAuthorized) {
+    myStuffCollection.projects = projects;
+    collections.unshift(myStuffCollection);
+  }
+
+  return children(collections);
+}
+
+function CollectionsListWithMyStuff({ collections, ...props }) {
+  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
+
+  if (myStuffCollection) {
+    return (
+      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props}>
+        {(collectionsWithMyStuff) => <CollectionsList collections={collectionsWithMyStuff} {...props} />}
+      </MyStuffCollectionLoader>
+    );
+  }
+
+  if (!props.isAuthorized) {
+    return <CollectionsList collections={collections} {...props} />;
+  }
+
+  if (props.isAuthorized) {
+    collections.unshift(nullMyStuffCollection);
+    return <CollectionsList collections={collections} {...props} />;
+  }
+}
+
+// TODO: in the future we can delete this
+function CollectionsListWithDevToggle(props) {
+  const myStuffEnabled = useDevToggle('My Stuff');
+  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
+}
+
 
 const UserPage = ({ user: initialUser }) => {
   const [user, funcs] = useUserEditor(initialUser);
@@ -150,7 +201,7 @@ const UserPage = ({ user: initialUser }) => {
       )}
 
       {!!user.login && (
-        <CollectionsList
+        <CollectionsListWithDevToggle
           title="Collections"
           collections={user.collections.map((collection) => ({
             ...collection,
