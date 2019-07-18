@@ -19,6 +19,7 @@ import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';
 
@@ -84,6 +85,8 @@ const UserPage = ({ user: initialUser }) => {
   const projectOptions = { ...funcs, user };
   const { _deletedProjects, featuredProjectId } = user;
 
+  useFocusFirst();
+
   const { currentUser: maybeCurrentUser } = useCurrentUser();
   const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
   const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;
@@ -95,7 +98,7 @@ const UserPage = ({ user: initialUser }) => {
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className={styles.container}>
+    <main id="main" className={styles.container}>
       <section>
         <UserProfileContainer
           item={user}

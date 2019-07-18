@@ -29,6 +29,8 @@ import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
+import useFocusFirst from 'Hooks/use-focus-first';
+
 
 import styles from './project.styl';
 
@@ -127,13 +129,13 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
     initialProject,
   );
-
+  useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
-    <main>
+    <main id="main">
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
