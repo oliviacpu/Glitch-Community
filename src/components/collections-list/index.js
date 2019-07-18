@@ -13,14 +13,6 @@ import { pickRandomColor } from 'Utils/color';
 
 import styles from './styles.styl';
 
-const CreateFirstCollection = () => (
-  <div className={styles.createFirstCollection}>
-    <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
-    <p className={styles.createFirstCollectionText}>Create collections to organize your favorite projects.</p>
-    <br />
-  </div>
-);
-
 const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: 'My Stuff',
@@ -30,16 +22,23 @@ const nullMyStuffCollection = {
   id: 'My Stuff',
 };
 
+const CreateFirstCollection = () => (
+  <div className={styles.createFirstCollection}>
+    <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
+    <p className={styles.createFirstCollectionText}>Create collections to organize your favorite projects.</p>
+    <br />
+  </div>
+);
 
-
-function MyStuffCollectionLoader({ collections, myStuffCollection, ...props }) {
+function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
 
-  if (projects.length > 0 || props.isAuthorized) {
+  if (projects.length > 0 || isAuthorized) {
     myStuffCollection.projects = projects;
     collections.unshift(myStuffCollection);
   }
-  return <CollectionsList collections={collections} {...props} />;
+
+  return children(collections);
 }
 
 function CollectionsList({ collections: rawCollections, title, isAuthorized, maybeTeam, showCurator }) {
@@ -108,7 +107,11 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
   const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
 
   if (myStuffCollection) {
-    return <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props} />;
+    return (
+      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props}>
+        {(collectionsWithMyStuff) => <CollectionsList collections={collectionsWithMyStuff} {...props} />}
+      </MyStuffCollectionLoader>
+    );
   }
 
   if (!props.isAuthorized) {
@@ -121,7 +124,6 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
   }
 }
 
-// TODO 
 function CollectionsListWithDevToggle(props) {
   const myStuffEnabled = useDevToggle('My Stuff');
   return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
