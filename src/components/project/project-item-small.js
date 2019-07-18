@@ -15,17 +15,17 @@ const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={get
 
 const getLinkBodyStyles = (project) => classnames(styles.linkBodySmall, { [styles.private]: project.private });
 
-const ProjectItemSmall = ({ project }) => (
+const ProjectItemSmall = ({ project, renderOptimistically }) => (
   <div className={styles.projectItemSmall}>
     <ProjectLink className={getLinkBodyStyles(project)} project={project}>
       <div className={styles.projectHeader}>
         <span className={styles.avatarWrap}>
-          <ProfileAvatar project={project} />
+          {renderOptimistically && !project ? <img src="" alt="" /> : <ProfileAvatar project={project} />}
         </span>
         <Text>
-          <span className={styles.projectName}>{project.domain}</span>{' '}
+          <span className={styles.projectName}>{project.domain || ''}</span>{' '}
         </Text>
-        {project.private && (
+        {project && project.private && (
           <Badge type="private" aria-label="private">
             {' '}
           </Badge>
@@ -41,6 +41,11 @@ ProjectItemSmall.propTypes = {
     id: PropTypes.string.isRequired,
     private: PropTypes.bool,
   }).isRequired,
+  renderOptimistically: PropTypes.bool,
 };
+
+ProjectItemSmall.defaultProps = {
+  renderOptimistically: false,
+}
 
 export default ProjectItemSmall;
