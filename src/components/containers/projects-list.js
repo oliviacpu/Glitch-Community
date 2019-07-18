@@ -13,6 +13,7 @@ import ProjectItem from 'Components/project/project-item';
 import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
+import SkipSectionButtons from 'Components/containers/skip-section-buttons';
 import { LiveMessage } from 'react-aria-live';
 
 import styles from './projects-list.styl';
@@ -222,6 +223,7 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
+          <SkipSectionButtons>
           {renderProjects((filteredProjects) => (
             <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
@@ -237,6 +239,7 @@ function ProjectsList({
               )}
             </PaginationController>
           ))}
+          </SkipSectionButtons>
         </article>
       )}
     </FilterController>
