@@ -71,6 +71,7 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
+<<<<<<< HEAD
           <SkipSectionButtons>
           {renderItems((filteredProjects) => (
             <PaginationController
@@ -78,6 +79,11 @@ function ProjectsList({
               items={filteredProjects}
               itemsPerPage={projectsPerPage}
             >
+=======
+          <SkipSectionButtons sectionName={title}>
+          {renderProjects((filteredProjects) => (
+            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+>>>>>>> 🌸👨 Checkpoint
               {(paginatedProjects) => (
                 <ProjectsUL
                   projects={paginatedProjects}
