@@ -20,7 +20,7 @@ require('module-alias').addAlias('Utils', (fromPath, request) => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 
-const { StaticRouter } = require('react-router');
+const { StaticRouter } = require('react-router-dom');
 const { GlobalsProvider } = require('State/globals');
 
 const { default: App } = require('../src/app');

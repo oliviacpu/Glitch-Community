@@ -5,6 +5,7 @@ const fs = require('fs');
 const util = require('util');
 const dayjs = require('dayjs');
 const punycode = require('punycode');
+const { captureException } = require('@sentry/node');
 
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
@@ -76,7 +77,13 @@ module.exports = function(external) {
       built = false;
     }
 
-    console.log(await renderPage(`${req.protocol}://${req.hostname}`, req.url));
+    let rendered = null;
+    try {
+      rendered = await renderPage(`${req.protocol}://${req.hostname}`, req.url)
+    } catch (error) {
+      captureException(error);
+      console.error(error);
+    }
 
     res.render('index.ejs', {
       title,
@@ -86,6 +93,7 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
+      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
