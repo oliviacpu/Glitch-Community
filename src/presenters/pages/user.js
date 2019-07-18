@@ -85,6 +85,9 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
   React.useEffect(() => {
     if (projects && (projects.length > 0 || isAuthorized)) {
       myStuffCollection.projects = projects;
+      if (collections[0].isBookmarkCollect) {
+        
+      }
       collections.unshift(myStuffCollection);
     }
   }, [projects]);
