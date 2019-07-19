@@ -139,11 +139,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
     <main id="main">
-      <section id={useUniqueId()}>
-=======
-    <main id="main">
       <section id="info">
->>>>>>> 00dac0d31a40e99c5a3e5a99393580c0158763fa
         <ProjectProfileContainer
           currentUser={currentUser}
           project={project}

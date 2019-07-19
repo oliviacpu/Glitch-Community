@@ -109,7 +109,7 @@ storiesOf('Emoji', module)
 storiesOf('TooltipContainer', module)
   .add('action', () => (
     <div style={{ margin: '70px' }}>
-      <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm an action tooltip" />
+      <TooltipContainer type="action" target={<Button>Hover or focus me</Button>} tooltip="I'm an action tooltip" />
     </div>
   ))
   .add('info', () => (
