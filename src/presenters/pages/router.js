@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import punycode from 'punycode';
 
@@ -65,17 +65,21 @@ const PageChangeHandler = withRouter(({ location }) => {
     [location.key],
   );
   
+  // const [linkedEl, setLinkedEl] = useState(null);
   let linkedEl = null;
   useEffect(() => {
+    console.log('effect')
     if (!linkedEl && location.hash) {
+      console.log({ linkedEl })
       console.log('checking hash')
+      // setLinkedEl(document.getElementById(location.hash.substr(1)));
       linkedEl = document.getElementById(location.hash.substr(1));
       if (linkedEl) {
         console.log({ linkedEl })
         linkedEl.scrollIntoView();
       }
     }
-  })
+  });
   return null;
 });
 
