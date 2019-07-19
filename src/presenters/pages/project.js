@@ -64,12 +64,15 @@ const ReadmeError = (error) =>
   );
 const ReadmeLoader = withRouter(({ domain, location }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
-    {({ data }) => (
-      loca
-      <Expander height={location.hash ? Infinity : 250}>
+    {({ data }) =>
+      location.hash ? (
         <Markdown linkifyHeadings>{data.toString()}</Markdown>
-      </Expander>
-    )}
+      ) : (
+        <Expander height={location.hash ? Infinity : 250}>
+          <Markdown linkifyHeadings>{data.toString()}</Markdown>
+        </Expander>
+      )
+    }
   </DataLoader>
 ));
 
