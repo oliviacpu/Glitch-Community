@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
@@ -12,8 +12,16 @@ import ErrorBoundary from 'Components/error-boundary';
 import useFocusFirst from 'Hooks/use-focus-first';
 import styles from './styles.styl';
 
-const Layout = withRouter(({ children, searchQuery, history }) => {
+const Layout = withRouter(({ children, searchQuery, history, location }) => {
   useFocusFirst();
+
+  let linkedEl = null;
+  useEffect(() => {
+    if (!linkedEl && location.hash) {
+      linkedEl = document.getElementById(location.href);
+      linkedEl.scrollIntoView();
+    }
+  });
 
   return (
     <div className={styles.content}>
