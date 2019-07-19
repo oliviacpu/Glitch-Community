@@ -203,7 +203,7 @@ function TeamPage({ team: initialTeam }) {
         isAuthorized={currentUserIsOnTeam}
       />
 
-      {!currentUserIsOnTeam && (
+      {currentUserIsOnTeam && (
         <ErrorBoundary>
           <TeamAnalytics
             id={team.id}
