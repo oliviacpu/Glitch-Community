@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { orderBy, partition } from 'lodash';
+import { orderBy, partition, remove } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import Emoji from 'Components/images/emoji';
@@ -84,11 +84,12 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 
   React.useEffect(() => {
     if (projects && (projects.length > 0 || isAuthorized)) {
-      myStuffCollection.projects = projects;
-      if (collections[0].isBookmarkCollect) {
-        
+      if (collections[0].isBookmarkCollection) {
+        collections[0].projects = projects;
+      } else {
+        myStuffCollection.projects = projects;
+        collections.unshift(myStuffCollection);
       }
-      collections.unshift(myStuffCollection);
     }
   }, [projects]);
 
@@ -96,11 +97,11 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  const myStuffCollection = collections.find((collection) => collection.isBookmarkCollection);
+  const myStuffCollection = remove(collections, (collection) => collection.isBookmarkCollection);
 
-  if (myStuffCollection) {
+  if (myStuffCollection[0]) {
     return (
-      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collections} {...props}>
+      <MyStuffCollectionLoader myStuffCollection={myStuffCollection[0]} collections={collections} {...props}>
         {(collectionsWithMyStuff) => <CollectionsList collections={collectionsWithMyStuff} {...props} />}
       </MyStuffCollectionLoader>
     );
