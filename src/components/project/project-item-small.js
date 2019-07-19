@@ -23,9 +23,9 @@ const ProjectItemSmall = ({ project }) => (
           <ProfileAvatar project={project} />
         </span>
         <Text>
-          <span className={styles.projectName}>{project.domain || ''}</span>{' '}
+          <span className={styles.projectName}>{project.domain}</span>{' '}
         </Text>
-        {project && project.private && (
+        {project.private && (
           <Badge type="private" aria-label="private">
             {' '}
           </Badge>

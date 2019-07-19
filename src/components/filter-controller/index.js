@@ -64,14 +64,12 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
 
 FilterController.propTypes = {
   matchFn: PropTypes.func.isRequired,
-  matchFn,
-  enabled
-  placeholder: PropTypes.node,
+  enabled: PropTypes.bool,
   searchPrompt: PropTypes.string.isRequired,
 };
 
 FilterController.defaultProps = {
-  placeholder: null,
+  enabled: false,
 };
 
 export default FilterController;
