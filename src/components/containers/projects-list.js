@@ -265,6 +265,7 @@ ProjectsList.propTypes = {
 
 ProjectsList.defaultProps = {
   title: null,
+  stringTitle: '',
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,
