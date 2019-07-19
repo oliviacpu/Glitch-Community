@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import {withRouter} from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -61,15 +63,16 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = ({ domain }) => (
+const ReadmeLoader = withRouter(({ domain, expanded, location}) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
-      <Expander height={250}>
+      <Expander height={250} expanded={expanded}>
+        {location}
         <Markdown linkifyHeadings>{data.toString()}</Markdown>
       </Expander>
     )}
   </DataLoader>
-);
+));
 
 ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
