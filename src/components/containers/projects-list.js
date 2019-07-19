@@ -224,22 +224,22 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          <SkipSectionButtons sectionName={stringTitle ? stringTitle : title}>
-          {renderProjects((filteredProjects) => (
-            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
-              {(paginatedProjects) => (
-                <ProjectsUL
-                  projects={paginatedProjects}
-                  collection={collection}
-                  noteOptions={noteOptions}
-                  layout={layout}
-                  sortable={enableSorting && paginatedProjects.length === projects.length}
-                  onReorder={onReorder}
-                  projectOptions={projectOptions}
-                />
-              )}
-            </PaginationController>
-          ))}
+          <SkipSectionButtons sectionName={stringTitle || title}>
+            {renderProjects((filteredProjects) => (
+              <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+                {(paginatedProjects) => (
+                  <ProjectsUL
+                    projects={paginatedProjects}
+                    collection={collection}
+                    noteOptions={noteOptions}
+                    layout={layout}
+                    sortable={enableSorting && paginatedProjects.length === projects.length}
+                    onReorder={onReorder}
+                    projectOptions={projectOptions}
+                  />
+                )}
+              </PaginationController>
+            ))}
           </SkipSectionButtons>
         </article>
       )}

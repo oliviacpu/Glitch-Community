@@ -1,14 +1,20 @@
 import React, { useRef } from 'react';
 import { snakeCase } from 'lodash';
 import Button from 'Components/buttons/button';
+import useUniqueId from 'Hooks/use-unique-id';
 import styles from './skip-section-buttons.styl';
 
 const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeRef = useRef();
   const afterRef = useRef();
 
-  const beforeId = `before-${snakeCase(sectionName)}`;
-  const afterId = `after-${snakeCase(sectionName)}`;
+  // hooks must be called on every render, but if sectionName exists we don't need to use those values
+  let beforeId = useUniqueId();
+  let afterId = useUniqueId();
+  if (sectionName !== 'This Section') {
+    beforeId = `before-${snakeCase(sectionName)}`;
+    afterId = `after-${snakeCase(sectionName)}`;
+  }
 
   const moveFocusToAfter = () => {
     afterRef.current.focus();
@@ -29,6 +35,10 @@ const SkipSectionButtons = ({ children, sectionName }) => {
       </Button>
     </>
   );
+};
+
+SkipSectionButtons.defaultProps = {
+  sectionName: 'This Section',
 };
 
 export default SkipSectionButtons;
