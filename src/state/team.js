@@ -35,7 +35,7 @@ export function useTeamEditor(initialTeam) {
     updateUserAccessLevel,
     joinTeamProject,
   } = useAPIHandlers();
-  const [team, setTeam] = useState({ ...initialTeam });
+  const [team, setTeam] = useState(initialTeam);
 
   async function updateFields(changes) {
     const { data } = await updateItem({ team }, changes);

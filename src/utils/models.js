@@ -1,7 +1,7 @@
-import { getLink as getCollectionLink } from '../models/collection';
-import { getLink as getProjectLink } from '../models/project';
-import { getLink as getTeamLink } from '../models/team';
-import { getLink as getUserLink } from '../models/user';
+import { getLink as getCollectionLink } from 'Models/collection';
+import { getLink as getProjectLink } from 'Models/project';
+import { getLink as getTeamLink } from 'Models/team';
+import { getLink as getUserLink } from 'Models/user';
 
 export const getUrlForModel = (model, modelType) => {
   switch (modelType) {

@@ -87,10 +87,7 @@ export function useProjectReload() {
 }
 
 export function useProjectEditor(initialProject) {
-  const [project, setProject] = useState({
-    ...initialProject,
-    _avatarCache: Date.now(),
-  });
+  const [project, setProject] = useState(initialProject);
   const { uploadAsset } = useUploader();
   const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
@@ -122,7 +119,7 @@ export function useProjectEditor(initialProject) {
           await uploadAsset(blob, policy, '', { cacheControl: 60 });
           setProject((prev) => ({
             ...prev,
-            _avatarCache: Date.now(),
+            avatarUpdatedAt: Date.now(),
           }));
         }, handleError),
       ),

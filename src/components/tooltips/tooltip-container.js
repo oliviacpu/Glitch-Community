@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import useUniqueId from 'Hooks/use-unique-id';
@@ -11,6 +11,17 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
+
+  useEffect(() => {
+    const keyHandler = (event) => {
+      if (['Escape', 'Esc'].includes(event.key)) {
+        event.preventDefault();
+        setTooltipIsActive(false);
+      }
+    };
+    window.addEventListener('keyup', keyHandler);
+    return () => window.removeEventListener('keyup', keyHandler);
+  }, [tooltipIsActive]);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
