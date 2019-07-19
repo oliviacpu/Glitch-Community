@@ -216,6 +216,21 @@ function ProjectsList({
   projectOptions,
   dataCy,
 }) {
+  const renderProjectsFunctionBody = (filteredProjects) => (
+    <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
+      {(paginatedProjects) => (
+        <ProjectsUL
+          projects={paginatedProjects}
+          collection={collection}
+          noteOptions={noteOptions}
+          layout={layout}
+          sortable={enableSorting && paginatedProjects.length === projects.length}
+          onReorder={onReorder}
+          projectOptions={projectOptions}
+        />
+      )}
+    </PaginationController>
+  );
   return (
     <FilterController enabled={enableFiltering} placeholder={placeholder} projects={projects}>
       {({ filterInput, renderProjects }) => (
@@ -224,37 +239,8 @@ function ProjectsList({
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
-          {!collection && <SkipSectionButtons sectionName={stringTitle || title}>
-            {renderProjects((filteredProjects) => (
-            <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
-                {(paginatedProjects) => (
-                  <ProjectsUL
-                    projects={paginatedProjects}
-                    collection={collection}
-                    noteOptions={noteOptions}
-                    layout={layout}
-                    sortable={enableSorting && paginatedProjects.length === projects.length}
-                    onReorder={onReorder}
-                    projectOptions={projectOptions}
-                  />
-                )}
-              </PaginationController>
-          </SkipSectionButtons> }
-          {collection && renderProjects((filteredProjects) => (
-              <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
-                {(paginatedProjects) => (
-                  <ProjectsUL
-                    projects={paginatedProjects}
-                    collection={collection}
-                    noteOptions={noteOptions}
-                    layout={layout}
-                    sortable={enableSorting && paginatedProjects.length === projects.length}
-                    onReorder={onReorder}
-                    projectOptions={projectOptions}
-                  />
-                )}
-              </PaginationController>
-            ))}
+          {!collection && <SkipSectionButtons sectionName={stringTitle || title}>{renderProjects(renderProjectsFunctionBody)}</SkipSectionButtons>}
+          {collection && renderProjects(renderProjectsFunctionBody)}
         </article>
       )}
     </FilterController>
