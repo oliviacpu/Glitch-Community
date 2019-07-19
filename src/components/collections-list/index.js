@@ -12,7 +12,6 @@ import { useCurrentUser } from 'State/current-user';
 import { useCollectionProjects } from 'State/collection';
 
 import styles from './styles.styl';
-import filterStyles from '../filter-controller/styles.styl';
 
 const CreateFirstCollection = () => (
   <div className={styles.createFirstCollection}>
@@ -61,10 +60,10 @@ function CollectionsList({
       placeholder={placeholder}
       items={orderedCollections}
     >
-      {({ filterInput, renderItems }) => (
+      {({ filterInput, filterHeaderStyles, renderItems }) => (
         <>
           <article data-cy="collections" className={styles.collections}>
-            <div className={filterStyles.header}>
+            <div className={filterHeaderStyles}>
               <Heading tagName="h2">{title}</Heading>
               {filterInput}
             </div>

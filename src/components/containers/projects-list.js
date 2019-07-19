@@ -11,7 +11,6 @@ import Row from 'Components/containers/row';
 import classNames from 'classnames/bind';
 
 import styles from './projects-list.styl';
-import filterStyles from '../filter-controller/styles.styl';
 
 const containers = {
   row: (props) => <Row className={styles.projectsRow} {...props} />,
@@ -61,9 +60,9 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
   return (
     <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt="find a project" items={projects}>
-      {({ filterInput, renderItems }) => (
+      {({ filterInput, filterHeaderStyles, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-          <div className={filterStyles.header}>
+          <div className={filterHeaderStyles}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
