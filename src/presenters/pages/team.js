@@ -8,9 +8,9 @@ import Heading from 'Components/text/heading';
 import FeaturedProject from 'Components/project/featured-project';
 import ProjectsList from 'Components/containers/projects-list';
 import Thanks from 'Components/thanks';
-import DataLoader from 'Components/data-loader';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
@@ -21,11 +21,13 @@ import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
+import Link from 'Components/link';
 import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { useTeamEditor } from 'State/team';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './team.styl';
 
@@ -33,35 +35,20 @@ function syncPageToUrl(team) {
   history.replaceState(null, null, getLink(team));
 }
 
-const TeamPageCollections = ({ collections, team }) => {
-  const { currentUser } = useCurrentUser();
-  return (
-    <CollectionsList
-      title="Collections"
-      collections={collections.map((collection) => ({ ...collection, team }))}
-      maybeCurrentUser={currentUser}
-      maybeTeam={team}
-      isAuthorized={userIsOnTeam({ team, user: currentUser })}
-    />
-  );
-};
-
 const Beta = () => (
-  <a href="/teams/" target="_blank" className={styles.beta}>
+  <Link to="/teams/" target="_blank" className={styles.beta}>
     <img src="https://cdn.glitch.com/0c3ba0da-dac8-4904-bb5e-e1c7acc378a2%2Fbeta-flag.svg?1541448893958" alt="" />
     <div>
       <Heading tagName="h4">Teams are in beta</Heading>
       <Text>Learn More</Text>
     </div>
-  </a>
+  </Link>
 );
 
 const ProjectPals = () => (
-  <aside className="inline-banners add-project-to-empty-team-banner">
-    <div className="description-container">
-      <img className="project-pals" src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
-      <div className="description">Add projects to share them with your team</div>
-    </div>
+  <aside className={styles.addProjectToEmptyTeam}>
+    <Image src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?1540583258925" alt="" />
+    <Text>Add projects to share them with your team</Text>
   </aside>
 );
 
@@ -126,19 +113,12 @@ function TeamPage({ team: initialTeam }) {
   const featuredProject = team.projects.find(({ id }) => id === team.featuredProjectId);
 
   const updateUrl = (url) => funcs.updateUrl(url).then(() => syncPageToUrl({ ...team, url }));
+  useFocusFirst();
 
-  const projectOptions = {
-    addProjectToCollection: funcs.addProjectToCollection,
-    deleteProject: funcs.deleteProject,
-    leaveTeamProject: funcs.leaveTeamProject,
-    removeProjectFromTeam: funcs.removeProject,
-    joinTeamProject: funcs.joinTeamProject,
-    featureProject: funcs.featureProject,
-    isAuthorized: currentUserIsOnTeam,
-  };
+  const projectOptions = { ...funcs, team };
 
   return (
-    <main className={styles.container}>
+    <main className={styles.container} id="main">
       <section>
         <Beta />
         <TeamProfileContainer
@@ -196,10 +176,7 @@ function TeamPage({ team: initialTeam }) {
           }
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
-          projectOptions={{
-            removePin: funcs.removePin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -212,24 +189,19 @@ function TeamPage({ team: initialTeam }) {
           isAuthorized={currentUserIsOnTeam}
           enablePagination
           enableFiltering={recentProjects.length > 6}
-          projectOptions={{
-            addPin: funcs.addPin,
-            ...projectOptions,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
       {team.projects.length === 0 && currentUserIsOnTeam && <ProjectPals />}
 
       {/* TEAM COLLECTIONS */}
-      <ErrorBoundary>
-        <DataLoader
-          get={(api) => api.get(`collections?teamId=${team.id}`)}
-          renderLoader={() => <TeamPageCollections team={team} collections={team.collections} />}
-        >
-          {({ data }) => <TeamPageCollections team={team} collections={data} />}
-        </DataLoader>
-      </ErrorBoundary>
+      <CollectionsList
+        title="Collections"
+        collections={team.collections.map((collection) => ({ ...collection, team }))}
+        maybeTeam={team}
+        isAuthorized={currentUserIsOnTeam}
+      />
 
       {currentUserIsOnTeam && (
         <ErrorBoundary>

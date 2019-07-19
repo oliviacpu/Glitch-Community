@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCurrentUser } from 'State/current-user';
+import Button from 'Components/buttons/button';
 import styles from './super-user.styl';
 
 const SuperUserBanner = () => {
@@ -15,7 +16,7 @@ const SuperUserBanner = () => {
   return (
     <div className={styles.container}>
       {displayText}
-      <button onClick={toggleSuperUser}>Click to disable</button>
+      <Button onClick={toggleSuperUser}>Click to disable</Button>
     </div>
   );
 };

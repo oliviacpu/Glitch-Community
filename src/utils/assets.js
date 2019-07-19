@@ -2,7 +2,9 @@
 
 /* eslint-disable no-param-reassign */
 
+import { useMemo } from 'react';
 import quantize from 'quantize';
+import { useAPI, entityPath } from 'State/api';
 import S3Uploader from './s3-uploader';
 
 export const COVER_SIZES = {
@@ -140,29 +142,25 @@ export function requestFile(callback) {
   console.log('input created: ', input);
 }
 
-export function getUserCoverImagePolicy(api, id) {
-  return api.get(`users/${id}/cover/policy`);
+export function uploadAsset(blob, policy, key, progressHandler, options = {}) {
+  const [promise, progress] = S3Uploader(policy).upload({ key, blob, ...options });
+  if (progressHandler) progress(progressHandler);
+  return promise;
 }
 
-export function getTeamAvatarImagePolicy(api, id) {
-  return api.get(`teams/${id}/avatar/policy`);
-}
-
-export function getTeamCoverImagePolicy(api, id) {
-  return api.get(`teams/${id}/cover/policy`);
-}
-
-export function getProjectAvatarImagePolicy(api, id) {
-  return api.get(`projects/${id}/avatar/policy`);
-}
-
-export function uploadAsset(blob, policy, key, options = {}) {
-  return S3Uploader(policy).upload({ key, blob, ...options });
-}
+export const useAssetPolicy = () => {
+  const api = useAPI();
+  return useMemo(
+    () => ({
+      getCoverImagePolicy: (args) => api.get(`/${entityPath(args)}/cover/policy`),
+      getAvatarImagePolicy: (args) => api.get(`/${entityPath(args)}/avatar/policy`),
+    }),
+    [api],
+  );
+};
 
 export function uploadAssetSizes(blob, policy, sizes, progressHandler) {
-  const upload = uploadAsset(blob, policy, 'original');
-  upload.progress(progressHandler);
+  const upload = uploadAsset(blob, policy, 'original', progressHandler);
 
   const scaledUploads = Object.keys(sizes).map((tag) => resizeImage(blob, sizes[tag]).then((resized) => uploadAsset(resized, policy, tag)));
 

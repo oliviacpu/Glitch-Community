@@ -47,6 +47,12 @@ You can use these in a `before` block in your tests to build up fixtures as you 
 
 Be careful not to commit a user fixture or something with sensitive data!
 
+### Making your own test data
+
+There are helpers in `cypress/support/data.js` for making objects that represent users, projects, collections, etc.
+
+You can pass in an `options` object to override the default values of the returned objects.
+
 ### Workflow with Cypress
 
 1. Remix and setup your local branch.

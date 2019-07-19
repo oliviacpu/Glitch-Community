@@ -15,8 +15,29 @@ export const SIZES = ['small'];
  */
 
 const Button = React.forwardRef(
-  ({ onClick, href, disabled, type, size, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji }, ref) => {
-    const className = cx({
+  (
+    {
+      onClick,
+      href,
+      disabled,
+      type,
+      size,
+      submit,
+      matchBackground,
+      hover,
+      children,
+      active,
+      decorative,
+      newTab,
+      image,
+      imagePosition,
+      emoji,
+      ariaPressed,
+      className,
+    },
+    ref,
+  ) => {
+    const fullClassName = cx({
       btn: true,
       cta: type === 'cta',
       small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
@@ -31,7 +52,7 @@ const Button = React.forwardRef(
       active,
       hover,
       decorative,
-    });
+    }, className);
 
     const content = (
       <>
@@ -49,9 +70,8 @@ const Button = React.forwardRef(
           rel: 'noopener noreferrer',
         };
       }
-
       return (
-        <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
+        <Link to={href} ref={ref} onClick={onClick} className={fullClassName} {...targetProps}>
           {content}
         </Link>
       );
@@ -59,14 +79,21 @@ const Button = React.forwardRef(
 
     if (decorative) {
       return (
-        <span className={className} disabled={disabled}>
+        <div className={fullClassName} disabled={disabled}>
           {content}
-        </span>
+        </div>
       );
     }
 
     return (
-      <button ref={ref} onClick={onClick} className={className} disabled={disabled}>
+      <button
+        ref={ref}
+        onClick={onClick}
+        className={fullClassName}
+        disabled={disabled}
+        type={submit ? 'submit' : 'button'}
+        aria-pressed={ariaPressed}
+      >
         {content}
       </button>
     );
@@ -78,15 +105,15 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   /** callback when button clicked */
   onClick: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'onClick', 'href', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'onClick', 'href', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
   /** OR link when button clicked */
   href: (props, propName, componentName) => {
-    if (!props.onClick && !props.href && !props.decorative) {
-      return new Error(`One of props 'href', 'onClick', 'decorative' was not specified in '${componentName}'.`);
+    if (!props.onClick && !props.href && !props.decorative && !props.submit) {
+      return new Error(`One of props 'href', 'onClick', 'decorative', 'submit' was not specified in '${componentName}'.`);
     }
     return null;
   },
@@ -98,6 +125,8 @@ Button.propTypes = {
   type: PropTypes.oneOf(TYPES),
   /** size of button */
   size: PropTypes.oneOf(SIZES),
+  /** button submits a form */
+  submit: PropTypes.bool,
   /** whether or not the button's hover state should be active */
   hover: PropTypes.bool,
   /** whether or not the button should match its background */
@@ -112,6 +141,8 @@ Button.propTypes = {
   imagePosition: PropTypes.oneOf(['left', 'right']),
   /** emoji name */
   emoji: PropTypes.string,
+  ariaPressed: PropTypes.string,
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -120,6 +151,7 @@ Button.defaultProps = {
   disabled: false,
   type: null,
   size: null,
+  submit: false,
   hover: false,
   matchBackground: false,
   active: false,
@@ -128,6 +160,8 @@ Button.defaultProps = {
   image: null,
   imagePosition: 'right',
   emoji: null,
+  ariaPressed: null,
+  className: '',
 };
 
 const ButtonImage = ({ image, position, up1 }) => {

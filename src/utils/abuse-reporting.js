@@ -1,7 +1,6 @@
-import { getUrlForModel, getDisplayNameForModel } from './models';
-import { getLink, getDisplayName } from '../models/user';
-
-/* global APP_URL */
+import { getLink, getDisplayName } from 'Models/user';
+import { getUrlForModel, getDisplayNameForModel } from 'Utils/models';
+import { APP_URL } from 'Utils/constants';
 
 export const getAbuseReportTitle = (model, modelType) => {
   if (modelType === 'home') {

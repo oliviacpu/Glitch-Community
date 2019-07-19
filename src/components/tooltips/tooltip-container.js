@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import useUniqueId from 'Hooks/use-unique-id';
@@ -11,6 +11,17 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
+
+  useEffect(() => {
+    const keyHandler = (event) => {
+      if (['Escape', 'Esc'].includes(event.key)) {
+        event.preventDefault();
+        setTooltipIsActive(false);
+      }
+    };
+    window.addEventListener('keyup', keyHandler);
+    return () => window.removeEventListener('keyup', keyHandler);
+  }, [tooltipIsActive]);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
@@ -26,7 +37,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
     persistent,
     fallback,
   });
-  const tooltipFallbackClassName = fallback ? 'fallback' : '';
+  const tooltipFallbackClassName = fallback ? styles.fallback : '';
 
   let role;
   let extendedTarget;
@@ -63,14 +74,14 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={`${tooltipClassName} tooltip`} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
+      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
     );
   }
 
   return (
-    <div className={`${tooltipContainerClassName} tooltip-container`}>
+    <div className={tooltipContainerClassName}>
       <div
         onMouseEnter={() => setTooltipIsActive(true)}
         onMouseLeave={() => setTooltipIsActive(false)}

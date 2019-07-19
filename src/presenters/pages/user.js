@@ -19,6 +19,7 @@ import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';
 
@@ -76,17 +77,15 @@ const UserPage = ({ user: initialUser }) => {
     uploadCover,
     clearCover,
     uploadAvatar,
-    addPin,
-    removePin,
-    leaveProject,
-    deleteProject,
     undeleteProject,
-    featureProject,
     unfeatureProject,
     setDeletedProjects,
     addProjectToCollection,
   } = funcs;
+  const projectOptions = { ...funcs, user };
   const { _deletedProjects, featuredProjectId } = user;
+
+  useFocusFirst();
 
   const { currentUser: maybeCurrentUser } = useCurrentUser();
   const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
@@ -99,7 +98,7 @@ const UserPage = ({ user: initialUser }) => {
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className={styles.container}>
+    <main id="main" className={styles.container}>
       <section>
         <UserProfileContainer
           item={user}
@@ -149,14 +148,7 @@ const UserPage = ({ user: initialUser }) => {
             </>
           }
           projects={pinnedProjects}
-          projectOptions={{
-            removePin,
-            featureProject,
-            leaveProject,
-            deleteProject,
-            addProjectToCollection,
-            isAuthorized,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -181,14 +173,7 @@ const UserPage = ({ user: initialUser }) => {
           projects={recentProjects}
           enablePagination
           enableFiltering={recentProjects.length > 6}
-          projectOptions={{
-            addPin,
-            featureProject,
-            leaveProject,
-            deleteProject,
-            addProjectToCollection,
-            isAuthorized,
-          }}
+          projectOptions={projectOptions}
         />
       )}
 
@@ -226,8 +211,6 @@ UserPage.propTypes = {
     projects: PropTypes.array.isRequired,
     teams: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
-    _deletedProjects: PropTypes.array.isRequired,
   }).isRequired,
 };
 

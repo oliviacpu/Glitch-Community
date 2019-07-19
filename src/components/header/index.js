@@ -1,7 +1,7 @@
-/* global EDITOR_URL */
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { EDITOR_URL } from 'Utils/constants';
 import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
 import SignInPop from 'Components/sign-in-pop';
@@ -20,10 +20,11 @@ const ResumeCoding = () => (
   </TrackedExternalLink>
 );
 
-const Header = ({ searchQuery, showNewStuffOverlay }) => {
+const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   return (
     <header role="banner" className={styles.header}>
+      <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
       <Link to="/" className={styles.logoWrap}>
         <Logo />
       </Link>
@@ -48,7 +49,13 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
           )}
           {!!currentUser && currentUser.login && (
             <li className={styles.buttonWrap}>
-              <UserOptionsPop user={currentUser} signOut={clear} showNewStuffOverlay={showNewStuffOverlay} superUserHelpers={superUserHelpers} />
+              <UserOptionsPop
+                user={currentUser}
+                signOut={clear}
+                showAccountSettingsOverlay={showAccountSettingsOverlay}
+                showNewStuffOverlay={showNewStuffOverlay}
+                superUserHelpers={superUserHelpers}
+              />
             </li>
           )}
         </ul>
@@ -59,12 +66,12 @@ const Header = ({ searchQuery, showNewStuffOverlay }) => {
 
 Header.propTypes = {
   searchQuery: PropTypes.string,
-  showNewStuffOverlay: PropTypes.func,
+  showAccountSettingsOverlay: PropTypes.func.isRequired,
+  showNewStuffOverlay: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
   searchQuery: '',
-  showNewStuffOverlay: () => {},
 };
 
 export default Header;

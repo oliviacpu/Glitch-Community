@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sampleSize } from 'lodash';
 
 import Helmet from 'react-helmet';
 
 import Button from 'Components/buttons/button';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -13,7 +11,7 @@ import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
 import ProjectEmbed from 'Components/project/project-embed';
 import ProfileList from 'Components/profile-list';
-import ProjectDomainInput from 'Components/fields/project-domain-input';
+import OptimisticTextInput from 'Components/fields/optimistic-text-input';
 import { ProjectProfileContainer } from 'Components/containers/profile';
 import DataLoader from 'Components/data-loader';
 import Row from 'Components/containers/row';
@@ -23,14 +21,16 @@ import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } f
 import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
+import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 import useUniqueId from 'Hooks/use-unique-id';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './project.styl';
 
@@ -38,59 +38,20 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const getIncludedCollections = async (api, projectId) => {
-  const collections = await getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100&orderKey=createdAt&orderDirection=DESC`);
-  const selectedCollections = sampleSize(collections, 3);
-  const populatedCollections = await Promise.all(
-    selectedCollections.map(async (collection) => {
-      const { projects, user, team } = await allByKeys({
-        projects: getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100&orderKey=projectOrder&orderDirection=ASC`),
-        user: collection.user && getSingleItem(api, `v1/users/by/id?id=${collection.user.id}`, collection.user.id),
-        team: collection.team && getSingleItem(api, `v1/teams/by/id?id=${collection.team.id}`, collection.team.id),
-      });
-      return { ...collection, projects, user, team };
-    }),
-  );
-  return populatedCollections.filter((c) => c.team || c.user);
-};
+const filteredCollections = (collections) => collections.filter((c) => c.user || c.team);
 
 const IncludedInCollections = ({ projectId }) => (
-  <DataLoader get={(api) => getIncludedCollections(api, projectId)} renderLoader={() => null}>
+  <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
       collections.length > 0 && (
         <>
           <Heading tagName="h2">Included in Collections</Heading>
-          <Row items={collections}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
+          <Row items={filteredCollections(collections)}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
         </>
       )
     }
   </DataLoader>
 );
-
-const PrivateTooltip = 'Only members can view code';
-const PublicTooltip = 'Visible to everyone';
-
-const PrivateBadge = () => (
-  <TooltipContainer type="info" tooltip={PrivateTooltip} target={<span className="project-badge private-project-badge" />} />
-);
-
-const PrivateToggle = ({ isPrivate, setPrivate }) => {
-  const tooltip = isPrivate ? PrivateTooltip : PublicTooltip;
-  const classBase = 'button-tertiary button-on-secondary-background project-badge';
-  const className = isPrivate ? 'private-project-badge' : 'public-project-badge';
-
-  return (
-    <TooltipContainer
-      type="action"
-      target={<button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" />}
-      tooltip={tooltip}
-    />
-  );
-};
-PrivateToggle.propTypes = {
-  isPrivate: PropTypes.bool.isRequired,
-  setPrivate: PropTypes.func.isRequired,
-};
 
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
@@ -168,16 +129,21 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
-  const [project, { addProjectToCollection, updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
     initialProject,
   );
-
+  useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
+  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   return (
-    <main>
+    <main id="main">
       <section id={useUniqueId()}>
+=======
+    <main id="main">
+      <section id="info">
+>>>>>>> 00dac0d31a40e99c5a3e5a99393580c0158763fa
         <ProjectProfileContainer
           currentUser={currentUser}
           project={project}
@@ -186,19 +152,24 @@ const ProjectPage = ({ project: initialProject }) => {
             'Upload Avatar': isAuthorized ? uploadAvatar : null,
           }}
         >
-          <Heading tagName="h1">
-            {isAuthorized ? (
-              <ProjectDomainInput
-                domain={domain}
-                onChange={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                privacy={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-              />
-            ) : (
-              <>
-                {!currentUser.isSupport && suspendedReason ? 'suspended project' : domain} {project.private && <PrivateBadge />}
-              </>
-            )}
-          </Heading>
+          {isAuthorized ? (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">
+                <OptimisticTextInput
+                  labelText="Project Domain"
+                  value={project.domain}
+                  onChange={updateDomainAndSync}
+                  placeholder="Name your project"
+                />
+              </Heading>
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+            </div>
+          ) : (
+            <div className={styles.headingWrap}>
+              <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+              {project.private && <PrivateBadge />}
+            </div>
+          )}
           {users.length + teams.length > 0 && (
             <div>
               <ProfileList hasLinks teams={teams} users={users} layout="block" />
@@ -221,12 +192,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed
-          project={project}
-          isAuthorized={isAuthorized}
-          currentUser={currentUser}
-          addProjectToCollection={(_, collection) => addProjectToCollection(collection)}
-        />
+        <ProjectEmbed project={project} />
       </div>
       <section id={useUniqueId()}>
         <ReadmeLoader domain={domain} />

@@ -94,11 +94,11 @@ const NewStuff = ({ children }) => {
   const [log, setLog] = useState(newStuffLog);
   const track = useTracker('Pupdate');
 
-  const renderOuter = ({ visible, togglePopover }) => {
+  const renderOuter = ({ visible, openPopover }) => {
     const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const show = () => {
       track();
-      togglePopover();
+      openPopover();
       const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
       setLog(unreadStuff.length ? unreadStuff : newStuffLog);
       setNewStuffReadId(latestId);

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import TransparentButton from 'Components/buttons/transparent-button';
 import Button from 'Components/buttons/button';
+import Arrow from 'Components/arrow';
 import styles from './results-list.styl';
 
 const ResultsList = ({ scroll, items, className, children }) => (
@@ -45,14 +46,14 @@ export const ResultItem = ({ className, onClick, href, children, active, selecte
   return (
     <div className={classnames(className, styles.resultItem, href && styles.withLink, selected && styles.selected)}>
       <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={buttonRef}>
-        <div className={styles.resultWrap}>
+        <span className={styles.resultWrap}>
           {children}
-        </div>
+        </span>
       </TransparentButton>
       {href && (
         <div className={styles.linkButtonWrap}>
           <Button size="small" href={href} newTab>
-            View <span aria-hidden="true">→</span>
+            View <Arrow />
           </Button>
         </div>
       )}

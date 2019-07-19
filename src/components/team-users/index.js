@@ -7,7 +7,7 @@ import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
-import { useAPI, createAPIHook } from 'State/api';
+import { useAPIHandlers, createAPIHook } from 'State/api';
 import { useNotifications } from 'State/notifications';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
@@ -22,15 +22,15 @@ import styles from './styles.styl';
 
 // Invited user icon and pop
 
-function InvitedUser(props) {
-  const api = useAPI();
+function InvitedUser({ user, team, onRevokeInvite }) {
+  const { inviteUserToTeam } = useAPIHandlers();
   const { createNotification } = useNotifications();
 
   // resend the invite
   const resendInvite = async () => {
     try {
-      await api.post(`/teams/${props.teamId}/sendJoinTeamEmail`, { userId: props.user.id });
-      createNotification(`Resent invite to ${props.user.name}!`, { type: 'success' });
+      await inviteUserToTeam({ team, user });
+      createNotification(`Resent invite to ${user.name}!`, { type: 'success' });
     } catch (error) {
       captureException(error);
       createNotification('Invite not sent, try again later', { type: 'error' });
@@ -42,24 +42,24 @@ function InvitedUser(props) {
       {({ visible, togglePopover }) => (
         <div style={{ position: 'relative' }}>
           <TransparentButton onClick={togglePopover}>
-            <UserAvatar user={props.user} />
+            <UserAvatar user={user} />
           </TransparentButton>
 
           {visible && (
             <PopoverDialog align="left">
               <PopoverInfo>
                 <div className={styles.avatar}>
-                  <UserLink user={props.user}>
-                    <UserAvatar user={props.user} />
+                  <UserLink user={user}>
+                    <UserAvatar user={user} />
                   </UserLink>
                 </div>
                 <div className={styles.nameLoginWrap}>
-                  <h3 className={styles.name} title={props.user.name}>
-                    {props.user.name || 'Anonymous'}
+                  <h3 className={styles.name} title={user.name}>
+                    {user.name || 'Anonymous'}
                   </h3>
-                  {props.user.login && (
-                    <p className={styles.userLogin} title={props.user.login}>
-                      @{props.user.login}
+                  {user.login && (
+                    <p className={styles.userLogin} title={user.login}>
+                      @{user.login}
                     </p>
                   )}
                 </div>
@@ -72,7 +72,7 @@ function InvitedUser(props) {
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
-                <Button onClick={props.onRevokeInvite} type="dangerZone" emoji="wave">
+                <Button onClick={onRevokeInvite} type="dangerZone" emoji="wave">
                   Remove
                 </Button>
               </PopoverActions>
@@ -86,7 +86,8 @@ function InvitedUser(props) {
 
 InvitedUser.propTypes = {
   user: PropTypes.object.isRequired,
-  teamId: PropTypes.number.isRequired,
+  team: PropTypes.object.isRequired,
+  onRevokeInvite: PropTypes.func.isRequired,
 };
 
 // Whitelisted domain icon
@@ -163,7 +164,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const { currentUser } = useCurrentUser();
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitees, setRemovedInvitee] = useState([]);
-  const api = useAPI();
+  const { revokeTeamInvite } = useAPIHandlers();
   const { createNotification } = useNotifications();
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
@@ -212,11 +213,11 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
         <li key={user.id} className={styles.invitedMember}>
           <InvitedUser
             user={user}
-            teamId={team.id}
+            team={team}
             onRevokeInvite={async () => {
               setRemovedInvitee((removed) => [...removed, user]);
               try {
-                await api.post(`/teams/${team.id}/revokeTeamJoinToken/${user.id}`);
+                await revokeTeamInvite({ team, user });
                 createNotification(`Removed ${user.name} from team`);
               } catch (error) {
                 captureException(error);

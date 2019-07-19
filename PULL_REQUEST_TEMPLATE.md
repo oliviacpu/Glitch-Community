@@ -1,7 +1,7 @@
 ## Links
 * Remix link
-* Manuscript link
-* Specs/Notion docs
+* Issue-tracker link
+* Specs/doc links
 
 ## GIF/Screenshots:
 

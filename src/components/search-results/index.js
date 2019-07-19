@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { useAPI } from 'State/api';
+import { getProjectPermissions } from 'State/project-options';
+
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
@@ -14,14 +17,9 @@ import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
-import { captureException } from 'Utils/sentry';
-
-import { useAPI, createAPIHook } from '../../state/api';
-import { useCurrentUser } from '../../state/current-user';
-
 import styles from './search-results.styl';
 
-const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
+const FilterContainer = ({ filters, activeFilter, setFilter }) => {
   const buttons = filters.map((filter) => ({
     name: filter.id,
     contents: (
@@ -32,91 +30,8 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
     ),
   }));
 
-  return (
-    <>
-      <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />
-      {activeFilter === 'all' && <h1>All results for {query}</h1>}
-    </>
-  );
+  return <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />;
 };
-
-// Search results from algolia do not contain their associated users or teams,
-// so those need to be fetched after the search results have loaded.
-const useTeamUsers = createAPIHook(async (api, teamID) => {
-  try {
-    const res = await api.get(`/v1/teams/by/id/users?id=${teamID}`);
-    return res.data.items;
-  } catch (e) {
-    captureException(e);
-    return [];
-  }
-});
-
-function TeamWithDataLoading({ team }) {
-  const { value: users } = useTeamUsers(team.id);
-  return <TeamItem team={{ ...team, users }} />;
-}
-
-const TeamResult = ({ result }) => {
-  if (!result.users) {
-    return <TeamWithDataLoading team={result} />;
-  }
-  return <TeamItem team={result} />;
-};
-
-const useUsers = createAPIHook(async (api, userIDs) => {
-  if (!userIDs.length) {
-    return undefined;
-  }
-  const idString = userIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/users/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-const useTeams = createAPIHook(async (api, teamIDs) => {
-  if (!teamIDs.length) {
-    return undefined;
-  }
-  const idString = teamIDs.map((id) => `id=${id}`).join('&');
-  try {
-    const { data } = await api.get(`/v1/teams/by/id/?${idString}`);
-    return Object.values(data);
-  } catch (error) {
-    captureException(error);
-    return [];
-  }
-});
-
-function ProjectResult({ result }) {
-  const { currentUser } = useCurrentUser();
-  const api = useAPI();
-
-  const props = { project: result, projectOptions: {} };
-  if (currentUser.login) {
-    props.projectOptions.addProjectToCollection = (project, collection) => api.patch(`collections/${collection.id}/add/${project.id}`);
-  }
-
-  return <ProjectItem {...props} />;
-}
-
-function CollectionWithDataLoading({ collection }) {
-  const { value: users = [] } = useUsers(collection.userIDs);
-  const { value: teams = [] } = useTeams(collection.teamIDs);
-  const collectionWithData = { ...collection, user: users[0], team: teams[0] };
-  return <CollectionItemSmall showCurator collection={collectionWithData} />;
-}
-
-function CollectionResult({ result }) {
-  if (!result.user && !result.team) {
-    return <CollectionWithDataLoading collection={result} />;
-  }
-  return <CollectionItemSmall showCurator collection={result} />;
-}
 
 const groups = [
   { id: 'team', label: 'Teams' },
@@ -125,11 +40,23 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
+const PermissionsLoader = ({ project }) => {
+  const api = useAPI();
+  React.useEffect(() => {
+    async function fillInPermissions() {
+      const permissions = await getProjectPermissions(api, project.domain);
+      project.permissions = permissions;
+    }
+    fillInPermissions();
+  }, []);
+  return <ProjectItem project={project} />;
+};
+
 const resultComponents = {
-  team: TeamResult,
+  team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ProjectResult,
-  collection: CollectionResult,
+  project: ({ result }) => <PermissionsLoader project={result} />,
+  collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
 const ResultComponent = ({ result }) => {
@@ -192,16 +119,12 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     .filter((group) => group.results.length > 0);
 
   return (
-    <main className={styles.page}>
-      {!ready && (
-        <>
-          <Loader />
-          <h1>All results for {query}</h1>
-        </>
-      )}
+    <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
-        <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} query={query} />
+        <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} />
       )}
+      {activeFilter === 'all' && <h1>All results for {query}</h1>}
+      {!ready && <Loader />}
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>

@@ -16,16 +16,15 @@ export const NotificationsProvider = (props) => {
 
   const create = (content, opts = {}) => {
     const notification = {
-      id: `${Date.now()}{Math.random()}`,
+      id: `${Date.now()}${Math.random()}`,
       content,
       ...opts,
     };
 
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
-
     if (notification.persistent) {
       const updateNotification = (updatedContent) => {
-        setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, updatedContent } : n)));
+        setNotifications((prevNotifications) => prevNotifications.map((n) => (n.id === notification.id ? { ...n, content: updatedContent } : n)));
       };
       const removeNotification = () => {
         remove(notification.id);
@@ -39,8 +38,8 @@ export const NotificationsProvider = (props) => {
     return notification.id;
   };
 
-  const createError = (content = 'Something went wrong. Try refreshing?', opts) => {
-    create(content, ...opts);
+  const createError = (content = 'Something went wrong. Try refreshing?', opts = {}) => {
+    create(content, { type: 'error', ...opts });
   };
 
   const funcs = {

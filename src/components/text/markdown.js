@@ -44,8 +44,13 @@ const Markdown = ({ children, length, allowImages, renderAsPlaintext, linkifyHea
   if (renderAsPlaintext) {
     rendered = stripHtml(rendered);
     className = '';
+
+    // in many cases we use the renderAsPlaintext prop to put markdown in a paragraph
+    // <div> can't be a descendant of a <p>, so use span
+    return <span className={className}>{rendered}</span>;
   }
 
+  // use <div> here, because <p> and other markup can't be a descendant of a <span>
   return (
     <div
       className={className}

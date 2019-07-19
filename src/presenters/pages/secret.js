@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
 
+import Button from 'Components/buttons/button';
+import Heading from 'Components/text/heading';
+import VisuallyHidden from 'Components/containers/visually-hidden';
 import { useDevToggles } from 'State/dev-toggles';
 
 import styles from './secret.styl';
@@ -41,18 +44,19 @@ const Secret = () => {
   };
 
   return (
-    <section className={styles.secretPage}>
+    <main className={styles.secretPage}>
       <Helmet title="Glitch - It's a secret to everybody." />
+      <VisuallyHidden as={Heading} tagName="h1">Glitch - It's a secret to everybody</VisuallyHidden>
       <ul>
         {toggleData.map(({ name, description }) => (
-          <li key={name}>
-            <button title={description} onClick={() => toggleTheToggle(name)} className={isEnabled(name) ? styles.lit : ''}>
+          <li key={name} className={isEnabled(name) ? styles.lit : ''}>
+            <Button title={description} ariaPressed={isEnabled(name) ? 'true' : 'false'} onClick={() => toggleTheToggle(name)}>
               {name}
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
-    </section>
+    </main>
   );
 };
 

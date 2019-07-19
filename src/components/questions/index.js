@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import randomColor from 'randomcolor';
 import { sample } from 'lodash';
 
@@ -8,6 +7,7 @@ import Heading from 'Components/text/heading';
 import Link from 'Components/link';
 import Grid from 'Components/containers/grid';
 import ErrorBoundary from 'Components/error-boundary';
+import Arrow from 'Components/arrow';
 import QuestionItem from './item';
 
 import { captureException } from '../../utils/sentry';
@@ -16,25 +16,10 @@ import styles from './questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
 
-const QuestionTimer = ({ animating, callback }) => (
-  <div className={styles.loaderPie} title="Looking for more questions...">
-    <div className={styles.leftSide}>
-      <div className={classnames(styles.slice, animating && styles.animated)} onAnimationEnd={callback} />
-    </div>
-    <div className={styles.rightSide}>
-      <div className={classnames(styles.slice, animating && styles.animated)} />
-    </div>
-  </div>
-);
-QuestionTimer.propTypes = {
-  animating: PropTypes.bool.isRequired,
-  callback: PropTypes.func.isRequired,
-};
-
 async function load(api, max) {
   const kaomoji = sample(kaomojis);
   try {
-    const { data } = await api.get('projects/questions');
+    const { data } = await api.get(`projects/questions?cache=${Date.now()}`);
     const questions = data
       .map((q) => JSON.parse(q.details))
       .filter((q) => !!q)
@@ -46,37 +31,36 @@ async function load(api, max) {
         });
         return { colorInner, colorOuter, id: question.questionId, ...question };
       });
-    return { kaomoji, questions, loading: false };
+    return { kaomoji, questions };
   } catch (error) {
     console.error(error);
     captureException(error);
-    return { kaomoji, questions: [], loading: false };
+    return { kaomoji, questions: [] };
   }
 }
 
-function useRepeatingEffect(effectHandler, dependencies) {
-  const [counter, setCounter] = useState(0);
-  useEffect(effectHandler, [...dependencies, counter]);
-  const increment = () => setCounter((x) => x + 1);
-  return increment;
+function useRepeatingEffect(effectHandler, interval, dependencies) {
+  useEffect(() => {
+    effectHandler();
+    const id = setInterval(effectHandler, interval);
+    return () => clearInterval(id);
+  }, dependencies);
 }
 
 function Questions({ max }) {
   const api = useAPI();
-  const [{ kaomoji, loading, questions }, setState] = useState({
+  const [{ kaomoji, questions }, setState] = useState({
     kaomoji: '',
-    loading: true,
     questions: [],
   });
-  const reload = useRepeatingEffect(() => {
-    setState({ kaomoji, loading: true, questions });
+  useRepeatingEffect(() => {
     load(api, max).then(setState);
-  }, []);
+  }, 10000, []);
 
   return (
     <section className={styles.container}>
       <Heading tagName="h2">
-        <Link to="/questions">Help Others, Get Thanks →</Link> <QuestionTimer animating={!loading} callback={reload} />
+        <Link to="/questions">Help Others, Get Thanks <Arrow /></Link>
       </Heading>
       <div>
         {questions.length ? (

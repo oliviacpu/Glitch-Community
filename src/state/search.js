@@ -119,7 +119,7 @@ const formatByType = {
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    permissions: project.members.map((userId) => ({ userId })),
+    permissions: [],
     teamIds: project.teams,
     private: project.isPrivate,
   }),
@@ -131,8 +131,8 @@ const formatByType = {
     id: Number(collection.objectID.replace('collection-', '')),
     team: null,
     user: null,
-    teamIDs: collection.team > 0 ? [collection.team] : [],
-    userIDs: collection.user > 0 ? [collection.user] : [],
+    teamId: collection.team,
+    userId: collection.user,
   }),
 };
 

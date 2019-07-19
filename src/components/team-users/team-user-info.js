@@ -41,7 +41,12 @@ const ProjectsList = ({ options, value, onChange }) => (
           value={project.id}
           onChange={(e) => {
             const next = new Set(value);
-            onChange(Array.from(e.target.checked ? next.add(e.target.value) : next.delete(e.target.value)));
+            if (e.target.checked) {
+              next.add(e.target.value);
+            } else {
+              next.delete(e.target.value);
+            }
+            onChange(Array.from(next));
           }}
         />
         <div className={styles.projectAvatarWrap}>
@@ -66,7 +71,7 @@ const AdminBadge = () => (
 // Team User Remove 💣
 
 function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
-  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [selectedProjectIDs, setSelectedProjects] = useState([]);
   function selectAllProjects() {
     setSelectedProjects(userTeamProjects.map((p) => p.id));
   }
@@ -75,7 +80,8 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
     setSelectedProjects([]);
   }
 
-  const allProjectsSelected = userTeamProjects.every((p) => selectedProjects.includes(p.id));
+  const allProjectsSelected = userTeamProjects.every((p) => selectedProjectIDs.includes(p.id));
+  const projectsToRemove = userTeamProjects.filter((p) => selectedProjectIDs.includes(p.id));
 
   return (
     <PopoverDialog align="left" focusOnPopover>
@@ -89,7 +95,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
       {userTeamProjects && userTeamProjects.length > 0 && (
         <PopoverActions>
           <ActionDescription>Also remove them from these projects</ActionDescription>
-          <ProjectsList options={userTeamProjects} value={selectedProjects} onChange={setSelectedProjects} />
+          <ProjectsList options={userTeamProjects} value={selectedProjectIDs} onChange={setSelectedProjects} />
           {userTeamProjects.length > 1 && allProjectsSelected && (
             <Button size="small" onClick={unselectAllProjects}>
               Unselect All
@@ -104,7 +110,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
       )}
 
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => onRemoveUser(selectedProjects)}>
+        <Button type="dangerZone" onClick={() => onRemoveUser(projectsToRemove)}>
           Remove{' '}
           <span className={styles.tinyAvatar}>
             <UserAvatar user={user} />
@@ -189,7 +195,7 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
   const userTeamProjects = userTeamProjectsResponse.status === 'ready' ? userTeamProjectsResponse.value : null;
 
   const removeUser = useTrackedFunc(async (selectedProjects = []) => {
-    await removeUserFromTeam(user.id, Array.from(selectedProjects));
+    await removeUserFromTeam(user, selectedProjects);
     createNotification(`${getDisplayName(user)} removed from Team`);
   }, 'Remove from Team submitted');
 
@@ -206,8 +212,8 @@ const TeamUserPop = ({ team, user, removeUserFromTeam, updateUserPermissions }) 
     }
   };
 
-  const onRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user.id, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
-  const onMakeAdmin = useTrackedFunc(() => updateUserPermissions(user.id, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
+  const onRemoveAdmin = useTrackedFunc(() => updateUserPermissions(user, MEMBER_ACCESS_LEVEL), 'Remove Admin Status clicked');
+  const onMakeAdmin = useTrackedFunc(() => updateUserPermissions(user, ADMIN_ACCESS_LEVEL), 'Make an Admin clicked');
 
   return (
     <PopoverContainer>

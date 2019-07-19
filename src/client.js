@@ -1,5 +1,3 @@
-/* globals EDITOR_URL */
-
 import './polyfills';
 
 // Init our dayjs plugins
@@ -8,8 +6,12 @@ import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
 import { render } from 'react-dom';
-import convertPlugin from '../shared/dayjs-convert';
-import { captureException, configureScope } from './utils/sentry';
+import { BrowserRouter } from 'react-router-dom';
+
+import convertPlugin from 'Shared/dayjs-convert';
+import { captureException, configureScope } from 'Utils/sentry';
+import { EDITOR_URL } from 'Utils/constants';
+import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
 dayjs.extend(relativeTimePlugin);
@@ -18,7 +20,6 @@ dayjs.extend(convertPlugin);
 // This function is used in index.ejs to set up the app
 window.bootstrap = () => {
   if (location.hash.startsWith('#!/')) {
-    // eslint-disable-line no-restricted-globals
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
@@ -32,7 +33,18 @@ window.bootstrap = () => {
 
   const dom = document.createElement('div');
   document.body.appendChild(dom);
-  render(<App />, dom);
+  render((
+    <BrowserRouter>
+      <GlobalsProvider
+        origin={window.location.origin}
+        ZINE_POSTS={window.ZINE_POSTS}
+        HOME_CONTENT={window.HOME_CONTENT}
+        EXTERNAL_ROUTES={window.EXTERNAL_ROUTES}
+      >
+        <App />
+      </GlobalsProvider>
+    </BrowserRouter>
+  ), dom);
 };
 
 // Make sure react exists because that's an issue that is happening
