@@ -43,7 +43,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text>
-          This collection is empty – add some projec ts <Emoji name="index" />
+          This collection is empty – add some projects <Emoji name="index" />
         </Text>
       </div>
     );
