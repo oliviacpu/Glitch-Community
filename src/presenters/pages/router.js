@@ -58,11 +58,24 @@ const PageChangeHandler = withRouter(({ location }) => {
         window.scrollTo(0, 0);
         reload();
       }
+
       isUpdate.current = true;
       track();
     },
     [location.key],
   );
+  
+  let linkedEl = null;
+  useEffect(() => {
+    if (!linkedEl && location.hash) {
+      console.log('checking hash')
+      linkedEl = document.getElementById(location.hash.substr(1));
+      if (linkedEl) {
+        console.log({ linkedEl })
+        linkedEl.scrollIntoView();
+      }
+    }
+  })
   return null;
 });
 

@@ -15,19 +15,6 @@ import styles from './styles.styl';
 const Layout = withRouter(({ children, searchQuery, history, location }) => {
   useFocusFirst();
 
-  let linkedEl = null;
-  useEffect(() => {
-    console.log('effect')
-    if (!linkedEl && location.hash) {
-      linkedEl = document.getElementById(location.hash.substr(1));
-      console.log(linkedEl);
-      console.log('scrolling into view')
-      if (linkedEl) {
-        linkedEl.scrollIntoView();
-      }
-    }
-  });
-
   return (
     <div className={styles.content}>
       <Helmet title="Glitch" />
