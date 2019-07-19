@@ -25,7 +25,7 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   };
 
   return (
-    <>
+    <div>
       <Button ref={beforeRef} onClick={moveFocusToAfter} id={beforeId} className={styles.visibleOnFocus}>
         Skip to After {sectionName}
       </Button>
@@ -33,7 +33,7 @@ const SkipSectionButtons = ({ children, sectionName }) => {
       <Button ref={afterRef} onClick={moveFocusToBefore} id={afterId} className={styles.visibleOnFocus}>
         Skip to Before {sectionName}
       </Button>
-    </>
+    </div>
   );
 };
 
