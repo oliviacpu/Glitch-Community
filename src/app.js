@@ -11,36 +11,33 @@ import { NotificationsProvider } from 'State/notifications';
 import OfflineNotice from 'State/offline-notice';
 import SuperUserBanner from 'Components/banners/super-user';
 import ErrorBoundary from 'Components/error-boundary';
-import useFocusFirst from 'Hooks/use-focus-first';
 
 import Router from './presenters/pages/router';
 
-const App = () => {
-  useFocusFirst();
-
-  return <ErrorBoundary fallback="Something went very wrong, try refreshing?">
-      <LiveAnnouncer>
-        <NotificationsProvider>
-          <LocalStorageProvider>
-            <AnalyticsContext context={{ groupId: '0' }}>
-              <CurrentUserProvider>
-                <APIContextProvider>
-                  <ProjectContextProvider>
-                    <CollectionContextProvider>
-                      <>
-                        <SuperUserBanner />
-                        <OfflineNotice />
-                        <Router />
-                      </>
-                    </CollectionContextProvider>
-                  </ProjectContextProvider>
-                </APIContextProvider>
-              </CurrentUserProvider>
-            </AnalyticsContext>
-          </LocalStorageProvider>
-        </NotificationsProvider>
-      </LiveAnnouncer>
-    </ErrorBoundary>;
-};
+const App = () => (
+  <ErrorBoundary fallback="Something went very wrong, try refreshing?">
+    <LiveAnnouncer>
+      <NotificationsProvider>
+        <LocalStorageProvider>
+          <AnalyticsContext context={{ groupId: '0' }}>
+            <CurrentUserProvider>
+              <APIContextProvider>
+                <ProjectContextProvider>
+                  <CollectionContextProvider>
+                    <>
+                      <SuperUserBanner />
+                      <OfflineNotice />
+                      <Router />
+                    </>
+                  </CollectionContextProvider>
+                </ProjectContextProvider>
+              </APIContextProvider>
+            </CurrentUserProvider>
+          </AnalyticsContext>
+        </LocalStorageProvider>
+      </NotificationsProvider>
+    </LiveAnnouncer>
+  </ErrorBoundary>
+);
 
 export default App;
