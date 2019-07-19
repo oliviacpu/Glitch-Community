@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -63,11 +63,10 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = withRouter(({ domain, expanded, location}) => (
+const ReadmeLoader = withRouter(({ domain, location }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
-      <Expander height={250} expanded={expanded}>
-        {location}
+      <Expander height={location.hash ? Infinity : 250}>
         <Markdown linkifyHeadings>{data.toString()}</Markdown>
       </Expander>
     )}
@@ -132,9 +131,7 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
-  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
-    initialProject,
-  );
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
