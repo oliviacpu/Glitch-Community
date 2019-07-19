@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
@@ -12,7 +12,7 @@ import ErrorBoundary from 'Components/error-boundary';
 import useFocusFirst from 'Hooks/use-focus-first';
 import styles from './styles.styl';
 
-const Layout = withRouter(({ children, searchQuery, history, location }) => {
+const Layout = withRouter(({ children, searchQuery, history }) => {
   useFocusFirst();
 
   return (
