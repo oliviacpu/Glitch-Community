@@ -31,7 +31,6 @@ import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
-import useUniqueId from 'Hooks/use-unique-id';
 import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './project.styl';
@@ -66,6 +65,7 @@ const ReadmeError = (error) =>
 const ReadmeLoader = withRouter(({ domain, location }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
     {({ data }) => (
+      loca
       <Expander height={location.hash ? Infinity : 250}>
         <Markdown linkifyHeadings>{data.toString()}</Markdown>
       </Expander>
@@ -190,16 +190,16 @@ const ProjectPage = ({ project: initialProject }) => {
       <div className={styles.projectEmbedWrap}>
         <ProjectEmbed project={project} />
       </div>
-      <section id={useUniqueId()}>
+      <section id="readme">
         <ReadmeLoader domain={domain} />
       </section>
 
       {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
-      <section id={useUniqueId()}>
+      <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
       </section>
-      <section id={useUniqueId()}>
+      <section id="related">
         <RelatedProjects project={project} />
       </section>
     </main>
