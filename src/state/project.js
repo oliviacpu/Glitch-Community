@@ -79,9 +79,7 @@ export const ProjectContextProvider = ({ children }) => {
 
 export function useProjectMembers(projectId) {
   const getProjectMembers = useContext(ProjectMemberContext);
-  const data = getProjectMembers(projectId);
-  console.log(data)
-  return data
+  return getProjectMembers(projectId);
 }
 
 export function useProjectReload() {
