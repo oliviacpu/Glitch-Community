@@ -18,8 +18,12 @@ const Layout = withRouter(({ children, searchQuery, history, location }) => {
   let linkedEl = null;
   useEffect(() => {
     if (!linkedEl && location.hash) {
-      linkedEl = document.getElementById(location.href);
-      linkedEl.scrollIntoView();
+      linkedEl = document.getElementById(location.hash.substr(1));
+      console.log(linkedEl);
+      console.log('scrolling into view')
+      if (linkedEl) {
+        linkedEl.scrollIntoView();
+      }
     }
   });
 
