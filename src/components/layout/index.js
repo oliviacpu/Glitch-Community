@@ -17,6 +17,7 @@ const Layout = withRouter(({ children, searchQuery, history, location }) => {
 
   let linkedEl = null;
   useEffect(() => {
+    console.log('effect')
     if (!linkedEl && location.hash) {
       linkedEl = document.getElementById(location.hash.substr(1));
       console.log(linkedEl);
