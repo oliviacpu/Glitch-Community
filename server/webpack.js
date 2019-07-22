@@ -28,7 +28,7 @@ function webpackExpressMiddleware() {
 }
 
 module.exports = function(app) {
-  if (true || process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     webpackBackgroundProcess();
   } else {
     app.use(webpackExpressMiddleware());
