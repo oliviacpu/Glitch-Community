@@ -21,8 +21,9 @@ const WistiaVideo = ({ videoId }) => {
       }
     });
 
-    // the server sends these script tags, but because a user can navigate to a page
-    // with a wistia video via an in-page link, sometimes we need to load them here
+    // the server sends these script tags on pages that have wistia videos
+    // you can navigate to a page with a wistia video via an in-page link, 
+    // so we need to check that the script tags are on this page, and load them if not
     loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
     loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }, []);
