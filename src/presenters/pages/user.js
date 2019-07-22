@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { orderBy, partition, remove } from 'lodash';
+import { orderBy, partition } from 'lodash';
 
 import Heading from 'Components/text/heading';
 import Emoji from 'Components/images/emoji';
@@ -16,24 +16,15 @@ import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
+import { getMyStuffFromCollections } from 'Models/collection'
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
 import useDevToggle from 'State/dev-toggles';
 import { useCollectionProjects } from 'State/collection';
-import { pickRandomColor } from 'Utils/color';
 import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';
-
-const nullMyStuffCollection = {
-  isBookmarkCollection: true,
-  name: 'My Stuff',
-  description: 'My place to save cool finds',
-  coverColor: pickRandomColor(),
-  projects: [],
-  id: 'My Stuff',
-};
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getLink({ login }));
@@ -98,7 +89,7 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  const myStuffCollection = remove(collections, (collection) => collection.isBookmarkCollection);
+  const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections })
 
   if (myStuffCollection[0]) {
     return (

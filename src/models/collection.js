@@ -11,7 +11,29 @@ import { getCollectionPair } from './words';
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1541449590339';
 export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1540389405633';
 
-export funct
+export function getMyStuffFromCollections({ collections }) {
+  let myStuffCollection = null;
+  const collectionsWithoutMyStuff = collections.filter((collection) => {
+    if (collection.isBookmarkCollection) {
+      myStuffCollection = collection
+      return false;
+    }
+    return true;
+  });
+  return [myStuffCollection, collectionsWithoutMyStuff]
+}
+const nullMyStuffCollection = {
+  isBookmarkCollection: true,
+  name: 'My Stuff',
+  description: 'My place to save cool finds',
+  coverColor: pickRandomColor(),
+  projects: [],
+  id: 'My Stuff',
+};
+export function putMyStuffAtBeginningOfCollections({ myStuffCollection, collections }) {
+  
+}
+
 export function getAvatarUrl(id) {
   return `${CDN_URL}/collection-avatar/${id}.png`;
 }
