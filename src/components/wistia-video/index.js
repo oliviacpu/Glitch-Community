@@ -4,6 +4,7 @@ const WistiaVideo = ({ videoId }) => {
   const loadedScripts = new Set();
   function loadScript(src) {
     if (!loadedScripts.has(src)) {
+      console.log(`adding ${src}`)
       const script = document.createElement('script');
       script.src = src;
       script.async = true;
@@ -14,11 +15,15 @@ const WistiaVideo = ({ videoId }) => {
 
   useEffect(() => {
     const scriptTags = document.querySelectorAll('script');
-    for (scriptTags)
-    console.log(loadedScripts)
-    console.log(loadedScripts);
-    // loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
-    // loadScript('//fast.wistia.com/assets/external/E-v1.js');
+    scriptTags.forEach(node => {
+      if (node.src) {
+        // strip protocol so we can match //fast.wistia.com...
+        loadedScripts.add(node.src.split(location.protocol)[1]);
+      }
+    });
+
+    loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
+    loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }, []);
 
   return (
