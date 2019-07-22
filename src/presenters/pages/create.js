@@ -470,16 +470,6 @@ function Remix() {
   }, []);
 
   return (
-<<<<<<< HEAD
-    <section className={classNames(styles.section, styles.remix)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#FBF2B8">Remix any app to get started</Mark>
-      </Heading>
-
-      <VisibilityContainer>
-        {({ wasEverVisible }) =>
-          wasEverVisible && (
-=======
     <VisibilityContainer>
       {({ wasEverVisible }) => (
         <section className={classNames(styles.section, styles.remix)}>
@@ -488,7 +478,6 @@ function Remix() {
           </Heading>
 
           <LazyLoader delay={wasEverVisible ? 0 : 3000}>
->>>>>>> 049d7aeaf0d4f00b96d70161c7bd1e2bbffafee2
             <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
               <TabList className={styles.remixAppTabs}>
                 {apps.map((app) => (
@@ -512,17 +501,10 @@ function Remix() {
                 </TabPanel>
               ))}
             </Tabs>
-<<<<<<< HEAD
-          )
-        }
-      </VisibilityContainer>
-    </section>
-=======
           </LazyLoader>
         </section>
       )}
     </VisibilityContainer>
->>>>>>> 049d7aeaf0d4f00b96d70161c7bd1e2bbffafee2
   );
 }
 
