@@ -70,13 +70,15 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   );
 };
 
-const CollectionProjectsLoader = ({ collection, isAuthorized, showLoader }) => (
+const CollectionProjectsLoader = ({ collection, isAuthorized, showLoader }) => {
+  console.log(showLoader);
+  return (
   <VisibilityContainer>
     {({ wasEverVisible }) =>
       showLoader && !wasEverVisible ? <ProjectsLoading /> : <CollectionProjects collection={collection} isAuthorized={isAuthorized} />
     }
   </VisibilityContainer>
-);
+);};
 
 const CollectionCurator = ({ collection }) => {
   const { value: curator } = useCollectionCurator(collection);
