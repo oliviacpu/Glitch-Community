@@ -25,6 +25,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
+import useDevToggle from 'State/dev-toggles';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import styles from './popover.styl';
@@ -105,12 +106,21 @@ function useCollectionSearch(query, project, collectionType) {
 
   const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
 
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const searchResultsWithMyStuff = useMemo(() => {
+    if (myStuffEnabled && searchResults.collection) {
+      //filter out mystuff and put it at the beginning of the list, or add it if it doesn't exist
+    }
+    return searchResults
+  }, [searchResults])
+
   const [collectionsWithProject, collections] = useMemo(
-    () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
-    [searchResults.collection, project.id, collectionType],
+    () => partition(searchResultsWithMyStuff.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
+    [searchResultsWithMyStuff.collection, project.id, collectionType],
   );
 
-  return { status: searchResults.status, collections, collectionsWithProject };
+
+  return { status: searchResultsWithMyStuff.status, collections, collectionsWithProject };
 }
 
 export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
