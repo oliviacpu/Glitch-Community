@@ -90,11 +90,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
-  <div {...props}>
-    {children}
-  </div>
-);
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => <div {...props}>{children}</div>;
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
