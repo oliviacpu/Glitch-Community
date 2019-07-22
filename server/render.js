@@ -3,7 +3,7 @@ const stylus = require('stylus');
 require('@babel/register')({
   only: [/src/],
   presets: [
-    //['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
+    ['@babel/preset-env', { targets: { node: 'current' }, corejs: 3, useBuiltIns: 'usage' }],
     '@babel/preset-react',
   ],
   plugins: [
