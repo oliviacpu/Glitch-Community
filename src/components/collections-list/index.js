@@ -97,7 +97,7 @@ function CollectionsList({
                           isAuthorized={isAuthorized}
                           deleteCollection={() => deleteCollection(collection)}
                           showCurator={showCurator}
-                          showLoadder={isExpanded}
+                          showLoader={isExpanded}
                         />
                       )
                     }
