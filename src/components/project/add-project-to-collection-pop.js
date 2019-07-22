@@ -109,10 +109,10 @@ function useCollectionSearch(query, project, collectionType) {
   const myStuffEnabled = useDevToggle('My Stuff');
   const searchResultsWithMyStuff = useMemo(() => {
     if (myStuffEnabled && searchResults.collection) {
-      const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection })
-      return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff })
+      const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
+      return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
     }
-    return searchResults.collection
+    return searchResults.collection;
   }, [searchResults])
 
   const [collectionsWithProject, collections] = useMemo(
