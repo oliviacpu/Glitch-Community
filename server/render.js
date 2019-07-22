@@ -32,8 +32,8 @@ const { default: App } = require('../src/app');
 const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const app = React.createElement(App);
   const globalsProvider = React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
-  const root = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
-  const rendered = ReactDOMServer.renderToString(root);
+  const staticRouter = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
+  const rendered = ReactDOMServer.renderToString(staticRouter);
   const helmet = Helmet.renderStatic();
   return { rendered, helmet };
 };
