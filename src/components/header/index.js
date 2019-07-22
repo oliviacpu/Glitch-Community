@@ -24,6 +24,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   return (
     <header role="banner" className={styles.header}>
+      <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
       <Link to="/" className={styles.logoWrap}>
         <Logo />
       </Link>

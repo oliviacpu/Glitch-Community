@@ -1,10 +1,5 @@
 @import  "../../components/constants"
 
-.container :global
-  // add-team-project
-  .add-project-container
-    position: relative
-
 .teamMarketing
   border-top: 1px solid #e5e5e5
   padding-top: 1rem
@@ -43,21 +38,16 @@
     
 .usersInformation
   padding-bottom: 12px
-  // team-users
-  :global
-    .users
-      display: inline
-      margin-right: 5px
-      padding: 1px 0 0;
-      vertical-align: middle
-    .users > li
-      display: inline-grid
-      margin-right: -7px
-    .whitelisted-domain-container
-      vertical-align: top
-      margin-top: 5px
-      margin-right: 5px
-      margin-left: 5px
-    .join-team-button
-      vertical-align: top
-      margin-top: 3px
+
+.addProjectToEmptyTeam
+  background-color: cta
+  max-width: 325px
+  border-radius: 5px
+  padding: 12px
+  position: relative
+  margin-top: 1rem
+  display: flex
+  align-items: center
+  img
+    margin-right: 6px
+    width: 90px

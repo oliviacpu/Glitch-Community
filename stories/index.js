@@ -109,14 +109,13 @@ storiesOf('Emoji', module)
 storiesOf('TooltipContainer', module)
   .add('action', () => (
     <div style={{ margin: '70px' }}>
-      <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm an action tooltip" />
+      <TooltipContainer type="action" target={<Button>Hover or focus me</Button>} tooltip="I'm an action tooltip" />
     </div>
   ))
   .add('info', () => (
     <div style={{ margin: '70px' }}>
       <TooltipContainer
         type="info"
-        id="a-unique-id"
         target={<img width="32" height="32" src="https://favicon-fetcher.glitch.me/img/glitch.com" />}
         tooltip="I'm an info tooltip"
       />
@@ -126,7 +125,6 @@ storiesOf('TooltipContainer', module)
     <div style={{ margin: '70px' }}>
       <TooltipContainer
         type="info"
-        id="a-unique-id"
         target={<img width="32" height="32" src="https://favicon-fetcher.glitch.me/img/glitch.com" />}
         tooltip="I'm a persistent tooltip"
         persistent
@@ -135,7 +133,7 @@ storiesOf('TooltipContainer', module)
   ))
   .add('left and top aligned', () => (
     <div style={{ margin: '70px' }}>
-      <TooltipContainer type="action" id="a-unique-id" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
+      <TooltipContainer type="action" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
     </div>
   ));
 

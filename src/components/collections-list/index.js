@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 import Heading from 'Components/text/heading';
-import CollectionItem from 'Components/collection/collection-item';
+import CollectionItem, { MyStuffItem } from 'Components/collection/collection-item';
 import Grid from 'Components/containers/grid';
 import PaginationController from 'Components/pagination-controller';
 import FilterController from 'Components/filter-controller';
@@ -10,6 +10,7 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionProjects } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
 
@@ -46,6 +47,8 @@ function CollectionsList({
   const canMakeCollections = isAuthorized && !!currentUser;
 
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
+  const myStuffEnabled = useDevToggle('My Stuff');
 
   if (!hasCollections && !canMakeCollections) {
     return null;
@@ -84,17 +87,19 @@ function CollectionsList({
               >
                 {(paginatedCollections, isExpanded) => (
                   <Grid items={paginatedCollections}>
-                    {(collection) => (
-                      <>
+                    {(collection) =>
+                      myStuffEnabled && collection.isBookmarkCollection ? (
+                        <MyStuffItem collection={collection} />
+                      ) : (
                         <CollectionItem
                           collection={collection}
                           isAuthorized={isAuthorized}
                           deleteCollection={() => deleteCollection(collection)}
                           showCurator={showCurator}
-                          showLoader={isExpanded}
+                          showLoadder={isExpanded}
                         />
-                      </>
-                    )}
+                      )
+                    }
                   </Grid>
                 )}
               </PaginationController>
