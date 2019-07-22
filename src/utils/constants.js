@@ -1,21 +1,26 @@
 const { envs } = require('Shared/constants');
 
-const getCurrentEnvBrowser = () => {
-  /* global RUNNING_ON */
+const getCurrentEnv = () => {
+  try {
+    // try loading constants as if we're a browser
+    const runningOn = window.RUNNING_ON;
 
-  let envFromOrigin = 'production';
-  if (window.location.origin.includes('staging.glitch.com')) {
-    envFromOrigin = 'staging';
-  } else if (window.location.origin.includes('glitch.development')) {
-    envFromOrigin = 'development';
+    let envFromOrigin = 'production';
+    if (window.location.origin.includes('staging.glitch.com')) {
+      envFromOrigin = 'staging';
+    } else if (window.location.origin.includes('glitch.development')) {
+      envFromOrigin = 'development';
+    }
+
+    return envs[runningOn] ? runningOn : envFromOrigin;
+  } catch (error) {
+    // oops, that didn't work. we must be in node
+    const runningOn = process.env.RUNNING_ON;
+    return envs[runningOn] ? runningOn : 'production';
   }
-
-  return envs[RUNNING_ON] ? RUNNING_ON : envFromOrigin;
-};
-
-const getCurrentEnvNode = () => {
-  return envs[]
 }
+
+const currentEnv = getCurrentEnv();
 
 const {
   APP_URL,

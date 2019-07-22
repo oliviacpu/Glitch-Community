@@ -7,10 +7,7 @@ require('@babel/register')({
   ],
   plugins: [
     ['module-resolver', {
-      alias: {
-        'Utils/constants': require.resolve('Utils/node/constants'),
-        'Utils/sentry': '@sentry/node',
-      },
+      alias: { 'Utils/sentry': '@sentry/node' },
     }],
     ['css-modules-transform', {
       preprocessCss: (data, filename) => stylus.render(data, { filename }),
