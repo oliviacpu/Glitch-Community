@@ -131,9 +131,11 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { createNotification } = useNotifications();
 
   const addProjectTo = (collection) => {
-    // TODO: if collection is a bookmark collection that doesn't exist yet, 
+    // TODO for my stuff: 
+    // if collection is a bookmark collection that doesn't exist yet, 
     // first we'll need to create that collection
     // then we'll need to add that project to the collection
+
     addProjectToCollection(project, collection).then(() => {
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
