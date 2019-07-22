@@ -282,14 +282,14 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
           sources={[{ src: v, minWidth: 0, maxWidth: 669 }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-          muted
+          track="muted"
           autoPlay
           loop
         />
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <Video autoPlay loop sources={[{ src: video, minWidth: 670 }]} />
+        <Video track="muted" autoPlay loop sources={[{ src: video, minWidth: 670 }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -417,14 +417,14 @@ function VSCode() {
               maxWidth: 669,
             },
           ]}
-          muted
+          track="muted"
           autoPlay
           loop
         />
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
           <Video
             sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 670 }]}
-            muted
+            track="muted"
             autoPlay
             loop
           />

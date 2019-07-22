@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Video({ sources, muted, ...props }) {
+function Video({ sources, track, ...props }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -20,34 +20,13 @@ function Video({ sources, muted, ...props }) {
     [windowWidth, sources],
   );
 
-  useEffect(
-    () => {
-      // confirm that videos with audio have a caption track
-      if (!muted) {
-        for (const video of visibleVideos) {
-          if (!video.track) {
-            console.error(`No caption track provided for asset ${video.src}`);
-            // if a video has words, it needs a complete caption track
-            // if the video has background music but no lyrics or words, use a .vtt file that describes the mood of the music:
-            //
-            // WEBVTT
-            //
-            // 00:01.00 --> 00:14.00
-            // (CHEERFUL POLKA MUSIC)
-          }
-        }
-      }
-    },
-    [muted],
-  );
-
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
-    <video muted={props.track === 'muted'} {...props}>
+    <video muted={track === 'muted'} {...props}>
       {/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
-          {props.track !== 'muted' && <track kind="captions" src={video.track} srcLang="en" />}
+          {track !== 'muted' && <track kind="captions" src={track} srcLang="en" />}
           <source key={video.src} src={video.src} />
         </React.Fragment>
       ))}
@@ -57,6 +36,13 @@ function Video({ sources, muted, ...props }) {
 
 Video.propTypes = {
   sources: PropTypes.array.isRequired,
+  // if a video has words, it needs a complete caption track
+  // if the video has background music but no lyrics or words, use a .vtt file that describes the mood of the music:
+  //
+  // WEBVTT
+  //
+  // 00:01.00 --> 00:14.00
+  // (CHEERFUL POLKA MUSIC)
   track: PropTypes.string.isRequired,
   autoPlay: PropTypes.bool,
   loop: PropTypes.bool,
