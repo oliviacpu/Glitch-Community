@@ -1,8 +1,7 @@
 const { envs } = require('Shared/constants');
 
 const getCurrentEnv = () => {
-  try {
-    // try loading constants as if we're a browser
+  if (typeof window !== 'undefined') {
     const runningOn = window.RUNNING_ON;
 
     let envFromOrigin = 'production';
@@ -13,11 +12,11 @@ const getCurrentEnv = () => {
     }
 
     return envs[runningOn] ? runningOn : envFromOrigin;
-  } catch (error) {
-    // oops, that didn't work. we must be in node
+  } else if (typeof process !== 'undefined') {
     const runningOn = process.env.RUNNING_ON;
     return envs[runningOn] ? runningOn : 'production';
   }
+  return 'production';
 }
 
 const currentEnv = getCurrentEnv();
