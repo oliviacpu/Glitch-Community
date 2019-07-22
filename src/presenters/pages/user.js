@@ -85,11 +85,9 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  console.log("hi?")
   const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections });
-  console.log({myStuffCollection, collectionsWithoutMyStuff})
   const collectionsWithNullMyStuff = getCollectionsWithMyStuffAtFront({ collections });
-  console.log({ collectionsWithNullMyStuff })
+
   if (myStuffCollection) {
     return (
       <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collectionsWithoutMyStuff} {...props}>

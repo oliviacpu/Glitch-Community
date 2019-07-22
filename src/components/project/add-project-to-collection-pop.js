@@ -26,7 +26,7 @@ import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useDevToggle from 'State/dev-toggles';
-
+import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront } from 'Models/collection';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import styles from './popover.styl';
 
@@ -109,18 +109,18 @@ function useCollectionSearch(query, project, collectionType) {
   const myStuffEnabled = useDevToggle('My Stuff');
   const searchResultsWithMyStuff = useMemo(() => {
     if (myStuffEnabled && searchResults.collection) {
-      //filter out mystuff and put it at the beginning of the list, or add it if it doesn't exist
+      const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection })
+      return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff })
     }
-    return searchResults
+    return searchResults.collection
   }, [searchResults])
 
   const [collectionsWithProject, collections] = useMemo(
-    () => partition(searchResultsWithMyStuff.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
-    [searchResultsWithMyStuff.collection, project.id, collectionType],
+    () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
+    [searchResultsWithMyStuff, project.id, collectionType],
   );
 
-
-  return { status: searchResultsWithMyStuff.status, collections, collectionsWithProject };
+  return { status: searchResults.status, collections, collectionsWithProject };
 }
 
 export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToCollection, togglePopover, createCollectionPopover }) => {
@@ -129,6 +129,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
+  const myStuffEnabled = useDevToggle('My Stuff');
 
   const addProjectTo = (collection) => {
     addProjectToCollection(project, collection).then(() => {
@@ -161,7 +162,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         placeholder="Filter collections"
         labelText="Filter collections"
         renderItem={({ item: collection, active }) => (
-          <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
+          collection.isBookmarkCollection && myStuffEnabled ? 
+            <div>my stuff baby</div> :
+            <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
         )}
         renderNoResults={() => (
           <PopoverInfo>
