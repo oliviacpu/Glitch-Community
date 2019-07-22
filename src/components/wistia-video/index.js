@@ -4,7 +4,6 @@ const WistiaVideo = ({ videoId }) => {
   const loadedScripts = new Set();
   function loadScript(src) {
     if (!loadedScripts.has(src)) {
-      console.log(`adding ${src}`);
       const script = document.createElement('script');
       script.src = src;
       script.async = true;
@@ -22,6 +21,7 @@ const WistiaVideo = ({ videoId }) => {
       }
     });
 
+    // we send these in script 
     loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
     loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }, []);
