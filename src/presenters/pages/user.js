@@ -16,7 +16,7 @@ import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
-import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront } from 'Models/collection'
+import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront } from 'Models/collection';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
@@ -76,8 +76,8 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 
   React.useEffect(() => {
     if (projects && (projects.length > 0 || isAuthorized)) {
-      myStuffCollection.projects = projects
-      collections = getCollectionsWithMyStuffAtFront({ collections, myStuffCollection })
+      myStuffCollection.projects = projects;
+      collections = getCollectionsWithMyStuffAtFront({ collections, myStuffCollection });
     }
   }, [projects]);
 
@@ -85,9 +85,11 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections })
+  console.log("hi?")
+  const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections });
+  console.log({myStuffCollection, collectionsWithoutMyStuff})
   const collectionsWithNullMyStuff = getCollectionsWithMyStuffAtFront({ collections });
-  
+  console.log({ collectionsWithNullMyStuff })
   if (myStuffCollection) {
     return (
       <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collectionsWithoutMyStuff} {...props}>

@@ -15,12 +15,12 @@ export function getMyStuffFromCollections({ collections }) {
   let myStuffCollection = null;
   const collectionsWithoutMyStuff = collections.filter((collection) => {
     if (collection.isBookmarkCollection) {
-      myStuffCollection = collection
+      myStuffCollection = collection;
       return false;
     }
     return true;
   });
-  return [myStuffCollection, collectionsWithoutMyStuff]
+  return [myStuffCollection, collectionsWithoutMyStuff];
 }
 
 const nullMyStuffCollection = {
@@ -33,10 +33,10 @@ const nullMyStuffCollection = {
 };
 
 export function getCollectionsWithMyStuffAtFront({ myStuffCollection, collections }) {
-  if (myStuffCollection) {
-    myStuffCollection = nullMyStuffCollection
+  if (!myStuffCollection) {
+    myStuffCollection = nullMyStuffCollection;
   }
-  let collectionsClone = [...collections];
+  const collectionsClone = [...collections];
   collectionsClone.unshift(myStuffCollection);
   return collectionsClone;
 }
