@@ -129,7 +129,6 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
-  const myStuffEnabled = useDevToggle('My Stuff');
 
   const addProjectTo = (collection) => {
     addProjectToCollection(project, collection).then(() => {
@@ -162,9 +161,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
         placeholder="Filter collections"
         labelText="Filter collections"
         renderItem={({ item: collection, active }) => (
-          collection.isBookmarkCollection && myStuffEnabled ? 
-            <div>my stuff baby</div> :
-            <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
+          <AddProjectToCollectionResultItem active={active} onClick={() => addProjectTo(collection)} collection={collection} />
         )}
         renderNoResults={() => (
           <PopoverInfo>

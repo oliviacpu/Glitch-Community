@@ -8,6 +8,7 @@ import VisibilityContainer from 'Components/visibility-container';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { CollectionAvatar } from 'Components/images/avatar';
 import { useCollectionCurator } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './collection-result-item.styl';
 
@@ -31,28 +32,36 @@ const ProfileItemWrap = ({ collection }) => (
   </div>
 );
 
-const CollectionResultItem = ({ onClick, collection, active }) => (
-  <ResultItem
-    active={active}
-    onClick={onClick}
-    href={`/@${collection.fullUrl}`}
-  >
-    <div className={styles.avatarWrap}>
-      <CollectionAvatar collection={collection} />
-    </div>
-    <ResultInfo>
-      <VisuallyHidden>Add to collection</VisuallyHidden>
-      <ResultName>{collection.name}</ResultName>
-      {collection.description.length > 0 && (
-        <ResultDescription>
-          <VisuallyHidden>with description</VisuallyHidden>
-          <Markdown renderAsPlaintext>{collection.description}</Markdown>
-        </ResultDescription>
-      )}
-      <ProfileItemWrap collection={collection} />
-    </ResultInfo>
-  </ResultItem>
-);
+const CollectionResultItem = ({ onClick, collection, active }) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
+
+  return (
+    <ResultItem
+      active={active}
+      onClick={onClick}
+      href={`/@${collection.fullUrl}`}
+    >
+      <div className={styles.avatarWrap}>
+        {
+          myStuffEnabled && collection.isBookmarkCollection ? 
+            <div>mystuff avatar will be here soon</div> :
+            <CollectionAvatar collection={collection} />
+        }
+      </div>
+      <ResultInfo>
+        <VisuallyHidden>Add to collection</VisuallyHidden>
+        <ResultName>{collection.name}</ResultName>
+        {collection.description.length > 0 && (
+          <ResultDescription>
+            <VisuallyHidden>with description</VisuallyHidden>
+            <Markdown renderAsPlaintext>{collection.description}</Markdown>
+          </ResultDescription>
+        )}
+        <ProfileItemWrap collection={collection} />
+      </ResultInfo>
+    </ResultItem>
+  );
+};
 
 CollectionResultItem.propTypes = {
   onClick: PropTypes.func.isRequired,
