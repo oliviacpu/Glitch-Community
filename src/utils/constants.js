@@ -1,14 +1,21 @@
 const { envs } = require('Shared/constants');
-/* global RUNNING_ON */
 
-let envFromOrigin = 'production';
-if (window.location.origin.includes('staging.glitch.com')) {
-  envFromOrigin = 'staging';
-} else if (window.location.origin.includes('glitch.development')) {
-  envFromOrigin = 'development';
+const getCurrentEnvBrowser = () => {
+  /* global RUNNING_ON */
+
+  let envFromOrigin = 'production';
+  if (window.location.origin.includes('staging.glitch.com')) {
+    envFromOrigin = 'staging';
+  } else if (window.location.origin.includes('glitch.development')) {
+    envFromOrigin = 'development';
+  }
+
+  return envs[RUNNING_ON] ? RUNNING_ON : envFromOrigin;
+};
+
+const getCurrentEnvNode = () => {
+  return envs[]
 }
-
-const currentEnv = envs[RUNNING_ON] ? RUNNING_ON : envFromOrigin;
 
 const {
   APP_URL,

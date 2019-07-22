@@ -1,4 +1,3 @@
-const path = require('path');
 const stylus = require('stylus');
 require('@babel/register')({
   only: [/\/src\//],
@@ -10,7 +9,7 @@ require('@babel/register')({
     ['module-resolver', {
       alias: {
         'Utils/constants': require.resolve('Utils/node/constants'),
-        'Utils': path.resolve(__dirname, '../src/utils/node'),
+        'Utils/sentry': '@sentry/node',
       },
     }],
     ['css-modules-transform', {
@@ -19,12 +18,6 @@ require('@babel/register')({
     }],
   ],
 });
-/*require('module-alias').addAlias('Utils', (fromPath, request) => {
-  if (request === 'Utils/constants' || request === 'Utils/sentry') {
-    return path.resolve(__dirname, '../src/utils/node');
-  }
-  return path.resolve(__dirname, '../src/utils');
-});*/
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
