@@ -217,6 +217,8 @@ const UserPage = ({ user: initialUser }) => {
             user,
           }))}
           isAuthorized={isAuthorized}
+          enablePagination
+          enableFiltering={user.collections.length > 6}
           maybeCurrentUser={maybeCurrentUser}
         />
       )}
