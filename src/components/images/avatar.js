@@ -27,7 +27,7 @@ export const Avatar = ({ name, src, color, srcFallback, type, hideTooltip, withi
   );
 
   if (!hideTooltip) {
-    return <TooltipContainer tooltip={name} target={contents} type="action" id={`avatar-tooltip-${name}`} align={['left']} fallback={withinButton} />;
+    return <TooltipContainer tooltip={name} target={contents} type="action" align={['left']} fallback={withinButton} />;
   }
   return contents;
 };
