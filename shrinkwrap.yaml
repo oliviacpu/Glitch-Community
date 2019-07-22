@@ -17,6 +17,7 @@ dependencies:
   babel-loader: 8.0.6
   babel-plugin-css-modules-transform: 1.6.2
   babel-plugin-lodash: 3.3.4
+  babel-plugin-module-resolver: 3.2.0
   babel-preset-modern-browsers: 14.0.0
   body-parser: 1.19.0
   c3: 0.6.14
@@ -4324,6 +4325,18 @@ packages:
     dev: false
     resolution:
       integrity: sha1-G8bxW4f3qxCF1CszC3F2V6IVZQA=
+  /babel-plugin-module-resolver/3.2.0:
+    dependencies:
+      find-babel-config: 1.2.0
+      glob: 7.1.4
+      pkg-up: 2.0.0
+      reselect: 3.0.1
+      resolve: 1.11.1
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    resolution:
+      integrity: sha512-tjR0GvSndzPew/Iayf4uICWZqjBwnlMWjSx6brryfQ81F9rxBVqwDJtFCV8oOs0+vJeefK9TmdZtkIFdFe1UnA==
   /babel-plugin-named-asset-import/0.3.2:
     dev: false
     peerDependencies:
@@ -7350,6 +7363,15 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==
+  /find-babel-config/1.2.0:
+    dependencies:
+      json5: 0.5.1
+      path-exists: 3.0.0
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-jB2CHJeqy6a820ssiqwrKMeyC6nNdmrcgkKWJWmpoxpE8RKciYJXCcXRq1h2AzCo5I5BJeN2tkGEO3hLTuePRA==
   /find-cache-dir/0.1.1:
     dependencies:
       commondir: 1.0.1
@@ -12286,6 +12308,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
+  /reselect/3.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-79qpjqdFEyTQkrKyFjpqHXqaIUc=
   /resize-observer-polyfill/1.5.1:
     dev: false
     resolution:
@@ -14341,6 +14367,7 @@ specifiers:
   babel-loader: ^8.0.5
   babel-plugin-css-modules-transform: ^1.6.2
   babel-plugin-lodash: ^3.3.4
+  babel-plugin-module-resolver: ^3.2.0
   babel-preset-modern-browsers: ^14.0.0
   body-parser: ^1.18.3
   c3: ^0.6.12

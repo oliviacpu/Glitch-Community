@@ -7,18 +7,24 @@ require('@babel/register')({
     '@babel/preset-react',
   ],
   plugins: [
+    ['module-resolver', {
+      alias: {
+        'Utils/constants': require.resolve('Utils/node/constants'),
+        'Utils': path.resolve(__dirname, '../src/utils/node'),
+      },
+    }],
     ['css-modules-transform', {
       preprocessCss: (data, filename) => stylus.render(data, { filename }),
       extensions: ['.styl'],
     }],
   ],
 });
-require('module-alias').addAlias('Utils', (fromPath, request) => {
+/*require('module-alias').addAlias('Utils', (fromPath, request) => {
   if (request === 'Utils/constants' || request === 'Utils/sentry') {
     return path.resolve(__dirname, '../src/utils/node');
   }
   return path.resolve(__dirname, '../src/utils');
-});
+});*/
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
