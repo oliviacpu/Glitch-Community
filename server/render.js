@@ -33,9 +33,9 @@ const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const app = React.createElement(App);
   const globalsProvider = React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
   const staticRouter = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
-  const rendered = ReactDOMServer.renderToString(staticRouter);
+  const html = ReactDOMServer.renderToString(staticRouter);
   const helmet = Helmet.renderStatic();
-  return { rendered, helmet };
+  return { html, helmet };
 };
 
 module.exports = render;

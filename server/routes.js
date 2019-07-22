@@ -76,14 +76,12 @@ module.exports = function(external) {
       built = false;
     }
 
-    const { rendered, helmet } = await renderPage({
+    const { html } = await renderPage({
       url: new URL(req.url, `${req.protocol}://${req.hostname}`),
       EXTERNAL_ROUTES: external,
       HOME_CONTENT: homeContent,
-      ZINE_POSTS: zine,
+      ZINE_POSTS: zine || [],
     });
-
-    console.log(helmet.title.toString());
 
     res.render('index.ejs', {
       title,
@@ -93,7 +91,7 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
-      rendered,
+      rendered: html,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
