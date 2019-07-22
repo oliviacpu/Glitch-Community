@@ -22,6 +22,7 @@ export function getMyStuffFromCollections({ collections }) {
   });
   return [myStuffCollection, collectionsWithoutMyStuff]
 }
+
 const nullMyStuffCollection = {
   isBookmarkCollection: true,
   name: 'My Stuff',
@@ -30,8 +31,14 @@ const nullMyStuffCollection = {
   projects: [],
   id: 'My Stuff',
 };
-export function putMyStuffAtBeginningOfCollections({ myStuffCollection, collections }) {
-  
+
+export function getCollectionsWithMyStuffAtFront({ myStuffCollection, collections }) {
+  if (myStuffCollection) {
+    myStuffCollection = nullMyStuffCollection
+  }
+  let collectionsClone = [...collections];
+  collectionsClone.unshift(myStuffCollection);
+  return collectionsClone;
 }
 
 export function getAvatarUrl(id) {
