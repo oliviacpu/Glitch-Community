@@ -83,6 +83,8 @@ module.exports = function(external) {
       ZINE_POSTS: zine,
     });
 
+    console.log(helmet.toString());
+
     res.render('index.ejs', {
       title,
       socialTitle,

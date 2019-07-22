@@ -22,7 +22,7 @@ require('module-alias').addAlias('Utils', (fromPath, request) => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const Helmet = require('react-helmet');
+const { Helmet } = require('react-helmet');
 
 const { StaticRouter } = require('react-router-dom');
 const { GlobalsProvider } = require('State/globals');
