@@ -43,11 +43,11 @@ function Video({ sources, muted, ...props }) {
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
-    <video muted={muted} {...props}>
+    <video muted={props.track === 'muted'} {...props}>
       {/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
-          {video.track && <track kind="captions" src={video.track} srcLang="en" />}
+          {props.track !== 'muted' && <track kind="captions" src={video.track} srcLang="en" />}
           <source key={video.src} src={video.src} />
         </React.Fragment>
       ))}
@@ -57,7 +57,7 @@ function Video({ sources, muted, ...props }) {
 
 Video.propTypes = {
   sources: PropTypes.array.isRequired,
-  muted: PropTypes.bool,
+  track: PropTypes.string.isRequired,
   autoPlay: PropTypes.bool,
   loop: PropTypes.bool,
   controls: PropTypes.bool,
@@ -65,7 +65,6 @@ Video.propTypes = {
 };
 
 Video.defaultProps = {
-  muted: false,
   autoPlay: false,
   loop: false,
   controls: false,
