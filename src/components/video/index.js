@@ -22,7 +22,7 @@ function Video({ sources, track, ...props }) {
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
-    <video muted={track === 'muted'} {...props}>
+    <video muted={track === 'muted' ? 'true': 'false'} {...props}>
       {/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
