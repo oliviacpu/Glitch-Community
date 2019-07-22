@@ -1,13 +1,16 @@
 const path = require('path');
 const stylus = require('stylus');
 require('@babel/register')({
-  only: [/src/],
+  only: [/\/src\//],
   presets: [
     ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
     '@babel/preset-react',
   ],
   plugins: [
-    ['css-modules-transform', { preprocessCss: (data, filename) => stylus.render(data, { filename }), extensions: ['.styl'] }],
+    ['css-modules-transform', {
+      preprocessCss: (data, filename) => stylus.render(data, { filename }),
+      extensions: ['.styl'],
+    }],
   ],
 });
 require('module-alias').addAlias('Utils', (fromPath, request) => {
@@ -25,7 +28,7 @@ const { GlobalsProvider } = require('State/globals');
 
 const { default: App } = require('../src/app');
 
-const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
+const render = ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   return ReactDOMServer.renderToString(
     React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash },
       React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES },
@@ -35,28 +38,4 @@ const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   );
 };
 
-const { captureException } = require('@sentry/node');
-const dayjs = require('dayjs');
-const { Cache } = require('memory-cache');
-
-const CACHE_TIMEOUT = dayjs.convert(1, 'hour', 'ms');
-const cache = new Cache();
-
-module.exports = async (origin, url) => {
-  let promise = cache.get(origin + url);
-  let trackError = false;
-  if (!promise) {
-    trackError = true;
-    promise = render(origin, url);
-    cache.put(origin + url, promise, CACHE_TIMEOUT);
-  }
-  try {
-    return await promise;
-  } catch (error) {
-    if (trackError) {
-      console.warn(`Failed to render ${url}: ${error.toString()}`);
-      captureException(error);
-    }
-    return null;
-  }
-};
+module.exports = render;
