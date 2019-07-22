@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
 
 const WistiaVideo = ({ videoId }) => {
-  const loadedScripts = new Set();
-  function loadScript(src) {
-    if (!loadedScripts.has(src)) {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      document.head.appendChild(script);
-      loadedScripts.add(src);
-    }
-  }
+  // const loadedScripts = new Set();
+  // function loadScript(src) {
+  //   if (!loadedScripts.has(src)) {
+  //     const script = document.createElement('script');
+  //     script.src = src;
+  //     script.async = true;
+  //     document.head.appendChild(script);
+  //     loadedScripts.add(src);
+  //   }
+  // }
 
   useEffect(() => {
-    loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
-    loadScript('//fast.wistia.com/assets/external/E-v1.js');
+    const loadedScripts = document.querySelectorAll('script');
+    console.log(loadedScripts)
+    console.log(loadedScripts);
+    // loadScript(`//fast.wistia.com/embed/medias/${videoId}.jsonp`);
+    // loadScript('//fast.wistia.com/assets/external/E-v1.js');
   }, []);
 
   return (
