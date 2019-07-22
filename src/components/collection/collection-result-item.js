@@ -35,6 +35,7 @@ const ProfileItemWrap = ({ collection }) => (
 const CollectionResultItem = ({ onClick, collection, active }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
 
+  
   return (
     <ResultItem
       active={active}
@@ -43,7 +44,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
     >
       <div className={styles.avatarWrap}>
         {
-          myStuffEnabled && collection.isBookmarkCollection ? 
+          (myStuffEnabled && collection.isBookmarkCollection) ? 
             <div>mystuff avatar will be here soon</div> :
             <CollectionAvatar collection={collection} />
         }
