@@ -3,7 +3,7 @@ const stylus = require('stylus');
 require('@babel/register')({
   only: [/src/],
   presets: [
-    ['@babel/preset-env', { targets: { node: 'current' }, corejs: 3, useBuiltIns: 'usage' }],
+    ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
     '@babel/preset-react',
   ],
   plugins: [
@@ -25,14 +25,10 @@ const { GlobalsProvider } = require('State/globals');
 
 const { default: App } = require('../src/app');
 
-const { getZine } = require('./api');
-const { getHomeData } = require('./home');
-
-const render = async (origin, url) => {
-  const [ZINE_POSTS, HOME_CONTENT] = await Promise.all([getZine(), getHomeData()]);
+const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   return ReactDOMServer.renderToString(
-    React.createElement(StaticRouter, { location: url },
-      React.createElement(GlobalsProvider, { origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES: [] },
+    React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash },
+      React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES },
         React.createElement(App),
       ),
     )

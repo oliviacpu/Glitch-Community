@@ -76,7 +76,12 @@ module.exports = function(external) {
       built = false;
     }
 
-    const rendered = await renderPage(`${req.protocol}://${req.hostname}`, req.url)
+    const rendered = await renderPage({
+      url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+      EXTERNAL_ROUTES: external,
+      HOME_CONTENT: homeContent,
+      ZINE_POSTS: zine,
+    });
 
     res.render('index.ejs', {
       title,
