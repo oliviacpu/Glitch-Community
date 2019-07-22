@@ -59,7 +59,7 @@ function ProjectsList({
 }) {
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
   return (
-    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt="find a project" items={projects}>
+    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt="find a project" label="project search" items={projects}>
       {({ filterInput, filterHeaderStyles, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
           <div className={filterHeaderStyles}>

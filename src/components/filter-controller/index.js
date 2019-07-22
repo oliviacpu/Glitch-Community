@@ -7,7 +7,7 @@ import TextInput from 'Components/inputs/text-input';
 
 import styles from './styles.styl';
 
-function FilterController({ matchFn, enabled, placeholder, items, children, searchPrompt }) {
+function FilterController({ matchFn, enabled, placeholder, items, children, searchPrompt, label }) {
   const [filter, setFilter] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
   const [isDoneFiltering, setIsDoneFiltering] = useState(false);
@@ -40,7 +40,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
         onChange={setFilter}
         opaque
         placeholder={searchPrompt}
-        labelText="project search"
+        labelText={label}
         type="search"
         value={filter}
       />
@@ -66,6 +66,8 @@ FilterController.propTypes = {
   matchFn: PropTypes.func.isRequired,
   enabled: PropTypes.bool,
   searchPrompt: PropTypes.string.isRequired,
+  // label for assistive technology, e.g., "project search"
+  label: PropTypes.string.isRequired,
 };
 
 FilterController.defaultProps = {

@@ -59,6 +59,7 @@ function CollectionsList({
     <FilterController
       matchFn={matchFn}
       searchPrompt="find a collection"
+      label="collection search"
       enabled={enableFiltering}
       placeholder={placeholder}
       items={orderedCollections}
