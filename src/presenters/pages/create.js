@@ -15,6 +15,7 @@ import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
+import LazyLoader from 'Components/lazy-loader';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
@@ -84,7 +85,7 @@ function WhatIsGlitch() {
         </Heading>
         <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
           <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.</Text>
-          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to fullstack Node apps.</Text>
+          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to full-stack Node apps.</Text>
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
@@ -469,6 +470,7 @@ function Remix() {
   }, []);
 
   return (
+<<<<<<< HEAD
     <section className={classNames(styles.section, styles.remix)}>
       <Heading className={styles.h2} tagName="h2">
         <Mark color="#FBF2B8">Remix any app to get started</Mark>
@@ -477,6 +479,16 @@ function Remix() {
       <VisibilityContainer>
         {({ wasEverVisible }) =>
           wasEverVisible && (
+=======
+    <VisibilityContainer>
+      {({ wasEverVisible }) => (
+        <section className={classNames(styles.section, styles.remix)}>
+          <Heading className={styles.h2} tagName="h2">
+            <Mark color="#FBF2B8">Remix any app to get started</Mark>
+          </Heading>
+
+          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
+>>>>>>> 049d7aeaf0d4f00b96d70161c7bd1e2bbffafee2
             <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
               <TabList className={styles.remixAppTabs}>
                 {apps.map((app) => (
@@ -500,10 +512,17 @@ function Remix() {
                 </TabPanel>
               ))}
             </Tabs>
+<<<<<<< HEAD
           )
         }
       </VisibilityContainer>
     </section>
+=======
+          </LazyLoader>
+        </section>
+      )}
+    </VisibilityContainer>
+>>>>>>> 049d7aeaf0d4f00b96d70161c7bd1e2bbffafee2
   );
 }
 
@@ -579,10 +598,10 @@ function Categories() {
 const CreatePage = () => (
   <div style={{ maxWidth: '100vw', overflow: 'hidden', background: '#f5f5f5' }}>
     <Layout>
-      <main className={styles.main}>
+      <main id="main" className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <VisibilityContainer>{({ wasEverVisible }) => wasEverVisible && <Starters />}</VisibilityContainer>
+        <Starters />
         <Collaborate />
         <YourAppIsLive />
         <Tools />

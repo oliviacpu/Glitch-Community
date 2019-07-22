@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { LiveAnnouncer } from 'react-aria-live';
 
 import { AnalyticsContext } from 'State/segment-analytics';
@@ -17,29 +16,27 @@ import Router from './presenters/pages/router';
 
 const App = () => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
-    <BrowserRouter>
+    <LiveAnnouncer>
       <NotificationsProvider>
         <LocalStorageProvider>
-          <LiveAnnouncer>
-            <AnalyticsContext context={{ groupId: '0' }}>
-              <CurrentUserProvider>
-                <APIContextProvider>
-                  <ProjectContextProvider>
-                    <CollectionContextProvider>
-                      <>
-                        <SuperUserBanner />
-                        <OfflineNotice />
-                        <Router />
-                      </>
-                    </CollectionContextProvider>
-                  </ProjectContextProvider>
-                </APIContextProvider>
-              </CurrentUserProvider>
-            </AnalyticsContext>
-          </LiveAnnouncer>
+          <AnalyticsContext context={{ groupId: '0' }}>
+            <CurrentUserProvider>
+              <APIContextProvider>
+                <ProjectContextProvider>
+                  <CollectionContextProvider>
+                    <>
+                      <SuperUserBanner />
+                      <OfflineNotice />
+                      <Router />
+                    </>
+                  </CollectionContextProvider>
+                </ProjectContextProvider>
+              </APIContextProvider>
+            </CurrentUserProvider>
+          </AnalyticsContext>
         </LocalStorageProvider>
       </NotificationsProvider>
-    </BrowserRouter>
+    </LiveAnnouncer>
   </ErrorBoundary>
 );
 

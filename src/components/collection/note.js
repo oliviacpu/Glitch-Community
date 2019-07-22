@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import AuthDescription from 'Components/fields/auth-description';
 import { CollectionCuratorLoader } from 'Components/collection/collection-item';
 
