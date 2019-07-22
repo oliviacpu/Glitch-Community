@@ -22,6 +22,7 @@ require('module-alias').addAlias('Utils', (fromPath, request) => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
+const Helmet = require('react-helmet');
 
 const { StaticRouter } = require('react-router-dom');
 const { GlobalsProvider } = require('State/globals');
@@ -32,7 +33,9 @@ const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const app = React.createElement(App);
   const globalsProvider = React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
   const root = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
-  return ReactDOMServer.renderToString(root);
+  const rendered = ReactDOMServer.renderToString(root);
+  const helmet = Helmet.renderStatic();
+  return { rendered, helmet };
 };
 
 module.exports = render;
