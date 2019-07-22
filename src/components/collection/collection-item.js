@@ -36,7 +36,6 @@ const ProjectsLoading = () => (
 
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
-
   if (!projects) return <ProjectsLoading />;
 
   if (projects.length === 0 && isAuthorized) {
@@ -87,6 +86,43 @@ export const CollectionCuratorLoader = ({ collection }) => (
     {({ wasEverVisible }) => (wasEverVisible ? <CollectionCurator collection={collection} /> : <ProfileItem />)}
   </VisibilityContainer>
 );
+
+// TODO: add onclick that creates the new my stuff collection, ensure button is accessible
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
+  <div {...props}>
+    {children}
+  </div>
+);
+
+// TODO: add to storybook
+export const MyStuffItem = ({ collection }) => {
+  const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
+
+  return (
+    <div className={styles.collectionItem}>
+      <div className={styles.header} />
+      <CollectionLinkComponent collection={collection} className={classNames(styles.linkBody)} style={collectionColorStyles(collection)}>
+        <div className={styles.avatarContainer}>
+          {/* TODO replace with my stuff icon */}
+          <CollectionAvatar collection={collection} />
+        </div>
+        <div className={styles.nameDescriptionContainer}>
+          <div className={styles.itemButtonWrap}>
+            <Button decorative>{collection.name}</Button>
+          </div>
+          <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
+            <Markdown length={100}>{collection.description || ' '}</Markdown>
+          </div>
+        </div>
+      </CollectionLinkComponent>
+      {collection.projects.length === 0 && (
+        <div className={classNames(styles.projectsContainer, styles.empty)}>
+          <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator }) => (
   <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
