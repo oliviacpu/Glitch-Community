@@ -70,15 +70,13 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   );
 };
 
-const CollectionProjectsLoader = ({ collection, isAuthorized, showLoader }) => {
-  console.log(showLoader);
-  return (
+const CollectionProjectsLoader = ({ collection, isAuthorized, showLoader }) => (
   <VisibilityContainer>
     {({ wasEverVisible }) =>
       showLoader && !wasEverVisible ? <ProjectsLoading /> : <CollectionProjects collection={collection} isAuthorized={isAuthorized} />
     }
   </VisibilityContainer>
-);};
+);
 
 const CollectionCurator = ({ collection }) => {
   const { value: curator } = useCollectionCurator(collection);
@@ -92,11 +90,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
-  <div {...props}>
-    {children}
-  </div>
-);
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => <div {...props}>{children}</div>;
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
