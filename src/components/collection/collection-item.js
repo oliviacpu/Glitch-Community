@@ -24,7 +24,7 @@ import { useAPI } from 'State/api';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 
-import { createCollection } from 'Models/collection';
+import { createCollection, getLink } from 'Models/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -95,7 +95,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = withRouter(({ history, children, ...props }) => {
+const CreateMyStuffOnClickComponent = withRouter(({ history, children, collection, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
 
@@ -103,12 +103,12 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, ...props 
     const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
     if (myStuff) {
       // TODO this needs to be fixed
-      history.push(myStuff.fullUrl)
+      history.push(getLink(myStuff))
     }
   }
 
   return (
-    <div onClick={createMyStuffCollection} {...props}>
+    <div onClick={createMyStuffCollection} collection={collection} className={className} style==>
       {children}
     </div>
   );
