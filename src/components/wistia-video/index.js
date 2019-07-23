@@ -1,18 +1,8 @@
 import React, { useEffect } from 'react';
 
 const WistiaVideo = ({ videoId }) => {
-  const loadedScripts = new Set();
-  function loadScript(src) {
-    if (!loadedScripts.has(src)) {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      document.head.appendChild(script);
-      loadedScripts.add(src);
-    }
-  }
-
   useEffect(() => {
+    const loadedScripts = new Set();
     const scriptTags = document.querySelectorAll('script');
     scriptTags.forEach((node) => {
       if (node.src) {
@@ -20,6 +10,16 @@ const WistiaVideo = ({ videoId }) => {
         loadedScripts.add(node.src.split(location.protocol)[1]);
       }
     });
+
+    function loadScript(src) {
+      if (!loadedScripts.has(src)) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        document.head.appendChild(script);
+        loadedScripts.add(src);
+      }
+    }
 
     // the server sends these script tags on pages that have wistia videos
     // you can navigate to a page with a wistia video via an in-page link,
