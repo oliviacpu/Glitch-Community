@@ -85,7 +85,9 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
     if (submitDisabled) return;
     event.preventDefault();
     setLoading(true);
-    const collection = await createCollection(api, collectionName, selection.value, createNotification);
+    const collection = await createCollection({ 
+      api, collectionName, teamId: selection.value, createNotification
+    });
     const team = currentUser.teams.find((t) => t.id === selection.value);
     collection.fullUrl = `${team ? team.url : currentUser.login}/${collection.url}`;
     onSubmit(collection);

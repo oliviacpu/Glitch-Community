@@ -18,6 +18,8 @@ import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 import { isDarkColor } from 'Utils/color';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
+import { useAPI } from 'State/api';
+import { createCollection } from 'Models/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -88,11 +90,18 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
-  <div onClick={() => console.log("hi")} {...props}>
-    {children}
-  </div>
-);
+const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
+  const api = useAPI();
+  const onClick = async () => {
+    await createCollection({ api, name: "My Stuff", createNotification });
+  }
+
+  return (
+    <div onClick={() => console.log("hi")} {...props}>
+      {children}
+    </div>
+  );
+}
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {

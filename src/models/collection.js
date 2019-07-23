@@ -63,9 +63,9 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
-export async function createCollection(api, name, teamId, createNotification) {
-  let description = '';
+export async function createCollection({ api, name, teamId, createNotification, description = '' }) {
   let generatedName = false;
+  let isMyStuff = false;
   if (!name) {
     // generate a new random name & description
     generatedName = true;
@@ -77,6 +77,10 @@ export async function createCollection(api, name, teamId, createNotification) {
     }
     const [predicate, collectionSynonym] = name.split('-');
     description = `A ${collectionSynonym} of projects that does ${predicate} things`;
+  }
+  
+  if (name === "My Stuff") {
+    isMyStuff = true;
   }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;
@@ -90,6 +94,7 @@ export async function createCollection(api, name, teamId, createNotification) {
       avatarUrl,
       coverColor,
       teamId,
+      isMyStuff
     });
 
     return collection;
