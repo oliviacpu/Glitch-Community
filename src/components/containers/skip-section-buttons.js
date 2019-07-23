@@ -9,16 +9,9 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeRef = useRef();
   const afterRef = useRef();
 
-  // hooks must be called on every render, but if sectionName exists we don't need to use those values
+  debugger; 
   let beforeId = useUniqueId();
   let afterId = useUniqueId();
-
-  
-  if (sectionName && sectionName !== 'This Section') {
-    beforeId = `before-${snakeCase(sectionName)}`;
-    afterId = `after-${snakeCase(sectionName)}`;
-  }
-
 
   const moveFocusToAfter = () => {
     afterRef.current.focus();
@@ -43,8 +36,9 @@ const SkipSectionButtons = ({ children, sectionName }) => {
 
 
 SkipSectionButtons.propTypes = {
-  sectionName: PropTypes.node.isRequired,
+  sectionName: PropTypes.string.isRequired,
 }
+
 SkipSectionButtons.defaultProps = {
   sectionName: 'This Section',
 };

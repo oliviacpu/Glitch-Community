@@ -124,7 +124,6 @@ function CollectionsListWithDevToggle(props) {
   return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
 }
 
-
 const UserPage = ({ user: initialUser }) => {
   const [user, funcs] = useUserEditor(initialUser);
   const {
@@ -143,7 +142,7 @@ const UserPage = ({ user: initialUser }) => {
   const { _deletedProjects, featuredProjectId } = user;
 
   useFocusFirst();
-  
+
   const { currentUser: maybeCurrentUser } = useCurrentUser();
   const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
   const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;

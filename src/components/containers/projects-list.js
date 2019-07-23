@@ -62,6 +62,17 @@ function ProjectsList({
 }) {
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
+  const makeTitle = (title, titleEmoji) => {
+    if (!titleEmoji) {
+      return title;
+    }
+    return (
+      <>
+        {title} <Emoji inTitle name={titleEmoji} />
+      </>
+    );
+  };
+
   return (
     <SkipSectionButtons sectionName={title}>
       <FilterController
@@ -75,7 +86,7 @@ function ProjectsList({
         {({ filterInput, filterHeaderStyles, renderItems }) => (
           <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
             <div className={filterHeaderStyles}>
-              {title && <Heading tagName="h2">{title}{titleEmoji && <Emoji inTitle name={titleEmoji} />}</Heading>}
+              {title && <Heading tagName="h2">{makeTitle(title, titleEmoji)}</Heading>}
               {filterInput}
             </div>
             {renderItems((filteredProjects) => (
@@ -118,7 +129,7 @@ ProjectsList.propTypes = {
 
 ProjectsList.defaultProps = {
   title: '',
-  stringTitle: '',
+  titleEmoji: undefined,
   placeholder: null,
   enableFiltering: false,
   enablePagination: false,

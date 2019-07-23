@@ -60,7 +60,7 @@ const RecentProjects = () => {
           </div>
           <div className={styles.projectsWrap}>
             {fetched ? (
-              <ProjectsList sectionName='Recent Projects' layout="row" projects={currentUser.projects.slice(0, 3)} />
+              <ProjectsList layout="row" projects={currentUser.projects.slice(0, 3)} />
             ) : (
               <Loader />
             )}
