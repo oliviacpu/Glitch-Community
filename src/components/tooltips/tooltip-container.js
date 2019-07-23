@@ -108,6 +108,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         id={id}
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
+        onMouseEnter={() => console.log('entered tooltip')}
       >
         {!align.includes('top') && <span onMouseEnter={() => setTooltipIsActive(true)} className={styles.invisibleHoverTarget} aria-hidden="true" />}
         {type === 'info' || shouldShowTooltip ? tooltip : null}
