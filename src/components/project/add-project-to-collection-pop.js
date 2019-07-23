@@ -108,8 +108,9 @@ function useCollectionSearch(query, project, collectionType) {
   const searchResultsWithMyStuff = useMemo(() => {
     if (myStuffEnabled && searchResults.collection) {
       const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
-      if (query.length === 0
-      return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
+      if (query.length === 0 || myStuffCollection) {
+        return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
+      }
     }
     return searchResults.collection;
   }, [searchResults, query]);
