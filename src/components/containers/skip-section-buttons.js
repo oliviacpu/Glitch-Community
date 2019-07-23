@@ -9,10 +9,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeRef = useRef();
   const afterRef = useRef();
 
-  console.log(sectionName);
-
-  let beforeId = useUniqueId();
-  let afterId = useUniqueId();
+  const beforeId = useUniqueId();
+  const afterId = useUniqueId();
 
   const moveFocusToAfter = () => {
     afterRef.current.focus();
