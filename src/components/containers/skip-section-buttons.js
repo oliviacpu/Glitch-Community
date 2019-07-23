@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 import { snakeCase } from 'lodash';
 import Button from 'Components/buttons/button';
 import useUniqueId from 'Hooks/use-unique-id';
@@ -11,7 +12,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   // hooks must be called on every render, but if sectionName exists we don't need to use those values
   let beforeId = useUniqueId();
   // let afterId = useUniqueId();
-  let afterId =5;
+  let afterId = 5;
+
   if (sectionName !== 'This Section') {
     beforeId = `before-${snakeCase(sectionName)}`;
     afterId = `after-${snakeCase(sectionName)}`;
@@ -38,6 +40,10 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   );
 };
 
+
+SkipSectionButtons.propTypes = {
+  sectionName: PropTypes.string.isRequired,
+}
 SkipSectionButtons.defaultProps = {
   sectionName: 'This Section',
 };

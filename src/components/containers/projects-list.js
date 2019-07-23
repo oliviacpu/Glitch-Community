@@ -62,7 +62,7 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
   return (
-    <SkipSectionButtons sectionName={title}>
+    <SkipSectionButtons sectionName={stringTitle}>
       <FilterController
         matchFn={matchFn}
         enabled={enableFiltering}
