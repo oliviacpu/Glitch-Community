@@ -13,16 +13,19 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
   const [timer, setTimer] = useState(null);
 
-  useEffect(() => {
-    const keyHandler = (event) => {
-      if (['Escape', 'Esc'].includes(event.key)) {
-        event.preventDefault();
-        setTooltipIsActive(false);
-      }
-    };
-    window.addEventListener('keyup', keyHandler);
-    return () => window.removeEventListener('keyup', keyHandler);
-  }, [tooltipIsActive]);
+  useEffect(
+    () => {
+      const keyHandler = (event) => {
+        if (['Escape', 'Esc'].includes(event.key)) {
+          event.preventDefault();
+          setTooltipIsActive(false);
+        }
+      };
+      window.addEventListener('keyup', keyHandler);
+      return () => window.removeEventListener('keyup', keyHandler);
+    },
+    [tooltipIsActive],
+  );
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
@@ -70,26 +73,41 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
 
+  const onMouseEnter = () => {
+    // clearTimeout(timer);
+    // setTimer(timer);
+    // console.log('mouseEnter', timer)
+    setTooltipIsActive(true);
+  };
+
+  const onMouseLeave = () => {
+    setTooltip()
+    setTimer(setTimeout(() => setTooltipIsActive(false), 1000));
+    console.log('mouseLeave', timer)
+  };
+  
+  useEffect(() => {
+    if ()
+    
+  }, [tooltipIsActive]);
+
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
+      <div
+        role={role}
+        id={id}
+        className={tooltipClassName}
+        style={{ opacity: shouldShowTooltip ? 1 : 0 }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
         {!align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
         {type === 'info' || shouldShowTooltip ? tooltip : null}
         {align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
       </div>
     );
   }
-
-  const onMouseEnter = () => {
-    clearTimeout(timer);
-    setTooltipIsActive(true);
-  };
-
-  const onMouseLeave = () => {
-    const mouseOutTimer = setTimeout(() => setTooltipIsActive(false), 500);
-    setTimer(mouseOutTimer);
-  };
 
   return (
     <div className={tooltipContainerClassName}>
