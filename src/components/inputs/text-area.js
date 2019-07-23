@@ -11,7 +11,6 @@ import styles from './text-area.styl';
 
 const TextArea = ({ className, autoFocus, disabled, error, name, onBlur, onChange, onFocus, placeholder, value }) => {
   const uniqueId = useUniqueId();
-  const uniqueId2 = useUniqueId();
   return (
     <label className={styles.inputWrap} htmlFor={uniqueId}>
       <div className={styles.inputBorder}>
