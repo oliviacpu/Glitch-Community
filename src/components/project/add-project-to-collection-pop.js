@@ -104,11 +104,11 @@ function useCollectionSearch(query, project, collectionType) {
 
   const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
   const myStuffEnabled = useDevToggle('My Stuff');
-  
-  //what happens when you are searching for something
+
   const searchResultsWithMyStuff = useMemo(() => {
     if (myStuffEnabled && searchResults.collection) {
       const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
+      if (query.length === 0
       return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
     }
     return searchResults.collection;
