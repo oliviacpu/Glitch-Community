@@ -11,7 +11,6 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
-  const [mousedIn, setMousedIn] = useState(false);
   const [timer, setTimer] = useState(null);
 
   useEffect(
