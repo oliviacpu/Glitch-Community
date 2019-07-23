@@ -9,7 +9,7 @@ tooltip-background = rgba(0,0,0,0.95)
   position: relative
   box-sizing: border-box
   display: inline-block
-  // height: calc(100% + 32px);
+  height: calc(100% + 32px);
 
 .tooltip
   border: none
@@ -24,7 +24,7 @@ tooltip-background = rgba(0,0,0,0.95)
   width: auto
   padding: 6px 8px
   margin-top: 5px
-  margin-top: calc(-100% + 5px + 7px)
+  // margin-top: calc(-100% + 5px + 7px)
   font-style: normal
   font-weight: normal
   text-align: center
@@ -91,12 +91,12 @@ tooltip-background = rgba(0,0,0,0.95)
   font-weight: bold
   
 // custom tooltips
-.tooltip.new-stuff
+.tooltip.newStuff
   background-color: notification
   right: 32px
   top: 10%
 
-.tooltip.new-stuff::before
+.tooltip.newStuff::before
   border-top-color: notification
   border-bottom-color: transparent
 

@@ -7,24 +7,20 @@ import { getLink as getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';
-import { addBreadcrumb } from 'Utils/sentry';
+import { useGlobals } from 'State/globals';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';
 
 export { WrappingLink, TrackedExternalLink };
 
-const external = window.EXTERNAL_ROUTES ? Array.from(window.EXTERNAL_ROUTES) : [];
-
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
+  const { location, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
-    addBreadcrumb({
-      level: 'info',
-      message: `window-location: ${JSON.stringify(window.location)}`,
-    });
-    const currentUrl = new URL(window.location.href);
-    const targetUrl = new URL(to, currentUrl);
+    // https://github.com/ReactTraining/react-router/issues/394 inner page links using hashes are not supported in react router links
+    const [, hash] = window.location.href.split('#');
 
-    if (targetUrl.origin !== currentUrl.origin || external.some((route) => targetUrl.pathname.startsWith(route))) {
+    const targetUrl = new URL(to, location);
+    if (targetUrl.origin !== location.origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route)) || hash) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}
@@ -38,7 +34,6 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
       hash: targetUrl.hash,
     };
   }
-
   return (
     <RouterLink to={to} {...props} innerRef={ref}>
       {children}
@@ -58,6 +53,9 @@ export const CollectionLink = ({ collection, children, ...props }) => (
 CollectionLink.propTypes = {
   collection: PropTypes.oneOfType([
     PropTypes.shape({
+      fullUrl: PropTypes.string.isRequired,
+    }),
+    PropTypes.shape({
       team: PropTypes.PropTypes.shape({
         url: PropTypes.string.isRequired,
       }).isRequired,
@@ -73,11 +71,16 @@ CollectionLink.propTypes = {
   ]).isRequired,
 };
 
-export const ProjectLink = ({ project, children, ...props }) => (
-  <Link to={getProjectLink(project)} {...props}>
-    {children}
-  </Link>
-);
+export const ProjectLink = ({ project, children, ...props }) => {
+  if (project.suspendedReason) {
+    return <span {...props}>{children}</span>;
+  }
+  return (
+    <Link to={getProjectLink(project)} {...props}>
+      {children}
+    </Link>
+  );
+};
 ProjectLink.propTypes = {
   project: PropTypes.shape({
     domain: PropTypes.string.isRequired,

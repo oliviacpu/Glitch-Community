@@ -1,5 +1,17 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable import/prefer-default-export */
+import { hex as getHexContrastRatio } from 'wcag-contrast';
+import randomColor from 'randomcolor';
+
+export const getContrastWithLightText = (hex) => getHexContrastRatio(hex, '#fff');
+
+export const getContrastWithDarkText = (hex) => getHexContrastRatio(hex, '#222');
+
+export const isDarkColor = (hex) => {
+  if (!hex.startsWith('#')) return false;
+  const contrastWithLightText = getContrastWithLightText(hex);
+  const contrastWithDarkText = getContrastWithDarkText(hex);
+  return contrastWithLightText > contrastWithDarkText;
+};
 
 // from https://stackoverflow.com/a/21648508/1720985
 export const hexToRgbA = (hex) => {
@@ -13,3 +25,13 @@ export const hexToRgbA = (hex) => {
   }
   return false;
 };
+
+export const isGoodColorContrast = (hex) => getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
+
+export function pickRandomColor() {
+  const newColor = randomColor({ luminosity: 'light' });
+  if (isGoodColorContrast(newColor)) {
+    return newColor;
+  }
+  return pickRandomColor();
+}
