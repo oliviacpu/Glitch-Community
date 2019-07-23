@@ -89,7 +89,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
 const CreateMyStuffOnClickComponent = ({ children, ...props }) => (
-  <div {...props}>
+  <div onClick={() => console.log("hi")} {...props}>
     {children}
   </div>
 );
