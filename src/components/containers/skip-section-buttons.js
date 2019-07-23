@@ -9,7 +9,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeRef = useRef();
   const afterRef = useRef();
 
-  debugger; 
+  console.log(sectionName);
+
   let beforeId = useUniqueId();
   let afterId = useUniqueId();
 

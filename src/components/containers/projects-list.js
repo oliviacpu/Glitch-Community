@@ -74,7 +74,6 @@ function ProjectsList({
   };
 
   return (
-    <SkipSectionButtons sectionName={title}>
       <FilterController
         matchFn={matchFn}
         enabled={enableFiltering}
@@ -89,6 +88,7 @@ function ProjectsList({
               {title && <Heading tagName="h2">{makeTitle(title, titleEmoji)}</Heading>}
               {filterInput}
             </div>
+            <SkipSectionButtons sectionName={title}>
             {renderItems((filteredProjects) => (
               <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
                 {(paginatedProjects) => (
@@ -104,10 +104,10 @@ function ProjectsList({
                 )}
               </PaginationController>
             ))}
+            </SkipSectionButtons>
           </article>
         )}
       </FilterController>
-    </SkipSectionButtons>
   );
 }
 
@@ -128,7 +128,7 @@ ProjectsList.propTypes = {
 };
 
 ProjectsList.defaultProps = {
-  title: '',
+  title: undefined,
   titleEmoji: undefined,
   placeholder: null,
   enableFiltering: false,
