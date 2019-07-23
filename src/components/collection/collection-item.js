@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
 
@@ -94,13 +95,15 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
+const CreateMyStuffOnClickComponent = withRouter(({ history, children, ...props }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
 
   const createMyStuffCollection = async () => {
     const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
-    window.
+    if (myStuff) {
+      history.push(myStuff.fullUrl)
+    }
   }
 
   return (
@@ -108,7 +111,7 @@ const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
       {children}
     </div>
   );
-}
+})
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
