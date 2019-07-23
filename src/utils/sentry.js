@@ -10,6 +10,7 @@
 
 import * as Sentry from '@sentry/browser';
 import { currentEnv, isBrowser } from './constants';
+
 const SentryHelpers = require('Shared/sentryHelpers');
 
 let beforeSendFailed = false;
