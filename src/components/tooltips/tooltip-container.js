@@ -12,6 +12,7 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
   const [timer, setTimer] = useState(null);
+  const [lastActiveTooltip, setLastActiveTooltip] = useState(null);
 
   useEffect(
     () => {
@@ -73,13 +74,24 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
 
-  const onMouseEnter = () => {
+  const onMouseEnter = (e) => {
+    if (e.target !== lastActiveTooltip) {
+      console.log('not hte same')
+      setTooltipIsActive(false);
+    }
     clearTimeout(timer);
     setTooltipIsActive(true);
+    setLastActiveTooltip(e.target);
   };
 
-  const onMouseLeave = () => {
-    setTimer(setTimeout(() => setTooltipIsActive(false), 300));
+  const onMouseLeave = (e) => {
+    if (e.target === lastActiveTooltip) {
+      setTimer(setTimeout(() => {
+        setTooltipIsActive(false);
+      }, 300));
+    } else {
+      setTooltipIsActive(false);
+    }
   };
   
 
