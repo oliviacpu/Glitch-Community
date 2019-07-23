@@ -62,7 +62,7 @@ function ProjectsList({
 }) {
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
-  const makeTitle = (title, titleEmoji) => {
+  const makeTitle = () => {
     if (!titleEmoji) {
       return title;
     }
@@ -74,21 +74,21 @@ function ProjectsList({
   };
 
   return (
-      <FilterController
-        matchFn={matchFn}
-        enabled={enableFiltering}
-        placeholder={placeholder}
-        searchPrompt="find a project"
-        label="project search"
-        items={projects}
-      >
-        {({ filterInput, filterHeaderStyles, renderItems }) => (
-          <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-            <div className={filterHeaderStyles}>
-              {title && <Heading tagName="h2">{makeTitle(title, titleEmoji)}</Heading>}
-              {filterInput}
-            </div>
-            <SkipSectionButtons sectionName={title}>
+    <FilterController
+      matchFn={matchFn}
+      enabled={enableFiltering}
+      placeholder={placeholder}
+      searchPrompt="find a project"
+      label="project search"
+      items={projects}
+    >
+      {({ filterInput, filterHeaderStyles, renderItems }) => (
+        <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
+          <div className={filterHeaderStyles}>
+            {title && <Heading tagName="h2">{makeTitle()}</Heading>}
+            {filterInput}
+          </div>
+          <SkipSectionButtons sectionName={title}>
             {renderItems((filteredProjects) => (
               <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
                 {(paginatedProjects) => (
@@ -104,10 +104,10 @@ function ProjectsList({
                 )}
               </PaginationController>
             ))}
-            </SkipSectionButtons>
-          </article>
-        )}
-      </FilterController>
+          </SkipSectionButtons>
+        </article>
+      )}
+    </FilterController>
   );
 }
 

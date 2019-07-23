@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { snakeCase } from 'lodash';
 import Button from 'Components/buttons/button';
 import useUniqueId from 'Hooks/use-unique-id';
 import styles from './skip-section-buttons.styl';
@@ -9,10 +8,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
   const beforeRef = useRef();
   const afterRef = useRef();
 
-  console.log(sectionName);
-
-  let beforeId = useUniqueId();
-  let afterId = useUniqueId();
+  const beforeId = useUniqueId();
+  const afterId = useUniqueId();
 
   const moveFocusToAfter = () => {
     afterRef.current.focus();
@@ -37,8 +34,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
 
 
 SkipSectionButtons.propTypes = {
-  sectionName: PropTypes.string.isRequired,
-}
+  sectionName: PropTypes.string,
+};
 
 SkipSectionButtons.defaultProps = {
   sectionName: 'This Section',
