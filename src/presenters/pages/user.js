@@ -74,14 +74,15 @@ NameAndLogin.defaultProps = {
 function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
   const { value: projects } = useCollectionProjects(myStuffCollection);
 
-  React.useEffect(() => {
+  const collectionsWithMyStuff = React.useMemo(() => {
     if (projects && (projects.length > 0 || isAuthorized)) {
       myStuffCollection.projects = projects;
-      collections = getCollectionsWithMyStuffAtFront({ collections, myStuffCollection });
+      return getCollectionsWithMyStuffAtFront({ collections, myStuffCollection });
     }
+    return collections
   }, [projects]);
 
-  return children(collections);
+  return children(collectionsWithMyStuff);
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {

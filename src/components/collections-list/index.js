@@ -36,7 +36,6 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   const myStuffEnabled = useDevToggle('My Stuff');
-
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
