@@ -97,7 +97,6 @@ const NoResults = ({ project, collectionsWithProject, query }) => {
   return <InfoDescription>Create collections to organize your favorite projects.</InfoDescription>;
 };
 
-
 // if dev toggle mystuff, add mystuff to collection
 function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
@@ -113,7 +112,7 @@ function useCollectionSearch(query, project, collectionType) {
       return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
     }
     return searchResults.collection;
-  }, [searchResults])
+  }, [searchResults]);
 
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
@@ -131,8 +130,8 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { createNotification } = useNotifications();
 
   const addProjectTo = (collection) => {
-    // TODO for my stuff: 
-    // if collection is a bookmark collection that doesn't exist yet, 
+    // TODO for my stuff:
+    // if collection is a bookmark collection that doesn't exist yet,
     // first we'll need to create that collection
     // then we'll need to add that project to the collection
 
@@ -193,10 +192,7 @@ AddProjectToCollectionBase.propTypes = {
 };
 
 const AddProjectToCollection = ({ project, addProjectToCollection }) => (
-  <PopoverWithButton
-    buttonProps={{ size: 'small', emoji: 'framedPicture' }}
-    buttonText="Add to Collection"
-  >
+  <PopoverWithButton buttonProps={{ size: 'small', emoji: 'framedPicture' }} buttonText="Add to Collection">
     {({ togglePopover }) => (
       <MultiPopover
         views={{

@@ -16,7 +16,7 @@ const ProfileItemWithData = ({ collection }) => {
   const { value: curator } = useCollectionCurator(collection);
   return (
     <>
-      {curator ? (<VisuallyHidden>by</VisuallyHidden>) : null}
+      {curator ? <VisuallyHidden>by</VisuallyHidden> : null}
       <ProfileItem {...curator} size="small" />
     </>
   );
@@ -25,9 +25,7 @@ const ProfileItemWithData = ({ collection }) => {
 const ProfileItemWrap = ({ collection }) => (
   <div className={styles.profileItemWrap}>
     <VisibilityContainer>
-      {({ wasEverVisible }) => (
-        wasEverVisible ? <ProfileItemWithData collection={collection} /> : <ProfileItem size="small" />
-      )}
+      {({ wasEverVisible }) => (wasEverVisible ? <ProfileItemWithData collection={collection} /> : <ProfileItem size="small" />)}
     </VisibilityContainer>
   </div>
 );
@@ -35,19 +33,14 @@ const ProfileItemWrap = ({ collection }) => (
 const CollectionResultItem = ({ onClick, collection, active }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
 
-  
   return (
-    <ResultItem
-      active={active}
-      onClick={onClick}
-      href={`/@${collection.fullUrl}`}
-    >
+    <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
       <div className={styles.avatarWrap}>
-        {
-          (myStuffEnabled && collection.isBookmarkCollection) ? 
-            <div>mystuff avatar will be here soon</div> :
-            <CollectionAvatar collection={collection} />
-        }
+        {myStuffEnabled && collection.isBookmarkCollection ? (
+          <div>avatar</div>
+        ) : (
+          <CollectionAvatar collection={collection} />
+        )}
       </div>
       <ResultInfo>
         <VisuallyHidden>Add to collection</VisuallyHidden>
