@@ -112,8 +112,9 @@ module.exports = smp.wrap({
                 loader: 'css-loader?modules',
                 options: {
                   sourceMap: mode !== 'production', // no css source maps in production
-                  modules: true,
-                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                  modules: {
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                  }
                 },
               },
               {
