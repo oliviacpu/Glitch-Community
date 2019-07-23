@@ -37,7 +37,14 @@ const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const { default: Page } = require('../src/server');
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
-  const page = React.createElement(Page, { origin: url.origin, route: url.pathname + url.search + url.hash, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
+  const page = React.createElement(Page, {
+    origin: url.origin,
+    route: url.pathname + url.search + url.hash,
+    ZINE_POSTS,
+    HOME_CONTENT,
+    EXTERNAL_ROUTES,
+  });
+
   const html = ReactDOMServer.renderToString(page);
   const helmet = Helmet.renderStatic();
   return { html, helmet };
