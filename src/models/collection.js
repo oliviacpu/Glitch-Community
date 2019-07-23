@@ -63,7 +63,8 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
-export async function createCollection({ api, name, teamId, createNotification, description = '' }) {
+export async function createCollection({ api, name, teamId, createNotification }) {
+  let description = ''
   let generatedName = false;
   let isMyStuff = false;
   if (!name) {
@@ -81,6 +82,7 @@ export async function createCollection({ api, name, teamId, createNotification, 
   
   if (name === "My Stuff") {
     isMyStuff = true;
+    description = "My place to save cool finds";
   }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;

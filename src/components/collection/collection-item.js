@@ -16,9 +16,13 @@ import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
+
 import { isDarkColor } from 'Utils/color';
-import { useCollectionProjects, useCollectionCurator } from 'State/collection';
+
 import { useAPI } from 'State/api';
+import { useCollectionProjects, useCollectionCurator } from 'State/collection';
+import { useNotifications } from 'State/notifications';
+
 import { createCollection } from 'Models/collection';
 
 import CollectionOptions from './collection-options-pop';
@@ -92,12 +96,15 @@ export const CollectionCuratorLoader = ({ collection }) => (
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
 const CreateMyStuffOnClickComponent = ({ children, ...props }) => {
   const api = useAPI();
-  const onClick = async () => {
-    await createCollection({ api, name: "My Stuff", createNotification });
+  const { createNotification } = useNotifications();
+
+  const createMyStuffCollection = async () => {
+    const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
+    window.
   }
 
   return (
-    <div onClick={() => console.log("hi")} {...props}>
+    <div onClick={createMyStuffCollection} {...props}>
       {children}
     </div>
   );
