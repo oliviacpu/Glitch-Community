@@ -97,7 +97,6 @@ const NoResults = ({ project, collectionsWithProject, query }) => {
   return <InfoDescription>Create collections to organize your favorite projects.</InfoDescription>;
 };
 
-// if dev toggle mystuff, add mystuff to collection
 function useCollectionSearch(query, project, collectionType) {
   const { currentUser } = useCurrentUser();
   const debouncedQuery = useDebouncedValue(query, 200);
