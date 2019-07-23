@@ -1,25 +1,25 @@
 const { envs } = require('Shared/constants');
 
-const getCurrentEnv = () => {
-  if (typeof window !== 'undefined') {
-    const runningOn = window.RUNNING_ON;
+const getBrowserEnv = () => {
+  const runningOn = window.RUNNING_ON;
 
-    let envFromOrigin = 'production';
-    if (window.location.origin.includes('staging.glitch.com')) {
-      envFromOrigin = 'staging';
-    } else if (window.location.origin.includes('glitch.development')) {
-      envFromOrigin = 'development';
-    }
-
-    return envs[runningOn] ? runningOn : envFromOrigin;
-  } else if (typeof process !== 'undefined') {
-    const runningOn = process.env.RUNNING_ON;
-    return envs[runningOn] ? runningOn : 'production';
+  let envFromOrigin = 'production';
+  if (window.location.origin.includes('staging.glitch.com')) {
+    envFromOrigin = 'staging';
+  } else if (window.location.origin.includes('glitch.development')) {
+    envFromOrigin = 'development';
   }
-  return 'production';
-}
 
-const currentEnv = getCurrentEnv();
+  return envs[runningOn] ? runningOn : envFromOrigin;
+};
+
+const getNodeEnv = () => {
+  const runningOn = process.env.RUNNING_ON;
+  return envs[runningOn] ? runningOn : 'production';
+};
+
+const isBrowser = typeof window !== 'undefined';
+const currentEnv = isBrowser ? getBrowserEnv() : getNodeEnv();
 
 const {
   APP_URL,
@@ -33,6 +33,7 @@ const {
 
 export {
   currentEnv,
+  isBrowser,
   APP_URL,
   API_URL,
   EDITOR_URL,

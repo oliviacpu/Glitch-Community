@@ -7,7 +7,7 @@ require('@babel/register')({
   ],
   plugins: [
     ['module-resolver', {
-      alias: { 'Utils/sentry': '@sentry/node' },
+      alias: { '@sentry/browser': '@sentry/node' },
     }],
     ['css-modules-transform', {
       preprocessCss: (data, filename) => stylus.render(data, { filename }),
@@ -21,7 +21,7 @@ const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
 const { StaticRouter } = require('react-router-dom');
-const { GlobalsProvider } = require('State/globals');
+const { GlobalsProvider } = require('../src/state/globals');
 
 const { default: App } = require('../src/app');
 

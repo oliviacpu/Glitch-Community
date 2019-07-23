@@ -9,13 +9,13 @@
 //
 
 import * as Sentry from '@sentry/browser';
-import { currentEnv } from './constants';
+import { currentEnv, isBrowser } from './constants';
 const SentryHelpers = require('Shared/sentryHelpers');
 
 let beforeSendFailed = false;
 let beforeBreadcrumbFailed = false;
 
-if (typeof window !== 'undefined') {
+if (isBrowser) {
   try {
     Sentry.init({
       dsn: 'https://4f1a68242b6944738df12eecc34d377c@sentry.io/1246508',
