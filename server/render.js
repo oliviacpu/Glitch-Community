@@ -1,6 +1,7 @@
 const path = require('path');
 const src = path.join(__dirname, '../src/');
 
+// apply transformations to the client code so it can run in node
 const stylus = require('stylus');
 require('@babel/register')({
   only: [(location) => location.startsWith(src)],
@@ -19,6 +20,8 @@ require('@babel/register')({
   ],
 });
 
+// clear client code from the require cache whenever it gets changed
+// it'll get loaded off the disk again when the render calls require
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
   Object.keys(require.cache).forEach((location) => {
