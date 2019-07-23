@@ -26,9 +26,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
     [tooltipIsActive],
   );
 
-  const tooltipContainerClassName = cx({
-    'tooltip-container': true,
-  });
   const id = useUniqueId();
 
   const tooltipClassName = cx({
@@ -82,7 +79,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   }
 
   return (
-    <div className={tooltipContainerClassName} onMouseEnter={() => setTooltipIsActive(true)} onMouseLeave={() => setTooltipIsActive(false)}>
+    <div className={styles.tooltipContainer} onMouseEnter={() => setTooltipIsActive(true)} onMouseLeave={() => setTooltipIsActive(false)}>
       <div onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>

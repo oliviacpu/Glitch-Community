@@ -5,10 +5,19 @@ tooltip-background = rgba(0,0,0,0.95)
 .touch .tooltip
   display: none
     
-.tooltip-container
+.tooltipContainer
   position: relative
   box-sizing: border-box
   display: inline-block
+
+.invisibleHoverTarget
+  position: absolute
+  left: 0
+  transform: translateY(-7px)
+  display: block
+  width: 100%
+  height: 100%
+  border: 1px solid red
 
 .tooltip
   border: none
@@ -50,8 +59,11 @@ tooltip-background = rgba(0,0,0,0.95)
   border-bottom-color: tooltip-background
 
 .tooltip.top
-  margin-top: -12px
+  margin-top: -6px
   transform: translateX(50%) translateY(-100%)
+  .invisibleHoverTarget
+    top: 0
+    transform: translateY(7px)
   
 .tooltip.top::before
   border-top-color: tooltip-background
@@ -79,6 +91,9 @@ tooltip-background = rgba(0,0,0,0.95)
   right: 10px
   transform: translateX(0) translateY(-100%)
 
+.tooltip.top
+  top: 0
+
 .tooltip.top.right,
 .tooltip.top.left
   transform: translateX(0) translateY(-100%)
@@ -101,8 +116,8 @@ tooltip-background = rgba(0,0,0,0.95)
 .fallback.tooltip::after
   opacity: 0
 
-.tooltip-container:hover,
-.tooltip-container-button:hover
+.tooltipContainer:hover,
+.tooltipContainer-button:hover
   .fallback.tooltip::before,
   .fallback.tooltip::after
     opacity: 1
@@ -184,12 +199,3 @@ tooltip-background = rgba(0,0,0,0.95)
 
 .fallback.tooltip.persistent::after
   font-weight: bold
-
-.invisibleHoverTarget
-  position: absolute
-  left: 0
-  transform: translateY(-7px)
-  display: block
-  width: 100%
-  height: 100%
-  border: 1px solid red
