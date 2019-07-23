@@ -17,11 +17,10 @@ require('@babel/register')({
 });
 
 const chokidar = require('chokidar');
-const watcher = chokidar.watch('../src');
-watcher.on('ready', () => {
-  console.log('client ready');
-  watcher.on('all', () => {
-    console.log('client change');
+const path = require('path');
+chokidar.watch(path.join(__dirname, '../src')).on('all', () => {
+  Object.keys(require.cache).forEach((location) => {
+    if (/^\/src\//.test(location)) console.log(location);
   });
 });
 
