@@ -199,12 +199,8 @@ const UserPage = ({ user: initialUser }) => {
         <ProjectsList
           dataCy="pinned-projects"
           layout="grid"
-          stringTitle="Pinned Projects"
-          title={
-            <>
-              Pinned Projects <Emoji inTitle name="pushpin" />
-            </>
-          }
+          title="Pinned Projects"
+          titleEmoji="pushpin"
           projects={pinnedProjects}
           projectOptions={projectOptions}
         />

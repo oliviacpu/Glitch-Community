@@ -10,6 +10,7 @@ import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
 import classNames from 'classnames/bind';
 import SkipSectionButtons from 'Components/containers/skip-section-buttons';
+import Emoji from 'Components/images/emoji';
 
 import styles from './projects-list.styl';
 
@@ -47,7 +48,7 @@ function ProjectsList({
   projects,
   layout,
   title,
-  stringTitle,
+  titleEmoji,
   placeholder,
   enableFiltering,
   enablePagination,
@@ -62,7 +63,7 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
   return (
-    <SkipSectionButtons sectionName={stringTitle}>
+    <SkipSectionButtons sectionName={title}>
       <FilterController
         matchFn={matchFn}
         enabled={enableFiltering}
@@ -74,7 +75,7 @@ function ProjectsList({
         {({ filterInput, filterHeaderStyles, renderItems }) => (
           <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
             <div className={filterHeaderStyles}>
-              {title && <Heading tagName="h2">{title}</Heading>}
+              {title && <Heading tagName="h2">{title}{titleEmoji && <Emoji inTitle name={titleEmoji} />}</Heading>}
               {filterInput}
             </div>
             {renderItems((filteredProjects) => (
@@ -102,8 +103,8 @@ function ProjectsList({
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   layout: PropTypes.oneOf(['row', 'grid', 'gridCompact']).isRequired,
-  title: PropTypes.node,
-  stringTitle: PropTypes.string,
+  title: PropTypes.string,
+  titleEmoji: PropTypes.string,
   placeholder: PropTypes.node,
   enableFiltering: PropTypes.bool,
   enablePagination: PropTypes.bool,
@@ -116,7 +117,7 @@ ProjectsList.propTypes = {
 };
 
 ProjectsList.defaultProps = {
-  title: null,
+  title: '',
   stringTitle: '',
   placeholder: null,
   enableFiltering: false,
