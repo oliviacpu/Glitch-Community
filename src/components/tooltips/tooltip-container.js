@@ -11,6 +11,7 @@ export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
 function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
+  const [mousedIn, setMousedIn] = useState(false);
   const [timer, setTimer] = useState(null);
 
   useEffect(
@@ -73,23 +74,31 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
 
-  const onMouseEnter = () => {
+  const onMouseEnter = (e) => {
     // clearTimeout(timer);
     // setTimer(timer);
     // console.log('mouseEnter', timer)
-    setTooltipIsActive(true);
+    // setTooltipIsActive(true);
+    setMousedIn(true);
+    console.log('mouseenter', e.target);
   };
 
   const onMouseLeave = () => {
-    setTooltip()
-    setTimer(setTimeout(() => setTooltipIsActive(false), 1000));
+    // setTooltipIsActive(false);
+    setMousedIn(false);
+    // setTimer(setTimeout(() => setTooltipIsActive(false), 1000));
     console.log('mouseLeave', timer)
   };
   
   useEffect(() => {
-    if ()
-    
-  }, [tooltipIsActive]);
+    let timer;
+    if (mousedIn) {
+      setTooltipIsActive(true);
+    } else {
+      timer = setTimeout(() => setTooltipIsActive(false), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [mousedIn]);
 
   let tooltipNode = null;
   if (!fallback) {
@@ -99,19 +108,17 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         id={id}
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
       >
-        {!align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
+        {!align.includes('top') && <span onMouseEnter={() => setTooltipIsActive(true)} className={styles.invisibleHoverTarget} aria-hidden="true" />}
         {type === 'info' || shouldShowTooltip ? tooltip : null}
-        {align.includes('top') && <span className={styles.invisibleHoverTarget} aria-hidden="true" />}
+        {align.includes('top') && <span onMouseEnter={() => setTooltipIsActive(true)} className={styles.invisibleHoverTarget} aria-hidden="true" />}
       </div>
     );
   }
 
   return (
-    <div className={tooltipContainerClassName}>
-      <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
+    <div className={tooltipContainerClassName} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>
       {tooltipNode}
