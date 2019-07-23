@@ -1,3 +1,5 @@
+const path = require('path');
+
 const stylus = require('stylus');
 require('@babel/register')({
   only: [/\/src\//],
@@ -17,10 +19,9 @@ require('@babel/register')({
 });
 
 const chokidar = require('chokidar');
-const path = require('path');
-chokidar.watch(path.join(__dirname, '../src')).on('all', () => {
+chokidar.watch(path.join(__dirname, '../src')).on('change', () => {
   Object.keys(require.cache).forEach((location) => {
-    if (/^\/src\//.test(location)) console.log(location);
+    if (location.startsWith('/src/')) console.log(JSON.stringify(location));
   });
 });
 
