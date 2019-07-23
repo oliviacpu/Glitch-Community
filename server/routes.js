@@ -87,7 +87,7 @@ module.exports = function(external) {
       title,
       socialTitle,
       description,
-      image: image,
+      image,
       scripts,
       styles,
       canonicalUrl,
