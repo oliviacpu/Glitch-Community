@@ -38,6 +38,7 @@ const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const { GlobalsProvider } = require('../src/state/globals');
   const { default: App } = require('../src/app');
 
+  // don't use <ReactSyntax /> so babel can stay scoped to the src directory
   const app = React.createElement(App);
   const globalsProvider = React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
   const staticRouter = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
