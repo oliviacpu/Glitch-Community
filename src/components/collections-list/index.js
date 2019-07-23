@@ -51,7 +51,7 @@ function CollectionsList({ collections: rawCollections, title, isAuthorized, may
       )}
       <Grid items={orderedCollections}>
         {(collection) =>
-          myStuffEnabled && collection.isBookmarkCollection ? (
+          myStuffEnabled && collection.isMyStuff ? (
             <MyStuffItem collection={collection} />
           ) : (
             <CollectionItem

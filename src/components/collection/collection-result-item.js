@@ -36,7 +36,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
   return (
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
       <div className={styles.avatarWrap}>
-        {myStuffEnabled && collection.isBookmarkCollection ? (
+        {myStuffEnabled && collection.isMyStuff ? (
           <div>avatar</div>
         ) : (
           <CollectionAvatar collection={collection} />

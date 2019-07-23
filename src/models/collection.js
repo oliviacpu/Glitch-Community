@@ -14,7 +14,7 @@ export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78f
 export function getMyStuffFromCollections({ collections }) {
   let myStuffCollection = null;
   const collectionsWithoutMyStuff = collections.filter((collection) => {
-    if (collection.isBookmarkCollection) {
+    if (collection.isMyStuff) {
       myStuffCollection = collection;
       return false;
     }
@@ -24,7 +24,7 @@ export function getMyStuffFromCollections({ collections }) {
 }
 
 const nullMyStuffCollection = {
-  isBookmarkCollection: true,
+  isMyStuff: true,
   name: 'My Stuff',
   description: 'My place to save cool finds',
   coverColor: pickRandomColor(),

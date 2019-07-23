@@ -102,6 +102,7 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, ...props 
   const createMyStuffCollection = async () => {
     const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
     if (myStuff) {
+      // TODO this needs to be fixed
       history.push(myStuff.fullUrl)
     }
   }
