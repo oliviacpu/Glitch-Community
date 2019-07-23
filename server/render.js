@@ -16,6 +16,15 @@ require('@babel/register')({
   ],
 });
 
+const chokidar = require('chokidar');
+const watcher = chokidar.watch('../src');
+watcher.on('ready', () => {
+  console.log('client ready');
+  watcher.on('all', () => {
+    console.log('client change');
+  });
+});
+
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
