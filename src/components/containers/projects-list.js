@@ -47,7 +47,6 @@ function ProjectsList({
   projects,
   layout,
   title,
-  stringTitle,
   placeholder,
   enableFiltering,
   enablePagination,
@@ -60,34 +59,42 @@ function ProjectsList({
   dataCy,
 }) {
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
-  const renderProjectsFunctionBody = (filteredProjects) => (
-    <PaginationController enabled={enablePagination} projects={filteredProjects} projectsPerPage={projectsPerPage}>
-      {(paginatedProjects) => (
-        <ProjectsUL
-          projects={paginatedProjects}
-          collection={collection}
-          noteOptions={noteOptions}
-          layout={layout}
-          sortable={enableSorting && paginatedProjects.length === projects.length}
-          onReorder={onReorder}
-          projectOptions={projectOptions}
-        />
-      )}
-    </PaginationController>
-  );
+
   return (
-    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt="find a project" label="project search" items={projects}>
-      {({ filterInput, filterHeaderStyles, renderItems }) => (
-        <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-          <div className={filterHeaderStyles}>
-            {title && <Heading tagName="h2">{title}</Heading>}
-            {filterInput}
-          </div>
-          {!collection && <SkipSectionButtons sectionName={stringTitle || title}>{renderProjects(renderProjectsFunctionBody)}</SkipSectionButtons>}
-          {collection && renderProjects(renderProjectsFunctionBody)}
-        </article>
-      )}
-    </FilterController>
+    <SkipSectionButtons sectionName={title}>
+      <FilterController
+        matchFn={matchFn}
+        enabled={enableFiltering}
+        placeholder={placeholder}
+        searchPrompt="find a project"
+        label="project search"
+        items={projects}
+      >
+        {({ filterInput, filterHeaderStyles, renderItems }) => (
+          <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
+            <div className={filterHeaderStyles}>
+              {title && <Heading tagName="h2">{title}</Heading>}
+              {filterInput}
+            </div>
+            {renderItems((filteredProjects) => (
+              <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
+                {(paginatedProjects) => (
+                  <ProjectsUL
+                    projects={paginatedProjects}
+                    collection={collection}
+                    noteOptions={noteOptions}
+                    layout={layout}
+                    sortable={enableSorting && paginatedProjects.length === projects.length}
+                    onReorder={onReorder}
+                    projectOptions={projectOptions}
+                  />
+                )}
+              </PaginationController>
+            ))}
+          </article>
+        )}
+      </FilterController>
+    </SkipSectionButtons>
   );
 }
 
