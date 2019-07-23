@@ -53,6 +53,7 @@ dependencies:
   lodash-webpack-plugin: 0.11.5
   markdown-it: 8.4.2
   markdown-it-emoji: 1.4.0
+  markdown-it-github-headings: 1.1.1
   markdown-it-sanitizer: 0.4.3
   memory-cache: 0.2.0
   mini-css-extract-plugin: 0.6.0
@@ -6413,6 +6414,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-kUlSC06PVvvjlMRpNIl3kR1NRXLEe86VQ7N0bQeaCZb2g+InShCeHQp/JvyYNTugMnRN2NvJhHlc3q12MWbbpg==
+  /emoji-regex/6.1.1:
+    dev: false
+    resolution:
+      integrity: sha1-xs0OwbBkLio8Z6ETfvxeeW2k+I4=
   /emoji-regex/7.0.3:
     dev: false
     resolution:
@@ -7680,6 +7685,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-Xv+OPmhNVprkyysSgmBOi6YhSfo=
+  /github-slugger/1.2.1:
+    dependencies:
+      emoji-regex: 6.1.1
+    dev: false
+    resolution:
+      integrity: sha512-SsZUjg/P03KPzQBt7OxJPasGw6NRO5uOgiZ5RGXVud5iSIZ0eNZeNp5rTwCxtavrRUa/A77j8mePVc5lEvk0KQ==
   /glob-base/0.3.0:
     dependencies:
       glob-parent: 2.0.0
@@ -8382,6 +8393,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  /innertext/1.0.3:
+    dependencies:
+      html-entities: 1.2.1
+    dev: false
+    resolution:
+      integrity: sha512-ZC410b7IbrTrmt8bQb27xUOJgXkJu+XL6MVncb9FGyxjRIHyQqNjpSDY20zvSUttkAiYj0dait/67/sXyWvwYg==
   /inquirer/6.2.2:
     dependencies:
       ansi-escapes: 3.2.0
@@ -9603,6 +9620,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-m+4OmpkKljupbfaYDE/dsF37Tcw=
+  /markdown-it-github-headings/1.1.1:
+    dependencies:
+      github-slugger: 1.2.1
+      innertext: 1.0.3
+    dev: false
+    resolution:
+      integrity: sha512-jEthmVitZXhYJ0Fkvh6RfBcxdIKKec/p3LidX9a+Hs5/AnUjtxi1nxDVhu1muyacXoTiA+ChVilASQyTdfWk2Q==
   /markdown-it-sanitizer/0.4.3:
     dev: false
     resolution:
@@ -14207,6 +14231,7 @@ specifiers:
   lodash-webpack-plugin: ^0.11.5
   markdown-it: ^8.4.2
   markdown-it-emoji: ^1.4.0
+  markdown-it-github-headings: ^1.1.1
   markdown-it-sanitizer: ^0.4.3
   memory-cache: ^0.2.0
   mini-css-extract-plugin: ^0.6.0

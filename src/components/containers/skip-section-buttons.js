@@ -10,7 +10,8 @@ const SkipSectionButtons = ({ children, sectionName }) => {
 
   // hooks must be called on every render, but if sectionName exists we don't need to use those values
   let beforeId = useUniqueId();
-  let afterId = useUniqueId();
+  // let afterId = useUniqueId();
+  let afterId =5;
   if (sectionName !== 'This Section') {
     beforeId = `before-${snakeCase(sectionName)}`;
     afterId = `after-${snakeCase(sectionName)}`;

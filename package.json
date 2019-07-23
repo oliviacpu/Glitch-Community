@@ -76,6 +76,7 @@
     "lodash-webpack-plugin": "^0.11.5",
     "markdown-it": "^8.4.2",
     "markdown-it-emoji": "^1.4.0",
+    "markdown-it-github-headings": "^1.1.1",
     "markdown-it-sanitizer": "^0.4.3",
     "memory-cache": "^0.2.0",
     "mini-css-extract-plugin": "^0.6.0",
