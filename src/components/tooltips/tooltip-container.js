@@ -93,9 +93,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
       >
-        {false && !align.includes('top') && <span onMouseEnter={() => setTooltipIsActive(true)} className={styles.invisibleHoverTarget} aria-hidden="true" />}
         {type === 'info' || shouldShowTooltip ? tooltip : null}
-        {false && align.includes('top') && <span onMouseEnter={() => setTooltipIsActive(true)} className={styles.invisibleHoverTarget} aria-hidden="true" />}
       </div>
     );
   }

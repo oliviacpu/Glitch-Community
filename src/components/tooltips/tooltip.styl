@@ -9,14 +9,11 @@ tooltip-background = rgba(0,0,0,0.95)
   position: relative
   box-sizing: border-box
   display: inline-block
-  height: calc(100% + 32px);
 
 .tooltip
   border: none
   box-sizing: inherit
   display: inline-block
-  content: ''
-  // pointer-events: none
   position: absolute
   z-index: 9
   transform: translateX(50%)
@@ -188,12 +185,3 @@ tooltip-background = rgba(0,0,0,0.95)
 
 .fallback.tooltip.persistent::after
   font-weight: bold
-
-// .invisibleHoverTarget
-//   // top: calc(-100% + 7px)
-//   transform: translateY(-100% + 7px)
-//   left: 0
-//   display: block
-//   width: 100%
-//   height: 60px
-//   background: rgba(255, 255, 0, .3)
