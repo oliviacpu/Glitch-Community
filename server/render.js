@@ -34,16 +34,11 @@ const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
 const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
-  const { StaticRouter } = require('react-router-dom');
-  const { GlobalsProvider } = require('../src/state/globals');
-  const { default: App } = require('../src/app');
+  const { default: Page } = require('../src/server');
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
-  const app = React.createElement(App);
-  const globalsProvider = React.createElement(GlobalsProvider, { origin: url.origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
-  const staticRouter = React.createElement(StaticRouter, { location: url.pathname + url.search + url.hash }, globalsProvider);
-
-  const html = ReactDOMServer.renderToString(staticRouter);
+  const page = React.createElement(Page, { origin: url.origin, route: url.pathname + url.search + url.hash, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }, app);
+  const html = ReactDOMServer.renderToString(page);
   const helmet = Helmet.renderStatic();
   return { html, helmet };
 };
