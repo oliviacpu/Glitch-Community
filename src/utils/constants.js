@@ -1,14 +1,23 @@
 const { envs } = require('Shared/constants');
 /* global RUNNING_ON */
 
-let envFromOrigin = 'production';
-if (origin.includes('staging.glitch.com')) {
-  envFromOrigin = 'staging';
-} else if (origin.includes('glitch.development')) {
-  envFromOrigin = 'development';
+// The current environment is based on the RUNNING_ON environment variable,
+// unless we're running under a staging/dev hostname, in which case we use the
+// corresponding environment config.
+function getCurrentEnv() {
+  if (origin.includes('staging.glitch.com')) {
+    return 'staging';
+  }
+  if (origin.includes('glitch.development')) {
+    return 'development';
+  }
+  if (envs[RUNNING_ON]) {
+    return RUNNING_ON;
+  }
+  return 'production';
 }
 
-const currentEnv = envs[RUNNING_ON] ? RUNNING_ON : envFromOrigin;
+const currentEnv = getCurrentEnv();
 
 const {
   APP_URL,
