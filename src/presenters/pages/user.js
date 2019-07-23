@@ -79,7 +79,7 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
       myStuffCollection.projects = projects;
       return getCollectionsWithMyStuffAtFront({ collections, myStuffCollection });
     }
-    return collections
+    return collections;
   }, [projects]);
 
   return children(collectionsWithMyStuff);

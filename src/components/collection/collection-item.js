@@ -23,6 +23,7 @@ import { isDarkColor } from 'Utils/color';
 import { useAPI } from 'State/api';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import { useNotifications } from 'State/notifications';
+import { useCurrentUser } from 'State/current-user';
 
 import { createCollection, getLink } from 'Models/collection';
 
@@ -98,17 +99,17 @@ export const CollectionCuratorLoader = ({ collection }) => (
 const CreateMyStuffOnClickComponent = withRouter(({ history, children, collection, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
 
   const createMyStuffCollection = async () => {
     const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
     if (myStuff) {
-      // TODO this needs to be fixed
-      history.push(getLink(myStuff))
+      history.push(`@${currentUser.login}/${myStuff.url}`)
     }
   }
 
   return (
-    <div onClick={createMyStuffCollection} collection={collection} className={className} style==>
+    <div onClick={createMyStuffCollection} collection={collection} className={className} style={style}>
       {children}
     </div>
   );
@@ -116,6 +117,7 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, collectio
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
+  console.log("ul", collection.fullUrl)
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (

@@ -64,7 +64,7 @@ export function getLink(collection) {
 }
 
 export async function createCollection({ api, name, teamId, createNotification }) {
-  let description = ''
+  let description = '';
   let generatedName = false;
   let isMyStuff = false;
   if (!name) {
