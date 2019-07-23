@@ -103,15 +103,16 @@ function useCollectionSearch(query, project, collectionType) {
   const filters = collectionType === 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
   const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
-
   const myStuffEnabled = useDevToggle('My Stuff');
+  
+  //what happens when you are searching for something
   const searchResultsWithMyStuff = useMemo(() => {
     if (myStuffEnabled && searchResults.collection) {
       const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
       return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
     }
     return searchResults.collection;
-  }, [searchResults]);
+  }, [searchResults, query]);
 
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
