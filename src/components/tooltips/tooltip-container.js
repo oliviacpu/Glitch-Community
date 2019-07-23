@@ -72,7 +72,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }}>
+      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }} onClick={e => { e.preventDefault(); e.stopPropagation()}}>
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
     );
@@ -83,9 +83,9 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       <div onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>
-      {align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top') })} />}
+      {align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {tooltipNode}
-      {!align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top') })} />}
+      {!align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {children}
     </div>
   );
