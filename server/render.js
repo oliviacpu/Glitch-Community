@@ -34,7 +34,7 @@ const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
 const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
-  const { default: Page } = require('../src/server');
+  const { Page } = require('../src/server');
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
   const page = React.createElement(Page, {

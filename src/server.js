@@ -3,7 +3,7 @@ import { StaticRouter } from 'react-router-dom';
 import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
-const Page = ({ origin, route, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
+export const Page = ({ origin, route, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
   <StaticRouter location={route}>
     <GlobalsProvider
       origin={origin}
