@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 import { getAvatarStyle, getDisplayName } from 'Models/user';
+import Link from 'Components/link';
 
 import styles from './styles.styl';
 
@@ -70,8 +71,8 @@ const collectionStyles = {
 };
 
 const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) => (
-  <a
-    href={href}
+  <Link
+    to={href}
     className={classnames(styles.curatedCollectionContainer, styles.plainLink)}
     style={{ backgroundColor: collectionStyles[collectionStyle].color }}
   >
@@ -80,7 +81,7 @@ const CuratedCollectionContainer = ({ collectionStyle, users, children, href }) 
     <div className={styles.curatedCollectionUsers}>
       <UserMask config={collectionStyles[collectionStyle]} users={users} />
     </div>
-  </a>
+  </Link>
 );
 
 export default CuratedCollectionContainer;

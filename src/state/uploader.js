@@ -36,13 +36,13 @@ async function uploadWrapper(notifications, upload) {
     });
   } catch (error) {
     captureException(error);
-    notifications.createNotification(<NotifyError error={error} />, { type: 'error' });
+    notifications.createErrorNotification(<NotifyError error={error} />);
     removeNotification();
     return result;
   }
 
   removeNotification();
-  notifications.createNotification('Image uploaded!');
+  notifications.createNotification('Image uploaded!', { type: 'success' });
   return result;
 }
 

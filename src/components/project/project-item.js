@@ -78,14 +78,14 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
-                          <span className={styles.projectDomain}>{project.domain}</span>
+                        <Button decorative disabled={!!project.suspendedReason} image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
+                          <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
                         </Button>
                       </div>
                     </div>
                   </div>
                   <div className={styles.description}>
-                    <Markdown length={80}>{project.description || ' '}</Markdown>
+                    <Markdown length={80}>{project.suspendedReason ? 'suspended project' : project.description || ' '}</Markdown>
                   </div>
                 </ProjectLink>
               </div>
