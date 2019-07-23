@@ -10,15 +10,6 @@ tooltip-background = rgba(0,0,0,0.95)
   box-sizing: border-box
   display: inline-block
 
-.invisibleHoverTarget
-  position: absolute
-  left: 0
-  transform: translateY(-7px)
-  display: block
-  width: 100%
-  height: 100%
-  border: 1px solid red
-
 .tooltip
   border: none
   box-sizing: inherit
@@ -59,11 +50,9 @@ tooltip-background = rgba(0,0,0,0.95)
   border-bottom-color: tooltip-background
 
 .tooltip.top
-  margin-top: -6px
+  top: 0
   transform: translateX(50%) translateY(-100%)
-  .invisibleHoverTarget
-    top: 0
-    transform: translateY(7px)
+  margin-top: -6px
   
 .tooltip.top::before
   border-top-color: tooltip-background
@@ -91,9 +80,6 @@ tooltip-background = rgba(0,0,0,0.95)
   right: 10px
   transform: translateX(0) translateY(-100%)
 
-.tooltip.top
-  top: 0
-
 .tooltip.top.right,
 .tooltip.top.left
   transform: translateX(0) translateY(-100%)
@@ -104,7 +90,6 @@ tooltip-background = rgba(0,0,0,0.95)
 .tooltip.newStuff
   background-color: notification
   right: 32px
-  top: 10%
   font-weight: bold
 
 .tooltip.newStuff::before
@@ -199,3 +184,14 @@ tooltip-background = rgba(0,0,0,0.95)
 
 .fallback.tooltip.persistent::after
   font-weight: bold
+  
+.invisibleHoverTarget
+  position: absolute
+  left: 0
+  transform: translateY(-7px)
+  display: block
+  width: 100%
+  height: 100%
+  opacity: 0
+  &.top
+    top: 0
