@@ -25,7 +25,7 @@ import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
 
-import { createCollection, getLink } from 'Models/collection';
+import { createCollection } from 'Models/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -102,22 +102,22 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, collectio
   const { currentUser } = useCurrentUser();
 
   const createMyStuffCollection = async () => {
-    const myStuff = await createCollection({ api, name: "My Stuff", createNotification });
+    const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
     if (myStuff) {
-      history.push(`@${currentUser.login}/${myStuff.url}`)
+      history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-  }
+  };
 
   return (
     <div onClick={createMyStuffCollection} collection={collection} className={className} style={style}>
       {children}
     </div>
   );
-})
+});
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
-  console.log("ul", collection.fullUrl)
+  console.log('ul', collection.fullUrl);
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (

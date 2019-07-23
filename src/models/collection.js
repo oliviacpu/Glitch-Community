@@ -63,7 +63,7 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
-export async function createCollection({ api, name, teamId, createNotification }) {
+export async function createCollection({ api, name, teamId, createNotification, myStuffEnabled = false }) {
   let description = '';
   let generatedName = false;
   let isMyStuff = false;
@@ -79,10 +79,10 @@ export async function createCollection({ api, name, teamId, createNotification }
     const [predicate, collectionSynonym] = name.split('-');
     description = `A ${collectionSynonym} of projects that does ${predicate} things`;
   }
-  
-  if (name === "My Stuff") {
+
+  if (name === 'My Stuff' && myStuffEnabled) {
     isMyStuff = true;
-    description = "My place to save cool finds";
+    description = 'My place to save cool finds';
   }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;
@@ -96,7 +96,7 @@ export async function createCollection({ api, name, teamId, createNotification }
       avatarUrl,
       coverColor,
       teamId,
-      isMyStuff
+      isMyStuff,
     });
 
     return collection;
