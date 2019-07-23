@@ -72,7 +72,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }} onClick={e => { e.preventDefault(); e.stopPropagation()}}>
+      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }} onClick={e => {e.preventDefault(); e.stopPropagation();}}>
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
     );
