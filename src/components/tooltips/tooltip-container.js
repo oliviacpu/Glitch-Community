@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import useUniqueId from 'Hooks/use-unique-id';
@@ -9,27 +9,31 @@ const cx = classNames.bind(styles);
 export const TYPES = ['action', 'info'];
 export const ALIGNMENTS = ['left', 'right', 'center', 'top'];
 
-function TooltipContainer({ id, type, tooltip, target, align, persistent, children, fallback }) {
+function TooltipContainer({ type, tooltip, target, align, persistent, children, fallback, newStuff }) {
   const [tooltipIsActive, setTooltipIsActive] = useState(false);
+
+  useEffect(() => {
+    const keyHandler = (event) => {
+      if (['Escape', 'Esc'].includes(event.key)) {
+        event.preventDefault();
+        setTooltipIsActive(false);
+      }
+    };
+    window.addEventListener('keyup', keyHandler);
+    return () => window.removeEventListener('keyup', keyHandler);
+  }, [tooltipIsActive]);
 
   const tooltipContainerClassName = cx({
     'tooltip-container': true,
   });
-  const uniqueId = useUniqueId();
-
-  // prevents invalid aria-labelledby values when names contain whitespace
-  id = id.replace(/\s/g, '-');
-
-  if (id !== 'new-stuff-tooltip') {
-    id = id.concat(uniqueId);
-  }
+  const id = useUniqueId();
 
   const tooltipClassName = cx({
     tooltip: true,
     top: align.includes('top'),
     left: align.includes('left'),
     right: align.includes('right'),
-    'new-stuff': id === 'new-stuff-tooltip',
+    newStuff,
     persistent,
     fallback,
   });
@@ -94,8 +98,6 @@ function TooltipContainer({ id, type, tooltip, target, align, persistent, childr
 
 TooltipContainer.propTypes = {
   children: PropTypes.node,
-  /* the id of the tooltip */
-  id: PropTypes.string.isRequired,
   /* the type of tooltip */
   type: PropTypes.oneOf(TYPES).isRequired,
   /* tooltip text */

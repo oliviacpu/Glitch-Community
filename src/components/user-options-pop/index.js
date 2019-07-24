@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
@@ -175,14 +175,15 @@ function CheckForCreateTeamHash(props) {
 
 export default function UserOptionsAndCreateTeamPopContainer(props) {
   const avatarStyle = { backgroundColor: props.user.color };
+  const buttonRef = useRef();
 
   return (
     <CheckForCreateTeamHash>
       {(createTeamOpen) => (
-        <PopoverContainer startOpen={createTeamOpen}>
+        <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id}>
+              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
                     <UserAvatar user={props.user} withinButton style={avatarStyle} />
@@ -193,7 +194,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
             );
 
             return (
-              <TooltipContainer target={userOptionsButton} tooltip="User options" id="user-options-tooltip" type="action" align={['right']}>
+              <TooltipContainer target={userOptionsButton} tooltip="User options" type="action" align={['right']}>
                 {visible && (
                   <MultiPopover
                     views={{
