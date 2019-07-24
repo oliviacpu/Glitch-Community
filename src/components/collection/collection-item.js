@@ -95,7 +95,6 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-// TODO: add onclick that creates the new my stuff collection, ensure button is accessible
 const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
@@ -109,13 +108,7 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
   };
 
   return (
-    <button
-      onClick={createMyStuffCollection}
-      className={className}
-      type='submit'
-      className={className} 
-      style={style}
-    >
+    <button onClick={createMyStuffCollection} type="submit" className={className} style={style}>
       {children}
     </button>
   );
