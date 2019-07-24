@@ -111,4 +111,4 @@ CollectionAvatar.propTypes = {
   }).isRequired,
 };
 
-export const BookmarkAvatar = () => <Image height="50%" src="https://cdn.glitch.com/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198" alt="" />;
+export const BookmarkAvatar = () => <Image src="https://cdn.glitch.com/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198" alt="" />;
