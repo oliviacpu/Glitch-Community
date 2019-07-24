@@ -13,6 +13,7 @@ import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
 
 import newStuffLog from '../../curated/new-stuff-log';
+import pupdate from '../../curated/pupdate.json';
 import NewStuffArticle from './new-stuff-article';
 import NewStuffPrompt from './new-stuff-prompt';
 import NewStuffPup from './new-stuff-pup';
