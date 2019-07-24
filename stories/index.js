@@ -33,6 +33,7 @@ import Footer from 'Components/footer';
 import RecentProjects from 'Components/recent-projects';
 import Notification from 'Components/notification';
 import Progress from 'Components/fields/progress';
+import Video from 'Components/video';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
@@ -79,6 +80,55 @@ storiesOf('TooltipContainer', module)
     </div>
   ));
 
+storiesOf('Image', module)
+  .add('regular', () => <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />)
+  .add('background Image', () => (
+    <Image backgroundImage={true} src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" />
+  ))
+  .add('srcSet', () => (
+    <Image
+      src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg"
+      srcSet={[
+        'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg?x=2 1000w',
+        'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-night.svg?x=1 2000w',
+      ]}
+      alt="Glitch Logo"
+    />
+  ))
+  .add('width & height', () => (
+    <Image src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" alt="Glitch Logo" width="200" height="200" />
+  ))
+  .add('width & height with background image', () => (
+    <Image
+      src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-night.svg"
+      backgroundImage
+      alt="Glitch Logo"
+      width="200px"
+      height="200px"
+    />
+  ));
+storiesOf('Video', module)
+  .add('default', () => (
+    <Video
+      sources={[
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4', minWidth: 0, maxWidth: 669 },
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4', minWidth: 700 },
+      ]}
+      track='some-caption-track.vtt'
+      controls
+    />
+  ))
+  .add('muted', () => (
+    <Video
+      sources={[
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4', minWidth: 0, maxWidth: 669 },
+        { src: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4', minWidth: 700 },
+      ]}
+      track='muted'
+      autoPlay
+      loop
+    />
+  ));
 
 storiesOf('Heading', module)
   .add('h1 ', () => <Heading tagName="h1">H1, 22px</Heading>)
