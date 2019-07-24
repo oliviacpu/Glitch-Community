@@ -41,9 +41,10 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   let role;
   let extendedTarget;
+
   if (fallback && target.type === 'img') {
     extendedTarget = (
-      <div data-tooltip={tooltip} className={tooltipFallbackClassName}>
+      <div data-tooltip={tooltip} className={tooltipFallbackClassName} draggable="false">
         {target}
       </div>
     );
@@ -55,6 +56,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       'aria-labelledby': id,
       'data-tooltip': tooltip,
       className: `${target.props.className} ${tooltipFallbackClassName}`,
+      draggable: false,
     });
   } else if (type === 'info') {
     // info tooltips are visible on hover and focus, they provide supplementary info
@@ -64,10 +66,8 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       'aria-describedby': id,
       'data-tooltip': tooltip,
       className: `${target.props.className} ${tooltipFallbackClassName}`,
+      draggable: false,
     });
-  }
-  if (extendedTarget.type.name === 'Image' || extendedTarget.type.name === 'A') {
-    extendedTarget.
   }
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
@@ -75,7 +75,22 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   let tooltipNode = null;
   if (!fallback) {
     tooltipNode = (
-      <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }} onClick={e => {e.preventDefault(); e.stopPropagation();}}>
+      <div
+        role={role}
+        id={id}
+        className={tooltipClassName}
+        style={{ opacity: shouldShowTooltip ? 1 : 0 }}
+        onClick={(e) => {
+          console.log('click');
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDrag={(e) => {
+          console.log('drag');
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
     );
