@@ -69,6 +69,11 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   }
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
+  
+  function preventDefault(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
   let tooltipNode = null;
   if (!fallback) {
@@ -78,10 +83,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         id={id}
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
+        onClick={preventDefault}
       >
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
