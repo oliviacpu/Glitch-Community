@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { parseOneAddress } from 'email-addresses';
 
 import useDebouncedValue from 'Hooks/use-debounced-value';
