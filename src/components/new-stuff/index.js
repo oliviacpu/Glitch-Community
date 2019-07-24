@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import Button from 'Components/buttons/button';
+import PreviewContainer from 'Components/containers/preview-container';
 import { PopoverContainer } from 'Components/popover';
 
 import { useTracker } from 'State/segment-analytics';
