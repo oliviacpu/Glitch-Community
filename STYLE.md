@@ -104,7 +104,11 @@ Our rule for [prop types](https://www.npmjs.com/package/prop-types) use is this:
 
 ### Server Side Rendering
 
-We use React's static renderer, which means that code in the `src/` folder is run both in the browser and in Node. 
+We use React's static renderer, which means that code in the `src/` folder is run both in the browser and in Node.
+
+- Components which pull values off of the global window object in their render function should use `src/utils/constants.js` or `src/state/globals.js`, which differentiate between the browser and the server
+
+- If the initial render uses the current time or random values, it'll get different results on the client and server
 
 ### More
 
