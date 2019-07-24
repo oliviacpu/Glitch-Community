@@ -1,8 +1,9 @@
 const express = require('express');
 const compression = require('compression');
 const constants = require('./constants');
-
 const moduleAlias = require('module-alias');
+const dotenv = require('dotenv');
+
 moduleAlias.addAliases(require('../shared/aliases'));
 
 const sentryHelpers = require('Shared/sentryHelpers');
@@ -11,7 +12,6 @@ const sentryHelpers = require('Shared/sentryHelpers');
 const Sentry = require('@sentry/node');
 
 // required for using .env when not on glitch; no-op when running on glitch
-const dotenv = require('dotenv');
 dotenv.config();
 
 try {

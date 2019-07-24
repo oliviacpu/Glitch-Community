@@ -1,3 +1,4 @@
+const { captureException } = require('@sentry/node');
 const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
@@ -51,7 +52,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, render = false) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, shouldRender = false) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -85,14 +86,18 @@ module.exports = function(external) {
     }
 
     let rendered = null;
-    if (render) {
-      const { html } = await renderPage({
-        url: new URL(req.url, `${req.protocol}://${req.hostname}`),
-        EXTERNAL_ROUTES: external,
-        HOME_CONTENT: homeContent,
-        ZINE_POSTS: zine || [],
-      });
-      rendered = html;
+    if (shouldRender) {
+      try {
+        const { html } = await renderPage({
+          url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+          EXTERNAL_ROUTES: external,
+          HOME_CONTENT: homeContent,
+          ZINE_POSTS: zine || [],
+        });
+        rendered = html;
+      } catch (error) {
+        captureException(error);
+      }
     }
 
     res.render('index.ejs', {
