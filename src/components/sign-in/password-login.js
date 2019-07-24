@@ -5,22 +5,12 @@ import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 
-import useDebouncedValue from 'Hooks/use-debounced-value';
+import useEmail from 'Hooks/use-email';
 
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
-
-function useEmail() {
-  const [email, setEmail] = useState('');
-  const debouncedEmail = useDebouncedValue(email, 500);
-  const validationError = useMemo(() => {
-    const isValidEmail = parseOneAddress(debouncedEmail) !== null;
-    return isValidEmail || !debouncedEmail ? null : 'Enter a valid email address';
-  }, [debouncedEmail]);
-  return [email, setEmail, validationError];
-}
 
 const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
   const [emailAddress, setEmail, emailValidationError] = useEmail();
