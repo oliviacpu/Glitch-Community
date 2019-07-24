@@ -29,7 +29,7 @@ const nullMyStuffCollection = {
   description: 'My place to save cool finds',
   coverColor: pickRandomColor(),
   projects: [],
-  id: 'My Stuff',
+  id: 'nullMyStuff',
   // TODO: handle curator stuff
 };
 

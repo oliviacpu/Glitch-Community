@@ -26,7 +26,8 @@ import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useDevToggle from 'State/dev-toggles';
-import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront } from 'Models/collection';
+import { useAPI } from 'State/api';
+import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront, createCollection } from 'Models/collection';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import styles from './popover.styl';
 
@@ -129,22 +130,28 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
-
-  const addProjectTo = (collection) => {
+  const api = useAPI();
+  const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
+  const addProjectTo = async (collection) => {
     // TODO for my stuff:
     // if collection is a bookmark collection that doesn't exist yet,
     // first we'll need to create that collection
     // then we'll need to add that project to the collection
+    if (collection.isMyStuff && collection.id === "nullMyStuff") {
+      const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
 
-    addProjectToCollection(project, collection).then(() => {
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        { type: 'success' },
-      );
-    });
+    }
+    await addProjectToCollection(project, collection);
+    
+    createNotification(
+      <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
+      { type: 'success' },
+    );
 
     togglePopover();
   };
+
 
   return (
     <PopoverDialog wide align="right">
