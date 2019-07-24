@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
 import Loader from 'Components/loader/';
@@ -45,11 +46,12 @@ const ProjectsLoading = () => (
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
   if (!projects) return <ProjectsLoading />;
-  
+
   if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
+        <Image src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659" alt="" className={styles.placeholder}/>
+        <Text className={styles.placeholderText}>Quickly add any app on Glitch to your My Stuff collection</Text>
       </div>
     );
   }
