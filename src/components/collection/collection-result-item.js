@@ -31,12 +31,12 @@ const ProfileItemWrap = ({ collection }) => (
 );
 
 const CollectionResultItem = ({ onClick, collection, active }) => {
-  const myStuffEnabled = useDevToggle('My Stuff');
+  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.isMyStuff;
 
   return (
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
       <div className={styles.avatarWrap}>
-        {myStuffEnabled && collection.isMyStuff ? (
+        {collectionIsMyStuff ? (
           <BookmarkAvatar />
         ) : (
           <CollectionAvatar collection={collection} />
@@ -45,7 +45,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
       <ResultInfo>
         <VisuallyHidden>Add to collection</VisuallyHidden>
         <ResultName>{collection.name}</ResultName>
-        {collection.description.length > 0 && !collection.isMyStuff && (
+        {collection.description.length > 0 && !collectionIsMyStuff && (
           <ResultDescription>
             <VisuallyHidden>with description</VisuallyHidden>
             <Markdown renderAsPlaintext>{collection.description}</Markdown>
