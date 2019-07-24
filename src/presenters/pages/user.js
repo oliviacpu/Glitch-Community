@@ -80,19 +80,22 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
   const collectionsWithMyStuffLoaded = React.useMemo(() => {
     if (!isAuthorized && projects && projects.length === 0) {
       collections.shift(0);
-      return collections
+      return collections;
     }
-    
+
     collections[0].projects = projects;
-    return collections
-  }, [collections, isAuthorized, projects])
+    return collections;
+  }, [collections, isAuthorized, projects]);
 
   return children(collectionsWithMyStuffLoaded);
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const [myStuffCollection, collectionsWithoutMyStuff] = React.useMemo(() => getMyStuffFromCollections({ collections }, [collections]));
-  const collectionsWithMyStuff = React.useMemo(() => getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection }), [collectionsWithoutMyStuff, myStuffCollection]);
+  const collectionsWithMyStuff = React.useMemo(
+    () => getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection }),
+    [collectionsWithoutMyStuff, myStuffCollection],
+  );
 
   if (myStuffCollection) {
     return (
@@ -116,7 +119,6 @@ function CollectionsListWithDevToggle(props) {
   const myStuffEnabled = useDevToggle('My Stuff');
   return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
 }
-
 
 const UserPage = ({ user: initialUser }) => {
   const [user, funcs] = useUserEditor(initialUser);

@@ -46,9 +46,16 @@ function CollectionsList({
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
-  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
+  let orderedCollections;
   const myStuffEnabled = useDevToggle('My Stuff');
+  if (myStuffEnabled) {
+    const myStuffCollection = collections.shift();
+    orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+    orderedCollections.unshift(myStuffCollection);
+  } else {
+    orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+  }
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
