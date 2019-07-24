@@ -2,19 +2,19 @@
     {
       "id": 6,
       "title": "Reorder projects in a collection",
-      "summary": "Click and drag to reorder projects to your heart's content.",
+      "body": "Click and drag to reorder projects to your heart's content.",
       "image": "https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2F5d1d154785d4b724908479.gif?v=1562187111603"
     },
     {
       "id": 5,
       "title": "Live Search",
-      "summary": "View search results as quickly as you can type, with autocomplete now built in.",
+      "body": "View search results as quickly as you can type, with autocomplete now built in.",
       "image": "https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fsearch.gif?v=1562185772803"
     },
     {
       "id": 4,
       "title": "Collection Notes",
-      "summary": "Adding an app to your collection? Leave a note to share why you love it! Notes support Markdown too, if you want to get fancy with formatting",
+      "body": "Adding an app to your collection? Leave a note to share why you love it! Notes support Markdown too, if you want to get fancy with formatting",
       "image": "https://cdn.glitch.com/4822a2a6-5ac1-4920-bb11-95cc5594b1db%2Fnote.gif?v=1562186723855"
     },
     {
