@@ -113,7 +113,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
         <Button type="dangerZone" onClick={() => onRemoveUser(projectsToRemove)}>
           Remove{' '}
           <span className={styles.tinyAvatar}>
-            <UserAvatar user={user} />
+            <UserAvatar user={user} withinButton />
           </span>
         </Button>
       </PopoverActions>
@@ -138,7 +138,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       <PopoverInfo>
         <div className={styles.userProfile}>
           <UserLink user={user}>
-            <UserAvatar user={user} />
+            <UserAvatar user={user}  />
           </UserLink>
           <div className={styles.userInfo}>
             <div className={styles.userName}>{user.name || 'Anonymous'}</div>
