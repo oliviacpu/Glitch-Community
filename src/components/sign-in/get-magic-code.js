@@ -1,12 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { parseOneAddress } from 'email-addresses';
+import React, { useState } from 'react';
 
 import Text from 'Components/text/text';
 import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import Loader from 'Components/loader';
-import useDebouncedValue from 'Hooks/use-debounced-value';
 import useEmail from 'Hooks/use-email';
 import { useAPI } from 'State/api';
 import { captureException } from 'Utils/sentry';
