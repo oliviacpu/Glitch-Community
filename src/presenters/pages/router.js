@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import punycode from 'punycode';
 
-import { PupdatePreview } from 'Components/new-stuff';
+import { PupdatesPreview } from 'Components/new-stuff';
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
 
@@ -74,7 +74,7 @@ const Router = () => (
       <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
-      <Route path="/pupdates/preview" exact render={({ location }) => <PupdatePreview key={location.key} />} />
+      <Route path="/pupdates/preview" exact render={({ location }) => <PupdatesPreview key={location.key} />} />
 
       <Route
         path="/login/facebook"
