@@ -96,7 +96,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
 );
 
 // TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = withRouter(({ history, children, collection, className, style }) => {
+const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
   const { currentUser } = useCurrentUser();
