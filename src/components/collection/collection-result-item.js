@@ -6,7 +6,7 @@ import { ProfileItem } from 'Components/profile-list';
 import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import VisibilityContainer from 'Components/visibility-container';
 import VisuallyHidden from 'Components/containers/visually-hidden';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import { useCollectionCurator } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 
@@ -37,7 +37,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
       <div className={styles.avatarWrap}>
         {myStuffEnabled && collection.isMyStuff ? (
-          <div>avatar</div>
+          <BookmarkAvatar />
         ) : (
           <CollectionAvatar collection={collection} />
         )}
@@ -45,7 +45,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
       <ResultInfo>
         <VisuallyHidden>Add to collection</VisuallyHidden>
         <ResultName>{collection.name}</ResultName>
-        {collection.description.length > 0 && (
+        {collection.description.length > 0 && !collection.isMyStuff && (
           <ResultDescription>
             <VisuallyHidden>with description</VisuallyHidden>
             <Markdown renderAsPlaintext>{collection.description}</Markdown>
