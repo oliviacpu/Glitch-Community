@@ -8,11 +8,11 @@ import Button from 'Components/buttons/button';
 import PreviewContainer from 'Components/containers/preview-container';
 import { PopoverContainer } from 'Components/popover';
 
+import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
 
-import newStuffLog from '../../curated/new-stuff-log';
 import pupdate from '../../curated/pupdate.json';
 import NewStuffArticle from './new-stuff-article';
 import NewStuffPrompt from './new-stuff-prompt';
@@ -21,8 +21,6 @@ import styles from './styles.styl';
 
 const pupdatesArray = pupdate.pupdates;
 const latestId = Math.max(...pupdatesArray.map(({ id }) => id));
-console.log('pupdates', pupdatesArray);
-console.log('newstuff', newStuffLog);
 
 function usePreventTabOut() {
   const first = useRef();
@@ -86,6 +84,20 @@ NewStuffOverlay.propTypes = {
       link: PropTypes.string,
     }).isRequired,
   ).isRequired,
+};
+
+export const PupdatePreview = () => {
+  const api = useAPI();
+  
+  return (
+    <PreviewContainer
+      get={() => api.get('https://buttercup-room.glitch.me/pupdate.json').then((res) => res.data)}
+      onPublish={onPublish}
+      previewMessage={
+        <>
+          This is a live preview of edits done with 
+      }
+  );
 };
 
 const NewStuff = ({ children }) => {
