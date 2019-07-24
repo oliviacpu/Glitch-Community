@@ -31,17 +31,11 @@ const ProfileItemWrap = ({ collection }) => (
 );
 
 const CollectionResultItem = ({ onClick, collection, active }) => {
-  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.name === "My Stuff"; // this should be .isMyStuff but search results don't have that yet
-
+  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.name === 'My Stuff'; // this should be .isMyStuff but search results don't have that yet
+  console.log(collection)
   return (
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
-      <div className={styles.avatarWrap}>
-        {collectionIsMyStuff ? (
-          <BookmarkAvatar />
-        ) : (
-          <CollectionAvatar collection={collection} />
-        )}
-      </div>
+      <div className={styles.avatarWrap}>{collectionIsMyStuff ? <BookmarkAvatar /> : <CollectionAvatar collection={collection} />}</div>
       <ResultInfo>
         <VisuallyHidden>Add to collection</VisuallyHidden>
         <ResultName>{collection.name}</ResultName>
@@ -51,7 +45,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
             <Markdown renderAsPlaintext>{collection.description}</Markdown>
           </ResultDescription>
         )}
-        {collection.team && <ProfileItemWrap collection={collection} />}
+        {collection.teamId && collection.teamId !== -1 && <ProfileItemWrap collection={collection} />}
       </ResultInfo>
     </ResultItem>
   );
