@@ -19,7 +19,7 @@ import NewStuffPrompt from './new-stuff-prompt';
 import NewStuffPup from './new-stuff-pup';
 import styles from './styles.styl';
 
-const latestId = Math.max(...newStuffLog.map(({ id }) => id));
+const latestId = Math.max(...pupdate.map(({ id }) => id));
 
 function usePreventTabOut() {
   const first = useRef();
@@ -90,7 +90,7 @@ const NewStuff = ({ children }) => {
   const isSignedIn = !!currentUser && !!currentUser.login;
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
-  const [log, setLog] = useState(newStuffLog);
+  const [log, setLog] = useState(pupdate);
   const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, openPopover }) => {
@@ -98,8 +98,8 @@ const NewStuff = ({ children }) => {
     const show = () => {
       track();
       openPopover();
-      const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
-      setLog(unreadStuff.length ? unreadStuff : newStuffLog);
+      const unreadStuff = pupdate.filter(({ id }) => id > newStuffReadId);
+      setLog(unreadStuff.length ? unreadStuff : pupdate);
       setNewStuffReadId(latestId);
     };
 
