@@ -33,6 +33,7 @@ import Footer from 'Components/footer';
 import RecentProjects from 'Components/recent-projects';
 import Notification from 'Components/notification';
 import Progress from 'Components/fields/progress';
+import Video from 'Components/video';
 import 'Components/profile-list/story';
 import 'Components/search-form/story';
 import 'Components/header/story';
@@ -40,7 +41,6 @@ import 'Components/containers/profile/story';
 import 'Components/collections-list/story';
 import 'Components/questions/story';
 import 'Components/deleted-projects/story';
-import 'Components/video';
 import { users, teams, projects, collections } from './data';
 import { withState, provideContext } from './util';
 
