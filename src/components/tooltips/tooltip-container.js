@@ -66,6 +66,9 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       className: `${target.props.className} ${tooltipFallbackClassName}`,
     });
   }
+  if (extendedTarget.type.name === 'Image' || extendedTarget.type.name === 'A') {
+    extendedTarget.
+  }
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
 
