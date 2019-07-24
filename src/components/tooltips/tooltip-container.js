@@ -70,7 +70,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   const shouldShowTooltip = tooltip && (tooltipIsActive || persistent);
   
-  function preventDefault(e) {
+  function cancelClick(e) {
     e.preventDefault();
     e.stopPropagation();
   }
@@ -83,7 +83,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         id={id}
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
-        onClick={preventDefault}
+        onClick={cancelClick}
       >
         {type === 'info' || shouldShowTooltip ? tooltip : null}
       </div>
@@ -95,9 +95,9 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       <div onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>
-      {align.includes('top') && <span aria-hidden="true" onClick={preventDefault} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
+      {align.includes('top') && <span aria-hidden="true" onClick={cancelClick} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {tooltipNode}
-      {!align.includes('top') && <span aria-hidden="true" onClick={preventDefault} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
+      {!align.includes('top') && <span aria-hidden="true" onClick={cancelClick} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {children}
     </div>
   );

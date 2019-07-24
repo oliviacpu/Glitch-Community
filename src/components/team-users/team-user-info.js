@@ -138,7 +138,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       <PopoverInfo>
         <div className={styles.userProfile}>
           <UserLink user={user}>
-            <UserAvatar user={user}  />
+            <UserAvatar user={user} hideTooltip/>
           </UserLink>
           <div className={styles.userInfo}>
             <div className={styles.userName}>{user.name || 'Anonymous'}</div>
