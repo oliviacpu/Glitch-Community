@@ -49,8 +49,8 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
 
   if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
     return (
-      <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Image src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659" alt="" className={styles.placeholder}/>
+      <div className={classNames(styles.projectsContainer, styles.empty, styles.placeholderContainer)}>
+        <Image src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659" alt="" className={styles.placeholder} />
         <Text className={styles.placeholderText}>Quickly add any app on Glitch to your My Stuff collection</Text>
       </div>
     );
@@ -59,7 +59,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   if (projects.length === 0 && isAuthorized) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Text>
+        <Text className={styles.emptyCollectionText}>
           This collection is empty – add some projects <Emoji name="index" />
         </Text>
       </div>
