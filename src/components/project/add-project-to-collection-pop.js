@@ -115,12 +115,12 @@ function useCollectionSearch(query, project, collectionType) {
     }
     return searchResults.collection;
   }, [searchResults, query]);
-  console.log({searchResultsWithMyStuff})
+  console.log({ searchResultsWithMyStuff });
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
     [searchResultsWithMyStuff, project.id, collectionType],
   );
-  console.log({collections})
+  console.log({ collections });
   return { status: searchResults.status, collections, collectionsWithProject };
 }
 
@@ -136,8 +136,9 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const addProjectTo = async (collection) => {
     if (myStuffEnabled && collection.isMyStuff && collection.id === 'nullMyStuff') {
       collection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+      collection.fullUrl = collection.fullUrl ? collection.fullUrl : `@${currentUser.login}/${collection.url}`;
     }
-    
+
     await addProjectToCollection(project, collection);
 
     createNotification(

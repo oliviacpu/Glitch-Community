@@ -14,7 +14,8 @@ export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78f
 export function getMyStuffFromCollections({ collections }) {
   let myStuffCollection = null;
   const collectionsWithoutMyStuff = collections.filter((collection) => {
-    if (collection.isMyStuff) {
+    // this should be `if (collection.isMyStuff)` but unfortunately search results do not currently return that property
+    if (collection.name === 'My Stuff') {
       myStuffCollection = collection;
       return false;
     }
