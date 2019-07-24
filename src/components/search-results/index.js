@@ -19,7 +19,7 @@ import NotFound from 'Components/errors/not-found';
 import Loader from 'Components/loader';
 import styles from './search-results.styl';
 
-const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
+const FilterContainer = ({ filters, activeFilter, setFilter }) => {
   const buttons = filters.map((filter) => ({
     name: filter.id,
     contents: (
@@ -30,12 +30,7 @@ const FilterContainer = ({ filters, activeFilter, setFilter, query }) => {
     ),
   }));
 
-  return (
-    <>
-      <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />
-      {activeFilter === 'all' && <h1>All results for {query}</h1>}
-    </>
-  );
+  return <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />;
 };
 
 const groups = [
@@ -124,16 +119,12 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     .filter((group) => group.results.length > 0);
 
   return (
-    <main className={styles.page}>
-      {!ready && (
-        <>
-          <Loader />
-          <h1>All results for {query}</h1>
-        </>
-      )}
+    <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
-        <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} query={query} />
+        <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} />
       )}
+      {activeFilter === 'all' && <h1>All results for {query}</h1>}
+      {!ready && <Loader />}
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>

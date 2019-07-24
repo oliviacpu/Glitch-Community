@@ -10,6 +10,10 @@ const sentryHelpers = require('Shared/sentryHelpers');
 // https://docs.sentry.io/error-reporting/quickstart/?platform=node
 const Sentry = require('@sentry/node');
 
+// required for using .env when not on glitch; no-op when running on glitch
+const dotenv = require('dotenv');
+dotenv.config();
+
 try {
   Sentry.init({
     dsn: 'https://4f1a68242b6944738df12eecc34d377c@sentry.io/1246508',
