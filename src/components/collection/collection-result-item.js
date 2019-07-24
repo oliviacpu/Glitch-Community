@@ -31,7 +31,7 @@ const ProfileItemWrap = ({ collection }) => (
 );
 
 const CollectionResultItem = ({ onClick, collection, active }) => {
-  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.isMyStuff;
+  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.name === "My Stuff"; // this should be .isMyStuff but search results don't have that yet
 
   return (
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
@@ -51,7 +51,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
             <Markdown renderAsPlaintext>{collection.description}</Markdown>
           </ResultDescription>
         )}
-        <ProfileItemWrap collection={collection} />
+        {collection.team && <ProfileItemWrap collection={collection} />}
       </ResultInfo>
     </ResultItem>
   );
