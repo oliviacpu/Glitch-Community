@@ -115,12 +115,12 @@ function useCollectionSearch(query, project, collectionType) {
     }
     return searchResults.collection;
   }, [searchResults, query]);
-
+  console.log({searchResultsWithMyStuff})
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
     [searchResultsWithMyStuff, project.id, collectionType],
   );
-
+  console.log({collections})
   return { status: searchResults.status, collections, collectionsWithProject };
 }
 
@@ -131,19 +131,15 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
   const api = useAPI();
-  const { createNotification } = useNotifications();
-  const { currentUser } = useCurrentUser();
-  const addProjectTo = async (collection) => {
-    // TODO for my stuff:
-    // if collection is a bookmark collection that doesn't exist yet,
-    // first we'll need to create that collection
-    // then we'll need to add that project to the collection
-    if (collection.isMyStuff && collection.id === "nullMyStuff") {
-      const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+  const myStuffEnabled = useDevToggle('My Stuff');
 
+  const addProjectTo = async (collection) => {
+    if (myStuffEnabled && collection.isMyStuff && collection.id === 'nullMyStuff') {
+      collection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
     }
-    await addProjectToCollection(project, collection);
     
+    await addProjectToCollection(project, collection);
+
     createNotification(
       <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
       { type: 'success' },
@@ -151,7 +147,6 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
     togglePopover();
   };
-
 
   return (
     <PopoverDialog wide align="right">
