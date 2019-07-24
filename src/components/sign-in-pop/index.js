@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { parseOneAddress } from 'email-addresses';
 
 import Button from 'Components/buttons/button';
 import SignInButton from 'Components/buttons/sign-in-button';
