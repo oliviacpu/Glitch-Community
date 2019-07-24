@@ -67,9 +67,9 @@ function ProjectsList({
       label="project search"
       items={projects}
     >
-      {({ filterInput, renderItems }) => (
+      {({ filterInput, filterHeaderStyles, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-          <div>
+          <div className={filterHeaderStyles || undefined}>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>

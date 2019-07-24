@@ -70,10 +70,10 @@ function CollectionsList({
       placeholder={placeholder}
       items={orderedCollections}
     >
-      {({ filterInput, renderItems }) => (
+      {({ filterInput, filterHeaderStyles, renderItems }) => (
         <>
-          <article data-cy="collections">
-            <div>
+          <article data-cy="collections" className={styles.collections}>
+            <div className={filterHeaderStyles || undefined}>
               <Heading tagName="h2">{title}</Heading>
               {filterInput}
             </div>
