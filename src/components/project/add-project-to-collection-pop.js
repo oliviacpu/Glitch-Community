@@ -107,20 +107,20 @@ function useCollectionSearch(query, project, collectionType) {
   const myStuffEnabled = useDevToggle('My Stuff');
 
   const searchResultsWithMyStuff = useMemo(() => {
-    if (myStuffEnabled && searchResults.collection) {
+    if (myStuffEnabled && searchResults.collection && collectionType === "user") {
       const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
       if (query.length === 0 || myStuffCollection) {
         return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
       }
     }
     return searchResults.collection;
-  }, [searchResults, query]);
-  console.log({ searchResultsWithMyStuff });
+  }, [searchResults, query, myStuffEnabled, collectionType]);
+  
   const [collectionsWithProject, collections] = useMemo(
     () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
     [searchResultsWithMyStuff, project.id, collectionType],
   );
-  console.log({ collections });
+  
   return { status: searchResults.status, collections, collectionsWithProject };
 }
 
