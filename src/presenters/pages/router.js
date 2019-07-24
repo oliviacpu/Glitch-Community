@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import punycode from 'punycode';
 
-import { PupdatesPreview } from 'Components/new-stuff';
 import categories from '../../curated/categories';
 import rootTeams from '../../curated/teams';
 
@@ -20,6 +19,7 @@ import CategoryPage from './category';
 import CollectionPage from './collection';
 import CreatePage from './create';
 import { NotFoundPage } from './error';
+import PupdatesPreview from './pupdates';
 import SearchPage from './search';
 import SecretPage from './secret';
 import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
