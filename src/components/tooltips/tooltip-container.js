@@ -76,6 +76,8 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
   }
 
   let tooltipNode = null;
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
   if (!fallback) {
     tooltipNode = (
       <div role={role} id={id} className={tooltipClassName} style={{ opacity: shouldShowTooltip ? 1 : 0 }} onClick={cancelClick}>
