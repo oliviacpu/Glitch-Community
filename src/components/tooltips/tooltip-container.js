@@ -77,9 +77,9 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   let tooltipNode = null;
   /*
-   to select tooltip text, the user needs to click on the tooltip. some tooltips are within buttons, links, or other click targets,
-   so we need prevent those click events from propagating. the click handler on the tooltip cancels the click, so we don't need to
-   expose the handler to keyboard 
+   To select tooltip text, the user needs to click on the tooltip. Some tooltips are within buttons, links, or other click targets,
+   so we need prevent those click events from propagating. The click handler on the tooltip cancels the click, so we don't need to
+   expose that event via a keyboard handler.
   */
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   /* eslint-disable jsx-a11y/no-static-element-interactions */
