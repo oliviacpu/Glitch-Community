@@ -101,7 +101,11 @@ Our rule for [prop types](https://www.npmjs.com/package/prop-types) use is this:
  - Any React Component that's not a stateless function should declare all of its parameters as prop types. This is done primarily as a form of documentation for the input parameters to the component.
  
  - Any Stateless Function should define prop-types for any props _which it itself uses_, but not for any props which it merely passes directly through to sub-components.  In this manner we achieve prop-types composition across our stateless functions and maintain prop-types coverage without redundancy.
- 
+
+### Server Side Rendering
+
+We use React's static renderer, which means that code in the `src/` folder is run both in the browser and in Node. 
+
 ### More
 
 More to say? Add to this file.  Let's keep it to high level guidance and things that often need repeating.  Anything can be enforced by our linter instead of this doc deserves to be in the linter instead of this doc.
