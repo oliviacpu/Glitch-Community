@@ -7,10 +7,11 @@ import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import { ProfileItem } from 'Components/profile-list';
 import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionLink } from 'Components/link';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 import { PrivateIcon } from 'Components/private-badge';
-import { isDarkColor } from 'Models/collection';
+import { isDarkColor } from 'Utils/color';
 import { useCollectionCurator } from 'State/collection';
 
 import styles from './collection-item.styl';
@@ -31,12 +32,6 @@ const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-const CollectionLink = ({ collection, children }) => (
-  <a href={`/@${collection.fullUrl}`} className={styles.smallCollectionLink}>
-    {children}
-  </a>
-);
-
 const CollectionItemSmall = ({ collection, showCurator }) => (
   <div className={styles.smallContainer}>
     {showCurator && (
@@ -44,7 +39,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
         <CollectionCuratorLoader collection={collection} />
       </div>
     )}
-    <CollectionLink collection={collection}>
+    <CollectionLink collection={collection} className={styles.smallCollectionLink}>
       <div
         className={classnames(styles.bubbleContainer, styles.smallNameDescriptionArea, showCurator && styles.showCurator)}
         style={collectionColorStyles(collection)}
@@ -61,12 +56,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
             </div>
           </div>
         </div>
-        <div
-          className={styles.description}
-          style={{
-            color: isDarkColor(collection.coverColor) ? 'white' : '',
-          }}
-        >
+        <div className={classnames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
           <Markdown length={80}>{collection.description || ' '}</Markdown>
         </div>
       </div>

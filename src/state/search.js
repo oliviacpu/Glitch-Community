@@ -1,4 +1,3 @@
-/* eslint-disable prefer-default-export */
 import algoliasearch from 'algoliasearch/lite';
 import { useEffect, useReducer, useMemo } from 'react';
 import { mapValues, sumBy, pick } from 'lodash';
@@ -119,7 +118,7 @@ const formatByType = {
     id: project.objectID.replace('project-', ''),
     users: null,
     teams: null,
-    permissions: project.members.map((userId) => ({ userId })),
+    permissions: [],
     teamIds: project.teams,
     private: project.isPrivate,
   }),

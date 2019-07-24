@@ -4,7 +4,7 @@ import onClickOutside from 'react-onclickoutside';
 import { isFragment } from 'react-is';
 
 // statuses: 'closed' | 'openedFromKeyboard' | 'openedFromClick'
-const usePopoverToggle = ({ startOpen, onOpen }) => {
+const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   const openPopover = (event) => {
     if (event && event.detail === 0) {
@@ -42,6 +42,9 @@ const usePopoverToggle = ({ startOpen, onOpen }) => {
       if (['Escape', 'Esc'].includes(event.key)) {
         event.preventDefault();
         setStatus('closed');
+        if (triggerButtonRef && triggerButtonRef.current) {
+          triggerButtonRef.current.focus();
+        }
       }
     };
     window.addEventListener('keyup', keyHandler);
@@ -68,8 +71,8 @@ const MonitoredComponent = onClickOutside(({ children }) => children, {
 
 export const PopoverToggleContext = createContext(null);
 
-const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
-  const toggleState = usePopoverToggle({ startOpen, onOpen });
+const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef }) => {
+  const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
 
   const inner = children(toggleState);
   if (isFragment(inner)) {
@@ -87,6 +90,8 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen }) => {
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  /* ref to the button that opened the popover. Used to reset focus back to that button after the user closes the popover by pressing escape */
+  triggerButtonRef: PropTypes.object,
   onOpen: PropTypes.func,
   outer: PropTypes.func,
   startOpen: PropTypes.bool,
@@ -95,6 +100,7 @@ PopoverContainer.defaultProps = {
   onOpen: null,
   outer: null,
   startOpen: false,
+  triggerButtonRef: null,
 };
 
 export default PopoverContainer;
