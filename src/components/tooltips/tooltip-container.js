@@ -44,7 +44,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
 
   if (fallback && target.type === 'img') {
     extendedTarget = (
-      <div data-tooltip={tooltip} className={tooltipFallbackClassName} draggable="false">
+      <div data-tooltip={tooltip} className={tooltipFallbackClassName}>
         {target}
       </div>
     );
@@ -56,7 +56,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       'aria-labelledby': id,
       'data-tooltip': tooltip,
       className: `${target.props.className} ${tooltipFallbackClassName}`,
-      draggable: false,
     });
   } else if (type === 'info') {
     // info tooltips are visible on hover and focus, they provide supplementary info
@@ -66,7 +65,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       'aria-describedby': id,
       'data-tooltip': tooltip,
       className: `${target.props.className} ${tooltipFallbackClassName}`,
-      draggable: false,
     });
   }
 
@@ -81,12 +79,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
         className={tooltipClassName}
         style={{ opacity: shouldShowTooltip ? 1 : 0 }}
         onClick={(e) => {
-          console.log('click');
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onDrag={(e) => {
-          console.log('drag');
           e.preventDefault();
           e.stopPropagation();
         }}
