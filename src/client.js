@@ -31,7 +31,7 @@ window.bootstrap = () => {
     scope.setTag('bootstrap', 'true');
   });
 
-  const node = (
+  const element = (
     <BrowserRouter>
       <GlobalsProvider
         origin={window.location.origin}
@@ -43,12 +43,12 @@ window.bootstrap = () => {
       </GlobalsProvider>
     </BrowserRouter>
   );
-  const dom = document.getElementById('main');
+  const container = document.getElementById('main');
 
-  if (dom.hasChildNodes()) {
-    hydrate(node, dom);
+  if (container.hasChildNodes()) {
+    hydrate(element, container);
   } else {
-    render(node, dom);
+    render(element, container);
   }
 };
 
