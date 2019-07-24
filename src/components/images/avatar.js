@@ -111,14 +111,4 @@ CollectionAvatar.propTypes = {
   }).isRequired,
 };
 
-export const BookmarkAvatar = () => (
-  <>
-    <Image height="50%" src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fhalo.svg?v=1563303181396" alt="" />
-    <Image
-      height="50%"
-      className={styles.bookmark}
-      src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-filled.svg?v=1563294366084"
-      alt=""
-    />
-  </>
-);
+export const BookmarkAvatar = () => <Image height="50%" src="https://cdn.glitch.com/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198" alt="" />;
