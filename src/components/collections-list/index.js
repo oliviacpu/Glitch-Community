@@ -89,7 +89,7 @@ function CollectionsList({
                   <Grid items={paginatedCollections}>
                     {(collection) =>
                       myStuffEnabled && collection.isMyStuff ? (
-                        <MyStuffItem collection={collection} />
+                        <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded}/>
                       ) : (
                         <CollectionItem
                           collection={collection}

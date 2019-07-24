@@ -45,6 +45,14 @@ const ProjectsLoading = () => (
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
   if (!projects) return <ProjectsLoading />;
+  
+  if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
+    return (
+      <div className={classNames(styles.projectsContainer, styles.empty)}>
+        <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
+      </div>
+    );
+  }
 
   if (projects.length === 0 && isAuthorized) {
     return (
@@ -116,8 +124,7 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
   );
 });
 
-// TODO: add to storybook
-export const MyStuffItem = ({ collection }) => {
+export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (
@@ -136,11 +143,7 @@ export const MyStuffItem = ({ collection }) => {
           </div>
         </div>
       </CollectionLinkComponent>
-      {collection.projects.length === 0 && (
-        <div className={classNames(styles.projectsContainer, styles.empty)}>
-          <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
-        </div>
-      )}
+      <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} showLoader={showLoader} />
     </div>
   );
 };
