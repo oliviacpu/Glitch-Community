@@ -14,7 +14,7 @@ import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 
@@ -124,9 +124,8 @@ export const MyStuffItem = ({ collection }) => {
     <div className={styles.collectionItem}>
       <div className={styles.header} />
       <CollectionLinkComponent collection={collection} className={classNames(styles.linkBody)} style={collectionColorStyles(collection)}>
-        <div className={styles.avatarContainer}>
-          {/* TODO replace with my stuff icon */}
-          <CollectionAvatar collection={collection} />
+        <div className={styles.bookmarkContainer}>
+          <BookmarkAvatar />
         </div>
         <div className={styles.nameDescriptionContainer}>
           <div className={styles.itemButtonWrap}>
