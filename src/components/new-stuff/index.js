@@ -6,9 +6,11 @@ import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Compon
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import Button from 'Components/buttons/button';
 import PreviewContainer from 'Components/containers/preview-container';
+import Link from 'Components/link';
 import { PopoverContainer } from 'Components/popover';
 
 import { useAPI } from 'State/api';
+import { useGlobals } from 'State/globals';
 import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
@@ -88,6 +90,15 @@ NewStuffOverlay.propTypes = {
 
 export const PupdatePreview = () => {
   const api = useAPI();
+  const { origin } = useGlobals();
+  const onPublish = async (data) => {
+    try {
+      await api.post(`${origin}/api/home`, data);
+      history.push('/');
+    } catch (e) {
+      console.error(e);
+    }
+  };
   
   return (
     <PreviewContainer
@@ -95,8 +106,12 @@ export const PupdatePreview = () => {
       onPublish={onPublish}
       previewMessage={
         <>
-          This is a live preview of edits done with 
+          This is a live preview of edits done with the <Link to="https://buttercup-room.glitch.me">Pupdate Editor.</Link>
+        </>
       }
+    >
+      {(data) => <NewStuffOverlay showNewStuff={true} setShowNewStuff={null} newStuff={log} closePopover={null} />}
+    </PreviewContainer>
   );
 };
 
