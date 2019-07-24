@@ -5,22 +5,20 @@ import { useNotifications } from 'State/notifications';
 const PersistentNotification = ({ children }) => {
   const { createNotification } = useNotifications();
 
-  useEffect(
-    () => {
-      const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
-      return removeNotification;
-    },
-    [children],
-  );
+  useEffect(() => {
+    const { removeNotification } = createNotification(children, { type: 'error', persistent: true });
+    return removeNotification;
+  }, [children]);
 
   return null;
 };
 
 const OfflineNotice = () => {
-  const [online, setOnline] = useState(() => navigator.onLine);
+  const [online, setOnline] = useState(true);
 
   useEffect(() => {
-    const onNetwork = () => setOnline(navigator.onLine);
+    const onNetwork = () => setOnline(navigator.onLine !== false);
+    onNetwork();
     window.addEventListener('offline', onNetwork);
     window.addEventListener('online', onNetwork);
     return () => {
