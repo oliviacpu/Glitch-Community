@@ -20,6 +20,7 @@ import NewStuffPup from './new-stuff-pup';
 import styles from './styles.styl';
 
 const latestId = Math.max(...pupdate.map(({ id }) => id));
+console.log(latestId);
 
 function usePreventTabOut() {
   const first = useRef();
