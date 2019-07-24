@@ -131,7 +131,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
 
   return (
     <div className={styles.collectionItem}>
-      <div className={styles.header} />
+      {isAuthorized && <div className={styles.header} />}
       <CollectionLinkComponent collection={collection} className={classNames(styles.linkBody)} style={collectionColorStyles(collection)}>
         <div className={styles.bookmarkContainer}>
           <BookmarkAvatar />

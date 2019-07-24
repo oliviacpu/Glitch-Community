@@ -75,26 +75,24 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
   const myStuffCollection = collections[0];
   const { value: projects } = useCollectionProjects(myStuffCollection);
 
-  // const collectionsWithMyStuff = React.useMemo(() => {
-  //   if (projects && (projects.length > 0 || isAuthorized)) {
-  //     myStuffCollection.projects = projects;
-  //   }
-  //   return collections;
-  // }, [projects]);
-  
   // if the user is not authorized and it's empty don't show "my stuff"
   // otherwise add the loaded projects to the collection
-  
-  
-  
-  
+  const collectionsWithMyStuffLoaded = React.useMemo(() => {
+    if (!isAuthorized && projects && projects.length === 0) {
+      collections.shift(0);
+      return collections
+    }
+    
+    collections[0].projects = projects;
+    return collections
+  }, [collections, isAuthorized, projects])
 
-  return children(collectionsWithMyStuff);
+  return children(collectionsWithMyStuffLoaded);
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
-  const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections });
-  const collectionsWithMyStuff = getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection });
+  const [myStuffCollection, collectionsWithoutMyStuff] = React.useMemo(() => getMyStuffFromCollections({ collections }, [collections]));
+  const collectionsWithMyStuff = React.useMemo(() => getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection }), [collectionsWithoutMyStuff, myStuffCollection]);
 
   if (myStuffCollection) {
     return (
