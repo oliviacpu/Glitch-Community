@@ -68,7 +68,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   if (projects.length === 0 && !isAuthorized) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Text>No projects to see in this collection just yet.</Text>
+        <Text className={styles.emptyCollectionText}>No projects to see in this collection just yet.</Text>
       </div>
     );
   }

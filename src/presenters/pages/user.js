@@ -71,38 +71,45 @@ NameAndLogin.defaultProps = {
   login: '',
 };
 
-function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
+function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
+  const myStuffCollection = collections[0];
   const { value: projects } = useCollectionProjects(myStuffCollection);
 
-  const collectionsWithMyStuff = React.useMemo(() => {
-    if (projects && (projects.length > 0 || isAuthorized)) {
-      myStuffCollection.projects = projects;
-      return getCollectionsWithMyStuffAtFront({ collections, myStuffCollection });
-    }
-    return collections;
-  }, [projects]);
+  // const collectionsWithMyStuff = React.useMemo(() => {
+  //   if (projects && (projects.length > 0 || isAuthorized)) {
+  //     myStuffCollection.projects = projects;
+  //   }
+  //   return collections;
+  // }, [projects]);
+  
+  // if the user is not authorized and it's empty don't show "my stuff"
+  // otherwise add the loaded projects to the collection
+  
+  
+  
+  
 
   return children(collectionsWithMyStuff);
 }
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections });
-  const collectionsWithNullMyStuff = getCollectionsWithMyStuffAtFront({ collections });
+  const collectionsWithMyStuff = getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection });
 
   if (myStuffCollection) {
     return (
-      <MyStuffCollectionLoader myStuffCollection={myStuffCollection} collections={collectionsWithoutMyStuff} {...props}>
-        {(collectionsWithMyStuff) => <CollectionsList collections={collectionsWithMyStuff} {...props} />}
+      <MyStuffCollectionLoader collections={collectionsWithMyStuff} {...props}>
+        {(collectionsWithMyStuffLoaded) => <CollectionsList collections={collectionsWithMyStuffLoaded} {...props} />}
       </MyStuffCollectionLoader>
     );
   }
 
-  if (!props.isAuthorized) {
+  if (!props.isAuthorized && !myStuffCollection) {
     return <CollectionsList collections={collectionsWithoutMyStuff} {...props} />;
   }
 
   if (props.isAuthorized) {
-    return <CollectionsList collections={collectionsWithNullMyStuff} {...props} />;
+    return <CollectionsList collections={collectionsWithMyStuff} {...props} />;
   }
 }
 
