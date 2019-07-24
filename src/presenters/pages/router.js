@@ -22,6 +22,7 @@ import { NotFoundPage } from './error';
 import SearchPage from './search';
 import SecretPage from './secret';
 import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
+import { PupdatePreview } from 'Components/new-stuff';
 import VSCodeAuth from './vscode-auth';
 
 /* global EXTERNAL_ROUTES */
@@ -73,7 +74,7 @@ const Router = () => (
       <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index.html" exact render={({ location }) => <NewHomePage key={location.key} />} />
       <Route path="/index/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
-      <Route path="/pupdate/preview" exact render={({ location }) => <NewHomePagePreview key={location.key} />} />
+      <Route path="/pupdate/preview" exact render={({ location }) => <PupdatePreview key={location.key} />} />
 
       <Route
         path="/login/facebook"

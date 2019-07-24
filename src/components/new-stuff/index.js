@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
@@ -88,7 +89,7 @@ NewStuffOverlay.propTypes = {
   ).isRequired,
 };
 
-export const PupdatePreview = () => {
+export const PupdatePreview = withRouter(({ history }) => {
   const api = useAPI();
   const { origin } = useGlobals();
   const onPublish = async (data) => {
@@ -99,7 +100,7 @@ export const PupdatePreview = () => {
       console.error(e);
     }
   };
-  
+
   return (
     <PreviewContainer
       get={() => api.get('https://buttercup-room.glitch.me/pupdate.json').then((res) => res.data)}
@@ -110,10 +111,10 @@ export const PupdatePreview = () => {
         </>
       }
     >
-      {(data) => <NewStuffOverlay showNewStuff={true} setShowNewStuff={null} newStuff={log} closePopover={null} />}
+      {(data) => <NewStuffOverlay showNewStuff setShowNewStuff={null} newStuff={data} closePopover={null} />}
     </PreviewContainer>
   );
-};
+});
 
 const NewStuff = ({ children }) => {
   const { currentUser } = useCurrentUser();
