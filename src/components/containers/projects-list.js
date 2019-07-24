@@ -59,19 +59,22 @@ function ProjectsList({
 }) {
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
   return (
-    <FilterController matchFn={matchFn} enabled={enableFiltering} placeholder={placeholder} searchPrompt="find a project" label="project search" items={projects}>
-      {({ filterInput, filterHeaderStyles, renderItems }) => (
+    <FilterController
+      matchFn={matchFn}
+      enabled={enableFiltering}
+      placeholder={placeholder}
+      searchPrompt="find a project"
+      label="project search"
+      items={projects}
+    >
+      {({ filterInput, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-          <div className={filterHeaderStyles}>
+          <div>
             {title && <Heading tagName="h2">{title}</Heading>}
             {filterInput}
           </div>
           {renderItems((filteredProjects) => (
-            <PaginationController
-              enabled={enablePagination}
-              items={filteredProjects}
-              itemsPerPage={projectsPerPage}
-            >
+            <PaginationController enabled={enablePagination} items={filteredProjects} itemsPerPage={projectsPerPage}>
               {(paginatedProjects) => (
                 <ProjectsUL
                   projects={paginatedProjects}
