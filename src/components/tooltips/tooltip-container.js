@@ -95,9 +95,9 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       <div onFocus={() => setTooltipIsActive(true)} onBlur={() => setTooltipIsActive(false)}>
         {extendedTarget}
       </div>
-      {align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
+      {align.includes('top') && <span aria-hidden="true" onClick={preventDefault} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {tooltipNode}
-      {!align.includes('top') && <span aria-hidden="true" className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
+      {!align.includes('top') && <span aria-hidden="true" onClick={preventDefault} className={cx({ invisibleHoverTarget: true, top: align.includes('top'), persistent })} />}
       {children}
     </div>
   );
