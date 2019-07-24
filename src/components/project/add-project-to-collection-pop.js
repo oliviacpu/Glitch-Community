@@ -134,15 +134,11 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const myStuffEnabled = useDevToggle('My Stuff');
 
   const addProjectTo = async (collection) => {
-    console.log("hi")
     if (myStuffEnabled && collection.isMyStuff && collection.id === 'nullMyStuff') {
       collection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
       collection.fullUrl = collection.fullUrl ? collection.fullUrl : `${currentUser.login}/${collection.url}`;
-      console.log("collection.fullUrl", collection.fullUrl)
     }
-    console.log("Before")
     await addProjectToCollection(project, collection);
-    console.log("after")
     createNotification(
       <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
       { type: 'success' },
