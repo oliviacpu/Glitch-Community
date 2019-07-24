@@ -3,7 +3,7 @@ const WARN = 1;
 const ERROR = 2;
 
 module.exports = {
-  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  extends: ['eslint:recommended'],
   env: {
     es6: true, // We are writing ES6 code
     node: true, // for Node.js
@@ -17,8 +17,5 @@ module.exports = {
     'implicit-arrow-linebreak': OFF,
     'object-curly-newline': OFF,
     'no-confusing-arrow': OFF,
-  },
-  settings: {
-    react: { version: 'detect' },
   },
 };
