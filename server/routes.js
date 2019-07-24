@@ -51,7 +51,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, render = false) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -84,12 +84,16 @@ module.exports = function(external) {
       built = false;
     }
 
-    const { html } = await renderPage({
-      url: new URL(req.url, `${req.protocol}://${req.hostname}`),
-      EXTERNAL_ROUTES: external,
-      HOME_CONTENT: homeContent,
-      ZINE_POSTS: zine || [],
-    });
+    let rendered = null;
+    if (render) {
+      const { html } = await renderPage({
+        url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+        EXTERNAL_ROUTES: external,
+        HOME_CONTENT: homeContent,
+        ZINE_POSTS: zine || [],
+      });
+      rendered = html;
+    }
 
     res.render('index.ejs', {
       title,
@@ -99,7 +103,7 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
-      rendered: html,
+      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
@@ -247,7 +251,7 @@ module.exports = function(external) {
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
     const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
-    await render(req, res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' });
+    await render(req, res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' }, true);
   });
 
   app.get('/create', async (req, res) => {
@@ -256,7 +260,7 @@ module.exports = function(external) {
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
     const canonicalUrl = `${APP_URL}/create`;
-    await render(req, res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' });
+    await render(req, res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' }, true);
   });
   
 
