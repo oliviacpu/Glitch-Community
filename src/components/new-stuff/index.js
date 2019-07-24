@@ -106,7 +106,7 @@ const NewStuff = ({ children }) => {
     return (
       <>
         {children(show)}
-        {!pupVisible && <NewStuffPrompt onClick={show} />}
+        {pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <OverlayBackground />}
       </>
     );
