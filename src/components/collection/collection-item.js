@@ -109,15 +109,20 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, collectio
   };
 
   return (
-    <Button onClick={createMyStuffCollection} collection={collection} className={className} style={style}>
+    <button
+      onClick={createMyStuffCollection}
+      className={className}
+      type='submit'
+      className={className} 
+      style={style}
+    >
       {children}
-    </Button>
+    </button>
   );
 });
 
 // TODO: add to storybook
 export const MyStuffItem = ({ collection }) => {
-  console.log('ul', collection.fullUrl);
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (
