@@ -42,6 +42,27 @@ export function getCollectionsWithMyStuffAtFront({ myStuffCollection, collection
   return collectionsClone;
 }
 
+// puts my stuff at the front of the array, if my stuff doesn't exist we add it. 
+export function getCollectionsWithMyStuff({ collections }) {
+  let myStuffCollection = null;
+  let updatedCollections = collections.filter((collection) => {
+    // this should be `if (collection.isMyStuff)` but unfortunately search results do not currently return that property
+    if (collection.name === 'My Stuff') {
+      myStuffCollection = collection;
+      return false;
+    }
+    return true;
+  });
+  
+  if (!myStuffCollection) {
+    myStuffCollection = nullMyStuffCollection;
+  }
+  
+  updatedCollections.unshift(myStuffCollection)
+  
+  return updatedCollections;
+}
+
 export function getAvatarUrl(id) {
   return `${CDN_URL}/collection-avatar/${id}.png`;
 }

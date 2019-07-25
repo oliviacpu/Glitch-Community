@@ -19,8 +19,6 @@ import { getLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
-import useDevToggle from 'State/dev-toggles';
-import { useCollectionProjects } from 'State/collection';
 import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';

@@ -10,7 +10,7 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionProjects } from 'State/collection';
-import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront }
+import { getCollectionsWithMyStuff } from 'Models/collection';
 import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
@@ -37,7 +37,8 @@ function CollectionsList({
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
-
+  const myStuffEnabled = useDevToggle("My Stuff");
+  
   function deleteCollection(collection) {
     setDeletedCollectionIds((ids) => [...ids, collection.id]);
     return deleteItem({ collection });
@@ -47,16 +48,21 @@ function CollectionsList({
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
-  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-
-  // filter out mystuff when there's no projects inside and user isn't authorized
-  // put mystuff at beginning of list (and fake one if it's not there yet)
-
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
+  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
+  // put mystuff at beginning of list (and fake one if it's not there yet)
+  let collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
+  
+  // filter out mystuff when there's no projects inside and user isn't authorized
+  if (!isAuthorized) {
+    collectionsWithMyStuff = collectionsWithMyStuff.filter(c => !(c.isMyStuff && c.projects.length === 0))
+  }
+  
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
+  
   return (
     <FilterController
       matchFn={matchFn}
@@ -64,7 +70,7 @@ function CollectionsList({
       label="collection search"
       enabled={enableFiltering}
       placeholder={placeholder}
-      items={orderedCollections}
+      items={myStuffEnabled ? collectionsWithMyStuff : orderedCollections}
     >
       {({ filterInput, filterHeaderStyles, renderItems }) => (
         <>
