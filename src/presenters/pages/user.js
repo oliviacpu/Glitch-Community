@@ -73,6 +73,7 @@ NameAndLogin.defaultProps = {
 
 function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
   const myStuffCollection = collections[0];
+  console.log({...myStuffCollection})
   const { value: projects, status } = useCollectionProjects(myStuffCollection);
 
   // if the user is not authorized and it's empty don't show "my stuff"
@@ -82,7 +83,7 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
       return []
     }
     if (!isAuthorized && projects && projects.length === 0) {
-      collections.shift(0);
+      collections.shift();
       return collections;
     }
 
