@@ -16,7 +16,6 @@ import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
 import { getLink } from 'Models/user';
-import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront } from 'Models/collection';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
@@ -70,60 +69,6 @@ NameAndLogin.defaultProps = {
   name: '',
   login: '',
 };
-
-function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
-  const { value: projects, status } = useCollectionProjects(myStuffCollection);
-
-  const collectionsWithMyStuffLoaded = React.useMemo(() => {
-    // don't show collections while it's loading
-    if (status === 'loading') {
-      return [];
-    }
-    // add projects to mystuff when it's loaded
-    if (collections[0].isMyStuff && status === 'ready') {
-      collections[0].projects = projects;
-    }
-
-    // if user is looking at someone else's user page and that person's mystuff collection is empty, remove it
-    if (!isAuthorized && status === 'ready' && projects.length === 0 && collections[0].isMyStuff) {
-      collections.shift();
-    }
-
-    return collections;
-  }, [collections, isAuthorized, projects, status]);
-
-  return children(collectionsWithMyStuffLoaded);
-}
-
-function CollectionsListWithMyStuff({ collections, ...props }) {
-  const [myStuffCollection, collectionsWithoutMyStuff] = React.useMemo(() => getMyStuffFromCollections({ collections }, [collections]));
-  const collectionsWithMyStuff = React.useMemo(
-    () => getCollectionsWithMyStuffAtFront({ collections: collectionsWithoutMyStuff, myStuffCollection }),
-    [collectionsWithoutMyStuff, myStuffCollection],
-  );
-
-  if (myStuffCollection) {
-    return (
-      <MyStuffCollectionLoader collections={collectionsWithMyStuff} myStuffCollection={myStuffCollection} {...props}>
-        {(collectionsWithMyStuffLoaded) => <CollectionsList collections={collectionsWithMyStuffLoaded} {...props} />}
-      </MyStuffCollectionLoader>
-    );
-  }
-
-  if (!props.isAuthorized && !myStuffCollection) {
-    return <CollectionsList collections={collectionsWithoutMyStuff} {...props} />;
-  }
-
-  if (props.isAuthorized) {
-    return <CollectionsList collections={collectionsWithMyStuff} {...props} />;
-  }
-}
-
-// TODO: in the future we can delete this
-function CollectionsListWithDevToggle(props) {
-  const myStuffEnabled = useDevToggle('My Stuff');
-  return myStuffEnabled ? <CollectionsListWithMyStuff {...props} /> : <CollectionsList {...props} />;
-}
 
 const UserPage = ({ user: initialUser }) => {
   const [user, funcs] = useUserEditor(initialUser);
@@ -207,7 +152,7 @@ const UserPage = ({ user: initialUser }) => {
       )}
 
       {!!user.login && (
-        <CollectionsListWithDevToggle
+        <CollectionsList
           title="Collections"
           collections={user.collections.map((collection) => ({
             ...collection,

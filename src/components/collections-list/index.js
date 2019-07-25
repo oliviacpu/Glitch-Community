@@ -10,6 +10,7 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionProjects } from 'State/collection';
+import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront }
 import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
@@ -46,15 +47,10 @@ function CollectionsList({
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
 
-  let orderedCollections;
-  const myStuffEnabled = useDevToggle('My Stuff');
-  if (myStuffEnabled && collections.length > 0 && collections[0].isMyStuff) {
-    const myStuffCollection = collections.shift();
-    orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-    orderedCollections.unshift(myStuffCollection);
-  } else {
-    orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-  }
+  const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
+  // filter out mystuff when there's no projects inside and user isn't authorized
+  // put mystuff at beginning of list (and fake one if it's not there yet)
 
   if (!hasCollections && !canMakeCollections) {
     return null;
