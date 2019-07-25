@@ -24,11 +24,8 @@ const CreateFirstCollection = () => (
 );
 
 /*
-  if my stuff doesnt exist yet:
-    - we add it to collections
-  if my stuff does exist yet
-    - we need to load it if it has projects
-  if 
+  - ensures my stuff is at the beginning of the list (even if it doesn't exist yet)
+  - ensures we remove mystuff if the collection has no projects and the user is not authorized we need to remove it from the list
 */
 function myStuffController({ children, collections }) {
   const myStuffEnabled = useDevToggle('My Stuff');

@@ -55,7 +55,7 @@ const CollectionReloadContext = createContext();
 export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState({});
   const api = useAPI();
-
+  console.log(responses)
   const getCollectionProjects = useCallback(
     (collection) => {
       if (responses[collection.id] && responses[collection.id].projects) {
