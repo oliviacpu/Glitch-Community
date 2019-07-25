@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 function Video({ sources, track, ...props }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(-1);
+  useLayoutEffect(() => setWindowWidth(window.innerWidth), []);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     handleResize();
