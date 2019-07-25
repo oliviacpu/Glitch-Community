@@ -73,11 +73,14 @@ NameAndLogin.defaultProps = {
 
 function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
   const myStuffCollection = collections[0];
-  const { value: projects } = useCollectionProjects(myStuffCollection);
+  const { value: projects, status } = useCollectionProjects(myStuffCollection);
 
   // if the user is not authorized and it's empty don't show "my stuff"
   // otherwise add the loaded projects to the collection
   const collectionsWithMyStuffLoaded = React.useMemo(() => {
+    if (status === "loading") {
+      return []
+    }
     if (!isAuthorized && projects && projects.length === 0) {
       collections.shift(0);
       return collections;
@@ -85,8 +88,8 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
 
     collections[0].projects = projects;
     return collections;
-  }, [collections, isAuthorized, projects]);
-  console.log({ collections: [...collections], isAuthorized, projects, collectionsWithMyStuffLoaded: [...collectionsWithMyStuffLoaded]})
+  }, [collections, isAuthorized, projects, status]);
+  console.log({ collections: [...collections], isAuthorized, projects, collectionsWithMyStuffLoaded: [...collectionsWithMyStuffLoaded], status })
   return children(collectionsWithMyStuffLoaded);
 }
 
