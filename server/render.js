@@ -32,9 +32,11 @@ chokidar.watch(src).on('change', () => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
+const { resetIdCounter } = require('react-tabs');
 
 const render = async ({ url, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const { Page } = require('../src/server');
+  resetIdCounter();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
   const page = React.createElement(Page, {
