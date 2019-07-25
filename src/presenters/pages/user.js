@@ -71,31 +71,33 @@ NameAndLogin.defaultProps = {
   login: '',
 };
 
-function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
-  const myStuffCollection = collections[0];
-  console.log({...myStuffCollection})
+function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
+  console.log("myStuffCollection", myStuffCollection)
   const { value: projects, status } = useCollectionProjects(myStuffCollection);
-
-  // if the user is not authorized and it's empty don't show "my stuff"
-  // otherwise add the loaded projects to the collection
+  console.log(projects, status)
   const collectionsWithMyStuffLoaded = React.useMemo(() => {
+    console.log("hi?")
+    // don't show collections while it's loading
     if (status === "loading") {
-      return []
-    }
-    if (!isAuthorized && projects && projects.length === 0) {
-      collections.shift();
-      return collections;
+      return [];
     }
 
-    collections[0].projects = projects;
+    // add projects to mystuff when it's loaded
+    if (collections[0].isMyStuff && status === "ready") {
+      collections[0].projects = projects;
+    }
+    
+    // if user is looking at someone else's user page and that person's mystuff collection is empty, remove it
+    if (!isAuthorized && status === "ready" && projects.length === 0 && collections[0].isMyStuff) {
+      collections.shift();
+    }
+
+    console.log([...collections])
     return collections;
   }, [collections, isAuthorized, projects, status]);
-  console.log({ collections: [...collections], isAuthorized, projects, collectionsWithMyStuffLoaded: [...collectionsWithMyStuffLoaded], status })
+
   return children(collectionsWithMyStuffLoaded);
 }
-
-//the bug: user has a real my stuff collection so it shows up, then we fetch for the projects within it and if it's empty we hide it, thus the flash
-// solution need to show a loader until we have finished fetching things
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const [myStuffCollection, collectionsWithoutMyStuff] = React.useMemo(() => getMyStuffFromCollections({ collections }, [collections]));
@@ -106,7 +108,7 @@ function CollectionsListWithMyStuff({ collections, ...props }) {
 
   if (myStuffCollection) {
     return (
-      <MyStuffCollectionLoader collections={collectionsWithMyStuff} {...props}>
+      <MyStuffCollectionLoader collections={collectionsWithMyStuff} myStuffCollection={myStuffCollection} {...props}>
         {(collectionsWithMyStuffLoaded) => <CollectionsList collections={collectionsWithMyStuffLoaded} {...props} />}
       </MyStuffCollectionLoader>
     );
