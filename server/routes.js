@@ -1,3 +1,4 @@
+const { captureException } = require('@sentry/node');
 const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
@@ -13,6 +14,7 @@ const cheerio = require('cheerio');
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
+const renderPage = require('./render');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 const { getHomeData, saveHomeDataToFile } = require('./home');
 
@@ -50,7 +52,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, shouldRender = false) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -83,6 +85,21 @@ module.exports = function(external) {
       built = false;
     }
 
+    let rendered = null;
+    if (shouldRender) {
+      try {
+        const { html } = await renderPage({
+          url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+          EXTERNAL_ROUTES: external,
+          HOME_CONTENT: homeContent,
+          ZINE_POSTS: zine || [],
+        });
+        rendered = html;
+      } catch (error) {
+        captureException(error);
+      }
+    }
+
     res.render('index.ejs', {
       title,
       socialTitle,
@@ -91,6 +108,7 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
+      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
@@ -123,7 +141,7 @@ module.exports = function(external) {
     const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
     if (!project) {
-      await render(res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
@@ -144,7 +162,7 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(res, { title: domain, canonicalUrl, description, image: avatar });
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar });
   });
 
   app.get('/@:name', async (req, res) => {
@@ -170,14 +188,14 @@ module.exports = function(external) {
         args.image = `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`;
       }
 
-      await render(res, args);
+      await render(req, res, args);
       return;
     }
     const user = await getUser(name);
     if (user) {
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
 
-      await render(res, {
+      await render(req, res, {
         title: user.name || `@${user.login}`,
         canonicalUrl,
         description,
@@ -185,7 +203,7 @@ module.exports = function(external) {
       });
       return;
     }
-    await render(res, { title: `@${name}`, description: `We couldn't find @${name}`, canonicalUrl });
+    await render(req, res, { title: `@${name}`, description: `We couldn't find @${name}`, canonicalUrl });
   });
 
   app.get('/@:name/:collection', async (req, res) => {
@@ -201,10 +219,10 @@ module.exports = function(external) {
       description += ` 🎏 A collection of apps by @${author}`;
       description = description.trimStart(); // if there was no description, trim space before the fish
 
-      await render(res, { title: name, description, canonicalUrl });
+      await render(req, res, { title: name, description, canonicalUrl });
       return;
     }
-    await render(res, { title: collection, description: `We couldn't find @${name}/${collection}`, canonicalUrl });
+    await render(req, res, { title: collection, description: `We couldn't find @${name}/${collection}`, canonicalUrl });
   });
 
   app.get('/auth/:domain', async (req, res) => {
@@ -238,7 +256,7 @@ module.exports = function(external) {
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
     const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
-    await render(res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' });
+    await render(req, res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' }, true);
   });
 
   app.get('/create', async (req, res) => {
@@ -247,7 +265,7 @@ module.exports = function(external) {
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
     const canonicalUrl = `${APP_URL}/create`;
-    await render(res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' });
+    await render(req, res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' }, true);
   });
   
 
@@ -256,7 +274,7 @@ module.exports = function(external) {
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
     const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
-    await render(res, { title, description, image, socialTitle });
+    await render(req, res, { title, description, image, socialTitle });
   });
 
   return app;

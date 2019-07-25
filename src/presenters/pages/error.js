@@ -6,6 +6,7 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import Layout from 'Components/layout';
 import Button from 'Components/buttons/button';
+import { useGlobals } from 'State/globals';
 
 import styles from './error.styl';
 
@@ -21,8 +22,9 @@ const ErrorMessage = ({ title, description }) => (
 );
 
 export const NotFoundPage = () => {
+  const { location } = useGlobals();
   // we show a translated error message and redirect in index.ejs (this just ensures we don't show duplicate messages)
-  if (window.location.origin === 'https://translate.googleusercontent.com') return null;
+  if (location.origin === 'https://translate.googleusercontent.com') return null;
 
   return (
     <Layout>
