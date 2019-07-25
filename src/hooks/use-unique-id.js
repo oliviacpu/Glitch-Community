@@ -1,24 +1,17 @@
-import React, { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 
-const createCounter = () => {
-  let counter = 0;
-  return () => {
-    counter += 1;
-    return counter;
-  };
-};
-
-const Context = createContext(createCounter());
+let counter = 0;
 
 const useUniqueId = () => {
-  const getCounter = useContext(Context);
-  const [uniqueId] = useState(getCounter);
+  const [uniqueId] = useState(() => {
+    counter += 1;
+    return counter;
+  });
   return `unique-${uniqueId}`;
 };
 
-export const UniqueIdProvider = ({ children }) => {
-  const [getCounter] = useState(createCounter);
-  return <Context.Provider value={getCounter}>{children}</Context.Provider>;
+export const resetUniqueId = () => {
+  counter = 0;
 };
 
 export default useUniqueId;
