@@ -27,7 +27,7 @@ const CreateFirstCollection = () => (
   - ensures my stuff is at the beginning of the list (even if it doesn't exist yet)
   - ensures we remove mystuff if the collection has no projects and the user is not authorized we need to remove it from the list
 */
-function MyStuffController({ children, collections, isAuthorized }) {
+function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   const myStuffEnabled = useDevToggle('My Stuff');
 
   // put mystuff at beginning of list (and fake one if it's not there yet)
@@ -40,8 +40,7 @@ function MyStuffController({ children, collections, isAuthorized }) {
     return children([]);
   }
 
-  // TODO remove during release of my stuff
-  if (!myStuffEnabled) {
+  if (!myStuffEnabled || maybeTeam) {
     return collections;
   }
 
@@ -86,7 +85,7 @@ function CollectionsList({
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
 
   return (
-    <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized}>
+    <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized} maybeTeam={maybeTeam}>
       {(collectionsWithMyStuff) => (
         <FilterController
           matchFn={matchFn}
