@@ -47,6 +47,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
   if (!projects) return <ProjectsLoading />;
 
+  // show placeholder text/image to encourage people to add projects to my stuff
   if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty, styles.placeholderContainer)}>
@@ -107,6 +108,7 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
+// when users don't have a my stuff collection yet, we mimic it on their user page and create it once they click on it
 const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
