@@ -31,7 +31,6 @@ const nullMyStuffCollection = {
   coverColor: pickRandomColor(),
   projects: [],
   id: 'nullMyStuff',
-  // TODO: handle curator stuff
 };
 
 export function getCollectionsWithMyStuffAtFront({ myStuffCollection, collections }) {
