@@ -23,6 +23,27 @@ const CreateFirstCollection = () => (
   </div>
 );
 
+/*
+  if my stuff doesnt exist yet:
+    - we add it to collections
+  if my stuff does exist yet
+    - we need to load it if it has projects
+  if 
+*/
+function myStuffController({ children, collections }) {
+  const myStuffEnabled = useDevToggle('My Stuff');
+
+  // put mystuff at beginning of list (and fake one if it's not there yet)
+  const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
+  // console.log(collectionsWithMyStuff)
+  // // filter out mystuff when there's no projects inside and user isn't authorized
+  const shouldHideCollection = (collection) => !isAuthorized && collection.isMyStuff && (!collection.projects || collection.projects.length === 0)
+  // if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && collectionsWithMyStuff[0].projects.length === 0) {
+  //   collectionsWithMyStuff.shift();
+  // }
+  return children()
+}
+
 function CollectionsList({
   collections: rawCollections,
   title,
@@ -53,16 +74,8 @@ function CollectionsList({
   }
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
-  // put mystuff at beginning of list (and fake one if it's not there yet)
-  const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
-  // console.log(collectionsWithMyStuff)
-  // // filter out mystuff when there's no projects inside and user isn't authorized
-  // if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && collectionsWithMyStuff[0].projects.length === 0) {
-  //   collectionsWithMyStuff.shift();
-  // }
-
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
-
+  
   return (
     <FilterController
       matchFn={matchFn}
@@ -70,7 +83,7 @@ function CollectionsList({
       label="collection search"
       enabled={enableFiltering}
       placeholder={placeholder}
-      items={myStuffEnabled ? collectionsWithMyStuff : orderedCollections}
+      items={orderedCollections}
     >
       {({ filterInput, filterHeaderStyles, renderItems }) => (
         <>
@@ -109,11 +122,7 @@ function CollectionsList({
                           showLoader={isExpanded}
                         />
                       )
-                    }
-                      
-                        
-                      )
-                    }
+                    }}
                   </Grid>
                 )}
               </PaginationController>
