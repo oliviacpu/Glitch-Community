@@ -50,7 +50,7 @@ try {
 }
 
 // Extend dayjs with our conversion plugin
-require('dayjs').extend(require('../shared/dayjs-convert'));
+require('dayjs').extend(require('Shared/dayjs-convert'));
 
 const app = express();
 app.enable('trust proxy');

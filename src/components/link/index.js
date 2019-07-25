@@ -17,7 +17,7 @@ const Link = React.forwardRef(({ to, children, ...props }, ref) => {
   const { location, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
     // https://github.com/ReactTraining/react-router/issues/394 inner page links using hashes are not supported in react router links
-    const [, hash] = window.location.href.split('#');
+    const [, hash] = location.href.split('#');
 
     const targetUrl = new URL(to, location);
     if (targetUrl.origin !== location.origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route)) || hash) {

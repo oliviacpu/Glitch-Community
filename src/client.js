@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import convertPlugin from 'Shared/dayjs-convert';
@@ -31,20 +31,25 @@ window.bootstrap = () => {
     scope.setTag('bootstrap', 'true');
   });
 
-  const dom = document.createElement('div');
-  document.body.appendChild(dom);
-  render((
+  const element = (
     <BrowserRouter>
       <GlobalsProvider
         origin={window.location.origin}
-        ZINE_POSTS={window.ZINE_POSTS}
-        HOME_CONTENT={window.HOME_CONTENT}
         EXTERNAL_ROUTES={window.EXTERNAL_ROUTES}
+        HOME_CONTENT={window.HOME_CONTENT}
+        ZINE_POSTS={window.ZINE_POSTS}
       >
         <App />
       </GlobalsProvider>
     </BrowserRouter>
-  ), dom);
+  );
+  const container = document.getElementById('main');
+
+  if (container.hasChildNodes()) {
+    hydrate(element, container);
+  } else {
+    render(element, container);
+  }
 };
 
 // Make sure react exists because that's an issue that is happening
