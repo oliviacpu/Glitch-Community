@@ -33,7 +33,6 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
-  console.log("rawCollections", rawCollections)
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);

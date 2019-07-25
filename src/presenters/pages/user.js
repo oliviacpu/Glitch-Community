@@ -72,27 +72,23 @@ NameAndLogin.defaultProps = {
 };
 
 function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized, children }) {
-  console.log("myStuffCollection", myStuffCollection)
   const { value: projects, status } = useCollectionProjects(myStuffCollection);
-  console.log(projects, status)
+
   const collectionsWithMyStuffLoaded = React.useMemo(() => {
-    console.log("hi?")
     // don't show collections while it's loading
-    if (status === "loading") {
+    if (status === 'loading') {
       return [];
     }
-    console.log("here?")
     // add projects to mystuff when it's loaded
-    if (collections[0].isMyStuff && status === "ready") {
+    if (collections[0].isMyStuff && status === 'ready') {
       collections[0].projects = projects;
     }
-    
+
     // if user is looking at someone else's user page and that person's mystuff collection is empty, remove it
-    if (!isAuthorized && status === "ready" && projects.length === 0 && collections[0].isMyStuff) {
+    if (!isAuthorized && status === 'ready' && projects.length === 0 && collections[0].isMyStuff) {
       collections.shift();
     }
 
-    console.log([...collections])
     return collections;
   }, [collections, isAuthorized, projects, status]);
 
