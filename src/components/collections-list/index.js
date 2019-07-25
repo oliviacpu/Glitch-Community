@@ -34,7 +34,7 @@ function MyStuffController({ children, collections, isAuthorized }) {
   const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
 
   // fetch projects for myStuff
-  const { value: projects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
+  const { value: myStuffProjects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
 
   if (status === 'loading') {
     return children([]);
@@ -45,9 +45,8 @@ function MyStuffController({ children, collections, isAuthorized }) {
     return collections;
   }
 
-  if (collectionsWithMyStuff[0].isMyStuff && collectionsWtih)
   // filter out mystuff when the collection is empty and user isn't authorized
-  if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && collectionsWithMyStuff[0].projects.length === 0) {
+  if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
 
@@ -88,61 +87,61 @@ function CollectionsList({
 
   return (
     <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized}>
-      (collectionsWithMyStuff) => (
-      <FilterController
-        matchFn={matchFn}
-        searchPrompt="find a collection"
-        label="collection search"
-        enabled={enableFiltering}
-        placeholder={placeholder}
-        items={orderedCollections}
-      >
-        {({ filterInput, filterHeaderStyles, renderItems }) => (
-          <>
-            <article data-cy="collections" className={styles.collections}>
-              <div className={filterHeaderStyles || undefined}>
-                <Heading tagName="h2">{title}</Heading>
-                {filterInput}
-              </div>
+      {(collectionsWithMyStuff) => (
+        <FilterController
+          matchFn={matchFn}
+          searchPrompt="find a collection"
+          label="collection search"
+          enabled={enableFiltering}
+          placeholder={placeholder}
+          items={collectionsWithMyStuff}
+        >
+          {({ filterInput, filterHeaderStyles, renderItems }) => (
+            <>
+              <article data-cy="collections" className={styles.collections}>
+                <div className={filterHeaderStyles || undefined}>
+                  <Heading tagName="h2">{title}</Heading>
+                  {filterInput}
+                </div>
 
-              {canMakeCollections && (
-                <>
-                  <CreateCollectionButton team={maybeTeam} />
-                  {!hasCollections && <CreateFirstCollection />}
-                </>
-              )}
+                {canMakeCollections && (
+                  <>
+                    <CreateCollectionButton team={maybeTeam} />
+                    {!hasCollections && <CreateFirstCollection />}
+                  </>
+                )}
 
-              {renderItems((filteredProjects) => (
-                <PaginationController
-                  enabled={enablePagination}
-                  items={filteredProjects}
-                  itemsPerPage={collectionsPerPage}
-                  fetchDataOptimistically={useCollectionProjects}
-                >
-                  {(paginatedCollections, isExpanded) => (
-                    <Grid items={paginatedCollections}>
-                      {(collection) =>
-                        myStuffEnabled && collection.isMyStuff ? (
-                          <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
-                        ) : (
-                          <CollectionItem
-                            collection={collection}
-                            isAuthorized={isAuthorized}
-                            deleteCollection={() => deleteCollection(collection)}
-                            showCurator={showCurator}
-                            showLoader={isExpanded}
-                          />
-                        )
-                      }
-                    </Grid>
-                  )}
-                </PaginationController>
-              ))}
-            </article>
-          </>
-        )}
-      </FilterController>
-      )
+                {renderItems((filteredProjects) => (
+                  <PaginationController
+                    enabled={enablePagination}
+                    items={filteredProjects}
+                    itemsPerPage={collectionsPerPage}
+                    fetchDataOptimistically={useCollectionProjects}
+                  >
+                    {(paginatedCollections, isExpanded) => (
+                      <Grid items={paginatedCollections}>
+                        {(collection) =>
+                          myStuffEnabled && collection.isMyStuff ? (
+                            <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
+                          ) : (
+                            <CollectionItem
+                              collection={collection}
+                              isAuthorized={isAuthorized}
+                              deleteCollection={() => deleteCollection(collection)}
+                              showCurator={showCurator}
+                              showLoader={isExpanded}
+                            />
+                          )
+                        }
+                      </Grid>
+                    )}
+                  </PaginationController>
+                ))}
+              </article>
+            </>
+          )}
+        </FilterController>
+      )}
     </MyStuffController>
   );
 }
