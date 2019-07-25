@@ -86,7 +86,7 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
     collections[0].projects = projects;
     return collections;
   }, [collections, isAuthorized, projects]);
-
+  console.log({ collections: [...collections], isAuthorized, projects, ...collectionsWithMyStuffLoaded})
   return children(collectionsWithMyStuffLoaded);
 }
 
