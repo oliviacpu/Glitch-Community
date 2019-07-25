@@ -7,7 +7,6 @@ import rootTeams from '../../curated/teams';
 
 import { useCurrentUser } from '../../state/current-user';
 
-// import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
 import ResetPasswordPage from './reset-password';
 import OauthSignIn from './signin';
