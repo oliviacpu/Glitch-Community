@@ -15,12 +15,14 @@ import Questions from 'Components/questions';
 import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
+import Link from 'Components/link';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
+import { useGlobals } from 'State/globals';
 
 import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
@@ -42,50 +44,54 @@ const calloutGraphics = {
   },
 };
 
+const HomeSection = ({ className = '', ...props }) => (
+  <section className={classnames(styles.homeSection, className)} {...props} />
+);
+
 const FeatureCallouts = ({ content }) => (
-  <section id="feature-callouts" className={styles.featureCalloutsContainer}>
+  <HomeSection id="feature-callouts" className={styles.featureCalloutsContainer}>
     <Row items={content} className={styles.featureCalloutsRow} minWidth="175px">
       {({ label, description, backgroundSrc, href, id }) => (
         <>
-          <a href={href} className={classnames(styles.plainLink, styles.featureCalloutsHeader)}>
+          <Link to={href} className={classnames(styles.plainLink, styles.featureCalloutsHeader)}>
             <div className={styles.featureCalloutsImage} style={{ backgroundImage: `url('${backgroundSrc}')` }}>
               {React.createElement(calloutGraphics[id].component)}
             </div>
             <h2 className={styles.featureCalloutsTitle}>
               <Mark color={calloutGraphics[id].color}>{label}</Mark>
             </h2>
-          </a>
+          </Link>
           <p>{description}</p>
         </>
       )}
     </Row>
-  </section>
+  </HomeSection>
 );
 
 const TopPicks = ({ children }) => (
-  <section id="top-picks">
+  <HomeSection id="top-picks">
     <h2 className={styles.h2}>
       <Mark color="#BCFCFF">Fresh apps</Mark>
     </h2>
     <p className={styles.subtitle}>The latest and greatest projects on Glitch, built by our community of creators.</p>
     {children}
-  </section>
+  </HomeSection>
 );
 
 const AppsWeLove = ({ content }) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
-    <section id="apps-we-love" className={styles.appsWeLoveContainer}>
+    <HomeSection id="apps-we-love" className={styles.appsWeLoveContainer}>
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
-          <a key={id} href={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
+          <Link key={id} to={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
             <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
             <div className={styles.appContent}>
               <h4 className={styles.h4}>{title}</h4>
               <p>{description}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
@@ -113,33 +119,33 @@ const AppsWeLove = ({ content }) => {
           </TabPanel>
         ))}
       </Tabs>
-    </section>
+    </HomeSection>
   );
 };
 
 const collectionStyles = ['wavey', 'diagonal', 'triangle'];
 
 const CuratedCollections = ({ content }) => (
-  <section id="curated-collections" className={styles.curatedCollectionsContainer}>
+  <HomeSection id="curated-collections" className={styles.curatedCollectionsContainer}>
     <h3 className={styles.h3}>Curated collections</h3>
     <Row items={content.map((data) => ({ ...data, id: data.fullUrl }))} className={styles.curatedCollectionRow}>
       {({ title, description, fullUrl, users, count }, i) => (
         <CuratedCollectionContainer collectionStyle={collectionStyles[i]} users={users} href={`/@${fullUrl}`}>
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
-          <span className={styles.curatedCollectionButtonWrap}>
+          <div className={styles.curatedCollectionButtonWrap}>
             <Button decorative>
               View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
-          </span>
+          </div>
         </CuratedCollectionContainer>
       )}
     </Row>
-  </section>
+  </HomeSection>
 );
 
 const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescription, summary, href, cta, relatedContent } }) => (
-  <section id="unified-stories" className={styles.unifiedStories}>
+  <HomeSection id="unified-stories" className={styles.unifiedStories}>
     <div className={styles.unifiedStoriesContainer}>
       <div className={styles.unifiedStoriesHeadline}>
         <div className={styles.unifiedStoriesContentWrap}>
@@ -170,21 +176,21 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
           <ul>
             {relatedContent.filter((related) => !!related.href).map((related) => (
               <li key={related.href}>
-                <a href={related.href} className={styles.plainLink}>
+                <Link to={related.href} className={styles.plainLink}>
                   <h4>{related.title}</h4>
                   <p>{related.source}</p>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </div>
       </div>
     </div>
-  </section>
+  </HomeSection>
 );
 
 const CultureZine = ({ content }) => (
-  <section id="culture-zine" className={styles.cultureZine}>
+  <HomeSection id="culture-zine" className={styles.cultureZine}>
     <div className={styles.cultureZineContainer}>
       <h2 className={styles.h2}>
         <Mark color="#CBC3FF">Where tech meets culture</Mark>
@@ -194,7 +200,7 @@ const CultureZine = ({ content }) => (
         {({ content: cultureZineItems }) => (
           <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
             {({ title, primary_tag: source, feature_image: img, url }) => (
-              <a href={`/culture${url}`} className={styles.plainLink}>
+              <Link to={`/culture${url}`} className={styles.plainLink}>
                 <div className={styles.cultureZineImageWrap}>
                   <MaskImage src={img} />
                 </div>
@@ -202,7 +208,7 @@ const CultureZine = ({ content }) => (
                   <h4 className={styles.h4}>{title}</h4>
                   {source && <p>{source.name}</p>}
                 </div>
-              </a>
+              </Link>
             )}
           </Row>
         )}
@@ -213,7 +219,7 @@ const CultureZine = ({ content }) => (
         </Button>
       </div>
     </div>
-  </section>
+  </HomeSection>
 );
 
 const buildingGraphics = [
@@ -222,13 +228,13 @@ const buildingGraphics = [
 ];
 
 const BuildingOnGlitch = ({ content }) => (
-  <section id="building-on-glitch" className={styles.buildingOnGlitch}>
+  <HomeSection id="building-on-glitch" className={styles.buildingOnGlitch}>
     <h2 className={styles.h2}>
       <Mark color="#FCF3B0">Start building on Glitch</Mark>
     </h2>
     <div className={styles.buildingOnGlitchRow}>
       {content.map(({ href, title, description, cta }, index) => (
-        <a key={href} href={href} className={styles.plainLink}>
+        <Link key={href} to={href} className={styles.plainLink}>
           <div className={styles.startBuildingImageWrap}>
             <img src={buildingGraphics[index]} alt="" />
           </div>
@@ -237,25 +243,25 @@ const BuildingOnGlitch = ({ content }) => (
           <Button decorative>
             {cta} <Arrow />
           </Button>
-        </a>
+        </Link>
       ))}
     </div>
-  </section>
+  </HomeSection>
 );
 
 const MadeInGlitch = () => (
-  <section className={styles.madeInGlitch}>
+  <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
     <Button href={getEditorUrl('community')} emoji="carpStreamer">
       View Source
     </Button>
-  </section>
+  </HomeSection>
 );
 
 // loggedIn and hasProjects are passed as props instead of pulled from context
 // because we want the preview to show what an anonymous user would see
 export const Home = ({ data, loggedIn, hasProjects }) => (
-  <main className={styles.homeContainer}>
+  <main id="main" className={styles.homeContainer}>
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
@@ -274,9 +280,10 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
 
 export const HomePreview = withRouter(({ history }) => {
   const api = useAPI();
+  const { origin, ZINE_POSTS } = useGlobals();
   const onPublish = async (data) => {
     try {
-      await api.post(`${window.location.origin}/api/home`, data);
+      await api.post(`${origin}/api/home`, data);
       history.push('/');
     } catch (e) {
       console.error(e);
@@ -290,11 +297,11 @@ export const HomePreview = withRouter(({ history }) => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <a href="https://community-home-editor.glitch.me">Community Home Editor.</a>
+            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
           </>
         }
       >
-        {(data) => <Home data={{ ...data, cultureZine: window.ZINE_POSTS.slice(0, 4) }} />}
+        {(data) => <Home data={{ ...data, cultureZine: ZINE_POSTS.slice(0, 4) }} />}
       </PreviewContainer>
     </Layout>
   );
@@ -302,10 +309,11 @@ export const HomePreview = withRouter(({ history }) => {
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
+  const { HOME_CONTENT, ZINE_POSTS } = useGlobals();
   return (
     <Layout>
       <Home
-        data={{ ...window.HOME_CONTENT, cultureZine: window.ZINE_POSTS.slice(0, 4) }}
+        data={{ ...HOME_CONTENT, cultureZine: ZINE_POSTS.slice(0, 4) }}
         loggedIn={!!currentUser.login}
         hasProjects={currentUser.projects.length > 0}
       />

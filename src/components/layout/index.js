@@ -9,7 +9,6 @@ import Footer from 'Components/footer';
 import AccountSettingsContainer from 'Components/account-settings-overlay';
 import NewStuffContainer from 'Components/new-stuff';
 import ErrorBoundary from 'Components/error-boundary';
-
 import styles from './styles.styl';
 
 const Layout = withRouter(({ children, searchQuery, history }) => (
@@ -33,6 +32,7 @@ const Layout = withRouter(({ children, searchQuery, history }) => (
     </ErrorBoundary>
   </div>
 ));
+
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   searchQuery: PropTypes.string,

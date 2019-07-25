@@ -8,10 +8,9 @@ if [ "$1" == "-h" ]; then
   exit 0
 fi
 
-# uncomment these lines after this has been merged and deployed:
-# curl https://community.glitch.me/api/home > src/curated/home.json
-# git add src/curated/home.json
-# git commit -m "update home page content"
+curl https://community.glitch.me/api/home > src/curated/home.json
+git add src/curated/home.json
+git commit -m "update home page content"
 
 git checkout master
 git pull

@@ -23,7 +23,10 @@ const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch,
 module.exports = function(external) {
   const app = express.Router();
 
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  // don't enforce HTTPS if building the site locally, not on glitch.com
+  if (!process.env.RUNNING_LOCALLY) {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  }
 
   // CORS - Allow pages from any domain to make requests to our API
   app.use(function(request, response, next) {
@@ -47,13 +50,18 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, title, description, image = imageDefault, socialTitle) {
+  async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
     let scripts = [];
     let styles = [];
+
+    if (wistiaVideoId) {
+      scripts.push('//fast.wistia.com/assets/external/E-v1.js');
+      scripts.push(`//fast.wistia.com/embed/medias/${wistiaVideoId}.jsonp`);
+    }
 
     try {
       const stats = JSON.parse(await readFilePromise('build/stats.json'));
@@ -82,6 +90,7 @@ module.exports = function(external) {
       image,
       scripts,
       styles,
+      canonicalUrl,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       EXTERNAL_ROUTES: JSON.stringify(external),
@@ -89,12 +98,11 @@ module.exports = function(external) {
       HOME_CONTENT: JSON.stringify(homeContent),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
-      CONSTANTS: constants,
       RUNNING_ON: process.env.RUNNING_ON,
     });
   }
 
-  const { CDN_URL } = constants.current;
+  const { CDN_URL, APP_URL } = constants.current;
 
   app.use(
     helmet.contentSecurityPolicy({
@@ -112,9 +120,10 @@ module.exports = function(external) {
 
   app.get('/~:domain', async (req, res) => {
     const { domain } = req.params;
+    const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
     if (!project) {
-      await render(res, domain, `We couldn't find ~${domain}`);
+      await render(res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
@@ -135,11 +144,12 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(res, domain, description, avatar);
+    await render(res, { title: domain, canonicalUrl, description, image: avatar });
   });
 
   app.get('/@:name', async (req, res) => {
     const { name } = req.params;
+    const canonicalUrl = `${APP_URL}/@${name}`;
     const team = await getTeam(name);
     if (team) {
       // detect if team uses default description "an adjectivy team that does adjectivy things"
@@ -151,35 +161,36 @@ module.exports = function(external) {
         description += cheerio.load(md.render(team.description)).text();
       }
 
-      const args = [res, team.name, description];
+      const args = { title: team.name, description, canonicalUrl };
 
       if (team.hasAvatarImage) {
-        args.push(`${CDN_URL}/team-avatar/${team.id}/large`);
+        args.image = `${CDN_URL}/team-avatar/${team.id}/large`;
       } else {
         // default team avatar (need to use PNG version, social cards don't support SVG)
-        args.push(`${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`);
+        args.image = `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`;
       }
 
-      await render(...args);
+      await render(res, args);
       return;
     }
     const user = await getUser(name);
     if (user) {
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
 
-      await render(
-        res,
-        user.name || `@${user.login}`,
+      await render(res, {
+        title: user.name || `@${user.login}`,
+        canonicalUrl,
         description,
-        user.avatarThumbnailUrl || `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932`,
-      );
+        image: user.avatarThumbnailUrl || `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fanon-user-avatar.png?1558646496932`,
+      });
       return;
     }
-    await render(res, `@${name}`, `We couldn't find @${name}`);
+    await render(res, { title: `@${name}`, description: `We couldn't find @${name}`, canonicalUrl });
   });
 
   app.get('/@:name/:collection', async (req, res) => {
     const { name, collection } = req.params;
+    const canonicalUrl = `${APP_URL}/@${name}/${collection}`;
     const collectionObj = await getCollection(name, collection);
     const author = name;
 
@@ -190,10 +201,10 @@ module.exports = function(external) {
       description += ` 🎏 A collection of apps by @${author}`;
       description = description.trimStart(); // if there was no description, trim space before the fish
 
-      await render(res, name, description);
+      await render(res, { title: name, description, canonicalUrl });
       return;
     }
-    await render(res, collection, `We couldn't find @${name}/${collection}`);
+    await render(res, { title: collection, description: `We couldn't find @${name}/${collection}`, canonicalUrl });
   });
 
   app.get('/auth/:domain', async (req, res) => {
@@ -205,7 +216,7 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
-  
+
   app.get('/api/home', async (req, res) => {
     const data = await getHomeData();
     res.send(data);
@@ -223,20 +234,29 @@ module.exports = function(external) {
     }
   });
 
+  app.get('/', async (req, res) => {
+    const socialTitle = 'Glitch: The friendly community where everyone builds the web';
+    const description = 'Simple, powerful, free tools to create and use millions of apps.';
+    const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
+    await render(res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' });
+  });
+
   app.get('/create', async (req, res) => {
     const title = 'Glitch - Create';
     const socialTitle = 'Get Started Creating on Glitch';
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
-    await render(res, title, description, image, socialTitle);
+    const canonicalUrl = `${APP_URL}/create`;
+    await render(res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' });
   });
+  
 
   app.get('*', async (req, res) => {
     const title = 'Glitch';
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
-    const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
-    await render(res, title, description, image, socialTitle);
+    const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
+    await render(res, { title, description, image, socialTitle });
   });
 
   return app;

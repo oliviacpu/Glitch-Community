@@ -8,7 +8,7 @@ import categories from '../../curated/categories';
 import styles from './more-ideas.styl';
 
 const MoreIdeas = () => (
-  <section className={styles.container}>
+  <aside className={styles.container}>
     <Heading tagName="h2">More Ideas</Heading>
     <Grid items={categories} className={styles.grid}>
       {(category) => (
@@ -18,7 +18,7 @@ const MoreIdeas = () => (
         </Link>
       )}
     </Grid>
-  </section>
+  </aside>
 );
 
 export default MoreIdeas;

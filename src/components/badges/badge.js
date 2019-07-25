@@ -13,7 +13,7 @@ export const TYPES = ['success', 'warning', 'error', 'private'];
  */
 const Badge = ({ type, children }) => {
   const className = cx({ badge: true, [type]: true });
-  return <div className={className}>{children}</div>;
+  return <span className={className}>{children}</span>;
 };
 
 Badge.propTypes = {

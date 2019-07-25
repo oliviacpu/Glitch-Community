@@ -11,15 +11,18 @@ import Heading from 'Components/text/heading';
 import Button from 'Components/buttons/button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
+import Video from 'Components/video';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
+import LazyLoader from 'Components/lazy-loader';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
+import { CDN_URL } from 'Utils/constants';
 
 import styles from './create.styl';
 
@@ -46,8 +49,8 @@ const Mark = ({ color, children }) => (
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
 function Banner() {
-  const illustration = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561575405393';
-  const shape = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561575627767';
+  const illustration = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fillustration.svg?v=1561575405393`;
+  const shape = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561575627767`;
 
   return (
     <section className={classNames(styles.section, styles.banner)}>
@@ -84,7 +87,7 @@ function WhatIsGlitch() {
         </Heading>
         <div className={classNames(styles.sectionDescription, styles.whatIsGlitchDescription)}>
           <Text size="16px">Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.</Text>
-          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to fullstack Node apps.</Text>
+          <Text size="16px">Use Glitch to build anything from a good ol’ static webpage to full-stack Node apps.</Text>
         </div>
       </div>
       <div className={styles.whatIsGlitchVideoContainer}>
@@ -97,44 +100,44 @@ function WhatIsGlitch() {
 const FRAMEWORK_STARTERS = [
   {
     name: 'React',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.svg?v=1561557350494',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Freact-logo.svg?v=1561557350494`,
     color: '#000',
     domain: 'starter-react',
   },
   {
     name: 'Ember',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.svg?v=1561557345876',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fember-logo.svg?v=1561557345876`,
     color: '#f8d1d5',
     domain: 'ember',
   },
   {
     name: 'Nuxt',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.svg?v=1561557346924',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fnuxt-logo.svg?v=1561557346924`,
     color: '#ebfef5',
     domain: 'nuxt-hello-world',
   },
   {
     name: 'Vue',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.svg?v=1561557349215',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvue-logo.svg?v=1561557349215`,
     color: '#ccfde5',
     domain: 'vue-ssr',
   },
   {
     name: 'Angular',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular-logo.svg?v=1561557349215',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fangular-logo.svg?v=1561557349215`,
     color: '#f9dcd1',
     domain: 'angular-quickstart',
   },
   {
     name: 'Svelte',
-    logo: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.svg?v=1561557347852',
+    logo: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fsvelte-logo.svg?v=1561557347852`,
     color: '#f6c6b4',
     domain: 'sveltejs-template-starter',
   },
 ];
 const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify', 'aframe'];
-const frameworkBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217';
-const platformBlob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539';
+const frameworkBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217`;
+const platformBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539`;
 
 const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
@@ -228,16 +231,16 @@ function Collaborate() {
   const title = 'Code together';
   const description =
     'Invite friends to work with you on public or private projects. Anyone with a browser can jump in and pick up where you left off, and private .env files keep secrets like API keys, well, secret.';
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069';
-  const pyramid = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218';
+  const blob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbean.svg?v=1561575068069`;
+  const pyramid = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fpyramid.svg?v=1561575628218`;
 
   return (
     <div className={styles.collaborate}>
       <ScreencapSection
         title={title}
         description={description}
-        video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate.mp4?v=1562171466297"
-        smallVideos={['https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate-small.mp4?v=1562171465382']}
+        video={`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate.mp4?v=1562171466297`}
+        smallVideos={[`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fcollaborate-small.mp4?v=1562171465382`]}
         blob={blob}
         image={pyramid}
         imageName="pyramid"
@@ -251,17 +254,17 @@ function YourAppIsLive() {
   const title = 'Your app is live, instantly';
   const description =
     "There's no deployment setup—as soon as you create a new project, your Glitch app is live with its own URL (or your custom domain!). Share or embed anywhere, and invite anyone to check out your code or remix it.";
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731';
-  const live = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737';
+  const blob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwhale.svg?v=1562079907731`;
+  const live = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.svg?v=1562079805737`;
 
   return (
     <ScreencapSection
       title={title}
       description={description}
-      video="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585"
+      video={`${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive.mp4?v=1562171472585`}
       smallVideos={[
-        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891',
-        'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530',
+        `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small.mp4?v=1562171471891`,
+        `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flive-small2.mp4?v=1562171477530`,
       ]}
       blob={blob}
       image={live}
@@ -275,23 +278,18 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
   const Videos = () => (
     <div className={styles.screencapContainer}>
       {smallVideos.map((v) => (
-        <video
+        <Video
+          sources={[{ src: v, minWidth: 0, maxWidth: 669 }]}
           key={v}
           className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
-          src={v}
-          muted
+          track="muted"
           autoPlay
           loop
-          playsInline
-        >
-          <source src={v} />
-        </video>
+        />
       ))}
 
       <div className={classNames(styles.screencap, styles.bigScreencap)}>
-        <video src={video} muted autoPlay loop playsInline>
-          <source src={video} />
-        </video>
+        <Video track="muted" autoPlay loop sources={[{ src: video, minWidth: 670 }]} />
       </div>
 
       <div className={classNames(styles.screencapBlob, styles.blobContainer)}>
@@ -326,8 +324,8 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
 }
 
 function Help() {
-  const blob = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561575218038';
-  const ambulance = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561575219950';
+  const blob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fboomerang.svg?v=1561575218038`;
+  const ambulance = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ffiretruck.svg?v=1561575219950`;
 
   return (
     <section className={classNames(styles.section, styles.help)}>
@@ -386,7 +384,7 @@ function Tools() {
 }
 
 function VSCode() {
-  const vscodeIcon = 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485';
+  const vscodeIcon = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.png?v=1562004128485`;
 
   return (
     <section className={classNames(styles.section, styles.help)}>
@@ -410,20 +408,26 @@ function VSCode() {
       </Text>
 
       <div className={styles.screencapContainer}>
-        <video
+        <Video
           className={classNames(styles.screencap, styles.smallScreencap)}
-          src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096"
-          muted
+          sources={[
+            {
+              src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096`,
+              minWidth: 0,
+              maxWidth: 669,
+            },
+          ]}
+          track="muted"
           autoPlay
           loop
-          playsInline
-        >
-          <source src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode-small.mp4?v=1562184049096" />
-        </video>
+        />
         <div className={classNames(styles.screencap, styles.bigScreencap)}>
-          <video src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854" muted autoPlay loop playsInline>
-            <source src="https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854" />
-          </video>
+          <Video
+            sources={[{ src: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fvscode.mp4?v=1562182730854`, minWidth: 670 }]}
+            track="muted"
+            autoPlay
+            loop
+          />
         </div>
       </div>
     </section>
@@ -469,34 +473,41 @@ function Remix() {
   }, []);
 
   return (
-    <section className={classNames(styles.section, styles.remix)}>
-      <Heading className={styles.h2} tagName="h2">
-        <Mark color="#FBF2B8">Remix any app to get started</Mark>
-      </Heading>
-      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
-        <TabList className={styles.remixAppTabs}>
-          {apps.map((app) => (
-            <Tab className={styles.remixAppTab} key={app.domain}>
-              <ProjectAvatar project={app} hideTooltip />
-              <Text size="14px">{app.domain}</Text>
-            </Tab>
-          ))}
-        </TabList>
+    <VisibilityContainer>
+      {({ wasEverVisible }) => (
+        <section className={classNames(styles.section, styles.remix)}>
+          <Heading className={styles.h2} tagName="h2">
+            <Mark color="#FBF2B8">Remix any app to get started</Mark>
+          </Heading>
 
-        {apps.map((app, i) => (
-          <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
-            <div className={styles.embedContainer}>
-              <Embed domain={app.domain} />
-            </div>
-            <div className={styles.embedRemixBtn}>
-              <RemixButton type="cta" emoji="microphone" app={app}>
-                Remix Your Own
-              </RemixButton>
-            </div>
-          </TabPanel>
-        ))}
-      </Tabs>
-    </section>
+          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
+            <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(tabIndex) => setCurrentTab(tabIndex)}>
+              <TabList className={styles.remixAppTabs}>
+                {apps.map((app) => (
+                  <Tab className={styles.remixAppTab} key={app.domain}>
+                    <ProjectAvatar project={app} hideTooltip />
+                    <Text size="14px">{app.domain}</Text>
+                  </Tab>
+                ))}
+              </TabList>
+
+              {apps.map((app, i) => (
+                <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
+                  <div className={styles.embedContainer}>
+                    <Embed domain={app.domain} />
+                  </div>
+                  <div className={styles.embedRemixBtn}>
+                    <RemixButton type="cta" emoji="microphone" app={app}>
+                      Remix Your Own
+                    </RemixButton>
+                  </div>
+                </TabPanel>
+              ))}
+            </Tabs>
+          </LazyLoader>
+        </section>
+      )}
+    </VisibilityContainer>
   );
 }
 
@@ -506,49 +517,49 @@ function Categories() {
       name: 'Games',
       color: '#fae3d1',
       url: '/games',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ftetris.svg?v=1561575626455',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Ftetris.svg?v=1561575626455`,
     },
     {
       name: 'Bots',
       color: '#c7bff0',
       url: '/handy-bots',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561575218667',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbot.svg?v=1561575218667`,
     },
     {
       name: 'Music',
       color: '#a9c4f7',
       url: '/music',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmusic.svg?v=1561575625725',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fmusic.svg?v=1561575625725`,
     },
     {
       name: 'Art',
       color: '#f2a7bb',
       url: '/art',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fart.svg?v=1561575091996',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fart.svg?v=1561575091996`,
     },
     {
       name: 'Productivity',
       color: '#7aa4d3',
       url: '/tools-for-work',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwork.svg?v=1561575627331',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fwork.svg?v=1561575627331`,
     },
     {
       name: 'Hardware',
       color: '#6cd8a9',
       url: '/hardware',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg?v=1561575405808',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg?v=1561575405808`,
     },
     {
       name: 'Building Blocks',
       color: '#65cad2',
       url: '/building-blocks',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg?v=1561575219123',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg?v=1561575219123`,
     },
     {
       name: 'Learn to Code',
       color: '#f8d3c8',
       url: '/learn-to-code',
-      icon: 'https://cdn.glitch.com/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg?v=1561575404279',
+      icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg?v=1561575404279`,
     },
   ];
   return (
@@ -572,10 +583,10 @@ function Categories() {
 const CreatePage = () => (
   <div style={{ maxWidth: '100vw', overflow: 'hidden', background: '#f5f5f5' }}>
     <Layout>
-      <main className={styles.main}>
+      <main id="main" className={styles.main}>
         <Banner />
         <WhatIsGlitch />
-        <VisibilityContainer>{({ wasEverVisible }) => wasEverVisible && <Starters />}</VisibilityContainer>
+        <Starters />
         <Collaborate />
         <YourAppIsLive />
         <Tools />

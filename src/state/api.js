@@ -1,7 +1,7 @@
-/* globals API_URL */
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize } from 'lodash';
+import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
@@ -47,6 +47,29 @@ export const getAPIForToken = memoize((persistentToken) => {
 export function APIContextProvider({ children }) {
   const { persistentToken } = useCurrentUser();
   const api = getAPIForToken(persistentToken);
+
+  const [pendingRequests, setPendingRequests] = useState([]);
+  if (!api.persistentToken) {
+    // stall requests until we have a persistentToken
+    ['get'].forEach((method) => {
+      api[method] = async (...args) => {
+        const apiWithToken = await new Promise((resolve) => {
+          setPendingRequests((latestPendingRequests) => [...latestPendingRequests, resolve]);
+        });
+        return apiWithToken[method](...args);
+      };
+    });
+  }
+  useEffect(() => {
+    if (api.persistentToken && pendingRequests.length) {
+      // go back and finally make all of those requests
+      pendingRequests.forEach((request) => request(api));
+      setPendingRequests((latestPendingRequests) => (
+        latestPendingRequests.filter((request) => !pendingRequests.includes(request))
+      ));
+    }
+  }, [api, pendingRequests]);
+
   return <Context.Provider value={api}>{children}</Context.Provider>;
 }
 
@@ -147,18 +170,7 @@ export const useAPIHandlers = () => {
 
       // projects
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
-      updateProjectDomain: ({ project }) =>
-        api.post(
-          `/project/domainChanged?projectId=${project.id}&authorization=${api.persistentToken}`,
-          {},
-          {
-            transformRequest: (data, headers) => {
-              // this endpoint doesn't like OPTIONS requests, which axios sends if there is an auth header (case 3328590)
-              delete headers.Authorization;
-              return data;
-            },
-          },
-        ),
+      updateProjectDomain: ({ project }) => api.post(`/project/domainChanged?projectId=${project.id}`),
       undeleteProject: ({ project }) => api.post(`/projects/${project.id}/undelete`),
 
       // teams

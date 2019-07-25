@@ -27,7 +27,6 @@ const DeletedProject = ({ project, onClick }) => {
         <div className={styles.projectName}>{project.domain}</div>
         <TooltipContainer
           type="action"
-          id="undelete-project"
           target={
             <div className={styles.buttonWrap}>
               <Button size="small" disabled decorative>
@@ -45,7 +44,7 @@ const DeletedProject = ({ project, onClick }) => {
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
           <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
-          <div className={styles.projectName}>{project.domain}</div>
+          <span className={styles.projectName}>{project.domain}</span>
           <div className={styles.buttonWrap}>
             <Button size="small" decorative>
               Undelete

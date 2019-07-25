@@ -14,63 +14,91 @@ export const SIZES = ['small'];
  * Button Component
  */
 
-const Button = React.forwardRef(({
-  onClick, href, disabled, type, size, submit, matchBackground, hover, children, active, decorative, newTab, image, imagePosition, emoji,
-}, ref) => {
-  const className = cx({
-    btn: true,
-    cta: type === 'cta',
-    small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
-    tertiary: ['tertiary', 'dangerZone'].includes(type),
-    dangerZone: type === 'dangerZone',
-    unstyled: type === 'dropDown',
-    hasImage: emoji || image,
-    hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
-    hasSunglassesEmoji: emoji === 'sunglasses',
-    padLeft: (image || emoji) && imagePosition === 'left',
-    matchBackground: matchBackground === true,
-    active,
-    hover,
-    decorative,
-  });
+const Button = React.forwardRef(
+  (
+    {
+      onClick,
+      href,
+      disabled,
+      type,
+      size,
+      submit,
+      matchBackground,
+      hover,
+      children,
+      active,
+      decorative,
+      newTab,
+      image,
+      imagePosition,
+      emoji,
+      ariaPressed,
+      className,
+    },
+    ref,
+  ) => {
+    const fullClassName = cx({
+      btn: true,
+      cta: type === 'cta',
+      small: size === 'small' || type === 'dangerZone', // we want to demphasize dangerous actions, so we make them small
+      tertiary: ['tertiary', 'dangerZone'].includes(type),
+      dangerZone: type === 'dangerZone',
+      unstyled: type === 'dropDown',
+      hasImage: emoji || image,
+      hasNarrowEmoji: ['balloon', 'index', 'policeOfficer'].includes(emoji),
+      hasSunglassesEmoji: emoji === 'sunglasses',
+      padLeft: (image || emoji) && imagePosition === 'left',
+      matchBackground: matchBackground === true,
+      active,
+      hover,
+      decorative,
+    }, className);
 
-  const content = (
-    <>
-      {children}
-      {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
-      {image && <ButtonImage image={image} position={imagePosition} />}
-    </>
-  );
+    const content = (
+      <>
+        {children}
+        {emoji && <ButtonEmoji emoji={emoji} position={imagePosition} />}
+        {image && <ButtonImage image={image} position={imagePosition} />}
+      </>
+    );
 
-  if (href) {
-    let targetProps = {};
-    if (newTab) {
-      targetProps = {
-        target: '_blank',
-        rel: 'noopener noreferrer',
-      };
+    if (href) {
+      let targetProps = {};
+      if (newTab) {
+        targetProps = {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        };
+      }
+      return (
+        <Link to={href} ref={ref} onClick={onClick} className={fullClassName} {...targetProps}>
+          {content}
+        </Link>
+      );
     }
-    return (
-      <Link to={href} ref={ref} onClick={onClick} className={className} {...targetProps}>
-        {content}
-      </Link>
-    );
-  }
 
-  if (decorative) {
-    return (
-      <span className={className} disabled={disabled}>
-        {content}
-      </span>
-    );
-  }
+    if (decorative) {
+      return (
+        <div className={fullClassName} disabled={disabled}>
+          {content}
+        </div>
+      );
+    }
 
-  return (
-    <button ref={ref} onClick={onClick} className={className} disabled={disabled} type={submit ? 'submit' : 'button'}>
-      {content}
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className={fullClassName}
+        disabled={disabled}
+        type={submit ? 'submit' : 'button'}
+        aria-pressed={ariaPressed}
+      >
+        {content}
+      </button>
+    );
+  },
+);
 
 Button.propTypes = {
   /** element(s) to display in the button */
@@ -113,6 +141,8 @@ Button.propTypes = {
   imagePosition: PropTypes.oneOf(['left', 'right']),
   /** emoji name */
   emoji: PropTypes.string,
+  ariaPressed: PropTypes.string,
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -130,6 +160,8 @@ Button.defaultProps = {
   image: null,
   imagePosition: 'right',
   emoji: null,
+  ariaPressed: null,
+  className: '',
 };
 
 const ButtonImage = ({ image, position, up1 }) => {

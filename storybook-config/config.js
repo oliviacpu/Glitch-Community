@@ -7,14 +7,11 @@ import { withInfo } from '@storybook/addon-info';
 import { MemoryRouter } from 'react-router-dom';
 
 // initialize globals
-window.CDN_URL = 'https://cdn.glitch.com';
-window.EDITOR_URL = 'https://glitch.com/edit/';
-window.APP_URL = 'https://glitch.com';
+window.RUNNING_ON = 'production';
 
 
 dayjs.extend(relativeTimePlugin);
 dayjs.extend(convertPlugin);
-
 
 const enableLinks = (story) => <MemoryRouter>{story()}</MemoryRouter>;
 
@@ -31,12 +28,15 @@ addDecorator(
   }),
 );
 
+function requireAll(requireContext) {
+  return requireContext.keys().map(requireContext);
+}
+
 function loadStories() {
   require('../stories/index.js');
   require('../stories/inputs.js');
-  require('Components/overlays/story');
-  require('Components/new-stuff/story');
-
+  // pulls in all nested stories, ex: src/components/buttons/story.js
+  requireAll(require.context("../src/", true, /story.js/));
   // You can require as many stories as you need.
 }
 

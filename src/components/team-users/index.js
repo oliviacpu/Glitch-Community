@@ -29,7 +29,7 @@ function InvitedUser({ user, team, onRevokeInvite }) {
   // resend the invite
   const resendInvite = async () => {
     try {
-      await inviteUserToTeam({ team }, user);
+      await inviteUserToTeam({ team, user });
       createNotification(`Resent invite to ${user.name}!`, { type: 'success' });
     } catch (error) {
       captureException(error);
@@ -50,7 +50,7 @@ function InvitedUser({ user, team, onRevokeInvite }) {
               <PopoverInfo>
                 <div className={styles.avatar}>
                   <UserLink user={user}>
-                    <UserAvatar user={user} />
+                    <UserAvatar user={user} hideTooltip />
                   </UserLink>
                 </div>
                 <div className={styles.nameLoginWrap}>
@@ -98,7 +98,6 @@ const WhitelistedDomain = ({ domain, setDomain }) => (
       <div style={{ position: 'relative' }}>
         <TransparentButton onClick={togglePopover}>
           <TooltipContainer
-            id="whitelisted-domain-tooltip"
             type="action"
             tooltip={visible ? null : `Anyone with an @${domain} email can join`}
             target={
