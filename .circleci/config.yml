@@ -22,58 +22,24 @@ jobs:
           key: dependency-cache-v2-{{ checksum "package.json" }}
           paths:
             - ~/.npm
-            - ~/.cache/Cypress
       - run:
           name: eslint
           command: npm run lint
       - run:
-          name: mocha tests
-          command: npm test
-          environment:
-            MOCHA_FILE: /tmp/circleci-test-results/mocha/test-results.xml
-      - run:
-          name: jest tests
-          command: npm run jest
-      - run:
           name: integration tests
-          command: npm run cy:ci
+          command: ./sh/cypress.sh ${CIRCLE_BRANCH}
           environment:
             CYPRESS_SCREENSHOTS_FOLDER: /tmp/circleci-artifacts/screenshots
             CYPRESS_VIDEOS_FOLDER: /tmp/circleci-artifacts/videos
       - persist_to_workspace:
           root: ~/FogCreek
-          paths: Glitch-Editor
+          paths: Glitch-Community
       - store_test_results:
           path: /tmp/circleci-test-results
       - store_artifacts:
           path: /tmp/circleci-artifacts
-  deploy:
-    docker:
-      - image: circleci/node:10-browsers
-    working_directory: ~/FogCreek/Glitch-Editor
-    steps:
-      - attach_workspace:
-          at: ~/FogCreek
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
-      - run:
-          name: production build
-          command: npm run build:production
-      - run:
-          name: s3-upload
-          command: |
-            sh/s3-upload edit/
-            sh/s3-upload embed/
 workflows:
   version: 2
   regular-workflow:
     jobs:
       - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only:
-                - master
