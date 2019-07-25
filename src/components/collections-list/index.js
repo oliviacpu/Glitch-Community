@@ -41,7 +41,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   }
 
   if (!myStuffEnabled || maybeTeam) {
-    return collections;
+    return children(collections);
   }
 
   // filter out mystuff when the collection is empty and user isn't authorized
