@@ -12,12 +12,12 @@ const Context = createContext(createCounter());
 
 const useUniqueId = () => {
   const getCounter = useContext(Context);
-  const [uniqueId] = useState(getCounter);
+  const [uniqueId] = useState(() => getCounter());
   return `unique-${uniqueId}`;
 };
 
 export const UniqueIdProvider = ({ children }) => {
-  const getCounter = useState(createCounter);
+  const getCounter = useState(() => createCounter());
   return <Context.Provider value={getCounter}>{children}</Context.Provider>;
 };
 
