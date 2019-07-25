@@ -37,8 +37,8 @@ function CollectionsList({
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
-  const myStuffEnabled = useDevToggle("My Stuff");
-  
+  const myStuffEnabled = useDevToggle('My Stuff');
+
   function deleteCollection(collection) {
     setDeletedCollectionIds((ids) => [...ids, collection.id]);
     return deleteItem({ collection });
@@ -54,15 +54,15 @@ function CollectionsList({
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   // put mystuff at beginning of list (and fake one if it's not there yet)
-  let collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
-  
-  // filter out mystuff when there's no projects inside and user isn't authorized
-  if (!isAuthorized) {
-    collectionsWithMyStuff = collectionsWithMyStuff.filter(c => !(c.isMyStuff && c.projects.length === 0))
-  }
-  
+  const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
+  // console.log(collectionsWithMyStuff)
+  // // filter out mystuff when there's no projects inside and user isn't authorized
+  // if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && collectionsWithMyStuff[0].projects.length === 0) {
+  //   collectionsWithMyStuff.shift();
+  // }
+
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
-  
+
   return (
     <FilterController
       matchFn={matchFn}
@@ -96,10 +96,11 @@ function CollectionsList({
               >
                 {(paginatedCollections, isExpanded) => (
                   <Grid items={paginatedCollections}>
-                    {(collection) =>
-                      myStuffEnabled && collection.isMyStuff ? (
-                        <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
-                      ) : (
+                    {(collection) => {
+                      if (myStuffEnabled && collection.isMyStuff) {
+                        return <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
+                      }
+                      return (
                         <CollectionItem
                           collection={collection}
                           isAuthorized={isAuthorized}
@@ -107,6 +108,10 @@ function CollectionsList({
                           showCurator={showCurator}
                           showLoader={isExpanded}
                         />
+                      )
+                    }
+                      
+                        
                       )
                     }
                   </Grid>
