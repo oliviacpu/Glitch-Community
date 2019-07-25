@@ -86,9 +86,12 @@ function MyStuffCollectionLoader({ collections, isAuthorized, children }) {
     collections[0].projects = projects;
     return collections;
   }, [collections, isAuthorized, projects]);
-  console.log({ collections: [...collections], isAuthorized, projects, ...collectionsWithMyStuffLoaded})
+  console.log({ collections: [...collections], isAuthorized, projects, collectionsWithMyStuffLoaded: [...collectionsWithMyStuffLoaded]})
   return children(collectionsWithMyStuffLoaded);
 }
+
+//the bug: user has a real my stuff collection so it shows up, then we fetch for the projects within it and if it's empty we hide it, thus the flash
+// solution need to show a loader until we have finished fetching things
 
 function CollectionsListWithMyStuff({ collections, ...props }) {
   const [myStuffCollection, collectionsWithoutMyStuff] = React.useMemo(() => getMyStuffFromCollections({ collections }, [collections]));
