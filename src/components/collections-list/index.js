@@ -33,6 +33,7 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
+  console.log("rawCollections", rawCollections)
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -48,7 +49,7 @@ function CollectionsList({
 
   let orderedCollections;
   const myStuffEnabled = useDevToggle('My Stuff');
-  if (myStuffEnabled) {
+  if (myStuffEnabled && collections.length > 0 && collections[0].isMyStuff) {
     const myStuffCollection = collections.shift();
     orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
     orderedCollections.unshift(myStuffCollection);
