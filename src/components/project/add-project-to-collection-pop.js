@@ -27,7 +27,7 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import useDevToggle from 'State/dev-toggles';
 import { useAPI } from 'State/api';
-import { getMyStuffFromCollections, getCollectionsWithMyStuffAtFront, createCollection } from 'Models/collection';
+import { getCollectionsWithMyStuff, createCollection } from 'Models/collection';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import styles from './popover.styl';
 
@@ -107,11 +107,9 @@ function useCollectionSearch(query, project, collectionType) {
   const myStuffEnabled = useDevToggle('My Stuff');
 
   const searchResultsWithMyStuff = useMemo(() => {
-    if (myStuffEnabled && searchResults.collection && collectionType === 'user') {
-      const [myStuffCollection, collectionsWithoutMyStuff] = getMyStuffFromCollections({ collections: searchResults.collection });
-      if (query.length === 0 || myStuffCollection) {
-        return getCollectionsWithMyStuffAtFront({ myStuffCollection, collections: collectionsWithoutMyStuff });
-      }
+    const shouldPutMyStuffAtFrontOfList = myStuffEnabled && searchResults.collection && collectionType === 'user' && query.length === 0;
+    if (shouldPutMyStuffAtFrontOfList) {
+      return getCollectionsWithMyStuff({ collections: searchResults.collection });
     }
     return searchResults.collection;
   }, [searchResults, query]);

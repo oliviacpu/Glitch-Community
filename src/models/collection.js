@@ -11,19 +11,6 @@ import { getCollectionPair } from './words';
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1541449590339';
 export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1540389405633';
 
-export function getMyStuffFromCollections({ collections }) {
-  let myStuffCollection = null;
-  const collectionsWithoutMyStuff = collections.filter((collection) => {
-    // this should be `if (collection.isMyStuff)` but unfortunately search results do not currently return that property
-    if (collection.name === 'My Stuff') {
-      myStuffCollection = collection;
-      return false;
-    }
-    return true;
-  });
-  return [myStuffCollection, collectionsWithoutMyStuff];
-}
-
 const nullMyStuffCollection = {
   isMyStuff: true,
   name: 'My Stuff',
@@ -32,15 +19,6 @@ const nullMyStuffCollection = {
   projects: [],
   id: 'nullMyStuff',
 };
-
-export function getCollectionsWithMyStuffAtFront({ myStuffCollection, collections }) {
-  if (!myStuffCollection) {
-    myStuffCollection = nullMyStuffCollection;
-  }
-  const collectionsClone = [...collections];
-  collectionsClone.unshift(myStuffCollection);
-  return collectionsClone;
-}
 
 // puts my stuff at the front of the array, if my stuff doesn't exist we add it.
 export function getCollectionsWithMyStuff({ collections }) {
