@@ -1,16 +1,20 @@
 const { envs } = require('Shared/constants');
 
+// The current environment is based on the RUNNING_ON environment variable,
+// unless we're running under a staging/dev hostname, in which case we use the
+// corresponding environment config.
 const getBrowserEnv = () => {
-  const runningOn = window.RUNNING_ON;
-
-  let envFromOrigin = 'production';
-  if (window.location.origin.includes('staging.glitch.com')) {
-    envFromOrigin = 'staging';
-  } else if (window.location.origin.includes('glitch.development')) {
-    envFromOrigin = 'development';
+  /* global RUNNING_ON */
+  if (origin.includes('staging.glitch.com')) {
+    return 'staging';
   }
-
-  return envs[runningOn] ? runningOn : envFromOrigin;
+  if (origin.includes('glitch.development')) {
+    return 'development';
+  }
+  if (envs[RUNNING_ON]) {
+    return RUNNING_ON;
+  }
+  return 'production';
 };
 
 const getNodeEnv = () => {

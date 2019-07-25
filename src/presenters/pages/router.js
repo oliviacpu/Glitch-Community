@@ -8,7 +8,6 @@ import rootTeams from 'Curated/teams';
 import { useCurrentUser } from 'State/current-user';
 import { useGlobals } from 'State/globals';
 
-// import IndexPage from './index';
 import { FacebookLoginPage, GitHubLoginPage, GoogleLoginPage, SlackLoginPage, EmailTokenLoginPage } from './login';
 import ResetPasswordPage from './reset-password';
 import OauthSignIn from './signin';
