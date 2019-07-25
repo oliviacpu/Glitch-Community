@@ -81,7 +81,7 @@ function MyStuffCollectionLoader({ collections, myStuffCollection, isAuthorized,
     if (status === "loading") {
       return [];
     }
-
+    console.log("here?")
     // add projects to mystuff when it's loaded
     if (collections[0].isMyStuff && status === "ready") {
       collections[0].projects = projects;
