@@ -79,7 +79,7 @@ export function APIContextProvider({ children }) {
     setCache((oldCache) => mapValues(oldCache, ({ data }) => ({ data, expires })));
   }, [api.persistentToken]);
   useEffect(() => {
-    if (cachePending.length) {
+    if (cachePending.size) {
       cachePending.forEach(async (url) => {
         console.log(url);
         let result = { status: 'loading', expires: Infinity };
@@ -93,10 +93,11 @@ export function APIContextProvider({ children }) {
         }
         setCache((oldCache) => ({ ...oldCache, [url]: result }));
       });
-      setCachePending((latestCachePending) => new Set(latestCachePending.values().filter((url) => !cachePending.has(url))));
+      setCachePending((latestCachePending) => new Set([...latestCachePending].filter((url) => !cachePending.has(url))));
     }
   }, [api, cachePending]);
   const getCached = (url) => {
+    console.log(cache, cachePending);
     const response = cache[url] || { status: 'loading', expires: -Infinity };
     if (response.expires < Date.now() && !cachePending.has(url)) {
       console.log('makeRequest', url);
@@ -104,6 +105,7 @@ export function APIContextProvider({ children }) {
     }
     return response;
   };
+  if (typeof window !== 'undefined') window.getCached = getCached;
 
   return (
     <ApiContext.Provider value={api}>
