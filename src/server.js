@@ -1,9 +1,11 @@
 import React from 'react';
 import { StaticRouter } from 'react-router-dom';
+import { resetIdCounter } from 'react-tabs';
+import { resetUniqueId } from 'Hooks/use-unique-id';
 import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
-export const Page = ({ origin, route, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
+const Page = ({ origin, route, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
   <StaticRouter location={route}>
     <GlobalsProvider
       origin={origin}
@@ -16,4 +18,9 @@ export const Page = ({ origin, route, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS 
   </StaticRouter>
 );
 
-export default Page;
+const resetState = () => {
+  resetIdCounter();
+  resetUniqueId();
+};
+
+export { Page, resetState };

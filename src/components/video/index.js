@@ -1,24 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-function Video({ sources, track, ...props }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+import useWindowSize from 'Hooks/use-window-size';
 
-  const filterVideos = () => sources.filter((s) => windowWidth >= s.minWidth && (!s.maxWidth || windowWidth <= s.maxWidth));
-  const [visibleVideos, setVisibleVideos] = useState(filterVideos());
-  useEffect(
-    () => {
-      setVisibleVideos(filterVideos());
-    },
-    [windowWidth, sources],
-  );
+function Video({ sources, track, ...props }) {
+  const [windowWidth] = useWindowSize();
+  const visibleVideos = sources.filter((s) => windowWidth >= s.minWidth && (!s.maxWidth || windowWidth <= s.maxWidth));
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
