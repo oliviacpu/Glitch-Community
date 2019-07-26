@@ -98,7 +98,7 @@ module.exports = function(external) {
         rendered = html;
       } catch (error) {
         captureException(error);
-        console.error(error.toString());
+        console.error(error);
       }
     }
 
@@ -165,9 +165,9 @@ module.exports = function(external) {
     }
 
     const cache = {
-      [`v1/projects/by/domain?domain=${domain}`]: { status: 'ready', value: project },
-      [`v1/projects/by/domain/teams?domain=${domain}`]: { status: 'ready', value: [] },
-      [`v1/projects/by/domain/users?domain=${domain}`]: { status: 'ready', value: [] },
+      [`v1/projects/by/domain?domain=${domain}`]: { status: 'ready', value: { [domain]: project } },
+      [`v1/projects/by/domain/teams?domain=${domain}`]: { status: 'ready', value: { items: [], hasMore: false } },
+      [`v1/projects/by/domain/users?domain=${domain}`]: { status: 'ready', value: { items: [], hasMore: false } },
     };
 
     await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
