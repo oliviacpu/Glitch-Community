@@ -6,7 +6,7 @@ import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
 export const ApiContext = createContext();
-export const CacheContext = createContext();
+const CacheContext = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
   const cache = {};
@@ -81,6 +81,7 @@ export function APIContextProvider({ children }) {
   useEffect(() => {
     if (cachePending.length) {
       cachePending.forEach(async (url) => {
+        console.log(url);
         let result = { status: 'loading', expires: Infinity };
         setCache((oldCache) => ({ ...oldCache, [url]: result }));
         try {
@@ -96,10 +97,12 @@ export function APIContextProvider({ children }) {
     }
   }, [api, cachePending]);
   const getCached = (url) => {
-    if (!cache[url] || cache[url].expires < Date.now()) {
+    const response = cache[url] || { status: 'loading', expires: -Infinity };
+    if (response.expires < Date.now() && !cachePending.has(url)) {
+      console.log('makeRequest', url);
       setCachePending((latestCachePending) => new Set([...latestCachePending, url]));
     }
-    return cache[url] || { status: 'loading' };
+    return response;
   };
 
   return (
@@ -113,6 +116,11 @@ export function APIContextProvider({ children }) {
 
 export function useAPI() {
   return useContext(ApiContext);
+}
+
+export function useCached(url) {
+  const getCached = useContext(CacheContext);
+  return getCached(url);
 }
 
 /*

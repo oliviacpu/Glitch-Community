@@ -32,6 +32,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
+import { useCached } from 'State/api';
 
 import styles from './project.styl';
 
@@ -228,23 +229,27 @@ async function addProjectBreadcrumb(projectWithMembers) {
   return projectWithMembers;
 }
 
-const ProjectPageContainer = ({ name: domain }) => (
-  <Layout>
-    <AnalyticsContext properties={{ origin: 'project' }}>
-      <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
-        {(project) =>
-          project ? (
-            <>
-              <Helmet title={project.domain} />
-              <ProjectPage project={project} />
-            </>
-          ) : (
-            <NotFound name={domain} />
-          )
-        }
-      </DataLoader>
-    </AnalyticsContext>
-  </Layout>
-);
+const ProjectPageContainer = ({ name: domain }) => {
+  const projectResponse = useCached(`projects/by/domain?domain=${domain}`);
+  console.log(projectResponse);
+  return (
+    <Layout>
+      <AnalyticsContext properties={{ origin: 'project' }}>
+        <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
+          {(project) =>
+            project ? (
+              <>
+                <Helmet title={project.domain} />
+                <ProjectPage project={project} />
+              </>
+            ) : (
+              <NotFound name={domain} />
+            )
+          }
+        </DataLoader>
+      </AnalyticsContext>
+    </Layout>
+  );
+};
 
 export default ProjectPageContainer;
