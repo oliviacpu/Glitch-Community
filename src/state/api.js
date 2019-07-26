@@ -6,7 +6,7 @@ import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
 export const ApiContext = createContext();
-const CacheContext = createContext();
+export const CacheContext = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
   const cache = {};
@@ -72,7 +72,7 @@ export function APIContextProvider({ children }) {
   }, [api, pendingRequests]);
 
   const [cache, setCache] = useState({});
-  const [cachePending, setCachePending] = useState([]);
+  const [cachePending, setCachePending] = useState(new Set());
   const maxAge = 60 * 1000;
   useEffect(() => {
     const expires = Date.now();
@@ -81,20 +81,23 @@ export function APIContextProvider({ children }) {
   useEffect(() => {
     if (cachePending.length) {
       cachePending.forEach(async (url) => {
+        let result = { status: 'loading', expires: Infinity };
+        setCache((oldCache) => ({ ...oldCache, [url]: result }));
         try {
           const { data } = await api.get(url);
           result = { status: 'ready', value: data, expires: Date.now() + maxAge };
         } catch (error) {
-          result = { status:value: data, expires: Date.now() + maxAge };
+          result = { status: 'error', error, expires: Date.now() + maxAge };
+          captureException(error);
         }
         setCache((oldCache) => ({ ...oldCache, [url]: result }));
       });
-      setCachePending((latestCachePending) => latestCachePending.filter((url) => !cachePending.includes(url)));
+      setCachePending((latestCachePending) => new Set(latestCachePending.values().filter((url) => !cachePending.has(url))));
     }
   }, [api, cachePending]);
   const getCached = (url) => {
     if (!cache[url] || cache[url].expires < Date.now()) {
-      setCachePending((oldCachePending) => [...oldCachePending, url]);
+      setCachePending((latestCachePending) => new Set([...latestCachePending, url]));
     }
     return cache[url] || { status: 'loading' };
   };
