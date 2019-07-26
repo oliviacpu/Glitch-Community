@@ -24,6 +24,7 @@ import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
+import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
@@ -161,6 +162,7 @@ const ProjectPage = ({ project: initialProject }) => {
                   placeholder="Name your project"
                 />
               </Heading>
+              <BookmarkButton />
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </div>
           ) : (
