@@ -6,7 +6,6 @@ import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
 export const ApiContext = createContext();
-const CacheContext = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
   const cache = {};
@@ -117,12 +116,16 @@ export function useAPI() {
   return useContext(ApiContext);
 }
 
-export function useCached(url) {
+const CacheContext = createContext();
+
+
+
+export const useCached = (url) => {
   const getCached = useContext(CacheContext);
   return getCached(url);
 }
 
-export function useCachedItem(url, key) {
+export const useCachedItem(url, key) {
   const { status, value, error } = useCached(url);
   if (value) {
     if (value[key]) {
