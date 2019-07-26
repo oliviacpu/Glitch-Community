@@ -153,6 +153,7 @@ const ProjectPage = ({ project: initialProject }) => {
           }}
         >
           {isAuthorized ? (
+            <>
             <div className={styles.headingWrap}>
               <Heading tagName="h1">
                 <OptimisticTextInput
@@ -163,8 +164,9 @@ const ProjectPage = ({ project: initialProject }) => {
                 />
               </Heading>
               <BookmarkButton />
-              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </div>
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+              </>
           ) : (
             <div className={styles.headingWrap}>
               <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
