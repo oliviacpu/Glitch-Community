@@ -136,6 +136,7 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
@@ -164,7 +165,7 @@ const ProjectPage = ({ project: initialProject }) => {
                     placeholder="Name your project"
                   />
                 </Heading>
-                <BookmarkButton />
+                {myStuffEnabled && <BookmarkButton />}
               </div>
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </>
