@@ -38,6 +38,7 @@ window.bootstrap = () => {
         EXTERNAL_ROUTES={window.EXTERNAL_ROUTES}
         HOME_CONTENT={window.HOME_CONTENT}
         ZINE_POSTS={window.ZINE_POSTS}
+        SSR_SIGNED_IN={window.SSR_SIGNED_IN}
       >
         <App />
       </GlobalsProvider>

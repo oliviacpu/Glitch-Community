@@ -58,6 +58,8 @@ app.enable('trust proxy');
 app.use(Sentry.Handlers.requestHandler());
 
 // Accept JSON as req.body
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
