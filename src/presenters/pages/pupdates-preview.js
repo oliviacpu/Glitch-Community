@@ -15,7 +15,7 @@ const PupdatesPreview = withRouter(({ history }) => {
   const { origin } = useGlobals();
   const onPublish = async (data) => {
     try {
-      await api.post(`${origin}/api/home`, data);
+      await api.post(`${origin}/api/pupdate`, data);
       history.push('/');
     } catch (e) {
       console.error(e);
