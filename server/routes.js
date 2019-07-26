@@ -113,6 +113,7 @@ module.exports = function(external) {
       rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
+      API_CACHE: JSON.stringify(cache),
       EXTERNAL_ROUTES: JSON.stringify(external),
       ZINE_POSTS: JSON.stringify(zine || []),
       HOME_CONTENT: JSON.stringify(homeContent),

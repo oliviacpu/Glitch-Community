@@ -39,7 +39,7 @@ window.bootstrap = () => {
         HOME_CONTENT={window.HOME_CONTENT}
         ZINE_POSTS={window.ZINE_POSTS}
       >
-        <App />
+        <App apiCache={window.API_CACHE} />
       </GlobalsProvider>
     </BrowserRouter>
   );
