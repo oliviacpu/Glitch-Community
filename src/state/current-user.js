@@ -38,7 +38,8 @@ function identifyUser(user) {
     });
     if (user.login) {
       const expires = new Date();
-      expires.setFullYear()
+      expires.setFullYear(expires.getFullYear() + 1);
+      document.cookie = `hasLogin=true; expires=${expires}`;
     }
   } else {
     addBreadcrumb({
