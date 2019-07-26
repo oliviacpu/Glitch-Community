@@ -34,7 +34,7 @@ const PupdatesPreview = withRouter(({ history }) => {
           </>
         }
       >
-        {(data) => <NewStuffOverlay showNewStuff setShowNewStuff={() => {}} newStuff={data.pupdates} />}
+        {(data) => <NewStuffOverlay showNewStuff setShowNewStuff={() => {}} newStuff={data.pupdates} closePopover={() => {}} />}
       </PreviewContainer>
     </main>
   );
