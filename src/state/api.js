@@ -70,13 +70,26 @@ export function APIContextProvider({ children }) {
     }
   }, [api, pendingRequests]);
 
-  const [cache, setCache] = useState({});
+  return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
+}
+
+export function useAPI() {
+  return useContext(ApiContext);
+}
+
+const CacheContext = createContext();
+
+export const APICacheProvider = ({ children, initial }) => {
+  const api = useAPI();
+  const [cache, setCache] = useState({ ...initial });
   const [cachePending, setCachePending] = useState(new Set());
   const maxAge = 60 * 1000;
+
   useEffect(() => {
     const expires = Date.now();
     setCache((oldCache) => mapValues(oldCache, ({ data }) => ({ data, expires })));
   }, [api.persistentToken]);
+
   useEffect(() => {
     if (cachePending.size) {
       cachePending.forEach(async (url) => {
@@ -94,6 +107,7 @@ export function APIContextProvider({ children }) {
       setCachePending((latestCachePending) => new Set([...latestCachePending].filter((url) => !cachePending.has(url))));
     }
   }, [api, cachePending]);
+
   const getCached = (url) => {
     const response = cache[url] || { status: 'loading', expires: -Infinity };
     if (response.expires < Date.now() && !cachePending.has(url)) {
@@ -101,31 +115,16 @@ export function APIContextProvider({ children }) {
     }
     return response;
   };
-  if (typeof window !== 'undefined') window.getCached = getCached;
 
-  return (
-    <ApiContext.Provider value={api}>
-      <CacheContext.Provider value={getCached}>
-        {children}
-      </CacheContext.Provider>
-    </ApiContext.Provider>
-  );
-}
-
-export function useAPI() {
-  return useContext(ApiContext);
-}
-
-const CacheContext = createContext();
-
-
+  return <CacheContext.Provider value={getCached}>{children}</CacheContext.Provider>;
+};
 
 export const useCached = (url) => {
   const getCached = useContext(CacheContext);
   return getCached(url);
-}
+};
 
-export const useCachedItem(url, key) {
+export const useCachedItem = (url, key) => {
   const { status, value, error } = useCached(url);
   if (value) {
     if (value[key]) {
@@ -137,9 +136,9 @@ export const useCachedItem(url, key) {
     }
   }
   return { status, value, error };
-}
+};
 
-export function useCachedPages(url) {
+export const useCachedPages = (url) => {
   const getCached = useContext(CacheContext);
   let lastStatus = null;
   let hasMore = true;
@@ -159,7 +158,7 @@ export function useCachedPages(url) {
     lastStatus = status;
   }
   return { status: lastStatus, value: results };
-}
+};
 
 /*
 Create a hook for working with the API via async functions.

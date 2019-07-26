@@ -162,7 +162,7 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar });
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, true);
   });
 
   app.get('/@:name', async (req, res) => {
