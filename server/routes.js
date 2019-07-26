@@ -86,7 +86,6 @@ module.exports = function(external) {
     }
 
     const signedIn = !!req.cookies.hasLogin;
-    console.log(signedIn);
 
     let rendered = null;
     if (shouldRender) {
@@ -118,7 +117,7 @@ module.exports = function(external) {
       EXTERNAL_ROUTES: JSON.stringify(external),
       ZINE_POSTS: JSON.stringify(zine || []),
       HOME_CONTENT: JSON.stringify(homeContent),
-      RENDERED_WITH_LOGIN: JSON.stringify(signedIn),
+      SSR_SIGNED_IN: JSON.stringify(signedIn),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,

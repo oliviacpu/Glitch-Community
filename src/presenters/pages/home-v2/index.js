@@ -309,12 +309,12 @@ export const HomePreview = withRouter(({ history }) => {
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
-  const { HOME_CONTENT, ZINE_POSTS } = useGlobals();
+  const { HOME_CONTENT, ZINE_POSTS, SSR_SIGNED_IN } = useGlobals();
   return (
     <Layout>
       <Home
         data={{ ...HOME_CONTENT, cultureZine: ZINE_POSTS.slice(0, 4) }}
-        loggedIn={!!currentUser.login}
+        loggedIn={!!currentUser.login || (!currentUser.id && SSR_SIGNED_IN)}
         hasProjects={currentUser.projects.length > 0}
       />
     </Layout>
