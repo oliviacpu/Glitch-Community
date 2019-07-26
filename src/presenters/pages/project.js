@@ -32,7 +32,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
-import { useCached, useCachedPages } from 'State/api';
+import { useCachedItem, useCachedPages } from 'State/api';
 
 import styles from './project.styl';
 
@@ -230,25 +230,23 @@ async function addProjectBreadcrumb(projectWithMembers) {
 }
 
 const ProjectPageContainer = ({ name: domain }) => {
-  const projectResponse = useCached(`v1/projects/by/domain?domain=${domain}`);
+  const projectResponse = useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain);
   const projectTeamsResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
-  const projectUsersResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
-  console.log(projectResponse.status, projectTeamsResponse.status, projectUsersResponse.status);
+  const projectUsersResponse = useCachedPages(`v1/projects/by/domain/users?domain=${domain}`);
+  const project = { ...projectResponse.value, teams: projectTeamsResponse.value, users: projectUsersResponse.value };
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
-          {(project) =>
-            project ? (
-              <>
-                <Helmet title={project.domain} />
-                <ProjectPage project={project} />
-              </>
-            ) : (
-              <NotFound name={domain} />
-            )
-          }
-        </DataLoader>
+        {projectResponse.status === 'ready' ? (
+          projectResponse.value ? (
+            <>
+              <Helmet title={project.domain} />
+              <ProjectPage project={project} />
+            </>
+          ) : (
+            <NotFound name={domain} />
+          )
+        ) : <Loader />}
       </AnalyticsContext>
     </Layout>
   );

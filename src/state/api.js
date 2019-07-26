@@ -122,6 +122,20 @@ export function useCached(url) {
   return getCached(url);
 }
 
+export function useCachedItem(url, key) {
+  const { status, value, error } = useCached(url);
+  if (value) {
+    if (value[key]) {
+      return { status, value: value[key], error };
+    }
+    const realKey = Object.keys(value).find((dataKey) => dataKey.toLowerCase() === key.toLowerCase());
+    if (realKey) {
+      return { status, value: value[realKey], error };
+    }
+  }
+  return { status, value, error };
+}
+
 export function useCachedPages(url) {
   const getCached = useContext(CacheContext);
   let lastStatus = null;
@@ -134,7 +148,7 @@ export function useCachedPages(url) {
     }
     if (status === 'ready') {
       results.push(...value.items);
-      { hasMore } = value;
+      ({ hasMore } = value);
       url = value.nextPage;
     } else {
       hasMore = false;
