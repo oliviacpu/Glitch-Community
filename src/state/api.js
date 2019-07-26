@@ -81,7 +81,6 @@ export function APIContextProvider({ children }) {
   useEffect(() => {
     if (cachePending.size) {
       cachePending.forEach(async (url) => {
-        console.log(url);
         let result = { status: 'loading', expires: Infinity };
         setCache((oldCache) => ({ ...oldCache, [url]: result }));
         try {
@@ -97,10 +96,8 @@ export function APIContextProvider({ children }) {
     }
   }, [api, cachePending]);
   const getCached = (url) => {
-    console.log(cache, cachePending);
     const response = cache[url] || { status: 'loading', expires: -Infinity };
     if (response.expires < Date.now() && !cachePending.has(url)) {
-      console.log('makeRequest', url);
       setCachePending((latestCachePending) => new Set([...latestCachePending, url]));
     }
     return response;

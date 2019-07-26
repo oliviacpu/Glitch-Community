@@ -230,7 +230,9 @@ async function addProjectBreadcrumb(projectWithMembers) {
 }
 
 const ProjectPageContainer = ({ name: domain }) => {
-  const projectResponse = useCached(`projects/by/domain?domain=${domain}`);
+  const projectResponse = useCached(`v1/projects/by/domain?domain=${domain}`);
+  const projectTeamsResponse = useCached(`v1/projects/by/domain/teams?domain=${domain}`);
+  const projectUsersResponse = useCached(`v1/projects/by/domain/teams?domain=${domain}`);
   console.log(projectResponse);
   return (
     <Layout>
