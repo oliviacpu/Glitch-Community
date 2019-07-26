@@ -13,7 +13,7 @@ const Halo = ({ isBookmarked }) => (
     className={`${styles.halo} ${isBookmarked ? styles.haloAnimated : ''}`}
     width="54px"
     height="29px"
-    viewbox="0 0 54 29"
+    viewBox="0 0 54 29"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     role="presentation"

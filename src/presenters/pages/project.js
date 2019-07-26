@@ -33,6 +33,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './project.styl';
 
@@ -154,19 +155,19 @@ const ProjectPage = ({ project: initialProject }) => {
         >
           {isAuthorized ? (
             <>
-            <div className={styles.headingWrap}>
-              <Heading tagName="h1">
-                <OptimisticTextInput
-                  labelText="Project Domain"
-                  value={project.domain}
-                  onChange={updateDomainAndSync}
-                  placeholder="Name your project"
-                />
-              </Heading>
-              <BookmarkButton />
-            </div>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">
+                  <OptimisticTextInput
+                    labelText="Project Domain"
+                    value={project.domain}
+                    onChange={updateDomainAndSync}
+                    placeholder="Name your project"
+                  />
+                </Heading>
+                <BookmarkButton />
+              </div>
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
-              </>
+            </>
           ) : (
             <div className={styles.headingWrap}>
               <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
