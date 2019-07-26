@@ -32,7 +32,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
-import { useCached } from 'State/api';
+import { useCached, useCachedPages } from 'State/api';
 
 import styles from './project.styl';
 
@@ -231,9 +231,9 @@ async function addProjectBreadcrumb(projectWithMembers) {
 
 const ProjectPageContainer = ({ name: domain }) => {
   const projectResponse = useCached(`v1/projects/by/domain?domain=${domain}`);
-  const projectTeamsResponse = useCached(`v1/projects/by/domain/teams?domain=${domain}`);
-  const projectUsersResponse = useCached(`v1/projects/by/domain/teams?domain=${domain}`);
-  console.log(projectResponse);
+  const projectTeamsResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
+  const projectUsersResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
+  console.log(projectResponse.status, projectTeamsResponse.status, projectUsersResponse.status);
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>

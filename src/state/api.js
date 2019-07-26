@@ -122,6 +122,28 @@ export function useCached(url) {
   return getCached(url);
 }
 
+export function useCachedPages(url) {
+  const getCached = useContext(CacheContext);
+  let lastStatus = null;
+  let hasMore = true;
+  const results = [];
+  while (hasMore) {
+    const { status, value, error } = getCached(url);
+    if (status === 'error') {
+      return { status, error };
+    }
+    if (status === 'ready') {
+      results.push(...value.items);
+      { hasMore } = value;
+      url = value.nextPage;
+    } else {
+      hasMore = false;
+    }
+    lastStatus = status;
+  }
+  return { status: lastStatus, value: results };
+}
+
 /*
 Create a hook for working with the API via async functions.
 Usage:
