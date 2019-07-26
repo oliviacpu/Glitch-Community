@@ -19,7 +19,7 @@ import CategoryPage from './category';
 import CollectionPage from './collection';
 import CreatePage from './create';
 import { NotFoundPage } from './error';
-import PupdatesPreview from './pupdates';
+import PupdatesPreview from './pupdates-preview';
 import SearchPage from './search';
 import SecretPage from './secret';
 import NewHomePage, { HomePreview as NewHomePagePreview } from './home-v2';
