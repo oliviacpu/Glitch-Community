@@ -237,7 +237,7 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {projectResponse.status === 'ready' ? (
+        {projectResponse.status === 'ready' && projectTeamsResponse.status === 'ready' && projectUsersResponse.status === 'ready' ? (
           projectResponse.value ? (
             <>
               <Helmet title={project.domain} />
