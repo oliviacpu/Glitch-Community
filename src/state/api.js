@@ -79,18 +79,29 @@ export function APIContextProvider({ children }) {
     setCache((oldCache) => mapValues(oldCache, ({ data }) => ({ data, expires })));
   }, [api.persistentToken]);
   useEffect(() => {
-    cachePending.forEach(async (url) => {
-      const { data } = await api.get(url);
-      setCache((oldCache) => ({ ...oldCache, [url]: { data } }));
-    });
+    if (cachePending.length) {
+      cachePending.forEach(async (url) => {
+        try {
+          const { data } = await api.get(url);
+          result = { status: 'ready', value: data, expires: Date.now() + maxAge };
+        } catch (error) {
+          result = { status:value: data, expires: Date.now() + maxAge };
+        }
+        setCache((oldCache) => ({ ...oldCache, [url]: result }));
+      });
+      setCachePending((latestCachePending) => latestCachePending.filter((url) => !cachePending.includes(url)));
+    }
   }, [api, cachePending]);
   const getCached = (url) => {
-
+    if (!cache[url] || cache[url].expires < Date.now()) {
+      setCachePending((oldCachePending) => [...oldCachePending, url]);
+    }
+    return cache[url] || { status: 'loading' };
   };
 
   return (
     <ApiContext.Provider value={api}>
-      <CacheContext.Provider value={null}>
+      <CacheContext.Provider value={getCached}>
         {children}
       </CacheContext.Provider>
     </ApiContext.Provider>
