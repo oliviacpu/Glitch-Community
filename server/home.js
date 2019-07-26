@@ -44,7 +44,7 @@ async function savePupdateDataToFile({ data, persistentToken }) {
   if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
 
   pupdateCache = data;
-  await fs.writeFile(path.join(__dirname, '../src/curated/pupdate.json'), JSON.stringify(data), { encoding: 'utf8' });
+  await fs.writeFile(path.join(__dirname, '../src/curated/pupdates.json'), JSON.stringify(data), { encoding: 'utf8' });
 }
 
 module.exports = { getHomeData, saveHomeDataToFile, getPupdateData, savePupdateDataToFile };

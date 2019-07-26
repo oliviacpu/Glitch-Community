@@ -233,9 +233,7 @@ module.exports = function(external) {
 
   app.post('/api/pupdate', async (req, res) => {
     const persistentToken = req.headers.authorization;
-    window.alert('persistentToken', persistentToken);
     const data = req.body;
-    window.alert('data', data);
     try {
       await savePupdateDataToFile({ persistentToken, data });
       res.sendStatus(200);
