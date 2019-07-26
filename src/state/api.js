@@ -5,7 +5,8 @@ import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
 
-export const Context = createContext();
+export const ApiContext = createContext();
+const CacheContext = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
   const cache = {};
@@ -70,11 +71,11 @@ export function APIContextProvider({ children }) {
     }
   }, [api, pendingRequests]);
 
-  return <Context.Provider value={api}>{children}</Context.Provider>;
+  return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 }
 
 export function useAPI() {
-  return useContext(Context);
+  return useContext(ApiContext);
 }
 
 /*
