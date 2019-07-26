@@ -52,7 +52,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, shouldRender = false) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache }, shouldRender = false) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -90,6 +90,7 @@ module.exports = function(external) {
       try {
         const { html } = await renderPage({
           url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+          cache,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
           ZINE_POSTS: zine || [],
@@ -97,6 +98,7 @@ module.exports = function(external) {
         rendered = html;
       } catch (error) {
         captureException(error);
+        console.error(error.toString());
       }
     }
 
@@ -162,7 +164,13 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, true);
+    const cache = {
+      [`v1/projects/by/domain?domain=${domain}`]: { status: 'ready', value: project },
+      [`v1/projects/by/domain/teams?domain=${domain}`]: { status: 'ready', value: [] },
+      [`v1/projects/by/domain/users?domain=${domain}`]: { status: 'ready', value: [] },
+    };
+
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
   });
 
   app.get('/@:name', async (req, res) => {

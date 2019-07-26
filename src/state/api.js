@@ -81,7 +81,7 @@ const CacheContext = createContext();
 
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
-  const [cache, setCache] = useState({ ...initial });
+  const [cache, setCache] = useState(initial);
   const [cachePending, setCachePending] = useState(new Set());
   const maxAge = 60 * 1000;
 
