@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
-import { memoize } from 'lodash';
+import { memoize, mapValues } from 'lodash';
 import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
@@ -71,7 +71,30 @@ export function APIContextProvider({ children }) {
     }
   }, [api, pendingRequests]);
 
-  return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
+  const [cache, setCache] = useState({});
+  const [cachePending, setCachePending] = useState([]);
+  const maxAge = 60 * 1000;
+  useEffect(() => {
+    const expires = Date.now();
+    setCache((oldCache) => mapValues(oldCache, ({ data }) => ({ data, expires })));
+  }, [api.persistentToken]);
+  useEffect(() => {
+    cachePending.forEach(async (url) => {
+      const { data } = await api.get(url);
+      setCache((oldCache) => ({ ...oldCache, [url]: { data } }));
+    });
+  }, [api, cachePending]);
+  const getCached = (url) => {
+
+  };
+
+  return (
+    <ApiContext.Provider value={api}>
+      <CacheContext.Provider value={null}>
+        {children}
+      </CacheContext.Provider>
+    </ApiContext.Provider>
+  );
 }
 
 export function useAPI() {
