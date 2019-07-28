@@ -128,11 +128,10 @@ const AlgoliaSearchController = withRouter(({ history, visible, openPopover, def
   const onSubmit = (event) => {
     event.preventDefault();
     if (!query) return;
-    const encodedQuery = encodeURIComponent(query);
     if (selectedResult) {
       history.push(urlForItem[selectedResult.type](selectedResult, query));
     } else {
-      history.push(`/search?q=${encodedQuery}`);
+      history.push(`/search?q=${encodeURIComponent(query)}`);
     }
   };
 
