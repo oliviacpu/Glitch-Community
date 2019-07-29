@@ -6,7 +6,8 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 
 export const addProjectToMyStuff = async({ api, project }) => {
-  //  
+  //add projec
+  //  ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
 }
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
