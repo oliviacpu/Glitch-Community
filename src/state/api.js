@@ -82,7 +82,7 @@ const CacheContext = createContext();
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
   const [cache, setCache] = useState(initial);
-  const [cachePending, setCachePending] = useState(new Set());
+  const [cachePending, setCachePending] = useState(new Map());
   const maxAge = 60 * 1000;
 
   useEffect(() => {
@@ -92,27 +92,27 @@ export const APICacheProvider = ({ children, initial }) => {
 
   useEffect(() => {
     if (cachePending.size) {
-      cachePending.forEach(async (url) => {
+      cachePending.forEach(async (get, key) => {
         const id = Math.random();
         let result = { id, status: 'loading', expires: Infinity };
-        setCache((oldCache) => ({ ...oldCache, [url]: { ...result, value: oldCache[url] && oldCache[url].value } }));
+        setCache((oldCache) => ({ ...oldCache, [key]: { ...result, value: oldCache[key] && oldCache[key].value } }));
         try {
-          const { data } = await api.get(url);
-          result = { status: 'ready', value: data, expires: Date.now() + maxAge };
+          const value = await get(api);
+          result = { status: 'ready', value, expires: Date.now() + maxAge };
         } catch (error) {
           captureException(error);
           result = { status: 'error', error, expires: Date.now() + maxAge };
         }
-        setCache((oldCache) => oldCache[url].id === id ? { ...oldCache, [url]: result } : oldCache);
+        setCache((oldCache) => oldCache[key].id === id ? { ...oldCache, [key]: result } : oldCache);
       });
-      setCachePending((latestCachePending) => new Set([...latestCachePending].filter((url) => !cachePending.has(url))));
+      setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
     }
   }, [api, cachePending]);
 
-  const getCached = (url) => {
-    const response = cache[url] || { status: 'loading', expires: -Infinity };
-    if (response.expires < Date.now() && !cachePending.has(url)) {
-      setCachePending((latestCachePending) => new Set([...latestCachePending, url]));
+  const getCached = (key, get) => {
+    const response = cache[key] || { status: 'loading', expires: -Infinity };
+    if (response.expires < Date.now() && !cachePending.has(key)) {
+      setCachePending((latestCachePending) => new Map([...latestCachePending, [key, get]]));
     }
     return response;
   };
@@ -122,7 +122,7 @@ export const APICacheProvider = ({ children, initial }) => {
 
 export const useCached = (url) => {
   const getCached = useContext(CacheContext);
-  return getCached(url);
+  return getCached(url, (api) => api.get(url));
 };
 
 export const useCachedItem = (url, key) => {
