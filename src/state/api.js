@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize } from 'lodash';
-import { getSingleItem, getAllPages } from 'Shared/api';
+import { getFromApi, getSingleItem, getAllPages } from 'Shared/api';
 import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
@@ -82,8 +82,8 @@ const CacheContext = createContext();
 
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
-  const [cache, setCache] = useState(() => new Map(
-    Object.entries(initial).map(([key, value]) => [key, { status: 'ready', value, expires: -Infinity }]),
+  const [cache, setCache] = useState(() => (
+    new Map(Object.entries(initial).map(([key, value]) => [key, { status: 'ready', value, expires: -Infinity }]))
   ));
   const [cachePending, setCachePending] = useState(new Map());
   const maxAge = 60 * 1000;
@@ -98,7 +98,7 @@ export const APICacheProvider = ({ children, initial }) => {
       cachePending.forEach(async (get, key) => {
         const id = Math.random();
         let result = { id, status: 'loading', expires: Infinity };
-        setCache((oldCache) => new Map([...oldCache, [key, { ...result, value: oldCache[key] && oldCache[key].value }]]));
+        setCache((oldCache) => new Map([...oldCache, [key, { ...result, value: oldCache.get(key).value }]]));
         try {
           const value = await get(api);
           result = { status: 'ready', value, expires: Date.now() + maxAge };
@@ -125,7 +125,7 @@ export const APICacheProvider = ({ children, initial }) => {
 
 export const useCached = (url) => {
   const getCached = useContext(CacheContext);
-  return getCached(url, (api) => api.get(url));
+  return getCached(url, (api) => getFromApi(api, url));
 };
 
 export const useCachedItem = (url, key) => {
