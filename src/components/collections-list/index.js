@@ -86,7 +86,6 @@ function CollectionsList({
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
 
   return (
-<<<<<<< HEAD
     <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized} maybeTeam={maybeTeam}>
       {(collectionsWithMyStuff) => (
         <FilterController
@@ -111,7 +110,7 @@ function CollectionsList({
                     {!hasCollections && !myStuffEnabled && <CreateFirstCollection />}
                   </>
                 )}
-                
+
                 <SkipSectionButtons sectionName="Collections">
                   {renderItems((filteredProjects) => (
                     <PaginationController
@@ -123,8 +122,8 @@ function CollectionsList({
                       {(paginatedCollections, isExpanded) => (
                         <Grid items={paginatedCollections}>
                           {(collection) =>
-                            myStuffEnabled && collection.isBookmarkCollection ? (
-                              <MyStuffItem collection={collection} />
+                            myStuffEnabled && collection.isMyStuff ? (
+                              <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
                             ) : (
                               <CollectionItem
                                 collection={collection}
@@ -140,70 +139,10 @@ function CollectionsList({
                     </PaginationController>
                   ))}
                 </SkipSectionButtons>
-                {renderItems((filteredProjects) => (
-                  <PaginationController
-                    enabled={enablePagination}
-                    items={filteredProjects}
-                    itemsPerPage={collectionsPerPage}
-                    fetchDataOptimistically={useCollectionProjects}
-                  >
-                    {(paginatedCollections, isExpanded) => (
-                      <Grid items={paginatedCollections}>
-                        {(collection) =>
-                          myStuffEnabled && collection.isMyStuff ? (
-                            <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
-                          ) : (
-                            <CollectionItem
-                              collection={collection}
-                              isAuthorized={isAuthorized}
-                              deleteCollection={() => deleteCollection(collection)}
-                              showCurator={showCurator}
-                              showLoader={isExpanded}
-                            />
-                          )
-                        }
-                      </Grid>
-                    )}
-                  </PaginationController>
-                ))}
               </article>
             </>
           )}
         </FilterController>
-=======
-
-
-            <SkipSectionButtons sectionName="Collections">
-              {renderItems((filteredProjects) => (
-                <PaginationController
-                  enabled={enablePagination}
-                  items={filteredProjects}
-                  itemsPerPage={collectionsPerPage}
-                  fetchDataOptimistically={useCollectionProjects}
-                >
-                  {(paginatedCollections, isExpanded) => (
-                    <Grid items={paginatedCollections}>
-                      {(collection) =>
-                        myStuffEnabled && collection.isBookmarkCollection ? (
-                          <MyStuffItem collection={collection} />
-                        ) : (
-                          <CollectionItem
-                            collection={collection}
-                            isAuthorized={isAuthorized}
-                            deleteCollection={() => deleteCollection(collection)}
-                            showCurator={showCurator}
-                            showLoader={isExpanded}
-                          />
-                        )
-                      }
-                    </Grid>
-                  )}
-                </PaginationController>
-              ))}
-            </SkipSectionButtons>
-          </article>
-        </>
->>>>>>> e9fa08b8890dc26092e0670413b073ae0545e28c
       )}
     </MyStuffController>
   );
