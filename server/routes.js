@@ -85,17 +85,21 @@ module.exports = function(external) {
       built = false;
     }
 
+    const signedIn = !!req.cookies.hasLogin;
+
     let rendered = null;
     if (shouldRender) {
       try {
         const { html } = await renderPage({
           url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+          signedIn,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
           ZINE_POSTS: zine || [],
         });
         rendered = html;
       } catch (error) {
+        console.error(error);
         captureException(error);
       }
     }
@@ -114,6 +118,7 @@ module.exports = function(external) {
       EXTERNAL_ROUTES: JSON.stringify(external),
       ZINE_POSTS: JSON.stringify(zine || []),
       HOME_CONTENT: JSON.stringify(homeContent),
+      SSR_SIGNED_IN: JSON.stringify(signedIn),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,

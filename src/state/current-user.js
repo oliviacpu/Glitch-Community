@@ -30,11 +30,17 @@ const defaultUser = {
 
 function identifyUser(user) {
   const analytics = { window };
+  document.cookie = `hasLogin=; expires=${new Date().toUTCString()}`;
   if (user) {
     addBreadcrumb({
       level: 'info',
       message: `Current user is ${JSON.stringify(user)}`,
     });
+    if (user.login) {
+      const expires = new Date();
+      expires.setFullYear(expires.getFullYear() + 1);
+      document.cookie = `hasLogin=true; expires=${expires}`;
+    }
   } else {
     addBreadcrumb({
       level: 'info',
