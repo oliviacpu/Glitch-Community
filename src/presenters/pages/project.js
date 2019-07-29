@@ -27,6 +27,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { addProjectToMyStuff } from 'State/collection';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
@@ -165,7 +166,7 @@ const ProjectPage = ({ project: initialProject }) => {
                     placeholder="Name your project"
                   />
                 </Heading>
-                {myStuffEnabled && <BookmarkButton />}
+                {myStuffEnabled && <BookmarkButton onClick={() => addProjectToMyStuff({ currentUser, project })}/>}
               </div>
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </>
