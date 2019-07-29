@@ -106,12 +106,15 @@ const AlgoliaSearchController = withRouter(({ history, visible, openPopover, def
   const [{ query, results, selectedResult }, dispatch] = useReducer(reducer, initialState);
   const algoliaResults = useAlgoliaSearch(query);
 
-  useEffect(() => {
-    // use last complete results
-    if (algoliaResults.status === 'ready') {
-      dispatch(actions.resultsChanged(algoliaResults));
-    }
-  }, [algoliaResults]);
+  useEffect(
+    () => {
+      // use last complete results
+      if (algoliaResults.status === 'ready') {
+        dispatch(actions.resultsChanged(algoliaResults));
+      }
+    },
+    [algoliaResults],
+  );
 
   const onKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
@@ -128,7 +131,7 @@ const AlgoliaSearchController = withRouter(({ history, visible, openPopover, def
     if (selectedResult) {
       history.push(urlForItem[selectedResult.type](selectedResult, query));
     } else {
-      history.push(`/search?q=${query}`);
+      history.push(`/search?q=${encodeURIComponent(query)}`);
     }
   };
 
