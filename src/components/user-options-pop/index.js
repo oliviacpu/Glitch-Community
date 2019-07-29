@@ -169,8 +169,8 @@ UserOptionsPop.propTypes = {
 };
 
 function CheckForCreateTeamHash(props) {
-  const location = 
-  return props.children(window.location.hash === '#create-team');
+  const { location } = useGlobals();
+  return props.children(location.hash === '#create-team');
 }
 
 // Header button and init pop

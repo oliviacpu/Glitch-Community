@@ -24,7 +24,9 @@ const ResumeCoding = () => (
 const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   const { SSR_SIGNED_IN } = useGlobals();
-  const signedIn = !!currentUser.login || (!currentUser.id && SSR_SIGNED_IN);
+  const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
+  const signedIn = !!currentUser.login || fakeSignedIn;
+  const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
     <header role="banner" className={styles.header}>
       <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
@@ -40,7 +42,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <li className={styles.buttonWrap}>
             <NewProjectPop />
           </li>
-          {!!currentUser && !!currentUser.projects.length && (
+          {hasProjects && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
             </li>
