@@ -32,7 +32,7 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getAllPages } from 'Shared/api';
+import { getAllPages, useAPI } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
 
@@ -141,6 +141,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
   return (
     <main id="main">
       <section id="info">
@@ -165,7 +166,19 @@ const ProjectPage = ({ project: initialProject }) => {
                 </Heading>
                 {myStuffEnabled && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })} />
+                    <BookmarkButton
+                      action={() =>
+                        addProjectToMyStuff({
+                          api,
+                          project,
+                          currentUser,
+                          createNotification,
+                          myStuffEnabled,
+                          addProjectToCollection,
+                          setHasBookmarked,
+                        })
+                      }
+                    />
                   </div>
                 )}
               </div>

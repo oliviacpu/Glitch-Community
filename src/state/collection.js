@@ -4,15 +4,28 @@ import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
+import { createCollection } from 'Models/collection';
 
-export const addProjectToMyStuff = async ({ api, project, currentUser }) => {
-  console.log(api, project, currentUser);
-  // const myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-  // if (!myStuffCollection) {
-  // }
-  // create a my stuff collection if it doesn't already exist
-  // add project to collection
-  //  ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
+export const addProjectToMyStuff = async ({
+  api,
+  project,
+  currentUser,
+  createNotification,
+  myStuffEnabled,
+  addProjectToCollection,
+  setHasBookmarked,
+}) => {
+  try {
+    setHasBookmarked(true);
+    let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+    if (!myStuffCollection) {
+      myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+    }
+    addProjectToCollection({ project, collection: myStuffCollection });
+  } catch (error) {
+    captureException(error);
+    console.log(error);
+  }
 };
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
