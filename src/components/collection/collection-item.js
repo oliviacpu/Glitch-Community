@@ -44,7 +44,7 @@ const ProjectsLoading = () => (
   </div>
 );
 
-const MY_STUFF_PLACEHOLDER = CDN_URL + "/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659";
+const MY_STUFF_PLACEHOLDER = `${CDN_URL}/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659`;
 
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);

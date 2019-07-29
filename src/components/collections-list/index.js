@@ -98,7 +98,7 @@ function CollectionsList({
           {({ filterInput, filterHeaderStyles, renderItems }) => (
             <>
               <article data-cy="collections" className={styles.collections}>
-                <div className={filterHeaderStyles || undefined}>
+                <div className={filterHeaderStyles}>
                   <Heading tagName="h2">{title}</Heading>
                   {filterInput}
                 </div>

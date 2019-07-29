@@ -135,7 +135,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
     const shouldCreateMyStuffCollection = myStuffEnabled && collection.isMyStuff && collection.id === 'nullMyStuff';
     if (shouldCreateMyStuffCollection) {
       collection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
-      collection.fullUrl = collection.fullUrl ? collection.fullUrl : `${currentUser.login}/${collection.url}`;
+      collection.fullUrl = collection.fullUrl || `${currentUser.login}/${collection.url}`;
     }
 
     await addProjectToCollection(project, collection);

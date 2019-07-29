@@ -84,7 +84,7 @@ function ProjectsList({
     >
       {({ filterInput, filterHeaderStyles, renderItems }) => (
         <article className={classNames(styles.projectsContainer)} data-cy={dataCy}>
-          <div className={filterHeaderStyles || undefined}>
+          <div className={filterHeaderStyles}>
             {title && <Heading tagName="h2">{makeTitle()}</Heading>}
             {filterInput}
           </div>
