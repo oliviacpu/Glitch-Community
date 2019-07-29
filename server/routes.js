@@ -99,6 +99,7 @@ module.exports = function(external) {
         });
         rendered = html;
       } catch (error) {
+        console.error(error);
         captureException(error);
       }
     }
