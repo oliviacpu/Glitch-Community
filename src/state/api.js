@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
-import { memoize, mapValues } from 'lodash';
+import { memoize } from 'lodash';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
@@ -83,14 +83,14 @@ const CacheContext = createContext();
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
   const [cache, setCache] = useState(() => new Map(
-    Object.entries(initial).map(([key, value]) => [key, { status: 'ready', value, expires:  }])
+    Object.entries(initial).map(([key, value]) => [key, { status: 'ready', value, expires: -Infinity }]),
   ));
   const [cachePending, setCachePending] = useState(new Map());
   const maxAge = 60 * 1000;
 
   useEffect(() => {
     const expires = Date.now();
-    setCache((oldCache) => mapValues(oldCache, (data) => ({ ...data, expires })));
+    setCache((oldCache) => new Map([...oldCache].map(([key, data]) => [key, { ...data, expires }])));
   }, [api.persistentToken]);
 
   useEffect(() => {
