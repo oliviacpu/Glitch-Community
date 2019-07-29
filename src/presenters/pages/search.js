@@ -12,7 +12,7 @@ import { useAlgoliaSearch } from 'State/search';
 const SearchPage = withRouter(({ query, activeFilter, history }) => {
   const searchResults = useAlgoliaSearch(query);
   const setActiveFilter = (filter) => {
-    history.push(`/search?q=${query}&activeFilter=${filter}`);
+    history.push(`/search?q=${encodeURIComponent(query)}&activeFilter=${filter}`);
   };
 
   return (

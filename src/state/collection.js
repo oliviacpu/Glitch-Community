@@ -62,8 +62,11 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
 const CollectionProjectContext = createContext();
 const CollectionReloadContext = createContext();
 
+// we mock out the projects for the placeholder my stuff collections
+const initialResponses = { nullMyStuff: { projects: { status: 'ready', value: [] } } };
+
 export const CollectionContextProvider = ({ children }) => {
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState(initialResponses);
   const api = useAPI();
 
   const getCollectionProjects = useCallback(

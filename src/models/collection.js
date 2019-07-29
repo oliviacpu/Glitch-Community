@@ -11,6 +11,35 @@ import { getCollectionPair } from './words';
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1541449590339';
 export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1540389405633';
 
+const nullMyStuffCollection = {
+  isMyStuff: true,
+  name: 'My Stuff',
+  description: 'My place to save cool finds',
+  coverColor: pickRandomColor(),
+  projects: [],
+  id: 'nullMyStuff',
+};
+
+// puts my stuff at the front of the array, if my stuff doesn't exist we add it.
+export function getCollectionsWithMyStuff({ collections }) {
+  let myStuffCollection = null;
+  const updatedCollections = collections.filter((collection) => {
+    if (collection.isMyStuff) {
+      myStuffCollection = collection;
+      return false;
+    }
+    return true;
+  });
+
+  if (!myStuffCollection) {
+    myStuffCollection = nullMyStuffCollection;
+  }
+
+  updatedCollections.unshift(myStuffCollection);
+
+  return updatedCollections;
+}
+
 export function getAvatarUrl(id) {
   return `${CDN_URL}/collection-avatar/${id}.png`;
 }
@@ -32,9 +61,10 @@ export function getLink(collection) {
   return `${getOwnerLink(collection)}/${collection.url}`;
 }
 
-export async function createCollection(api, name, teamId, createNotification) {
+export async function createCollection({ api, name, teamId, createNotification, myStuffEnabled = false }) {
   let description = '';
   let generatedName = false;
+  let isMyStuff = false;
   if (!name) {
     // generate a new random name & description
     generatedName = true;
@@ -46,6 +76,11 @@ export async function createCollection(api, name, teamId, createNotification) {
     }
     const [predicate, collectionSynonym] = name.split('-');
     description = `A ${collectionSynonym} of projects that does ${predicate} things`;
+  }
+
+  if (name === 'My Stuff' && myStuffEnabled) {
+    isMyStuff = true;
+    description = 'My place to save cool finds';
   }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;
@@ -59,6 +94,7 @@ export async function createCollection(api, name, teamId, createNotification) {
       avatarUrl,
       coverColor,
       teamId,
+      isMyStuff,
     });
 
     return collection;

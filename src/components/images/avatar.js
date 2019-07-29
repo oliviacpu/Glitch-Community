@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
 import CollectionAvatarBase from 'Components/collection/defaultAvatar';
+
 import { hexToRgbA } from 'Utils/color';
+import { CDN_URL } from 'Utils/constants';
 
 import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+
 import styles from './avatar.styl';
 
 // UserAvatar
@@ -111,14 +114,5 @@ CollectionAvatar.propTypes = {
   }).isRequired,
 };
 
-export const BookmarkAvatar = () => (
-  <>
-    <Image height="50%" src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fhalo.svg?v=1563303181396" alt="" />
-    <Image
-      height="50%"
-      className={styles.bookmark}
-      src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-filled.svg?v=1563294366084"
-      alt=""
-    />
-  </>
-);
+
+export const BookmarkAvatar = () => <Image src={`${CDN_URL}/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198`} alt="" />;
