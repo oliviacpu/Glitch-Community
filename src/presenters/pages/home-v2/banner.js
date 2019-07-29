@@ -55,7 +55,7 @@ const InlineVideo = () => {
   };
 
   return (
-    <div className={classnames(styles.bannerVideo, styles[status])}>
+    <div className={classnames(styles.bannerVideo)}>
       {showVideo ? (
         <WistiaVideo videoId="z2ksbcs34d" />
       ) : (

@@ -12,6 +12,7 @@ import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
+import { useGlobals } from 'State/globals';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
@@ -168,7 +169,8 @@ UserOptionsPop.propTypes = {
 };
 
 function CheckForCreateTeamHash(props) {
-  return props.children(window.location.hash === '#create-team');
+  const { location } = useGlobals();
+  return props.children(location.hash === '#create-team');
 }
 
 // Header button and init pop

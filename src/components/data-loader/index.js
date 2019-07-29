@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Loader from 'Components/loader';
-import { useAPI } from '../../state/api';
-import { captureException } from '../../utils/sentry';
+import { useAPI } from 'State/api';
+import { captureException } from 'Utils/sentry';
 
 const DataLoader = ({ children, get, renderError, renderLoader, captureException: shouldCaptureException, args }) => {
   const [{ status, value }, setState] = useState({ status: 'loading', value: null });

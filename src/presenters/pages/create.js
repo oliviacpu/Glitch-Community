@@ -281,7 +281,7 @@ function ScreencapSection({ title, description, video, smallVideos, blob, image,
         <Video
           sources={[{ src: v, minWidth: 0, maxWidth: 669 }]}
           key={v}
-          className={classNames(styles.screencap, styles.smallScreencap, styles[smallVideos.length])}
+          className={classNames(styles.screencap, styles.smallScreencap, styles[`small${smallVideos.length}`])}
           track="muted"
           autoPlay
           loop

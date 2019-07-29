@@ -7,6 +7,7 @@ import Grid from 'Components/containers/grid';
 import PaginationController from 'Components/pagination-controller';
 import FilterController from 'Components/filter-controller';
 import CreateCollectionButton from 'Components/collection/create-collection-pop';
+import SkipSectionButtons from 'Components/containers/skip-section-buttons';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionProjects } from 'State/collection';
@@ -85,6 +86,7 @@ function CollectionsList({
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
 
   return (
+<<<<<<< HEAD
     <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized} maybeTeam={maybeTeam}>
       {(collectionsWithMyStuff) => (
         <FilterController
@@ -109,7 +111,35 @@ function CollectionsList({
                     {!hasCollections && !myStuffEnabled && <CreateFirstCollection />}
                   </>
                 )}
-
+                
+                <SkipSectionButtons sectionName="Collections">
+                  {renderItems((filteredProjects) => (
+                    <PaginationController
+                      enabled={enablePagination}
+                      items={filteredProjects}
+                      itemsPerPage={collectionsPerPage}
+                      fetchDataOptimistically={useCollectionProjects}
+                    >
+                      {(paginatedCollections, isExpanded) => (
+                        <Grid items={paginatedCollections}>
+                          {(collection) =>
+                            myStuffEnabled && collection.isBookmarkCollection ? (
+                              <MyStuffItem collection={collection} />
+                            ) : (
+                              <CollectionItem
+                                collection={collection}
+                                isAuthorized={isAuthorized}
+                                deleteCollection={() => deleteCollection(collection)}
+                                showCurator={showCurator}
+                                showLoader={isExpanded}
+                              />
+                            )
+                          }
+                        </Grid>
+                      )}
+                    </PaginationController>
+                  ))}
+                </SkipSectionButtons>
                 {renderItems((filteredProjects) => (
                   <PaginationController
                     enabled={enablePagination}
@@ -140,6 +170,40 @@ function CollectionsList({
             </>
           )}
         </FilterController>
+=======
+
+
+            <SkipSectionButtons sectionName="Collections">
+              {renderItems((filteredProjects) => (
+                <PaginationController
+                  enabled={enablePagination}
+                  items={filteredProjects}
+                  itemsPerPage={collectionsPerPage}
+                  fetchDataOptimistically={useCollectionProjects}
+                >
+                  {(paginatedCollections, isExpanded) => (
+                    <Grid items={paginatedCollections}>
+                      {(collection) =>
+                        myStuffEnabled && collection.isBookmarkCollection ? (
+                          <MyStuffItem collection={collection} />
+                        ) : (
+                          <CollectionItem
+                            collection={collection}
+                            isAuthorized={isAuthorized}
+                            deleteCollection={() => deleteCollection(collection)}
+                            showCurator={showCurator}
+                            showLoader={isExpanded}
+                          />
+                        )
+                      }
+                    </Grid>
+                  )}
+                </PaginationController>
+              ))}
+            </SkipSectionButtons>
+          </article>
+        </>
+>>>>>>> e9fa08b8890dc26092e0670413b073ae0545e28c
       )}
     </MyStuffController>
   );
