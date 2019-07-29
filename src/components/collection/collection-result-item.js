@@ -31,7 +31,7 @@ const ProfileItemWrap = ({ collection }) => (
 );
 
 const CollectionResultItem = ({ onClick, collection, active }) => {
-  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.isMyStuff
+  const collectionIsMyStuff = useDevToggle('My Stuff') && collection.isMyStuff;
   return (
     <ResultItem active={active} onClick={onClick} href={`/@${collection.fullUrl}`}>
       <div className={styles.avatarWrap}>{collectionIsMyStuff ? <BookmarkAvatar /> : <CollectionAvatar collection={collection} />}</div>

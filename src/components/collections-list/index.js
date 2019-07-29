@@ -106,7 +106,7 @@ function CollectionsList({
                 {canMakeCollections && (
                   <>
                     <CreateCollectionButton team={maybeTeam} />
-                    {!hasCollections && <CreateFirstCollection />}
+                    {!hasCollections && !myStuffEnabled && <CreateFirstCollection />}
                   </>
                 )}
 

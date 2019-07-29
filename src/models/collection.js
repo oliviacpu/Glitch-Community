@@ -24,8 +24,7 @@ const nullMyStuffCollection = {
 export function getCollectionsWithMyStuff({ collections }) {
   let myStuffCollection = null;
   const updatedCollections = collections.filter((collection) => {
-    // this should be `if (collection.isMyStuff)` but unfortunately search results do not currently return that property
-    if (collection.name === 'My Stuff') {
+    if (collection.isMyStuff) {
       myStuffCollection = collection;
       return false;
     }
