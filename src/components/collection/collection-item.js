@@ -20,6 +20,7 @@ import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
 
 import { isDarkColor } from 'Utils/color';
+import { CDN_URL } from 'Utils/constants';
 
 import { useAPI } from 'State/api';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
@@ -43,6 +44,8 @@ const ProjectsLoading = () => (
   </div>
 );
 
+const MY_STUFF_PLACEHOLDER = CDN_URL + "/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659";
+
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
   if (!projects) return <ProjectsLoading />;
@@ -51,7 +54,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty, styles.placeholderContainer)}>
-        <Image src="https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659" alt="" className={styles.placeholder} />
+        <Image src={MY_STUFF_PLACEHOLDER} alt="" className={styles.placeholder} />
         <Text className={styles.placeholderText}>Quickly add any app on Glitch to your My Stuff collection</Text>
       </div>
     );

@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
 import CollectionAvatarBase from 'Components/collection/defaultAvatar';
+
 import { hexToRgbA } from 'Utils/color';
+import { CDN_URL } from 'Utils/constants';
 
 import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+
 import styles from './avatar.styl';
 
 // UserAvatar
@@ -111,4 +114,5 @@ CollectionAvatar.propTypes = {
   }).isRequired,
 };
 
-export const BookmarkAvatar = () => <Image src="https://cdn.glitch.com/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198" alt="" />;
+
+export const BookmarkAvatar = () => <Image src={CDN_URL + "/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198"} alt="" />;
