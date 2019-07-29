@@ -25,7 +25,9 @@ import { useTrackedFunc } from 'State/segment-analytics';
 import { useAlgoliaSearch } from 'State/search';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
-
+import useDevToggle from 'State/dev-toggles';
+import { useAPI } from 'State/api';
+import { getCollectionsWithMyStuff, createCollection } from 'Models/collection';
 import useDebouncedValue from '../../hooks/use-debounced-value';
 import styles from './popover.styl';
 
@@ -102,10 +104,19 @@ function useCollectionSearch(query, project, collectionType) {
   const filters = collectionType === 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
   const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
+  const myStuffEnabled = useDevToggle('My Stuff');
+
+  const searchResultsWithMyStuff = useMemo(() => {
+    const shouldPutMyStuffAtFrontOfList = myStuffEnabled && searchResults.collection && collectionType === 'user' && query.length === 0;
+    if (shouldPutMyStuffAtFrontOfList) {
+      return getCollectionsWithMyStuff({ collections: searchResults.collection });
+    }
+    return searchResults.collection;
+  }, [searchResults, query]);
 
   const [collectionsWithProject, collections] = useMemo(
-    () => partition(searchResults.collection, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
-    [searchResults.collection, project.id, collectionType],
+    () => partition(searchResultsWithMyStuff, (result) => result.projects.includes(project.id)).map((list) => list.slice(0, 20)),
+    [searchResultsWithMyStuff, project.id, collectionType],
   );
 
   return { status: searchResults.status, collections, collectionsWithProject };
@@ -117,14 +128,21 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
   const { status, collections, collectionsWithProject } = useCollectionSearch(query, project, collectionType);
   const { currentUser } = useCurrentUser();
   const { createNotification } = useNotifications();
+  const api = useAPI();
+  const myStuffEnabled = useDevToggle('My Stuff');
 
-  const addProjectTo = (collection) => {
-    addProjectToCollection(project, collection).then(() => {
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
-        { type: 'success' },
-      );
-    });
+  const addProjectTo = async (collection) => {
+    const shouldCreateMyStuffCollection = myStuffEnabled && collection.isMyStuff && collection.id === 'nullMyStuff';
+    if (shouldCreateMyStuffCollection) {
+      collection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+      collection.fullUrl = collection.fullUrl || `${currentUser.login}/${collection.url}`;
+    }
+
+    await addProjectToCollection(project, collection);
+    createNotification(
+      <AddProjectToCollectionMsg projectDomain={project.domain} collectionName={collection.name} url={`/@${collection.fullUrl}`} />,
+      { type: 'success' },
+    );
 
     togglePopover();
   };
@@ -176,10 +194,7 @@ AddProjectToCollectionBase.propTypes = {
 };
 
 const AddProjectToCollection = ({ project, addProjectToCollection }) => (
-  <PopoverWithButton
-    buttonProps={{ size: 'small', emoji: 'framedPicture' }}
-    buttonText="Add to Collection"
-  >
+  <PopoverWithButton buttonProps={{ size: 'small', emoji: 'framedPicture' }} buttonText="Add to Collection">
     {({ togglePopover }) => (
       <MultiPopover
         views={{

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
+import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
 import Loader from 'Components/loader/';
@@ -13,11 +15,19 @@ import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import AnimationContainer from 'Components/animation-container';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
+
 import { isDarkColor } from 'Utils/color';
+import { CDN_URL } from 'Utils/constants';
+
+import { useAPI } from 'State/api';
 import { useCollectionProjects, useCollectionCurator } from 'State/collection';
+import { useNotifications } from 'State/notifications';
+import { useCurrentUser } from 'State/current-user';
+
+import { createCollection } from 'Models/collection';
 
 import CollectionOptions from './collection-options-pop';
 
@@ -34,14 +44,26 @@ const ProjectsLoading = () => (
   </div>
 );
 
+const MY_STUFF_PLACEHOLDER = `${CDN_URL}/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fplaceholder.svg?v=1563305881659`;
+
 const CollectionProjects = ({ collection, isAuthorized }) => {
   const { value: projects } = useCollectionProjects(collection);
   if (!projects) return <ProjectsLoading />;
 
+  // show placeholder text/image to encourage people to add projects to my stuff
+  if (projects.length === 0 && isAuthorized && collection.isMyStuff) {
+    return (
+      <div className={classNames(styles.projectsContainer, styles.empty, styles.placeholderContainer)}>
+        <Image src={MY_STUFF_PLACEHOLDER} alt="" className={styles.placeholder} />
+        <Text className={styles.placeholderText}>Quickly add any app on Glitch to your My Stuff collection</Text>
+      </div>
+    );
+  }
+
   if (projects.length === 0 && isAuthorized) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Text>
+        <Text className={styles.emptyCollectionText}>
           This collection is empty – add some projects <Emoji name="index" />
         </Text>
       </div>
@@ -50,7 +72,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   if (projects.length === 0 && !isAuthorized) {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
-        <Text>No projects to see in this collection just yet.</Text>
+        <Text className={styles.emptyCollectionText}>No projects to see in this collection just yet.</Text>
       </div>
     );
   }
@@ -89,20 +111,35 @@ export const CollectionCuratorLoader = ({ collection }) => (
   </VisibilityContainer>
 );
 
-// TODO: add onclick that creates the new my stuff collection, ensure button is accessible
-const CreateMyStuffOnClickComponent = ({ children, ...props }) => <div {...props}>{children}</div>;
+// when users don't have a my stuff collection yet, we mimic it on their user page and create it once they click on it
+const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
+  const api = useAPI();
+  const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
 
-// TODO: add to storybook
-export const MyStuffItem = ({ collection }) => {
+  const createMyStuffCollection = async () => {
+    const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+    if (myStuff) {
+      history.push(`@${currentUser.login}/${myStuff.url}`);
+    }
+  };
+
+  return (
+    <button onClick={createMyStuffCollection} type="submit" className={className} style={style}>
+      {children}
+    </button>
+  );
+});
+
+export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (
     <div className={styles.collectionItem}>
-      <div className={styles.header} />
+      {isAuthorized && <div className={styles.header} />}
       <CollectionLinkComponent collection={collection} className={classNames(styles.linkBody)} style={collectionColorStyles(collection)}>
-        <div className={styles.avatarContainer}>
-          {/* TODO replace with my stuff icon */}
-          <CollectionAvatar collection={collection} />
+        <div className={styles.bookmarkContainer}>
+          <BookmarkAvatar />
         </div>
         <div className={styles.nameDescriptionContainer}>
           <div className={styles.itemButtonWrap}>
@@ -113,11 +150,7 @@ export const MyStuffItem = ({ collection }) => {
           </div>
         </div>
       </CollectionLinkComponent>
-      {collection.projects.length === 0 && (
-        <div className={classNames(styles.projectsContainer, styles.empty)}>
-          <Text>(placeholder image coming soon) Quickly add any app on Glitch to your My Stuff collection</Text>
-        </div>
-      )}
+      <CollectionProjectsLoader collection={collection} isAuthorized={isAuthorized} showLoader={showLoader} />
     </div>
   );
 };
