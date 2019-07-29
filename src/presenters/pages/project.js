@@ -32,9 +32,10 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getAllPages, useAPI } from 'Shared/api';
+import { getAllPages, useAPI, useAPIHandlers } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
+import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -142,6 +143,11 @@ const ProjectPage = ({ project: initialProject }) => {
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   const api = useAPI();
+  const { addProjectToCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
+  const [hasBookmarked, setHasBookmarked] = useState(false);
+  console.log(initialProject)
+  
   return (
     <main id="main">
       <section id="info">
