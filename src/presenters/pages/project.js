@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -233,7 +233,11 @@ const ProjectPageContainer = ({ name: domain }) => {
   const projectResponse = useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain);
   const projectTeamsResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
   const projectUsersResponse = useCachedPages(`v1/projects/by/domain/users?domain=${domain}`);
-  const project = { ...projectResponse.value, teams: projectTeamsResponse.value, users: projectUsersResponse.value };
+  const project = useMemo(() => ({
+    ...projectResponse.value,
+    teams: projectTeamsResponse.value,
+    users: projectUsersResponse.value,
+  }), [projectResponse.value, projectTeamsResponse.value, projectUsersResponse.value]);
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
