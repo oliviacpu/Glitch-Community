@@ -148,8 +148,9 @@ module.exports = function(external) {
     const { domain } = req.params;
     const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
+    
     if (!project) {
-      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, true);
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
