@@ -4,9 +4,9 @@ import Image from 'Components/images/image';
 
 import styles from './bookmark-button.styl';
 
-const CHECKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck%20(2).svg?v=1564174145347';
-const EMPTY_BOOKMARK = 'https://cdn.glitch.com/6d94a2b0-1c44-4a6e-8b57-417c8e6e93e7%2Fatms-btn-empty.svg?v=1563224340818';
-const FILLED_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-filled%20(1).svg?v=1564174244708';
+const CHECKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008';
+const EMPTY_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-btn-empty.svg?v=1564431969254';
+const FILLED_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-filled.svg?v=1564431950332';
 
 const Halo = ({ isBookmarked }) => (
   <svg
