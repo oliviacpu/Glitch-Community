@@ -138,6 +138,8 @@ export const useCachedPages = (url) => {
   return getCached(`pages:${url}`, (api) => getAllPages(api, url));
 };
 
+export const combineCached = (b)
+
 /*
 Create a hook for working with the API via async functions.
 Usage:

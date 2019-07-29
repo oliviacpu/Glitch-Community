@@ -6,15 +6,20 @@ const dayjs = require('dayjs');
 const { captureException } = require('@sentry/node');
 
 const { API_URL } = require('./constants').current;
-const { getSingleItem } = require('Shared/api');
+const { allByKeys, getSingleItem, getAllPages } = require('Shared/api');
 
 const api = axios.create({
   baseURL: API_URL,
   timeout: 5000,
 });
 
-function getProjectFromApi(domain) {
-  return getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
+async function getProjectFromApi(domain) {
+  const { project, teams, users } = await allByKeys({
+    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
+    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
+  });
+  return { ...project, teams, users };
 }
 
 function getTeamFromApi(url) {

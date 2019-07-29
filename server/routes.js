@@ -171,10 +171,11 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
+    const { users, teams, ...rawProject } = project;
     const cache = {
-      [`item:v1/projects/by/domain?domain=${domain}`]: project,
-      [`pages:v1/projects/by/domain/teams?domain=${domain}`]: [],
-      [`pages:v1/projects/by/domain/users?domain=${domain}`]: [],
+      [`item:v1/projects/by/domain?domain=${domain}`]: rawProject,
+      [`pages:v1/projects/by/domain/teams?domain=${domain}`]: teams,
+      [`pages:v1/projects/by/domain/users?domain=${domain}`]: users,
     };
 
     await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
