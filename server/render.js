@@ -41,7 +41,7 @@ const render = async ({ url, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZIN
   const page = React.createElement(Page, {
     origin: url.origin,
     route: url.pathname + url.search + url.hash,
-    cache: { ...cache },
+    cache,
     signedIn,
     ZINE_POSTS,
     HOME_CONTENT,
