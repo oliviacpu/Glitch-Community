@@ -141,13 +141,14 @@ export const useCachedPages = (url) => {
 export const useCombinedCache = (responses, baseResponse) => {
   const allResponses = [baseResponse, ...Object.values(responses)];
   return useMemo(() => {
-    if (baseResponse.status === 'ready' && !baseResponse.value) return baseResponse;
+    if (!baseResponse.value) return baseResponse;
     const errorResponse = allResponses.find(({ status }) => status === 'error');
     if (errorResponse) return errorResponse;
+    console.log('asdf');
     return {
       ...baseResponse,
       status: allResponses.every(({ status }) => status === 'ready') ? 'ready' : 'loading',
-      value: { ...baseResponse.value, ...mapValues(responses, ([key, { value }]) => [key, value]) },
+      value: { ...baseResponse.value, ...mapValues(responses, ({ value }) => value) },
     };
   }, allResponses);
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -237,17 +237,18 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {status === 'ready' && (
-          project ? (
-            <>
-              <Helmet title={project.domain} />
-              <ProjectPage project={project} />
-            </>
-          ) : (
-            <NotFound name={domain} />
-          )
+        {project ? (
+          <>
+            <Helmet title={project.domain} />
+            <ProjectPage project={project} />
+          </>
+        ) : (
+          <>
+            {status === 'ready' && <NotFound name={domain} />}
+            {status === 'loading' && <Loader />}
+            {status === 'error' && error.toString()}
+          </>
         )}
-        {status === 'loading' && <Loader />}
       </AnalyticsContext>
     </Layout>
   );
