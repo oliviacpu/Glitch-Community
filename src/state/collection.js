@@ -6,9 +6,10 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 
 export const addProjectToMyStuff = async({ api, project, currentUser }) => {
-  currentUser.collections.find(c => c.isMyStuff)
-  console.log("hello?")
-  console.log(currentUser)
+  const myStuffCollection = currentUser.collections.find(c => c.isMyStuff)
+  if (!myStuffCollection) {
+    
+  }
   // create a my stuff collection if it doesn't already exist
   // add project to collection
   //  ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
