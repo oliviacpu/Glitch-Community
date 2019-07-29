@@ -166,13 +166,14 @@ const ProjectPage = ({ project: initialProject }) => {
                     placeholder="Name your project"
                   />
                 </Heading>
-                {myStuffEnabled && <BookmarkButton onClick={() => addProjectToMyStuff({ currentUser, project })}/>}
+                {myStuffEnabled && <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/>}
               </div>
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </>
           ) : (
             <div className={styles.headingWrap}>
               <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+              {myStuffEnabled && <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/>}
               {project.private && <PrivateBadge />}
             </div>
           )}
