@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
 import { memoize, mapValues } from 'lodash';
+import { getSingleItem, getAllPages } from 'Shared/api';
 import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
 import { useCurrentUser } from './current-user'; // eslint-disable-line import/no-cycle
@@ -126,39 +127,13 @@ export const useCached = (url) => {
 };
 
 export const useCachedItem = (url, key) => {
-  const { status, value, error } = useCached(url, (api) => api.get(url));
-  if (value) {
-    if (value[key]) {
-      return { status, value: value[key], error };
-    }
-    const realKey = Object.keys(value).find((dataKey) => dataKey.toLowerCase() === key.toLowerCase());
-    if (realKey) {
-      return { status, value: value[realKey], error };
-    }
-  }
-  return { status, value, error };
+  const getCached = useContext(CacheContext);
+  return getCached(`item:${url}`, (api) => getSingleItem(api, url, key));
 };
 
 export const useCachedPages = (url) => {
   const getCached = useContext(CacheContext);
-  let lastStatus = null;
-  let hasMore = true;
-  const results = [];
-  while (hasMore) {
-    const { status, value, error } = getCached(url, (api) => api.get(url));
-    if (status === 'error') {
-      return { status, error };
-    }
-    if (status === 'ready') {
-      results.push(...value.items);
-      ({ hasMore } = value);
-      url = value.nextPage;
-    } else {
-      hasMore = false;
-    }
-    lastStatus = status;
-  }
-  return { status: lastStatus, value: results };
+  return getCached(`pages:${url}`, (api) => getAllPages(api, url));
 };
 
 /*

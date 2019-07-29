@@ -233,11 +233,11 @@ const ProjectPageContainer = ({ name: domain }) => {
   const projectResponse = useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain);
   const projectTeamsResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
   const projectUsersResponse = useCachedPages(`v1/projects/by/domain/users?domain=${domain}`);
-  const project = useMemo(() => ({
+  const project = useMemo(() => projectResponse.value && {
     ...projectResponse.value,
-    teams: projectTeamsResponse.value,
-    users: projectUsersResponse.value,
-  }), [projectResponse.value, projectTeamsResponse.value, projectUsersResponse.value]);
+    teams: projectTeamsResponse.value || [],
+    users: projectUsersResponse.value || [],
+  }, [projectResponse.value, projectTeamsResponse.value, projectUsersResponse.value]);
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
