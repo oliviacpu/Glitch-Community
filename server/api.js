@@ -19,7 +19,7 @@ async function getProjectFromApi(domain) {
     teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
     users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
   });
-  return { ...project, teams, users };
+  return project && { ...project, teams, users };
 }
 
 function getTeamFromApi(url) {

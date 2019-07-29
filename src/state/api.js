@@ -83,7 +83,7 @@ const CacheContext = createContext();
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
   const [cache, setCache] = useState(() => (
-    new Map(Object.entries(initial).map(([key, value]) => [key, { status: 'ready', value, expires: -Infinity }]))
+    new Map(Object.entries(initial).map(([key, value]) => [key, { status: 'loading', value, expires: -Infinity }]))
   ));
   const [cachePending, setCachePending] = useState(new Map());
   const maxAge = 60 * 1000;
@@ -98,7 +98,7 @@ export const APICacheProvider = ({ children, initial }) => {
       cachePending.forEach(async (get, key) => {
         const id = Math.random();
         let result = { id, status: 'loading', expires: Infinity };
-        setCache((oldCache) => new Map([...oldCache, [key, { ...result, value: oldCache.get(key).value }]]));
+        setCache((oldCache) => new Map([...oldCache, [key, { ...result, value: oldCache.has(key) ? oldCache.get(key).value : undefined }]]));
         try {
           const value = await get(api);
           result = { status: 'ready', value, expires: Date.now() + maxAge };
@@ -144,9 +144,8 @@ export const useCombinedCache = (responses, baseResponse) => {
     if (!baseResponse.value) return baseResponse;
     const errorResponse = allResponses.find(({ status }) => status === 'error');
     if (errorResponse) return errorResponse;
-    console.log('asdf');
+    if (allResponses.some(({ value }) => !value)) return { status: 'loading' };
     return {
-      ...baseResponse,
       status: allResponses.every(({ status }) => status === 'ready') ? 'ready' : 'loading',
       value: { ...baseResponse.value, ...mapValues(responses, ({ value }) => value) },
     };
