@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef, useMemo, createContext } from 'react';
 import axios from 'axios';
-import { memoize } from 'lodash';
+import { memoize, mapValues } from 'lodash';
 import { getFromApi, getSingleItem, getAllPages } from 'Shared/api';
 import { API_URL } from 'Utils/constants';
 import { captureException } from 'Utils/sentry';
@@ -138,10 +138,18 @@ export const useCachedPages = (url) => {
   return getCached(`pages:${url}`, (api) => getAllPages(api, url));
 };
 
-export const combineCached = (responses, baseResponse) => {
-  if (baseResponse.status === 'ready' && !baseResponse.value) return baseResponse;
-  const errorResponse = [baseResponse, ...Object.values(responses)].find(({ status }) => status === 'error');
-  if (errorResponse) return errorResponse;
+export const useCombinedCache = (responses, baseResponse) => {
+  const allResponses = [baseResponse, ...Object.values(responses)];
+  return useMemo(() => {
+    if (baseResponse.status === 'ready' && !baseResponse.value) return baseResponse;
+    const errorResponse = allResponses.find(({ status }) => status === 'error');
+    if (errorResponse) return errorResponse;
+    return {
+      ...baseResponse,
+      status: allResponses.every(({ status }) => status === 'ready') ? 'ready' : 'loading',
+      value: { ...baseResponse.value, ...mapValues(responses, ([key, { value }]) => [key, value]) },
+    };
+  }, allResponses);
 };
 
 /*

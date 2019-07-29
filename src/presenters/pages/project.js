@@ -32,7 +32,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
-import { useCachedItem, useCachedPages } from 'State/api';
+import { useCachedItem, useCachedPages, useCombinedCache } from 'State/api';
 
 import styles from './project.styl';
 
@@ -230,18 +230,14 @@ async function addProjectBreadcrumb(projectWithMembers) {
 }
 
 const ProjectPageContainer = ({ name: domain }) => {
-  const projectResponse = useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain);
-  const projectTeamsResponse = useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`);
-  const projectUsersResponse = useCachedPages(`v1/projects/by/domain/users?domain=${domain}`);
-  const project = useMemo(() => projectResponse.value && {
-    ...projectResponse.value,
-    teams: projectTeamsResponse.value || [],
-    users: projectUsersResponse.value || [],
-  }, [projectResponse.value, projectTeamsResponse.value, projectUsersResponse.value]);
+  const { status, value: project, error } = useCombinedCache({
+    teams: useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`),
+    users: useCachedPages(`v1/projects/by/domain/users?domain=${domain}`),
+  }, useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain));
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {project || projectResponse.status === 'ready' ? (
+        {status === 'ready' && (
           project ? (
             <>
               <Helmet title={project.domain} />
@@ -250,7 +246,8 @@ const ProjectPageContainer = ({ name: domain }) => {
           ) : (
             <NotFound name={domain} />
           )
-        ) : <Loader />}
+        )}
+        {status === 'loading' && <Loader />}
       </AnalyticsContext>
     </Layout>
   );
