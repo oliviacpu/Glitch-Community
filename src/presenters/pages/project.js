@@ -173,7 +173,7 @@ const ProjectPage = ({ project: initialProject }) => {
           ) : (
             <div className={styles.headingWrap}>
               <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
-              {myStuffEnabled && <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/>}
+              {myStuffEnabled && <div className={styles.bookmarkButton}><BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/></div>}
               {project.private && <PrivateBadge />}
             </div>
           )}

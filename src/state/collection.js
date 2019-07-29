@@ -7,6 +7,7 @@ import { captureException } from 'Utils/sentry';
 
 export const addProjectToMyStuff = async({ api, project, currentUser }) => {
   const myStuffCollection = currentUser.collections.find(c => c.isMyStuff)
+  console.log(myStuffCollection)
   if (!myStuffCollection) {
     
   }
