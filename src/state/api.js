@@ -138,7 +138,11 @@ export const useCachedPages = (url) => {
   return getCached(`pages:${url}`, (api) => getAllPages(api, url));
 };
 
-export const combineCached = (b)
+export const combineCached = (responses, baseResponse) => {
+  if (baseResponse.status === 'ready' && !baseResponse.value) return baseResponse;
+  const errorResponse = [baseResponse, ...Object.values(responses)].find(({ status }) => status === 'error');
+  if (errorResponse) return errorResponse;
+};
 
 /*
 Create a hook for working with the API via async functions.
