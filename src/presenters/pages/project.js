@@ -88,14 +88,11 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(
-    () => {
-      if (done) {
-        window.location = getUserLink(currentUser);
-      }
-    },
-    [done, currentUser],
-  );
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
 
   return (
     <section>
@@ -166,7 +163,11 @@ const ProjectPage = ({ project: initialProject }) => {
                     placeholder="Name your project"
                   />
                 </Heading>
-              {myStuffEnabled && <div className={styles.bookmarkButton}><BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/></div>}
+                {myStuffEnabled && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })} />
+                  </div>
+                )}
               </div>
               <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </>
@@ -174,7 +175,11 @@ const ProjectPage = ({ project: initialProject }) => {
             <>
               <div className={styles.headingWrap}>
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
-              {myStuffEnabled && <div className={styles.bookmarkButton}><BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })}/></div>}
+                {myStuffEnabled && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })} />
+                  </div>
+                )}
               </div>
               {project.private && <PrivateBadge />}
             </>

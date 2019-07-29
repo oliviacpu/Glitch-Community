@@ -5,16 +5,15 @@ import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 
-export const addProjectToMyStuff = async({ api, project, currentUser }) => {
-  const myStuffCollection = currentUser.collections.find(c => c.isMyStuff)
-  console.log(myStuffCollection)
-  if (!myStuffCollection) {
-    
-  }
+export const addProjectToMyStuff = async ({ api, project, currentUser }) => {
+  console.log(api, project, currentUser);
+  // const myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+  // if (!myStuffCollection) {
+  // }
   // create a my stuff collection if it doesn't already exist
   // add project to collection
   //  ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
-}
+};
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
