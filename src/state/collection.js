@@ -5,6 +5,10 @@ import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 
+export const addProjectToMyStuff = async({ api, project }) => {
+  //  
+}
+
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
   try {
