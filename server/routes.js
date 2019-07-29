@@ -172,9 +172,9 @@ module.exports = function(external) {
     }
 
     const cache = {
-      [`v1/projects/by/domain?domain=${domain}`]: { status: 'ready', value: { [domain]: project } },
-      [`v1/projects/by/domain/teams?domain=${domain}`]: { status: 'ready', value: { items: [], hasMore: false } },
-      [`v1/projects/by/domain/users?domain=${domain}`]: { status: 'ready', value: { items: [], hasMore: false } },
+      [`item:v1/projects/by/domain?domain=${domain}`]: project,
+      [`pages:v1/projects/by/domain/teams?domain=${domain}`]: [],
+      [`pages:v1/projects/by/domain/users?domain=${domain}`]: [],
     };
 
     await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
