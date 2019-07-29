@@ -32,9 +32,10 @@ import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
-import { getAllPages, useAPI, useAPIHandlers } from 'Shared/api';
+import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
@@ -145,9 +146,9 @@ const ProjectPage = ({ project: initialProject }) => {
   const api = useAPI();
   const { addProjectToCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
-  const [hasBookmarked, setHasBookmarked] = useState(false);
-  console.log(initialProject)
-  
+  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  console.log(initialProject);
+
   return (
     <main id="main">
       <section id="info">
@@ -184,6 +185,7 @@ const ProjectPage = ({ project: initialProject }) => {
                           setHasBookmarked,
                         })
                       }
+                      initialIsBookmarked={hasBookmarked}
                     />
                   </div>
                 )}
@@ -196,7 +198,20 @@ const ProjectPage = ({ project: initialProject }) => {
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
                 {myStuffEnabled && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={() => addProjectToMyStuff({ currentUser, project })} />
+                    <BookmarkButton
+                      action={() =>
+                        addProjectToMyStuff({
+                          api,
+                          project,
+                          currentUser,
+                          createNotification,
+                          myStuffEnabled,
+                          addProjectToCollection,
+                          setHasBookmarked,
+                        })
+                      }
+                      initialIsBookmarked={hasBookmarked}
+                    />
                   </div>
                 )}
               </div>
