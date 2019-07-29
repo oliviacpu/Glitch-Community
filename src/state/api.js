@@ -126,7 +126,7 @@ export const useCached = (url) => {
 };
 
 export const useCachedItem = (url, key) => {
-  const { status, value, error } = useCached(url);
+  const { status, value, error } = useCached(url, (api) => api.get(url));
   if (value) {
     if (value[key]) {
       return { status, value: value[key], error };
@@ -145,7 +145,7 @@ export const useCachedPages = (url) => {
   let hasMore = true;
   const results = [];
   while (hasMore) {
-    const { status, value, error } = getCached(url);
+    const { status, value, error } = getCached(url, (api) => api.get(url));
     if (status === 'error') {
       return { status, error };
     }
