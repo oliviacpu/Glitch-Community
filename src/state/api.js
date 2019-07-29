@@ -87,22 +87,23 @@ export const APICacheProvider = ({ children, initial }) => {
 
   useEffect(() => {
     const expires = Date.now();
-    setCache((oldCache) => mapValues(oldCache, ({ data }) => ({ data, expires })));
+    setCache((oldCache) => mapValues(oldCache, (data) => ({ ...data, expires })));
   }, [api.persistentToken]);
 
   useEffect(() => {
     if (cachePending.size) {
       cachePending.forEach(async (url) => {
-        let result = { status: 'loading', expires: Infinity };
-        setCache((oldCache) => ({ ...oldCache, [url]: result }));
+        const id = Math.random();
+        let result = { id, status: 'loading', expires: Infinity };
+        setCache((oldCache) => ({ ...oldCache, [url]: { ...result, value: oldCache[url] && oldCache[url].value } }));
         try {
           const { data } = await api.get(url);
           result = { status: 'ready', value: data, expires: Date.now() + maxAge };
         } catch (error) {
-          result = { status: 'error', error, expires: Date.now() + maxAge };
           captureException(error);
+          result = { status: 'error', error, expires: Date.now() + maxAge };
         }
-        setCache((oldCache) => ({ ...oldCache, [url]: result }));
+        setCache((oldCache) => oldCache[url].id === id ? { ...oldCache, [url]: result } : oldCache);
       });
       setCachePending((latestCachePending) => new Set([...latestCachePending].filter((url) => !cachePending.has(url))));
     }
