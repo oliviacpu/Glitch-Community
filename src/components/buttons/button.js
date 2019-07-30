@@ -85,13 +85,13 @@ const Button = React.forwardRef(
       );
     }
 
-    if (typeof window === 'undefined') console.log('btn', disabled);
+    if (fullClassName === 'button__btn___1ah9Q button__unstyled___4HScI  ') console.log('btn', disabled);
     return (
       <button
         ref={ref}
         onClick={onClick}
         className={fullClassName}
-        disabled
+        disabled={disabled}
         type={submit ? 'submit' : 'button'}
         aria-pressed={ariaPressed}
       >
