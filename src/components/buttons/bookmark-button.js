@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
+import classNames from 'classnames/bind';
 
 import styles from './bookmark-button.styl';
+
+const cx = classNames.bind(styles);
 
 const CHECKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008';
 const EMPTY_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-btn-empty.svg?v=1564431969254';
@@ -69,22 +72,27 @@ const Halo = ({ isBookmarked }) => (
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [isBookmarked, setIsBookmarked] = React.useState(initialIsBookmarked);
   const [isAnimating, setIsAnimating] = React.useState(false);
-  const onClick = async () => {
+  const onClick = () => {
     if (!isBookmarked) {
       setIsAnimating(true);
+      setIsBookmarked(true);
+    } else {
+      setIsAnimating(false);
+      setIsBookmarked(false);
     }
-    setIsBookmarked(!isBookmarked);
-    if (action) {
-      await action();
-    }
-    setIsAnimating(false)
+    if (action) action();
   };
+  const checkClassName = cx({
+    check: true,
+    hidden: !isBookmarked,
+    checkAnimated: isAnimating,
+  });
 
   return (
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
       <Halo isBookmarked={isAnimating} />
       <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
-      <Image className={`${styles.check} ${!isBookmarked ? styles.hidden : ""} ${isAnimating ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px" />
+      <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
     </button>
   );
 };
