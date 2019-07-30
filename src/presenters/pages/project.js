@@ -147,16 +147,18 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const bookmarkAction = () => toggleBookmark({
-    api,
-    project,
-    currentUser,
-    createNotification,
-    myStuffEnabled,
-    addProjectToCollection,
-    setHasBookmarked,
-    hasBookmarked
-  });
+  const bookmarkAction = () =>
+    toggleBookmark({
+      api,
+      project,
+      currentUser,
+      createNotification,
+      myStuffEnabled,
+      addProjectToCollection,
+      removeProjectFromCollection,
+      setHasBookmarked,
+      hasBookmarked,
+    });
   return (
     <main id="main">
       <section id="info">
