@@ -84,7 +84,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
       <Halo isBookmarked={isAnimating} />
       <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
-      <Image className={`${styles.check} ${isAnimating ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px" />
+      <Image className={`${styles.check} ${!isBookmarked ? styles.hidden : ""} ${isAnimating ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px" />
     </button>
   );
 };
