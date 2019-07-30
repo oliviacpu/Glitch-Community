@@ -56,12 +56,12 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   } else {
     avatar = <CollectionAvatar collection={collection} />;
   }
+  console.log(myStuffIsEnabled ? (isAuthorized && !collection.isMyStuff) : isAuthorized)
 
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
         <div className={styles.imageContainer}>{avatar}</div>
-
         <div>
           <h1 className={styles.name}>{collectionName}</h1>
 
@@ -71,7 +71,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           <div className={styles.description}>
             <AuthDescription
-              authorized={isAuthorized}
+              authorized={myStuffIsEnabled ? (isAuthorized && !collection.isMyStuff) : isAuthorized}
               description={collection.description}
               update={funcs.updateDescription}
               placeholder="Tell us about your collection"
