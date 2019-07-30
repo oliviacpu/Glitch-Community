@@ -22,11 +22,14 @@ export const APICacheProvider = ({ children, initial }) => {
     if (cachePending.size) {
       const timestamp = Date.now();
       cachePending.forEach(async (get, key) => {
-        let result = { status: 'loading', timestamp: Date.now() };
+        // first write the loading state into the cache, preserving the old value
+        let result = { status: 'loading', timestamp };
         setCache((oldCache) => {
           const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
           return new Map([...oldCache, [key, { ...result, value }]]);
         });
+
+        // next actually try to load the value and determine the new response
         try {
           const value = await get(api);
           result = { status: 'ready', value };
@@ -34,12 +37,15 @@ export const APICacheProvider = ({ children, initial }) => {
           captureException(error);
           result = { status: 'error', error };
         }
+
+        // finally put the new response in the cache if the timestamp is still up to date
+        // note that the
         setCache((currentCache) => {
           const currentResult = currentCache.get(key);
           if (currentResult.timestamp > timestamp) {
             return currentCache;
           }
-          return new Map([...currrentCache, [key, { ...currentResult, ...result }]]);
+          return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
         });
       });
       setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
@@ -47,8 +53,8 @@ export const APICacheProvider = ({ children, initial }) => {
   }, [api, cachePending]);
 
   const getCached = (key, get, timestamp) => {
-    const response = cache.has(key) ? cache.get(key) : { status: 'loading', expires: -Infinity };
-    if (response.expires < Date.now() && !cachePending.has(key)) {
+    const response = cache.has(key) ? cache.get(key) : { status: 'loading', timestamp: -Infinity };
+    if (response.timestamp < timestamp && !cachePending.has(key)) {
       setCachePending((latestCachePending) => new Map([...latestCachePending, [key, get]]));
     }
     return response;
@@ -57,20 +63,15 @@ export const APICacheProvider = ({ children, initial }) => {
   return <CacheContext.Provider value={getCached}>{children}</CacheContext.Provider>;
 };
 
-export const useCached = (url) => {
+const useGetCached = (key, get) => {
   const getCached = useContext(CacheContext);
-  return getCached(url, (api) => getFromApi(api, url));
+  const [timestamp] = useState(() => Date.now());
+  return getCached(key, get, timestamp);
 };
 
-export const useCachedItem = (url, key) => {
-  const getCached = useContext(CacheContext);
-  return getCached(`item:${url}`, (api) => getSingleItem(api, url, key));
-};
-
-export const useCachedPages = (url) => {
-  const getCached = useContext(CacheContext);
-  return getCached(`pages:${url}`, (api) => getAllPages(api, url));
-};
+export const useCached = (url) => useGetCached(url, (api) => getFromApi(api, url));
+export const useCachedItem = (url, key) => useGetCached(`item:${url}`, (api) => getSingleItem(api, url, key));
+export const useCachedPages = (url) => useGetCached(`pages:${url}`, (api) => getAllPages(api, url));
 
 export const useCombinedCache = (responses, baseResponse) => {
   const allResponses = [baseResponse, ...Object.values(responses)];
