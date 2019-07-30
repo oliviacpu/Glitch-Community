@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
-import { withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import Button from 'Components/buttons/button';
@@ -278,14 +277,15 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
   </main>
 );
 
-export const HomePreview = withRouter(({ history }) => {
+export const HomePreview = () => {
   const api = useAPI();
   const { origin, ZINE_POSTS } = useGlobals();
   console.log('HomePreview', origin);
   const onPublish = async (data) => {
     try {
       await api.post(`${origin}/api/home`, data);
-      history.push('/');
+      // need to do a hard reload for this to take effect
+      window.location = '/';
     } catch (e) {
       console.error(e);
     }
@@ -306,7 +306,7 @@ export const HomePreview = withRouter(({ history }) => {
       </PreviewContainer>
     </Layout>
   );
-});
+};
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();

@@ -13,12 +13,14 @@ const api = axios.create({
   timeout: 5000,
 });
 
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+
 let homeCache = null;
 
 async function getHomeData() {
   if (!homeCache) {
-    const [readFilePromise] = util.promisify(fs.readFile);
-    homeCache = readFilePromise(path.join(__dirname, '../src/curated/home.json')).then((json) => JSON.parse(json));
+    homeCache = readFile(path.join(__dirname, '../src/curated/home.json')).then(JSON.parse);
   }
   return homeCache;
 }
@@ -28,7 +30,7 @@ async function saveHomeDataToFile({ data, persistentToken }) {
   if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
 
   homeCache = Promise.resolve(data);
-  await fs.writeFile(path.join(__dirname, '../src/curated/home.json'), JSON.stringify(data), { encoding: 'utf8' });
+  await writeFile(path.join(__dirname, '../src/curated/home.json'), JSON.stringify(data), { encoding: 'utf8' });
 }
 
 module.exports = { getHomeData, saveHomeDataToFile };
