@@ -74,28 +74,30 @@ Halo.propTypes = {
 };
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
-  const [isBookmarked, setIsBookmarked] = React.useState(initialIsBookmarked);
-  const [isAnimating, setIsAnimating] = React.useState(false);
+  const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false });
   const onClick = () => {
-    if (!isBookmarked) {
-      setIsAnimating(true);
-      setIsBookmarked(true);
+    if (!state.isBookmarked) {
+      setState({ isAnimating: true, isBookmarked: true });
     } else {
-      setIsAnimating(false);
-      setIsBookmarked(false);
+      setState({ isAnimating: false, isBookmarked: false });
     }
     if (action) action();
   };
   const checkClassName = cx({
     check: true,
-    hidden: !isBookmarked,
-    checkAnimated: isAnimating,
+    checkAnimated: state.isAnimating,
+    hidden: !state.isBookmarked,
   });
 
   return (
-    <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
-      <Halo isAnimating={isAnimating} />
-      <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
+    <button
+      className={styles.bookmarkButton}
+      onClick={onClick}
+      aria-pressed={state.isBookmarked ? 'true' : 'false'}
+      aria-label="Add project to My Stuff"
+    >
+      <Halo isAnimating={state.isAnimating} />
+      <Image src={state.isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
       <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
     </button>
   );
