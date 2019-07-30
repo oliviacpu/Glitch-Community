@@ -187,7 +187,9 @@ const ProjectPage = ({ project: initialProject }) => {
                   </div>
                 )}
               </div>
-              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+              <div className={styles.privacyToggle}>
+                <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
+              </div>
             </>
           ) : (
             <>
