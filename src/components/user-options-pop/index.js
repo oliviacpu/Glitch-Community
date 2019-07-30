@@ -188,7 +188,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
-                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    <UserAvatar user={props.user} hideTooltip withinButton style={avatarStyle} />
                   </span>
                   <span className="down-arrow icon" />
                 </span>
