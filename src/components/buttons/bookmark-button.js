@@ -9,8 +9,8 @@ import styles from './bookmark-button.styl';
 const cx = classNames.bind(styles);
 
 const CHECKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008`;
-const EMPTY_BOOKMARK = `${CDN_URL}/e73ca55f-dcdd-42a6-a2db-8975a2a8180b%2Fatms-btn-empty.svg?v=1564517168944`;
-const FILLED_BOOKMARK = `${CDN_URL}/e73ca55f-dcdd-42a6-a2db-8975a2a8180b%2Fatms-filled.svg?v=1564517169448`;
+const EMPTY_BOOKMARK = `${CDN_URL}/e73ca55f-dcdd-42a6-a2db-8975a2a8180b%2Fatms-btn-empty.svg?v=1564517818850`;
+const FILLED_BOOKMARK = `${CDN_URL}/e73ca55f-dcdd-42a6-a2db-8975a2a8180b%2Fatms-filled.svg?v=1564517819769`;
 
 
 const Halo = ({ isAnimating }) => (
