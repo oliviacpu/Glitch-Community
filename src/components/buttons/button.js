@@ -85,7 +85,6 @@ const Button = React.forwardRef(
       );
     }
 
-    if (fullClassName === 'button__btn___1ah9Q button__unstyled___4HScI  ') console.log('btn', disabled);
     return (
       <button
         ref={ref}
