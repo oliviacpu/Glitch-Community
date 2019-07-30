@@ -8,37 +8,45 @@ const CacheContext = createContext();
 
 export const APICacheProvider = ({ children, initial }) => {
   const api = useAPI();
-  const [cache, setCache] = useState(() => (
-    new Map(Object.entries(initial).map(([key, value]) => [key, { status: 'loading', value, expires: -Infinity }]))
-  ));
+  const [cache, setCache] = useState(() => {
+    const formatted = mapValues(initial, (value) => ({ status: 'loading', value, timestamp: -Infinity }));
+    return new Map(Object.entries(formatted));
+  });
   const [cachePending, setCachePending] = useState(new Map());
-  const maxAge = 60 * 1000;
 
   useEffect(() => {
-    const expires = Date.now();
-    setCache((oldCache) => new Map([...oldCache].map(([key, data]) => [key, { ...data, expires }])));
+    setCache((oldCache) => new Map([...oldCache].map(([key, data]) => [key, { ...data, timestamp: -Infinity }])));
   }, [api.persistentToken]);
 
   useEffect(() => {
     if (cachePending.size) {
+      const timestamp = Date.now();
       cachePending.forEach(async (get, key) => {
-        const id = Math.random();
-        let result = { id, status: 'loading', expires: Infinity };
-        setCache((oldCache) => new Map([...oldCache, [key, { ...result, value: oldCache.has(key) ? oldCache.get(key).value : undefined }]]));
+        let result = { status: 'loading', timestamp: Date.now() };
+        setCache((oldCache) => {
+          const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
+          return new Map([...oldCache, [key, { ...result, value }]]);
+        });
         try {
           const value = await get(api);
-          result = { status: 'ready', value, expires: Date.now() + maxAge };
+          result = { status: 'ready', value };
         } catch (error) {
           captureException(error);
-          result = { status: 'error', error, expires: Date.now() + maxAge };
+          result = { status: 'error', error };
         }
-        setCache((oldCache) => oldCache.get(key).id === id ? new Map([...oldCache, [key, result]]) : oldCache);
+        setCache((currentCache) => {
+          const currentResult = currentCache.get(key);
+          if (currentResult.timestamp > timestamp) {
+            return currentCache;
+          }
+          return new Map([...currrentCache, [key, { ...currentResult, ...result }]]);
+        });
       });
       setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
     }
   }, [api, cachePending]);
 
-  const getCached = (key, get) => {
+  const getCached = (key, get, timestamp) => {
     const response = cache.has(key) ? cache.get(key) : { status: 'loading', expires: -Infinity };
     if (response.expires < Date.now() && !cachePending.has(key)) {
       setCachePending((latestCachePending) => new Map([...latestCachePending, [key, get]]));
