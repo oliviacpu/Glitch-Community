@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo, createContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { mapValues } from 'lodash';
 import { getFromApi, getSingleItem, getAllPages } from 'Shared/api';
 import { useAPI } from 'State/api';
@@ -77,17 +77,3 @@ export const useCached = (url) => useGetCached(url, (api) => getFromApi(api, url
 export const useCachedItem = (url, key) => useGetCached(`item:${url}`, (api) => getSingleItem(api, url, key));
 export const useCachedPages = (url) => useGetCached(`pages:${url}`, (api) => getAllPages(api, url));
 export const useCachedProject = (domain) => useGetCached(`project:${domain}`, (api) => getProjectByDomain(api, domain));
-
-export const useCombinedCache = (responses, baseResponse) => {
-  const allResponses = [baseResponse, ...Object.values(responses)];
-  return useMemo(() => {
-    if (!baseResponse.value) return baseResponse;
-    const errorResponse = allResponses.find(({ status }) => status === 'error');
-    if (errorResponse) return errorResponse;
-    if (allResponses.some(({ value }) => !value)) return { status: 'loading' };
-    return {
-      status: allResponses.every(({ status }) => status === 'ready') ? 'ready' : 'loading',
-      value: { ...baseResponse.value, ...mapValues(responses, ({ value }) => value) },
-    };
-  }, allResponses);
-};
