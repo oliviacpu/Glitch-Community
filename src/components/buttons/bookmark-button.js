@@ -11,9 +11,9 @@ const CHECKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2
 const EMPTY_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-btn-empty.svg?v=1564431969254';
 const FILLED_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-filled.svg?v=1564431950332';
 
-const Halo = ({ isBookmarked }) => (
+const Halo = ({ isAnimating }) => (
   <svg
-    className={`${styles.halo} ${isBookmarked ? styles.haloAnimated : ''}`}
+    className={`${styles.halo} ${isAnimating ? styles.haloAnimated : ''}`}
     width="54px"
     height="29px"
     viewBox="0 0 54 29"
@@ -69,6 +69,10 @@ const Halo = ({ isBookmarked }) => (
   </svg>
 );
 
+Halo.propTypes = {
+  isAnimating: React.bool.isRequired,
+};
+
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [isBookmarked, setIsBookmarked] = React.useState(initialIsBookmarked);
   const [isAnimating, setIsAnimating] = React.useState(false);
@@ -90,7 +94,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
 
   return (
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
-      <Halo isBookmarked={isAnimating} />
+      <Halo isAnimating={isAnimating} />
       <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
       <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
     </button>
