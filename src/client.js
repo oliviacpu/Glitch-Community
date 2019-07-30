@@ -47,7 +47,7 @@ window.bootstrap = () => {
   const container = document.getElementById('main');
 
   if (container.hasChildNodes()) {
-    document.querySelectorAll('.button__btn___1ah9Q').forEach((e) => console.log(e.disabled));
+    console.log(document.querySelector('.button__btn___1ah9Q.button__unstyled___4HScI'));
     hydrate(element, container);
   } else {
     render(element, container);

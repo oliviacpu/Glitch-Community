@@ -91,7 +91,7 @@ const Button = React.forwardRef(
         ref={ref}
         onClick={onClick}
         className={fullClassName}
-        disabled={disabled}
+        disabled
         type={submit ? 'submit' : 'button'}
         aria-pressed={ariaPressed}
       >
