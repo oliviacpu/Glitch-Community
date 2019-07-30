@@ -281,6 +281,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
 export const HomePreview = withRouter(({ history }) => {
   const api = useAPI();
   const { origin, ZINE_POSTS } = useGlobals();
+  console.log('HomePreview', origin);
   const onPublish = async (data) => {
     try {
       await api.post(`${origin}/api/home`, data);

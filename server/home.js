@@ -17,7 +17,7 @@ let homeCache = null;
 
 async function getHomeData() {
   if (!homeCache) {
-    const readFilePromise = util.promisify(fs.readFile);
+    const [readFilePromise] = util.promisify(fs.readFile);
     homeCache = readFilePromise(path.join(__dirname, '../src/curated/home.json')).then((json) => JSON.parse(json));
   }
   return homeCache;
