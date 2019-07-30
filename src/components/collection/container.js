@@ -38,15 +38,17 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
 
+  const myStuffIsEnabled = useDevToggle('My Stuff');
+  const canEditNameAndDescription = myStuffIsEnabled ? (isAuthorized && !collection.isMyStuff) : isAuthorized
+
   let collectionName = collection.name;
-  if (isAuthorized) {
+  if (canEditNameAndDescription) {
     collectionName = <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} />;
   } else if (preview) {
     collectionName = <CollectionLink collection={collection}>{collection.name}</CollectionLink>;
   }
 
   const enableSorting = isAuthorized && projects.length > 1;
-  const myStuffIsEnabled = useDevToggle('My Stuff');
 
   let avatar;
   if (myStuffIsEnabled && collection.isMyStuff) {
@@ -70,7 +72,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           <div className={styles.description}>
             <AuthDescription
-              authorized={myStuffIsEnabled ? (isAuthorized && !collection.isMyStuff) : isAuthorized}
+              authorized={canEditNameAndDescription}
               description={collection.description}
               update={funcs.updateDescription}
               placeholder="Tell us about your collection"

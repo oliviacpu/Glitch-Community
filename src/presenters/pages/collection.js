@@ -40,7 +40,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       <main id="main">
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
-        {currentUserIsAuthor &&
+        {currentUserIsAuthor && !collection.isMyStuff &&
           <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
             {() => <DeleteCollection collection={collection} />}
           </PopoverWithButton>
