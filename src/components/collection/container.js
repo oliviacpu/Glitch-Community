@@ -56,7 +56,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   } else {
     avatar = <CollectionAvatar collection={collection} />;
   }
-  console.log(myStuffIsEnabled ? (isAuthorized && !collection.isMyStuff) : isAuthorized)
 
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
