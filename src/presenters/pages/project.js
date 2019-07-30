@@ -140,6 +140,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
@@ -147,18 +148,18 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const bookmarkAction = () =>
-    toggleBookmark({
-      api,
-      project,
-      currentUser,
-      createNotification,
-      myStuffEnabled,
-      addProjectToCollection,
-      removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
-    });
+  const bookmarkAction = () => toggleBookmark({
+    api,
+    project,
+    currentUser,
+    createNotification,
+    myStuffEnabled,
+    addProjectToCollection,
+    removeProjectFromCollection,
+    setHasBookmarked,
+    hasBookmarked,
+  });
+
   return (
     <main id="main">
       <section id="info">
@@ -181,7 +182,7 @@ const ProjectPage = ({ project: initialProject }) => {
                     placeholder="Name your project"
                   />
                 </Heading>
-                {myStuffEnabled && (
+                {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
                     <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
                   </div>
@@ -195,7 +196,7 @@ const ProjectPage = ({ project: initialProject }) => {
             <>
               <div className={styles.headingWrap}>
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
-                {myStuffEnabled && (
+                {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
                     <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
                   </div>
