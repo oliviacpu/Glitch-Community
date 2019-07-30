@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import classNames from 'classnames/bind';
+import { CDN_URL } from 'Utils/constants';
 
 import styles from './bookmark-button.styl';
 
 const cx = classNames.bind(styles);
 
-const CHECKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008';
-const EMPTY_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-btn-empty.svg?v=1564431969254';
-const FILLED_BOOKMARK = 'https://cdn.glitch.com/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-filled.svg?v=1564431950332';
+const CHECKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008`;
+const EMPTY_BOOKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-btn-empty.svg?v=1564431969254`;
+const FILLED_BOOKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fatms-filled.svg?v=1564431950332`;
 
 const Halo = ({ isAnimating }) => (
   <svg
