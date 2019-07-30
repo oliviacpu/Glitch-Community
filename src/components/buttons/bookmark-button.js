@@ -68,16 +68,23 @@ const Halo = ({ isBookmarked }) => (
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [isBookmarked, setIsBookmarked] = React.useState(initialIsBookmarked);
-  const onClick = () => {
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  const onClick = async () => {
+    if (!isBookmarked) {
+      setIsAnimating(true);
+    }
     setIsBookmarked(!isBookmarked);
-    if (action) action();
+    if (action) {
+      await action();
+    }
+    setIsAnimating(false)
   };
 
   return (
     <button className={styles.bookmarkButton} onClick={onClick} aria-pressed={isBookmarked ? 'true' : 'false'} aria-label="Add project to My Stuff">
-      <Halo isBookmarked={isBookmarked} />
+      <Halo isBookmarked={isAnimating} />
       <Image src={isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" />
-      <Image className={`${styles.check} ${isBookmarked ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px" />
+      <Image className={`${styles.check} ${isAnimating ? styles.checkAnimated : ''}`} src={CHECKMARK} alt="" width="10px" height="10px" />
     </button>
   );
 };
