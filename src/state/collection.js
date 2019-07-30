@@ -17,7 +17,6 @@ export const toggleBookmark = async ({
   setHasBookmarked,
   hasBookmarked,
 }) => {
-  console.log('toggle?', hasBookmarked);
   try {
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
     if (hasBookmarked) {
@@ -31,7 +30,6 @@ export const toggleBookmark = async ({
       await addProjectToCollection({ project, collection: myStuffCollection });
     }
   } catch (error) {
-    console.log(error);
     captureException(error);
   }
 };

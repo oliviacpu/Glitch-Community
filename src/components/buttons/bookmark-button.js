@@ -70,7 +70,7 @@ const Halo = ({ isAnimating }) => (
 );
 
 Halo.propTypes = {
-  isAnimating: React.bool.isRequired,
+  isAnimating: PropTypes.bool.isRequired,
 };
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
