@@ -32,7 +32,7 @@ import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
-import { useCachedItem, useCachedPages, useCombinedCache } from 'State/api';
+import { useCachedItem, useCachedPages, useCombinedCache } from 'State/api-cache';
 
 import styles from './project.styl';
 

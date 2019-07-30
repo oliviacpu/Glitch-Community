@@ -3,7 +3,8 @@ import { LiveAnnouncer } from 'react-aria-live';
 
 import { AnalyticsContext } from 'State/segment-analytics';
 import { CurrentUserProvider } from 'State/current-user';
-import { APIContextProvider, APICacheProvider } from 'State/api';
+import { APIContextProvider } from 'State/api';
+import { APICacheProvider } from 'State/api-cache';
 import { LocalStorageProvider } from 'State/local-storage';
 import { ProjectContextProvider } from 'State/project';
 import { CollectionContextProvider } from 'State/collection';
