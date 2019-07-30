@@ -14,10 +14,11 @@ import CollectionNameInput from 'Components/fields/collection-name-input';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
 import AuthDescription from 'Components/fields/auth-description';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import { useCollectionCurator } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './container.styl';
 
@@ -45,12 +46,22 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   }
 
   const enableSorting = isAuthorized && projects.length > 1;
-  console.log(collection.avatarUrl)
+  const myStuffIsEnabled = useDevToggle('My Stuff');
+  
+  let avatar;
+  if (myStuffIsEnabled && collection.isMyStuff) {
+    avatar = <BookmarkAvatar />;
+  } else if (collection.avatarUrl) {
+    avatar = <Image src={collection.avatarUrl} alt="" />; 
+  } else {
+    avatar = <CollectionAvatar collection={collection} />;
+  }
+  
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
         <div className={styles.imageContainer}>
-          {<CollectionAvatar collection={collection} />}
+          {avatar}
         </div>
 
         <div>
