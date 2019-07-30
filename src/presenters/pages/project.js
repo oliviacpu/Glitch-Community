@@ -39,7 +39,7 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const filteredCollections = (collections) => collections.filter((c) => c.user || c.team);
+const filteredCollections = (collections) => collections.filter((c) => (c.user || c.team) && !c.isMyStuff);
 
 const IncludedInCollections = ({ projectId }) => (
   <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
@@ -85,14 +85,11 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(
-    () => {
-      if (done) {
-        window.location = getUserLink(currentUser);
-      }
-    },
-    [done, currentUser],
-  );
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
 
   return (
     <section>
