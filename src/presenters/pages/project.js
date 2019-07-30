@@ -26,13 +26,13 @@ import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useProjectEditor, getProjectByDomain } from 'State/project';
+import { useProjectEditor } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
-import { useCachedItem, useCachedPages, useCombinedCache } from 'State/api-cache';
+import { useCachedProject } from 'State/api-cache';
 
 import styles from './project.styl';
 
@@ -230,10 +230,7 @@ async function addProjectBreadcrumb(projectWithMembers) {
 }
 
 const ProjectPageContainer = ({ name: domain }) => {
-  const { status, value: project, error } = useCombinedCache({
-    teams: useCachedPages(`v1/projects/by/domain/teams?domain=${domain}`),
-    users: useCachedPages(`v1/projects/by/domain/users?domain=${domain}`),
-  }, useCachedItem(`v1/projects/by/domain?domain=${domain}`, domain));
+  const { status, value: project, error } = useCachedProject(domain);
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>

@@ -4,6 +4,8 @@ import { getFromApi, getSingleItem, getAllPages } from 'Shared/api';
 import { useAPI } from 'State/api';
 import { captureException } from 'Utils/sentry';
 
+import { getProjectByDomain } from 'State/project';
+
 const CacheContext = createContext();
 
 export const APICacheProvider = ({ children, initial }) => {
@@ -74,6 +76,7 @@ const useGetCached = (key, get) => {
 export const useCached = (url) => useGetCached(url, (api) => getFromApi(api, url));
 export const useCachedItem = (url, key) => useGetCached(`item:${url}`, (api) => getSingleItem(api, url, key));
 export const useCachedPages = (url) => useGetCached(`pages:${url}`, (api) => getAllPages(api, url));
+export const useCachedProject = (domain) => useGetCached(`project:${domain}`, (api) => getProjectByDomain(api, domain));
 
 export const useCombinedCache = (responses, baseResponse) => {
   const allResponses = [baseResponse, ...Object.values(responses)];
