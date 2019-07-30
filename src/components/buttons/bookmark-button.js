@@ -121,6 +121,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
       aria-label="Add project to My Stuff"
     >
       <Halo isAnimating={state.isAnimating} />
+      <div className={styles.focusRing}/>
       {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
       {/* <Image src={state.isBookmarked ? FILLED_BOOKMARK : EMPTY_BOOKMARK} alt="" /> */}
       <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
