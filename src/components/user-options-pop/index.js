@@ -184,6 +184,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
       {(createTeamOpen) => (
         <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
+            console.log('id', props.user.id);
             const userOptionsButton = (
               <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
