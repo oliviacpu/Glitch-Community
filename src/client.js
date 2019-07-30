@@ -47,7 +47,8 @@ window.bootstrap = () => {
   const container = document.getElementById('main');
 
   if (container.hasChildNodes()) {
-    hydrate(element, container);
+    hydrate(element, container, () => console.log(container.innerHTML));
+    
   } else {
     render(element, container);
   }
