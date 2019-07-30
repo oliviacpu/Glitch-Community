@@ -57,7 +57,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       'data-tooltip': tooltip,
       className: `${target.props.className} ${tooltipFallbackClassName}`,
     });
-    console.log(extendedTarget.props);
   } else if (type === 'info') {
     // info tooltips are visible on hover and focus, they provide supplementary info
     // they should be empty when not "visible", and populated when they are

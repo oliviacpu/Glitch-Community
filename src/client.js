@@ -9,7 +9,7 @@ import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import convertPlugin from 'Shared/dayjs-convert';
-import { captureException, configureScope } from 'Utils/sentry';
+import { configureScope } from 'Utils/sentry';
 import { EDITOR_URL } from 'Utils/constants';
 import { GlobalsProvider } from 'State/globals';
 import App from './app';
@@ -47,18 +47,9 @@ window.bootstrap = () => {
   const container = document.getElementById('main');
 
   if (container.hasChildNodes()) {
-    console.log(document.querySelectorAll('.button__btn___1ah9Q.button__unstyled___4HScI'));
+    console.log(document.querySelector('.button__btn___1ah9Q.button__unstyled___4HScI').outerHTML);
     hydrate(element, container);
   } else {
     render(element, container);
   }
 };
-
-// Make sure react exists because that's an issue that is happening
-try {
-  if (!React.Component) {
-    throw new Error('React.Component is not defined?');
-  }
-} catch (error) {
-  captureException(error);
-}
