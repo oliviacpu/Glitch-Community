@@ -89,7 +89,7 @@ RUNNING_LOCALLY=true
 ```
 4. Start the server:
 ```bash
-node server/server.js
+npm start
 ```
 
 ### How do I add a question to the FAQ?
