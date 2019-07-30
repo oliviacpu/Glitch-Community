@@ -6,25 +6,31 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 import { createCollection } from 'Models/collection';
 
-export const addProjectToMyStuff = async ({
+export const toggleBookmark = async ({
   api,
   project,
   currentUser,
   createNotification,
   myStuffEnabled,
   addProjectToCollection,
+  removeProjectFromCollection,
   setHasBookmarked,
+  hasBookmarked,
 }) => {
   try {
-    setHasBookmarked(true);
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-    if (!myStuffCollection) {
-      myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+    if (hasBookmarked) {
+      setHasBookmarked(false);
+      await removeProjectFromCollection({ project, collection: myStuffCollection });
+    } else {
+      setHasBookmarked(true);
+      if (!myStuffCollection) {
+        myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+      }
+      await addProjectToCollection({ project, collection: myStuffCollection });
     }
-    addProjectToCollection({ project, collection: myStuffCollection });
   } catch (error) {
     captureException(error);
-    console.log(error);
   }
 };
 

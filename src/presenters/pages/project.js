@@ -27,7 +27,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { addProjectToMyStuff } from 'State/collection';
+import { toggleBookmark } from 'State/collection';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
@@ -144,11 +144,19 @@ const ProjectPage = ({ project: initialProject }) => {
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   const api = useAPI();
-  const { addProjectToCollection } = useAPIHandlers();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  console.log(initialProject);
-
+  const bookmarkAction = () => toggleBookmark({
+    api,
+    project,
+    currentUser,
+    createNotification,
+    myStuffEnabled,
+    addProjectToCollection,
+    setHasBookmarked,
+    hasBookmarked
+  });
   return (
     <main id="main">
       <section id="info">
@@ -173,20 +181,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 </Heading>
                 {myStuffEnabled && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton
-                      action={() =>
-                        addProjectToMyStuff({
-                          api,
-                          project,
-                          currentUser,
-                          createNotification,
-                          myStuffEnabled,
-                          addProjectToCollection,
-                          setHasBookmarked,
-                        })
-                      }
-                      initialIsBookmarked={hasBookmarked}
-                    />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
                   </div>
                 )}
               </div>
@@ -198,20 +193,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
                 {myStuffEnabled && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton
-                      action={() =>
-                        addProjectToMyStuff({
-                          api,
-                          project,
-                          currentUser,
-                          createNotification,
-                          myStuffEnabled,
-                          addProjectToCollection,
-                          setHasBookmarked,
-                        })
-                      }
-                      initialIsBookmarked={hasBookmarked}
-                    />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
                   </div>
                 )}
               </div>
