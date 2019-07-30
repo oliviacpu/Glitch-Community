@@ -45,12 +45,12 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   }
 
   const enableSorting = isAuthorized && projects.length > 1;
-
+  console.log(collection.avatarUrl)
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
         <div className={styles.imageContainer}>
-          {collection.avatarUrl ? <Image src={collection.avatarUrl} alt="" /> : <CollectionAvatar collection={collection} />}
+          {<CollectionAvatar collection={collection} />}
         </div>
 
         <div>
