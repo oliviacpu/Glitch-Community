@@ -14,44 +14,46 @@ export const APICacheProvider = ({ children, initial }) => {
   });
   const [cachePending, setCachePending] = useState(new Map());
 
+  // on auth change mark everything as very old, that way component rerender will kick off all new requests
   useEffect(() => {
     setCache((oldCache) => new Map([...oldCache].map(([key, data]) => [key, { ...data, timestamp: -Infinity }])));
   }, [api.persistentToken]);
 
   useEffect(() => {
-    if (cachePending.size) {
-      const timestamp = Date.now();
-      cachePending.forEach(async (get, key) => {
-        // first write the loading state into the cache, preserving the old value
-        let result = { status: 'loading', timestamp };
-        setCache((oldCache) => {
-          const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
-          return new Map([...oldCache, [key, { ...result, value }]]);
-        });
-
-        // next actually try to load the value and determine the new response
-        try {
-          const value = await get(api);
-          result = { status: 'ready', value };
-        } catch (error) {
-          captureException(error);
-          result = { status: 'error', error };
-        }
-
-        // finally put the new response in the cache if the timestamp is still up to date
-        // note that the
-        setCache((currentCache) => {
-          const currentResult = currentCache.get(key);
-          if (currentResult.timestamp > timestamp) {
-            return currentCache;
-          }
-          return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
-        });
+    if (!cachePending.size) return;
+    const timestamp = Date.now();
+    cachePending.forEach(async (get, key) => {
+      // first write the loading state into the cache, preserving the old value
+      let result = { status: 'loading', timestamp };
+      setCache((oldCache) => {
+        const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
+        return new Map([...oldCache, [key, { ...result, value }]]);
       });
-      setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
-    }
+
+      // next actually try to load the value and determine the new response
+      try {
+        const value = await get(api);
+        result = { status: 'ready', value };
+      } catch (error) {
+        captureException(error);
+        result = { status: 'error', error };
+      }
+
+      // finally put the new response in the cache if the timestamp is still up to date
+      setCache((currentCache) => {
+        const currentResult = currentCache.get(key);
+        if (currentResult.timestamp > timestamp) {
+          return currentCache;
+        }
+        return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
+      });
+    });
+    setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
   }, [api, cachePending]);
 
+  // the timestamp is a minimum recency for the requested data
+  // several components mounting at once will naturally debounce via effects
+  // if we have stale data on hand it'll show up until the fresh data loads in
   const getCached = (key, get, timestamp) => {
     const response = cache.has(key) ? cache.get(key) : { status: 'loading', timestamp: -Infinity };
     if (response.timestamp < timestamp && !cachePending.has(key)) {
