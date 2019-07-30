@@ -162,7 +162,7 @@ const ProjectPage = ({ project: initialProject }) => {
                   placeholder="Name your project"
                 />
               </Heading>
-              <PrivateToggle isPrivate={!!project.private} setPrivate={updatePrivate} />
+              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
             </div>
           ) : (
             <div className={styles.headingWrap}>

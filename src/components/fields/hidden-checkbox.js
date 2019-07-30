@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './hidden-checkbox.styl';
 
 const HiddenCheckbox = ({ value, onChange, children }) => (
@@ -8,11 +7,5 @@ const HiddenCheckbox = ({ value, onChange, children }) => (
     {children}
   </label>
 );
-
-HiddenCheckbox.propTypes = {
-  value: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default HiddenCheckbox;

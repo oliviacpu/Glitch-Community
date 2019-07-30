@@ -45,10 +45,8 @@ window.bootstrap = () => {
     </BrowserRouter>
   );
   const container = document.getElementById('main');
-
   if (container.hasChildNodes()) {
-    hydrate(element, container, () => console.log(container.innerHTML));
-    
+    hydrate(element, container);
   } else {
     render(element, container);
   }
