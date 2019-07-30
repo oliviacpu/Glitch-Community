@@ -85,6 +85,7 @@ const Button = React.forwardRef(
       );
     }
 
+    if (typeof window === 'undefined') console.log('btn', disabled);
     return (
       <button
         ref={ref}

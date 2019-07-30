@@ -47,7 +47,7 @@ window.bootstrap = () => {
   const container = document.getElementById('main');
 
   if (container.hasChildNodes()) {
-    console.log('disabled', document.querySelector('.button__btn___1ah9Q.button__unstyled___4HScI').disabled);
+    document.querySelectorAll('.button__btn___1ah9Q').forEach((e) => console.log(e.disabled));
     hydrate(element, container);
   } else {
     render(element, container);
