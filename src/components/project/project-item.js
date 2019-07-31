@@ -10,6 +10,7 @@ import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
+import TooltipContainer from 'Components/tooltips/tooltip-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
@@ -92,6 +93,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   {myStuffEnabled && !isAnonymousUser && (
                     <div className={styles.bookmarkButton}>
                       <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                      <TooltipContainer />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>
