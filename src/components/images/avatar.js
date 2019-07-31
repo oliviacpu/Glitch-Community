@@ -15,7 +15,6 @@ import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models
 import styles from './avatar.styl';
 
 // UserAvatar
-
 export const Avatar = ({ name, src, color, srcFallback, type, hideTooltip, withinButton }) => {
   const contents = (
     <Image width="32px" height="32px" src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={styles[type]} />
