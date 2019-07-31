@@ -116,7 +116,7 @@ const EmptyBookmark = () => (
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
-  const onClick = () => {
+  const onClick = (event) => {
     if (!state.isBookmarked) {
       setState({ isFocused: false, isAnimating: true, isBookmarked: true });
     } else {
@@ -125,10 +125,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     if (action) action();
   };
   const onFocus = () => {
-    setState({ isFocused: true, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: true });
   };
   const onBlur = () => {
-    setState({ isFocused: false, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: false });
   };
 
   const checkClassName = cx({
