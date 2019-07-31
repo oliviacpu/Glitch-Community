@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
 import classNames from 'classnames/bind';
 import { CDN_URL } from 'Utils/constants';
+import TooltipContainer from 'Components/tooltips/tooltip-container';
 
 import styles from './bookmark-button.styl';
 
@@ -116,19 +117,23 @@ const EmptyBookmark = () => (
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
-  const onClick = () => {
+  const addText = 'Add to My Stuff';
+  const removeText = 'Remove from My Stuff';
+
+  const onClick = (e) => {
+    const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
     if (!state.isBookmarked) {
-      setState({ isFocused: false, isAnimating: true, isBookmarked: true });
+      setState({ isFocused: fromKeyboard, isAnimating: true, isBookmarked: true });
     } else {
-      setState({ isFocused: false, isAnimating: false, isBookmarked: false });
+      setState({ isFocused: fromKeyboard, isAnimating: false, isBookmarked: false });
     }
     if (action) action();
   };
   const onFocus = () => {
-    setState({ isFocused: true, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: true });
   };
   const onBlur = () => {
-    setState({ isFocused: false, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: false });
   };
 
   const checkClassName = cx({
@@ -138,18 +143,24 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   });
 
   return (
-    <button
-      className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''}`}
-      onClick={onClick}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      aria-pressed={state.isBookmarked ? 'true' : 'false'}
-      aria-label="Add project to My Stuff"
-    >
-      <Halo isAnimating={state.isAnimating} />
-      {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
-      <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
-    </button>
+    <TooltipContainer
+      type="action"
+      tooltip={state.isBookmarked ? removeText : addText}
+      target={
+        <button
+          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''}`}
+          onClick={onClick}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          aria-pressed={state.isBookmarked ? 'true' : 'false'}
+          aria-label="Add project to My Stuff"
+        >
+          <Halo isAnimating={state.isAnimating} />
+          {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
+          <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
+        </button>
+      }
+    />
   );
 };
 
