@@ -163,6 +163,7 @@ const ProjectPage = ({ project: initialProject }) => {
 
   return (
     <main id="main">
+      <Helmet title={project.domain} />
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
@@ -273,12 +274,7 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {project ? (
-          <>
-            <Helmet title={project.domain} />
-            <ProjectPage project={project} />
-          </>
-        ) : (
+        {project ? <ProjectPage project={project} /> : (
           <>
             {status === 'ready' && <NotFound name={domain} />}
             {status === 'loading' && <Loader />}
