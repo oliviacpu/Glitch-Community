@@ -42,7 +42,10 @@ function useCollectionsWithProjects(collections) {
           moreCollectionsWithProjects.push({ ...collections[i], projects: response.value });
         }
       });
-      return sampleSize(moreCollectionsWithProjects, 3);
+
+      const filteredMoreCollectionsWithProjects = moreCollectionsWithProjects.filter((c) => !c.isMyStuff);
+
+      return sampleSize(filteredMoreCollectionsWithProjects, 3);
     });
   }, [responses]);
   return collectionsWithProjects;
@@ -62,8 +65,16 @@ const MoreCollections = ({ currentCollection, collections }) => {
         <Heading tagName="h2">
           {curator.status === 'ready' ? (
             <>
-              {curator.value.user && <UserLink user={curator.value.user}>More by {getDisplayName(curator.value.user)} <Arrow /></UserLink>}
-              {curator.value.team && <TeamLink team={curator.value.team}>More from {curator.value.team.name} <Arrow /></TeamLink>}
+              {curator.value.user && (
+                <UserLink user={curator.value.user}>
+                  More by {getDisplayName(curator.value.user)} <Arrow />
+                </UserLink>
+              )}
+              {curator.value.team && (
+                <TeamLink team={curator.value.team}>
+                  More from {curator.value.team.name} <Arrow />
+                </TeamLink>
+              )}
             </>
           ) : (
             <>More collections</>
