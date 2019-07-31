@@ -12,16 +12,26 @@
   
   &:focus{
     outline: none;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     .highlight{
       fill: none;
       display: inline;
+    }
+  }
+
+  &:focus-visible{
+    .highlight{
+      fill: none;
+      display: none;
     }
   }
 }
 
 .halo {
   position: absolute;
-  left: 3px;
+  left: 6px;
   top: 0px;
   display: none;
 }
