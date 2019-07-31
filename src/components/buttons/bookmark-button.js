@@ -117,17 +117,28 @@ const EmptyBookmark = () => (
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
   const onClick = (event) => {
+
+    console.log('event', event);
+    let clickFromMouse = false;
+    if(event.type == 'mousedown'){
+      clickFromMouse = false;
+    }else if(event.type === 'keypress'){
+      console.log('triggered click from mouse');
+      clickFromMouse = true;
+    }
     if (!state.isBookmarked) {
-      setState({ isFocused: false, isAnimating: true, isBookmarked: true });
+      setState({ isFocused: true, isAnimating: true, isBookmarked: true });
     } else {
-      setState({ isFocused: false, isAnimating: false, isBookmarked: false });
+      setState({ isFocused: true, isAnimating: false, isBookmarked: false });
     }
     if (action) action();
   };
   const onFocus = () => {
+    console.log('on focus');
     setState({ ...state, isFocused: true });
   };
   const onBlur = () => {
+    console.log('on blur');
     setState({ ...state, isFocused: false });
   };
 
