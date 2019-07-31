@@ -23,21 +23,20 @@ export const APICacheProvider = ({ children, initial }) => {
 
   useEffect(() => {
     if (!cachePending.size) return;
+    const timestamp = Date.now();
 
-    // first write the loading state into the cache, preserving the old value
-    let result = { status: 'loading', timestamp };
+    // first write the loading states into the cache, preserving the old value
     setCache((oldCache) => {
-      const entries = cachePending.keys().map((key) => {
+      const newCache = Array.from(cachePending.keys()).map((key) => {
         const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
-
+        return [key, { status: 'loading', value, timestamp }];
       });
-      return new Map([...oldCache, [key, { ...result, value }]]);
+      return new Map([...oldCache, ...newCache]);
     });
 
-    const timestamp = Date.now();
     cachePending.forEach(async (get, key) => {
-
       // next actually try to load the value and determine the new response
+      let result;
       try {
         const value = await get(api);
         result = { status: 'ready', value };
@@ -48,11 +47,10 @@ export const APICacheProvider = ({ children, initial }) => {
 
       // finally put the new response in the cache if the timestamp is still up to date
       setCache((currentCache) => {
-        const currentResult = currentCache.get(key);
-        if (currentResult.timestamp > timestamp) {
+        if (currentCache.get(key).timestamp > timestamp) {
           return currentCache;
         }
-        return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
+        return new Map([...currentCache, [key, { timestamp, ...result }]]);
       });
     });
 
