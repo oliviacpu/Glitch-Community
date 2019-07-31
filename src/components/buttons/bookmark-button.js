@@ -130,8 +130,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     if (action) action();
   };
   const onFocus = () => {
-    console.log('focused');
     setState({ isFocused: true });
+  }
+  const onBlur = () => {
+    setState({ isFocused: false });
   }
   const checkClassName = cx({
     check: true,
@@ -141,9 +143,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
 
   return (
     <button
-      className={`${styles.bookmarkButton} ${state.isFocused ? 'focused' : ''}`}
+      className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''}`}
       onClick={onClick}
       onFocus={onFocus}
+      onBlur={onBlur}
       aria-pressed={state.isBookmarked ? 'true' : 'false'}
       aria-label="Add project to My Stuff"
     >
