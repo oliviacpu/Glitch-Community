@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
 import Markdown from 'Components/text/markdown';
+import BookmarkButton from 'Components/buttons/bookmark-button';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
@@ -67,6 +68,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
+                  <BookmarkButton></BookmarkButton>
                   <div className={styles.projectOptionsContainer}>
                     <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                   </div>
