@@ -120,8 +120,8 @@ const EmptyBookmark = () => (
 );
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
-  const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false });
-  const onClick = (e) => {
+  const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
+  const onClick = () => {
     if (!state.isBookmarked) {
       setState({ isAnimating: true, isBookmarked: true });
     } else {
@@ -129,6 +129,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     }
     if (action) action();
   };
+  const onFocus = () => {
+    console.log('focused');
+    setState({ isFocused: true });
+  }
   const checkClassName = cx({
     check: true,
     checkAnimated: state.isAnimating,
@@ -137,8 +141,9 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
 
   return (
     <button
-      className={styles.bookmarkButton}
+      className={`${styles.bookmarkButton} ${state.isFocused ? 'focused' : ''}`}
       onClick={onClick}
+      onFocus={onFocus}
       aria-pressed={state.isBookmarked ? 'true' : 'false'}
       aria-label="Add project to My Stuff"
     >

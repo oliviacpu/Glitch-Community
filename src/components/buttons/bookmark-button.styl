@@ -9,15 +9,19 @@
     fill: none;
     display: none;
   }
-  
-  &:focus{
-    outline: none;
-    border: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+
+  &.focused{
     .highlight{
       fill: none;
       display: inline;
+    }
+  }
+  
+  &:focus{
+    outline: none;
+    .highlight{
+      fill: none;
+      display: none;
     }
   }
 }
