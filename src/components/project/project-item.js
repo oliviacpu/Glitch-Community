@@ -11,7 +11,7 @@ import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
-import { FALLBACK_AVATAR_URL, getAvatarUrl, userIsProjectMember } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark } from 'State/collection';
 import { useNotifications } from 'State/notifications';
@@ -47,12 +47,8 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  // useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
-  const isAuthorized = userIsProjectMember({ project, user: currentUser });
-  const { domain, users, teams, suspendedReason } = project;
-  // const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
