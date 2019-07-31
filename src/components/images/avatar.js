@@ -10,7 +10,7 @@ import { CDN_URL } from 'Utils/constants';
 
 import { DEFAULT_TEAM_AVATAR, getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getUserAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 
 import styles from './avatar.styl';
 
@@ -91,7 +91,7 @@ UserAvatar.defaultProps = {
 };
 
 export const ProjectAvatar = ({ project, hasAlt }) => (
-  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project.id)} srcFallback={FALLBACK_AVATAR_URL} type="team" hideTooltip />
+  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="team" hideTooltip />
 );
 
 ProjectAvatar.propTypes = {
