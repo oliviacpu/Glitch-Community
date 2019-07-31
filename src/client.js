@@ -9,7 +9,7 @@ import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import convertPlugin from 'Shared/dayjs-convert';
-import { captureException, configureScope } from 'Utils/sentry';
+import { configureScope } from 'Utils/sentry';
 import { EDITOR_URL } from 'Utils/constants';
 import { GlobalsProvider } from 'State/globals';
 import App from './app';
@@ -51,12 +51,3 @@ window.bootstrap = () => {
     render(element, container);
   }
 };
-
-// Make sure react exists because that's an issue that is happening
-try {
-  if (!React.Component) {
-    throw new Error('React.Component is not defined?');
-  }
-} catch (error) {
-  captureException(error);
-}

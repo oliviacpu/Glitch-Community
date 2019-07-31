@@ -53,7 +53,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           {collection.avatarUrl ? <Image src={collection.avatarUrl} alt="" /> : <CollectionAvatar collection={collection} />}
         </div>
 
-        <div className={styles.collectionInfo}>
+        <div>
           <h1 className={styles.name}>{collectionName}</h1>
 
           <div className={styles.owner}>
