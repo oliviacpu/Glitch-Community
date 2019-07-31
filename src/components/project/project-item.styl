@@ -2,6 +2,9 @@
 
 .container
   font-size: 14px
+  &:hover
+    .bookmarkButton
+      display: block
 
 .projectItemSmall
   .linkBodySmall
@@ -53,7 +56,7 @@
   position: relative
   z-index: 1
   &.spaceForOptions
-    max-width: calc(100% - 30px)
+    max-width: calc(100% - 86px)
 
 .projectOptionsContainer
   position: absolute
@@ -104,8 +107,9 @@ a.linkBody:hover
   border-radius: 5px
     
 .bookmarkButton
-  margin: -18px -20px 0 0
+  display: none
+  margin: -17px 35px 0 0
   flex: none 
   position: absolute
   top: 0
-  right: 35px
+  right: 0
