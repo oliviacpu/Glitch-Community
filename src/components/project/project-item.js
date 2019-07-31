@@ -12,9 +12,11 @@ import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { toggleBookmark } from 'State/collection';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -42,6 +44,7 @@ const ProfileListLoader = ({ project }) => (
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const { currentUser } = useCurrentUser();
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
