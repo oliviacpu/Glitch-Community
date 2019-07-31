@@ -47,10 +47,11 @@ export const APICacheProvider = ({ children, initial }) => {
 
       // finally put the new response in the cache if the timestamp is still up to date
       setCache((currentCache) => {
-        if (currentCache.get(key).timestamp > timestamp) {
+        const currentResult = currentCache.get(key);
+        if (currentResult.timestamp > timestamp) {
           return currentCache;
         }
-        return new Map([...currentCache, [key, { timestamp, ...result }]]);
+        return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
       });
     });
 
