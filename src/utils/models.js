@@ -1,6 +1,6 @@
 import { getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getTeamLink } from 'Models/team';
+import { getTeamLink } from 'Models/team';
 import { getUserLink } from 'Models/user';
 
 export const getUrlForModel = (model, modelType) => {

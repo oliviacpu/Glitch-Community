@@ -8,7 +8,7 @@ import CollectionAvatarBase from 'Components/collection/defaultAvatar';
 import { hexToRgbA } from 'Utils/color';
 import { CDN_URL } from 'Utils/constants';
 
-import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
+import { DEFAULT_TEAM_AVATAR, getTeamAvatarUrl } from 'Models/team';
 import { ANON_AVATAR_URL, getUserAvatarThumbnailUrl, getDisplayName } from 'Models/user';
 import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
 

@@ -10,7 +10,7 @@ import Thanks from 'Components/thanks';
 import VerifiedBadge from 'Components/verified-badge';
 import ProfileList from 'Components/profile-list';
 import { WrappingLink } from 'Components/link';
-import { getLink, getAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
+import { getTeamLink, getTeamAvatarUrl, DEFAULT_TEAM_AVATAR } from 'Models/team';
 import { createAPIHook } from 'State/api';
 import { captureException } from 'Utils/sentry';
 
@@ -26,14 +26,14 @@ const useTeamUsers = createAPIHook(async (api, teamID) => {
   }
 });
 
-const ProfileAvatar = ({ team }) => <Image className={styles.avatar} src={getAvatarUrl(team)} defaultSrc={DEFAULT_TEAM_AVATAR} alt="" />;
+const ProfileAvatar = ({ team }) => <Image className={styles.avatar} src={getTeamAvatarUrl(team)} defaultSrc={DEFAULT_TEAM_AVATAR} alt="" />;
 
 const getTeamThanksCount = (team) => sumBy(team.users, (user) => user.thanksCount);
 
 const TeamItem = ({ team }) => {
   const { value: users } = useTeamUsers(team.id);
   return (
-    <WrappingLink className={styles.container} href={getLink(team)}>
+    <WrappingLink className={styles.container} href={getTeamLink(team)}>
       <Cover type="team" item={team} size="medium" />
       <div className={styles.mainContent}>
         <div className={styles.avatarWrap}>
@@ -41,7 +41,7 @@ const TeamItem = ({ team }) => {
         </div>
         <div className={styles.body}>
           <div className={styles.itemButtonWrap}>
-            <Button href={getLink(team)}>{team.name}</Button>
+            <Button href={getTeamLink(team)}>{team.name}</Button>
             {!!team.isVerified && <VerifiedBadge />}
           </div>
           <div className={styles.usersList}>

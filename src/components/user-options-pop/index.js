@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
+import { getTeamLink, getTeamAvatarUrl } from 'Models/team';
 import { getUserAvatarThumbnailUrl } from 'Models/user';
 import Image from 'Components/images/image';
 import { UserAvatar } from 'Components/images/avatar';

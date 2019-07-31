@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getTeamLink } from 'Models/team';
+import { getTeamLink } from 'Models/team';
 import { getUserLink } from 'Models/user';
 import { useGlobals } from 'State/globals';
 import WrappingLink from './wrapping-link';

@@ -2,7 +2,7 @@ import { kebabCase } from 'lodash';
 
 import { pickRandomColor } from 'Utils/color';
 
-import { getLink as getTeamLink } from './team';
+import { getTeamLink } from './team';
 import { getUserLink } from './user';
 
 import { getCollectionPair } from './words';
