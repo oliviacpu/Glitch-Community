@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import TextInput from 'Components/inputs/text-input';
 
@@ -54,7 +53,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
       if (filtering) {
         return (
           <div className={styles.filterResultsPlaceholder}>
-            <Aquarium className={styles.aquarium}/>
+            <Aquarium className={styles.aquarium} />
             <Text>No items found</Text>
           </div>
         );

@@ -28,13 +28,12 @@ export const NotFoundPage = () => {
     <Layout>
       <Helmet title="👻 Page not found" />
       <main className={styles.container}>
-        <Aquarium className={styles.aquarium}/>
+        <Aquarium className={styles.aquarium} />
         <ErrorMessage title="Page Not Found" description="Maybe a typo, or perhaps it's moved?" />
       </main>
     </Layout>
   );
 };
-
 
 const emailImageUrl = 'https://cdn.glitch.com/26ac422d-705d-42be-b9cb-1fbdfe7e5a63%2Ferror-mailer.svg?1543429767321';
 
