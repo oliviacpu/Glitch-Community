@@ -15,7 +15,6 @@ import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models
 import styles from './avatar.styl';
 
 // UserAvatar
-
 export const Avatar = ({ name, src, color, srcFallback, type, hideTooltip, withinButton }) => {
   const contents = (
     <Image width="32px" height="32px" src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={styles[type]} />
@@ -115,4 +114,4 @@ CollectionAvatar.propTypes = {
 };
 
 
-export const BookmarkAvatar = () => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" />;
+export const BookmarkAvatar = ({ width }) => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" width={width} />;

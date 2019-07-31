@@ -14,10 +14,11 @@ import CollectionNameInput from 'Components/fields/collection-name-input';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
 import AuthDescription from 'Components/fields/auth-description';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import { useCollectionCurator } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './container.styl';
 
@@ -37,8 +38,11 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
 
+  const myStuffIsEnabled = useDevToggle('My Stuff');
+  const canEditNameAndDescription = myStuffIsEnabled ? isAuthorized && !collection.isMyStuff : isAuthorized;
+
   let collectionName = collection.name;
-  if (isAuthorized) {
+  if (canEditNameAndDescription) {
     collectionName = <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} />;
   } else if (preview) {
     collectionName = <CollectionLink collection={collection}>{collection.name}</CollectionLink>;
@@ -46,13 +50,19 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
   const enableSorting = isAuthorized && projects.length > 1;
 
+  let avatar;
+  if (myStuffIsEnabled && collection.isMyStuff) {
+    avatar = <BookmarkAvatar width="50%" />;
+  } else if (collection.avatarUrl) {
+    avatar = <Image src={collection.avatarUrl} alt="" />;
+  } else {
+    avatar = <CollectionAvatar collection={collection} />;
+  }
+
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
-        <div className={styles.imageContainer}>
-          {collection.avatarUrl ? <Image src={collection.avatarUrl} alt="" /> : <CollectionAvatar collection={collection} />}
-        </div>
-
+        <div className={styles.imageContainer}>{avatar}</div>
         <div>
           <h1 className={styles.name}>{collectionName}</h1>
 
@@ -62,7 +72,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           <div className={styles.description}>
             <AuthDescription
-              authorized={isAuthorized}
+              authorized={canEditNameAndDescription}
               description={collection.description}
               update={funcs.updateDescription}
               placeholder="Tell us about your collection"
