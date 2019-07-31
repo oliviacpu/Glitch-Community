@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
@@ -12,6 +12,7 @@ import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark } from 'State/collection';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
@@ -45,8 +46,28 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const projectOptions = useProjectOptions(project, providedProjectOptions);
+  useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const isAnonymousUser = !currentUser.login;
+  const isAuthorized = userIsProjectMember({ project, user: currentUser });
+  const { domain, users, teams, suspendedReason } = project;
+  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
+  const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+  const bookmarkAction = () => toggleBookmark({
+    api,
+    project,
+    currentUser,
+    createNotification,
+    myStuffEnabled,
+    addProjectToCollection,
+    removeProjectFromCollection,
+    setHasBookmarked,
+    hasBookmarked,
+  });
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -71,7 +92,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
-                  <BookmarkButton></BookmarkButton>
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                  </div>
                   <div className={styles.projectOptionsContainer}>
                     <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                   </div>
