@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
@@ -11,9 +11,10 @@ import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getAvatarUrl, userIsProjectMember } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark } from 'State/collection';
+import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -46,12 +47,12 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  useFocusFirst();
+  // useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
-  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  // const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
@@ -92,9 +93,11 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
-                  <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
-                  </div>
+                  {myStuffEnabled && !isAnonymousUser && (
+                    <div className={styles.bookmarkButton}>
+                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                    </div>
+                  )}
                   <div className={styles.projectOptionsContainer}>
                     <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                   </div>
