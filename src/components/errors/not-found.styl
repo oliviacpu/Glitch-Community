@@ -1,15 +1,39 @@
-@keyframes spin
-  50% 
-    transform: rotate(360deg)
-  100%
-    transform: rotate(0deg)
+.bubble1{
+  animation: bubble1-fade 4s ease-in-out infinite normal;
+}
 
-.errorImage
-  margin-bottom: 1em
-  position: relative
-  display: inline-block
-.needle
-  position: absolute
-  top: 25%
-  left: 27%
-  animation: spin 2.5s cubic-bezier(0.71, -0.01, 0.23, 0.98) 1
+.bubble2{
+  animation: bubble2-fade 4s ease-in-out infinite normal;
+}
+
+.bubble3{
+  animation: bubble3-fade 4s ease-in-out infinite normal;
+}
+
+@keyframes bubble1-fade{
+  0{
+    opacity: 1;
+  }
+  50%{
+    opacity: 0;
+  }
+}
+
+@keyframes bubble2-fade{
+  0%{
+    opacity: 1;
+  }
+  70%{
+    opacity: 0;
+  }
+  
+}
+
+@keyframes bubble3-fade{
+  0%{
+    opacity: 1;
+  }
+  90%{
+    opacity: 0;
+  }
+}
