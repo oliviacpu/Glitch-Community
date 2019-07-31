@@ -116,20 +116,20 @@ const EmptyBookmark = () => (
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
-  const onClick = () => {
+  const onClick = (e) => {
+    const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
     if (!state.isBookmarked) {
-      setState({ isFocused: false, isAnimating: true, isBookmarked: true });
+      setState({ isFocused: fromKeyboard, isAnimating: true, isBookmarked: true });
     } else {
-      setState({ isFocused: false, isAnimating: false, isBookmarked: false });
+      setState({ isFocused: fromKeyboard, isAnimating: false, isBookmarked: false });
     }
     if (action) action();
   };
   const onFocus = () => {
-    setState({ isFocused: true, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: true });
   };
   const onBlur = () => {
-    setState({ isFocused: false, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
-ookmarked: state.isBookmarked });
+    setState({ ...state, isFocused: false });
   };
 
   const checkClassName = cx({
