@@ -41,5 +41,13 @@ jobs:
 workflows:
   version: 2
   regular-workflow:
+    triggers:
+       - schedule:
+           cron: "0 0 * * *"
+           filters:
+             branches:
+               only:
+                 - tundra-beat
+                 - circleci
     jobs:
       - build_and_test

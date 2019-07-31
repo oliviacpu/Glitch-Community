@@ -4,13 +4,42 @@ import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
+import { createCollection } from 'Models/collection';
+
+export const toggleBookmark = async ({
+  api,
+  project,
+  currentUser,
+  createNotification,
+  myStuffEnabled,
+  addProjectToCollection,
+  removeProjectFromCollection,
+  setHasBookmarked,
+  hasBookmarked,
+}) => {
+  try {
+    let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+    if (hasBookmarked) {
+      setHasBookmarked(false);
+      await removeProjectFromCollection({ project, collection: myStuffCollection });
+    } else {
+      setHasBookmarked(true);
+      if (!myStuffCollection) {
+        myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+      }
+      await addProjectToCollection({ project, collection: myStuffCollection });
+    }
+  } catch (error) {
+    captureException(error);
+  }
+};
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
   try {
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
-      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
+      getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&orderKey=projectOrder&limit=100`),
     ]);
     return { ...collection, projects };
   } catch (error) {
