@@ -129,6 +129,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   };
   const onBlur = () => {
     setState({ isFocused: false, isAnimating: state.isAnimating, isBookmarked: state.isBookmarked });
+ookmarked: state.isBookmarked });
   };
 
   const checkClassName = cx({
