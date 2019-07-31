@@ -5,7 +5,7 @@ import { mapValues, flatMap } from 'lodash';
 
 import { PopoverContainer } from 'Components/popover';
 import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getUserLink } from 'Models/user';
+import { getUserLink } from 'Models/user';
 import { getLink as getTeamLink } from 'Models/team';
 import { useAlgoliaSearch } from 'State/search';
 

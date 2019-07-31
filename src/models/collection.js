@@ -1,10 +1,9 @@
 import { kebabCase } from 'lodash';
 
-import { CDN_URL } from 'Utils/constants';
 import { pickRandomColor } from 'Utils/color';
 
 import { getLink as getTeamLink } from './team';
-import { getLink as getUserLink } from './user';
+import { getUserLink } from './user';
 
 import { getCollectionPair } from './words';
 
@@ -38,10 +37,6 @@ export function getCollectionsWithMyStuff({ collections }) {
   updatedCollections.unshift(myStuffCollection);
 
   return updatedCollections;
-}
-
-export function getCollectionAvatarUrl({ id, updatedAt }) {
-  return `${CDN_URL}/collection-avatar/${id}.png?${updatedAt}`;
 }
 
 export function getCollectionOwnerLink(collection) {

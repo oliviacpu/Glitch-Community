@@ -16,35 +16,35 @@ export function getDisplayName({ login, name }) {
   return 'Anonymous User';
 }
 
-export function getLink({ id, login }) {
+export function getUserLink({ id, login }) {
   if (login) {
     return `/@${login}`;
   }
   return `/user/${id}`;
 }
 
-export function getAvatarUrl({ login, avatarUrl }) {
+export function getUserAvatarUrl({ login, avatarUrl }) {
   if (login && avatarUrl) {
     return avatarUrl;
   }
   return ANON_AVATAR_URL;
 }
 
-export function getAvatarThumbnailUrl({ login, avatarThumbnailUrl }) {
+export function getUserAvatarThumbnailUrl({ login, avatarThumbnailUrl }) {
   if (login && avatarThumbnailUrl) {
     return avatarThumbnailUrl;
   }
   return ANON_AVATAR_URL;
 }
 
-export function getAvatarStyle({ avatarUrl, color }) {
+export function getUserAvatarStyle({ avatarUrl, color }) {
   return {
     backgroundColor: color,
     backgroundImage: `url('${avatarUrl || ANON_AVATAR_URL}')`,
   };
 }
 
-export function getCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) {
+export function getUserCoverUrl({ id, hasCoverImage, cache = cacheBuster, size = 'large' }) {
   const customImage = `${CDN_URL}/user-cover/${id}/${size}?${cache}`;
   const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg';
   return hasCoverImage ? customImage : defaultImage;
