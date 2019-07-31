@@ -266,7 +266,7 @@ async function addProjectBreadcrumb(projectWithMembers) {
 }
 
 const ProjectPageContainer = ({ name: domain }) => {
-  const { status, value: project, error } = useCachedProject(domain);
+  const { status, value: project } = useCachedProject(domain);
   useEffect(() => {
     if (project) addProjectBreadcrumb(project);
   }, [project]);
@@ -282,7 +282,7 @@ const ProjectPageContainer = ({ name: domain }) => {
           <>
             {status === 'ready' && <NotFound name={domain} />}
             {status === 'loading' && <Loader />}
-            {status === 'error' && error.toString()}
+            {status === 'error' && <NotFound name={domain} />}
           </>
         )}
       </AnalyticsContext>
