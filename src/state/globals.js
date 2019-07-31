@@ -7,7 +7,7 @@ const Context = createContext({});
 export const GlobalsProvider = withRouter(({ children, history, location, origin, SSR_SIGNED_IN, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES }) => {
   const value = useMemo(() => {
     const url = new URL(location.pathname + location.search + location.hash, origin);
-    return { history, location: url, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES, SSR_SIGNED_IN };
+    return { history, location: url, origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES, SSR_SIGNED_IN };
   }, [history, location.key, origin, ZINE_POSTS, HOME_CONTENT, EXTERNAL_ROUTES, SSR_SIGNED_IN]);
   return <Context.Provider value={value}>{children}</Context.Provider>;
 });
