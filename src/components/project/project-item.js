@@ -92,8 +92,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                   {myStuffEnabled && !isAnonymousUser && (
                     <div className={styles.bookmarkButton}>
-                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
-                      <TooltipContainer />
+                      <TooltipContainer type="info" target={<BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />} tooltip="Add to My Stuff" />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>
