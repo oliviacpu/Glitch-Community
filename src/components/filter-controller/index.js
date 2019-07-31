@@ -5,6 +5,8 @@ import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import TextInput from 'Components/inputs/text-input';
 
+import Aquarium from 'Components/errors/not-found';
+
 import styles from './styles.styl';
 
 function FilterController({ matchFn, enabled, placeholder, items, children, searchPrompt, label }) {
@@ -52,7 +54,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
       if (filtering) {
         return (
           <div className={styles.filterResultsPlaceholder}>
-            <Image alt="" src="https://cdn.glitch.com/c117d5df-3b8d-4389-9e6b-eb049bcefcd6%2Fcompass-not-found.svg?1554146070630" />
+            <Aquarium/>
             <Text>No items found</Text>
           </div>
         );
