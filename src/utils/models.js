@@ -1,4 +1,4 @@
-import { getLink as getCollectionLink } from 'Models/collection';
+import { getCollectionLink } from 'Models/collection';
 import { getLink as getProjectLink } from 'Models/project';
 import { getLink as getTeamLink } from 'Models/team';
 import { getLink as getUserLink } from 'Models/user';

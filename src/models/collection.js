@@ -40,11 +40,11 @@ export function getCollectionsWithMyStuff({ collections }) {
   return updatedCollections;
 }
 
-export function getAvatarUrl(id) {
-  return `${CDN_URL}/collection-avatar/${id}.png`;
+export function getCollectionAvatarUrl({ id, updatedAt }) {
+  return `${CDN_URL}/collection-avatar/${id}.png?${updatedAt}`;
 }
 
-export function getOwnerLink(collection) {
+export function getCollectionOwnerLink(collection) {
   if (collection.team) {
     return getTeamLink(collection.team);
   }
@@ -54,11 +54,11 @@ export function getOwnerLink(collection) {
   throw new Error(`Collection ${collection.id} has no team or user field!`);
 }
 
-export function getLink(collection) {
+export function getCollectionLink(collection) {
   if (collection.fullUrl) {
     return `/@${collection.fullUrl}`;
   }
-  return `${getOwnerLink(collection)}/${collection.url}`;
+  return `${getCollectionOwnerLink(collection)}/${collection.url}`;
 }
 
 export async function createCollection({ api, name, teamId, createNotification, myStuffEnabled = false }) {
