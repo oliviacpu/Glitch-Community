@@ -115,4 +115,4 @@ CollectionAvatar.propTypes = {
 };
 
 
-export const BookmarkAvatar = () => <Image src={`${CDN_URL}/019176a9-a6da-4710-941a-1063c9226a98%2Fmy-stuff-collection-avatar.svg?v=1563992180198`} alt="" />;
+export const BookmarkAvatar = () => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" />;

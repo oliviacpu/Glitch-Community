@@ -24,15 +24,20 @@ import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
+import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { toggleBookmark } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getLink as getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
+import useDevToggle from 'State/dev-toggles';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
+import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -86,14 +91,11 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(
-    () => {
-      if (done) {
-        window.location = getUserLink(currentUser);
-      }
-    },
-    [done, currentUser],
-  );
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
 
   return (
     <section>
@@ -135,12 +137,30 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
+  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  const bookmarkAction = () => toggleBookmark({
+    api,
+    project,
+    currentUser,
+    createNotification,
+    myStuffEnabled,
+    addProjectToCollection,
+    removeProjectFromCollection,
+    setHasBookmarked,
+    hasBookmarked,
+  });
+
   return (
     <main id="main">
       <section id="info">
@@ -153,22 +173,38 @@ const ProjectPage = ({ project: initialProject }) => {
           }}
         >
           {isAuthorized ? (
-            <div className={styles.headingWrap}>
-              <Heading tagName="h1">
-                <OptimisticTextInput
-                  labelText="Project Domain"
-                  value={project.domain}
-                  onChange={updateDomainAndSync}
-                  placeholder="Name your project"
-                />
-              </Heading>
-              <PrivateToggle isPrivate={!!project.private} setPrivate={updatePrivate} />
-            </div>
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">
+                  <OptimisticTextInput
+                    labelText="Project Domain"
+                    value={project.domain}
+                    onChange={updateDomainAndSync}
+                    placeholder="Name your project"
+                  />
+                </Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                  </div>
+                )}
+              </div>
+              <div className={styles.privacyToggle}>
+                <PrivateToggle isPrivate={!!project.private} setPrivate={updatePrivate} />
+              </div>
+            </>
           ) : (
-            <div className={styles.headingWrap}>
-              <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                  </div>
+                )}
+              </div>
               {project.private && <PrivateBadge />}
-            </div>
+            </>
           )}
           {users.length + teams.length > 0 && (
             <div>
