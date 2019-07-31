@@ -16,21 +16,26 @@ export const APICacheProvider = ({ children, initial }) => {
   });
   const [cachePending, setCachePending] = useState(new Map());
 
-  // on auth change mark everything as very old, that way component rerender will kick off all new requests
+  // on auth change mark everything as very old, that way component rerender will kick off new requests
   useEffect(() => {
     setCache((oldCache) => new Map([...oldCache].map(([key, data]) => [key, { ...data, timestamp: -Infinity }])));
   }, [api.persistentToken]);
 
   useEffect(() => {
     if (!cachePending.size) return;
+
+    // first write the loading state into the cache, preserving the old value
+    let result = { status: 'loading', timestamp };
+    setCache((oldCache) => {
+      const entries = cachePending.keys().map((key) => {
+        const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
+
+      });
+      return new Map([...oldCache, [key, { ...result, value }]]);
+    });
+
     const timestamp = Date.now();
     cachePending.forEach(async (get, key) => {
-      // first write the loading state into the cache, preserving the old value
-      let result = { status: 'loading', timestamp };
-      setCache((oldCache) => {
-        const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
-        return new Map([...oldCache, [key, { ...result, value }]]);
-      });
 
       // next actually try to load the value and determine the new response
       try {
@@ -50,6 +55,8 @@ export const APICacheProvider = ({ children, initial }) => {
         return new Map([...currentCache, [key, { ...currentResult, ...result }]]);
       });
     });
+
+    // then remove everything we just requested from the cache
     setCachePending((latestCachePending) => new Map([...latestCachePending].filter(([key]) => !cachePending.has(key))));
   }, [api, cachePending]);
 
