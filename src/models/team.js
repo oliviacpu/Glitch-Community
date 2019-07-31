@@ -18,26 +18,21 @@ export const getAvatarStyle = (team) => {
     };
   }
   return {
-    backgroundColor,
+    backgroundColor: team.backgroundColor,
     backgroundImage: `url('${image}')`,
   };
 };
 
 export const getCoverUrl = ({ id, hasCoverImage, updatedAt, size = 'large' }) => {
-  const customImage = `${CDN_URL}/team-cover/${id}/${size}?${cache}`;
+  const customImage = `${CDN_URL}/team-cover/${id}/${size}?${updatedAt}`;
   const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fteam-cover-pattern.svg?v=1559853406967';
   return hasCoverImage ? customImage : defaultImage;
 };
 
-export const getProfileStyle = ({ id, hasCoverImage, cache, size }) => {
-  const image = getCoverUrl({
-    id,
-    hasCoverImage,
-    cache,
-    size,
-  });
+export const getProfileStyle = (team) => {
+  const image = getCoverUrl(team);
   return {
-    backgroundColor: lightColors[id % 4],
+    backgroundColor: lightColors[team.id % 4],
     backgroundImage: `url('${image}')`,
   };
 };
