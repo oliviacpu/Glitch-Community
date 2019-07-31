@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import Text from 'Components/text/text';
 import styles from './not-found.styl';
 
-export const Aquarium = () => (
+export const Aquarium = ({ className }) => (
   <svg 
-  className={styles.aquarium}
+  className={classnames(styles.aquarium, className)}
   viewBox="0 0 88 86" 
   xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(1 1)" fill="none" fillRule="evenodd">

@@ -28,7 +28,7 @@ export const NotFoundPage = () => {
     <Layout>
       <Helmet title="👻 Page not found" />
       <main className={styles.container}>
-        <Aquarium className={styles.aquariumErrorImage}/>
+        <Aquarium className={styles.aquarium}/>
         <ErrorMessage title="Page Not Found" description="Maybe a typo, or perhaps it's moved?" />
       </main>
     </Layout>
