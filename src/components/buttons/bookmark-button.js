@@ -124,8 +124,7 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     }
     if (action) action();
   };
-  const onFocus = (e) => {
-    e.preventDefault();
+  const onFocus = () => {]
     console.log('on focus');
     setState({ ...state, isFocused: true });
   };
