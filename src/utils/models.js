@@ -1,5 +1,5 @@
 import { getCollectionLink } from 'Models/collection';
-import { getLink as getProjectLink } from 'Models/project';
+import { getProjectLink } from 'Models/project';
 import { getTeamLink } from 'Models/team';
 import { getUserLink } from 'Models/user';
 

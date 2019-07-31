@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'Components/images/image';
-import { getCoverUrl as getTeamCoverUrl } from 'Models/team';
+import { getTeamCoverUrl } from 'Models/team';
 import { getUserCoverUrl, lightColors } from 'Models/user';
 import { hexToRgbA } from 'Utils/color';
 import styles from './search-result-cover-bar.styl';

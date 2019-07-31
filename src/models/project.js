@@ -6,7 +6,7 @@ export function getAvatarUrl(id, cdnUrl = CDN_URL) {
   return `${cdnUrl}/project-avatar/${id}.png`;
 }
 
-export function getLink({ domain }) {
+export function getProjectLink({ domain }) {
   return `/~${domain}`;
 }
 

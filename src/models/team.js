@@ -10,7 +10,7 @@ export const getTeamAvatarUrl = ({ id, hasAvatarImage, updatedAt, size = 'large'
   return hasAvatarImage ? customImage : DEFAULT_TEAM_AVATAR;
 };
 
-export const getAvatarStyle = (team) => {
+export const getTeamAvatarStyle = (team) => {
   const image = getTeamAvatarUrl(team);
   if (team.hasAvatarImage) {
     return {
@@ -23,14 +23,14 @@ export const getAvatarStyle = (team) => {
   };
 };
 
-export const getCoverUrl = ({ id, hasCoverImage, updatedAt, size = 'large' }) => {
+export const getTeamCoverUrl = ({ id, hasCoverImage, updatedAt, size = 'large' }) => {
   const customImage = `${CDN_URL}/team-cover/${id}/${size}?${updatedAt}`;
   const defaultImage = 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fteam-cover-pattern.svg?v=1559853406967';
   return hasCoverImage ? customImage : defaultImage;
 };
 
-export const getProfileStyle = (team) => {
-  const image = getCoverUrl(team);
+export const getTeamProfileStyle = (team) => {
+  const image = getTeamCoverUrl(team);
   return {
     backgroundColor: lightColors[team.id % 4],
     backgroundImage: `url('${image}')`,

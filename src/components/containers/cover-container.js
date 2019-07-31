@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
 
-import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
+import { getTeamProfileStyle } from 'Models/team';
 import { getUserProfileStyle } from 'Models/user';
 import styles from './cover-container.styl';
 
