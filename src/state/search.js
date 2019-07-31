@@ -172,13 +172,13 @@ function createAlgoliaProvider(api) {
 
   return {
     ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
-    collection: (query, { teamIDs, userIDs }) =>
+    collection: (query, { teamIDs, userIDs, isMyStuff }) =>
       searchIndices.collection
         .search({
           query,
           hitsPerPage: 100,
           filters: buildCollectionFilters({ teamIDs, userIDs }),
-          facetFilters: ['isMyStuff:false'],
+          facetFilters: [isMyStuff ? '': 'isMyStuff:false'],
         })
         .then(formatAlgoliaResult('collection')),
     project: (query, { notSafeForKids }) =>
