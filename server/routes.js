@@ -102,7 +102,6 @@ module.exports = function(external) {
       } catch (error) {
         console.error(error);
         captureException(error);
-        console.error(error);
       }
     }
 
