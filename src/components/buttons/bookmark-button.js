@@ -121,7 +121,7 @@ const EmptyBookmark = () => (
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false });
-  const onClick = () => {
+  const onClick = (e) => {
     if (!state.isBookmarked) {
       setState({ isAnimating: true, isBookmarked: true });
     } else {
