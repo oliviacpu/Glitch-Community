@@ -25,7 +25,7 @@ export const APICacheProvider = ({ children, initial }) => {
     if (!cachePending.size) return;
     const timestamp = Date.now();
 
-    // first write the loading states into the cache, preserving the old value
+    // first write the loading states into the cache, preserving the old values
     setCache((oldCache) => {
       const newCache = Array.from(cachePending.keys()).map((key) => {
         const value = oldCache.has(key) ? oldCache.get(key).value : undefined;
