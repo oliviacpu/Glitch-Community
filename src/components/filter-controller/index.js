@@ -5,7 +5,7 @@ import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import TextInput from 'Components/inputs/text-input';
 
-import Aquarium from 'Components/errors/not-found';
+import { Aquarium } from 'Components/errors/not-found';
 
 import styles from './styles.styl';
 
@@ -54,7 +54,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
       if (filtering) {
         return (
           <div className={styles.filterResultsPlaceholder}>
-            <Aquarium/>
+            <Aquarium className={styles.aquarium}/>
             <Text>No items found</Text>
           </div>
         );

@@ -7,11 +7,9 @@ import Heading from 'Components/text/heading';
 import Layout from 'Components/layout';
 import Button from 'Components/buttons/button';
 import { useGlobals } from 'State/globals';
+import { Aquarium } from 'Components/errors/not-found';
 
 import styles from './error.styl';
-
-const telescopeImageUrl = 'https://cdn.glitch.com/7138972f-76e1-43f4-8ede-84c3cdd4b40a%2Ftelescope_404.svg?1543258683849';
-
 
 const ErrorMessage = ({ title, description }) => (
   <div className={styles.errorMessage}>
@@ -30,7 +28,7 @@ export const NotFoundPage = () => {
     <Layout>
       <Helmet title="👻 Page not found" />
       <main className={styles.container}>
-        <Image className={styles.errorImage} src={telescopeImageUrl} alt="" width="318px" height="297px" />
+        <Aquarium className={styles.aquariumErrorImage}/>
         <ErrorMessage title="Page Not Found" description="Maybe a typo, or perhaps it's moved?" />
       </main>
     </Layout>
