@@ -12,7 +12,7 @@ const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) =
     <div className={classnames(styles.profileWrap)}>
       <div className={styles.avatarContainer}>
         {/* eslint-disable-next-line no-underscore-dangle */}
-        <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle({ ...item, cache: item.updatedAt })} />
+        <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle(item)} />
         <div className={styles.avatarButtons}>{avatarActions && <TrackedButtonGroup actions={avatarActions} />}</div>
       </div>
       <div className={styles.profileInfo}>{children}</div>

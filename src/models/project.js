@@ -2,8 +2,8 @@ import { CDN_URL, EDITOR_URL, PROJECTS_DOMAIN } from 'Utils/constants';
 
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Ffallback-project-avatar.svg?1528812220123';
 
-export function getProjectAvatarUrl({ id }) {
-  return `${CDN_URL}/project-avatar/${id}.png`;
+export function getProjectAvatarUrl({ id, avatarUpdatedAt }) {
+  return `${CDN_URL}/project-avatar/${id}.png?${avatarUpdatedAt}`;
 }
 
 export function getProjectLink({ domain }) {

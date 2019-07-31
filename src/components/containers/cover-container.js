@@ -19,9 +19,8 @@ const CoverContainer = ({ coverActions, children, type, item }) => {
     coverContainer: true,
     hasCoverImage: item.hasCoverImage,
   });
-  const cache = item.updatedAt;
   return (
-    <div className={className} style={getProfileStyles[type]({ ...item, cache })}>
+    <div className={className} style={getProfileStyles[type](item)}>
       {children}
       <div className={styles.buttonWrap}>{coverActions && <TrackedButtonGroup actions={coverActions} />}</div>
     </div>
