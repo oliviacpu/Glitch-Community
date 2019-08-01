@@ -149,9 +149,8 @@ const ProjectPage = ({ project: initialProject }) => {
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
   const bookmarkAction = useTrackedFunc(
-    () =>{
-      console.log(`Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, { origin: `Project page: ${project.domain}`, project: project.domain })
-      return toggleBookmark({
+    () =>
+      toggleBookmark({
         api,
         project,
         currentUser,
@@ -161,13 +160,11 @@ const ProjectPage = ({ project: initialProject }) => {
         removeProjectFromCollection,
         setHasBookmarked,
         hasBookmarked,
-      })
-    }
-      ,
+      }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     { origin: `Project page: ${project.domain}`, project: project.domain },
   );
-  
+
   return (
     <main id="main">
       <section id="info">
