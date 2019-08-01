@@ -46,7 +46,7 @@ const PermissionsLoader = ({ project }) => {
     async function fillInPermissions() {
       const permissions = await getProjectPermissions(api, project.domain);
       project.permissions = permissions;
-      console.log(permissions);
+      console.log(project.domain, permissions);
     }
     fillInPermissions();
   }, []);
