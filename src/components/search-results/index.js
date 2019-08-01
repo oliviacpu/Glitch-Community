@@ -45,7 +45,7 @@ const PermissionsLoader = ({ project }) => {
   React.useEffect(() => {
     async function fillInPermissions() {
       const permissions = await getProjectPermissions(api, project.domain);
-      project.permissions = permissions;
+      project.permissions.push(project.) = permissions;
     }
     fillInPermissions();
   }, []);
