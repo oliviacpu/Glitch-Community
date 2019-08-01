@@ -27,7 +27,7 @@ export const NotFoundPage = () => {
   return (
     <Layout>
       <Helmet title="👻 Page not found" />
-      <main className={styles.container}>
+      <main className={styles.container} id="main">
         <Aquarium className={styles.aquarium} />
         <ErrorMessage title="Page Not Found" description="Maybe a typo, or perhaps it's moved?" />
       </main>
@@ -40,7 +40,7 @@ const emailImageUrl = 'https://cdn.glitch.com/26ac422d-705d-42be-b9cb-1fbdfe7e5a
 export const EmailErrorPage = ({ title, description }) => (
   <Layout>
     <Helmet title={`✉️ ${title}`} />
-    <main className={styles.container}>
+    <main className={styles.container} id="main">
       <Image className={styles.emailErrorImage} src={emailImageUrl} alt="" width="470px" />
       <ErrorMessage title={title} description={description} />
     </main>
@@ -57,7 +57,7 @@ const oauthImageUrl = 'https://cdn.glitch.com/8ae9b195-ef39-406b-aee0-764888d156
 export const OauthErrorPage = ({ title, description }) => (
   <Layout>
     <Helmet title={`🔑 ${title}`} />
-    <main className={styles.container}>
+    <main className={styles.container} id="main">
       <Image className={styles.errorImage} src={oauthImageUrl} alt="" width="370px" />
       <ErrorMessage title={title} description={description} />
     </main>
