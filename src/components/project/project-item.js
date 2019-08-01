@@ -54,6 +54,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+  // createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
   const bookmarkAction = () => toggleBookmark({
     api,
     project,
