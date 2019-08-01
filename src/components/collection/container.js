@@ -40,7 +40,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
   const myStuffIsEnabled = useDevToggle('My Stuff');
   const canEditNameAndDescription = myStuffIsEnabled ? isAuthorized && !collection.isMyStuff : isAuthorized;
-
+  console.l
   let collectionName = collection.name;
   if (canEditNameAndDescription) {
     collectionName = <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} />;
