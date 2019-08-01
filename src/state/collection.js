@@ -26,14 +26,15 @@ export const toggleBookmark = async ({
       createNotification(`Removed ${project.domain} from collection My Stuff`);
     } else {
       setHasBookmarked(true);
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName='My Stuff' url={project.domain} />, { type: 'success' });
       if (!myStuffCollection) {
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${myStuffCollection.fullUrl}`} />, { type: 'success' });
     }
   } catch (error) {
     captureException(error);
+    createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }
 };
 
