@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { withRouter } from 'react-router-dom';
 import { kebabCase } from 'lodash';
 
 import { getCollectionLink } from 'Models/collection';
@@ -18,7 +17,7 @@ import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } from 'State/collection';
 import useFocusFirst from 'Hooks/use-focus-first';
 
-const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
+const CollectionPageContents = ({ collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
   useFocusFirst();
@@ -30,7 +29,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
     onNameChange: async (name) => {
       const url = kebabCase(name);
       const result = await funcs.updateNameAndUrl({ name, url });
-      history.replace(getCollectionLink({ ...collection, url }));
+      window.history.replaceState(null, null, getCollectionLink({ ...collection, url }));
       return result;
     },
   };
@@ -49,7 +48,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
       <MoreCollectionsContainer collection={collection} />
     </>
   );
-});
+};
 
 CollectionPageContents.propTypes = {
   collection: PropTypes.shape({
