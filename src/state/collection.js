@@ -6,6 +6,7 @@ import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 import { createCollection } from 'Models/collection';
 import Button from 'Components/buttons/button';
+import { ProjectLink } from 'Components/link';
 
 export const toggleBookmark = async ({
   api,
@@ -26,7 +27,7 @@ export const toggleBookmark = async ({
       createNotification(`Removed ${project.domain} from collection My Stuff`);
     } else {
       setHasBookmarked(true);
-      createNotification(<Button href='~${project.domain}'>Take me There</Button>, { type: 'success' });
+      createNotification(<Button><ProjectLink project={project}>Take me There</ProjectLink></Button>, { type: 'success' });
       if (!myStuffCollection) {
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
