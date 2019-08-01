@@ -116,7 +116,11 @@ const EmptyBookmark = () => (
 );
 
 const BookmarkButton = ({ action, initialIsBookmarked }) => {
+  console.log("initialIsBookmarked", initialIsBookmarked)
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
+  React.useEffect(() => {
+    setState({...state, isBookmarked: initialIsBookmarked })
+  }, [initialIsBookmarked])
   const addText = 'Add to My Stuff';
   const removeText = 'Remove from My Stuff';
 
@@ -141,6 +145,8 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     checkAnimated: state.isAnimating,
     hidden: !state.isBookmarked,
   });
+  
+  
 
   return (
     <TooltipContainer

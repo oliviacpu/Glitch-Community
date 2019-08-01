@@ -52,7 +52,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
-  const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+  const hasBookmarked = project.authUserHasBookmarked
+  // const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   const bookmarkAction = () =>
     toggleBookmark({
       api,
@@ -62,13 +63,13 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       myStuffEnabled,
       addProjectToCollection,
       removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
+      // setHasBookmarked,
+      hasBookmarked: project.authUserHasBookmarked,
     });
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  React.useEffect(() => {
-    setHasBookmarked(project.authUserHasBookmarked)
-  }, [project.authUserHasBookmarked])
+  // React.useEffect(() => {
+  //   setHasBookmarked(project.authUserHasBookmarked)
+  // }, [project.authUserHasBookmarked])
 
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
