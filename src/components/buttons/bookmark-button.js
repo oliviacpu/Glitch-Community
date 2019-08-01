@@ -11,9 +11,10 @@ const cx = classNames.bind(styles);
 
 const CHECKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008`;
 
-const Halo = ({ isAnimating }) => (
+const Halo = ({ isAnimating, onAnimationEnd }) => (
   <svg
     className={`${styles.halo} ${isAnimating ? styles.haloAnimated : ''}`}
+    onAnimationEnd={onAnimationEnd}
     width="54px"
     height="29px"
     viewBox="0 0 54 29"
@@ -139,6 +140,10 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const onBlur = () => {
     setState({ ...state, isFocused: false });
   };
+  const onAnimationEnd = () => {
+    console.log("is this happening")
+    setState({ ...state, isAnimating: false });
+  }
 
   const checkClassName = cx({
     check: true,
@@ -161,9 +166,9 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
           aria-pressed={state.isBookmarked ? 'true' : 'false'}
           aria-label="Add project to My Stuff"
         >
-          <Halo isAnimating={state.isAnimating} />
+          <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
           {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
-          <Image className={checkClassName} src={CHECKMARK} alt="" width="10px" height="10px" />
+          <Image className={checkClassName} src={CHECKMARK} onAnimationEnd={onAnimationEnd} alt="" width="10px" height="10px" />
         </button>
       }
     />
