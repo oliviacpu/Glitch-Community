@@ -81,8 +81,9 @@
     <script src="<%= scripts[i] %>"></script>
     <% } %>
     <script>
+      var container = document.getElementById('main');
       var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
-      const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      var isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
       if (isIe) {
         document.getElementById('fallback').removeAttribute('style');
         document.getElementById('fallback-img').removeAttribute('style');
@@ -97,7 +98,7 @@
           window.location.href = "https://glitch.com";      
         }, 3000);
       } else if (window.bootstrap) {
-        window.bootstrap();
+        window.bootstrap(container);
       } else if (!BUILD_COMPLETE) {
         document.getElementById('fallback').removeAttribute('style');
         document.getElementById('fallback-img').removeAttribute('style');
