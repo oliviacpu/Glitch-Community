@@ -22,7 +22,7 @@ import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
 import Link from 'Components/link';
-import { getLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
+import { getTeamLink, userIsOnTeam, userIsTeamAdmin } from 'Models/team';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
@@ -32,7 +32,7 @@ import useFocusFirst from 'Hooks/use-focus-first';
 import styles from './team.styl';
 
 function syncPageToUrl(team) {
-  history.replaceState(null, null, getLink(team));
+  history.replaceState(null, null, getTeamLink(team));
 }
 
 const Beta = () => (

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { getLink } from 'Models/team';
+import { getTeamLink } from 'Models/team';
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
@@ -30,7 +30,7 @@ const JoinTeamPage = withRouter(({ history, teamUrl, joinToken }) => {
         }
         createNotification('Invite failed, try asking your teammate to resend the invite', { type: 'error' });
       }
-      history.push(getLink({ url: teamUrl }));
+      history.push(getTeamLink({ url: teamUrl }));
     })();
   }, []);
 

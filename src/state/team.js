@@ -161,7 +161,7 @@ export function useTeamEditor(initialTeam) {
         projects: [project, ...prev.projects],
       }));
     }, handleError),
-    removeProject: withErrorHandler(async (project) => {
+    removeProjectFromTeam: withErrorHandler(async (project) => {
       await removeProjectFromTeam({ project, team });
       setTeam((prev) => ({
         ...prev,

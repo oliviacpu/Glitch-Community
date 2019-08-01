@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
-import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import { getTeamLink, getTeamAvatarUrl } from 'Models/team';
+import { getUserAvatarThumbnailUrl } from 'Models/user';
 import Image from 'Components/images/image';
 import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
@@ -111,7 +111,7 @@ Are you sure you want to sign out?`)
       <PopoverTitle>
         <UserLink user={user}>
           <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
-            <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
+            <Image src={getUserAvatarThumbnailUrl(user)} alt="Your avatar" />
           </div>
           <div className={styles.userInfo}>
             <InfoDescription>{user.name || 'Anonymous'}</InfoDescription>
@@ -185,10 +185,10 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
         <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
+              <Button type="dropDown" onClick={togglePopover} decorative={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
-                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    <UserAvatar user={props.user} hideTooltip withinButton style={avatarStyle} />
                   </span>
                   <span className="down-arrow icon" />
                 </span>

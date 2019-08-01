@@ -8,14 +8,13 @@ import CollectionAvatarBase from 'Components/collection/defaultAvatar';
 import { hexToRgbA } from 'Utils/color';
 import { CDN_URL } from 'Utils/constants';
 
-import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
-import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+import { DEFAULT_TEAM_AVATAR, getTeamAvatarUrl } from 'Models/team';
+import { ANON_AVATAR_URL, getUserAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 
 import styles from './avatar.styl';
 
 // UserAvatar
-
 export const Avatar = ({ name, src, color, srcFallback, type, hideTooltip, withinButton }) => {
   const contents = (
     <Image width="32px" height="32px" src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={styles[type]} />
@@ -63,7 +62,7 @@ TeamAvatar.defaultProps = {
 export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton }) => (
   <Avatar
     name={getDisplayName(user) + suffix}
-    src={getAvatarThumbnailUrl(user)}
+    src={getUserAvatarThumbnailUrl(user)}
     color={user.color}
     srcFallback={ANON_AVATAR_URL}
     type="user"
@@ -91,7 +90,7 @@ UserAvatar.defaultProps = {
 };
 
 export const ProjectAvatar = ({ project, hasAlt }) => (
-  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project.id)} srcFallback={FALLBACK_AVATAR_URL} type="team" hideTooltip />
+  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="team" hideTooltip />
 );
 
 ProjectAvatar.propTypes = {
@@ -115,4 +114,4 @@ CollectionAvatar.propTypes = {
 };
 
 
-export const BookmarkAvatar = () => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" />;
+export const BookmarkAvatar = ({ width }) => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" width={width} />;

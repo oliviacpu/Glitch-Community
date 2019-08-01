@@ -12,10 +12,14 @@ import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import VisibilityContainer from 'Components/visibility-container';
+<<<<<<< HEAD
 import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark } from 'State/collection';
 import { useNotifications } from 'State/notifications';
+=======
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
+>>>>>>> ec67760720a740a18817878e760e22d5cc874eed
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -24,7 +28,7 @@ import useDevToggle from 'State/dev-toggles';
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
 
-const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
+const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getProjectAvatarUrl(project)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
 const getLinkBodyStyles = (project) =>
   classnames(styles.linkBody, {

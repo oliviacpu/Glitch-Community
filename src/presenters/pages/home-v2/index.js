@@ -19,7 +19,7 @@ import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
 import { useCurrentUser } from 'State/current-user';
-import { getEditorUrl, getAvatarUrl } from 'Models/project';
+import { getEditorUrl, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useGlobals } from 'State/globals';
 
@@ -85,7 +85,7 @@ const AppsWeLove = ({ content }) => {
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
           <Link key={id} to={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
-            <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+            <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
             <div className={styles.appContent}>
               <h4 className={styles.h4}>{title}</h4>
               <p>{description}</p>
@@ -107,7 +107,7 @@ const AppsWeLove = ({ content }) => {
                   <h4 className={styles.h4}>{title}</h4>
                   <p>{description}</p>
                 </div>
-                <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+                <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
               </div>
             </Tab>
           ))}
