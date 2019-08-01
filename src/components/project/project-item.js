@@ -58,7 +58,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     api,
     project,
     currentUser,
-    createNotification: createNotification(<Button><ProjectLink project={project}>Take me There</ProjectLink></Button>, { type: 'success' }),
+    createNotification,
     myStuffEnabled,
     addProjectToCollection,
     removeProjectFromCollection,

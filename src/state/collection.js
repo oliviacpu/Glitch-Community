@@ -5,6 +5,8 @@ import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
 import { createCollection } from 'Models/collection';
+import { AddProjectToCollectionMsg } from 'Components/notification';
+
 export const toggleBookmark = async ({
   api,
   project,
@@ -24,7 +26,8 @@ export const toggleBookmark = async ({
       createNotification(`Removed ${project.domain} from collection My Stuff`);
     } else {
       setHasBookmarked(true);
-        if (!myStuffCollection) {
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName='My Stuff' url={project.domain} />, { type: 'success' });
+      if (!myStuffCollection) {
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
