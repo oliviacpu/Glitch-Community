@@ -10,16 +10,11 @@ import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
-import TooltipContainer from 'Components/tooltips/tooltip-container';
 import VisibilityContainer from 'Components/visibility-container';
-<<<<<<< HEAD
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark } from 'State/collection';
 import { useNotifications } from 'State/notifications';
-=======
-import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
->>>>>>> ec67760720a740a18817878e760e22d5cc874eed
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -42,9 +37,9 @@ const ProfileListWithData = ({ project }) => {
 
 const ProfileListLoader = ({ project }) => (
   <VisibilityContainer>
-    {({ wasEverVisible }) => (
+    {({ wasEverVisible }) =>
       wasEverVisible ? <ProfileListWithData project={project} /> : <ProfileList layout="row" glitchTeam={project.showAsGlitchTeam} />
-    )}
+    }
   </VisibilityContainer>
 );
 
@@ -58,17 +53,18 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
-  const bookmarkAction = () => toggleBookmark({
-    api,
-    project,
-    currentUser,
-    createNotification,
-    myStuffEnabled,
-    addProjectToCollection,
-    removeProjectFromCollection,
-    setHasBookmarked,
-    hasBookmarked,
-  });
+  const bookmarkAction = () =>
+    toggleBookmark({
+      api,
+      project,
+      currentUser,
+      createNotification,
+      myStuffEnabled,
+      addProjectToCollection,
+      removeProjectFromCollection,
+      setHasBookmarked,
+      hasBookmarked,
+    });
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
@@ -96,11 +92,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                   {myStuffEnabled && !isAnonymousUser && (
                     <div className={styles.bookmarkButton}>
-                      <TooltipContainer
-                        type="info"
-                        target={<BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />}
-                        tooltip="Add to My Stuff"
-                      />
+                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>
@@ -114,7 +106,12 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                     </div>
                     <div className={styles.nameWrap}>
                       <div className={styles.itemButtonWrap}>
-                        <Button decorative disabled={!!project.suspendedReason} image={project.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
+                        <Button
+                          decorative
+                          disabled={!!project.suspendedReason}
+                          image={project.private ? <PrivateIcon inButton isPrivate /> : null}
+                          imagePosition="left"
+                        >
                           <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
                         </Button>
                       </div>
@@ -148,6 +145,5 @@ ProjectItem.propTypes = {
 ProjectItem.defaultProps = {
   projectOptions: {},
 };
-
 
 export default ProjectItem;
