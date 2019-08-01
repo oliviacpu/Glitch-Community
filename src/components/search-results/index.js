@@ -42,8 +42,11 @@ const groups = [
 
 const DetailsLoader = ({ project }) => {
   const api = useAPI();
+  console.log("details loader is loading")
   React.useEffect(() => {
+    console.log("use effect was called")
     async function fillInDetails() {
+      console.log("fillin details was called")
       const details = await getProjectDetails(api, project.domain);
       project.permissions = details.permissions || [];
       project.authUserHasBookmarked = details.authUserHasBookmarked;

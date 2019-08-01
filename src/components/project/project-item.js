@@ -66,7 +66,10 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       hasBookmarked,
     });
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  console.log("from project-item", project);
+  React.useEffect(() => {
+    setHasBookmarked(project.authUserHasBookmarked)
+  }, [project.authUserHasBookmarked])
+
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
