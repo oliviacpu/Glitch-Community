@@ -83,17 +83,15 @@ git clone git@github.com:FogCreek/Glitch-Community.git
 ```
 npm install
 ```
-3. Create a file called `.env` in the root directory, and populate it with the `RUNNING_LOCALLY` variable, which tells our build process to allow the app to run on `localhost`
+3. Create a file called `.env` in the root directory, and populate it with the `RUNNING_LOCALLY` variable, which tells our build process to allow the app to run on `localhost`. Optionally, you can also choose which port the app will run on.
 ```yaml
 RUNNING_LOCALLY=true
+PORT=3000 # optional
 ```
 4. Start the server:
 ```bash
 npm start
 ```
-
-#### 
-
 
 ### How do I add a question to the FAQ?
 
