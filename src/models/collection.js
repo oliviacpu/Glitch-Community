@@ -50,10 +50,10 @@ export function getCollectionOwnerLink(collection) {
 }
 
 export function getCollectionLink(collection) {
-  if (collection.fullUrl) {
-    return `/@${collection.fullUrl}`;
+  if (collection.team || collection.user) {
+    return `${getCollectionOwnerLink(collection)}/${collection.url}`;
   }
-  return `${getCollectionOwnerLink(collection)}/${collection.url}`;
+  return `/@${collection.fullUrl}`;
 }
 
 export async function createCollection({ api, name, teamId, createNotification, myStuffEnabled = false }) {
