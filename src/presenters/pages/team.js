@@ -70,7 +70,9 @@ const TeamMarketing = () => (
 
 const NameConflictWarning = ({ id }) => (
   <>
-    <Text>This team has your name. You should update your info to remain unique <Emoji name="sparkles" /></Text>
+    <Text>
+      This team has your name. You should update your info to remain unique <Emoji name="sparkles" />
+    </Text>
     <Button size="small" type="tertiary" href={`/user/${id}`}>
       Your Profile
     </Button>

@@ -148,30 +148,26 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  useTrackedFunc(
-    async (project) => {
-      togglePopover();
-      // add project to page if successful & show notification
-      await addProjectToCollection(project, collection);
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
-    },
-    'Project Added to Collection',
-    { origin: 'Add Project collection' },
-  );
   const bookmarkAction = useTrackedFunc(
-    () => toggleBookmark({
-      api,
-      project,
-      currentUser,
-      createNotification,
-      myStuffEnabled,
-      addProjectToCollection,
-      removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
-    }),
-    `${project.domain} was ${hasBookmarked ? "removed from my stuff": "added to my stuff"}`
-  )
+    () =>{
+      console.log(`Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, { origin: `Project page: ${project.domain}`, project: project.domain })
+      return toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+      })
+    }
+      ,
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    { origin: `Project page: ${project.domain}`, project: project.domain },
+  );
+  
   return (
     <main id="main">
       <section id="info">
