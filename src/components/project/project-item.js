@@ -66,7 +66,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       hasBookmarked,
     });
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  console.log(project.authUserHasBookmarked);
+  console.log("from project-item", project);
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>

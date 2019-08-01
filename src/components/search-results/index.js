@@ -47,7 +47,7 @@ const DetailsLoader = ({ project }) => {
       const details = await getProjectDetails(api, project.domain);
       project.permissions = details.permissions || [];
       project.authUserHasBookmarked = details.authUserHasBookmarked;
-      console.log(project);
+      console.log("from search results", project);
     }
     fillInDetails();
   }, []);
