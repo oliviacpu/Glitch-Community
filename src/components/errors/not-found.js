@@ -6,10 +6,7 @@ import Text from 'Components/text/text';
 import styles from './not-found.styl';
 
 export const Aquarium = ({ className }) => (
-  <svg className={classnames(styles.aquarium, className)} 
-    viewBox="0 0 88 86" 
-    xmlns="http://www.w3.org/2000/svg"
-    aria-label=''>
+  <svg className={classnames(styles.aquarium, className)} viewBox="0 0 88 86" xmlns="http://www.w3.org/2000/svg" aria-label="">
     <g transform="translate(1 1)" fill="none" fillRule="evenodd">
       <path
         d="M75.488 13.541C79.911 16.924 85.7 30.651 85.7 41.215c0 23.527-19.073 42.6-42.6 42.6S.5 64.742.5 41.215c0-9.341.835-14.852 5.894-21.888a119.629 119.629 0 0 1 4.27-5.542c4.146-.137 7.976.058 11.491.585 10.48 1.57 18.045 8.53 30.453 8.53 12.408 0 22.954-9.203 22.88-9.359z"
