@@ -141,7 +141,7 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
     ...formatByType[type](value),
   }));
 
-const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'] };
+const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'], isMyStuff: false };
 
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
@@ -172,12 +172,13 @@ function createAlgoliaProvider(api) {
 
   return {
     ...mapValues(searchIndices, (index, type) => (query) => index.search({ query, hitsPerPage: 100 }).then(formatAlgoliaResult(type))),
-    collection: (query, { teamIDs, userIDs }) =>
+    collection: (query, { teamIDs, userIDs, isMyStuff }) =>
       searchIndices.collection
         .search({
           query,
           hitsPerPage: 100,
           filters: buildCollectionFilters({ teamIDs, userIDs }),
+          facetFilters: [isMyStuff ? '' : 'isMyStuff:false'],
         })
         .then(formatAlgoliaResult('collection')),
     project: (query, { notSafeForKids }) =>
