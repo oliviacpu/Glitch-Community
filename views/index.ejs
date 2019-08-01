@@ -93,16 +93,18 @@
       if (isIe) {
         showFallback('ie');
       } else if (isCodeRunningInsideGoogleTranslateIframe) {
-        showFallback('translate');
-        setTimeout(function(){
-          window.location.href = "https://glitch.com";      
-        }, 3000);
+        if (!container.hasChildNodes()) {
+          showFallback('translate');
+          setTimeout(function() {
+            window.location.href = "https://glitch.com";      
+          }, 3000);
+        }
       } else if (window.bootstrap) {
         window.bootstrap(container);
       } else if (!BUILD_COMPLETE) {
         showFallback('notbuilt');
       } else {
-        sho
+        showFallback('noscript');
       }
       analytics.load("ZE6VsqXhz5izMM2cqRrVEDIrJWUKntoX");
     </script>
