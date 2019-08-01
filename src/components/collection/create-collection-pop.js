@@ -64,7 +64,6 @@ const useCollections = createAPIHook((api, teamId, currentUser) => {
   return getAllPages(api, `/v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
 });
 
-
 function CreateCollectionPopBase({ align, title, onSubmit, options }) {
   const api = useAPI();
   const { createNotification } = useNotifications();
@@ -75,17 +74,17 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
   const [collectionName, setCollectionName] = useState('');
 
   const [selection, setSelection] = useState(options[0]);
-  
+
   // determine if name is valid
   const { value: collections } = useCollections(selection.value, currentUser);
   const nameAlreadyExists = (collections || []).some((c) => c.url === kebabCase(collectionName));
-  const isMyStuffError = kebabCase(collectionName) === "my-stuff";
+  const isMyStuffError = kebabCase(collectionName) === 'my-stuff';
   let error = '';
   if (isMyStuffError) {
-    error = 'My Stuff is a reserved name'
+    error = 'My Stuff is a reserved name';
   }
   if (nameAlreadyExists) {
-    error = 'You already have a collection with this name'
+    error = 'You already have a collection with this name';
   }
 
   const submitDisabled = loading || collectionName.length === 0;
