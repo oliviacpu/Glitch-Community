@@ -30,7 +30,10 @@ export const toggleBookmark = async ({
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${myStuffCollection.fullUrl}`} />, { type: 'success' });
+      createNotification(
+        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${myStuffCollection.fullUrl}`} />,
+        { type: 'success' },
+      );
     }
   } catch (error) {
     captureException(error);
