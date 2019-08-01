@@ -4,19 +4,37 @@
   background: inherit;
   position: relative;
   cursor: pointer;
+
+  .highlight{
+    fill: none;
+    display: none;
+  }
+  
+  &:focus{
+    outline: none;
+  }
+}
+
+.focused{
+  .highlight{
+    fill: none;
+    display: inline;
+  }
 }
 
 .halo {
   position: absolute;
-  left: 3px;
+  left: 6px;
   top: 0px;
   display: none;
 }
 
 .check {
   position: absolute;
-  left: 25px;
-  top: 25px;
+  width: 13px;
+  height: 13px;
+  left: 27px;
+  top: 27px;
   display: inline-block;
 }
 

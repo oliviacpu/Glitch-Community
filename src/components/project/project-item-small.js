@@ -6,12 +6,12 @@ import classnames from 'classnames';
 import Image from 'Components/images/image';
 import Text from 'Components/text/text';
 import Badge from 'Components/badges/badge';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { ProjectLink } from 'Components/link';
 
 import styles from './project-item.styl';
 
-const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
+const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getProjectAvatarUrl(project)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
 const getLinkBodyStyles = (project) => classnames(styles.linkBodySmall, { [styles.private]: project.private });
 

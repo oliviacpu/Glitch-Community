@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
-import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import { getTeamLink, getTeamAvatarUrl } from 'Models/team';
+import { getUserAvatarThumbnailUrl } from 'Models/user';
 import Image from 'Components/images/image';
 import { UserAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
@@ -111,7 +111,7 @@ Are you sure you want to sign out?`)
       <PopoverTitle>
         <UserLink user={user}>
           <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
-            <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
+            <Image src={getUserAvatarThumbnailUrl(user)} alt="Your avatar" />
           </div>
           <div className={styles.userInfo}>
             <InfoDescription>{user.name || 'Anonymous'}</InfoDescription>
