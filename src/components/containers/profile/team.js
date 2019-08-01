@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import CoverContainer from 'Components/containers/cover-container';
 import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
-import { getAvatarStyle as getTeamAvatarStyle } from 'Models/team';
+import { getTeamAvatarStyle } from 'Models/team';
 import styles from './styles.styl';
 
 const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) => (
@@ -12,7 +12,7 @@ const TeamProfileContainer = ({ item, children, avatarActions, coverActions }) =
     <div className={classnames(styles.profileWrap)}>
       <div className={styles.avatarContainer}>
         {/* eslint-disable-next-line no-underscore-dangle */}
-        <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle({ ...item, cache: item.updatedAt })} />
+        <div className={classnames(styles.avatar, styles.team)} style={getTeamAvatarStyle(item)} />
         <div className={styles.avatarButtons}>{avatarActions && <TrackedButtonGroup actions={avatarActions} />}</div>
       </div>
       <div className={styles.profileInfo}>{children}</div>

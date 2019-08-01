@@ -29,7 +29,7 @@ import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { toggleBookmark } from 'State/collection';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
-import { getLink as getUserLink } from 'Models/user';
+import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';

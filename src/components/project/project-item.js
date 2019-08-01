@@ -10,7 +10,7 @@ import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
-import { FALLBACK_AVATAR_URL, getAvatarUrl } from 'Models/project';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -18,7 +18,7 @@ import { useCurrentUser } from 'State/current-user';
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
 
-const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getAvatarUrl(project.id)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
+const ProfileAvatar = ({ project }) => <Image className={styles.avatar} src={getProjectAvatarUrl(project)} defaultSrc={FALLBACK_AVATAR_URL} alt="" />;
 
 const getLinkBodyStyles = (project) =>
   classnames(styles.linkBody, {

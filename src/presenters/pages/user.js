@@ -15,7 +15,7 @@ import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
-import { getLink } from 'Models/user';
+import { getUserLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
@@ -24,7 +24,7 @@ import useFocusFirst from 'Hooks/use-focus-first';
 import styles from './user.styl';
 
 function syncPageToLogin(login) {
-  history.replaceState(null, null, getLink({ login }));
+  history.replaceState(null, null, getUserLink({ login }));
 }
 
 const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) => {

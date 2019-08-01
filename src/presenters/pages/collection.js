@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 import { kebabCase } from 'lodash';
 
-import { getLink } from 'Models/collection';
+import { getCollectionLink } from 'Models/collection';
 import { PopoverWithButton } from 'Components/popover';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
@@ -30,7 +30,7 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
     onNameChange: async (name) => {
       const url = kebabCase(name);
       const result = await funcs.updateNameAndUrl({ name, url });
-      history.replace(getLink({ ...collection, url }));
+      history.replace(getCollectionLink({ ...collection, url }));
       return result;
     },
   };

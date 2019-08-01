@@ -8,7 +8,7 @@ import { MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, InfoDesc
 import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import { getPredicates, getTeamPair } from 'Models/words';
-import { getLink } from 'Models/team';
+import { getTeamLink } from 'Models/team';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 
@@ -106,7 +106,7 @@ const CreateTeamPop = withRouter(({ history }) => {
         hasCoverImage: false,
         isVerified: false,
       });
-      history.push(getLink(data));
+      history.push(getTeamLink(data));
     } catch (error) {
       const message = error && error.response && error.response.data && error.response.data.message;
       setState({

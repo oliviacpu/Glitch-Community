@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import { getLink as getCollectionLink } from 'Models/collection';
-import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getTeamLink } from 'Models/team';
-import { getLink as getUserLink } from 'Models/user';
+import { getCollectionLink } from 'Models/collection';
+import { getProjectLink } from 'Models/project';
+import { getTeamLink } from 'Models/team';
+import { getUserLink } from 'Models/user';
 import { useGlobals } from 'State/globals';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';

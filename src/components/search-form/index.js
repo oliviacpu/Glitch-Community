@@ -4,9 +4,9 @@ import { withRouter } from 'react-router-dom';
 import { mapValues, flatMap } from 'lodash';
 
 import { PopoverContainer } from 'Components/popover';
-import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getUserLink } from 'Models/user';
-import { getLink as getTeamLink } from 'Models/team';
+import { getProjectLink } from 'Models/project';
+import { getUserLink } from 'Models/user';
+import { getTeamLink } from 'Models/team';
 import { useAlgoliaSearch } from 'State/search';
 
 import TextInput from '../inputs/text-input';

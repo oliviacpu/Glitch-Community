@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { getAvatarStyle, getDisplayName } from 'Models/user';
+import { getUserAvatarStyle, getDisplayName } from 'Models/user';
 import Link from 'Components/link';
 
 import styles from './styles.styl';
@@ -19,7 +19,7 @@ const UserMask = ({ users, config }) => (
           width: `${(100 * point.d) / config.width}%`,
         }}
       >
-        <div className={styles.userMaskBubble} style={getAvatarStyle(users[i])} />
+        <div className={styles.userMaskBubble} style={getUserAvatarStyle(users[i])} />
       </div>
     ))}
   </div>
