@@ -75,6 +75,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
   }
+  const onMouseLeave = () => {
+    setIsHoveringOnProjectItem(false);
+  }
   
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
@@ -97,14 +100,14 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
             );
 
             return (
-              <div className={styles.container}>
+              <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <header className={styles.header}>
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
                   {myStuffEnabled && !isAnonymousUser && (
                     <div className={styles.bookmarkButton}>
-                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} isHoveringOnProjectItem={isHoveringOnProjectItem} />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>

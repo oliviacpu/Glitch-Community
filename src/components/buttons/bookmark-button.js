@@ -116,8 +116,8 @@ const EmptyBookmark = () => (
   </svg>
 );
 
-const BookmarkButton = ({ action, initialIsBookmarked }) => {
-  console.log("initialIsBookmarked", initialIsBookmarked)
+const BookmarkButton = ({ action, initialIsBookmarked, isHoveringOnProjectItem }) => {
+  console.log(isHoveringOnProjectItem)
   const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
   React.useEffect(() => {
     setState({...state, isBookmarked: initialIsBookmarked })
@@ -143,9 +143,6 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
   const onAnimationEnd = () => {
     setState({ ...state, isAnimating: false });
   };
-  const onMouseLeave = () => {
-    setState({ ...state, isAnimating: false });
-  }
 
   const checkClassName = cx({
     check: true,
