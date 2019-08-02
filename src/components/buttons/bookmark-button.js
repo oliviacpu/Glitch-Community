@@ -9,7 +9,7 @@ import styles from './bookmark-button.styl';
 
 const cx = classNames.bind(styles);
 
-const CHECKMARK = `${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fcheck-bookmark.svg?v=1564432004008`;
+const CHECKMARK = `${CDN_URL}/979b3751-5b48-4702-8aa3-9f558f429877%2Fcheck.svg?v=1564776265338`';
 
 const Halo = ({ isAnimating, onAnimationEnd }) => (
   <svg
