@@ -46,7 +46,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             type="tertiary"
-            image={<Image className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
+            image={<TeamAvatar className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
           >
             {team.name}
           </Button>

@@ -15,7 +15,7 @@ import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import styles from './avatar.styl';
 
 // UserAvatar
-export const Avatar = ({ name, src, color, srcFallback, type, width, hideTooltip, withinButton }) => {
+export const Avatar = ({ name, src, color, srcFallback, type, tiny, hideTooltip, withinButton }) => {
   const contents = (
     <Image width={width} height={width} src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={styles[type]} />
   );
@@ -34,14 +34,14 @@ Avatar.propTypes = {
   color: PropTypes.string,
   hideTooltip: PropTypes.bool,
   withinButton: PropTypes.bool,
-  width: PropTypes.string,
+  tiny: PropTypes.bool,
 };
 
 Avatar.defaultProps = {
   color: null,
   srcFallback: '',
   hideTooltip: false,
-  width: '32px',
+  tiny: false,
 };
 
 export const TeamAvatar = ({ team, size, hideTooltip, width }) => (
