@@ -44,9 +44,7 @@ const collectionTypeOptions = [
 
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
-    <div className={styles.popoverTitleWrap}>
-      <ProjectAvatar project={project} width="15px" /> Add {project.domain} to collection
-    </div>
+    <ProjectAvatar project={project} tiny />&nbsp;Add {project.domain} to collection
   </MultiPopoverTitle>
 );
 AddProjectPopoverTitle.propTypes = {

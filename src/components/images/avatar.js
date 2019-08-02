@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
@@ -16,8 +17,10 @@ import styles from './avatar.styl';
 
 // UserAvatar
 export const Avatar = ({ name, src, color, srcFallback, type, tiny, hideTooltip, withinButton }) => {
+  const size = tiny ? '16px' : '32px';
+  const className = classNames(styles[type], { [styles.tiny]: tiny });
   const contents = (
-    <Image width={width} height={width} src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={styles[type]} />
+    <Image width={size} height={size} src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={className} />
   );
 
   if (!hideTooltip) {
@@ -44,8 +47,8 @@ Avatar.defaultProps = {
   tiny: false,
 };
 
-export const TeamAvatar = ({ team, size, hideTooltip, width }) => (
-  <Avatar name={team.name} src={getTeamAvatarUrl({ ...team, size })} srcFallback={DEFAULT_TEAM_AVATAR} type="team" hideTooltip={hideTooltip} width={width} />
+export const TeamAvatar = ({ team, size, hideTooltip, tiny }) => (
+  <Avatar name={team.name} src={getTeamAvatarUrl({ ...team, size })} srcFallback={DEFAULT_TEAM_AVATAR} type="team" hideTooltip={hideTooltip} tiny={tiny} />
 );
 TeamAvatar.propTypes = {
   team: PropTypes.shape({
@@ -61,7 +64,7 @@ TeamAvatar.defaultProps = {
   size: 'small',
 };
 
-export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton, width }) => (
+export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton, tiny }) => (
   <Avatar
     name={getDisplayName(user) + suffix}
     src={getUserAvatarThumbnailUrl(user)}
@@ -70,7 +73,7 @@ export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton, width
     type="user"
     hideTooltip={hideTooltip}
     withinButton={withinButton}
-    width={width}
+    tiny={tiny}
   />
 );
 UserAvatar.propTypes = {
@@ -92,8 +95,8 @@ UserAvatar.defaultProps = {
   withinButton: false,
 };
 
-export const ProjectAvatar = ({ project, hasAlt, width }) => (
-  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="team" hideTooltip width={width} />
+export const ProjectAvatar = ({ project, hasAlt, tiny }) => (
+  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="project" hideTooltip tiny={tiny} />
 );
 
 ProjectAvatar.propTypes = {
@@ -108,9 +111,7 @@ ProjectAvatar.defaultProps = {
   hasAlt: false,
 };
 
-export const CollectionAvatar = ({ collection, width }) => (
-  <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} width={width} />
-);
+export const CollectionAvatar = ({ collection, tiny }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} tiny={tiny} />;
 
 CollectionAvatar.propTypes = {
   collection: PropTypes.shape({
