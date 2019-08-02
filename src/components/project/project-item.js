@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
@@ -52,8 +52,12 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
-  const hasBookmarked = project.authUserHasBookmarked
-  // const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+
+  const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+  useEffect(() => {
+    setHasBookmarked(project.authUserHasBookmarked);
+  }, [project.authUserHasBookmarked]);
+
   const bookmarkAction = () =>
     toggleBookmark({
       api,
@@ -63,13 +67,10 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       myStuffEnabled,
       addProjectToCollection,
       removeProjectFromCollection,
-      // setHasBookmarked,
-      hasBookmarked: project.authUserHasBookmarked,
+      setHasBookmarked,
+      hasBookmarked,
     });
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  // React.useEffect(() => {
-  //   setHasBookmarked(project.authUserHasBookmarked)
-  // }, [project.authUserHasBookmarked])
 
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
