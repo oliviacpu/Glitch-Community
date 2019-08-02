@@ -125,12 +125,21 @@ const EmptyBookmark = () => (
   </svg>
 );
 
-const BookmarkButton = ({ action, initialIsBookmarked, isHoveringOnProjectItem }) => {
-  console.log(isHoveringOnProjectItem)
-  const [state, setState] = React.useState({ isBookmarked: initialIsBookmarked, isAnimating: false, isFocused: false });
+const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
+  const [state, setState] = React.useState({ 
+    isBookmarked: initialIsBookmarked, 
+    isAnimating: false, 
+    isFocused: false,
+    isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true,
+  });
   React.useEffect(() => {
-    setState({...state, isBookmarked: initialIsBookmarked })
-  }, [initialIsBookmarked])
+    setState({ ...state, isBookmarked: initialIsBookmarked })
+  }, [initialIsBookmarked]);
+  React.useEffect(() => {
+    if (state.isAnimating === false && containerDetails) {
+      setState({ ...state, isVisible})
+    }
+  }, [containerDetails])
   const addText = 'Add to My Stuff';
   const removeText = 'Remove from My Stuff';
 
@@ -150,9 +159,10 @@ const BookmarkButton = ({ action, initialIsBookmarked, isHoveringOnProjectItem }
     setState({ ...state, isFocused: false });
   };
   const onAnimationEnd = () => {
-    setState({ ...state, isAnimating: false });
+    setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true });
   };
 
+  console.log(isVisible)
   const checkClassName = cx({
     check: true,
     checkAnimated: state.isAnimating,
