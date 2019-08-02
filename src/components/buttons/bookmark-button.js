@@ -132,14 +132,18 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     isFocused: false,
     isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true,
   });
+  
   React.useEffect(() => {
-    setState({ ...state, isBookmarked: initialIsBookmarked })
-  }, [initialIsBookmarked]);
-  React.useEffect(() => {
-    if ((state.isAnimating === false) && containerDetails) {
-      setState({ ...state, isVisible: containerDetails.isHoveringOnProjectItem })
+    let updatedState = {};
+    if (initialIsBookmarked !== state.isBookmarked)
+      updatedState = { ...updatedState, isBookmarked: initialIsBookmarked }
+    if (containerDetails && containerDetails.isHoveringOnProjectItem !== undefined && state.isAnimating === false) {
+      updatedState = { ...updatedState, isVisible: containerDetails.isHoveringOnProjectItem }
     }
-  }, [containerDetails]);
+    if (Object.keys(updatedState)) {
+      setState({ ...state, ...updatedState });
+    }
+  }, [containerDetails, initialIsBookmarked])
   
   const addText = 'Add to My Stuff';
   const removeText = 'Remove from My Stuff';
