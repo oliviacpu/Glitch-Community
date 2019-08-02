@@ -147,9 +147,9 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
   const onClick = (e) => {
     const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
     if (!state.isBookmarked) {
-      setState({ isFocused: fromKeyboard, isAnimating: true, isBookmarked: true });
+      setState({ ...state, isFocused: fromKeyboard, isAnimating: true, isBookmarked: true });
     } else {
-      setState({ isFocused: fromKeyboard, isAnimating: false, isBookmarked: false });
+      setState({ ...state, isFocused: fromKeyboard, isAnimating: false, isBookmarked: false });
     }
     if (action) action();
   };
@@ -171,11 +171,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
 
   const isSmallScreen = window.matchMedia('(max-width: 592px)');
   const isHidden = isSmallScreen.matches ? false : !state.isVisible;
-  console.log({
-    isSmallScreen: isSmallScreen.matches,
-    isVisible: state.isVisible,
-    isHidden,
-  })
+
   return (
     <TooltipContainer
       type="action"

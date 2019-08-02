@@ -22,6 +22,14 @@
   }
 }
 
+.buttonmarkButton.fadeIn{
+  animation: fadeIn 0.3s 1 forwards;
+}
+
+.bookmarkButton.fadeOut{
+  animation: fadeOut 0.3s 1 forwards;
+}
+
 .halo {
   position: absolute
   left: 6px
@@ -164,3 +172,28 @@
     opacity: 1
   }
 }
+
+@keyframes fadeIn {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to{
+      opacity: 0;
+    }
+  }

@@ -72,6 +72,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     });
   
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
+
+  // hey I'm going to try adding this load in animation so that the bookmark icon flys in and out on hover of project item: https://equable-sword.glitch.me/ (the fourth option, first in second row)
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
   }
