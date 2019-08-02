@@ -141,7 +141,9 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     setState({ ...state, isFocused: false });
   };
   const onAnimationEnd = () => {
-    console.log("is this happening")
+    setState({ ...state, isAnimating: false });
+  };
+  const onMouseLeave = () => {
     setState({ ...state, isAnimating: false });
   }
 
@@ -150,8 +152,6 @@ const BookmarkButton = ({ action, initialIsBookmarked }) => {
     checkAnimated: state.isAnimating,
     hidden: !state.isBookmarked,
   });
-  
-  
 
   return (
     <TooltipContainer

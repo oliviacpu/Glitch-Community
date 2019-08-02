@@ -57,7 +57,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
-
+  
   const bookmarkAction = () =>
     toggleBookmark({
       api,
@@ -70,6 +70,12 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       setHasBookmarked,
       hasBookmarked,
     });
+  
+  const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
+  const onMouseEnter = () => {
+    setIsHoveringOnProjectItem(true);
+  }
+  
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);

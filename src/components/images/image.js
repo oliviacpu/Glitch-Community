@@ -21,7 +21,20 @@ const handleDefaultSrc = (defaultSrc) => (event) => {
   }
 };
 
-const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, src, srcSet, sizes, width, defaultSrc, onAnimationEnd }) =>
+const Image = ({
+  alt,
+  backgroundColor,
+  backgroundImage,
+  backgroundRatio,
+  className,
+  height,
+  src,
+  srcSet,
+  sizes,
+  width,
+  defaultSrc,
+  onAnimationEnd,
+}) =>
   !backgroundImage ? (
     <img
       alt={alt}
