@@ -113,15 +113,18 @@ a.linkBody:hover
   position: absolute
   top: 0
   right: 0
+  @media (min-width: mediumSmallViewport)
+    button
+      transition: all 0.3s
+      transform: translateY(20px)
+      opacity: 0
   // @media (min-width: mediumSmallViewport)
   //   display: none
-  button
-    transition: all 0.5s
-    transform: translateY(20px)
-    opacity: 0
 
-.container
-  &:hover
-    .bookmarkButtonContainer
-      opacity: 1
-      transform: translateY(0px)
+@media (min-width: mediumSmallViewport)
+  .container
+    &:hover
+      .bookmarkButtonContainer
+        button
+          opacity: 1
+          transform: translateY(0px)
