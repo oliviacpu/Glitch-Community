@@ -106,7 +106,7 @@
       } else if (window.bootstrap) {
         window.bootstrap(container);
       } else if (!BUILD_COMPLETE) {
-        // js not built means the css is not built yet either
+        // we can't show the server rendered page if the css is still building
         showFallback('notbuilt');
       } else {
         // js failed to parse, odds are the css would be broken too
