@@ -148,6 +148,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  console.log(project)
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -162,7 +163,7 @@ const ProjectPage = ({ project: initialProject }) => {
         hasBookmarked,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    { origin: `Project page: ${project.domain}`, projectName: project.domain },
+    { origin: `Project page: ${project.domain}`, projectName: project.domain, baseProjectId: project.baseId },
   );
 
   return (
