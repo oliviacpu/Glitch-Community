@@ -136,10 +136,11 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     setState({ ...state, isBookmarked: initialIsBookmarked })
   }, [initialIsBookmarked]);
   React.useEffect(() => {
-    if (state.isAnimating === false && containerDetails) {
-      setState({ ...state, isVisible})
+    if ((state.isAnimating === false) && containerDetails) {
+      setState({ ...state, isVisible: containerDetails.isHoveringOnProjectItem })
     }
-  }, [containerDetails])
+  }, [containerDetails]);
+  
   const addText = 'Add to My Stuff';
   const removeText = 'Remove from My Stuff';
 
@@ -162,20 +163,22 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true });
   };
 
-  console.log(isVisible)
   const checkClassName = cx({
     check: true,
     checkAnimated: state.isAnimating,
     hidden: !state.isBookmarked,
   });
 
+  const x = window.matchMedia('max-width: 592px')
+  console.log("windowww", x)
+  
   return (
     <TooltipContainer
       type="action"
       tooltip={state.isBookmarked ? removeText : addText}
       target={
         <button
-          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''}`}
+          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} `}
           onClick={onClick}
           onFocus={onFocus}
           onBlur={onBlur}
