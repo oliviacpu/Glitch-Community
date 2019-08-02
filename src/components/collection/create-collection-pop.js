@@ -87,7 +87,7 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
     error = 'You already have a collection with this name';
   }
 
-  const submitDisabled = loading || collectionName.length === 0;
+  const submitDisabled = loading || collectionName.length === 0 || !!error;
 
   async function handleSubmit(event) {
     if (submitDisabled) return;
