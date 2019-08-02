@@ -162,7 +162,7 @@ const ProjectPage = ({ project: initialProject }) => {
         hasBookmarked,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    { origin: `Project page: ${project.domain}`, project: project.domain },
+    { origin: `Project page: ${project.domain}`, projectName: project.domain },
   );
 
   return (
