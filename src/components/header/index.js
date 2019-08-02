@@ -24,11 +24,11 @@ const ResumeCoding = () => (
 const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   const { SSR_SIGNED_IN } = useGlobals();
+  // signedIn and signedOut are both false on the server so the sign in button doesn't render
   const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
   const signedIn = !!currentUser.login || fakeSignedIn;
-  const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   const signedOut = !!currentUser.id && !signedIn;
-  // signedIn and signedOut are both false on the server so 
+  const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
     <header role="banner" className={styles.header}>
       <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
