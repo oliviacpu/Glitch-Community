@@ -1,161 +1,166 @@
 .bookmarkButton {
-  padding: 17px 17px 0;
-  border: none;
-  background: inherit;
-  position: relative;
-  cursor: pointer;
+  padding: 17px 17px 0
+  border: none
+  background: inherit
+  position: relative
+  cursor: pointer
 
   .highlight{
-    fill: none;
-    display: none;
+    fill: none
+    display: none
   }
   
   &:focus{
-    outline: none;
+    outline: none
   }
 }
 
 .focused{
   .highlight{
-    fill: none;
-    display: inline;
+    fill: none
+    display: inline
   }
 }
 
 .halo {
-  position: absolute;
-  left: 6px;
-  top: 0px;
-  display: none;
+  position: absolute
+  left: 6px
+  top: 0px
+  display: none
+}
+
+.bookmark{
+  width: 34px
+  height: 38px
 }
 
 .check {
-  position: absolute;
-  width: 13px;
-  height: 13px;
-  left: 27px;
-  top: 27px;
-  display: inline-block;
+  position: absolute
+  width: 13px
+  height: 13px
+  left: 27px
+  top: 27px
+  display: inline-block
 }
 
 .hidden {
-  display: none;
+  display: none
 }
 
 .checkAnimated {
-  display: inline-block;
-  animation: scale cubic-bezier(0, 0, 0.2, 1) 0.5s 1;
+  display: inline-block
+  animation: scale cubic-bezier(0, 0, 0.2, 1) 0.5s 1
 }
 
 @keyframes scale{
   0%{
-    transform: scale(0);
+    transform: scale(0)
   }
   100%{
-    transform: scale(1.0);
+    transform: scale(1.0)
   }
 }
 
 
 .haloAnimated {
-  display: inline;
+  display: inline
 }
 
 
 .halo1{
-  opacity: 0;
-  animation: halo-1 cubic-bezier(0, 0, 0.2, 1) 1.2s 1;
+  opacity: 0
+  animation: halo-1 cubic-bezier(0, 0, 0.2, 1) 1.2s 1
 }
 
 .halo2{
-  opacity: 0;
-  animation: halo-2 cubic-bezier(0, 0, 0.2, 1) 1.2s 1;
+  opacity: 0
+  animation: halo-2 cubic-bezier(0, 0, 0.2, 1) 1.2s 1
 }
 
 .halo3{
-  opacity: 0;
-  animation: halo-3 cubic-bezier(0, 0, 0.2, 1) 1.2s 1;
+  opacity: 0
+  animation: halo-3 cubic-bezier(0, 0, 0.2, 1) 1.2s 1
 }
 
 .halo4{
-  opacity: 0;
-  animation: halo-4 cubic-bezier(0, 0, 0.2, 1) 1.2s 1;
+  opacity: 0
+  animation: halo-4 cubic-bezier(0, 0, 0.2, 1) 1.2s 1
 }
 
 .halo5 {
-  opacity: 0;
-  animation: halo-5 cubic-bezier(0, 0, 0.2, 1) 1.2s 1;
+  opacity: 0
+  animation: halo-5 cubic-bezier(0, 0, 0.2, 1) 1.2s 1
 }
 
 
 @keyframes halo-1{
   0%{
-    opacity: 0;
+    opacity: 0
   }
   4%{
-    opacity: 1;
+    opacity: 1
   }
   100%{
-    opacity: 1;
+    opacity: 1
   }
 }
 
 @keyframes halo-2{
   0%{
-    opacity: 0;
+    opacity: 0
   }
   4%{
-    opacity: 0;
+    opacity: 0
   }
   8%{
-    opacity: 1;
+    opacity: 1
   }
   100%{
-    opacity: 1;
+    opacity: 1
   }
 }
 
 @keyframes halo-3{
   0%{
-    opacity: 0;
+    opacity: 0
   }
   8%{
-    opacity: 0;
+    opacity: 0
   }
   12%{
-    opacity: 1;
+    opacity: 1
   }
   100%{
-    opacity: 1;
+    opacity: 1
   }
 }
 
 @keyframes halo-4{
   0%{
-    opacity: 0;
+    opacity: 0
   }
   12%{
-    opacity: 0;
+    opacity: 0
   }
   16%{
-    opacity: 1;
+    opacity: 1
   }
   100%{
-    opacity: 1;
+    opacity: 1
   }  
 }
 
 @keyframes halo-5{
   0%{
-    opacity: 0;
+    opacity: 0
   }
   16%{
-    opacity: 0;
+    opacity: 0
   }
   20%{
-    opacity: 1;
+    opacity: 1
   }
   100%{
-    opacity: 1;
+    opacity: 1
   }
 }
