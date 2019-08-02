@@ -27,6 +27,8 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
   const signedIn = !!currentUser.login || fakeSignedIn;
   const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
+  const signedOut = !!currentUser.id && !signedIn;
+  // signedIn and signedOut are both false on the server so 
   return (
     <header role="banner" className={styles.header}>
       <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
@@ -39,15 +41,17 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <SearchForm defaultValue={searchQuery} />
         </div>
         <ul className={styles.buttons}>
-          <li className={styles.buttonWrap}>
-            <NewProjectPop />
-          </li>
+          {(signedIn || signedOut) && (
+            <li className={styles.buttonWrap}>
+              <NewProjectPop />
+            </li>
+          )}
           {hasProjects && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
             </li>
           )}
-          {!signedIn && (
+          {signedOut && (
             <li className={styles.buttonWrap}>
               <SignInPop align="right" />
             </li>
