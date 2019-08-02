@@ -57,7 +57,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
-  
+
   const bookmarkAction = () =>
     toggleBookmark({
       api,
@@ -70,17 +70,23 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       setHasBookmarked,
       hasBookmarked,
     });
-  
+
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
+  const [isMouseEnter, setIsMouseEnter] = useState(false);
+  const [isMouseLeave, setIsMouseLeave] = useState(false);
 
   // hey I'm going to try adding this load in animation so that the bookmark icon flys in and out on hover of project item: https://equable-sword.glitch.me/ (the fourth option, first in second row)
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
-  }
+    setIsMouseEnter(true);
+    setIsMouseLeave(false);
+  };
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
-  }
-  
+    setIsMouseEnter(false);
+    setIsMouseLeave(true);
+  };
+
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
