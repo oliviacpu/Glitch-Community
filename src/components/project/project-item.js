@@ -114,7 +114,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                     <ProfileListLoader project={project} />
                   </div>
                   {myStuffEnabled && !isAnonymousUser && (
-                    <div className={styles.bookmarkButton}>
+                    <div className={styles.bookmarkButtonContainer}>
                       <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} containerDetails={{ isHoveringOnProjectItem }} />
                     </div>
                   )}

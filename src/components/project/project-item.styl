@@ -106,7 +106,7 @@ a.linkBody:hover
   height: 42px
   border-radius: 5px
     
-.bookmarkButton
+.bookmarkButtonContainer
   display: block
   margin: -21px 28px 0 0
   flex: none 
@@ -115,3 +115,13 @@ a.linkBody:hover
   right: 0
   // @media (min-width: mediumSmallViewport)
   //   display: none
+  button
+    transition: all 0.5s
+    transform: translateY(20px)
+    opacity: 0
+
+.container
+  &:hover
+    .bookmarkButtonContainer
+      opacity: 1
+      transform: translateY(0px)
