@@ -5,6 +5,7 @@ dependencies:
   '@babel/preset-env': 7.5.5
   '@babel/preset-react': 7.0.0
   '@babel/register': 7.5.5
+  '@babel/runtime': 7.5.5
   '@percy/cypress': 1.0.9
   '@sentry/browser': 5.5.0
   '@sentry/node': 5.5.0
@@ -14778,6 +14779,7 @@ specifiers:
   '@babel/preset-env': ^7.5.5
   '@babel/preset-react': ^7.0.0
   '@babel/register': 7.5.5
+  '@babel/runtime': ^7.5.4
   '@percy/cypress': ^1.0.9
   '@sentry/browser': ^5.5.0
   '@sentry/node': ^5.5.0
