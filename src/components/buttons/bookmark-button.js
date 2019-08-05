@@ -154,6 +154,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     setState({ ...state, isFocused: false });
   };
   const onAnimationEnd = () => {
+    console.log('animationend')
     setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true });
   };
 
