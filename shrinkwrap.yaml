@@ -7,6 +7,7 @@ dependencies:
   '@babel/preset-react': 7.0.0
   '@babel/register': 7.5.5
   '@babel/runtime': 7.5.5
+  '@babel/runtime-corejs3': 7.5.5
   '@percy/cypress': 1.0.9
   '@sentry/browser': 5.5.0
   '@sentry/node': 5.5.0
@@ -2487,6 +2488,13 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-pdd5nNR+g2qDkXZlW1yRCWFlNrAn2PPdnZUB72zjX4l1Vv4fMRRLwyf+n/idFCLI1UgVGboUU8oVziwTBiyNKQ==
+  /@babel/runtime-corejs3/7.5.5:
+    dependencies:
+      core-js-pure: 3.1.4
+      regenerator-runtime: 0.13.3
+    dev: false
+    resolution:
+      integrity: sha512-bNxHJ+w7RfLzZJtIZdEjFgL1twwZ6ozuOmsEjtyuTqfi1hb1fqsDYYyi3Fi3i+RgAO4S9+wkSG102+GCqdpr7w==
   /@babel/runtime/7.3.4:
     dependencies:
       regenerator-runtime: 0.12.1
@@ -14799,6 +14807,7 @@ specifiers:
   '@babel/preset-react': ^7.0.0
   '@babel/register': 7.5.5
   '@babel/runtime': ^7.5.4
+  '@babel/runtime-corejs3': ^7.5.5
   '@percy/cypress': ^1.0.9
   '@sentry/browser': ^5.5.0
   '@sentry/node': ^5.5.0
