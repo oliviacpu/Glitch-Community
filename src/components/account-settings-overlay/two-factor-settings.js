@@ -7,6 +7,8 @@ import Button from 'Components/buttons/button';
 import Loader from 'Components/loader';
 import Notification from 'Components/notification';
 
+import useDynamicImport from 'Hooks/use-dynamic-import';
+
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 

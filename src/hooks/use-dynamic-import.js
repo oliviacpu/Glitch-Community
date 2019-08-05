@@ -1,10 +1,12 @@
-export function useDynamicImport(packageName, bundleName) {
+function useDynamicImport(packageName, bundleName) {
+  const [importedPackage, setImportedPackage] = useState(null);
   useEffect(() => {
-    const [importedPackage, setImportedPackage] = useState(null);
     if (importedPackage) return importedPackage;
-    const importPackage = async () => {
-      setImportedPackage(await import(/* webpackChunkName: `"${bundleName}`" */ packageName));
+    const importPackage = async () => 
+      setImportedPackage(await import(`/* webpackChunkName: "${bundleName}" */ '${packageName}'`));
     };
     importPackage();
-  })
+  });
 }
+
+export default useDynamicImport;
