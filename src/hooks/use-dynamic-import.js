@@ -1,17 +1,10 @@
 export function useDynamicImport(packageName, bundleName) {
   useEffect(() => {
-    const [default, setPackage] = useState(null);
-    const loadPackage = async () => {
-      setPackage(await import(/* webpackChunkName: `"${bundleName}`" */ packageName));
+    const [importedPackage, setImportedPackage] = useState(null);
+    if (importedPackage) return importedPackage;
+    const importPackage = async () => {
+      setImportedPackage(await import(/* webpackChunkName: `"${bundleName}`" */ packageName));
     };
-    loadPackage();
+    importPackage();
   })
-    useEffect(() => {
-    if (QRCode) return;
-    const loadQRCode = async () => {
-      setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
-    };
-    loadQRCode();
-  }, []);
-  
 }
