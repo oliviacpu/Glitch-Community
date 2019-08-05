@@ -26,7 +26,7 @@ function TwoFactorSettings() {
   const [backupCodes, setBackupCodes] = useState(null);
 
   // const [QRCode, setQRCode] = useState(null);
-  const QRCode = useDynamicImport('qrcode', 'qrcode-bundle');
+  const QRCode = useDynamicImport(/* webpackChunkName: "qrcode-bundle" */ 'qrcode');
 
   // useEffect(() => {
   //   if (QRCode) return;
