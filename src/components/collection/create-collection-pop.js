@@ -74,12 +74,20 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
   const [collectionName, setCollectionName] = useState('');
 
   const [selection, setSelection] = useState(options[0]);
-  // determine if entered name already exists for selected user / team
-  const { value: collections } = useCollections(selection.value, currentUser);
-  const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
-  const error = hasQueryError ? 'You already have a collection with this name' : '';
 
-  const submitDisabled = loading || collectionName.length === 0;
+  // determine if name is valid
+  const { value: collections } = useCollections(selection.value, currentUser);
+  const nameAlreadyExists = (collections || []).some((c) => c.url === kebabCase(collectionName));
+  const isMyStuffError = kebabCase(collectionName) === 'my-stuff';
+  let error = '';
+  if (isMyStuffError) {
+    error = 'My Stuff is a reserved name';
+  }
+  if (nameAlreadyExists) {
+    error = 'You already have a collection with this name';
+  }
+
+  const submitDisabled = loading || collectionName.length === 0 || !!error;
 
   async function handleSubmit(event) {
     if (submitDisabled) return;
