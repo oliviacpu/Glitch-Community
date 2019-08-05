@@ -26,11 +26,11 @@ const PupdatesPreview = withRouter(({ history }) => {
     <main>
       <Helmet title="Glitch Pupdates Previewer" />
       <PreviewContainer
-        get={() => api.get('https://buttercup-room.glitch.me/pupdate.json').then((res) => res.data)}
+        get={() => api.get('https://pupdates-editor.glitch.me/pupdate.json').then((res) => res.data)}
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with the <Link to="https://buttercup-room.glitch.me">Pupdates Editor.</Link>
+            This is a live preview of edits done with the <Link to="https://pupdates-editor.glitch.me">Pupdates Editor.</Link>
           </>
         }
       >
