@@ -7,7 +7,6 @@ const AutoprefixerStylus = require('autoprefixer-stylus');
 const StatsPlugin = require('stats-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const aliases = require('./shared/aliases');
 
 const BUILD = path.resolve(__dirname, 'build');
@@ -45,7 +44,7 @@ module.exports = smp.wrap({
     path: BUILD,
     publicPath: '/',
   },
-  devtool: 'source-map', // mode === 'production' ? 'source-map' : 'cheap-module-source-map',
+  devtool: mode === 'production' ? 'source-map' : 'cheap-module-source-map',
   optimization: {
     splitChunks: {
       chunks: 'initial',
@@ -104,7 +103,7 @@ module.exports = smp.wrap({
         include: SRC,
         loader: 'eslint-loader',
         options: {
-          fix: false, //mode === 'development', // Only change source files in development
+          fix: mode === 'development', // Only change source files in development
           cache: false, // Keep this off, it can use a lot of space.  Let Webpack --watch do the heavy lifting for us.
           emitError: false,
           emitWarning: true,
@@ -130,7 +129,7 @@ module.exports = smp.wrap({
               {
                 loader: 'css-loader?modules',
                 options: {
-                  sourceMap: true, // mode !== 'production', // no css source maps in production
+                  sourceMap: mode !== 'production', // no css source maps in production
                   modules: {
                     localIdentName: '[name]__[local]___[hash:base64:5]',
                   },
@@ -139,7 +138,7 @@ module.exports = smp.wrap({
               {
                 loader: 'stylus-loader',
                 options: {
-                  compress: false, //mode === 'production', // Compress CSS as part of the stylus build
+                  compress: mode === 'production', // Compress CSS as part of the stylus build
                   use: [AutoprefixerStylus()],
                 },
               },
@@ -181,7 +180,6 @@ module.exports = smp.wrap({
       publicPath: true,
     }),
     new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets] }),
-    new BundleAnalyzerPlugin(),
   ],
   watchOptions: {
     ignored: /node_modules/,
