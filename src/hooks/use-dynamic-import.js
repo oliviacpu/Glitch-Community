@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 function useDynamicImport(importArgs) {
   const [importedPackage, setImportedPackage] = useState(null);
   useEffect(() => {
+    console.log('ineffect');
     if (importedPackage) return importedPackage;
     const importPackage = async () => {
       setImportedPackage(await import(importArgs));
@@ -10,7 +11,6 @@ function useDynamicImport(importArgs) {
     };
     importPackage();
   });
-  return importedPackage;
 }
 
 export default useDynamicImport;
