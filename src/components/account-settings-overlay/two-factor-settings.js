@@ -97,10 +97,6 @@ function TwoFactorSettings() {
     await getBackupCodes();
   };
 
-  if (!QRCode) {
-    return null;
-  }
-
   return (
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
