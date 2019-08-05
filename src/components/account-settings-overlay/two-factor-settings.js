@@ -23,14 +23,16 @@ function TwoFactorSettings() {
   const [done, setDone] = useState(false);
   const [backupCodes, setBackupCodes] = useState(null);
 
-  const [QRCode, setQRCode] = useState(null);
-  useEffect(() => {
-    if (QRCode) return;
-    const loadQRCode = async () => {
-      setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
-    };
-    loadQRCode();
-  }, []);
+  // const [QRCode, setQRCode] = useState(null);
+  const QRCode = useDynamicImport('qrcode', 'qrcode-bundle');
+
+  // useEffect(() => {
+  //   if (QRCode) return;
+  //   const loadQRCode = async () => {
+  //     setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
+  //   };
+  //   loadQRCode();
+  // }, []);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
