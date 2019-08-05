@@ -139,10 +139,10 @@ const PLATFORM_STARTERS = ['slack', 'twitchdev', 'material', 'trello', 'spotify'
 const frameworkBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-framework.svg?v=1561575006217`;
 const platformBlob = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fblob-platforms.svg?v=1561575219539`;
 
-const FrameworkStarterItem = (app, isVisible) => (
+const FrameworkStarterItem = (app) => (
   <div key={app.domain} style={{ '--color': app.color }} className={styles.frameworkStarter}>
     <span className={styles.frameworkLogo}>
-      <Image src={isVisible ? app.logo : null} alt={app.name} />
+      <Image src={app.logo} alt={app.name} />
     </span>
     <div>
       <Heading tagName="h4">{app.name}</Heading>
@@ -201,7 +201,8 @@ function Starters() {
       </Heading>
       <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="16px">
         You never have to start from scratch: Just start remixing an existing starter app, or{' '}
-        <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on Glitch.
+        <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on
+        Glitch.
       </Text>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
@@ -211,7 +212,7 @@ function Starters() {
           </Heading>
           <Text size="16px">Build off the most popular JavaScript frameworks.</Text>
         </div>
-        {FRAMEWORK_STARTERS.map((app) => <FrameworkStarterItem )}
+        {FRAMEWORK_STARTERS.map(FrameworkStarterItem)}
       </div>
 
       <div className={classNames(styles.startersSection, styles.startersGrid, styles.platformStartersGrid)}>
