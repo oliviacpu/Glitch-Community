@@ -121,7 +121,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     isBookmarked: initialIsBookmarked,
     isAnimating: false,
     isFocused: false,
-    isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : false,
+    isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true,
   });
 
   React.useEffect(() => {
@@ -154,7 +154,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     setState({ ...state, isFocused: false });
   };
   const onAnimationEnd = () => {
-    setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : false });
+    setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true });
   };
 
   const checkClassName = cx({
