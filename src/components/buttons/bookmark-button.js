@@ -138,7 +138,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
   const addText = 'Add to My Stuff';
   const removeText = 'Remove from My Stuff';
 
-  const onClick = (e)=> {
+  const onClick = (e) => {
     const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
     if (!state.isBookmarked) {
       setState({ ...state, isFocused: fromKeyboard, isAnimating: true, isBookmarked: true });
@@ -199,4 +199,3 @@ BookmarkButton.defaultProps = {
 };
 
 export default BookmarkButton;
-   
