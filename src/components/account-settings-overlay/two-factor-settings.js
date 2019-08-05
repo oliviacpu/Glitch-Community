@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import QRCode from 'qrcode';
+import React, { useEffect, useState } from 'react';
 
 import Heading from 'Components/text/heading';
 import Text from 'Components/text/text';
@@ -13,7 +12,7 @@ import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
 
-const TwoFactorSettings = () => {
+function TwoFactorSettings() {
   const { currentUser, reload } = useCurrentUser();
   const { twoFactorEnabled } = currentUser;
 
@@ -23,6 +22,15 @@ const TwoFactorSettings = () => {
   const [code, setCode] = useState('');
   const [done, setDone] = useState(false);
   const [backupCodes, setBackupCodes] = useState(null);
+
+  const [QRCode, setQRCode] = useState(null);
+  useEffect(() => {
+    if (QRCode) return;
+    const loadQRCode = async () => {
+      setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
+    };
+    loadQRCode();
+  }, []);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
@@ -78,7 +86,8 @@ const TwoFactorSettings = () => {
       setBackupCodes(null);
     }
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     getBackupCodes();
   }, [currentUser.id, twoFactorEnabled]);
 
@@ -88,14 +97,24 @@ const TwoFactorSettings = () => {
     await getBackupCodes();
   };
 
+  if (!QRCode) {
+    return null;
+  }
+
   return (
     <>
       <Heading tagName="h2">Two-Factor Authentication</Heading>
       <Text>Protect your account with an additional layer of security.</Text>
       {twoFactorEnabled ? (
         <>
-          {done && <Notification type="success" persistent>Successfully enabled two-factor authentication</Notification>}
-          <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>Disable Authenticator App</Button>
+          {done && (
+            <Notification type="success" persistent>
+              Successfully enabled two-factor authentication
+            </Notification>
+          )}
+          <Button type="tertiary" size="small" disabled={working} onClick={disableTwoFactor}>
+            Disable Authenticator App
+          </Button>
           <Heading tagName="h3">Backup Codes</Heading>
           <Text>Keep these somewhere safe in case you lose your authenticator</Text>
           {backupCodes ? (
@@ -109,25 +128,44 @@ const TwoFactorSettings = () => {
                   ))}
                 </ul>
               )}
-              <Button type="tertiary" size="small" onClick={resetBackupCodes}>Generate New Codes</Button>
+              <Button type="tertiary" size="small" onClick={resetBackupCodes}>
+                Generate New Codes
+              </Button>
             </>
-          ) : <Loader />}
+          ) : (
+            <Loader />
+          )}
         </>
       ) : (
         <>
-          {done && <Notification type="success" persistent>Successfully disabled two-factor authentication</Notification>}
-          <Button type="tertiary" size="small" disabled={!!secret || working} onClick={generateSecret}>Enable Authenticator App</Button>
-          {secret &&
+          {done && (
+            <Notification type="success" persistent>
+              Successfully disabled two-factor authentication
+            </Notification>
+          )}
+          <Button type="tertiary" size="small" disabled={!!secret || working} onClick={generateSecret}>
+            Enable Authenticator App
+          </Button>
+          {secret && (
             <form className={styles.accountSettingsForm} onSubmit={verifyCode}>
               <img alt="QR Code" src={secret} />
-              <TextInput labelText="Enter Authenticator Code" placeholder="Enter Authenticator Code" maxLength={6} value={code} disabled={working} onChange={setCode} />
-              <Button type="tertiary" size="small" disabled={code.length < 6 || working} submit>Verify Initial Code</Button>
+              <TextInput
+                labelText="Enter Authenticator Code"
+                placeholder="Enter Authenticator Code"
+                maxLength={6}
+                value={code}
+                disabled={working}
+                onChange={setCode}
+              />
+              <Button type="tertiary" size="small" disabled={code.length < 6 || working} submit>
+                Verify Initial Code
+              </Button>
             </form>
-          }
+          )}
         </>
       )}
     </>
   );
-};
+}
 
 export default TwoFactorSettings;
