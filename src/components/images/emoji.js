@@ -6,13 +6,13 @@ import styles from './emoji.styl';
 const cx = classNames.bind(styles);
 
 const EMOJIS = {
-  ambulance: 'https://cdn.glitch.com/cc880f8d-a84f-4909-b676-497522a8c625%2Fambulance.png',
-  arrowDown: 'https://cdn.glitch.com/20b03a49-e2c4-45fb-b411-c56cf5a734d4%2Farrow-down.png',
-  balloon: 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fballoon.png',
-  bentoBox: 'https://cdn.glitch.com/55f8497b-3334-43ca-851e-6c9780082244%2Fbento-box.png',
-  bicep: 'https://cdn.glitch.com/a7b5cfd3-307b-4b99-bc1c-ca96f720521a%2Fbiceps.png?1555609837062',
-  bomb: 'https://cdn.glitch.com/f34c5d19-c958-40f6-b11f-7a4542a5ae5f%2Fbomb.png',
-  bouquet: 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fbouquet.png',
+  ambulance: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fambulance.png',
+  arrowDown: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Farrow-down.png?v=1564970974905',
+  balloon: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fballoon.png?v=1564970970817',
+  bentoBox: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbento-box.png?v=1564970971725',
+  bicep: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbiceps.png?v=1564970966662',
+  bomb: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbomb.png?v=1564970972832',
+  bouquet: '',
   carpStreamer: 'https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fcarp_streamer.png',
   clapper: 'https://cdn.glitch.com/25a45fb6-d565-483a-87d2-f944befeb36b%2Fclapper.png',
   creditCard: 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fcredit-card.png',
