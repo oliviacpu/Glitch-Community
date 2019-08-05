@@ -25,6 +25,7 @@ const PupdatesPreview = withRouter(({ history }) => {
   return (
     <main>
       <Helmet title="Glitch Pupdates Previewer" />
+      <Link to="/">Go Home (to log in)</Link>
       <PreviewContainer
         get={() => api.get('https://pupdates-editor.glitch.me/pupdate.json').then((res) => res.data)}
         onPublish={onPublish}
@@ -34,7 +35,6 @@ const PupdatesPreview = withRouter(({ history }) => {
           </>
         }
       >
-      <Link to="/">Go Home (to log in)</Link>
         {(data) => <NewStuffOverlay showNewStuff setShowNewStuff={() => {}} newStuff={data.pupdates} closePopover={() => {}} />}
       </PreviewContainer>
     </main>
