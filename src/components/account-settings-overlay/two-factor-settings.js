@@ -7,8 +7,6 @@ import Button from 'Components/buttons/button';
 import Loader from 'Components/loader';
 import Notification from 'Components/notification';
 
-import useDynamicImport from 'Hooks/use-dynamic-import';
-
 import { useAPI } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 
@@ -25,16 +23,14 @@ function TwoFactorSettings() {
   const [done, setDone] = useState(false);
   const [backupCodes, setBackupCodes] = useState(null);
 
-  // const [QRCode, setQRCode] = useState(null);
-  const QRCode = useDynamicImport(/* webpackChunkName: "qrcode-bundle" */ 'qrcode');
-
-  // useEffect(() => {
-  //   if (QRCode) return;
-  //   const loadQRCode = async () => {
-  //     setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
-  //   };
-  //   loadQRCode();
-  // }, []);
+  const [QRCode, setQRCode] = useState(null);
+  useEffect(() => {
+    if (QRCode) return;
+    const loadQRCode = async () => {
+      setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
+    };
+    loadQRCode();
+  }, []);
 
   const disableTwoFactor = async (evt) => {
     evt.preventDefault();
