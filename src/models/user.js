@@ -36,7 +36,6 @@ export function getUserAvatarThumbnailUrl({ login, avatarThumbnailUrl }) {
 }
 
 export function getUserAvatarStyle(user, size) {
-  console.log({ size });
   const { avatarUrl, avatarThumbnailUrl, color } = user;
   const url = size === 'small' ? avatarThumbnailUrl : avatarUrl;
   return {
