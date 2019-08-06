@@ -163,6 +163,7 @@ const buildCollectionFilters = ({ teamIDs = [], userIDs = [] }) => {
 };
 
 function createAlgoliaProvider(api, algoliasearch) {
+  if (!algoliasearch) return null;
   const searchClient = createSearchClient(api, algoliasearch);
   const searchIndices = {
     team: searchClient.initIndex('search_teams'),
@@ -203,8 +204,7 @@ export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
     };
     loadAlgolia();
   }, []);
-  if (!algoliasearch) return;
-  console.log(algoliasearch);
+  console.log('algoliasearch');
 
   const api = useAPI();
   const algoliaProvider = useMemo(() => createAlgoliaProvider(api, algoliasearch), [api, algoliasearch]);
