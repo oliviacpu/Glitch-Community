@@ -17,11 +17,8 @@ import styles from './avatar.styl';
 
 // UserAvatar
 export const Avatar = ({ name, src, color, srcFallback, type, tiny, hideTooltip, withinButton }) => {
-  const size = tiny ? '16px' : '32px';
-  const className = classNames(styles[type], { [styles.tiny]: tiny });
-  const contents = (
-    <Image width={size} height={size} src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={className} />
-  );
+  const className = classNames(styles.avatar, styles[type], { [styles.tiny]: tiny });
+  const contents = <Image src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={className} />;
 
   if (!hideTooltip) {
     return <TooltipContainer tooltip={name} target={contents} type="action" align={['left']} fallback={withinButton} />;
