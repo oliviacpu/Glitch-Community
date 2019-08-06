@@ -12,6 +12,7 @@ function useActiveIndex(items, onSelect) {
   const [activeIndex, setActiveIndex] = useState(-1);
   // reset activeIndex & focus when items change
   useEffect(() => {
+    console.log('reset');
     setActiveIndex(-1);
     inputRef.current.focus();
   }, [items]);
@@ -42,6 +43,7 @@ function useActiveIndex(items, onSelect) {
           return prev + 1;
         });
       } else if (e.key === 'Enter') {
+        console.log(items, activeIndex);
         e.preventDefault();
         if (items[activeIndex]) {
           onSelect(items[activeIndex]);
