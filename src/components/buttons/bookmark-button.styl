@@ -1,3 +1,5 @@
+@require '../constants'
+
 .bookmarkButton {
   padding: 17px 17px 0
   border: none
@@ -16,10 +18,12 @@
     outline: none
   }
 } 
-@media (max-width: mediumSmallViewport) 
-  .bookmarkButton
+@media (max-width: mediumSmallViewport) {
+  .bookmarkButton {
     transform: translateY(0px)
     opacity: 1
+  }
+}
       
 .visible, .focused{
   transform: translateY(0px)
