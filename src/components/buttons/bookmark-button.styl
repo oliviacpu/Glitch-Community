@@ -4,10 +4,6 @@
   background: inherit
   position: relative
   cursor: pointer
-  &.hidden {
-    transform: translateY(0px)
-    opacity: 0
-  }
   .highlight{
     fill: none
     display: none
@@ -15,12 +11,12 @@
   
   &:focus{
     outline: none
-    opacity: 1
-    transform: translateY(0px)
   }
 }
 
 .focused{
+  transform: translateY(0px)
+  opacity: 1
   .highlight{
     fill: none
     display: inline
