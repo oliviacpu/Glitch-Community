@@ -145,7 +145,7 @@ const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'pr
 
 // function createSearchClient(api) {
 function createSearchClient(api, algoliasearch) {
-  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
+  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch.default(data.id, data.searchKey));
   return {
     initIndex: (indexName) => {
       const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
@@ -200,6 +200,7 @@ export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
   useEffect(() => {
     if (algoliasearch) return;
     const loadAlgolia = async () => {
+      // setAlgoliasearch((await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite')).default);
       setAlgoliasearch(await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite'));
       console.log('loadAlgolia', algoliasearch);
     };
