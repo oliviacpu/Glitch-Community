@@ -61,6 +61,7 @@ const EMOJIS = {
  * Emoji Component
  */
 
+
 const Emoji = ({ name, inTitle, alt }) => {
   const classNameObj = { emoji: true, [name]: true, inTitle };
   const emojiUrl = `${CDN_URL}/${EMOJIS[name]}`;
