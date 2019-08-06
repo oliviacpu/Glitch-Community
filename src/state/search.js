@@ -143,7 +143,6 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 
 const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'], isMyStuff: false };
 
-// function createSearchClient(api) {
 function createSearchClient(api) {
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
   return {

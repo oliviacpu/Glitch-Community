@@ -157,13 +157,13 @@ module.exports = smp.wrap({
               {
                 loader: 'css-loader',
                 options: {
-                  sourceMap: true, // mode !== 'production', // no css source maps in production
+                  sourceMap: mode !== 'production', // no css source maps in production
                 },
               },
               {
                 loader: 'stylus-loader',
                 options: {
-                  compress: false, // mode === 'production', // Compress CSS as part of the stylus build
+                  compress: mode === 'production', // Compress CSS as part of the stylus build
                   use: [AutoprefixerStylus()],
                 },
               },
