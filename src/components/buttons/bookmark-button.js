@@ -155,7 +155,9 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
   };
   const onAnimationEnd = () => {
     console.log('animationend')
-    setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : true });
+    console.log('isanimating', state.isAnimating, 'isvisible', state.isVisible)
+    setState({ ...state, isAnimating: false, isVisible: containerDetails ? containerDetails.isHoveringOnProjectItem : false });
+    console.log('isanimating', state.isAnimating, 'isvisible', state.isVisible)
   };
 
   const checkClassName = cx({
