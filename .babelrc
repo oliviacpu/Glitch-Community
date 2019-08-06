@@ -20,8 +20,7 @@
     [
       "@babel/plugin-transform-runtime",
       {
-        "corejs": 3,
-        "useESModules": true
+        "corejs": 3
       }
     ]
   ],

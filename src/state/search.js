@@ -1,5 +1,5 @@
-// import algoliasearch from 'algoliasearch/lite';
-import { useEffect, useState, useReducer, useMemo } from 'react';
+import algoliasearch from 'algoliasearch/lite';
+import { useEffect, useReducer, useMemo } from 'react';
 import { mapValues, sumBy, pick } from 'lodash';
 
 import { allByKeys } from 'Shared/api';
@@ -144,8 +144,8 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'], isMyStuff: false };
 
 // function createSearchClient(api) {
-function createSearchClient(api, algoliasearch) {
-  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch.default(data.id, data.searchKey));
+function createSearchClient(api) {
+  const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
   return {
     initIndex: (indexName) => {
       const indexPromise = clientPromise.then((client) => client.initIndex(indexName));
@@ -162,9 +162,8 @@ const buildCollectionFilters = ({ teamIDs = [], userIDs = [] }) => {
   return [...teamIDs.map((id) => `team=${id}`), ...userIDs.map((id) => `user=${id}`)].join(' OR ');
 };
 
-function createAlgoliaProvider(api, algoliasearch) {
-  if (!algoliasearch) return null;
-  const searchClient = createSearchClient(api, algoliasearch);
+function createAlgoliaProvider(api) {
+  const searchClient = createSearchClient(api);
   const searchIndices = {
     team: searchClient.initIndex('search_teams'),
     user: searchClient.initIndex('search_users'),
@@ -196,20 +195,8 @@ function createAlgoliaProvider(api, algoliasearch) {
 }
 
 export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
-  const [algoliasearch, setAlgoliasearch] = useState(null);
-  useEffect(() => {
-    if (algoliasearch) return;
-    const loadAlgolia = async () => {
-      // setAlgoliasearch((await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite')).default);
-      setAlgoliasearch(await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite'));
-      console.log('loadAlgolia', algoliasearch);
-    };
-    loadAlgolia();
-  }, []);
-  console.log('algoliasearch', algoliasearch);
-
   const api = useAPI();
-  const algoliaProvider = useMemo(() => createAlgoliaProvider(api, algoliasearch), [api, algoliasearch]);
+  const algoliaProvider = useMemo(() => createAlgoliaProvider(api), [api]);
   return useSearchProvider(algoliaProvider, query, params, deps);
 }
 
