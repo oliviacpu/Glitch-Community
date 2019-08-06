@@ -12,6 +12,20 @@ import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
 
+functionUseDynamicImport(importVal) {
+  const [imported, setImp]
+  useEffect(() => {
+    if (QRCode) return;
+    const loadQRCode = async () => {
+      setQRCode(await import(/* webpackChunkName: "qrcode-bundle" */ 'qrcode'));
+    };
+    loadQRCode();
+  }, []);
+  
+  return [email, setEmail, validationError];
+  
+}
+
 function TwoFactorSettings() {
   const { currentUser, reload } = useCurrentUser();
   const { twoFactorEnabled } = currentUser;
