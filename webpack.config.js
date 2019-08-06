@@ -67,6 +67,11 @@ module.exports = smp.wrap({
           test: /[\\/]node_modules[\\/]markdown-it[-\\/]/,
           priority: 2,
         },
+        algolia: {
+          name: 'algolia',
+          test: /[\\/]node_modules[\\/]algoliasearch[-\\/]/,
+          priority: 2,
+        },
         lodash: {
           name: 'lodash',
           test: /[\\/]node_modules[\\/]lodash[-\\/]/,
