@@ -201,10 +201,11 @@ export function useAlgoliaSearch(query, params = defaultParams, deps = []) {
     if (algoliasearch) return;
     const loadAlgolia = async () => {
       setAlgoliasearch(await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite'));
+      console.log('loadAlgolia', algoliasearch);
     };
     loadAlgolia();
   }, []);
-  console.log('algoliasearch');
+  console.log('algoliasearch', algoliasearch);
 
   const api = useAPI();
   const algoliaProvider = useMemo(() => createAlgoliaProvider(api, algoliasearch), [api, algoliasearch]);
