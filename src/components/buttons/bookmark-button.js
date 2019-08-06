@@ -172,7 +172,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
       tooltip={state.isBookmarked ? removeText : addText}
       target={
         <button
-          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${isHidden ? "hidden" : 'visible'}`}
+          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${isHidden ? styles.hidden : ''}`}
           onClick={onClick}
           onFocus={onFocus}
           onBlur={onBlur}
