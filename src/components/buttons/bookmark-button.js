@@ -163,16 +163,13 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
     hidden: !state.isBookmarked,
   });
 
-  const isSmallScreen = window.matchMedia('(max-width: 592px)');
-  const isHidden = isSmallScreen.matches ? false : !state.isVisible;
-
   return (
     <TooltipContainer
       type="action"
       tooltip={state.isBookmarked ? removeText : addText}
       target={
         <button
-          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible: ''}`}
+          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible : ''}`}
           onClick={onClick}
           onFocus={onFocus}
           onBlur={onBlur}
