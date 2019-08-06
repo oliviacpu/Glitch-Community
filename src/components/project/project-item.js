@@ -82,6 +82,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
 
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
+  const onMyStuffPage = window.location.pathname.includes('my-stuff');
+
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -106,7 +108,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
                     <ProfileListLoader project={project} />
                   </div>
-                  {myStuffEnabled && !isAnonymousUser && (
+                  {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
                     <div className={styles.bookmarkButtonContainer}>
                       <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} containerDetails={{ isHoveringOnProjectItem }} />
                     </div>
