@@ -110,7 +110,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                   {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
                     <div className={styles.bookmarkButtonContainer}>
-                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} containerDetails={{ isHoveringOnProjectItem }} />
+                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} containerDetails={{ isHoveringOnProjectItem }} shouldFlyIn />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>
