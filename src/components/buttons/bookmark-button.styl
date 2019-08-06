@@ -4,6 +4,9 @@
   background: inherit
   position: relative
   cursor: pointer
+  transition: all 0.3s
+  transform: translateY(20px)
+  opacity: 0
   .highlight{
     fill: none
     display: none
@@ -12,15 +15,16 @@
   &:focus{
     outline: none
   }
-}
+}   
+      
 .visible{
-  transform: translateY(0px)!important
-  opacity: 1!important
+  transform: translateY(0px)
+  opacity: 1
 }
   
 .focused{
-  transform: translateY(0px)!important
-  opacity: 1!important
+  transform: translateY(0px)
+  opacity: 1
   .highlight{
     fill: none
     display: inline

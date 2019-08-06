@@ -116,7 +116,7 @@ const EmptyBookmark = () => (
   </svg>
 );
 
-const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, shouldFlyIn }) => {
+const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
   const [state, setState] = React.useState({
     isBookmarked: initialIsBookmarked,
     isAnimating: false,
