@@ -144,6 +144,15 @@ const formatAlgoliaResult = (type) => ({ hits }) =>
 const defaultParams = { notSafeForKids: false, filterTypes: ['user', 'team', 'project', 'collection'], isMyStuff: false };
 
 function createSearchClient(api) {
+  const [QRCode, setQRCode] = useState(null);
+  useEffect(() => {
+    if (QRCode) return;
+    const loadQRCode = async () => {
+      setQRCode(await import(/* webpackChunkName: "algolia-bundle" */ 'algoliasearch/lite'));
+    };
+    loadAlgolia();
+  }, []);
+
   const clientPromise = api.get('/search/creds').then(({ data }) => algoliasearch(data.id, data.searchKey));
   return {
     initIndex: (indexName) => {
