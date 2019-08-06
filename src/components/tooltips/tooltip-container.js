@@ -90,7 +90,6 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
       </div>
     );
   }
-  React.useEffect(() => setTooltipIsActive(true))
 
   return (
     <div className={styles.tooltipContainer} onMouseEnter={() => setTooltipIsActive(true)} onMouseLeave={() => setTooltipIsActive(false)}>
