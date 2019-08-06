@@ -48,8 +48,7 @@ module.exports = smp.wrap({
   optimization: {
     splitChunks: {
       chunks: 'initial',
-      minChunks: 1,
-      maxInitialRequests: 10,
+      maxInitialRequests: 5,
       cacheGroups: {
         curated: {
           name: 'curated',
@@ -108,7 +107,7 @@ module.exports = smp.wrap({
         include: SRC,
         loader: 'eslint-loader',
         options: {
-          fix: false, // mode === 'development', // Only change source files in development
+          fix: false, //mode === 'development', // Only change source files in development
           cache: false, // Keep this off, it can use a lot of space.  Let Webpack --watch do the heavy lifting for us.
           emitError: false,
           emitWarning: true,

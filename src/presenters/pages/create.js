@@ -201,8 +201,7 @@ function Starters() {
       </Heading>
       <Text className={classNames(styles.sectionDescription, styles.startersDescription)} size="16px">
         You never have to start from scratch: Just start remixing an existing starter app, or{' '}
-        <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on
-        Glitch.
+        <Link to="https://glitch.com/help/import-git/">clone a project from services like GitHub and GitLab</Link> to experiment and deploy on Glitch.
       </Text>
 
       <div className={classNames(styles.startersSection, styles.startersGrid)}>
