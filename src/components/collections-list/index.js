@@ -10,7 +10,7 @@ import CreateCollectionButton from 'Components/collection/create-collection-pop'
 import SkipSectionButtons from 'Components/containers/skip-section-buttons';
 import { useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { useCollectionContext } from 'State/collection';
+import { useCollectionContext, useCollectionProjects } from 'State/collection';
 import { getCollectionsWithMyStuff } from 'Models/collection';
 import useDevToggle from 'State/dev-toggles';
 
