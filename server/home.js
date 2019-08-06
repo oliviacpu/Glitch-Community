@@ -15,6 +15,10 @@ const api = axios.create({
 let homeCache = null;
 let pupdateCache = null;
 
+async function getData() {
+  
+}
+
 async function getHomeData() {
   if (!homeCache) {
     const json = await fs.readFile(path.join(__dirname, '../src/curated/home.json'));
