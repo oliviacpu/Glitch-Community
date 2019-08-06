@@ -45,6 +45,7 @@ const paginationReducer = (oldState, action) => {
 function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimistically, children }) {
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
+  const allItems = items;
 
   const [state, dispatchState] = useReducer(paginationReducer, {
     page: 1,
@@ -73,19 +74,18 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
     dispatchState({ type: 'previous' });
   };
 
-  useEffect(() => {
-    if (canPaginate && fetchDataOptimistically) {
-      const startIdx = state.page * itemsPerPage;
-      const nextItems = items.slice(startIdx, startIdx + itemsPerPage);
-      console.log(nextItems);
-      nextItems.forEach(fetchDataOptimistically);
-    }
-  }, [state.page, canPaginate, itemsPerPage, fetchDataOptimistically]);
-
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
     items = items.slice(startIdx, startIdx + itemsPerPage);
   }
+
+  useEffect(() => {
+    if (canPaginate && fetchDataOptimistically) {
+      const startIdx = state.page * itemsPerPage;
+      const nextItems = allItems.slice(startIdx, startIdx + itemsPerPage);
+      nextItems.forEach(fetchDataOptimistically);
+    }
+  }, [state.page, canPaginate, itemsPerPage]);
 
   useEffect(() => {
     dispatchState({ type: 'restart', totalPages: numPages });
