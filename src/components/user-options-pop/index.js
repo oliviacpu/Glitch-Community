@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getTeamLink, getTeamAvatarUrl } from 'Models/team';
+import { getTeamLink } from 'Models/team';
 import { getUserAvatarThumbnailUrl } from 'Models/user';
 import Image from 'Components/images/image';
-import { UserAvatar } from 'Components/images/avatar';
+import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
@@ -46,7 +46,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             type="tertiary"
-            image={<Image className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
+            image={<TeamAvatar team={team} size="small" tiny hideTooltip />}
           >
             {team.name}
           </Button>
