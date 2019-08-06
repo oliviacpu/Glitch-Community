@@ -48,7 +48,6 @@ module.exports = smp.wrap({
   optimization: {
     splitChunks: {
       chunks: 'initial',
-      minChunks: 1,
       maxInitialRequests: 6,
       cacheGroups: {
         curated: {
