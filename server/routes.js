@@ -14,7 +14,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { getHomeData, saveHomeDataToFile, getPupdateData, savePupdateDataToFile } = require('./home');
+const { getData, saveDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -50,7 +50,7 @@ module.exports = function(external) {
   async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL }) {
     let built = true;
 
-    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
+    const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
 
     let scripts = [];
     let styles = [];
@@ -210,15 +210,16 @@ module.exports = function(external) {
   });
   
   app.get('/api/home', async (req, res) => {
-    const data = await getHomeData();
+    const data = await getData('home');
     res.send(data);
   });
 
   app.post('/api/home', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
+    const pageName = 'home';
     try {
-      await saveHomeDataToFile({ persistentToken, data });
+      await saveDataToFile({ pageName, persistentToken, data });
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
@@ -227,15 +228,16 @@ module.exports = function(external) {
   });
   
   app.get('/api/pupdate', async (req, res) => {
-    const data = await getPupdateData();
+    const data = await getData('pupdates');
     res.send(data);
   });
 
   app.post('/api/pupdate', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
+    const pageName = 'pupdates';
     try {
-      await savePupdateDataToFile({ persistentToken, data });
+      await saveDataToFile({ pageName, persistentToken, data });
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
