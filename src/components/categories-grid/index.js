@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
+import React, { useMemo } from 'react';
 
+import Link from 'Components/link';
+import Image from 'Components/images/image';
 import { CDN_URL } from 'Utils/constants';
 
 import styles from './styles.styl';
@@ -39,7 +40,7 @@ const allCategories = [
   {
     name: 'Hardware',
     color: '#6cd8a9',
-    path: '/hardware',
+    path: 'hardware',
     icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fhardware.svg`,
   },
   {
@@ -57,12 +58,15 @@ const allCategories = [
 ];
 
 function CategoriesGrid({ categories }) {
-  const categoriesToRender = useMemo(() => allCategories.filter(() => categories === 'all' || ))
+  const categoriesToRender = useMemo((category) => allCategories.filter(() => categories === 'all' || categories.includes(category.path)), [
+    categories,
+  ]);
+
   return (
     <ul className={styles.categoriesGrid}>
-      {categories.filter(categories === 'all' map((category) => (
+      {categoriesToRender.map((category) => (
         <li key={category.path} className={styles.categoriesGridItem} style={{ '--bg-color': category.color }}>
-          <Link to={category.url}>
+          <Link to={`/${category.path}`}>
             <Image src={category.icon} alt="" />
             {category.name}
           </Link>
