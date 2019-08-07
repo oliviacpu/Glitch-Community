@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { CDN_URL } from 'Utils/constants';
+import { envs } from 'Shared/constants';
 import styles from './emoji.styl';
 
 const cx = classNames.bind(styles);
@@ -63,7 +63,7 @@ const EMOJIS = {
 
 const Emoji = ({ name, inTitle, alt }) => {
   const classNameObj = { emoji: true, [name]: true, inTitle };
-  const emojiUrl = `${CDN_URL}/${EMOJIS[name]}`;
+  const emojiUrl = `${envs.production.CDN_URL}/${EMOJIS[name]}`;
 
   const className = cx(classNameObj);
 
