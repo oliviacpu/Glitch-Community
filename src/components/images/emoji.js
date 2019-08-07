@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { envs } from 'Shared/constants';
 import styles from './emoji.styl';
 
 const cx = classNames.bind(styles);
 
 const EMOJIS = {
-  ambulance: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fambulance.png',
-  arrowDown: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Farrow-down.png',
-  balloon: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fballoon.png',
-  bentoBox: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbento-box.png',
-  bicep: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbiceps.png',
-  bomb: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbomb.png',
-  bouquet: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbouquet.png',
+  ambulance: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fambulance.png',
+  arrowDown: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Farrow-down.png',
+  balloon: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fballoon.png',
+  bentoBox: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbento-box.png',
+  bicep: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbiceps.png',
+  bomb: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbomb.png',
+  bouquet: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fbouquet.png',
   carpStreamer: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fcarp_streamer.png',
   clapper: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fclapper.png?v=1564970973232',
   creditCard: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fcredit-card.png?v=1564971352521',
@@ -56,6 +55,8 @@ const EMOJIS = {
   umbrella: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fumbrella.png',
   wave: '7e047504-e283-4115-bb1a-65dc0d431fa6%2Fwave.png',
 };
+
+'https://cdn.glitch.com/'
 
 /**
  * Emoji Component
