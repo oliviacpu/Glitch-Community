@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import propTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -7,6 +7,8 @@ import Image from 'Components/images/image';
 import { CDN_URL } from 'Utils/constants';
 
 import styles from './styles.styl';
+
+const cx = classNames.bind(styles);
 
 const allCategories = [
   {
@@ -63,11 +65,20 @@ function CategoriesGrid({ categories, alwaysWrap }) {
   const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
     categories,
   ]);
+  
+  useEffect(() => {
+    
+  }, );
+  
+  const className = cx({
+    categoriesGridItem: true,
+    alwaysWrap,
+  });
 
   return (
     <ul className={styles.categoriesGrid}>
       {categoriesToRender.map((category) => (
-        <li key={category.path} className={classNames(styles.categoriesGridItem, { alwaysWrap })} style={{ '--bg-color': category.color }}>
+        <li key={category.path} className={className} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
             <Image src={category.icon} alt="" />
             {category.name}

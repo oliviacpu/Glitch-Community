@@ -57,7 +57,7 @@ function Banner() {
     <>
       <div>
         <div style={{ width: '300px', background: 'cyan' }}>placeholder</div>
-        <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} wrapWidth="550" />
+        <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} alwaysWrap />
       </div>
       <section className={classNames(styles.section, styles.banner)}>
         <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
