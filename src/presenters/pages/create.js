@@ -494,7 +494,7 @@ function Remix() {
               {apps.map((app, i) => (
                 <TabPanel className={styles.remixAppTabPanel} hidden={currentTab !== i} key={app.id}>
                   <div className={styles.embedContainer}>
-                    <Embed domain={app.domain} />
+                    <Embed domain={app.domain} loading="lazy" />
                   </div>
                   <div className={styles.embedRemixBtn}>
                     <RemixButton type="cta" emoji="microphone" app={app}>
@@ -570,7 +570,7 @@ function Categories() {
         {categories.map((category) => (
           <li key={category.url} className={styles.categoriesGridItem} style={{ '--bgColor': category.color }}>
             <Link to={category.url}>
-              <Image src={category.icon} alt="" />
+              <Image src={category.icon} alt="" loading="lazy" />
               {category.name}
             </Link>
           </li>
