@@ -22,7 +22,21 @@ const handleDefaultSrc = (defaultSrc) => (event) => {
   }
 };
 
-const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, src, srcSet, sizes, width, defaultSrc, loading }) =>
+const Image = ({
+  alt,
+  backgroundColor,
+  backgroundImage,
+  backgroundRatio,
+  className,
+  height,
+  src,
+  srcSet,
+  sizes,
+  width,
+  defaultSrc,
+  onAnimationEnd,
+  loading,
+}) =>
   !backgroundImage ? (
     <img
       alt={alt}
@@ -35,6 +49,7 @@ const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, classNa
       width={width || undefined}
       onError={handleDefaultSrc(defaultSrc)}
       loading={loading}
+      onAnimationEnd={onAnimationEnd}
     />
   ) : (
     <div
