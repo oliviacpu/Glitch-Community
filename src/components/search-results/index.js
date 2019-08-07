@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { useAPI } from 'State/api';
-import { getProjectPermissions } from 'State/project-options';
+import { getProjectDetails } from 'State/project-options';
 
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
@@ -40,14 +40,15 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
-const PermissionsLoader = ({ project }) => {
+const DetailsLoader = ({ project }) => {
   const api = useAPI();
   React.useEffect(() => {
-    async function fillInPermissions() {
-      const permissions = await getProjectPermissions(api, project.domain);
-      project.permissions = permissions;
+    async function fillInDetails() {
+      const details = await getProjectDetails(api, project.domain);
+      project.permissions = details.permissions || [];
+      project.authUserHasBookmarked = details.authUserHasBookmarked;
     }
-    fillInPermissions();
+    fillInDetails();
   }, []);
   return <ProjectItem project={project} />;
 };
@@ -55,7 +56,7 @@ const PermissionsLoader = ({ project }) => {
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => <PermissionsLoader project={result} />,
+  project: ({ result }) => <DetailsLoader project={result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
