@@ -17,6 +17,7 @@ import Layout from 'Components/layout';
 import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
 import LazyLoader from 'Components/lazy-loader';
+import CategoriesGrid from 'Components/categories-grid';
 import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 import { getRemixUrl } from 'Models/project';
