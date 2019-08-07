@@ -58,7 +58,7 @@ const allCategories = [
 ];
 
 function CategoriesGrid({ categories }) {
-  const categoriesToRender = useMemo((category) => allCategories.filter(() => categories === 'all' || categories.includes(category.path)), [
+  const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
     categories,
   ]);
 

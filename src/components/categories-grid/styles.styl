@@ -10,6 +10,7 @@
   @media (min-width: largeViewport)    
     grid-template-columns: repeat(8, 1fr)
 .categoriesGridItem
+  display: flex
   list-style: none
   text-align: center
   background: var(--bg-color);
@@ -17,7 +18,8 @@
   font-size: 12px
   font-weight: 600
   a
-    display: block
+    display: flex
+    flex-direction: column
     width: 100%
     height: 100%
     padding: u2 u1 u1 u1
@@ -27,3 +29,10 @@
     max-width: 60px
     height: 50px
     margin: 0 auto u1 auto
+    
+//
+//   grid-template-columns: repeat(2, 1fr)
+//   @media (min-width: mediumViewport)
+//     grid-template-columns: repeat(4, 1fr)
+//   @media (min-width: largeViewport)    
+//     grid-template-columns: repeat(8, 1fr)

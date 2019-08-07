@@ -54,26 +54,32 @@ function Banner() {
   const shape = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fshape-pattern.svg?v=1561575627767`;
 
   return (
-    <section className={classNames(styles.section, styles.banner)}>
-      <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
-        <div className={styles.bannerText}>
-          <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
-            <Mark color="#fbf2b8">Code</Mark>
-            <Unmarked>your next app. Now it's live. Just like that.</Unmarked>
-          </Heading>
-          <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
-          <div className={styles.bannerRemixBtn}>
-            <RemixButton app={{ id: '929980a8-32fc-4ae7-a66f-dddb3ae4912c', domain: 'hello-webpage' }} type="cta">
-              Start Remixing
-            </RemixButton>
+    <>
+      <div>
+        <div style={{ width: '300px', background: 'cyan' }}>placeholder</div>
+        <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} wrapWidth="550" />
+      </div>
+      <section className={classNames(styles.section, styles.banner)}>
+        <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
+          <div className={styles.bannerText}>
+            <Heading className={styles.bannerTagline} tagName="h1" ariaLabel="Create the app of your dreams">
+              <Mark color="#fbf2b8">Code</Mark>
+              <Unmarked>your next app. Now it's live. Just like that.</Unmarked>
+            </Heading>
+            <Text>Whether you’re new to code or an experienced developer, simply pick a starter app to remix.</Text>
+            <div className={styles.bannerRemixBtn}>
+              <RemixButton app={{ id: '929980a8-32fc-4ae7-a66f-dddb3ae4912c', domain: 'hello-webpage' }} type="cta">
+                Start Remixing
+              </RemixButton>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.bannerIllustration}>
-        <Image src={illustration} alt="" />
-      </div>
-    </section>
+        <div className={styles.bannerIllustration}>
+          <Image src={illustration} alt="" />
+        </div>
+      </section>
+    </>
   );
 }
 
