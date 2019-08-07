@@ -565,17 +565,7 @@ function Categories() {
   return (
     <section className={classNames(styles.categories, styles.section)}>
       <Text>...or browse starter apps for inspiration</Text>
-
-      <ul className={styles.categoriesGrid}>
-        {categories.map((category) => (
-          <li key={category.url} className={styles.categoriesGridItem} style={{ '--bgColor': category.color }}>
-            <Link to={category.url}>
-              <Image src={category.icon} alt="" />
-              {category.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <CategoriesGrid categories={['building-blocks', 'learn-to-code', 'hardware', 'tools-for-work', 'art', 'music', 'handy-bots', 'games']} />
     </section>
   );
 }
