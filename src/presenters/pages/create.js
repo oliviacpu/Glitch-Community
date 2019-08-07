@@ -516,7 +516,7 @@ function Categories() {
   return (
     <section className={classNames(styles.categories, styles.section)}>
       <Text>...or browse starter apps for inspiration</Text>
-      <CategoriesGrid categories='all' />
+      <CategoriesGrid categories="all" />
     </section>
   );
 }
