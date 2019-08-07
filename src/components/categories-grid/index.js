@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import propTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
@@ -62,6 +62,8 @@ const allCategories = [
 ];
 
 function CategoriesGrid({ categories, alwaysWrap }) {
+  const el = useRef(null);
+  
   const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
     categories,
   ]);
@@ -76,7 +78,7 @@ function CategoriesGrid({ categories, alwaysWrap }) {
   });
 
   return (
-    <ul className={styles.categoriesGrid}>
+    <ul ref={el} className={styles.categoriesGrid}>
       {categoriesToRender.map((category) => (
         <li key={category.path} className={className} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
