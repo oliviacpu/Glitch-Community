@@ -96,9 +96,4 @@ app.use(Sentry.Handlers.errorHandler());
 const listener = app.listen(process.env.PORT, () => {
   const port = listener.address().port;
   console.log(`Your app is listening on port ${port}.`);
-
-  if (process.env.RUNNING_LOCALLY) {
-    const open = require('open');
-    open(`http://localhost:${port}`);
-  }
 });
