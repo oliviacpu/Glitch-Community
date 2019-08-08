@@ -5,6 +5,14 @@
   grid-gap: u3
   padding: 0
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr))
+  &.tiny
+    grid-template-columns
+  &.wide
+    grid-template-columns: repeat(2, 1fr)
+    @media (min-width: mediumViewport)
+      grid-template-columns: repeat(4, 1fr)
+    @media (min-width: largeViewport)    
+      grid-template-columns: repeat(8, 1fr)
 .categoriesGridItem
   list-style: none
   text-align: center
@@ -26,9 +34,9 @@
   &.alwaysWrap a
     flex-direction: column
     
-//
-//   grid-template-columns: repeat(2, 1fr)
-//   @media (min-width: mediumViewport)
-//     grid-template-columns: repeat(4, 1fr)
-//   @media (min-width: largeViewport)    
-//     grid-template-columns: repeat(8, 1fr)
+//   &.wide
+// grid-template-columns: repeat(2, 1fr)
+// @media (min-width: mediumViewport)
+//   grid-template-columns: repeat(4, 1fr)
+// @media (min-width: largeViewport)    
+//   grid-template-columns: repeat(8, 1fr)
