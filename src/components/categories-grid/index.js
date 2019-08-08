@@ -69,16 +69,11 @@ function CategoriesGrid({ categories, alwaysWrap }) {
     categories,
   ]);
   
-  const windowSize = useWindowSize();
-  useEffect(() => {
-    
-  }, [windowSize]);
-  
   const className = cx({
     categoriesGridItem: true,
     alwaysWrap,
   });
-  console.log(el.current)
+  console.log(el.current ? el.current.offsetWidth : '!el.current');
 
   return (
     <ul ref={el} className={styles.categoriesGrid}>
