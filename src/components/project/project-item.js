@@ -73,9 +73,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       hasBookmarked,
     }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    { origin: `project-item: ${project.domain}`, projectName: project.domain, baseProjectId: project.baseId },
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject }),
   );
-
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
   const onMouseEnter = () => {
