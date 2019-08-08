@@ -25,13 +25,13 @@ const PupdatesPreview = withRouter(({ history }) => {
   return (
     <main>
       <Helmet title="Glitch Pupdates Previewer" />
-      <Link to="/">Go Home (to log in)</Link>
       <PreviewContainer
         get={() => api.get('https://pupdates-editor.glitch.me/pupdate.json').then((res) => res.data)}
         onPublish={onPublish}
         previewMessage={
           <>
             This is a live preview of edits done with the <Link to="https://pupdates-editor.glitch.me">Pupdates Editor.</Link>
+            If you aren't logged in, <Link to="/">Go Home</Link> and then come back here to publish!
           </>
         }
       >
