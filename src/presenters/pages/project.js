@@ -163,7 +163,7 @@ const ProjectPage = ({ project: initialProject }) => {
         hasBookmarked,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId }),
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
 
   return (
