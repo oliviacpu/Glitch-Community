@@ -62,16 +62,16 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
-      api,
-      project,
-      currentUser,
-      createNotification,
-      myStuffEnabled,
-      addProjectToCollection,
-      removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
-    }),
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+      }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject }),
   );

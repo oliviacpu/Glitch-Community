@@ -23,7 +23,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
   useFocusFirst();
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
-  console.log(collection.id, collection)
+
   const funcs = {
     ...baseFuncs,
     onNameChange: async (name) => {
