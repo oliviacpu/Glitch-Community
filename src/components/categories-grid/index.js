@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 
 import Link from 'Components/link';
 import Image from 'Components/images/image';
+import useWindowSize from 'Hooks/use-window-size';
 import { CDN_URL } from 'Utils/constants';
 
 import styles from './styles.styl';
@@ -68,17 +69,20 @@ function CategoriesGrid({ categories, alwaysWrap }) {
     categories,
   ]);
   
+  const windowSize = useWindowSize();
   useEffect(() => {
     
-  }, );
+  }, [windowSize]);
   
   const className = cx({
     categoriesGridItem: true,
     alwaysWrap,
   });
+  console.log(el.current)
 
   return (
     <ul ref={el} className={styles.categoriesGrid}>
+      {el.current && el.current.width}
       {categoriesToRender.map((category) => (
         <li key={category.path} className={className} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
