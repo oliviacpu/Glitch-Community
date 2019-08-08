@@ -36,6 +36,7 @@ export const toggleBookmark = async ({
       );
     }
   } catch (error) {
+    console.log(error);
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }
