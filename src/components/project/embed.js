@@ -24,7 +24,7 @@ const browserSatisfiesRequirements = (() => {
   return false;
 })();
 
-const Embed = ({ domain }) => (
+const Embed = ({ domain, loading }) => (
   <div className={styles.embedContainer}>
     {browserSatisfiesRequirements ? (
       // Embed iframe for app
@@ -35,6 +35,7 @@ const Embed = ({ domain }) => (
         height="100%"
         width="100%"
         allowvr="yes"
+        loading={loading}
         src={`${APP_URL}/embed/#!/embed/${domain}?path=README.md&previewSize=100`}
       />
     ) : (
@@ -53,6 +54,11 @@ const Embed = ({ domain }) => (
 
 Embed.propTypes = {
   domain: PropTypes.string.isRequired,
+  loading: PropTypes.oneOf(['lazy', 'eager', 'auto']),
+};
+
+Embed.defaultProps = {
+  loading: 'auto',
 };
 
 export default Embed;
