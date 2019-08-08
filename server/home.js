@@ -27,6 +27,7 @@ async function saveDataToFile({ page, data, persistentToken }) {
   if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
   
   pageCache[page] = data;
+  console.log("home.js", data)
   await fs.writeFile(path.join(__dirname, `../src/curated/${page}.json`), JSON.stringify(data), { encoding: 'utf8' });
 }
 
