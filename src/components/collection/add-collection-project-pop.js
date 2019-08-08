@@ -56,15 +56,17 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
 
   const { createNotification } = useNotifications();
 
-  const onSubmit = useTrackedFunc(
-    async (project) => {
+  const onSubmit = (project) => (
+    useTrackedFunc(
+      async (project) => {
       togglePopover();
       // add project to page if successful & show notification
       await addProjectToCollection(project, collection);
       createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
-    },
-    'Project Added to Collection',
-    { origin: 'Add Project collection' },
+      },
+      'Project Added to Collection',
+      (inherited) =>({ ...inherited, origin: 'Add Project collection', projectDomain: project.domain }),
+    )
   );
 
   /* eslint-disable no-shadow */
