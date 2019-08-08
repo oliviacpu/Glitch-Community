@@ -10,6 +10,7 @@ import BookmarkButton from "Components/buttons/bookmark-button";
 import FeaturedProjectOptionsPop from "./featured-project-options-pop";
 import styles from "./featured-project.styl";
 import { useAPI, useAPIHandlers } from "State/api";
+import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from "State/notifications";
 import { toggleBookmark } from "State/collection";
 import useDevToggle from "State/dev-toggles";
@@ -77,6 +78,7 @@ const FeaturedProject = ({
   unfeatureProject
 }) => {
   const myStuffEnabled = useDevToggle("My Stuff");
+  const { currentUser } = useCurrentUser();
   const [hasBookmarked, setHasBookmarked] = useState(
     featuredProject.authUserHasBookmarked
   );
@@ -95,7 +97,7 @@ const FeaturedProject = ({
   const bookmarkAction = () =>
     toggleBookmark({
       api,
-      project={featuredProject},
+      featuredProject,
       currentUser,
       createNotification,
       myStuffEnabled,
