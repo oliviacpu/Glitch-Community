@@ -23,7 +23,7 @@ const CollectionPageContents = ({ collection: initialCollection }) => {
   useFocusFirst();
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
-
+  console.log(collection.id, collection)
   const funcs = {
     ...baseFuncs,
     onNameChange: async (name) => {
@@ -66,7 +66,7 @@ const CollectionPage = ({ owner, name }) => (
       {(collection) =>
         collection ? (
           <AnalyticsContext
-            properties={{ origin: 'collection' }}
+            properties={{ origin: 'collection', collectionId: collection.id }}
             context={{
               groupId: collection.team ? collection.team.id.toString() : '0',
             }}
