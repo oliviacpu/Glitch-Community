@@ -217,9 +217,9 @@ module.exports = function(external) {
   app.post('/api/home', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
-    const pageName = 'home';
+    const page = 'home';
     try {
-      await saveDataToFile({ pageName, persistentToken, data });
+      await saveDataToFile({ page, persistentToken, data });
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
@@ -238,8 +238,6 @@ module.exports = function(external) {
     const page = 'pupdates';
     try {
       await saveDataToFile({ page, persistentToken, data });
-      console.log("saved data", data)
-      console.log("ok")
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
