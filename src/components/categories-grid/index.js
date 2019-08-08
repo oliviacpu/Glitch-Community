@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import propTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import Link from 'Components/link';
 import Image from 'Components/images/image';
-import useWindowSize from 'Hooks/use-window-size';
 import { CDN_URL } from 'Utils/constants';
 
 import styles from './styles.styl';
