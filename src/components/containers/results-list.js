@@ -44,7 +44,7 @@ export const ResultItem = ({ className, onClick, href, children, active, selecte
   }, [active]);
 
   return (
-    <div className={classnames(className, styles.resultItem, href && styles.withLink, selected && styles.selected)}>
+    <div className={classnames(className, styles.resultItem, href && styles.withLink, { [styles.selected]: active || selected })}>
       <TransparentButton className={styles.resultItemButton} onClick={onClick} ref={buttonRef}>
         <span className={styles.resultWrap}>
           {children}
