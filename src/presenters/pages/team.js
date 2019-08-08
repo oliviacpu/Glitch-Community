@@ -171,11 +171,8 @@ function TeamPage({ team: initialTeam }) {
       {pinnedProjects.length > 0 && (
         <ProjectsList
           layout="grid"
-          title={
-            <>
-              Pinned Projects <Emoji inTitle name="pushpin" />
-            </>
-          }
+          title="Pinned Projects"
+          titleEmoji="pushpin"
           projects={pinnedProjects}
           isAuthorized={currentUserIsOnTeam}
           projectOptions={projectOptions}

@@ -45,6 +45,7 @@ const paginationReducer = (oldState, action) => {
 function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimistically, children }) {
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
+  const allItems = items;
 
   const [state, dispatchState] = useReducer(paginationReducer, {
     page: 1,
@@ -75,48 +76,46 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
 
   if (canPaginate) {
     const startIdx = (state.page - 1) * itemsPerPage;
-    const nextItems = items.slice(startIdx + itemsPerPage, startIdx + itemsPerPage * 2);
     items = items.slice(startIdx, startIdx + itemsPerPage);
-
-    if (fetchDataOptimistically) {
-      Promise.all(nextItems.map(fetchDataOptimistically));
-    }
   }
 
-  useEffect(
-    () => {
-      dispatchState({ type: 'restart', totalPages: numPages });
-    },
-    [numItems],
-  );
+  useEffect(() => {
+    if (canPaginate && fetchDataOptimistically) {
+      const startIdx = state.page * itemsPerPage;
+      const nextItems = allItems.slice(startIdx, startIdx + itemsPerPage);
+      nextItems.forEach(fetchDataOptimistically);
+    }
+  }, [state.page, canPaginate, itemsPerPage]);
+
+  useEffect(() => {
+    dispatchState({ type: 'restart', totalPages: numPages });
+  }, [numItems]);
 
   const arrow = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
   return (
-    (
-      <>
-        {children(items, state.expanded)}
-        {canPaginate && (
-          <div className={styles.controls}>
-            <div className={styles.paginationControls}>
-              <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
-                <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
-              </Button>
-              {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
-              <div data-cy="page-numbers" className={styles.pageNumbers}>
-                {state.page} / {numPages}
-              </div>
-              <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
-                <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
-              </Button>
+    <>
+      {children(items, state.expanded)}
+      {canPaginate && (
+        <div className={styles.controls}>
+          <div className={styles.paginationControls}>
+            <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
+              <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
+            </Button>
+            {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
+            <div data-cy="page-numbers" className={styles.pageNumbers}>
+              {state.page} / {numPages}
             </div>
-            <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
-              Show all <Badge>{numItems}</Badge>
+            <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
+              <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
             </Button>
           </div>
-        )}
-      </>
-    )
+          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
+            Show all <Badge>{numItems}</Badge>
+          </Button>
+        </div>
+      )}
+    </>
   );
 }
 

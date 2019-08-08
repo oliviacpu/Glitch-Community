@@ -208,7 +208,11 @@ const ProjectPage = ({ project: initialProject }) => {
                   </div>
                 )}
               </div>
-              {project.private && <PrivateBadge />}
+              {project.private && (
+                <div className={styles.privacyToggle}>
+                  <PrivateBadge />
+                </div>
+              )}
             </>
           )}
           {users.length + teams.length > 0 && (
