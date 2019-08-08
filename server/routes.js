@@ -238,6 +238,8 @@ module.exports = function(external) {
     const pageName = 'pupdates';
     try {
       await saveDataToFile({ pageName, persistentToken, data });
+      console.log(data)
+      console.log("ok")
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
