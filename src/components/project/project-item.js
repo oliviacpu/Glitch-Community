@@ -62,20 +62,19 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
-        setHasBookmarked,
-        hasBookmarked,
-      }),
+      api,
+      project,
+      currentUser,
+      createNotification,
+      myStuffEnabled,
+      addProjectToCollection,
+      removeProjectFromCollection,
+      setHasBookmarked,
+      hasBookmarked,
+    }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    { origin: `Project page: ${project.domain}`, projectName: project.domain, baseProjectId: project.baseId },
+    { origin: `project-item: ${project.domain}`, projectName: project.domain, baseProjectId: project.baseId },
   );
-  console.log(window.location.pathname)
 
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
