@@ -28,10 +28,6 @@ function syncPageToLogin(login) {
 }
 
 const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) => {
-  if (login === 'oliviacpu') {
-    throw new Error('olivia and cassey made an error');
-  }
-
   if (!login) {
     return <Heading tagName="h1">Anonymous</Heading>;
   }
