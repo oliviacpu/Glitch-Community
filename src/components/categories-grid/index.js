@@ -69,11 +69,13 @@ function CategoriesGrid({ categories, alwaysWrap }) {
     categories,
   ]);
   
+  const width = el.current ? el.current.offsetWidth : 0;
   const className = cx({
     categoriesGridItem: true,
     alwaysWrap,
+    small: width <= 500,
+    medium: width <= 800,
   });
-  console.log(el.current ? el.current.offsetWidth : '!el.current');
 
   return (
     <ul ref={el} className={styles.categoriesGrid}>
