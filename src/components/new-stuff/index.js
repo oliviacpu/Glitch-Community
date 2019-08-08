@@ -98,7 +98,7 @@ const NewStuff = ({ children }) => {
       track();
       openPopover();
       const unreadStuff = pupdatesArray.filter(({ id }) => id > newStuffReadId);
-      console.log(unreadStuff)
+      console.log("unread stuff", unreadStuff)
       setLog(unreadStuff.length ? unreadStuff : pupdatesArray);
       setNewStuffReadId(latestId);
     };
