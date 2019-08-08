@@ -8,8 +8,12 @@ import Note from 'Components/collection/note';
 import AnimationContainer from 'Components/animation-container';
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
+import { useNotifications } from 'State/notifications';
+import { toggleBookmark } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, unfeatureProject, createNote }) => (
+
+const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, unfeatureProject, createNote, myStuffEnabled, isAnonymousUser }) => (
   <div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
@@ -23,6 +27,7 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
       )}
     </div>
     {isAuthorized && (
+      {myStuffEnabled && !isAnonymousUser && !onMyStuffPage }
       <div className={styles.unfeatureBtn}>
         <FeaturedProjectOptionsPop unfeatureProject={unfeatureProject} createNote={createNote} hasNote={!!featuredProject.note} />
       </div>
@@ -39,29 +44,55 @@ const FeaturedProject = ({
   isAuthorized,
   updateNote,
   unfeatureProject,
-}) => (
-  <div data-cy="featured-project">
-    <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
-      {(animateAndUnfeatureProject) => (
-        <ProjectEmbed
-          top={
-            <Top
-              featuredProject={featuredProject}
-              collection={collection}
-              hideNote={hideNote}
-              updateNote={updateNote}
-              isAuthorized={isAuthorized}
-              unfeatureProject={animateAndUnfeatureProject}
-              createNote={collection ? () => displayNewNote(featuredProject) : null}
+}) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const [hasBookmarked, setHasBookmarked] = useState(feautredProject.authUserHasBookmarked);
+  const { createNotification } = useNotifications();
+  const isAnonymousUser = !currentUser.login;
+
+  useEffect(() => {
+    setHasBookmarked(featuredProject.authUserHasBookmarked);
+  }, [featuredProject.authUserHasBookmarked]);
+
+  const bookmarkAction = () =>
+  toggleBookmark({
+    api,
+    project,
+    currentUser,
+    createNotification,
+    myStuffEnabled,
+    addProjectToCollection,
+    removeProjectFromCollection,
+    setHasBookmarked,
+    hasBookmarked,
+  });
+
+  return(
+      <div data-cy="featured-project">
+        <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
+          {(animateAndUnfeatureProject) => (
+            <ProjectEmbed
+              top={
+                <Top
+                  featuredProject={featuredProject}
+                  collection={collection}
+                  hideNote={hideNote}
+                  updateNote={updateNote}
+                  isAuthorized={isAuthorized}
+                  unfeatureProject={animateAndUnfeatureProject}
+                  createNote={collection ? () => displayNewNote(featuredProject) : null}
+                  myStuffEnabled={myStuffEnabled}
+                  isAnonymousUser={isAnonymousUser}
+                />
+              }
+              project={featuredProject}
+              addProjectToCollection={addProjectToCollection}
             />
-          }
-          project={featuredProject}
-          addProjectToCollection={addProjectToCollection}
-        />
-      )}
-    </AnimationContainer>
-  </div>
-);
+          )}
+        </AnimationContainer>
+      </div>
+  )
+}
 
 FeaturedProject.propTypes = {
   addProjectToCollection: PropTypes.func,
