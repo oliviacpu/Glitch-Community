@@ -97,7 +97,7 @@ const FeaturedProject = ({
   const bookmarkAction = () =>
     toggleBookmark({
       api,
-      featuredProject,
+      project: featuredProject,
       currentUser,
       createNotification,
       myStuffEnabled,
