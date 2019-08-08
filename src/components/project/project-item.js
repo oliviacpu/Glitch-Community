@@ -73,7 +73,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         hasBookmarked,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject }),
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
