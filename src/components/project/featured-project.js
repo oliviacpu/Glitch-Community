@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -6,6 +6,7 @@ import ProjectEmbed from 'Components/project/project-embed';
 import Emoji from 'Components/images/emoji';
 import Note from 'Components/collection/note';
 import AnimationContainer from 'Components/animation-container';
+import BookmarkButton from 'Components/buttons/bookmark-button';
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
 import { useNotifications } from 'State/notifications';
@@ -13,7 +14,19 @@ import { toggleBookmark } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 
 
-const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, unfeatureProject, createNote, myStuffEnabled, isAnonymousUser }) => (
+const Top = ({
+  featuredProject,
+  collection,
+  updateNote,
+  hideNote,
+  isAuthorized,
+  unfeatureProject,
+  createNote,
+  myStuffEnabled,
+  isAnonymousUser,
+  bookmarkAction,
+  hasBookmarked
+}) => (
   <div className={styles.top}>
     <div className={styles.left}>
       <Heading tagName="h2">
@@ -22,14 +35,33 @@ const Top = ({ featuredProject, collection, updateNote, hideNote, isAuthorized, 
       </Heading>
       {collection && (
         <div className={styles.note}>
-          <Note project={featuredProject} collection={collection} updateNote={updateNote} hideNote={hideNote} isAuthorized={isAuthorized} />
+          <Note
+            project={featuredProject}
+            collection={collection}
+            updateNote={updateNote}
+            hideNote={hideNote}
+            isAuthorized={isAuthorized}
+          />
         </div>
       )}
     </div>
+    {myStuffEnabled &&
+      !isAnonymousUser &&
+      !window.location.pathname.includes("my-stuff") && (
+        <div className={styles.bookmarkButtonContainer}>
+          <BookmarkButton
+            action={bookmarkAction}
+            initialIsBookmarked={hasBookmarked}
+          />
+        </div>
+      )}
     {isAuthorized && (
-      {myStuffEnabled && !isAnonymousUser && !onMyStuffPage }
       <div className={styles.unfeatureBtn}>
-        <FeaturedProjectOptionsPop unfeatureProject={unfeatureProject} createNote={createNote} hasNote={!!featuredProject.note} />
+        <FeaturedProjectOptionsPop
+          unfeatureProject={unfeatureProject}
+          createNote={createNote}
+          hasNote={!!featuredProject.note}
+        />
       </div>
     )}
   </div>
@@ -46,7 +78,7 @@ const FeaturedProject = ({
   unfeatureProject,
 }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const [hasBookmarked, setHasBookmarked] = useState(feautredProject.authUserHasBookmarked);
+  const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
   const { createNotification } = useNotifications();
   const isAnonymousUser = !currentUser.login;
 
@@ -83,6 +115,8 @@ const FeaturedProject = ({
                   createNote={collection ? () => displayNewNote(featuredProject) : null}
                   myStuffEnabled={myStuffEnabled}
                   isAnonymousUser={isAnonymousUser}
+                  bookmarkAction={bookmarkAction}
+                  hasBookmarked={hasBookmarked}
                 />
               }
               project={featuredProject}
