@@ -237,7 +237,7 @@ module.exports = function(external) {
     const data = req.body;
     const pageName = 'pupdates';
     try {
-      await saveDataToFile({ pageName, persistentToken, data });
+      await saveDataToFile({ 'pupdates', persistentToken, data });
       console.log("saved data", data)
       console.log("ok")
       res.sendStatus(200);

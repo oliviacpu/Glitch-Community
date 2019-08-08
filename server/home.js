@@ -28,6 +28,8 @@ async function saveDataToFile({ page, data, persistentToken }) {
   
   pageCache[page] = data;
   console.log("home.js", data)
+  console.log(page)
+  console.log("filename", path.join(__dirname, `../src/curated/${page}.json`))
   await fs.writeFile(path.join(__dirname, `../src/curated/${page}.json`), JSON.stringify(data), { encoding: 'utf8' });
 }
 
