@@ -46,7 +46,8 @@ const Top = ({
         </div>
       )}
     </div>
-    {myStuffEnabled &&
+    <div className={styles.right}>
+      {myStuffEnabled &&
       !isAnonymousUser &&
       !window.location.pathname.includes("my-stuff") && (
         <div className={styles.bookmarkButtonContainer}>
@@ -56,17 +57,18 @@ const Top = ({
           />
         </div>
       )}
-    {isAuthorized && (
-      <div className={styles.unfeatureBtn}>
-        <FeaturedProjectOptionsPop
-          unfeatureProject={unfeatureProject}
-          createNote={createNote}
-          hasNote={!!featuredProject.note}
-        />
-      </div>
-    )}
+      {isAuthorized && (
+        <div className={styles.unfeatureBtn}>
+          <FeaturedProjectOptionsPop
+            unfeatureProject={unfeatureProject}
+            createNote={createNote}
+            hasNote={!!featuredProject.note}
+          />
+        </div>
+      )}
+    </div>
   </div>
-);
+  );
 
 const FeaturedProject = ({
   collection,
