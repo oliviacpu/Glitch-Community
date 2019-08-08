@@ -42,14 +42,14 @@ tooltip-background = rgba(0,0,0,0.95)
   position: absolute
   content: ''
   display: block
-  height: 100%
+  height: 0
   left: 50%
   transform: translateX(-50%) translateY(-100%)
   margin-top: -6px;
   box-sizing: border-box
   border: 5px solid transparent
   border-bottom-color: tooltip-background
-
+  
 .tooltip.top
   top: 0
   transform: translateX(50%) translateY(-100%)
@@ -197,6 +197,6 @@ tooltip-background = rgba(0,0,0,0.95)
   // don't show pointer
   cursor: default
   &.top
-    top: 0
+    top: 0px
   &.persistent
     display: none
