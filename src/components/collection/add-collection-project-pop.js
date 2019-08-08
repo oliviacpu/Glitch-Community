@@ -7,7 +7,7 @@ import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescr
 import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
 import { AddProjectToCollectionMsg } from 'Components/notification';
-import { useTracker } from 'State/segment-analytics';
+import { useTrackedFunc } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useAlgoliaSearch } from 'State/search';
@@ -56,16 +56,16 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
 
   const { createNotification } = useNotifications();
 
-  const onSubmit = async (project) => {
-    useTracker('Project Added to Collection', (inherited) => ({ 
-      ...inherited, projectDomain: project.domain, collectionId: collection.id, baseProjectId: project.baseId || project.baseProject  
-    }))
-    
-    togglePopover();
-    // add project to page if successful & show notification
-    await addProjectToCollection(project, collection);
-    createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
-  }
+  const onSubmit = useTrackedFunc(
+    async (project) => {
+      togglePopover();
+      // add project to page if successful & show notification
+      await addProjectToCollection(project, collection);
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} />, { type: 'success' });
+    },
+    'Project Added to Collection',
+    { origin: 'Add Project collection' },
+  );
 
   /* eslint-disable no-shadow */
   const { visibleProjects, excludingExactMatch } = useMemo(
