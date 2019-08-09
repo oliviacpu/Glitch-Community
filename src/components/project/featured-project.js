@@ -106,7 +106,7 @@ const FeaturedProject = ({
       currentUser,
       createNotification,
       myStuffEnabled,
-      addProjectToCollectionAPI,
+      addProjectToCollection: addProjectToCollectionAPI,
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked
@@ -155,6 +155,7 @@ FeaturedProject.propTypes = {
 };
 
 FeaturedProject.defaultProps = {
+  addProjectToCollection: null,
   collection: null,
   displayNewNote: () => {},
   hideNote: () => {},
