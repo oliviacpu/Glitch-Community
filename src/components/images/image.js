@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
  * @param {object | string} className - extra classes to be passed down to the component
  * @param {string} backgroundColor - If we want to fill the space behind the image with a color
  * @param {boolean} backgroundImage - If we want the image to be rendered as a background image
+ * @param {string} loading - Value of loading attribute, enables support for native lazy-loading (supported in >= Chrome 76)
  */
 
 const handleDefaultSrc = (defaultSrc) => (event) => {
@@ -21,7 +22,21 @@ const handleDefaultSrc = (defaultSrc) => (event) => {
   }
 };
 
-const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, className, height, src, srcSet, sizes, width, defaultSrc }) =>
+const Image = ({
+  alt,
+  backgroundColor,
+  backgroundImage,
+  backgroundRatio,
+  className,
+  height,
+  src,
+  srcSet,
+  sizes,
+  width,
+  defaultSrc,
+  onAnimationEnd,
+  loading,
+}) =>
   !backgroundImage ? (
     <img
       alt={alt}
@@ -33,6 +48,8 @@ const Image = ({ alt, backgroundColor, backgroundImage, backgroundRatio, classNa
       style={backgroundColor ? { backgroundColor } : undefined}
       width={width || undefined}
       onError={handleDefaultSrc(defaultSrc)}
+      loading={loading}
+      onAnimationEnd={onAnimationEnd}
     />
   ) : (
     <div
@@ -60,6 +77,7 @@ Image.propTypes = {
   sizes: PropTypes.string,
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   defaultSrc: PropTypes.string,
+  loading: PropTypes.oneOf(['lazy', 'eager', 'auto']),
 };
 
 Image.defaultProps = {
@@ -72,6 +90,7 @@ Image.defaultProps = {
   sizes: '',
   width: '100%',
   defaultSrc: null,
+  loading: 'auto',
 };
 
 export default Image;

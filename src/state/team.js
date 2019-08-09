@@ -160,6 +160,7 @@ export function useTeamEditor(initialTeam) {
         ...prev,
         projects: [project, ...prev.projects],
       }));
+      reloadProjectMembers([project.id]);
     }, handleError),
     removeProjectFromTeam: withErrorHandler(async (project) => {
       await removeProjectFromTeam({ project, team });
@@ -167,6 +168,7 @@ export function useTeamEditor(initialTeam) {
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
       }));
+      reloadProjectMembers([project.id]);
     }, handleError),
     deleteProject: withErrorHandler(async (project) => {
       await deleteItem({ project });

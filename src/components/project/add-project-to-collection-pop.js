@@ -44,9 +44,7 @@ const collectionTypeOptions = [
 
 const AddProjectPopoverTitle = ({ project }) => (
   <MultiPopoverTitle>
-    <div className={styles.popoverTitleWrap}>
-      <ProjectAvatar project={project} /> Add {project.domain} to collection
-    </div>
+    <ProjectAvatar project={project} tiny />&nbsp;Add {project.domain} to collection
   </MultiPopoverTitle>
 );
 AddProjectPopoverTitle.propTypes = {
@@ -103,7 +101,7 @@ function useCollectionSearch(query, project, collectionType) {
   const debouncedQuery = useDebouncedValue(query, 200);
   const filters = collectionType === 'user' ? { userIDs: [currentUser.id] } : { teamIDs: currentUser.teams.map((team) => team.id) };
 
-  const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true }, [collectionType]);
+  const searchResults = useAlgoliaSearch(debouncedQuery, { ...filters, filterTypes: ['collection'], allowEmptyQuery: true, isMyStuff: true }, [collectionType]);
   const myStuffEnabled = useDevToggle('My Stuff');
 
   const searchResultsWithMyStuff = useMemo(() => {

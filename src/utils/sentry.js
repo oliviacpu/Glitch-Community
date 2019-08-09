@@ -23,7 +23,7 @@ if (isBrowser) {
       environment: ENVIRONMENT,
       release: `community@${BUILD_TIMESTAMP}`,
       ignoreErrors: SentryHelpers.ignoreErrors,
-      whitelistUrls: ['/glitch.com/'],
+      whitelistUrls: [/glitch\.com/, /glitch\.me/, /localhost/],
       beforeSend(event) {
         // do not send errors to sentry when user uses UC Browser
         const ucBrowser = window.navigator.userAgent.match(/^Mozilla\/5\.0 .+ Gecko\/$/);

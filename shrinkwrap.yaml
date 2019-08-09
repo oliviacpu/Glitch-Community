@@ -6,8 +6,8 @@ dependencies:
   '@babel/preset-react': 7.0.0
   '@babel/register': 7.5.5
   '@percy/cypress': 1.0.9
-  '@sentry/browser': 5.5.0
-  '@sentry/node': 5.5.0
+  '@sentry/browser': 4.6.6
+  '@sentry/node': 4.6.6
   '@storybook/addon-info': 5.1.9
   '@storybook/react': 5.1.9
   algoliasearch: 3.33.0
@@ -36,7 +36,7 @@ dependencies:
   dotenv: 8.0.0
   ejs: 2.6.2
   email-addresses: 3.0.3
-  eslint: 6.0.1
+  eslint: 5.16.0
   eslint-config-airbnb: 17.1.1
   eslint-import-resolver-alias: 1.1.2
   eslint-loader: 2.2.1
@@ -2987,79 +2987,82 @@ packages:
       react-dom: 15.x || 16.x || 16.4.0-alpha.0911da3
     resolution:
       integrity: sha512-kTaX08X4g27tzIFQGRukaHmNbtMYDS3LEWIS8+l6OayGIw6Oyo1HIF/JzeuR2FoF9z6oV+x/wJSVSq4v8tcUGQ==
-  /@sentry/browser/5.5.0:
+  /@sentry/browser/4.6.6:
     dependencies:
-      '@sentry/core': 5.5.0
-      '@sentry/types': 5.5.0
-      '@sentry/utils': 5.5.0
+      '@sentry/core': 4.6.6
+      '@sentry/types': 4.5.3
+      '@sentry/utils': 4.6.5
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-QZw4EXK47Qp9Q+vNpL5H4P4tYyfAN8qpWWeLIM0RDiNLlOugTVUdkfkeNTEJZ9VlqJ5RLx/2G/PITG4R6pwh/A==
-  /@sentry/core/5.5.0:
+      integrity: sha512-+9VsQ+oQYU+PYlLJG2ex7JCMSVQbnUvWPI2uZOofWdI9sWIPUub3boWItMzRQNQ1T4S3FZd4FqAWNFd3azdnBw==
+  /@sentry/core/4.6.6:
     dependencies:
-      '@sentry/hub': 5.5.0
-      '@sentry/minimal': 5.5.0
-      '@sentry/types': 5.5.0
-      '@sentry/utils': 5.5.0
+      '@sentry/hub': 4.6.5
+      '@sentry/minimal': 4.6.5
+      '@sentry/types': 4.5.3
+      '@sentry/utils': 4.6.5
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-xOcBud0t5mfhFdyd2tQQti4uuWSrLiJihpXzxeRpdCfk2ic+xmpeQs3G4UqnluvQDc48ug/Igt7LXfSBRBx4eg==
-  /@sentry/hub/5.5.0:
+      integrity: sha512-7z9HKLTNr3zVBR3tBRheTxkkkuK2IqISUc5Iyo3crN2OecOLtpptT96f5XjLndBEL2ab39eCBPpA5OFjbpzrIA==
+  /@sentry/hub/4.6.5:
     dependencies:
-      '@sentry/types': 5.5.0
-      '@sentry/utils': 5.5.0
+      '@sentry/types': 4.5.3
+      '@sentry/utils': 4.6.5
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-+jKh5U1nv8ufoquGciWoZPOmKuEjFPH5m0VifCs6t3NcEbAq2qnfF26KUGqhUNznlUN/PkbWB4qMfKn14uNE2Q==
-  /@sentry/minimal/5.5.0:
+      integrity: sha512-v9vee8s8C1fK/DPtNOzv6r+AMbPDOWfnasouNcBUkbQUSN5wUNyCDvt51QbWaw5kMMY5TSqjdVqY6gXQZI0APQ==
+  /@sentry/minimal/4.6.5:
     dependencies:
-      '@sentry/hub': 5.5.0
-      '@sentry/types': 5.5.0
+      '@sentry/hub': 4.6.5
+      '@sentry/types': 4.5.3
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-o6O30+/pNrO7fTgwKxgZynHB7cMScJlw9HXgnNXgLXS6LBiqjYCQfVnWAgV//SyyG0uUlcjH3P6PnV6TsJOmVQ==
-  /@sentry/node/5.5.0:
+      integrity: sha512-tf+J+uUNmSgzC7d9JSN8Ekw1HeBAX87Efa/jyFbzLvaw80oibvTiLSLqDjQ9PgvyIzBUuuPImkS2NpvPQGWFtg==
+  /@sentry/node/4.6.6:
     dependencies:
-      '@sentry/core': 5.5.0
-      '@sentry/hub': 5.5.0
-      '@sentry/types': 5.5.0
-      '@sentry/utils': 5.5.0
+      '@sentry/core': 4.6.6
+      '@sentry/hub': 4.6.5
+      '@sentry/types': 4.5.3
+      '@sentry/utils': 4.6.5
+      '@types/stack-trace': 0.0.29
       cookie: 0.3.1
       https-proxy-agent: 2.2.1
       lru_map: 0.3.3
+      lsmod: 1.0.0
+      stack-trace: 0.0.10
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-Qn60k7NqJhzpI7PnW/dOz2Y1ofD6kMKGEgLWAO5vcbNShyQj7m2JYFk0c7nFU9HDgertqkxQnvhvIGvT+QokaQ==
-  /@sentry/types/5.5.0:
+      integrity: sha512-+zZHE2uOwQTgypP6N9oBd0Io6BKXaJh6mdmZBauF0G46/8V28sBQ/dXBtJJNZ8tW7eVlLGpLSGuJb9Ai7c/rNw==
+  /@sentry/types/4.5.3:
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-3otF/miVDth91o+iign00x0o31McUPeyIFbMjLbgeTRRW9rXpu2jGrcRrvHfofECtoqCf5Y734hwvvlBvFZeIw==
-  /@sentry/utils/5.5.0:
+      integrity: sha512-7ll1PAFNjrBNX9rzy3P2qAQrpQwHaDO3uKj735qsnGw34OtAS8Xr8WYrjI14f9fMPa/XIeWvMPb4GMic28V/ag==
+  /@sentry/utils/4.6.5:
     dependencies:
-      '@sentry/types': 5.5.0
+      '@sentry/types': 4.5.3
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-gO8Bs/QcKDn7ncc2f2fIOTPx2AiZKrGj4us1Yxu6mBU8JZqMQRl9XjDMFAUECJQvquBAta+TFJyYj71ZedeQUQ==
+      integrity: sha512-rTISJtRRbWsd3UE+TkA3QG1C0VzPKPW8w74tieBwYhtTCGmOHNwz2nDC/MZGbGj4OgDmNKKl4CCyQr88EX08hA==
   /@storybook/addon-info/5.1.9:
     dependencies:
       '@storybook/addons': 5.1.9
@@ -3648,6 +3651,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-/BZ4QRLpH/bNYgZgwhKEh+5AsboDBcUdlBYgzoLX0fpj3Y2gp6EApyOlM3bK53wQS/OE1SrdSYBAbux2D1528Q==
+  /@types/stack-trace/0.0.29:
+    dev: false
+    resolution:
+      integrity: sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==
   /@types/tapable/1.0.4:
     dev: false
     resolution:
@@ -3826,9 +3833,9 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-Il80Qs2WjYlJIBNzNkK6KYqlVMTbZLXgHx2oT0pU/fjRHyEp+PEfEPY0R3WCwAGVOtauxh1hOxNgIf5bv7dQpA==
-  /acorn-jsx/5.0.1/acorn@6.2.0:
+  /acorn-jsx/5.0.1/acorn@6.2.1:
     dependencies:
-      acorn: 6.2.0
+      acorn: 6.2.1
     dev: false
     id: registry.npmjs.org/acorn-jsx/5.0.1
     peerDependencies:
@@ -3842,6 +3849,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-8oe72N3WPMjA+2zVG71Ia0nXZ8DpQH+QyyHO+p06jT8eg8FGG3FbcUIi8KziHlAfheJQZeoqbvq1mQSQHXKYLw==
+  /acorn/6.2.1:
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-JD0xT5FCRDNyjDda3Lrg/IxFscp9q4tiYtxE1/nOzlKCk7hIRuYjhq1kCNkbPjMRMZuFq20HNQn1I9k8Oj0E+Q==
   /address/1.0.3:
     dev: false
     engines:
@@ -6587,7 +6601,7 @@ packages:
       integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==
   /doctrine/3.0.0:
     dependencies:
-      esutils: 2.0.2
+      esutils: 2.0.3
     dev: false
     engines:
       node: '>=6.0.0'
@@ -7088,9 +7102,9 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-qzm/XxIbxm/FHyH341ZrbnMUpe+5Bocte9xkmFMzPMjRaZMcXww+MpBptFvtU+79L362nqiLhekCxCxDPaUMBQ==
-  /eslint/6.0.1:
+  /eslint/5.16.0:
     dependencies:
-      '@babel/code-frame': 7.0.0
+      '@babel/code-frame': 7.5.5
       ajv: 6.10.2
       chalk: 2.4.2
       cross-spawn: 6.0.5
@@ -7099,49 +7113,49 @@ packages:
       eslint-scope: 4.0.3
       eslint-utils: 1.4.0
       eslint-visitor-keys: 1.0.0
-      espree: 6.0.0
+      espree: 5.0.1
       esquery: 1.0.1
-      esutils: 2.0.2
+      esutils: 2.0.3
       file-entry-cache: 5.0.1
       functional-red-black-tree: 1.0.1
-      glob-parent: 3.1.0
+      glob: 7.1.4
       globals: 11.12.0
       ignore: 4.0.6
       import-fresh: 3.1.0
       imurmurhash: 0.1.4
       inquirer: 6.5.0
-      is-glob: 4.0.1
       js-yaml: 3.13.1
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.3.0
-      lodash: 4.17.14
+      lodash: 4.17.15
       minimatch: 3.0.4
       mkdirp: 0.5.1
       natural-compare: 1.4.0
       optionator: 0.8.2
+      path-is-inside: 1.0.2
       progress: 2.0.3
       regexpp: 2.0.1
       semver: 5.7.0
       strip-ansi: 4.0.0
       strip-json-comments: 2.0.1
-      table: 5.4.1
+      table: 5.4.5
       text-table: 0.2.0
     dev: false
     engines:
-      node: ^8.10.0 || ^10.13.0 || >=11.10.1
+      node: ^6.14.0 || ^8.10.0 || >=9.10.0
     hasBin: true
     resolution:
-      integrity: sha512-DyQRaMmORQ+JsWShYsSg4OPTjY56u1nCjAmICrE8vLWqyLKxhFXOthwMj1SA8xwfrv0CofLNVnqbfyhwCkaO0w==
-  /espree/6.0.0:
+      integrity: sha512-S3Rz11i7c8AA5JPv7xAH+dOyq/Cu/VXHiHXBPOU1k/JAM5dXqQPt3qcrhpHSorXmrpu2g0gkIBVXAqCpzfoZIg==
+  /espree/5.0.1:
     dependencies:
-      acorn: 6.2.0
-      acorn-jsx: /acorn-jsx/5.0.1/acorn@6.2.0
+      acorn: 6.2.1
+      acorn-jsx: /acorn-jsx/5.0.1/acorn@6.2.1
       eslint-visitor-keys: 1.0.0
     dev: false
     engines:
       node: '>=6.0.0'
     resolution:
-      integrity: sha512-lJvCS6YbCn3ImT3yKkPe0+tJ+mH6ljhGNjHQH9mRtiO6gjhVAOhVXW1yjnwqGwTkK3bGbye+hb00nFNmu0l/1Q==
+      integrity: sha512-qWAZcWh4XE/RwzLJejfcofscgMc9CamR6Tn1+XRXNzrvUSSbiAjGOI/fggztjIi7y9VLPqnICMIPiGyr8JaZ0A==
   /esprima/4.0.1:
     dev: false
     engines:
@@ -7177,6 +7191,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-Cr9PHKpbyx96nYrMbepPqqBLrJs=
+  /esutils/2.0.3:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
   /etag/1.8.1:
     dev: false
     engines:
@@ -8919,7 +8939,7 @@ packages:
       cli-width: 2.2.0
       external-editor: 3.1.0
       figures: 2.0.0
-      lodash: 4.17.14
+      lodash: 4.17.15
       mute-stream: 0.0.7
       run-async: 2.3.0
       rxjs: 6.5.2
@@ -10071,6 +10091,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tcg1G5Rky9dQM1p5ZQoOwOVhGN0=
+  /lsmod/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-mgD3bco26yP6BTUK/htYXUKZ5ks=
   /make-dir/1.3.0:
     dependencies:
       pify: 3.0.0
@@ -13738,17 +13762,17 @@ packages:
       node: '>= 0.12'
     resolution:
       integrity: sha512-I9mrbZ5M96s7QeJDv95toF1svkUjeBybe8ydhY7foPaBmr0SPJMFupArmMkDrOKTTj0sJVr+nvQNxWLziQ7nDQ==
-  /table/5.4.1:
+  /table/5.4.5:
     dependencies:
       ajv: 6.10.2
-      lodash: 4.17.14
+      lodash: 4.17.15
       slice-ansi: 2.1.0
       string-width: 3.1.0
     dev: false
     engines:
       node: '>=6.0.0'
     resolution:
-      integrity: sha512-E6CK1/pZe2N75rGZQotFOdmzWQ1AILtgYbMAbAjvms0S1l5IDB47zG3nCnFGB/w+7nB3vKofbLXCH7HPBo864w==
+      integrity: sha512-oGa2Hl7CQjfoaogtrOHEJroOcYILTx7BZWLGsJIlzoWmB2zmguhNfPJZsWPKYek/MgCxfco54gEi31d1uN2hFA==
   /tapable/1.1.3:
     dev: false
     engines:
@@ -14779,8 +14803,8 @@ specifiers:
   '@babel/preset-react': ^7.0.0
   '@babel/register': 7.5.5
   '@percy/cypress': ^1.0.9
-  '@sentry/browser': ^5.5.0
-  '@sentry/node': ^5.5.0
+  '@sentry/browser': ^4.6.6
+  '@sentry/node': ^4.6.6
   '@storybook/addon-info': ^5.1.9
   '@storybook/react': ^5.1.9
   algoliasearch: ^3.33.0
@@ -14809,7 +14833,7 @@ specifiers:
   dotenv: ^8.0.0
   ejs: ^2.6.2
   email-addresses: ^3.0.3
-  eslint: ^6.0.1
+  eslint: ^5.16.0
   eslint-config-airbnb: ^17.1.0
   eslint-import-resolver-alias: ^1.1.2
   eslint-loader: ^2.1.2

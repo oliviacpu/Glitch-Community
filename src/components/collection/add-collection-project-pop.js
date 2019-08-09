@@ -56,7 +56,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
 
   const { createNotification } = useNotifications();
 
-  const onClick = useTrackedFunc(
+  const onSubmit = useTrackedFunc(
     async (project) => {
       togglePopover();
       // add project to page if successful & show notification
@@ -87,12 +87,13 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       <PopoverSearch
         value={query}
         onChange={setQuery}
+        onSubmit={onSubmit}
         results={visibleProjects}
         labelText="Project name or URL"
         placeholder="Search by project name or URL"
         status={status}
         renderItem={
-          ({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onClick(project)} />
+          ({ item: project, active }) => <ProjectResultItem project={project} active={active} onClick={() => onSubmit(project)} />
         }
       />
       {status === 'ready' && excludingExactMatch && (
