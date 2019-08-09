@@ -78,8 +78,5 @@ module.exports = function(app) {
   // proxy projects, users, teams, collections sitemaps
   proxyGlitch('sitemaps', 'sitemaps.glitch.me');
 
-  // proxy pupdates CMS (without rewriting paths)
-  proxyGlitch('pupdates/edit', 'pupdates-editor.glitch.me');
-
   return routes;
 };
