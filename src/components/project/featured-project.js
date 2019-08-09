@@ -57,14 +57,23 @@ const Top = ({
   </div>
 );
 
-const FeaturedProject = ({ collection, displayNewNote, featuredProject, hideNote, isAuthorized, updateNote, unfeatureProject }) => {
+const FeaturedProject = ({
+  addProjectToCollection,
+  collection,
+  displayNewNote,
+  featuredProject,
+  hideNote,
+  isAuthorized,
+  updateNote,
+  unfeatureProject,
+}) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
   const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
   const { createNotification } = useNotifications();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { addProjectToCollection: addProjectToCollectionAPI, removeProjectFromCollection } = useAPIHandlers();
 
   useEffect(() => {
     setHasBookmarked(featuredProject.authUserHasBookmarked);
@@ -77,7 +86,7 @@ const FeaturedProject = ({ collection, displayNewNote, featuredProject, hideNote
       currentUser,
       createNotification,
       myStuffEnabled,
-      addProjectToCollection,
+      addProjectToCollection: addProjectToCollectionAPI,
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked,
@@ -113,6 +122,7 @@ const FeaturedProject = ({ collection, displayNewNote, featuredProject, hideNote
 };
 
 FeaturedProject.propTypes = {
+  addProjectToCollection: PropTypes.func,
   featuredProject: PropTypes.object.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   unfeatureProject: PropTypes.func.isRequired,
@@ -123,6 +133,7 @@ FeaturedProject.propTypes = {
 };
 
 FeaturedProject.defaultProps = {
+  addProjectToCollection: null,
   collection: null,
   displayNewNote: () => {},
   hideNote: () => {},
