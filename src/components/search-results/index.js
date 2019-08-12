@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { createAPIHook } from 'State/api';
-import { getSingleItem } from 'Shared/api';
 
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
@@ -40,10 +39,11 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
-const useProjectsWithUserData = () => {
-  
-}
-
+const useProjectsWithUserData = createAPIHook(async (api, projects) => {
+  const idString = projects.map((p) => `id=${p.id}`).join('&');
+  const { data } = await api.get(`/v1/projects/by/id?${idString}&limit=100`);
+  return data;
+}, { captureException: true });
 
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
@@ -111,8 +111,8 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     }))
     .filter((group) => group.results.length > 0);
 
-  const projectsWithUserData = useProjectsWithUserData(groups.project);
-  
+  const { value: projectsWithUserData = {} } = useProjectsWithUserData(searchResults.project);
+
   return (
     <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
