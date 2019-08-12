@@ -160,7 +160,7 @@ const ProjectPage = ({ project: initialProject }) => {
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked,
-      reloadCollectionProjects
+      reloadCollectionProjects,
     });
 
   return (
