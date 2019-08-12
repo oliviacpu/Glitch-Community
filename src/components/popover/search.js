@@ -10,6 +10,7 @@ import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './
 function useActiveIndex(items, onSelect) {
   const inputRef = useRef();
   const [activeIndex, setActiveIndex] = useState(-1);
+
   // reset activeIndex & focus when items change
   useEffect(() => {
     setActiveIndex(-1);
@@ -54,7 +55,7 @@ function useActiveIndex(items, onSelect) {
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [items]);
+  }, [items, activeIndex]);
 
   return { inputRef, activeIndex };
 }

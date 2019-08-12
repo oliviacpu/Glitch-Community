@@ -24,8 +24,10 @@ const ResumeCoding = () => (
 const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
   const { SSR_SIGNED_IN } = useGlobals();
+  // signedIn and signedOut are both false on the server so the sign in button doesn't render
   const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
   const signedIn = !!currentUser.login || fakeSignedIn;
+  const signedOut = !!currentUser.id && !signedIn;
   const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
     <header role="banner" className={styles.header}>
@@ -39,15 +41,17 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <SearchForm defaultValue={searchQuery} />
         </div>
         <ul className={styles.buttons}>
-          <li className={styles.buttonWrap}>
-            <NewProjectPop />
-          </li>
+          {(signedIn || signedOut) && (
+            <li className={styles.buttonWrap}>
+              <NewProjectPop />
+            </li>
+          )}
           {hasProjects && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
             </li>
           )}
-          {!signedIn && (
+          {signedOut && (
             <li className={styles.buttonWrap}>
               <SignInPop align="right" />
             </li>

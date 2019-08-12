@@ -4,15 +4,14 @@ const { envs } = require('Shared/constants');
 // unless we're running under a staging/dev hostname, in which case we use the
 // corresponding environment config.
 const getBrowserEnv = () => {
-  /* global RUNNING_ON */
-  if (origin.includes('staging.glitch.com')) {
+  if (window.location.origin.includes('staging.glitch.com')) {
     return 'staging';
   }
-  if (origin.includes('glitch.development')) {
+  if (window.location.origin.includes('glitch.development')) {
     return 'development';
   }
-  if (envs[RUNNING_ON]) {
-    return RUNNING_ON;
+  if (envs[window.RUNNING_ON]) {
+    return window.RUNNING_ON;
   }
   return 'production';
 };

@@ -132,7 +132,9 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           />
         )}
         {enableSorting && (
-          <Text>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</Text>
+          <Text defaultMargin>
+            Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.
+          </Text>
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>

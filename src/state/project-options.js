@@ -40,13 +40,13 @@ const useDefaultProjectOptions = () => {
   };
 };
 
-export async function getProjectPermissions(api, domain) {
+export async function getProjectDetails(api, domain) {
   try {
     const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
-    return project ? project.permissions : [];
+    return project;
   } catch (error) {
     captureException(error);
-    return [];
+    return {};
   }
 }
 
