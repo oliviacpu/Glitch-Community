@@ -36,7 +36,7 @@ export const toggleBookmark = async ({
         { type: 'success' },
       );
     }
-    reloadCollectionProjects();
+    reloadCollectionProjects([myStuffCollection])
   } catch (error) {
     console.error(error)
     captureException(error);
