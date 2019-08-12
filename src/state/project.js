@@ -6,12 +6,11 @@ import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
 
-export async function getProjectByDomain(api, domain, withCacheBust) {
-  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}${cacheBust}`, domain),
-    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}${cacheBust}`),
-    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}${cacheBust}`),
+    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
+    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
   });
   return { ...project, teams, users };
 }

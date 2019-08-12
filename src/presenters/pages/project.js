@@ -148,6 +148,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  const reloadCollectionProjects = useReloadProjects();
   const bookmarkAction = () =>
     toggleBookmark({
       api,
@@ -159,6 +160,7 @@ const ProjectPage = ({ project: initialProject }) => {
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked,
+      reloadCollectionProjects
     });
 
   return (
@@ -273,8 +275,7 @@ const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
       <DataLoader
-        get={(api, { projectDomain, withCacheBust }) => getProjectByDomain(api, projectDomain, withCacheBust).then(addProjectBreadcrumb)}
-        args={{ projectDomain: domain, withCacheBust: true }}
+        get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)}
         renderError={() => <NotFound name={domain} />}
       >
         {(project) =>

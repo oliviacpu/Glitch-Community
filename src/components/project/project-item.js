@@ -13,7 +13,7 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
-import { toggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
@@ -48,6 +48,7 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
+  const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
@@ -69,6 +70,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked,
+      reloadCollectionProjects,
     });
 
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
