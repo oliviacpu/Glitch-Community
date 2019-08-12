@@ -280,7 +280,6 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
 export const HomePreview = () => {
   const api = useAPI();
   const { origin, ZINE_POSTS } = useGlobals();
-  console.log('HomePreview', origin);
   const onPublish = async (data) => {
     try {
       await api.post(`${origin}/api/home`, data);
@@ -298,7 +297,7 @@ export const HomePreview = () => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
+            This is a live preview of edits done with <Link to="/index/edit">Community Home Editor.</Link>
           </>
         }
       >
