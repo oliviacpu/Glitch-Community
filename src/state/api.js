@@ -9,7 +9,7 @@ export const Context = createContext();
 
 export const getAPIForToken = memoize((persistentToken) => {
   const cache = {};
-  const maxAge = 30 * 1000;
+  const maxAge = 60 * 1000;
   let api;
   if (persistentToken) {
     api = axios.create({
@@ -28,13 +28,10 @@ export const getAPIForToken = memoize((persistentToken) => {
     ...api,
     persistentToken,
     get: (url, config) => {
-      console.log("inside the get", url, config)
-      
       // TODO: support params
       if (config) return api.get(url, config);
       const now = Date.now();
       if (cache[url] && cache[url].timestamp + maxAge > now) {
-        console.log("cached response")
         return cache[url].response;
       }
       const response = api.get(url);
