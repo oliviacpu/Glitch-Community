@@ -7,6 +7,7 @@ import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
 
 export async function getProjectByDomain(api, domain) {
+  console.log("getProjectByDomain called", api, domain)
   const { project, teams, users } = await allByKeys({
     project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
     teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),

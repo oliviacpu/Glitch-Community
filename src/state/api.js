@@ -28,10 +28,12 @@ export const getAPIForToken = memoize((persistentToken) => {
     ...api,
     persistentToken,
     get: (url, config) => {
+      console.log("inside the get", url, config)
       // TODO: support params
       if (config) return api.get(url, config);
       const now = Date.now();
       if (cache[url] && cache[url].timestamp + maxAge > now) {
+        console.log("cached response")
         return cache[url].response;
       }
       const response = api.get(url);
