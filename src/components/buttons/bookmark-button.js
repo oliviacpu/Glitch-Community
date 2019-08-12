@@ -135,8 +135,8 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
     }
   }, [containerDetails, initialIsBookmarked]);
 
-  const addText = `Add ${projectName} to My Stuff`;
-  const removeText = `Remove ${projectName} from My Stuff`;
+  const addText = `Add project ${projectName} to My Stuff`;
+  const removeText = `Remove project ${projectName} from My Stuff`;
 
   const onClick = (e) => {
     const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
