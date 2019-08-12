@@ -135,8 +135,8 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
     }
   }, [containerDetails, initialIsBookmarked]);
 
-  const addText = 'Add to My Stuff';
-  const removeText = 'Remove from My Stuff';
+  const addText = `Add ${projectName} to My Stuff`;
+  const removeText = `Remove ${projectName} from My Stuff`;
 
   const onClick = (e) => {
     const fromKeyboard = !e.detail; // only show focus highlighting if onClick triggered from keyboard input
@@ -174,7 +174,6 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
           onFocus={onFocus}
           onBlur={onBlur}
           aria-pressed={state.isBookmarked ? 'true' : 'false'}
-          aria-label={`Add project: ${projectName} to My Stuff`}
         >
           <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
           {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
