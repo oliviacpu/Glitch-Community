@@ -83,51 +83,45 @@ const AppsWeLove = ({ content }) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
-    <VisibilityContainer>
-      {({ wasEverVisible }) => (
-        <HomeSection id="apps-we-love" className={styles.appsWeLoveContainer}>
-          <div className={styles.appsWeLoveSmallLayout}>
-            {content.map(({ id, title, description, domain }) => (
-              <Link key={id} to={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
-                <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
+    <HomeSection id="apps-we-love" className={styles.appsWeLoveContainer}>
+      <div className={styles.appsWeLoveSmallLayout}>
+        {content.map(({ id, title, description, domain }) => (
+          <Link key={id} to={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
+            <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
+            <div className={styles.appContent}>
+              <h4 className={styles.h4}>{title}</h4>
+              <p>{description}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
+        <TabList className={styles.appsWeLoveList}>
+          {content.map(({ id, domain, title, description, users }, i) => (
+            <Tab key={domain} className={styles.appsWeLoveListItem}>
+              <div className={styles.appsWeLoveProfileWrap}>
+                <div className={styles.appsWeLoveProfile}>
+                  <ProfileList layout="row" users={users} />
+                </div>
+              </div>
+              <div className={classnames(styles.appItem, i === currentTab && styles.active)}>
                 <div className={styles.appContent}>
                   <h4 className={styles.h4}>{title}</h4>
                   <p>{description}</p>
                 </div>
-              </Link>
-            ))}
-          </div>
-
-          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
-            <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
-              <TabList className={styles.appsWeLoveList}>
-                {content.map(({ id, domain, title, description, users }, i) => (
-                  <Tab key={domain} className={styles.appsWeLoveListItem}>
-                    <div className={styles.appsWeLoveProfileWrap}>
-                      <div className={styles.appsWeLoveProfile}>
-                        <ProfileList layout="row" users={users} />
-                      </div>
-                    </div>
-                    <div className={classnames(styles.appItem, i === currentTab && styles.active)}>
-                      <div className={styles.appContent}>
-                        <h4 className={styles.h4}>{title}</h4>
-                        <p>{description}</p>
-                      </div>
-                      <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
-                    </div>
-                  </Tab>
-                ))}
-              </TabList>
-              {content.map(({ domain }, i) => (
-                <TabPanel key={domain} className={styles.appsWeLoveEmbed} hidden={currentTab !== i}>
-                  <Embed domain={domain} />
-                </TabPanel>
-              ))}
-            </Tabs>
-          </LazyLoader>
-        </HomeSection>
-      )}
-    </VisibilityContainer>
+                <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
+              </div>
+            </Tab>
+          ))}
+        </TabList>
+        {content.map(({ domain }, i) => (
+          <TabPanel key={domain} className={styles.appsWeLoveEmbed} hidden={currentTab !== i}>
+            <Embed domain={domain} />
+          </TabPanel>
+        ))}
+      </Tabs>
+    </HomeSection>
   );
 };
 
