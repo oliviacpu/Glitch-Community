@@ -116,7 +116,7 @@ const EmptyBookmark = () => (
   </svg>
 );
 
-const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
+const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, projectName }) => {
   const [state, setState] = React.useState({
     isBookmarked: initialIsBookmarked,
     isAnimating: false,
@@ -188,6 +188,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
 BookmarkButton.propTypes = {
   action: PropTypes.func,
   initialIsBookmarked: PropTypes.bool,
+  projectName: PropTypes.string.isRequired,
 };
 
 BookmarkButton.defaultProps = {
