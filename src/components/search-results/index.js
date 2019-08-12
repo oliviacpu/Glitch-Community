@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import { useAPI } from 'State/api';
-import { getProjectDetails } from 'State/project-options';
+import { createAPIHook } from 'State/api';
+import { getSingleItem } from 'Shared/api';
 
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
@@ -40,23 +40,20 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
-const DetailsLoader = ({ project }) => {
-  const api = useAPI();
-  React.useEffect(() => {
-    async function fillInDetails() {
-      const details = await getProjectDetails(api, project.domain);
-      project.permissions = details.permissions || [];
-      project.authUserHasBookmarked = details.authUserHasBookmarked;
-    }
-    fillInDetails();
-  }, []);
+const useProjectWithUserData = createAPIHook(async (api, id) => getSingleItem(api, `v1/projects/by/id?id=${id}`, id), { captureException: true });
+
+const ProjectWithUserData = ({ project }) => {
+  const { value: projectWithUserData } = useProjectWithUserData(project.id);
+  if (projectWithUserData) {
+    return <ProjectItem project={projectWithUserData} />;
+  }
   return <ProjectItem project={project} />;
 };
 
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => <DetailsLoader project={result} />,
+  project: ({ result }) => <ProjectWithUserData project={result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
