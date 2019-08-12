@@ -18,6 +18,8 @@ import Link from 'Components/link';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
+import VisibilityContainer from 'Components/visibility-container';
+import LazyLoader from 'Components/lazy-loader';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
@@ -93,6 +95,7 @@ const AppsWeLove = ({ content }) => {
           </Link>
         ))}
       </div>
+
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
         <TabList className={styles.appsWeLoveList}>
           {content.map(({ id, domain, title, description, users }, i) => (
@@ -189,36 +192,45 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 );
 
 const CultureZine = ({ content }) => (
-  <HomeSection id="culture-zine" className={styles.cultureZine}>
-    <div className={styles.cultureZineContainer}>
-      <h2 className={styles.h2}>
-        <Mark color="#CBC3FF">Where tech meets culture</Mark>
-      </h2>
-      <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
-      <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
-        {({ content: cultureZineItems }) => (
-          <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
-            {({ title, primary_tag: source, feature_image: img, url }) => (
-              <Link to={`/culture${url}`} className={styles.plainLink}>
-                <div className={styles.cultureZineImageWrap}>
-                  <MaskImage src={img} />
-                </div>
-                <div className={styles.cultureZineText}>
-                  <h4 className={styles.h4}>{title}</h4>
-                  {source && <p>{source.name}</p>}
-                </div>
-              </Link>
-            )}
-          </Row>
-        )}
-      </Row>
-      <div className={styles.readMoreLink}>
-        <Button href="https://glitch.com/culture/">
-          Read More on Culture <Arrow />
-        </Button>
-      </div>
-    </div>
-  </HomeSection>
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (
+      <HomeSection id="culture-zine" className={styles.cultureZine}>
+        <div className={styles.cultureZineContainer}>
+          <h2 className={styles.h2}>
+            <Mark color="#CBC3FF">Where tech meets culture</Mark>
+          </h2>
+          <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+
+          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
+            <>
+              <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
+                {({ content: cultureZineItems }) => (
+                  <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
+                    {({ title, primary_tag: source, feature_image: img, url }) => (
+                      <Link to={`/culture${url}`} className={styles.plainLink}>
+                        <div className={styles.cultureZineImageWrap}>
+                          <MaskImage src={img} />
+                        </div>
+                        <div className={styles.cultureZineText}>
+                          <h4 className={styles.h4}>{title}</h4>
+                          {source && <p>{source.name}</p>}
+                        </div>
+                      </Link>
+                    )}
+                  </Row>
+                )}
+              </Row>
+              <div className={styles.readMoreLink}>
+                <Button href="https://glitch.com/culture/">
+                  Read More on Culture <Arrow />
+                </Button>
+              </div>
+            </>
+          </LazyLoader>
+        </div>
+      </HomeSection>
+    )}
+  </VisibilityContainer>
 );
 
 const buildingGraphics = [
