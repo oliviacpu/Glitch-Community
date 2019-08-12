@@ -40,26 +40,21 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
-const useProjectWithUserData = createAPIHook(async (api, id) => getSingleItem(api, `v1/projects/by/id?id=${id}`, id), { captureException: true });
+const useProjectsWithUserData = () => {
+  
+}
 
-const ProjectWithUserData = ({ project }) => {
-  const { value: projectWithUserData } = useProjectWithUserData(project.id);
-  if (projectWithUserData) {
-    return <ProjectItem project={projectWithUserData} />;
-  }
-  return <ProjectItem project={project} />;
-};
 
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => <ProjectWithUserData project={result} />,
+  project: ({ result, projectsWithUserData }) => <ProjectItem project={projectsWithUserData[result.id] || result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
-const ResultComponent = ({ result }) => {
+const ResultComponent = ({ result, ...props }) => {
   const Component = resultComponents[result.type];
-  return <Component result={result} />;
+  return <Component result={result} {...props} />;
 };
 
 const ShowAllButton = ({ label, onClick }) => (
@@ -116,6 +111,8 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     }))
     .filter((group) => group.results.length > 0);
 
+  const projectsWithUserData = useProjectsWithUserData(groups.project);
+  
   return (
     <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
@@ -130,7 +127,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
             {(result) => <StarterKitItem result={result} />}
           </Grid>
           <Grid items={searchResults.topResults} className={styles.resultsContainer}>
-            {(result) => <ResultComponent result={result} />}
+            {(result) => <ResultComponent result={result} projectsWithUserData={projectsWithUserData} />}
           </Grid>
         </article>
       )}
@@ -139,7 +136,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
           <article key={id} className={styles.groupContainer}>
             <Heading tagName="h2">{label}</Heading>
             <Grid items={results} className={styles.resultsContainer}>
-              {(result) => <ResultComponent result={result} />}
+              {(result) => <ResultComponent result={result} projectsWithUserData={projectsWithUserData} />}
             </Grid>
             {canShowMoreResults && <ShowAllButton label={label} onClick={() => setActiveFilter(id)} />}
           </article>
