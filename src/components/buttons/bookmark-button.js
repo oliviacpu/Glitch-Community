@@ -174,7 +174,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
           onFocus={onFocus}
           onBlur={onBlur}
           aria-pressed={state.isBookmarked ? 'true' : 'false'}
-          aria-label="Add project to My Stuff"
+          aria-label={`Add project: ${projectName} to My Stuff`}
         >
           <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
           {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}

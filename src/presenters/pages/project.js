@@ -187,7 +187,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 </Heading>
                 {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.name} />
                   </div>
                 )}
               </div>
