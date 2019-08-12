@@ -9,9 +9,13 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
   const api = useAPI();
 
   useEffect(() => {
+    console.log("inside useEffect")
     let isCurrent = true;
     get(api, args).then(
       (data) => {
+        if (data.id === "648cfd90-846c-4ff2-b30c-7239bc8bb295") {
+          console.log("got new data", data)
+        }
         if (!isCurrent) return;
         setState({ status: 'ready', value: data });
       },
@@ -25,6 +29,7 @@ const DataLoader = ({ children, get, renderError, renderLoader, captureException
       },
     );
     return () => {
+      console.log("unmount")
       isCurrent = false;
       setState({ status: 'loading', value: null });
     };

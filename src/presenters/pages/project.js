@@ -273,12 +273,13 @@ const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
       <DataLoader
-        get={(api, args) => getProjectByDomain(api, args).then(addProjectBreadcrumb)}
-        args={domain}
+        get={(api, {domain}) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)}
+        args={{domain}}
         renderError={() => <NotFound name={domain} />}
       >
-        {(project) =>
-          project ? (
+        {(project) =>{
+          console.log("got a project", project)
+          return project ? (
             <>
               <Helmet title={project.domain} />
               <ProjectPage project={project} />
@@ -286,6 +287,8 @@ const ProjectPageContainer = ({ name: domain }) => (
           ) : (
             <NotFound name={domain} />
           )
+        }
+          
         }
       </DataLoader>
     </AnalyticsContext>
