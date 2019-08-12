@@ -27,7 +27,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { toggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
@@ -148,7 +148,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const reloadCollectionProjects = useReloadProjects();
+  const reloadCollectionProjects = useCollectionReload();
   const bookmarkAction = () =>
     toggleBookmark({
       api,
