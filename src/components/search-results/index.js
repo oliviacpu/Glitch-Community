@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import { useAPI } from 'State/api';
-import { getProjectDetails } from 'State/project-options';
+import { createAPIHook } from 'State/api';
 
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Button from 'Components/buttons/button';
@@ -40,29 +39,22 @@ const groups = [
   { id: 'collection', label: 'Collections' },
 ];
 
-const DetailsLoader = ({ project }) => {
-  const api = useAPI();
-  React.useEffect(() => {
-    async function fillInDetails() {
-      const details = await getProjectDetails(api, project.domain);
-      project.permissions = details.permissions || [];
-      project.authUserHasBookmarked = details.authUserHasBookmarked;
-    }
-    fillInDetails();
-  }, []);
-  return <ProjectItem project={project} />;
-};
+const useProjectsWithUserData = createAPIHook(async (api, projects) => {
+  const idString = projects.map((p) => `id=${p.id}`).join('&');
+  const { data } = await api.get(`/v1/projects/by/id?${idString}&limit=100`);
+  return data;
+}, { captureException: true });
 
 const resultComponents = {
   team: ({ result }) => <TeamItem team={result} />,
   user: ({ result }) => <UserItem user={result} />,
-  project: ({ result }) => <DetailsLoader project={result} />,
+  project: ({ result, projectsWithUserData }) => <ProjectItem project={projectsWithUserData[result.id] || result} />,
   collection: ({ result }) => <CollectionItemSmall showCurator collection={result} />,
 };
 
-const ResultComponent = ({ result }) => {
+const ResultComponent = ({ result, ...props }) => {
   const Component = resultComponents[result.type];
-  return <Component result={result} />;
+  return <Component result={result} {...props} />;
 };
 
 const ShowAllButton = ({ label, onClick }) => (
@@ -119,6 +111,8 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
     }))
     .filter((group) => group.results.length > 0);
 
+  const { value: projectsWithUserData = {} } = useProjectsWithUserData(searchResults.project);
+
   return (
     <main className={styles.page} id="main">
       {ready && searchResults.totalHits > 0 && (
@@ -133,7 +127,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
             {(result) => <StarterKitItem result={result} />}
           </Grid>
           <Grid items={searchResults.topResults} className={styles.resultsContainer}>
-            {(result) => <ResultComponent result={result} />}
+            {(result) => <ResultComponent result={result} projectsWithUserData={projectsWithUserData} />}
           </Grid>
         </article>
       )}
@@ -142,7 +136,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
           <article key={id} className={styles.groupContainer}>
             <Heading tagName="h2">{label}</Heading>
             <Grid items={results} className={styles.resultsContainer}>
-              {(result) => <ResultComponent result={result} />}
+              {(result) => <ResultComponent result={result} projectsWithUserData={projectsWithUserData} />}
             </Grid>
             {canShowMoreResults && <ShowAllButton label={label} onClick={() => setActiveFilter(id)} />}
           </article>
