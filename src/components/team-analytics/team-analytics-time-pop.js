@@ -4,7 +4,7 @@ import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/pop
 import TransparentButton from 'Components/buttons/transparent-button';
 import styles from './styles.styl';
 
-const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours']
+const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours'];
 
 const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => {
   const [selected, setSelected] = useState(currentTimeFrame);
@@ -13,7 +13,7 @@ const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => {
     refs.current[selected].focus();
   }, [selected]);
 
-  const onKeyDown = (e, index) => {
+  const onKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const nextIndex = (timeFrames.indexOf(selected) + 1) % timeFrames.length;
@@ -23,15 +23,15 @@ const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => {
       const nextIndex = (timeFrames.indexOf(selected) + timeFrames.length - 1) % timeFrames.length;
       setSelected(timeFrames[nextIndex]);
     }
-  }
+  };
 
   return (
     <PopoverDialog align="left">
       <PopoverSection>
         {timeFrames.map((timeFrame, index) => (
-          <TransparentButton 
+          <TransparentButton
             key={timeFrame}
-            ref={(el) => refs.current[timeFrame] = el}
+            ref={(el) => { refs.current[timeFrame] = el; }}
             tabIndex={timeFrame === selected ? 0 : -1}
             onKeyDown={(e) => onKeyDown(e, index)}
             onClick={() => updateTimeFrame(timeFrame)}
