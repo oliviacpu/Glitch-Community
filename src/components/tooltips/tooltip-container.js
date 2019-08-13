@@ -52,6 +52,7 @@ function TooltipContainer({ type, tooltip, target, align, persistent, children, 
     // action tooltips are visible on hover and focus, click triggers a separate action
     // they should always be populated with their content, even when they are "hidden"
     role = 'tooltip';
+    console.log(tooltip)
     extendedTarget = React.cloneElement(target, {
       'aria-labelledby': id,
       'data-tooltip': tooltip,
