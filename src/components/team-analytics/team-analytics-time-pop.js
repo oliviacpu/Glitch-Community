@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { PopoverWithButton, PopoverDialog, PopoverSection } from 'Components/popover';
-import ResultsList, { ResultItem, ResultInfo } from 'Components/containers/results-list';
+import TransparentButton from 'Components/buttons/transparent-button';
 
-const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours'].map((id) => ({ id }));
+const timeFrames = ['Last 4 Weeks', 'Last 2 Weeks', 'Last 24 Hours']
 
-const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => (
-  <PopoverDialog align="left">
-    <PopoverSection>
-      <ResultsList items={timeFrames}>
-        {({ id: timeFrame }) => (
-          <ResultItem onClick={() => updateTimeFrame(timeFrame)} active={currentTimeFrame === timeFrame}>
-            <ResultInfo>{timeFrame}</ResultInfo>
-          </ResultItem>
-        )}
-      </ResultsList>
-    </PopoverSection>
-  </PopoverDialog>
-);
+const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => {
+  const [selected, setSelected] = useState(currentTimeFrame)
+  const onKeyDown = (e, index) => {
+    
+  }
+  return (
+    <PopoverDialog align="left">
+      <PopoverSection>
+        {timeFrames.map((timeFrame, index) => (
+          <TransparentButton 
+            key={timeFrame} 
+            tabIndex={timeFrame === selected ? 0 : -1}
+            onKeyDown={}
+          >
+            {timeFrame}
+          </TransparentButton>
+        ))}
+      </PopoverSection>
+    </PopoverDialog>
+  );
+}
 
 const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => (
   <PopoverWithButton
