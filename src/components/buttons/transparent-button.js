@@ -8,8 +8,8 @@ Transparent buttons are useful for making a whole container clickable, without b
 If you're using this for an icon button, be sure to also include an accessible label.
 */
 
-const TransparentButton = forwardRef(({ children, onClick, onKeyDown, className }, ref) => (
-  <button type="button" onClick={onClick} className={classnames(styles.transparentButton, className)} ref={ref}>
+const TransparentButton = forwardRef(({ children, onClick, className, ...props }, ref) => (
+  <button type="button" onClick={onClick} className={classnames(styles.transparentButton, className)} ref={ref} {...props}>
     {children}
   </button>
 ));
