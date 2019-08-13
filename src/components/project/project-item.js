@@ -111,9 +111,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                   {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
                     <div className={styles.bookmarkButtonContainer}>
-                      <BookmarkButton 
-                        action={bookmarkAction} 
-                        initialIsBookmarked={hasBookmarked} 
+                      <BookmarkButton
+                        action={bookmarkAction}
+                        initialIsBookmarked={hasBookmarked}
                         containerDetails={{ isHoveringOnProjectItem }}
                         projectName={project.domain}
                       />
