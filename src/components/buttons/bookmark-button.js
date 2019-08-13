@@ -165,7 +165,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
 
   return (
     <TooltipContainer
-      type="action"
+      type="info"
       tooltip={state.isBookmarked ? removeText : addText}
       target={
         <button
