@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import styles from './styles.styl';
 
 const sectionTypes = ['primary', 'secondary', 'dangerZone'];
-export const PopoverSection = ({ className, children, type }) => (
-  <section className={classnames(styles.popoverSection, styles[type], className)}>{children}</section>
+export const PopoverSection = ({ className, children, type, ...props }) => (
+  <section className={classnames(styles.popoverSection, styles[type], className)} {...props}>{children}</section>
 );
 
 PopoverSection.propTypes = {
