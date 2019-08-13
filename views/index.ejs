@@ -77,13 +77,13 @@
       </div>
     </div>
 
-    <div id="main"><%- rendered %></div>
+    <div id="react-root"><%- rendered %></div>
 
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>
     <% } %>
     <script>
-      var container = document.getElementById('main');
+      var container = document.getElementById('react-root');
       function showFallback(name) {
         document.getElementById('fallback').removeAttribute('style');
         document.getElementById('fallback-img').removeAttribute('style');

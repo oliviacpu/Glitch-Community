@@ -66,7 +66,7 @@ const CollectionPage = ({ owner, name }) => (
       {(collection) =>
         collection ? (
           <AnalyticsContext
-            properties={{ origin: 'collection' }}
+            properties={{ origin: 'collection', collectionId: collection.id }}
             context={{
               groupId: collection.team ? collection.team.id.toString() : '0',
             }}
