@@ -40,6 +40,7 @@ const groups = [
 ];
 
 const useProjectsWithUserData = createAPIHook(async (api, projects) => {
+  if (!projects.length) return {};
   const idString = projects.map((p) => `id=${p.id}`).join('&');
   const { data } = await api.get(`/v1/projects/by/id?${idString}&limit=100`);
   return data;
