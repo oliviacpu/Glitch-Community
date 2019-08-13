@@ -28,7 +28,7 @@ const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => {
 
   return (
     <PopoverDialog align="left">
-      <PopoverSection 
+      <PopoverSection
         role="listbox"
         aria-label="Team analytics timeframe"
         aria-activedescendant={getTimeFrameId(selected)}
