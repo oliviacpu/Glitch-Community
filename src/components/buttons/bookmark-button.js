@@ -4,6 +4,7 @@ import Image from 'Components/images/image';
 import classNames from 'classnames/bind';
 import { CDN_URL } from 'Utils/constants';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import HiddenCheckbox from 'Components/fields/hidden-checkbox';
 
 import styles from './bookmark-button.styl';
 
@@ -168,18 +169,18 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
       type="info"
       tooltip={state.isBookmarked ? removeText : addText}
       target={
-        <button
-          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible : ''}`}
-          onClick={onClick}
+        <HiddenCheckbox 
+          value={state.isBookmarked} 
+          onChange={onClick}          
           onFocus={onFocus}
           onBlur={onBlur}
-          aria-pressed={state.isBookmarked ? 'true' : 'false'}
-          aria-label={`Add project ${projectName} to My Stuff`}
         >
-          <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
-          {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
-          <Image className={checkClassName} src={CHECKMARK} onAnimationEnd={onAnimationEnd} alt="" width="10px" height="10px" />
-        </button>
+          <div className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible : ''}`}>
+            <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
+            {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
+            <Image className={checkClassName} src={CHECKMARK} onAnimationEnd={onAnimationEnd} alt="" width="10px" height="10px" />
+          </div>
+        </HiddenCheckbox>
       }
     />
   );
