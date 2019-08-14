@@ -5,13 +5,15 @@ const { envs, tagline } = require('../shared/constants');
 // the client supports RUNNING_ON = development
 const currentEnv = ['local', 'staging'].includes(process.env.RUNNING_ON) ? process.env.RUNNING_ON : 'production';
 const current = envs[currentEnv];
+
 if (currentEnv === 'local') {
-  current.API_URL = `https://${process.env.FWD_SUBDOMAIN_PREFIX}-glitch.fwd.wf/`;
+  const fwdSubdomainPrefix = process.env.FWD_SUBDOMAIN_PREFIX || process.env.PROJECT_NAME || os.userInfo().username;
+  current.API_URL = `https://${fwdSubdomainPrefix}-glitch.fwd.wf/`;
 }
 
 module.exports = {
   ...envs,
-  current: envs[currentEnv],
+  current,
   currentEnv,
   tagline,
 };
