@@ -51,7 +51,7 @@ function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust)
 }
 
 const ProjectMemberContext = createContext();
-const ProjectMemberReloadContext = createContext();
+const ProjectReloadContext = createContext();
 
 export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
@@ -71,9 +71,9 @@ export const ProjectContextProvider = ({ children }) => {
 
   return (
     <ProjectMemberContext.Provider value={getProjectMembers}>
-      <ProjectMemberReloadContext.Provider value={reloadProjectMembers}>
+      <ProjectReloadContext.Provider value={reloadProjectMembers}>
         {children}
-      </ProjectMemberReloadContext.Provider>
+      </ProjectReloadContext.Provider>
     </ProjectMemberContext.Provider>
   );
 };
@@ -84,7 +84,7 @@ export function useProjectMembers(projectId) {
 }
 
 export function useProjectReload() {
-  return useContext(ProjectMemberReloadContext);
+  return useContext(ProjectReloadContext);
 }
 
 export function useProjectEditor(initialProject) {
