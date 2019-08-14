@@ -29,9 +29,11 @@ function OnboardingBanner() {
       <div className={styles.actions}>
         <div className={styles.create}>
           <h2>Create your first project</h2>
-          <Text>Jump into the editor by creating your very own app.</Text>
+          <Text defaultMargin>Jump into the editor by creating your very own app.</Text>
           <NewProjectPop buttonText="Create New Project" buttonType="cta" />
-          <Link to="/create">Learn about creating on Glitch</Link>
+          <Text defaultMargin>
+            <Link to="/create">Learn about creating on Glitch</Link>
+          </Text>
         </div>
         
         <div className={styles.explore}>
