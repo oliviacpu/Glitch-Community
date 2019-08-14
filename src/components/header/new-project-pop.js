@@ -93,16 +93,26 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return projectIds.map((id) => data[id]);
 });
 
-function NewProjectPopButton() {
+function NewProjectPopButton({ buttonText, buttonType }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
   const onOpen = useTracker('open new-project pop');
 
   return (
-    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText="New Project">
+    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText={buttonText} type={buttonType}>
       {() => <NewProjectPop projects={projects} />}
     </PopoverWithButton>
   );
 }
+
+NewProjectPopButton.propTypes = {
+  buttonText: PropTypes.string,
+  buttonType: PropTypes.oneOf(['cta', 'tertiary'])
+};
+
+NewProjectPopButton.defaultProps = {
+  buttonText: 'New Project',
+  buttonType: 'tertiary',
+};
 
 export default NewProjectPopButton;

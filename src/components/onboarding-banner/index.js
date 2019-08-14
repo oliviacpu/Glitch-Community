@@ -8,15 +8,15 @@ import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
 
-function OnboardingBanner () {
+function OnboardingBanner() {
   const user = useCurrentUser();
   return (
     <div className={styles.banner} style={getUserProfileStyle(user)}>
       <div className={styles.illustration}>
         <h1>Welcome to Glitch!</h1>
-        <Image src='https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?v=1540583258925' alt="" />
+        <Image src="https://cdn.glitch.com/02ae6077-549b-429d-85bc-682e0e3ced5c%2Fcollaborate.svg?v=1540583258925" alt="" />
       </div>
-      
+
       <div className={styles.actions}>
         <div>
           <h2>Create your first project</h2>
