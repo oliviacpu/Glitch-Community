@@ -40,7 +40,7 @@ function OnboardingBanner() {
           <Text>
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
-          <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
+          <CategoriesGrid alwaysWrap categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
           
           <Text>
             Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
