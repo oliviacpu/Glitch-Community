@@ -38,7 +38,7 @@ const CollectionResultItem = ({ onClick, collection, active }) => {
       <ResultInfo>
         <VisuallyHidden>Add to collection</VisuallyHidden>
         <ResultName>{collection.name}</ResultName>
-        {collection.description.length > 0 && !collectionIsMyStuff && (
+        {collection.description.length > 0 && (
           <ResultDescription>
             <VisuallyHidden>with description</VisuallyHidden>
             <Markdown renderAsPlaintext>{collection.description}</Markdown>
