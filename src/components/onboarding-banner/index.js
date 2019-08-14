@@ -1,8 +1,10 @@
 import React from 'react';
 import Image from 'Components/images/image';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
 import NewProjectPop from 'Components/header/new-project-pop';
+import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
@@ -15,7 +17,7 @@ function OnboardingBanner() {
     <div
       className={styles.banner}
       style={{
-        backgroundImage: 'https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg',
+        backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
         backgroundColor: lightColors[currentUser.id % 4],
       }}
     >
@@ -30,6 +32,17 @@ function OnboardingBanner() {
           <Text>Jump into the editor by creating your very own app.</Text>
           <NewProjectPop buttonText="Create New Project" buttonType="cta" />
           <Link to="/create">Learn about creating on Glitch</Link>
+        </div>
+        
+        <div>
+          <Text>
+            <strong>...or explore starter apps</strong> to find a project to remix.
+          </Text>
+          <CategoriesGrid />
+          
+          <Text>
+            Find even more inspiration below with our <Link to="#featured-apps">featured apps</Link> <Emoji name="backhandIndex" />
+          </Text>
         </div>
       </div>
     </div>
