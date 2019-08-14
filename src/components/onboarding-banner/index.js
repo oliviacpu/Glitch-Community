@@ -23,22 +23,22 @@ function OnboardingBanner() {
     >
       <div className={styles.illustration}>
         <h1>
-          <Image alt="Welcome to Glitch" src="https://cdn.glitch.com/064b323a-e0b3-43bc-a6e8-79163b0b5d7a%2Fwelcome-to-glitch.svg?v=1565796609099" alt="" />
+          <Image alt="Welcome to Glitch" src="https://cdn.glitch.com/064b323a-e0b3-43bc-a6e8-79163b0b5d7a%2Fwelcome-to-glitch.svg?v=1565796609099" />
         </h1>
       </div>
 
       <div className={styles.actions}>
         <div className={styles.create}>
           <h2>Create your first project</h2>
-          <Text defaultMargin>Jump into the editor by creating your very own app.</Text>
+          <Text size="15px" defaultMargin>Jump into the editor by creating your very own app.</Text>
           <NewProjectPop buttonText="Create New Project" buttonType="cta" />
-          <Text defaultMargin>
+          <Text size="15px" defaultMargin>
             <Link to="/create">Learn about creating on Glitch</Link>
           </Text>
         </div>
         
         <div className={styles.explore}>
-          <Text>
+          <Text size="15px">
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
           <CategoriesGrid alwaysWrap categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
