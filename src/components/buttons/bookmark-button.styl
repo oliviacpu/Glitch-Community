@@ -51,7 +51,7 @@
   width: 13px
   height: 13px
   top: 9px
-  left: 18px
+  left: 11px
   display: inline-block
 }
 
@@ -172,3 +172,9 @@
     opacity: 1
   }
 }
+
+@media(prefers-reduced-motion: reduce)
+  .halo1, .halo2, .halo3, .halo4, .halo5{
+    animation: none !important
+    -webkit-animation: none !important
+  }
