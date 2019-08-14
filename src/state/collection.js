@@ -30,7 +30,7 @@ export const toggleBookmark = async ({
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
-      const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuff.url}`
+      const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
         { type: 'success' },
