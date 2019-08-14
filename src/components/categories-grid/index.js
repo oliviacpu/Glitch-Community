@@ -63,11 +63,11 @@ const allCategories = [
 
 function CategoriesGrid({ categories, alwaysWrap }) {
   const el = useRef(null);
-  
+
   const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
     categories,
   ]);
-  
+
   const width = el.current ? el.current.offsetWidth : 0;
   const className = cx({
     categoriesGridItem: true,
