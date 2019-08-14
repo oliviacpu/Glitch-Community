@@ -8,7 +8,7 @@
   border-radius: u1
 
 .illustration
-  flex-basis: 225px
+  width: 225px
   padding: u2
   img
     width: 100%
@@ -22,13 +22,18 @@
   border-radius: u1
   
 .create
-  flex-basis: 235px
+  width: 235px
   margin-right: 24px
   padding: u2
   border-radius: u1
   background: #cbe9ff
   h2
     font-size: 15px
+    
+.explore
+  flex: 1
 
 .categoriesGrid
-  grid-template-columns: repeat(6, 1fr)
+  grid-template-columns: repeat(3, 1fr)
+  @media (min-width: hugeViewport)
+    grid-template-columns: repeat(6, 1fr)

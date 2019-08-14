@@ -73,7 +73,8 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
     categoriesGridItem: true,
     alwaysWrap,
     small: width <= 500,
-    medium: width <= 800,
+    medium: width > 500 && width <= 800,
+    wide: width > 800,
   });
 
   return (
