@@ -99,7 +99,7 @@ function NewProjectPopButton({ buttonText, buttonType }) {
   const onOpen = useTracker('open new-project pop');
 
   return (
-    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small' }} buttonText={buttonText} type={buttonType}>
+    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
       {() => <NewProjectPop projects={projects} />}
     </PopoverWithButton>
   );
@@ -107,12 +107,12 @@ function NewProjectPopButton({ buttonText, buttonType }) {
 
 NewProjectPopButton.propTypes = {
   buttonText: PropTypes.string,
-  buttonType: PropTypes.oneOf(['cta', 'tertiary'])
+  buttonType: PropTypes.string,
 };
 
 NewProjectPopButton.defaultProps = {
   buttonText: 'New Project',
-  buttonType: 'tertiary',
+  buttonType: '',
 };
 
 export default NewProjectPopButton;
