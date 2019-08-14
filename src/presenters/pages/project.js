@@ -149,7 +149,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
   const reloadCollectionProjects = useCollectionReload();
-  
+
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -167,13 +167,13 @@ const ProjectPage = ({ project: initialProject }) => {
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
-  
-  const addProjectToCollectionFromProjectPage = (_project, _collection) => {
+
+  const addProjectToCollectionAndSetHasBookmarked = (_project, _collection) => {
     if (_collection.isMyStuff) {
       setHasBookmarked(true);
     }
-    return addProjectToCollection({ project: _project, collection: _collection })
-  }
+    return addProjectToCollection({ project: _project, collection: _collection });
+  };
 
   return (
     <main id="main">
@@ -246,7 +246,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionFromProjectPage} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
@@ -286,10 +286,7 @@ async function addProjectBreadcrumb(projectWithMembers) {
 const ProjectPageContainer = ({ name: domain }) => (
   <Layout>
     <AnalyticsContext properties={{ origin: 'project' }}>
-      <DataLoader
-        get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)}
-        renderError={() => <NotFound name={domain} />}
-      >
+      <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
         {(project) =>
           project ? (
             <>
