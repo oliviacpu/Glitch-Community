@@ -168,11 +168,11 @@ const ProjectPage = ({ project: initialProject }) => {
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
   
-  const addProjectToCollectionFromProjectPage = (...args) => {
-    if (c.isMyStuff) {
+  const addProjectToCollectionFromProjectPage = (_project, _collection) => {
+    if (_collection.isMyStuff) {
       setHasBookmarked(true);
     }
-    return addProjectToCollection(...args)
+    return addProjectToCollection({ project: _project, collection: _collection })
   }
 
   return (
