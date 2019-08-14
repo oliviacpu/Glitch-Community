@@ -147,7 +147,6 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, project
     setState({ ...state, isFocused: true });
   };
   const onBlur = () => {
-    console.log('blur');
     setState({ ...state, isFocused: false });
   };
   const onAnimationEnd = () => {

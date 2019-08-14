@@ -39,6 +39,7 @@ export const toggleBookmark = async ({
     reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
     captureException(error);
+    console.log('error', error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }
 };

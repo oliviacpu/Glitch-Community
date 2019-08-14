@@ -11,7 +11,7 @@ import BookmarkButton from 'Components/buttons/bookmark-button';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
-import { toggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
@@ -45,7 +45,7 @@ const Top = ({
     <div className={styles.right}>
       {myStuffEnabled && !isAnonymousUser && !window.location.pathname.includes('my-stuff') && (
         <div className={styles.bookmarkButtonContainer}>
-          <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+          <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={featuredProject.domain} />
         </div>
       )}
       {isAuthorized && (
@@ -69,6 +69,7 @@ const FeaturedProject = ({
 }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
+  const reloadCollectionProjects = useCollectionReload();
   const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
   const { createNotification } = useNotifications();
   const isAnonymousUser = !currentUser.login;
@@ -90,6 +91,7 @@ const FeaturedProject = ({
       removeProjectFromCollection,
       setHasBookmarked,
       hasBookmarked,
+      reloadCollectionProjects,
     });
 
   return (
