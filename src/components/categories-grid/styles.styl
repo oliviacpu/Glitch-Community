@@ -10,6 +10,7 @@
 .medium
   grid-template-columns: repeat(4, 1fr)
 .categoriesGridItem
+  flex-direction: row
   list-style: none
   text-align: center
   background: var(--bg-color);
@@ -27,5 +28,6 @@
     max-width: 60px
     height: 50px
     margin: 0 auto u1 auto
-  &.alwaysWrap a
-    flex-direction: column
+  &.alwaysWrap
+    a      
+      flex-direction: column
