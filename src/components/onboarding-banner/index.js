@@ -43,7 +43,7 @@ function OnboardingBanner() {
           </Text>
           <CategoriesGrid alwaysWrap categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
           
-          <Text>
+          <Text size="15px">
             Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
           </Text>
         </div>
