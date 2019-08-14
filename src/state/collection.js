@@ -17,6 +17,7 @@ export const toggleBookmark = async ({
   removeProjectFromCollection,
   setHasBookmarked,
   hasBookmarked,
+  reloadCollectionProjects,
 }) => {
   try {
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
@@ -35,6 +36,7 @@ export const toggleBookmark = async ({
         { type: 'success' },
       );
     }
+    reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
@@ -115,7 +117,9 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
+        {children}
+      </CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };

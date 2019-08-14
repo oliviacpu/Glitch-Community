@@ -4,6 +4,7 @@ import Image from 'Components/images/image';
 import classNames from 'classnames/bind';
 import { CDN_URL } from 'Utils/constants';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
+import HiddenCheckbox from 'Components/fields/hidden-checkbox';
 
 import styles from './bookmark-button.styl';
 
@@ -116,7 +117,7 @@ const EmptyBookmark = () => (
   </svg>
 );
 
-const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
+const BookmarkButton = ({ action, initialIsBookmarked, containerDetails, projectName }) => {
   const [state, setState] = React.useState({
     isBookmarked: initialIsBookmarked,
     isAnimating: false,
@@ -168,18 +169,16 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
       type="action"
       tooltip={state.isBookmarked ? removeText : addText}
       target={
-        <button
-          className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible : ''}`}
-          onClick={onClick}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          aria-pressed={state.isBookmarked ? 'true' : 'false'}
-          aria-label="Add project to My Stuff"
-        >
-          <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
-          {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
-          <Image className={checkClassName} src={CHECKMARK} onAnimationEnd={onAnimationEnd} alt="" width="10px" height="10px" />
-        </button>
+        <HiddenCheckbox value={state.isBookmarked} onChange={onClick} onFocus={onFocus} onBlur={onBlur}>
+          <div
+            className={`${styles.bookmarkButton} ${state.isFocused ? styles.focused : ''} ${state.isVisible ? styles.visible : ''}`}
+            aria-label={`Add ${projectName} to My Stuff`}
+          >
+            <Halo isAnimating={state.isAnimating} onAnimationEnd={onAnimationEnd} />
+            {state.isBookmarked ? <FilledBookmark /> : <EmptyBookmark />}
+            <Image className={checkClassName} src={CHECKMARK} onAnimationEnd={onAnimationEnd} alt="" width="10px" height="10px" />
+          </div>
+        </HiddenCheckbox>
       }
     />
   );
@@ -188,6 +187,7 @@ const BookmarkButton = ({ action, initialIsBookmarked, containerDetails }) => {
 BookmarkButton.propTypes = {
   action: PropTypes.func,
   initialIsBookmarked: PropTypes.bool,
+  projectName: PropTypes.string.isRequired,
 };
 
 BookmarkButton.defaultProps = {

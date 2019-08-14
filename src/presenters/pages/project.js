@@ -25,9 +25,9 @@ import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
-import { AnalyticsContext } from 'State/segment-analytics';
+import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { toggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
@@ -149,17 +149,24 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const bookmarkAction = () => toggleBookmark({
-    api,
-    project,
-    currentUser,
-    createNotification,
-    myStuffEnabled,
-    addProjectToCollection,
-    removeProjectFromCollection,
-    setHasBookmarked,
-    hasBookmarked,
-  });
+  const reloadCollectionProjects = useCollectionReload();
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
+  );
 
   return (
     <main id="main">
@@ -186,7 +193,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 </Heading>
                 {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
                   </div>
                 )}
               </div>
@@ -200,7 +207,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
                 {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
                   </div>
                 )}
               </div>
