@@ -168,11 +168,11 @@ const ProjectPage = ({ project: initialProject }) => {
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
   
-  const addProjectToCollectionFromProjectPage = ({ project, collection }) => {
-    if (collection.isMyStuff) {
+  const addProjectToCollectionFromProjectPage = (...args) => {
+    if (c.isMyStuff) {
       setHasBookmarked(true);
     }
-    return addProjectToCollection({ project, collection })
+    return addProjectToCollection(...args)
   }
 
   return (
@@ -246,7 +246,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionFromProjectPage} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
