@@ -27,21 +27,21 @@ function OnboardingBanner() {
       </div>
 
       <div className={styles.actions}>
-        <div>
+        <div className={styles.create}>
           <h2>Create your first project</h2>
           <Text>Jump into the editor by creating your very own app.</Text>
           <NewProjectPop buttonText="Create New Project" buttonType="cta" />
           <Link to="/create">Learn about creating on Glitch</Link>
         </div>
         
-        <div>
+        <div className={styles.explore}>
           <Text>
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
-          <CategoriesGrid />
+          <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
           
           <Text>
-            Find even more inspiration below with our <Link to="#featured-apps">featured apps</Link> <Emoji name="backhandIndex" />
+            Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
           </Text>
         </div>
       </div>
