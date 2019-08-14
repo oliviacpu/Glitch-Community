@@ -69,7 +69,7 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
   ]);
 
   const width = el.current ? el.current.offsetWidth : 0;
-  const baseClassName = cx({
+  const gridItemClassName = cx({
     categoriesGridItem: true,
     alwaysWrap,
     small: width <= 500,
@@ -77,10 +77,10 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
   });
 
   return (
-    <ul ref={el} className={styles.categoriesGrid} >
+    <ul ref={el} className={classNames(styles.categoriesGrid, className)}>
       {el.current && el.current.width}
       {categoriesToRender.map((category) => (
-        <li key={category.path} className={className} style={{ '--bg-color': category.color }}>
+        <li key={category.path} className={gridItemClassName} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
             <Image src={category.icon} alt="" />
             {category.name}
