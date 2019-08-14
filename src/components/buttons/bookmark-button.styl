@@ -12,23 +12,23 @@
     fill: none
     display: none
   }  
+  .flag, .check{
+    transition: all 0.15s
+  }
   &:focus{
     outline: none
   }
   &:hover{
-    .bookmarkFlag{
+    .flag{
       stroke: tertiary
     }
     .check{
       fill: tertiary
     }
   }
-}
+}  
 
-.bookmark{
-  color: black;
-}
-  
+
 
 @media (max-width: mediumSmallViewport) {
   .bookmarkButton {
