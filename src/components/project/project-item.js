@@ -13,7 +13,7 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
-import { toggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
@@ -49,6 +49,7 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
+  const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
@@ -71,6 +72,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         removeProjectFromCollection,
         setHasBookmarked,
         hasBookmarked,
+        reloadCollectionProjects,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
@@ -87,7 +89,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
-
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -114,7 +115,12 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                   {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
                     <div className={styles.bookmarkButtonContainer}>
-                      <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} containerDetails={{ isHoveringOnProjectItem }} />
+                      <BookmarkButton
+                        action={bookmarkAction}
+                        initialIsBookmarked={hasBookmarked}
+                        containerDetails={{ isHoveringOnProjectItem }}
+                        projectName={project.domain}
+                      />
                     </div>
                   )}
                   <div className={styles.projectOptionsContainer}>
