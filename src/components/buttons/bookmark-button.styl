@@ -11,12 +11,25 @@
   .highlight{
     fill: none
     display: none
-  }
-  
+  }  
   &:focus{
     outline: none
   }
-} 
+  &:hover{
+    .bookmarkFlag{
+      stroke: tertiary
+    }
+    .check{
+      fill: tertiary
+    }
+  }
+}
+
+.bookmark{
+  color: black;
+}
+  
+
 @media (max-width: mediumSmallViewport) {
   .bookmarkButton {
     transform: translateY(0px)
