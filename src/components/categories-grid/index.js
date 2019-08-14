@@ -61,7 +61,7 @@ const allCategories = [
   },
 ];
 
-function CategoriesGrid({ categories, alwaysWrap }) {
+function CategoriesGrid({ categories, alwaysWrap, className }) {
   const el = useRef(null);
 
   const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
@@ -69,7 +69,7 @@ function CategoriesGrid({ categories, alwaysWrap }) {
   ]);
 
   const width = el.current ? el.current.offsetWidth : 0;
-  const className = cx({
+  const baseClassName = cx({
     categoriesGridItem: true,
     alwaysWrap,
     small: width <= 500,
@@ -77,7 +77,7 @@ function CategoriesGrid({ categories, alwaysWrap }) {
   });
 
   return (
-    <ul ref={el} className={styles.categoriesGrid}>
+    <ul ref={el} className={styles.categoriesGrid} >
       {el.current && el.current.width}
       {categoriesToRender.map((category) => (
         <li key={category.path} className={className} style={{ '--bg-color': category.color }}>
