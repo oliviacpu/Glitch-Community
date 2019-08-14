@@ -30,7 +30,9 @@
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
     
-    <!-- <noscript><style>#fallback, #fallback-noscript { display: inline-block !important; } #fallback-img {display: block !important}</style></noscript> -->
+    <% if (!rendered) { %>
+    <noscript><style>#fallback, #fallback-noscript { display: inline-block !important } #fallback-img { display: block !important }</style></noscript>
+    <% } %>
   </head>
   <body>
     <script>
@@ -75,39 +77,40 @@
       </div>
     </div>
 
-    <div id="main"><%- rendered %></div>
+    <div id="react-root"><%- rendered %></div>
 
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>
     <% } %>
     <script>
+      var container = document.getElementById('react-root');
+      function showFallback(name) {
+        document.getElementById('fallback').removeAttribute('style');
+        document.getElementById('fallback-img').removeAttribute('style');
+        document.getElementById('fallback-' + name).removeAttribute('style');
+        container.style.display = 'none';
+      }
       var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
-      const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      var isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
       if (isIe) {
-        document.getElementById('fallback').removeAttribute('style');
-        document.getElementById('fallback-img').removeAttribute('style');
-        document.getElementById('fallback-ie').removeAttribute('style');
-        document.getElementById('main').style.display = 'none';
+        // ie doesn't support our css
+        showFallback('ie');
       } else if (isCodeRunningInsideGoogleTranslateIframe) {
-        document.getElementById('fallback').removeAttribute('style');
-        document.getElementById('fallback-img').removeAttribute('style');
-        document.getElementById('fallback-translate').removeAttribute('style');
-        document.getElementById('main').style.display = 'none';
-        setTimeout(function(){
-          window.location.href = "https://glitch.com";      
-        }, 3000);
+        // only translate server rendered pages
+        if (!container.hasChildNodes()) {
+          showFallback('translate');
+          setTimeout(function() {
+            window.location.href = "https://glitch.com";      
+          }, 3000);
+        }
       } else if (window.bootstrap) {
-        window.bootstrap();
+        window.bootstrap(container);
       } else if (!BUILD_COMPLETE) {
-        document.getElementById('fallback').removeAttribute('style');
-        document.getElementById('fallback-img').removeAttribute('style');
-        document.getElementById('fallback-notbuilt').removeAttribute('style');
-        document.getElementById('main').style.display = 'none';
+        // we can't show the server rendered page if the css is still building
+        showFallback('notbuilt');
       } else {
-        document.getElementById('fallback').removeAttribute('style');
-        document.getElementById('fallback-img').removeAttribute('style');
-        document.getElementById('fallback-noscript').removeAttribute('style');
-        document.getElementById('main').style.display = 'none';
+        // js failed to parse, odds are the css would be broken too
+        showFallback('noscript');
       }
       analytics.load("ZE6VsqXhz5izMM2cqRrVEDIrJWUKntoX");
     </script>

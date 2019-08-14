@@ -19,7 +19,7 @@ const UserMask = ({ users, config }) => (
           width: `${(100 * point.d) / config.width}%`,
         }}
       >
-        <div className={styles.userMaskBubble} style={getUserAvatarStyle(users[i])} />
+        <div className={styles.userMaskBubble} style={getUserAvatarStyle(users[i], 'small')} />
       </div>
     ))}
   </div>

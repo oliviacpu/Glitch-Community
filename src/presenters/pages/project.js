@@ -25,7 +25,7 @@ import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
-import { AnalyticsContext } from 'State/segment-analytics';
+import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { toggleBookmark } from 'State/collection';
 import { useProjectEditor, getProjectByDomain } from 'State/project';
@@ -148,17 +148,23 @@ const ProjectPage = ({ project: initialProject }) => {
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const bookmarkAction = () => toggleBookmark({
-    api,
-    project,
-    currentUser,
-    createNotification,
-    myStuffEnabled,
-    addProjectToCollection,
-    removeProjectFromCollection,
-    setHasBookmarked,
-    hasBookmarked,
-  });
+
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
+  );
 
   return (
     <main id="main">
@@ -202,7 +208,11 @@ const ProjectPage = ({ project: initialProject }) => {
                   </div>
                 )}
               </div>
-              {project.private && <PrivateBadge />}
+              {project.private && (
+                <div className={styles.privacyToggle}>
+                  <PrivateBadge />
+                </div>
+              )}
             </>
           )}
           {users.length + teams.length > 0 && (

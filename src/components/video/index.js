@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 import useWindowSize from 'Hooks/use-window-size';
 
-function Video({ sources, track, ...props }) {
+function Video({ sources, track, autoPlay, ...props }) {
   const [windowWidth] = useWindowSize();
   const visibleVideos = sources.filter((s) => windowWidth >= s.minWidth && (!s.maxWidth || windowWidth <= s.maxWidth));
 
   // disabling this rule here because the linter doesn't understand that the track is inside .map
   return (
-    <video muted={track === 'muted'} {...props}> {/* eslint-disable-line jsx-a11y/media-has-caption */}
+    <video muted={track === 'muted'} autoPlay={autoPlay} playsInline={autoPlay} {...props}> {/* eslint-disable-line jsx-a11y/media-has-caption */}
       {visibleVideos.map((video) => (
         <React.Fragment key={video.src}>
           {track !== 'muted' && <track kind="captions" src={track} srcLang="en" />}

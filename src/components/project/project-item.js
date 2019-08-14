@@ -19,6 +19,7 @@ import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
+import { useTrackedFunc } from 'State/segment-analytics';
 
 import ProjectOptionsPop from './project-options-pop';
 import styles from './project-item.styl';
@@ -58,19 +59,22 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  const bookmarkAction = () =>
-    toggleBookmark({
-      api,
-      project,
-      currentUser,
-      createNotification,
-      myStuffEnabled,
-      addProjectToCollection,
-      removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
-    });
-
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
+  );
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
   const onMouseEnter = () => {

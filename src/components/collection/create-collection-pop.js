@@ -1,9 +1,8 @@
 // create-collection-pop.jsx -> add a project to a new user or team collection
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase, orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import Select from 'react-select';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
@@ -20,17 +19,31 @@ import { getAllPages } from 'Shared/api';
 
 import styles from './create-collection-pop.styl';
 
-const Dropdown = ({ selection, options, onUpdate }) => (
-  <Select
-    autoWidth
-    value={selection}
-    options={options}
-    className={styles.userOrTeamToggle}
-    classNamePrefix="dropdown"
-    onChange={onUpdate}
-    isSearchable={false}
-  />
-);
+function Dropdown({ selection, options, onUpdate }) {
+  const [reactSelect, setReactSelect] = useState(null);
+  useEffect(() => {
+    if (reactSelect) return;
+    const loadReactSelect = async () => {
+      setReactSelect(await import(/* webpackChunkName: "react-select" */ 'react-select'));
+    };
+    loadReactSelect();
+  }, []);
+
+  if (!reactSelect) return <Loader />;
+
+  const Select = reactSelect.default;
+  return (
+    <Select
+      autoWidth
+      value={selection}
+      options={options}
+      className={styles.userOrTeamToggle}
+      classNamePrefix="dropdown"
+      onChange={onUpdate}
+      isSearchable={false}
+    />
+  );
+}
 
 // Format in { value: teamId, label: html elements } format for react-select
 const getUserOption = (currentUser) => ({
