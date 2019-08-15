@@ -86,18 +86,21 @@ module.exports = function(external) {
     const signedIn = !!req.cookies.hasLogin;
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
-    let rendered = null;
+    let ssr = { rendered: null };
     if (shouldRender) {
       try {
-        const { html } = await renderPage({
-          url: new URL(req.url, `${req.protocol}://${req.hostname}`),
-          cache,
-          signedIn,
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const { html, context } = await renderPage(url, {
+          API_CACHE: cache,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
+          SSR_SIGNED_IN: signedIn,
           ZINE_POSTS: zine || [],
         });
-        rendered = html;
+        ssr = {
+          rendered: html,
+          ...context,
+        };
       } catch (error) {
         console.error(`Failed to server render ${req.url}: ${error.toString()}`);
         captureException(error);
@@ -112,7 +115,6 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
-      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
       API_CACHE: JSON.stringify(cache),
@@ -123,6 +125,7 @@ module.exports = function(external) {
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,
+      ...ssr,
     });
   }
 

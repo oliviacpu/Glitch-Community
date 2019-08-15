@@ -33,7 +33,7 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
-const render = async ({ url, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
+const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = require('../src/server');
   resetState();
 
@@ -41,16 +41,17 @@ const render = async ({ url, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZIN
   const page = React.createElement(Page, {
     origin: url.origin,
     route: url.pathname + url.search + url.hash,
-    cache,
-    signedIn,
+    API_CACHE,
     ZINE_POSTS,
     HOME_CONTENT,
+    SSR_SIGNED_IN,
     EXTERNAL_ROUTES,
   });
 
   const html = ReactDOMServer.renderToString(page);
   const helmet = Helmet.renderStatic();
-  return { html, helmet };
+  const context = { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
+  return { html, helmet, context };
 };
 
 module.exports = render;
