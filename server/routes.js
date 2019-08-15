@@ -55,8 +55,6 @@ module.exports = function(external) {
   async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
 
-    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
-
     let scripts = [];
     let styles = [];
 
@@ -86,6 +84,7 @@ module.exports = function(external) {
     }
 
     const signedIn = !!req.cookies.hasLogin;
+    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
     let rendered = null;
     if (shouldRender) {
@@ -100,7 +99,7 @@ module.exports = function(external) {
         });
         rendered = html;
       } catch (error) {
-        console.error(error);
+        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
         captureException(error);
       }
     }
