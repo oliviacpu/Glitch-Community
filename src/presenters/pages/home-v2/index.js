@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Button as NewButton } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
-
+// import Button from 'Components/buttons/button';
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
@@ -19,8 +19,6 @@ import Link from 'Components/link';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
-import VisibilityContainer from 'Components/visibility-container';
-import LazyLoader from 'Components/lazy-loader';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
@@ -96,7 +94,6 @@ const AppsWeLove = ({ content }) => {
           </Link>
         ))}
       </div>
-
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
         <TabList className={styles.appsWeLoveList}>
           {content.map(({ id, domain, title, description, users }, i) => (
@@ -137,9 +134,9 @@ const CuratedCollections = ({ content }) => (
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <div className={styles.curatedCollectionButtonWrap}>
-            <NewButton as="span">
+            <Button as="span">
               View <Pluralize count={count} singular="Project" /> <Arrow />
-            </NewButton>
+            </Button>
           </div>
         </CuratedCollectionContainer>
       )}
@@ -168,9 +165,9 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         <div className={styles.unifiedStoriesContentWrap}>
           <h3 className={styles.h3}>{dek}</h3>
           <Markdown>{summary}</Markdown>
-          <NewButton as="a" href={href}>
+          <Button as="a" href={href}>
             {cta} <Arrow />
-          </NewButton>
+          </Button>
         </div>
       </div>
       <div className={styles.unifiedStoriesRelatedContent}>
@@ -193,45 +190,36 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 );
 
 const CultureZine = ({ content }) => (
-  <VisibilityContainer>
-    {({ wasEverVisible }) => (
-      <HomeSection id="culture-zine" className={styles.cultureZine}>
-        <div className={styles.cultureZineContainer}>
-          <h2 className={styles.h2}>
-            <Mark color="#CBC3FF">Where tech meets culture</Mark>
-          </h2>
-          <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
-
-          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
-            <>
-              <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
-                {({ content: cultureZineItems }) => (
-                  <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
-                    {({ title, primary_tag: source, feature_image: img, url }) => (
-                      <Link to={`/culture${url}`} className={styles.plainLink}>
-                        <div className={styles.cultureZineImageWrap}>
-                          <MaskImage src={img} />
-                        </div>
-                        <div className={styles.cultureZineText}>
-                          <h4 className={styles.h4}>{title}</h4>
-                          {source && <p>{source.name}</p>}
-                        </div>
-                      </Link>
-                    )}
-                  </Row>
-                )}
-              </Row>
-              <div className={styles.readMoreLink}>
-                <NewButton as="a" href="https://glitch.com/culture/">
-                  Read More on Culture <Arrow />
-                </NewButton>
-              </div>
-            </>
-          </LazyLoader>
-        </div>
-      </HomeSection>
-    )}
-  </VisibilityContainer>
+  <HomeSection id="culture-zine" className={styles.cultureZine}>
+    <div className={styles.cultureZineContainer}>
+      <h2 className={styles.h2}>
+        <Mark color="#CBC3FF">Where tech meets culture</Mark>
+      </h2>
+      <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+      <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
+        {({ content: cultureZineItems }) => (
+          <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
+            {({ title, primary_tag: source, feature_image: img, url }) => (
+              <Link to={`/culture${url}`} className={styles.plainLink}>
+                <div className={styles.cultureZineImageWrap}>
+                  <MaskImage src={img} />
+                </div>
+                <div className={styles.cultureZineText}>
+                  <h4 className={styles.h4}>{title}</h4>
+                  {source && <p>{source.name}</p>}
+                </div>
+              </Link>
+            )}
+          </Row>
+        )}
+      </Row>
+      <div className={styles.readMoreLink}>
+        <Button as="a" href="https://glitch.com/culture/">
+          Read More on Culture <Arrow />
+        </Button>
+      </div>
+    </div>
+  </HomeSection>
 );
 
 const buildingGraphics = [
@@ -252,9 +240,9 @@ const BuildingOnGlitch = ({ content }) => (
           </div>
           <h3>{title}</h3>
           <p>{description}</p>
-          <NewButton as="span">
+          <Button as="span">
             {cta} <Arrow />
-          </NewButton>
+          </Button>
         </Link>
       ))}
     </div>
@@ -264,9 +252,10 @@ const BuildingOnGlitch = ({ content }) => (
 const MadeInGlitch = () => (
   <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
-    <NewButton as="a" href={getEditorUrl('community')} emoji="carpStreamer">
+    <Button as="a" href={getEditorUrl('community')}>
       View Source
-    </NewButton>
+      <Icon icon="carpStreamer" />
+    </Button>
   </HomeSection>
 );
 
@@ -293,6 +282,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
 export const HomePreview = () => {
   const api = useAPI();
   const { origin, ZINE_POSTS } = useGlobals();
+  console.log('HomePreview', origin);
   const onPublish = async (data) => {
     try {
       await api.post(`${origin}/api/home`, data);
@@ -310,7 +300,7 @@ export const HomePreview = () => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <Link to="/index/edit">Community Home Editor.</Link>
+            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
           </>
         }
       >
