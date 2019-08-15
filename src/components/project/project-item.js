@@ -85,10 +85,10 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
   };
+  const onMyStuffPage = window.location.pathname.includes('my-stuff');
 
   const projectOptions = useProjectOptions(project, providedProjectOptions);
 
-  const onMyStuffPage = window.location.pathname.includes('my-stuff');
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
