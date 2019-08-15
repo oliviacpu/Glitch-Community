@@ -56,6 +56,5 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   return { html, helmet, context };
 };
 
-const cgetFromCacheache = createCache(dayjs.convert(1, 'hour', 'ms'), 'render');
-
-module.exports = (url, context) => ;
+const getFromCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
+module.exports = (url, context) => getFromCache(url, render, url, context);

@@ -1,4 +1,3 @@
-const { captureException } = require('@sentry/node');
 const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
@@ -88,23 +87,18 @@ module.exports = function(external) {
 
     let ssr = { rendered: null };
     if (shouldRender) {
-      try {
-        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
-        const { html, context } = await renderPage(url, {
-          API_CACHE: cache,
-          EXTERNAL_ROUTES: external,
-          HOME_CONTENT: homeContent,
-          SSR_SIGNED_IN: signedIn,
-          ZINE_POSTS: zine || [],
-        });
-        ssr = {
-          rendered: html,
-          ...context,
-        };
-      } catch (error) {
-        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
-        captureException(error);
-      }
+      const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+      const { html, context } = await renderPage(url, {
+        API_CACHE: cache,
+        EXTERNAL_ROUTES: external,
+        HOME_CONTENT: homeContent,
+        SSR_SIGNED_IN: signedIn,
+        ZINE_POSTS: zine || [],
+      });
+      ssr = {
+        rendered: html,
+        ...context,
+      };
     }
 
     res.render('index.ejs', {
