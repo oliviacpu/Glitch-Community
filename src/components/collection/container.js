@@ -59,6 +59,9 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
     avatar = <CollectionAvatar collection={collection} />;
   }
 
+  const toggleReorder = () => {
+  }
+
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
@@ -81,13 +84,16 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {!preview && (
             <div className={styles.projectCount}>
-              <Text>
+              <Text weight={600}>
                 <Pluralize count={collection.projects.length} singular="Project" />
               </Text>
             </div>
           )}
 
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
+
+          {isAuthorized && <Button onClick={turnOnReorder}>Reorder</Button> }
+
         </div>
       </header>
 
