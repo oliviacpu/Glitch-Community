@@ -11,7 +11,7 @@ import { getRemixUrl } from 'Models/project';
 import { useTracker } from 'State/segment-analytics';
 import { createAPIHook } from 'State/api';
 
-import styles from './new-project-pop.styl';
+import styles from './styles.styl';
 
 const importGitRepo = () => {
   /* eslint-disable no-alert */
