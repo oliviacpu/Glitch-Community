@@ -1,5 +1,6 @@
 import React from 'react';
 import { LiveAnnouncer } from 'react-aria-live';
+import { RootStyle, lightTheme } from '@fogcreek/shared-components';
 
 import { AnalyticsContext } from 'State/segment-analytics';
 import { CurrentUserProvider } from 'State/current-user';
@@ -25,6 +26,7 @@ const App = () => (
                 <ProjectContextProvider>
                   <CollectionContextProvider>
                     <>
+                      <RootStyle theme={lightTheme} />
                       <SuperUserBanner />
                       <OfflineNotice />
                       <Router />
