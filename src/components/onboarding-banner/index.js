@@ -23,7 +23,7 @@ function OnboardingBanner() {
     >
       <div className={styles.illustration}>
         <h1>
-          <Image alt="Welcome to Glitch" src="https://cdn.glitch.com/064b323a-e0b3-43bc-a6e8-79163b0b5d7a%2Fwelcome-to-glitch.svg?v=1565796609099" />
+          <Image alt="Welcome to Glitch" src="https://cdn.glitch.com/064b323a-e0b3-43bc-a6e8-79163b0b5d7a%2Fwelcome-to-glitch.svg" />
         </h1>
       </div>
 
