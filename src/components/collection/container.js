@@ -82,7 +82,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {!preview && (
             <div className={styles.projectCount}>
-              <Text weight={600}>
+              <Text weight={'600'}>
                 <Pluralize count={collection.projects.length} singular="Project" />
               </Text>
             </div>
@@ -91,7 +91,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
 
           {enableSorting && (
-            <div className={styles.sortingHint}>
+            <div className={classnames(styles.sortingHint, isDarkColor(collection.coverColor) && styles.dark)}>
               <Emoji name="new"/>
               <Text> You can reorder your projects</Text>
               <Text><Emoji name="mouse"/> Click and drag to reorder</Text>
@@ -111,7 +111,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         {!collectionHasProjects && isAuthorized && (
           <div className={styles.emptyCollectionHint}>
             <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
-            <Text>You can add any project, created by any user</Text>
+            <Text className={isDarkColor(collection.coverColor) && styles.dark}>You can add any project, created by any user</Text>
           </div>
         )}
         {!collectionHasProjects && !isAuthorized && <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>}
