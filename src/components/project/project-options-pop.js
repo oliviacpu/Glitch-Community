@@ -83,16 +83,11 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
 
   if (noProjectOptions) return null;
 
-  const toggleBeforeAction = (togglePopover) =>
-    mapValues(
-      projectOptions,
-      (action) =>
-        action &&
-        ((...args) => {
-          togglePopover();
-          action(...args);
-        }),
-    );
+  const toggleBeforeAction = (togglePopover, action) => action && ((...args) => {
+    togglePopover();
+    action(...args);
+  });
+  const toggleBeforeActions = (togglePopover) => mapValues(projectOptions, (action) => toggleBeforeAction(togglePopover, action));
 
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
@@ -115,10 +110,10 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
           {({ addToCollection, leaveProject }) => (
             <ProjectOptionsContent
               project={project}
-              projectOptions={toggleBeforeAction(togglePopover)}
+              projectOptions={toggleBeforeActions(togglePopover)}
               addToCollectionPopover={addToCollection}
               leaveProjectPopover={leaveProject}
-              leaveProjectDirect={projectOptions.leaveProject}
+              leaveProjectDirect={toggleBeforeAction(togglePopover, projectOptions.leaveProject)}
             />
           )}
         </MultiPopover>
