@@ -57,4 +57,4 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
 };
 
 const getFromCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
-module.exports = (url, context) => getFromCache(url, render, url, context);
+module.exports = (url, context) => getFromCache(`signed ${context.SSR_SIGNED_IN ? 'in' : 'out'} ${url}`, render, url, context);
