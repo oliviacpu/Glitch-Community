@@ -111,7 +111,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
             return (
               <>
                 {collection && (
-                  <div className={styles.projectsContainerNote}>
+                  <div className={styles.projectsContainerNote} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                     <Note
                       project={project}
                       collection={collection}
