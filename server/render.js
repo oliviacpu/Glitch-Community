@@ -52,7 +52,10 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
 
   const html = ReactDOMServer.renderToString(page);
   const helmet = Helmet.renderStatic();
-  const context = { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
+  const context = {
+    API_CACHE: JSON.stringify(API_CACHE),
+    EXTERNAL_ROUTES: JSON.stringify(EXTERNAL_ROUTES),
+    HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
   return { html, helmet, context };
 };
 

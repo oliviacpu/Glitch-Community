@@ -1,3 +1,4 @@
+const { captureException } = require('@sentry/node');
 const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
@@ -85,20 +86,25 @@ module.exports = function(external) {
     const signedIn = !!req.cookies.hasLogin;
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
-    let ssr = { rendered: null };
+    let ssr = {};
     if (shouldRender) {
-      const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
-      const { html, context } = await renderPage(url, {
-        API_CACHE: cache,
-        EXTERNAL_ROUTES: external,
-        HOME_CONTENT: homeContent,
-        SSR_SIGNED_IN: signedIn,
-        ZINE_POSTS: zine || [],
-      });
-      ssr = {
-        rendered: html,
-        ...context,
-      };
+      try {
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const { html, context } = await renderPage(url, {
+          API_CACHE: cache,
+          EXTERNAL_ROUTES: external,
+          HOME_CONTENT: homeContent,
+          SSR_SIGNED_IN: signedIn,
+          ZINE_POSTS: zine || [],
+        });
+        ssr = {
+          rendered: html,
+          ...context,
+        };
+      } catch (error) {
+        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
+        captureException(error);
+      }
     }
 
     res.render('index.ejs', {
