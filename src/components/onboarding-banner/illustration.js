@@ -1,8 +1,8 @@
 import React from 'react';
+import styles from './illustration.styl';
 
 const Illustration = () => (
-  <svg viewBox="0 0 332 263" xmlns="http://www.w3.org/2000/svg">
-    <title>Welcome to Glitch</title>
+  <svg viewBox="0 0 332 263">
     <defs>
       <path
         d="M4.233.876c-2.53.959-3.958 3.376-3.192 5.402C1.81 8.3 4.482 9.164 7.013 8.204c2.527-.959 3.956-3.377 3.19-5.4C9.646 1.34 8.095.483 6.324.483a5.91 5.91 0 0 0-2.092.392z"
@@ -11,7 +11,7 @@ const Illustration = () => (
     </defs>
     <g id="welcome" fill="none" fill-rule="evenodd">
       <g transform="translate(51.5 16.65)">
-        <g id="hand" transform="translate(0 2.35)">
+        <g className={styles.hand} id="hand" transform="translate(0 2.35)">
           <g id="arm" transform="translate(20.943 56.934)">
             <path
               d="M0 0c4.661 32.182 16.217 47.698 34.667 46.55l8.3-18.318v-.153c-13.086 1.26-24.764-5.048-24.742-26.951"
@@ -371,7 +371,6 @@ const Illustration = () => (
       <g id="Group-18" transform="translate(222.074 70.5)">
         <g id="Group-14" transform="translate(.867 .816)">
           <mask id="mask-2" fill="#fff">
-
           </mask>
         </g>
       </g>
