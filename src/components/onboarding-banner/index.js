@@ -7,6 +7,7 @@ import NewProjectPop from 'Components/new-project-pop';
 import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
+import useWindowSize from 'Hooks/use-window-size';
 
 import styles from './styles.styl';
 
@@ -15,10 +16,12 @@ function OnboardingBanner() {
   const exploreEl = useRef();
   
   const [categoriesWidth, setCategoriesWidth] = useState(0)
+  const [windowWidth] = useWindowSize();
   useEffect(() => {
     const width = exploreEl.current ? exploreEl.current.offsetWidth : 0;
+    console.log(width)
     setCategoriesWidth(width);
-  }, exploreEl);
+  }, [windowWidth]);
 
   return (
     <div
@@ -47,11 +50,11 @@ function OnboardingBanner() {
         </div>
 
         <div className={styles.explore} ref={exploreEl}>
-          <Text size="15px">
+          <Text defaultMargin size="15px">
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
           <CategoriesGrid
-            wrapItems={categoriesWidth > 550}
+            wrapItems={categoriesWidth > 540}
             className={styles.categoriesGrid}
             categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
           />

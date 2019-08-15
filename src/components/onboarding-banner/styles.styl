@@ -16,6 +16,12 @@
     animation: wave cubic-bezier(0.24, 0.45, 1, 1) 2s infinite forwards;
     transform-origin: 51px 121px;
 
+.banner,
+.actions
+  flex-direction: column
+  @media (min-width: mediumViewport)
+    flex-direction: row
+  
 .actions
   display: inline-flex
   flex: 1
@@ -25,13 +31,15 @@
   border-radius: u1
   
 .create
-  width: 235px
-  margin-right: 24px
+  width: 100%
   padding: u2
   border-radius: u1
   background: #cbe9ff
   h2
     font-size: 15px
+  @media (min-width: mediumViewport)
+    width: 235px
+    margin: 0 24px 0 0
     
 .explore
   flex: 1
