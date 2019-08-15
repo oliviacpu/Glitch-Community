@@ -94,6 +94,8 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
             <div className={styles.sortingHint}>
               <Emoji name="new"/>
               <Text> You can reorder your projects</Text>
+              <Text><Emoji name="mouse"/> Click and drag to reorder</Text>
+              <Text><Emoji name="keyboard"/> Focus on a project and press space to select.  Move it with the arrow keys, and press space again to save.</Text>
             </div>
           )}
 
@@ -139,11 +141,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
             }}
             projectOptions={{ ...funcs, collection }}
           />
-        )}
-        {enableSorting && (
-          <Text defaultMargin>
-            Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.
-          </Text>
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>
