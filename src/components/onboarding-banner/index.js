@@ -9,6 +9,7 @@ import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import useWindowSize from 'Hooks/use-window-size';
 
+import Illustration from './illustration';
 import styles from './styles.styl';
 
 function OnboardingBanner() {
@@ -19,7 +20,6 @@ function OnboardingBanner() {
   const [windowWidth] = useWindowSize();
   useEffect(() => {
     const width = exploreEl.current ? exploreEl.current.offsetWidth : 0;
-    console.log(width)
     setCategoriesWidth(width);
   }, [windowWidth]);
 
@@ -33,7 +33,7 @@ function OnboardingBanner() {
     >
       <div className={styles.illustration}>
         <h1>
-          <Image alt="Welcome to Glitch" src="https://cdn.glitch.com/064b323a-e0b3-43bc-a6e8-79163b0b5d7a%2Fwelcome-to-glitch.svg" />
+          <Illustration />
         </h1>
       </div>
 
