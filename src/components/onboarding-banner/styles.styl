@@ -2,11 +2,13 @@
 
 .banner
   display: flex
+  flex-direction: column
   align-items: center
-  margin: u2 0
+  margin: u2 0 u3 0
   padding: u2
   border-radius: u1
-  @media (min-width: mediumViewport)
+  @media (min-width: mediumSmallViewport)
+    flex-direction: row
     padding: u3 24px u3 u1  
 
 .illustration
@@ -17,21 +19,18 @@
   #hand
     animation: wave cubic-bezier(0.24, 0.45, 1, 1) 2s infinite forwards;
     transform-origin: 51px 121px;
-
-.banner,
-.actions
-  flex-direction: column
-  @media (min-width: mediumViewport)
-    flex-direction: row
   
 .actions
   display: inline-flex
+  flex-direction: column
   flex: 1
   align-items: center
   background: rgba(255, 255, 255, .875);
   border-radius: u1
+  padding: u2
   @media (min-width: mediumViewport)
-  padding: u3 24px u3 u3
+    flex-direction: row
+    padding: u3 24px u3 u3
   
 .create
   width: 100%
@@ -40,7 +39,7 @@
   background: #cbe9ff
   h2
     font-size: 15px
-  @media (min-width: mediumViewport)
+  @media (min-width: mediumSmallViewport)
     width: 235px
     margin: 0 24px 0 0
     
