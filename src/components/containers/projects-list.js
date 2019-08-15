@@ -24,22 +24,7 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
   const Container = containers[layout];
   return (
     <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
-      {(project) => (
-        <>
-          {collection && (
-            <div className={styles.projectsContainerNote}>
-              <Note
-                project={project}
-                collection={collection}
-                isAuthorized={noteOptions.isAuthorized}
-                hideNote={noteOptions.hideNote}
-                updateNote={noteOptions.updateNote}
-              />
-            </div>
-          )}
-          <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />
-        </>
-      )}
+      {(project) => <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />}
     </Container>
   );
 };

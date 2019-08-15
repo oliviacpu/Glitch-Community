@@ -108,6 +108,18 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
             );
 
             return (
+              <>
+              {collection && (
+                <div className={styles.projectsContainerNote}>
+                  <Note
+                    project={project}
+                    collection={collection}
+                    isAuthorized={noteOptions.isAuthorized}
+                    hideNote={noteOptions.hideNote}
+                    updateNote={noteOptions.updateNote}
+                  />
+                </div>
+              )}
               <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 <header className={styles.header}>
                   <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
@@ -150,6 +162,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
                   </div>
                 </ProjectLink>
               </div>
+            </>
             );
           }}
         </AnimationContainer>
