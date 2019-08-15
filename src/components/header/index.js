@@ -6,10 +6,10 @@ import SearchForm from 'Components/search-form';
 import Button from 'Components/buttons/button';
 import SignInPop from 'Components/sign-in-pop';
 import UserOptionsPop from 'Components/user-options-pop';
+import NewProjectPop from 'Components/new-project-pop';
 import Link, { TrackedExternalLink } from 'Components/link';
 import { useCurrentUser } from 'State/current-user';
 import { useGlobals } from 'State/globals';
-import NewProjectPop from './new-project-pop';
 import Logo from './logo';
 import styles from './header.styl';
 

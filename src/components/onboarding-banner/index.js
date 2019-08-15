@@ -3,7 +3,7 @@ import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
-import NewProjectPop from 'Components/header/new-project-pop';
+import NewProjectPop from 'Components/new-project-pop';
 import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
@@ -31,7 +31,7 @@ function OnboardingBanner() {
         <div className={styles.create}>
           <h2>Create your first project</h2>
           <Text size="15px" defaultMargin>Jump into the editor by creating your very own app.</Text>
-          <NewProjectPop buttonText="Create New Project" buttonType="cta" />
+          <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" />
           <Text size="15px" defaultMargin>
             <Link to="/create">Learn about creating on Glitch</Link>
           </Text>
