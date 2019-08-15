@@ -5,7 +5,6 @@ import Heading from 'Components/text/heading';
 import PaginationController from 'Components/pagination-controller';
 import FilterController from 'Components/filter-controller';
 import ProjectItem from 'Components/project/project-item';
-import Note from 'Components/collection/note';
 import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
 import classNames from 'classnames/bind';
@@ -24,7 +23,9 @@ const ProjectsUL = ({ collection, projects, sortable, onReorder, noteOptions, la
   const Container = containers[layout];
   return (
     <Container itemClassName={styles.projectsItem} items={projects} sortable={sortable} onReorder={onReorder}>
-      {(project) => <ProjectItem key={project.id} project={project} projectOptions={projectOptions} />}
+      {(project) => (
+        <ProjectItem key={project.id} project={project} projectOptions={projectOptions} collection={collection} noteOptions={noteOptions} />
+      )}
     </Container>
   );
 };

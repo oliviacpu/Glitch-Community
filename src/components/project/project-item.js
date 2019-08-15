@@ -11,6 +11,7 @@ import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
+import Note from 'Components/collection/note';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { toggleBookmark, useCollectionReload } from 'State/collection';
@@ -46,7 +47,7 @@ const ProfileListLoader = ({ project }) => (
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
-const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+const ProjectItem = ({ project, projectOptions: providedProjectOptions, collection, noteOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
   const reloadCollectionProjects = useCollectionReload();
@@ -109,60 +110,60 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
 
             return (
               <>
-              {collection && (
-                <div className={styles.projectsContainerNote}>
-                  <Note
-                    project={project}
-                    collection={collection}
-                    isAuthorized={noteOptions.isAuthorized}
-                    hideNote={noteOptions.hideNote}
-                    updateNote={noteOptions.updateNote}
-                  />
-                </div>
-              )}
-              <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <header className={styles.header}>
-                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
-                    <ProfileListLoader project={project} />
+                {collection && (
+                  <div className={styles.projectsContainerNote}>
+                    <Note
+                      project={project}
+                      collection={collection}
+                      isAuthorized={noteOptions.isAuthorized}
+                      hideNote={noteOptions.hideNote}
+                      updateNote={noteOptions.updateNote}
+                    />
                   </div>
-                  {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
-                    <div className={styles.bookmarkButtonContainer}>
-                      <BookmarkButton
-                        action={bookmarkAction}
-                        initialIsBookmarked={hasBookmarked}
-                        containerDetails={{ isHoveringOnProjectItem }}
-                        projectName={project.domain}
-                      />
+                )}
+                <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                  <header className={styles.header}>
+                    <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
+                      <ProfileListLoader project={project} />
                     </div>
-                  )}
-                  <div className={styles.projectOptionsContainer}>
-                    <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
-                  </div>
-                </header>
-                <ProjectLink className={getLinkBodyStyles(project)} project={project}>
-                  <div className={styles.projectHeader}>
-                    <div className={styles.avatarWrap}>
-                      <ProfileAvatar project={project} />
+                    {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
+                      <div className={styles.bookmarkButtonContainer}>
+                        <BookmarkButton
+                          action={bookmarkAction}
+                          initialIsBookmarked={hasBookmarked}
+                          containerDetails={{ isHoveringOnProjectItem }}
+                          projectName={project.domain}
+                        />
+                      </div>
+                    )}
+                    <div className={styles.projectOptionsContainer}>
+                      <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                     </div>
-                    <div className={styles.nameWrap}>
-                      <div className={styles.itemButtonWrap}>
-                        <Button
-                          decorative
-                          disabled={!!project.suspendedReason}
-                          image={project.private ? <PrivateIcon inButton isPrivate /> : null}
-                          imagePosition="left"
-                        >
-                          <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
-                        </Button>
+                  </header>
+                  <ProjectLink className={getLinkBodyStyles(project)} project={project}>
+                    <div className={styles.projectHeader}>
+                      <div className={styles.avatarWrap}>
+                        <ProfileAvatar project={project} />
+                      </div>
+                      <div className={styles.nameWrap}>
+                        <div className={styles.itemButtonWrap}>
+                          <Button
+                            decorative
+                            disabled={!!project.suspendedReason}
+                            image={project.private ? <PrivateIcon inButton isPrivate /> : null}
+                            imagePosition="left"
+                          >
+                            <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className={styles.description}>
-                    <Markdown length={80}>{project.suspendedReason ? 'suspended project' : project.description || ' '}</Markdown>
-                  </div>
-                </ProjectLink>
-              </div>
-            </>
+                    <div className={styles.description}>
+                      <Markdown length={80}>{project.suspendedReason ? 'suspended project' : project.description || ' '}</Markdown>
+                    </div>
+                  </ProjectLink>
+                </div>
+              </>
             );
           }}
         </AnimationContainer>
@@ -181,10 +182,12 @@ ProjectItem.propTypes = {
     teams: PropTypes.array,
   }).isRequired,
   projectOptions: PropTypes.object,
+  collection: PropTypes.object,
 };
 
 ProjectItem.defaultProps = {
   projectOptions: {},
+  collection: null,
 };
 
 export default ProjectItem;
