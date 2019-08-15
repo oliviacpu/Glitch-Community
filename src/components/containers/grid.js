@@ -34,13 +34,14 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
       event.preventDefault();
       console.log('drag start');
       console.log(event.target);
-      event.target.closest('li').classList.add('sorting');
+      let dragStyles = `transform: rotate(2deg); box-shadow: 0px 7px 6px -7px rgba(0,0,0,0.27)`;
+      event.target.closest('li').setAttribute('style', dragStyles);
     }
     const onSortStart = () => setSortingItems(items);
     const onSortOver = ({ oldIndex, newIndex, isKeySorting }) => {
       if (isKeySorting) onReorder(items[oldIndex], newIndex);
     };
-    const onSortEnd = ({ oldIndex, newIndex }) => {
+    const onSortEnd = ({ oldIndex, newIndex }, event) => {
       onReorder(sortingItems[oldIndex], newIndex);
       setSortingItems(null);
     };
