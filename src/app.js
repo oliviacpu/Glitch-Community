@@ -4,6 +4,7 @@ import { LiveAnnouncer } from 'react-aria-live';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { CurrentUserProvider } from 'State/current-user';
 import { APIContextProvider } from 'State/api';
+import { APICacheProvider } from 'State/api-cache';
 import { LocalStorageProvider } from 'State/local-storage';
 import { ProjectContextProvider } from 'State/project';
 import { CollectionContextProvider } from 'State/collection';
@@ -14,7 +15,7 @@ import ErrorBoundary from 'Components/error-boundary';
 
 import Router from './presenters/pages/router';
 
-const App = () => (
+const App = ({ apiCache }) => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <LiveAnnouncer>
       <NotificationsProvider>
@@ -22,15 +23,17 @@ const App = () => (
           <AnalyticsContext context={{ groupId: '0' }}>
             <CurrentUserProvider>
               <APIContextProvider>
-                <ProjectContextProvider>
-                  <CollectionContextProvider>
-                    <>
-                      <SuperUserBanner />
-                      <OfflineNotice />
-                      <Router />
-                    </>
-                  </CollectionContextProvider>
-                </ProjectContextProvider>
+                <APICacheProvider initial={apiCache}>
+                  <ProjectContextProvider>
+                    <CollectionContextProvider>
+                      <>
+                        <SuperUserBanner />
+                        <OfflineNotice />
+                        <Router />
+                      </>
+                    </CollectionContextProvider>
+                  </ProjectContextProvider>
+                </APICacheProvider>
               </APIContextProvider>
             </CurrentUserProvider>
           </AnalyticsContext>
