@@ -52,7 +52,7 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, shouldRender = false) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
 
     const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
@@ -92,6 +92,7 @@ module.exports = function(external) {
       try {
         const { html } = await renderPage({
           url: new URL(req.url, `${req.protocol}://${req.hostname}`),
+          cache,
           signedIn,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
@@ -115,6 +116,7 @@ module.exports = function(external) {
       rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
+      API_CACHE: JSON.stringify(cache),
       EXTERNAL_ROUTES: JSON.stringify(external),
       ZINE_POSTS: JSON.stringify(zine || []),
       HOME_CONTENT: JSON.stringify(homeContent),
@@ -145,8 +147,9 @@ module.exports = function(external) {
     const { domain } = req.params;
     const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
+    
     if (!project) {
-      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, true);
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
@@ -167,7 +170,8 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar });
+    const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
   });
 
   app.get('/@:name', async (req, res) => {
