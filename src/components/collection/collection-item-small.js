@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import classnames from 'classnames';
+import { Icon } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
@@ -10,7 +11,6 @@ import { CollectionAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
-import { PrivateIcon } from 'Components/private-badge';
 import { isDarkColor } from 'Utils/color';
 import { useCollectionCurator } from 'State/collection';
 
@@ -50,7 +50,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
           </div>
           <div className={styles.collectionNameWrap}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative image={collection.private ? <PrivateIcon inButton isPrivate /> : null} imagePosition="left">
+              <Button decorative image={collection.private ? <Icon icon="private" /> : null} imagePosition="left">
                 <div className={styles.collectionName}>{collection.name}</div>
               </Button>
             </div>

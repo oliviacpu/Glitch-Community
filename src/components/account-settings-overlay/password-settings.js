@@ -36,7 +36,7 @@ const ResetPassword = () => {
   return (
     <>
       <Heading tagName="h2">Reset Password</Heading>
-      <Button variant="secondary" size="small" disabled={status.working} onClick={resetPassword}>Send Reset Password Email</Button>
+      <Button variant="secondary" size="tiny" disabled={status.working} onClick={resetPassword}>Send Reset Password Email</Button>
       {status.done && <Notification type="success" persistent>Sent a reset code to {primaryEmail.email}</Notification>}
       {status.error && <Notification type="error" persistent>Something went wrong, check your inbox?</Notification>}
     </>
@@ -88,7 +88,7 @@ const PasswordSettings = () => {
 
         <NewPasswordInput key={passwordVersion} disabled={status.working} onChange={andClearState(setNewPassword)} />
 
-        <Button variant="secondary" size="small" disabled={!canSubmit} submit>
+        <Button variant="secondary" size="tiny" disabled={!canSubmit} submit>
           Set Password
         </Button>
 

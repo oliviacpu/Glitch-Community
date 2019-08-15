@@ -1,7 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
+
 import Image from 'Components/images/image';
-import Emoji from 'Components/images/emoji';
 import Link from 'Components/link';
 import styles from './footer.styl';
 
@@ -21,33 +23,36 @@ const PlatformsIcon = () => (
   />
 );
 
-const Footer = () => (
-  <footer className={styles.container} role="contentinfo">
-    <FooterLink href="/about" track="about">
-      About Glitch
-      <Emoji name="crystalBall" />
-    </FooterLink>
-    <FooterLink href="/culture" track="blog">
-      Blog
-      <Emoji name="newspaper" />
-    </FooterLink>
-    <FooterLink href="/help/" track="faq">
-      Help Center
-      <Emoji name="umbrella" />
-    </FooterLink>
-    <FooterLink href="http://status.glitch.com/" track="system status">
-      System Status
-      <Emoji name="horizontalTrafficLight" />
-    </FooterLink>
-    <FooterLink href="/legal" track="legal stuff">
-      Legal Stuff
-      <Emoji name="scales" />
-    </FooterLink>
-    <FooterLink className={styles.teams} href="/teams" track="platforms">
-      <PlatformsIcon />
-      Glitch Teams
-    </FooterLink>
-  </footer>
-);
+function Footer() {
+  const StyledIcon = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
+  return (
+    <footer className={styles.container} role="contentinfo">
+      <FooterLink href="/about" track="about">
+        About Glitch
+        <StyledIcon icon="crystalBall" />
+      </FooterLink>
+      <FooterLink href="/culture" track="blog">
+        Blog
+        <StyledIcon icon="newspaper" />
+      </FooterLink>
+      <FooterLink href="/help/" track="faq">
+        Help Center
+        <StyledIcon icon="umbrella" />
+      </FooterLink>
+      <FooterLink href="http://status.glitch.com/" track="system status">
+        System Status
+        <StyledIcon icon="horizontalTrafficLight" />
+      </FooterLink>
+      <FooterLink href="/legal" track="legal stuff">
+        Legal Stuff
+        <StyledIcon icon="scales" />
+      </FooterLink>
+      <FooterLink className={styles.teams} href="/teams" track="platforms">
+        <PlatformsIcon />
+        Glitch Teams
+      </FooterLink>
+    </footer>
+  );
+}
 
 export default Footer;

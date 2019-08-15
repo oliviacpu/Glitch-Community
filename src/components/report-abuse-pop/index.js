@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
 import axios from 'axios';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';
@@ -46,13 +47,15 @@ function useDebouncedState(initialState, timeout) {
   return [state, setDebounced];
 }
 
+const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub; margin-left: 5px`;
+
 const Success = () => (
   <>
     <PopoverTitle>Report Abuse</PopoverTitle>
     <PopoverActions>
       <Notification persistent type="success">Report Sent</Notification>
       <InfoDescription>
-        Thanks for helping to keep Glitch a safe, friendly community <Emoji name="park" />
+        Thanks for helping to keep Glitch a safe, friendly community <StyledIcon icon="park" />
       </InfoDescription>
     </PopoverActions>
   </>
@@ -61,7 +64,7 @@ const Success = () => (
 const Failure = ({ value }) => (
   <>
     <PopoverTitle>
-      Failed to Send <Emoji name="sick" />
+      Failed to Send <StyledIcon icon="sick" />
     </PopoverTitle>
     <PopoverInfo>
       <InfoDescription>

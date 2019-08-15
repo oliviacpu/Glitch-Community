@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import Emoji from 'Components/images/emoji';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
+
 import Link from 'Components/link';
 import styles from './button.styl';
 
@@ -184,8 +186,10 @@ ButtonImage.defaultProps = {
   up1: false,
 };
 
+const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
+
 const ButtonEmoji = ({ emoji, ...props }) => (
-  <ButtonImage image={<Emoji name={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
+  <ButtonImage image={<StyledIcon icon={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
 );
 
 ButtonEmoji.propTypes = {

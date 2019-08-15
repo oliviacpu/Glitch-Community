@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { partition, uniqBy } from 'lodash';
+import { Icon } from '@fogcreek/shared-components';
+import styled from 'styled-components';
 
 import { getAllPages } from 'Shared/api';
 import { PopoverWithButton, PopoverDialog, PopoverSearch, PopoverInfo, InfoDescription } from 'Components/popover';
-import Emoji from 'Components/images/emoji';
 import ProjectResultItem from 'Components/project/project-result-item';
 import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useTrackedFunc } from 'State/segment-analytics';
@@ -82,6 +83,8 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     [parsedQuery, initialProjects, topResults, retrievedProjects],
   );
 
+  const StyledIcon = styled(Icon)`height: 1.3em; width:1.3em;`;
+
   return (
     <PopoverDialog wide align="left">
       <PopoverSearch
@@ -99,7 +102,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
-            {parsedQuery} is already in this collection <Emoji name="sparkles" />
+            {parsedQuery} is already in this collection <StyledIcon icon="sparkles" />
           </InfoDescription>
         </PopoverInfo>
       )}

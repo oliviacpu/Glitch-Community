@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
+import styled from 'styled-components';
+import { AnimationContainer, slideDown, Icon } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
 import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
-import Emoji from 'Components/images/emoji';
 import { ProfileItem } from 'Components/profile-list';
 import Loader from 'Components/loader/';
 import { CollectionLink } from 'Components/link';
 import Row from 'Components/containers/row';
 import ProjectItemSmall from 'Components/project/project-item-small';
-import AnimationContainer from 'Components/animation-container';
 import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import VisibilityContainer from 'Components/visibility-container';
 import Arrow from 'Components/arrow';
@@ -61,10 +61,11 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   }
 
   if (projects.length === 0 && isAuthorized) {
+    const StyledIcon = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text className={styles.emptyCollectionText}>
-          This collection is empty – add some projects <Emoji name="index" />
+          This collection is empty – add some projects <StyledIcon icon="index" />
         </Text>
       </div>
     );
@@ -156,7 +157,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator, showLoader }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
+  <AnimationContainer tanimation={slideDown} onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (

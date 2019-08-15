@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { kebabCase, debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
 import { MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import { getPredicates, getTeamPair } from 'Models/words';
 import { getTeamLink } from 'Models/team';
 import { useAPI } from 'State/api';
@@ -117,11 +118,12 @@ const CreateTeamPop = withRouter(({ history }) => {
   };
 
   const placeholder = 'Your Team Name';
+  const StyledIcon = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px;`;
 
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
       <MultiPopoverTitle>
-        Create Team <Emoji name="herb" inTitle />
+        Create Team <StyledIcon icon="herb" inTitle />
       </MultiPopoverTitle>
 
       <PopoverInfo>

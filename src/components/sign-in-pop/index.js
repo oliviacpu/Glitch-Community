@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Button from 'Components/buttons/button';
 import SignInButton from 'Components/buttons/sign-in-button';
-import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
 import Notification from 'Components/notification';
@@ -20,6 +21,8 @@ import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
+
+const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">

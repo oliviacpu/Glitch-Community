@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import Emoji from 'Components/images/emoji';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import styles from './password-strength.styl';
 
 const PasswordStrength = ({ strength }) => {
+  const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
   const labels = {
-    0: <><Emoji name="faceExpressionless" /> weak</>,
-    1: <><Emoji name="faceSlightlySmiling" /> okay</>,
-    2: <><Emoji name="faceSlightlySmiling" /> okay</>,
-    3: <><Emoji name="bicep" /> strong</>,
+    0: <><StyledIcon icon="faceExpressionless" /> weak</>,
+    1: <><StyledIcon icon="faceSlightlySmiling" /> okay</>,
+    2: <><StyledIcon icon="faceSlightlySmiling" /> okay</>,
+    3: <><StyledIcon icon="bicep" /> strong</>,
   };
   return (
     <div className={styles.container}>

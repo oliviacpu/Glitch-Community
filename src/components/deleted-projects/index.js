@@ -4,12 +4,12 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { AnimationContainer, slideUp } from '@fogcreek/shared-components';
 
 import { getAllPages } from 'Shared/api';
 import Loader from 'Components/loader';
 import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
-import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { getProjectAvatarUrl } from 'Models/project';
@@ -40,7 +40,7 @@ const DeletedProject = ({ project, onClick }) => {
     );
   }
   return (
-    <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
+    <AnimationContainer animation={slideUp} onAnimationEnd={onClick}>
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
           <img className={styles.avatar} src={getProjectAvatarUrl(project)} alt="" />

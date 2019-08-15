@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
 import PaginationController from 'Components/pagination-controller';
@@ -10,7 +12,6 @@ import Grid from 'Components/containers/grid';
 import Row from 'Components/containers/row';
 import classNames from 'classnames/bind';
 import SkipSectionButtons from 'Components/containers/skip-section-buttons';
-import Emoji from 'Components/images/emoji';
 
 import styles from './projects-list.styl';
 
@@ -63,12 +64,13 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
   const makeTitle = () => {
+    const StyledIcon = styled(Icon)`width: 1.1em; height: 1.1em; vertical-align: sub; margin-left: 5px;`;
     if (!titleEmoji) {
       return title;
     }
     return (
       <>
-        {title} <Emoji inTitle name={titleEmoji} />
+        {title} <StyledIcon icon={titleEmoji} />
       </>
     );
   };
