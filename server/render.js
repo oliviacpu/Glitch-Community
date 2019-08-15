@@ -1,4 +1,6 @@
 const path = require('path');
+const dayjs = require('dayjs');
+const createCache = require('./cache');
 const src = path.join(__dirname, '../src/');
 
 // apply transformations to the client code so it can run in node
@@ -54,4 +56,6 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   return { html, helmet, context };
 };
 
-module.exports = render;
+const cgetFromCacheache = createCache(dayjs.convert(1, 'hour', 'ms'), 'render');
+
+module.exports = (url, context) => ;
