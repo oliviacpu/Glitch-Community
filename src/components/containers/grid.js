@@ -30,19 +30,27 @@ const SortableGridItem = SortableElement(GridItem);
 const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props }) => {
   const [sortingItems, setSortingItems] = React.useState(null);
   if (sortable) {
-    const onDragStart = (event) => { 
+    const onDragStart = (event) => {
       event.preventDefault();
-    }
+    };
     const onSortStart = () => setSortingItems(items);
     const onSortOver = ({ oldIndex, newIndex, isKeySorting }) => {
       if (isKeySorting) onReorder(items[oldIndex], newIndex);
     };
-    const onSortEnd = ({ oldIndex, newIndex }, event) => {
+    const onSortEnd = ({ oldIndex, newIndex }) => {
       onReorder(sortingItems[oldIndex], newIndex);
       setSortingItems(null);
     };
     return (
-      <SortableGridContainer {...props} axis="xy" distance={15} onSortStart={onSortStart} onSortOver={onSortOver} onSortEnd={onSortEnd} helperClass={styles.dragStyle}> 
+      <SortableGridContainer
+        {...props}
+        axis="xy"
+        distance={15}
+        onSortStart={onSortStart}
+        onSortOver={onSortOver}
+        onSortEnd={onSortEnd}
+        helperClass={styles.dragStyle}
+      >
         {(sortingItems || items).map((item, index) => (
           <SortableGridItem key={item.id} className={itemClassName} index={index} tabIndex={0} onDragStart={onDragStart}>
             {children(item)}
@@ -53,7 +61,11 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
   }
   return (
     <GridContainer {...props}>
-      {items.map((item) => <GridItem key={item.id} className={itemClassName}>{children(item)}</GridItem>)}
+      {items.map((item) => (
+        <GridItem key={item.id} className={itemClassName}>
+          {children(item)}
+        </GridItem>
+      ))}
     </GridContainer>
   );
 };
