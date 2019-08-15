@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { orderBy, partition } from 'lodash';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
-import Emoji from 'Components/images/emoji';
 import FeaturedProject from 'Components/project/featured-project';
 import Thanks from 'Components/thanks';
 import UserNameInput from 'Components/fields/user-name-input';
@@ -96,6 +97,7 @@ const UserPage = ({ user: initialUser }) => {
   const sortedProjects = orderBy(user.projects, (project) => project.updatedAt, ['desc']);
   const [pinnedProjects, recentProjects] = partition(sortedProjects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
+  const Emoji = styled(Icon)`height: 20px; width: 20px; vertical-align: sub; margin-left: 5px;`;
 
   return (
     <main id="main" className={styles.container}>
@@ -180,7 +182,7 @@ const UserPage = ({ user: initialUser }) => {
         <article data-cy="deleted-projects">
           <Heading tagName="h2">
             Deleted Projects
-            <Emoji inTitle name="bomb" />
+            <Emoji icon="bomb" />
           </Heading>
           <DeletedProjects
             setDeletedProjects={setDeletedProjects}

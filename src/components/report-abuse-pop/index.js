@@ -47,7 +47,7 @@ function useDebouncedState(initialState, timeout) {
   return [state, setDebounced];
 }
 
-const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub; margin-left: 5px`;
+const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub; margin-left: 5px`;
 
 const Success = () => (
   <>
@@ -55,7 +55,7 @@ const Success = () => (
     <PopoverActions>
       <Notification persistent type="success">Report Sent</Notification>
       <InfoDescription>
-        Thanks for helping to keep Glitch a safe, friendly community <StyledIcon icon="park" />
+        Thanks for helping to keep Glitch a safe, friendly community <Emoji icon="park" />
       </InfoDescription>
     </PopoverActions>
   </>
@@ -64,7 +64,7 @@ const Success = () => (
 const Failure = ({ value }) => (
   <>
     <PopoverTitle>
-      Failed to Send <StyledIcon icon="sick" />
+      Failed to Send <Emoji icon="sick" />
     </PopoverTitle>
     <PopoverInfo>
       <InfoDescription>

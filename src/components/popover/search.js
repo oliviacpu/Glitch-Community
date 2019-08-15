@@ -67,12 +67,12 @@ const PopoverLoader = () => (
   </PopoverActions>
 );
 
-const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
+const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
 const NothingFound = () => (
   <PopoverActions>
     <InfoDescription>
-      Nothing found <StyledIcon icon="sparkles" />
+      Nothing found <Emoji icon="sparkles" />
     </InfoDescription>
   </PopoverActions>
 );

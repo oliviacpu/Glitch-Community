@@ -61,11 +61,11 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   }
 
   if (projects.length === 0 && isAuthorized) {
-    const StyledIcon = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
+    const Emoji = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text className={styles.emptyCollectionText}>
-          This collection is empty – add some projects <StyledIcon icon="index" />
+          This collection is empty – add some projects <Emoji icon="index" />
         </Text>
       </div>
     );
@@ -157,7 +157,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator, showLoader }) => (
-  <AnimationContainer tanimation={slideDown} onAnimationEnd={deleteCollection}>
+  <AnimationContainer animation={slideDown} onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (

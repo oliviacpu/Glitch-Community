@@ -26,13 +26,13 @@ const AccountSettingsOverlay = () => {
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
   
-  const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
+  const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
   return (
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
-          Account Settings <StyledIcon icon="key" />
+          Account Settings <Emoji icon="key" />
         </OverlayTitle>
       </OverlaySection>
 

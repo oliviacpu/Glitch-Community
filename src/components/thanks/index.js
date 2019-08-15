@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Emoji from 'Components/images/emoji';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
+
 import styles from './thanks.styl';
+
+const Emoji = styled(Icon)`height: 18px; width: 18px; margin: 0; vertical-align: sub;`;
 
 const thanksText = (count) => {
   if (count === 1) {
@@ -17,13 +21,13 @@ const ThanksLong = ({ count }) => (
   <p className={styles.container}>
     {thanksText(count)}
     &nbsp;
-    <Emoji name="sparklingHeart" />
+    <Emoji icon="sparklingHeart" />
   </p>
 );
 
 const ThanksShort = ({ count }) => (
   <p className={styles.container}>
-    <Emoji name="sparklingHeart" />
+    <Emoji icon="sparklingHeart" />
     &nbsp;
     {count}
   </p>

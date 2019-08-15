@@ -4,7 +4,6 @@ import Pluralize from 'react-pluralize';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Button, Icon } from '@fogcreek/shared-components';
 
-// import Button from 'Components/buttons/button';
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
@@ -254,7 +253,7 @@ const MadeInGlitch = () => (
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
     <Button as="a" href={getEditorUrl('community')}>
       View Source
-      <Icon icon="carpStreamer" />
+      <Icon icon="carpStreamer" /> {/* needs margin and resizing */}
     </Button>
   </HomeSection>
 );

@@ -64,13 +64,13 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
   const makeTitle = () => {
-    const StyledIcon = styled(Icon)`width: 1.1em; height: 1.1em; vertical-align: sub; margin-left: 5px;`;
+    const Emoji = styled(Icon)`width: 1.1em; height: 1.1em; vertical-align: sub; margin-left: 5px;`;
     if (!titleEmoji) {
       return title;
     }
     return (
       <>
-        {title} <StyledIcon icon={titleEmoji} />
+        {title} <Emoji icon={titleEmoji} />
       </>
     );
   };

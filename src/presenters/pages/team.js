@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
@@ -11,7 +13,6 @@ import Thanks from 'Components/thanks';
 import { TeamProfileContainer } from 'Components/containers/profile';
 import CollectionsList from 'Components/collections-list';
 import Image from 'Components/images/image';
-import Emoji from 'Components/images/emoji';
 import TeamFields from 'Components/fields/team-fields';
 import ReportButton from 'Components/report-abuse-pop';
 import DeleteTeam from 'Components/team/delete-team-pop';
@@ -68,10 +69,12 @@ const TeamMarketing = () => (
   </section>
 );
 
+const Emoji = styled(Icon)`height: 13.em; width: 1.3em; vertical-align: sub;`;
+
 const NameConflictWarning = ({ id }) => (
   <>
     <Text>
-      This team has your name. You should update your info to remain unique <Emoji name="sparkles" />
+      This team has your name. You should update your info to remain unique <Emoji icon="sparkles" />
     </Text>
     <Button size="small" type="tertiary" href={`/user/${id}`}>
       Your Profile

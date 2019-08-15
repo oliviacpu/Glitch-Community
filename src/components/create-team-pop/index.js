@@ -118,12 +118,12 @@ const CreateTeamPop = withRouter(({ history }) => {
   };
 
   const placeholder = 'Your Team Name';
-  const StyledIcon = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px;`;
+  const Emoji = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px;`;
 
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
       <MultiPopoverTitle>
-        Create Team <StyledIcon icon="herb" inTitle />
+        Create Team <Emoji icon="herb" />
       </MultiPopoverTitle>
 
       <PopoverInfo>

@@ -186,10 +186,10 @@ ButtonImage.defaultProps = {
   up1: false,
 };
 
-const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
+const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
 const ButtonEmoji = ({ emoji, ...props }) => (
-  <ButtonImage image={<StyledIcon icon={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
+  <ButtonImage image={<Emoji icon={emoji} />} up1={['bentoBox', 'bomb', 'clapper', 'herb', 'dogFace', 'framedPicture'].includes(emoji)} {...props} />
 );
 
 ButtonEmoji.propTypes = {

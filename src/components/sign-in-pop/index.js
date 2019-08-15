@@ -22,7 +22,7 @@ import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
 
-const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
+const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
@@ -131,7 +131,7 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In&nbsp;<Emoji name="email" />
+        Email Sign In&nbsp;<Emoji icon="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -249,7 +249,7 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
 const TwoFactorSignIn = ({ align, token }) => (
   <PopoverDialog align={align}>
     <MultiPopoverTitle>
-      Two factor auth <Emoji name="key" />
+      Two factor auth <Emoji icon="key" />
     </MultiPopoverTitle>
     <PopoverActions>
       <TwoFactorForm initialToken={token} />
@@ -368,7 +368,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
           <PopoverInfo>
-            <Emoji name="carpStreamer" /> New to Glitch? Create an account by signing in.
+            <Emoji icon="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
           <PopoverInfo>
             <div className={styles.termsAndConditions}>

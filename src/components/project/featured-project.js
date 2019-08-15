@@ -17,7 +17,7 @@ import useDevToggle from 'State/dev-toggles';
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
 
-const StyledIcon = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px`;
+const Emoji = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px`;
 
 const Top = ({
   featuredProject,
@@ -36,7 +36,7 @@ const Top = ({
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
-        <StyledIcon icon="clapper" />
+        <Emoji icon="clapper" />
       </Heading>
       {collection && (
         <div className={styles.note}>

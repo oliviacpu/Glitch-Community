@@ -83,7 +83,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
     [parsedQuery, initialProjects, topResults, retrievedProjects],
   );
 
-  const StyledIcon = styled(Icon)`height: 1.3em; width:1.3em;`;
+  const Emoji = styled(Icon)`height: 1.3em; width:1.3em;`;
 
   return (
     <PopoverDialog wide align="left">
@@ -102,7 +102,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
-            {parsedQuery} is already in this collection <StyledIcon icon="sparkles" />
+            {parsedQuery} is already in this collection <Emoji icon="sparkles" />
           </InfoDescription>
         </PopoverInfo>
       )}
