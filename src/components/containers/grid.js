@@ -32,10 +32,6 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
   if (sortable) {
     const onDragStart = (event) => { 
       event.preventDefault();
-      console.log('drag start');
-      console.log(event.target);
-      let dragStyles = `transform: rotate(2deg); box-shadow: 0px 7px 6px -7px rgba(0,0,0,0.27)`;
-      event.target.closest('li').setAttribute('style', dragStyles);
     }
     const onSortStart = () => setSortingItems(items);
     const onSortOver = ({ oldIndex, newIndex, isKeySorting }) => {
@@ -46,7 +42,7 @@ const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props })
       setSortingItems(null);
     };
     return (
-      <SortableGridContainer {...props} axis="xy" distance={15} onSortStart={onSortStart} onSortOver={onSortOver} onSortEnd={onSortEnd}>
+      <SortableGridContainer {...props} axis="xy" distance={15} onSortStart={onSortStart} onSortOver={onSortOver} onSortEnd={onSortEnd} helperClass={styles.dragStyle}> 
         {(sortingItems || items).map((item, index) => (
           <SortableGridItem key={item.id} className={itemClassName} index={index} tabIndex={0} onDragStart={onDragStart}>
             {children(item)}
