@@ -13,7 +13,8 @@ import styles from './styles.styl';
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
-  const exploreElWidth = exploreEl.current ? exploreEl.offsetWidth: 0;
+  const exploreElWidth = exploreEl.current ? exploreEl.offsetWidth : 0;
+  console.log(exploreElWidth);
 
   return (
     <div
@@ -32,19 +33,25 @@ function OnboardingBanner() {
       <div className={styles.actions}>
         <div className={styles.create}>
           <h2>Create your first project</h2>
-          <Text size="15px" defaultMargin>Jump into the editor by creating your very own app.</Text>
+          <Text size="15px" defaultMargin>
+            Jump into the editor by creating your very own app.
+          </Text>
           <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" />
           <Text size="15px" defaultMargin>
             <Link to="/create">Learn about creating on Glitch</Link>
           </Text>
         </div>
-        
+
         <div className={styles.explore} ref={exploreEl}>
           <Text size="15px">
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
-          <CategoriesGrid wrapItems={exploreElWidth < 600} className={styles.categoriesGrid} categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
-          
+          <CategoriesGrid
+            wrapItems={exploreElWidth > 550}
+            className={styles.categoriesGrid}
+            categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
+          />
+
           <Text size="15px">
             Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
           </Text>
