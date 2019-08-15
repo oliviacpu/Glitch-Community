@@ -21,5 +21,5 @@ module.exports = (timeout, verb, fallback = null) => {
       cache.put(key, promise, timeout);
     }
     return promise;
-  }
+  };
 };
