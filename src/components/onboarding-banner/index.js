@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -12,6 +12,8 @@ import styles from './styles.styl';
 
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
+  const exploreEl = useRef();
+  const exploreElWidth = exploreEl.current ? exploreEl.offsetWidth: 0;
 
   return (
     <div
@@ -37,11 +39,11 @@ function OnboardingBanner() {
           </Text>
         </div>
         
-        <div className={styles.explore}>
+        <div className={styles.explore} ref={exploreEl}>
           <Text size="15px">
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
-          <CategoriesGrid className={styles.categoriesGrid} categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
+          <CategoriesGrid wrapItems={exploreElWidth < 600} className={styles.categoriesGrid} categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} />
           
           <Text size="15px">
             Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />

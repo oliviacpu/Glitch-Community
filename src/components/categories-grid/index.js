@@ -61,7 +61,7 @@ const allCategories = [
   },
 ];
 
-function CategoriesGrid({ categories, alwaysWrap, className }) {
+function CategoriesGrid({ categories, wrapItems, className }) {
   const el = useRef(null);
 
   const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
@@ -69,18 +69,22 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
   ]);
 
   const width = el.current ? el.current.offsetWidth : 0;
-  const sharedClassNames = cx({
-    alwaysWrap,
-    small: width <= 450,
-    medium: width > 450 && width <= 650,
-    wide: width > 650
-  });
+  // const sharedClassNames = cx({
+  //   alwaysWrap,
+  //   small: width <= 450,
+  //   medium: width > 450 && width <= 650,
+  //   wide: width > 650
+  // });
+  const gridClassNames = cx({
+    categoriesGrid: true,
+    wrapItems,
+  })
   
   return (
-    <ul ref={el} className={classNames(styles.categoriesGrid, sharedClassNames, className)}>
+    <ul ref={el} className={classNames(gridClassNames, className)}>
       {el.current && el.current.width}
       {categoriesToRender.map((category) => (
-        <li key={category.path} className={classNames(styles.categoriesGridItem, sharedClassNames)} style={{ '--bg-color': category.color }}>
+        <li key={category.path} className={classNames(styles.categoriesGridItem)} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
             <Image src={category.icon} alt="" />
             {category.name}
