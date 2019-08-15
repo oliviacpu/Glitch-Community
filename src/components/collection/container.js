@@ -144,9 +144,9 @@ const CollectionContainer = ({
               <Emoji name="new" />
               <Text> You can reorder your projects</Text>
               {!displayHint && (
-                <Link to="/" onClick={() => setDisplayHint(true)}>
+                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
                   Learn More
-                </Link>
+                </Button>
               )}
               {displayHint && (
                 <div className={styles.hintBody}>

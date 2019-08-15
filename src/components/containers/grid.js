@@ -30,7 +30,12 @@ const SortableGridItem = SortableElement(GridItem);
 const Grid = ({ items, itemClassName, children, sortable, onReorder, ...props }) => {
   const [sortingItems, setSortingItems] = React.useState(null);
   if (sortable) {
-    const onDragStart = (event) => event.preventDefault();
+    const onDragStart = (event) => { 
+      event.preventDefault();
+      console.log('drag start');
+      console.log(event.target);
+      event.target.closest('li').classList.add('sorting');
+    }
     const onSortStart = () => setSortingItems(items);
     const onSortOver = ({ oldIndex, newIndex, isKeySorting }) => {
       if (isKeySorting) onReorder(items[oldIndex], newIndex);
