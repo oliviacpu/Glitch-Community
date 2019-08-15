@@ -54,7 +54,7 @@ function OnboardingBanner() {
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
           <CategoriesGrid
-            wrapItems={categoriesWidth > 540}
+            wrapItems={categoriesWidth > 530}
             className={styles.categoriesGrid}
             categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
           />
