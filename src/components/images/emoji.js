@@ -36,6 +36,7 @@ const EMOJIS = {
   index: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Findex.png',
   loveLetter: 'https://cdn.glitch.com/7ce3d054-7a26-40e1-9268-4189fc526e5b%2Flove-letter.png',
   microphone: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fmicrophone.png',
+  new: 'https://cdn.glitch.com/972abf14-29f7-4556-b34d-996d5c699008%2Fnew.png?v=1565900204323',
   newspaper: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fnewspaper_1f4f0.png',
   octocat: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fgithub-logo.svg',
   park: 'https://cdn.glitch.com/7e047504-e283-4115-bb1a-65dc0d431fa6%2Fnational-park_1f3de.png',

@@ -5,6 +5,7 @@ import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
 
 import { isDarkColor } from 'Utils/color';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -59,9 +60,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
     avatar = <CollectionAvatar collection={collection} />;
   }
 
-  const toggleReorder = () => {
-  }
-
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
@@ -92,7 +90,12 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
 
-          {isAuthorized && <Button onClick={turnOnReorder}>Reorder</Button> }
+          {enableSorting && (
+            <div className={styles.sortingHint}>
+              <Emoji name="new"/>
+              <Text> You can reorder your projects</Text>
+            </div>
+          )}
 
         </div>
       </header>
