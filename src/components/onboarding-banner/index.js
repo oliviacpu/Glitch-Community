@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -13,8 +13,12 @@ import styles from './styles.styl';
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
-  const exploreElWidth = exploreEl.current ? exploreEl.offsetWidth : 0;
-  console.log(exploreElWidth);
+  
+  const [categoriesWidth, setCategoriesWidth] = useState(0)
+  useEffect(() => {
+    const width = exploreEl.current ? exploreEl.current.offsetWidth : 0;
+    setCategoriesWidth(width);
+  }, exploreEl);
 
   return (
     <div
@@ -47,7 +51,7 @@ function OnboardingBanner() {
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
           <CategoriesGrid
-            wrapItems={exploreElWidth > 550}
+            wrapItems={categoriesWidth > 550}
             className={styles.categoriesGrid}
             categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
           />

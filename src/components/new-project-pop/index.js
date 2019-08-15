@@ -107,13 +107,11 @@ function NewProjectPopButton({ buttonText, buttonType, align }) {
 
 NewProjectPopButton.propTypes = {
   buttonText: PropTypes.string,
-  buttonType: PropTypes.string,
   align: PropTypes.string,
 };
 
 NewProjectPopButton.defaultProps = {
   buttonText: 'New Project',
-  buttonType: '',
   align: 'right',
 };
 
