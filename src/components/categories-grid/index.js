@@ -71,13 +71,13 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
   const width = el.current ? el.current.offsetWidth : 0;
   const sharedClassNames = cx({
     alwaysWrap,
-    small: width <= 500,
-    medium: width > 500 && width <= 800,
-    wide: width > 800,
+    small: width <= 450,
+    medium: width > 450 && width <= 650,
+    wide: width > 650
   });
   
   return (
-    <ul ref={el} className={classNames(styles.categoriesGrid, sharedClassNames)}>
+    <ul ref={el} className={classNames(styles.categoriesGrid, sharedClassNames, className)}>
       {el.current && el.current.width}
       {categoriesToRender.map((category) => (
         <li key={category.path} className={classNames(styles.categoriesGridItem, sharedClassNames)} style={{ '--bg-color': category.color }}>
