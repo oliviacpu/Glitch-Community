@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
 import Emoji from 'Components/images/emoji';
@@ -23,12 +25,14 @@ const AccountSettingsOverlay = () => {
   const [page, setPage] = useState('password');
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
+  
+  const StyledIcon = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
   return (
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
-          Account Settings <Emoji name="key" />
+          Account Settings <StyledIcon icon="key" />
         </OverlayTitle>
       </OverlaySection>
 
