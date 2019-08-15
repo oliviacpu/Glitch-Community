@@ -14,12 +14,13 @@ const api = axios.create({
 });
 
 async function getProjectFromApi(domain) {
-  const { project, teams, users } = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+  const project = await getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain);
+  if (!project) return project;
+  const members = await allByKeys({
     teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
     users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
   });
-  return project && { ...project, teams, users };
+  return { ...project, ...members };
 }
 
 function getTeamFromApi(url) {
