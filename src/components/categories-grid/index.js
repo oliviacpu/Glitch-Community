@@ -69,19 +69,18 @@ function CategoriesGrid({ categories, alwaysWrap, className }) {
   ]);
 
   const width = el.current ? el.current.offsetWidth : 0;
-  const gridItemClassName = cx({
-    categoriesGridItem: true,
+  const sharedClassNames = cx({
     alwaysWrap,
     small: width <= 500,
     medium: width > 500 && width <= 800,
     wide: width > 800,
   });
-
+  
   return (
-    <ul ref={el} className={classNames(styles.categoriesGrid, className)}>
+    <ul ref={el} className={classNames(styles.categoriesGrid, sharedClassNames)}>
       {el.current && el.current.width}
       {categoriesToRender.map((category) => (
-        <li key={category.path} className={gridItemClassName} style={{ '--bg-color': category.color }}>
+        <li key={category.path} className={classNames(styles.categoriesGridItem, sharedClassNames)} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
             <Image src={category.icon} alt="" />
             {category.name}
