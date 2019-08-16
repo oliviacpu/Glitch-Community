@@ -69,7 +69,7 @@ const PopoverLoader = () => (
 const NothingFound = () => (
   <PopoverActions>
     <InfoDescription>
-      Nothing found <Icon style={{ height: 1.3 + 'em', width: 1.3 + 'em', verticalAlign:'sub'}} icon="sparkles" />
+      Nothing found <Icon style={{ height: `${1.3}em`, width: `${1.3}em`, verticalAlign: 'sub' }} icon="sparkles" />
     </InfoDescription>
   </PopoverActions>
 );

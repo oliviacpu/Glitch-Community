@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
-// import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import NewPasswordInput from 'Components/new-password-input';
