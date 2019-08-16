@@ -204,7 +204,7 @@ export const CurrentUserProvider = ({ children }) => {
 
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
-
+  console.log("cachedUser inside state/currentUser", {cachedUser})
   const load = useDebouncedAsync(async () => {
     let sharedOrAnonUser = sharedUser;
 
@@ -265,6 +265,7 @@ export const CurrentUserProvider = ({ children }) => {
       setCachedUser(undefined);
     },
     update: (changes) => {
+      console.log("new cached user", setCachedUser({ ...cachedUser, ...changes }))
       setCachedUser({ ...cachedUser, ...changes });
     },
     clear: () => {
