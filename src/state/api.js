@@ -43,7 +43,7 @@ export const getAPIForToken = memoize((persistentToken) => {
     },
     bustCache: (url) => {
       cache[url].timestamp = 0;
-    }
+    },
   };
 });
 

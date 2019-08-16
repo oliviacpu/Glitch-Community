@@ -115,14 +115,14 @@ export const CollectionCuratorLoader = ({ collection }) => (
 const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
-  const { currentUser, update: updateCurrentUser } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
 
   const createMyStuffCollection = async () => {
     const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-    api.bustCache(entityPath())
+    api.bustCache(`v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
   };
 
   return (
