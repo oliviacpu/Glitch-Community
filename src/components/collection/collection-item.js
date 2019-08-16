@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
-import styled from 'styled-components';
 import { AnimationContainer, slideDown, Icon } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
@@ -61,11 +60,10 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
   }
 
   if (projects.length === 0 && isAuthorized) {
-    const Emoji = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text className={styles.emptyCollectionText}>
-          This collection is empty – add some projects <Emoji icon="index" />
+          This collection is empty – add some projects <Icon className={styles.emoji} icon="index" />
         </Text>
       </div>
     );
