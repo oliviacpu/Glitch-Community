@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
@@ -64,13 +63,12 @@ function ProjectsList({
   const matchFn = (project, filter) => project.domain.includes(filter) || project.description.toLowerCase().includes(filter);
 
   const makeTitle = () => {
-    const Emoji = styled(Icon)`width: 1.1em; height: 1.1em; vertical-align: sub; margin-left: 5px;`;
     if (!titleEmoji) {
       return title;
     }
     return (
       <>
-        {title} <Emoji icon={titleEmoji} />
+        {title} <Icon className={styles.emoji} icon={titleEmoji} />
       </>
     );
   };

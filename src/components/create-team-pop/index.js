@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { kebabCase, debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import TextInput from 'Components/inputs/text-input';
@@ -118,12 +117,11 @@ const CreateTeamPop = withRouter(({ history }) => {
   };
 
   const placeholder = 'Your Team Name';
-  const Emoji = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px;`;
 
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
       <MultiPopoverTitle>
-        Create Team <Emoji icon="herb" />
+        Create Team <Icon className={styles.emoji} icon="herb" />
       </MultiPopoverTitle>
 
       <PopoverInfo>

@@ -24,28 +24,27 @@ const PlatformsIcon = () => (
 );
 
 function Footer() {
-  const Emoji = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub;`;
   return (
     <footer className={styles.container} role="contentinfo">
       <FooterLink href="/about" track="about">
         About Glitch
-        <Emoji icon="crystalBall" />
+        <Icon className={styles.emoji} icon="crystalBall" />
       </FooterLink>
       <FooterLink href="/culture" track="blog">
         Blog
-        <Emoji icon="newspaper" />
+        <Icon className={styles.emoji} icon="newspaper" />
       </FooterLink>
       <FooterLink href="/help/" track="faq">
         Help Center
-        <Emoji icon="umbrella" />
+        <Icon className={styles.emoji} icon="umbrella" />
       </FooterLink>
       <FooterLink href="http://status.glitch.com/" track="system status">
         System Status
-        <Emoji icon="horizontalTrafficLight" />
+        <Icon className={styles.emoji} icon="horizontalTrafficLight" />
       </FooterLink>
       <FooterLink href="/legal" track="legal stuff">
         Legal Stuff
-        <Emoji icon="scales" />
+        <Icon className={styles.emoji} icon="scales" />
       </FooterLink>
       <FooterLink className={styles.teams} href="/teams" track="platforms">
         <PlatformsIcon />
