@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Helmet from 'react-helmet';
@@ -69,12 +68,10 @@ const TeamMarketing = () => (
   </section>
 );
 
-const Emoji = styled(Icon)`height: 13.em; width: 1.3em; vertical-align: sub;`;
-
 const NameConflictWarning = ({ id }) => (
   <>
     <Text>
-      This team has your name. You should update your info to remain unique <Emoji icon="sparkles" />
+      This team has your name. You should update your info to remain unique <Icon className={styles.emoji} icon="sparkles" />
     </Text>
     <Button size="small" type="tertiary" href={`/user/${id}`}>
       Your Profile

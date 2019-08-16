@@ -99,7 +99,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
-            {parsedQuery} is already in this collection <Icon style={{height:1.3+'em', width:1.3+'em'}} icon="sparkles" />
+            {parsedQuery} is already in this collection <Icon style={{ height: 1.3 + 'em', width: 1.3 + 'em' }} icon="sparkles" />
           </InfoDescription>
         </PopoverInfo>
       )}

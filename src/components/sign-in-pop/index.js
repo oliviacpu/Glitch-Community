@@ -21,8 +21,6 @@ import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
 
-const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
-
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
     <Button size="small" type="tertiary" matchBackground onClick={onClick}>
@@ -130,7 +128,7 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In&nbsp;<Emoji icon="email" />
+        Email Sign In&nbsp;<Icon className={styles.emoji} icon="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -248,7 +246,7 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
 const TwoFactorSignIn = ({ align, token }) => (
   <PopoverDialog align={align}>
     <MultiPopoverTitle>
-      Two factor auth <Emoji icon="key" />
+      Two factor auth <Icon className={styles.emoji} icon="key" />
     </MultiPopoverTitle>
     <PopoverActions>
       <TwoFactorForm initialToken={token} />

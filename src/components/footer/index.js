@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
