@@ -7,9 +7,8 @@ const joinIdsToQueryString = (ids) => {
 };
 
 const getFromApi = async (api, url) => {
-  const stuff = await api.get(url);
-  console.log("if you tell me stuff.data is not a thing that's the bug", stuff, stuff.data)
-  return stuff.data;
+  const { data } = await api.get(url);
+  return data;
 };
 
 const getSingleItem = async (api, url, key) => {
@@ -33,7 +32,6 @@ const getAllPages = async (api, url) => {
   while (hasMore) {
     const data = await getFromApi(api, url);
     results.push(...data.items);
-    console.log("results for"+ url, results)
     if (data.hasMore && !data.lastOrderValue) {
       Sentry.captureBreadcrumb(`Broken api pagination hasMore=${data.hasMore} lastOrderValue=${data.lastOrderValue}`);
       Sentry.captureMessage(`The rest api responded with hasMore but no lastOrderValue for url ${url}`);
@@ -50,7 +48,6 @@ const getAllPages = async (api, url) => {
 const allByKeys = async (objOfPromises) => {
   const keys = Object.keys(objOfPromises);
   const values = await Promise.all(Object.values(objOfPromises));
-  console.log("values", values)
   return keys.reduce((result, key, i) => {
     result[key] = values[i];
     return result;
