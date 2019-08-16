@@ -122,7 +122,9 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-    updateCurrentUser({ collections: currentUser.collections.push(myStuff)});
+    const updatedCollections = [...currentUser.collections, myStuff]
+    console.log("After creating", updatedCollections)
+    updateCurrentUser({ collections: updatedCollections});
   };
 
   return (
