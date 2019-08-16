@@ -20,7 +20,7 @@ function getBatchedEntity(type, field, value) {
 
   // create a new batch
   if (!batches.has(key)) {
-    const BATCH_TIME = 100; // ms
+    const BATCH_TIME = 250; // ms
     const promise = new Promise((resolve) => setTimeout(() => {
       const [values] = batches.get(key);
       batches.delete(key);
