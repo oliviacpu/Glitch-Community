@@ -123,7 +123,7 @@ async function getCachedUser(sharedUser) {
       teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
       collections: getAllPages(api, makeUrl('collections')),
     });
-    console.log("collections inside getCachedUser", collections)
+    console.log("collections inside getCachedUser", collections, "after hitting", makeUrl('collections'))
     const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
     if (!usersMatch(sharedUser, user)) return 'error';
     return user;

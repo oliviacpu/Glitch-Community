@@ -48,6 +48,7 @@ const getAllPages = async (api, url) => {
 const allByKeys = async (objOfPromises) => {
   const keys = Object.keys(objOfPromises);
   const values = await Promise.all(Object.values(objOfPromises));
+  console.log("values", values)
   return keys.reduce((result, key, i) => {
     result[key] = values[i];
     return result;
