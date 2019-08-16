@@ -209,7 +209,7 @@ export const CurrentUserProvider = ({ children }) => {
   const load = useDebouncedAsync(async () => {
     console.log("load twas called")
     let sharedOrAnonUser = sharedUser;
-
+    console.log("sharedUser from inside load", sharedUser)
     // If we're signed out create a new anon user
     if (!sharedOrAnonUser) {
       sharedOrAnonUser = await getAnonUser();
@@ -218,11 +218,12 @@ export const CurrentUserProvider = ({ children }) => {
 
     // Check if we have to clear the cached user
     if (!usersMatch(sharedOrAnonUser, cachedUser)) {
+      console.log("settingCachedUser to undefined")
       setCachedUser(undefined);
     }
 
     const newCachedUser = await getCachedUser(sharedOrAnonUser);
-  console.log("newCachedUser", newCachedUser)
+    console.log("newCachedUser from within load", newCachedUser)
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in

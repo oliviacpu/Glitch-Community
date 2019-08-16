@@ -62,7 +62,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   const bookmarkAction = useTrackedFunc(
-    async() => {
+    async () => {
       await reload();
       return toggleBookmark({
         api,
