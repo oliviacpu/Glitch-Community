@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import styled from 'styled-components';
 import { Button, Icon } from '@fogcreek/shared-components';
 
 import Row from 'Components/containers/row';
@@ -248,12 +249,14 @@ const BuildingOnGlitch = ({ content }) => (
   </HomeSection>
 );
 
+const Emoji = styled(Icon)`width: 1.3em; height: 1.3em; vertical-align: sub; margin-left: 5px;`;
+
 const MadeInGlitch = () => (
   <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
-    <Button as="a" href={getEditorUrl('community')}>
+    <Button as="a" size="small" href={getEditorUrl('community')}>
       View Source
-      <Icon icon="carpStreamer" /> {/* needs margin and resizing */}
+      <Emoji icon="carpStreamer" />
     </Button>
   </HomeSection>
 );
