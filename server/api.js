@@ -35,7 +35,7 @@ async function getBatchedEntity(type, field, value) {
   batches.set(key, [[...values, value], promise]);
 
   // pull what we want out of the batch
-  // this is pretty much getSingleItem
+  // this does the same thing as getSingleItem
   return promise.then(({ data }) => {
     if (data[value]) return data[value];
     const realValue = Object.keys(data).find((key) => key.toLowerCase() === value.toLowerCase());
