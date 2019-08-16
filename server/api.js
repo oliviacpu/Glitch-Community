@@ -6,7 +6,7 @@ const dayjs = require('dayjs');
 const { captureException } = require('@sentry/node');
 
 const { API_URL } = require('./constants').current;
-const { allByKeys, getSingleItem } = require('Shared/api');
+const { allByKeys } = require('Shared/api');
 
 const api = axios.create({
   baseURL: API_URL,
@@ -20,21 +20,24 @@ async function getBatchedEntity(type, field, value) {
     const promise = new Promise((resolve) => setTimeout(() => {
       const [values] = batches.get(key);
       batches.delete(key);
-      const query = values.map((v) => `${field}=${value}`).join('&');
+      const query = values.map((value) => `${field}=${encodeURIComponent(value)}`).join('&');
       resolve(api.get(`v1/${type}/by/${field}?${query}`));
-    }, 100));
-    batches.set(key, [[value], promise]);
+    }, 1000));
+    batches.set(key, [[], promise]);
   }
   const [values, promise] = batches.get(key);
   batches.set(key, [[...values, value], promise]);
   return promise.then((data) => {
     if (data[value]) return data[value];
+    const realValue = Object.keys(data).find((key) => key.toLowerCase() === value.toLowerCase());
+    if (realValue) return data[realValue];
+    return null;
   });
 }
 
 async function getProjectFromApi(domain) {
   const { project, teams, users } = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
+    project: getBatchedEntity('projects', 'domain', domain),
     // teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
     // users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
   });
@@ -42,17 +45,16 @@ async function getProjectFromApi(domain) {
 }
 
 function getTeamFromApi(url) {
-  return getSingleItem(api, `v1/teams/by/url?url=${encodeURIComponent(url)}`, url);
+  return getBatchedEntity('teams', 'url', url);
 }
 
 function getUserFromApi(login) {
-  return getSingleItem(api, `v1/users/by/login?login=${encodeURIComponent(login)}`, login);
+  return getBatchedEntity('users', 'login', login);
 }
 
 function getCollectionFromApi(login, collection) {
   const url = `${login}/${collection}`;
-  const encodedUrl = `${encodeURIComponent(login)}/${encodeURIComponent(collection)}`;
-  return getSingleItem(api, `v1/collections/by/fullUrl?fullUrl=${encodedUrl}`, url);
+  return getBatchedEntity('collections', 'fullUrl', url);
 }
 
 async function getCultureZinePosts() {
