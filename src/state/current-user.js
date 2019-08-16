@@ -278,7 +278,7 @@ export const CurrentUserProvider = ({ children }) => {
     },
     superUserHelpers: getSuperUserHelpers(cachedUser),
   };
-
+  window.testload = load //remove me just doing this for debugging
   return <Context.Provider value={userProps}>{children}</Context.Provider>;
 };
 CurrentUserProvider.propTypes = {
