@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
+
 import styles from './segmented-buttons.styl';
-import Button from './button';
 
 const SegmentedButtons = ({ value, buttons, onChange }) => (
   <div className={styles.segmentedButtons}>
     {buttons.map((button) => (
-      <Button key={button.name} type="tertiary" active={button.name === value} onClick={() => onChange(button.name)}>
+      <Button key={button.name} variant="secondary" active={button.name === value} onClick={() => onChange(button.name)}>
         {button.contents}
       </Button>
     ))}
