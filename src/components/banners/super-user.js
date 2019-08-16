@@ -1,6 +1,7 @@
 import React from 'react';
+import { Button } from '@fogcreek/shared-components';
+
 import { useCurrentUser } from 'State/current-user';
-import Button from 'Components/buttons/button';
 import styles from './super-user.styl';
 
 const SuperUserBanner = () => {
