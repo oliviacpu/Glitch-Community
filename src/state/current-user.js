@@ -236,6 +236,7 @@ export const CurrentUserProvider = ({ children }) => {
         logSharedUserError(sharedUser, newSharedUser);
       }
     } else {
+      console.log("we ended up storing the new cached user")
       // The shared user is good, store it
       setCachedUser(newCachedUser);
       setFetched(true);

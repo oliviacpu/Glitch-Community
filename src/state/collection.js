@@ -21,7 +21,12 @@ export const toggleBookmark = async ({
 }) => {
   try {
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-    console.log(myStuffCollection, currentUser.collections, currentUser)
+    if (myStuffCollection) {
+      console.log("this would have worked" )
+    } else {
+      console.log("nope")
+      console.log(myStuffCollection, currentUser.collections, currentUser)
+    }
     // if (hasBookmarked) {
     //   setHasBookmarked(false);
     //   await removeProjectFromCollection({ project, collection: myStuffCollection });
