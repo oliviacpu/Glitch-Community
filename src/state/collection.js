@@ -20,6 +20,7 @@ export const toggleBookmark = async ({
   reloadCollectionProjects,
 }) => {
   try {
+    console.log("inside toggle bookmark")
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
     if (myStuffCollection) {
       console.log("this would have worked" )

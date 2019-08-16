@@ -63,7 +63,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
 
   const bookmarkAction = useTrackedFunc(
     async () => {
-      // await reload();
+      console.log("about to call reload")
+      await reload();
+      console.log("finished calling reload")
       return toggleBookmark({
         api,
         project,
