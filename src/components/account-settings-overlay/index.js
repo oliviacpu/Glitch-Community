@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
-import Emoji from 'Components/images/emoji';
 import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import PopoverContainer from 'Components/popover/container';
@@ -25,7 +24,7 @@ const AccountSettingsOverlay = () => {
   const [page, setPage] = useState('password');
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
-  
+
   const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
 
   return (
