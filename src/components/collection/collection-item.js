@@ -122,8 +122,7 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-    const updatedCollections = [...currentUser.collections, myStuff];
-    updateCurrentUser({ collections: updatedCollections });
+    api.bustCache(entityPath())
   };
 
   return (

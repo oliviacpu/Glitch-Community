@@ -218,12 +218,6 @@ export const CurrentUserProvider = ({ children }) => {
       setCachedUser(undefined);
     }
 
-    // if you have a cached user just use that one
-    if (cachedUser) {
-      return;
-    }
-
-    // otherwise create one
     const newCachedUser = await getCachedUser(sharedOrAnonUser);
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
