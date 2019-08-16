@@ -48,7 +48,7 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const { currentUser, reload } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
@@ -61,21 +61,18 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   const bookmarkAction = useTrackedFunc(
-    async () => {
-      await reload();
-      return toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
-        setHasBookmarked,
-        hasBookmarked,
-        reloadCollectionProjects,
-      });
-    },
+    async () => toggleBookmark({
+      api,
+      project,
+      currentUser,
+      createNotification,
+      myStuffEnabled,
+      addProjectToCollection,
+      removeProjectFromCollection,
+      setHasBookmarked,
+      hasBookmarked,
+      reloadCollectionProjects,
+    }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
