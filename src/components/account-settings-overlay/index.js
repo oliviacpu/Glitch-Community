@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Icon, Button } from '@fogcreek/shared-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
+import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import PopoverContainer from 'Components/popover/container';
 import { useCurrentUser } from 'State/current-user';
