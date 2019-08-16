@@ -123,7 +123,6 @@ async function getCachedUser(sharedUser) {
       teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
       collections: getAllPages(api, makeUrl('collections')),
     });
-    console.log("collections inside getCachedUser", collections, "after hitting", makeUrl('collections'))
     const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
     if (!usersMatch(sharedUser, user)) return 'error';
     return user;
@@ -205,11 +204,9 @@ export const CurrentUserProvider = ({ children }) => {
 
   // cachedUser mirrors GET /users/{id} and is what we actually display
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
-  console.log("cachedUser inside state/currentUser", {...cachedUser})
   const load = useDebouncedAsync(async () => {
-    console.log("load twas called")
     let sharedOrAnonUser = sharedUser;
-    console.log("sharedUser from inside load", sharedUser)
+
     // If we're signed out create a new anon user
     if (!sharedOrAnonUser) {
       sharedOrAnonUser = await getAnonUser();
@@ -218,12 +215,16 @@ export const CurrentUserProvider = ({ children }) => {
 
     // Check if we have to clear the cached user
     if (!usersMatch(sharedOrAnonUser, cachedUser)) {
-      console.log("settingCachedUser to undefined")
       setCachedUser(undefined);
     }
 
+    // if you have a cached user just use that one
+    if (cachedUser) {
+      return;
+    }
+
+    // otherwise create one
     const newCachedUser = await getCachedUser(sharedOrAnonUser);
-    console.log("newCachedUser from within load", newCachedUser)
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
@@ -236,7 +237,6 @@ export const CurrentUserProvider = ({ children }) => {
         logSharedUserError(sharedUser, newSharedUser);
       }
     } else {
-      console.log("we ended up storing the new cached user")
       // The shared user is good, store it
       setCachedUser(newCachedUser);
       setFetched(true);
@@ -269,7 +269,6 @@ export const CurrentUserProvider = ({ children }) => {
       setCachedUser(undefined);
     },
     update: (changes) => {
-      console.log("new cached user", { ...cachedUser, ...changes })
       setCachedUser({ ...cachedUser, ...changes });
     },
     clear: () => {
@@ -278,7 +277,7 @@ export const CurrentUserProvider = ({ children }) => {
     },
     superUserHelpers: getSuperUserHelpers(cachedUser),
   };
-  window.testload = load //remove me just doing this for debugging
+
   return <Context.Provider value={userProps}>{children}</Context.Provider>;
 };
 CurrentUserProvider.propTypes = {

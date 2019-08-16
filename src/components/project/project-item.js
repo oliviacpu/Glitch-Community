@@ -62,9 +62,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
 
   const bookmarkAction = useTrackedFunc(
     async () => {
-      console.log("about to call reload")
       await reload();
-      console.log("finished calling reload")
       return toggleBookmark({
         api,
         project,
@@ -76,7 +74,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         setHasBookmarked,
         hasBookmarked,
         reloadCollectionProjects,
-      })
+      });
     },
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
