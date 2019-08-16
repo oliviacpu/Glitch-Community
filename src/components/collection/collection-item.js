@@ -115,13 +115,14 @@ export const CollectionCuratorLoader = ({ collection }) => (
 const CreateMyStuffOnClickComponent = withRouter(({ history, children, className, style }) => {
   const api = useAPI();
   const { createNotification } = useNotifications();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, update: updateCurrentUser } = useCurrentUser();
 
   const createMyStuffCollection = async () => {
     const myStuff = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
+    updateCurrentUser({ collections: currentUser.collections.push(myStuff)});
   };
 
   return (
