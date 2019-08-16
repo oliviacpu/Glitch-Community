@@ -101,6 +101,7 @@ const FeaturedProject = ({
       projectName: featuredProject.domain,
       baseProjectId: featuredProject.baseId || featuredProject.baseProject,
       userId: currentUser.id,
+      origin: `${inherited.origin}-featured-project`,
     }),
   );
 
