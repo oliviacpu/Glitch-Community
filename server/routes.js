@@ -15,6 +15,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const renderPage = require('./render');
+const getStudyAssignments = require('./study');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 const { getHomeData, saveHomeDataToFile } = require('./home');
 
@@ -84,6 +85,8 @@ module.exports = function(external) {
       console.error("Failed to load webpack stats file. Unless you see a webpack error here, the initial build probably just isn't ready yet.");
       built = false;
     }
+
+    const assignments = getStudyAssignments(request, response);
 
     const signedIn = !!req.cookies.hasLogin;
 
