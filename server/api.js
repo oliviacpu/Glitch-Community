@@ -13,21 +13,30 @@ const api = axios.create({
   timeout: 5000,
 });
 
+// group similar requests made in a small period of time
+const BATCH_TIME = 100; // ms
 const batches = new Map();
 async function getBatchedEntity(type, field, value) {
   const key = `${type}:${field}`;
+
+  // create a new batch
   if (!batches.has(key)) {
     const promise = new Promise((resolve) => setTimeout(() => {
       const [values] = batches.get(key);
       batches.delete(key);
       const query = values.map((value) => `${field}=${encodeURIComponent(value)}`).join('&');
       resolve(api.get(`v1/${type}/by/${field}?${query}`));
-    }, 1000));
+    }, BATCH_TIME));
     batches.set(key, [[], promise]);
   }
+
+  // add us to the batch
   const [values, promise] = batches.get(key);
   batches.set(key, [[...values, value], promise]);
-  return promise.then((data) => {
+
+  // pull what we want out of the batch
+  // this is pretty much getSingleItem
+  return promise.then(({ data }) => {
     if (data[value]) return data[value];
     const realValue = Object.keys(data).find((key) => key.toLowerCase() === value.toLowerCase());
     if (realValue) return data[realValue];
@@ -53,8 +62,7 @@ function getUserFromApi(login) {
 }
 
 function getCollectionFromApi(login, collection) {
-  const url = `${login}/${collection}`;
-  return getBatchedEntity('collections', 'fullUrl', url);
+  return getBatchedEntity('collections', 'fullUrl', `${login}/${collection}`);
 }
 
 async function getCultureZinePosts() {
