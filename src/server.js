@@ -5,7 +5,7 @@ import { resetUniqueId } from 'Hooks/use-unique-id';
 import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
-const Page = ({ origin, route, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
+const Page = ({ origin, route, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => (
   <StaticRouter location={route}>
     <GlobalsProvider
       origin={origin}
@@ -14,7 +14,7 @@ const Page = ({ origin, route, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POS
       ZINE_POSTS={ZINE_POSTS}
       SSR_SIGNED_IN={signedIn}
     >
-      <App />
+      <App apiCache={cache} />
     </GlobalsProvider>
   </StaticRouter>
 );
