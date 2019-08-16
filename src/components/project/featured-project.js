@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { AnimationContainer, slideDown, Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
@@ -16,8 +15,6 @@ import useDevToggle from 'State/dev-toggles';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
-
-const Emoji = styled(Icon)`height: 1.1em; width: 1.1em; vertical-align: sub; margin-left: 5px`;
 
 const Top = ({
   featuredProject,
@@ -36,7 +33,7 @@ const Top = ({
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
-        <Emoji icon="clapper" />
+        <Icon className={styles.emoji} icon="clapper" />
       </Heading>
       {collection && (
         <div className={styles.note}>

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
 import axios from 'axios';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import TextArea from 'Components/inputs/text-area';
@@ -47,15 +46,13 @@ function useDebouncedState(initialState, timeout) {
   return [state, setDebounced];
 }
 
-const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub; margin-left: 5px`;
-
 const Success = () => (
   <>
     <PopoverTitle>Report Abuse</PopoverTitle>
     <PopoverActions>
       <Notification persistent type="success">Report Sent</Notification>
       <InfoDescription>
-        Thanks for helping to keep Glitch a safe, friendly community <Emoji icon="park" />
+        Thanks for helping to keep Glitch a safe, friendly community <Icon className={styles.emoji} icon="park" />
       </InfoDescription>
     </PopoverActions>
   </>
@@ -64,7 +61,7 @@ const Success = () => (
 const Failure = ({ value }) => (
   <>
     <PopoverTitle>
-      Failed to Send <Emoji icon="sick" />
+      Failed to Send <Icon className={styles.emoji} icon="sick" />
     </PopoverTitle>
     <PopoverInfo>
       <InfoDescription>

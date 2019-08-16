@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Button from 'Components/buttons/button';
@@ -368,7 +367,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
           <PopoverInfo>
-            <Emoji icon="carpStreamer" /> New to Glitch? Create an account by signing in.
+            <Icon className={styles.emoji} icon="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
           <PopoverInfo>
             <div className={styles.termsAndConditions}>
