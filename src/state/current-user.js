@@ -123,6 +123,7 @@ async function getCachedUser(sharedUser) {
       teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
       collections: getAllPages(api, makeUrl('collections')),
     });
+    console.log("collections inside getCachedUser", collections)
     const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
     if (!usersMatch(sharedUser, user)) return 'error';
     return user;
@@ -206,6 +207,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [cachedUser, setCachedUser] = useLocalStorage('community-cachedUser', null);
   console.log("cachedUser inside state/currentUser", {...cachedUser})
   const load = useDebouncedAsync(async () => {
+    console.log("load twas called")
     let sharedOrAnonUser = sharedUser;
 
     // If we're signed out create a new anon user
@@ -220,7 +222,7 @@ export const CurrentUserProvider = ({ children }) => {
     }
 
     const newCachedUser = await getCachedUser(sharedOrAnonUser);
-
+  console.log("newCachedUser", newCachedUser)
     if (newCachedUser === 'error') {
       // Looks like our sharedUser is bad, make sure it wasn't changed since we read it
       // Anon users get their token and id deleted when they're merged into a user on sign in
