@@ -48,7 +48,8 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const { currentUser } = useCurrentUser();
+  const { currentUser, reload } = useCurrentUser();
+  console.log("currentUser inside project item", {...currentUser})
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
@@ -61,8 +62,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
+    async() => {
+      await reload();
+      return toggleBookmark({
         api,
         project,
         currentUser,
@@ -73,7 +75,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         setHasBookmarked,
         hasBookmarked,
         reloadCollectionProjects,
-      }),
+      })
+    },
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
