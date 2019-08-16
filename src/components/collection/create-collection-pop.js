@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase, orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
+import { Button } from '@fogcreek/shared-components';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TextInput from 'Components/inputs/text-input';
 import { AddProjectToCollectionMsg } from 'Components/notification';
 import { PopoverDialog, MultiPopoverTitle, PopoverActions, PopoverWithButton } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import { createCollection } from 'Models/collection';
 import { useTracker } from 'State/segment-analytics';
 import { useAPI, createAPIHook } from 'State/api';
@@ -143,7 +143,7 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
           {loading ? (
             <Loader />
           ) : (
-            <Button size="small" onClick={handleSubmit} disabled={submitDisabled}>
+            <Button size="tiny" onClick={handleSubmit} disabled={submitDisabled}>
               Create
             </Button>
           )}

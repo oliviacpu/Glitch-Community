@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
-import { AnimationContainer, slideDown, Icon } from '@fogcreek/shared-components';
+import { AnimationContainer, slideDown, Button, Icon } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
-import Button from 'Components/buttons/button';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import { ProfileItem } from 'Components/profile-list';
@@ -142,7 +141,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
         </div>
         <div className={styles.nameDescriptionContainer}>
           <div className={styles.itemButtonWrap}>
-            <Button decorative>{collection.name}</Button>
+            <Button size="small" as="span">{collection.name}</Button>
           </div>
           <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
             <Markdown length={100}>{collection.description || ' '}</Markdown>
@@ -174,7 +173,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
           <div className={styles.nameDescriptionContainer}>
             <div className={styles.itemButtonWrap}>
-              <Button decorative>{collection.name}</Button>
+              <Button size="small" as="span">{collection.name}</Button>
             </div>
             <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>
