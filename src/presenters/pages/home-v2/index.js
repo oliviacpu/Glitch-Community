@@ -133,7 +133,7 @@ const CuratedCollections = ({ content }) => (
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <div className={styles.curatedCollectionButtonWrap}>
-            <Button as="span">
+            <Button size="small" as="span">
               View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
           </div>
@@ -164,7 +164,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         <div className={styles.unifiedStoriesContentWrap}>
           <h3 className={styles.h3}>{dek}</h3>
           <Markdown>{summary}</Markdown>
-          <Button as="a" href={href}>
+          <Button size="small" as="a" href={href}>
             {cta} <Arrow />
           </Button>
         </div>
@@ -213,7 +213,7 @@ const CultureZine = ({ content }) => (
         )}
       </Row>
       <div className={styles.readMoreLink}>
-        <Button as="a" href="https://glitch.com/culture/">
+        <Button size="small" as="a" href="https://glitch.com/culture/">
           Read More on Culture <Arrow />
         </Button>
       </div>
@@ -239,7 +239,7 @@ const BuildingOnGlitch = ({ content }) => (
           </div>
           <h3>{title}</h3>
           <p>{description}</p>
-          <Button as="span">
+          <Button size="small" as="span">
             {cta} <Arrow />
           </Button>
         </Link>
