@@ -14,13 +14,13 @@ const api = axios.create({
 });
 
 // group similar requests made in a small period of time
-const BATCH_TIME = 100; // ms
 const batches = new Map();
-async function getBatchedEntity(type, field, value) {
+function getBatchedEntity(type, field, value) {
   const key = `${type}:${field}`;
 
   // create a new batch
   if (!batches.has(key)) {
+    const BATCH_TIME = 100; // ms
     const promise = new Promise((resolve) => setTimeout(() => {
       const [values] = batches.get(key);
       batches.delete(key);
