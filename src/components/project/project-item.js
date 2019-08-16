@@ -49,7 +49,6 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser, reload } = useCurrentUser();
-  console.log("currentUser inside project item", {...currentUser})
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
