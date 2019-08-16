@@ -13,6 +13,25 @@ const api = axios.create({
   timeout: 5000,
 });
 
+const batches = new Map();
+async function getBatchedEntity(type, field, value) {
+  const key = `${type}:${field}`;
+  if (!batches.has(key)) {
+    const promise = new Promise((resolve) => setTimeout(() => {
+      const [values] = batches.get(key);
+      batches.delete(key);
+      const query = values.map((v) => `${field}=${value}`).join('&');
+      resolve(api.get(`v1/${type}/by/${field}?${query}`));
+    }, 100));
+    batches.set(key, [[value], promise]);
+  }
+  const [values, promise] = batches.get(key);
+  batches.set(key, [[...values, value], promise]);
+  return promise.then((data) => {
+    if (data[value]) return data[value];
+  });
+}
+
 async function getProjectFromApi(domain) {
   const { project, teams, users } = await allByKeys({
     project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
