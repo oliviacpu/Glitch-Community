@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Icon } from '@fogcreek/shared-components';
 
 import Loader from 'Components/loader';
@@ -67,12 +66,10 @@ const PopoverLoader = () => (
   </PopoverActions>
 );
 
-const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
-
 const NothingFound = () => (
   <PopoverActions>
     <InfoDescription>
-      Nothing found <Emoji icon="sparkles" />
+      Nothing found <Icon style={{height:1.3+'em', width:1.3+'em', verticalAlign:'sub'}} icon="sparkles" />
     </InfoDescription>
   </PopoverActions>
 );
