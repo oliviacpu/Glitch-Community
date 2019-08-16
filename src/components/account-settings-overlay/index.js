@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Icon } from '@fogcreek/shared-components';
+import { Icon, Button } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
-import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import PopoverContainer from 'Components/popover/container';
 import { useCurrentUser } from 'State/current-user';
@@ -13,7 +11,7 @@ import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
 const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
-  <Button size="small" onClick={() => setPage(name)} active={name === currentPage}>
+  <Button size="tiny" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
     {children}
   </Button>
 );
@@ -25,13 +23,11 @@ const AccountSettingsOverlay = () => {
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
 
-  const Emoji = styled(Icon)`height: 1.3em; width: 1.3em; vertical-align: sub;`;
-
   return (
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
-          Account Settings <Emoji icon="key" />
+          Account Settings <Icon icon="key" className={styles.emoji} />
         </OverlayTitle>
       </OverlaySection>
 
