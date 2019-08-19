@@ -1,20 +1,5 @@
 const dayjs = require('dayjs');
 
-const createStore = (request, response) => {
-  const get = (key) => {
-    return request.cookies[key] || null;
-  };
-  const set = (key, value) => {
-    const maxAge = dayjs.convert(1, 'month', 'ms');
-    response.cookie(key, value, { maxAge });
-  };
-  return {
-    get, set,
-    type: 'expressCookies',
-    isSupported: () => !!request.cookies && !!response.cookie,
-  };
-};
-
 const tests = {
   'Just-A-Test': {
     winner: { weight: 0.75 },
@@ -23,7 +8,7 @@ const tests = {
 };
 
 const readAssignment = (request, test) => {
-  return request.cookies[test] || null;
+  return request.cookies[`test-${test}`] || null;
 };
 
 const writeAssignment = (response, test, assignment) => {
@@ -49,6 +34,7 @@ const getAssignments = (request, response) => {
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
     }
+    writeAssignment(response, test, assignment);
     assignments[test] = [assignment, groups[assignment]];
   }
   return assignments;
