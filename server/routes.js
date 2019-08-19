@@ -86,7 +86,8 @@ module.exports = function(external) {
       built = false;
     }
 
-    const assignments = getStudyAssignments(request, response);
+    const assignments = getStudyAssignments(req, res);
+    console.log(assignments);
 
     const signedIn = !!req.cookies.hasLogin;
 

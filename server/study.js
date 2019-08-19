@@ -1,5 +1,4 @@
 const dayjs = require('dayjs');
-const Study = require('studyjs');
 
 const createStore = (request, response) => {
   const get = (key) => {
@@ -16,22 +15,25 @@ const createStore = (request, response) => {
   };
 };
 
-const tests = [
-  {
-    name: 'Just-A-Test',
-    buckets: {
-      winner: { weight: 0.75 },
-      loser: { weight: 0.25 },
-    },
+const tests = {
+  'Just-A-Test': {
+    winner: { weight: 0.75 },
+    loser: { weight: 0.25 },
   },
-];
-
-const runStudy = (request, response) => {
-  const store = createStore(request, response);
-  const study = new Study({ store });
-  study.define(tests);
-  study.assign();
-  return study.assignments();
 };
 
-module.exports = runStudy;
+const readAssignment = (request, test) => {
+  return request.cookies[test] || null;
+};
+
+const writeAssignment = (response, test, group) => {
+  const maxAge = dayjs.convert(1, 'month', 'ms');
+  response.cookie(`test-${test}`, group, { maxAge });
+};
+
+const getAssignments = (request, response) => {
+  const assignments = {};
+
+};
+
+module.exports = getAssignments;
