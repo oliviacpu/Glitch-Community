@@ -125,7 +125,7 @@ const GLITCH_TEAM_AVATAR = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-20439
 const GLITCH_TEAM_URL = 'glitch';
 
 const GlitchTeamList = ({ size }) => {
-  const tooltipTarget = <TeamLink team={{url: GLITCH_TEAM_URL }} draggable={false}><Avatar name="Glitch Team" src={GLITCH_TEAM_AVATAR} color="#74ecfc" type="team" hideTooltip /></TeamLink>;
+  const tooltipTarget = <TeamLink team={{ url: GLITCH_TEAM_URL }} draggable={false}><Avatar name="Glitch Team" src={GLITCH_TEAM_AVATAR} color="#74ecfc" type="team" hideTooltip /></TeamLink>;
   return (
     <ul className={classnames(styles.container, styles[size])}>
       <li className={styles.teamItem}>
