@@ -33,6 +33,7 @@ function OnboardingBanner({ isHomepage }) {
         backgroundColor: lightColors[currentUser.id % 4],
       }
     : null;
+  const sourceLabel = `${isHomepage ? 'homepage' : 'profile page'} onboarding banner`;
 
   return (
     <div className={styles.banner} style={backgroundStyles}>
@@ -48,7 +49,12 @@ function OnboardingBanner({ isHomepage }) {
           <Text size="15px" defaultMargin>
             Jump into the editor by creating your very own app.
           </Text>
-          <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" />
+          <NewProjectPop
+            align="left"
+            buttonText="Create New Project"
+            buttonType="cta"
+            source={sourceLabel}
+          />
           <Text size="15px" defaultMargin>
             <Link to="/create">Learn about creating on Glitch</Link>
           </Text>

@@ -43,7 +43,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
         <ul className={styles.buttons}>
           {(signedIn || signedOut) && (
             <li className={styles.buttonWrap}>
-              <NewProjectPop />
+              <NewProjectPop source="navbar"/>
             </li>
           )}
           {hasProjects && (
