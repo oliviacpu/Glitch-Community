@@ -138,6 +138,7 @@ const AlgoliaSearchController = withRouter(({ history, visible, openPopover, def
   };
 
   const onChange = (value) => dispatch(actions.queryChanged(value));
+  console.log('paint')
 
   return (
     <form className={styles.container} role="search" onSubmit={onSubmit} autoComplete="off" autoCapitalize="off" action="/search" method="get">
