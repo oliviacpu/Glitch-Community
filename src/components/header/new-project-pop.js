@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
 
 import Loader from 'Components/loader';
-import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverSection, PopoverActions } from 'Components/popover';
 import ResultsList from 'Components/containers/results-list';
 import { TrackedExternalLink } from 'Components/link';
@@ -61,7 +61,7 @@ const NewProjectPop = ({ projects }) => (
       )}
     </PopoverSection>
     <PopoverActions type="secondary">
-      <Button size="small" type="tertiary" onClick={importGitRepo} matchBackground>
+      <Button size="small" type="secondary" onClick={importGitRepo} matchBackground>
         Clone from Git Repo
       </Button>
     </PopoverActions>
