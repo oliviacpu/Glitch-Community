@@ -55,10 +55,6 @@ function Banner() {
 
   return (
     <>
-      <div>
-        <div style={{ width: '300px', background: 'cyan' }}>placeholder</div>
-        <CategoriesGrid categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']} alwaysWrap />
-      </div>
       <section className={classNames(styles.section, styles.banner)}>
         <div className={styles.bannerShape} style={{ backgroundImage: `url(${shape})` }}>
           <div className={styles.bannerText}>
@@ -522,7 +518,7 @@ function Categories() {
   return (
     <section className={classNames(styles.categories, styles.section)}>
       <Text>...or browse starter apps for inspiration</Text>
-      <CategoriesGrid categories="all" alwaysWrap />
+      <CategoriesGrid categories="all" className={styles.categoriesGrid} wrapItems={true} />
     </section>
   );
 }
