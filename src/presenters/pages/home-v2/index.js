@@ -277,7 +277,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
-    {loggedIn && !hasProjects && <OnboardingBanner />}
+    {loggedIn && !hasProjects && <OnboardingBanner isHomepage />}
     {loggedIn && <Questions />}
     <UnifiedStories content={data.unifiedStories} />
     <TopPicks>

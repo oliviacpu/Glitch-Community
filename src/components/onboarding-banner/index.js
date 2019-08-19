@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'react-prop-types';
+import PropTypes from 'prop-types';
 
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -13,7 +13,7 @@ import useWindowSize from 'Hooks/use-window-size';
 import Illustration from './illustration';
 import styles from './styles.styl';
 
-function OnboardingBanner({ useBackgroundImage }) {
+function OnboardingBanner({ isHomepage }) {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
 
@@ -26,22 +26,23 @@ function OnboardingBanner({ useBackgroundImage }) {
     },
     [windowWidth],
   );
-  
-  const backgroundStyles = useBackgroundImage ? 
-    { backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)', backgroundColor: lightColors[currentUser.id % 4] } : null
+
+  const backgroundStyles = isHomepage
+    ? {
+        backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
+        backgroundColor: lightColors[currentUser.id % 4],
+      }
+    : null;
 
   return (
-    <div
-      className={styles.banner}
-      style={backgroundStyles}
-    >
+    <div className={styles.banner} style={backgroundStyles}>
       <div className={styles.illustration}>
         <h1>
           <Illustration />
         </h1>
       </div>
 
-      <div className={styles.actions}>
+      <div className={styles.actions} style={{ background: isHomepage ? 'rgba(255, 255, 255, .875)' : 'none' }}>
         <div className={styles.create}>
           <h2>Create your first project</h2>
           <Text size="15px" defaultMargin>
@@ -63,9 +64,11 @@ function OnboardingBanner({ useBackgroundImage }) {
             categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
           />
 
-          <Text size="15px">
-            Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
-          </Text>
+          {isHomepage && (
+            <Text size="15px">
+              Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
+            </Text>
+          )}
         </div>
       </div>
     </div>
@@ -73,11 +76,11 @@ function OnboardingBanner({ useBackgroundImage }) {
 }
 
 OnboardingBanner.propTypes = {
-  useBackgroundImage: PropTypes.bool,
-}
+  isHomepage: PropTypes.bool,
+};
 
 OnboardingBanner.defaultProps = {
-  useBackgroundImage: true,
-}
+  isHomepage: false,
+};
 
 export default OnboardingBanner;
