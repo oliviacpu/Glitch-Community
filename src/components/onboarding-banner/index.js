@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Image from 'Components/images/image';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
@@ -15,13 +14,16 @@ import styles from './styles.styl';
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
-  
-  const [categoriesWidth, setCategoriesWidth] = useState(0)
+
+  const [categoriesWidth, setCategoriesWidth] = useState(0);
   const [windowWidth] = useWindowSize();
-  useEffect(() => {
-    const width = exploreEl.current ? exploreEl.current.offsetWidth : 0;
-    setCategoriesWidth(width);
-  }, [windowWidth]);
+  useEffect(
+    () => {
+      const width = exploreEl.current ? exploreEl.current.offsetWidth : 0;
+      setCategoriesWidth(width);
+    },
+    [windowWidth],
+  );
 
   return (
     <div
