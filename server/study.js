@@ -12,24 +12,29 @@ const readAssignment = (request, test) => {
 };
 
 const writeAssignment = (response, test, assignment) => {
-  const maxAge = dayjs.convert(1, 'month', 'ms');
+  const maxAge = dayjs.convert(10, 'second', 'ms');
   response.cookie(`test-${test}`, assignment, { maxAge });
 };
 
 const assignGroup = (groups) => {
+  const entries = Object.entries(groups);
   const sum = Object.values(groups).reduce((sum, { weight }) => sum + weight, 0);
+  
   let rand = Math.random() * sum;
-  for (const [assignment, { weight }] in Object.entries(groups)) {
+  for (const [assignment, { weight }] of entries) {
     rand -= weight;
     if (rand < 0) {
       return assignment;
     }
   }
+
+  // this must be a rounding error, so return the last group
+  return entries[entries.length - 1][0];
 };
 
 const getAssignments = (request, response) => {
   const assignments = {};
-  for (const [test, groups] in Object.entries(tests)) {
+  for (const [test, groups] of Object.entries(tests)) {
     let assignment = readAssignment(request, test);
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
