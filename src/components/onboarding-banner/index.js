@@ -49,12 +49,7 @@ function OnboardingBanner({ isHomepage }) {
           <Text size="15px" defaultMargin>
             Jump into the editor by creating your very own app.
           </Text>
-          <NewProjectPop
-            align="left"
-            buttonText="Create New Project"
-            buttonType="cta"
-            source={sourceLabel}
-          />
+          <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" source={sourceLabel} />
           <Text size="15px" defaultMargin>
             <Link to="/create">Learn about creating on Glitch</Link>
           </Text>
