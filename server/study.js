@@ -26,14 +26,26 @@ const readAssignment = (request, test) => {
   return request.cookies[test] || null;
 };
 
-const writeAssignment = (response, test, group) => {
+const writeAssignment = (response, test, assignment) => {
   const maxAge = dayjs.convert(1, 'month', 'ms');
-  response.cookie(`test-${test}`, group, { maxAge });
+  response.cookie(`test-${test}`, assignment, { maxAge });
+};
+
+const assignGroup = (groups) => {
+  const sum = Object.values(groups).reduce((sum, { weight }) => sum + weight, 0);
+  let rand = Math.random() * sum;
 };
 
 const getAssignments = (request, response) => {
   const assignments = {};
-
+  for (const [test, groups] in Object.entries(tests)) {
+    let assignment = readAssignment(request, test);
+    if (!Object.keys(groups).includes(assignment)) {
+      assignment = assignGroup(groups);
+    }
+    assignments[test] = [assignment, groups[assignment]];
+  }
+  return assignments;
 };
 
 module.exports = getAssignments;
