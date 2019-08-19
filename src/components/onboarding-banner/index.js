@@ -60,7 +60,7 @@ function OnboardingBanner({ isHomepage }) {
             <strong>...or explore starter apps</strong> to find a project to remix.
           </Text>
           <CategoriesGrid
-            wrapItems={categoriesWidth > 530}
+            wrapItems={categoriesWidth > 590}
             className={styles.categoriesGrid}
             categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
           />
