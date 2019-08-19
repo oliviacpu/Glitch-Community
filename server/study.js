@@ -12,7 +12,7 @@ const readAssignment = (request, test) => {
 };
 
 const writeAssignment = (response, test, assignment) => {
-  const maxAge = dayjs.convert(10, 'second', 'ms');
+  const maxAge = dayjs.convert(1, 'month', 'ms');
   response.cookie(`test-${test}`, assignment, { maxAge });
 };
 
