@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import PropTypes from 'react-prop-types';
+
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
@@ -11,7 +13,7 @@ import useWindowSize from 'Hooks/use-window-size';
 import Illustration from './illustration';
 import styles from './styles.styl';
 
-function OnboardingBanner() {
+function OnboardingBanner({ useBackgroundImage }) {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
 
@@ -24,14 +26,14 @@ function OnboardingBanner() {
     },
     [windowWidth],
   );
+  
+  const backgroundStyles = useBackgroundImage ? 
+    { backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)', backgroundColor: lightColors[currentUser.id % 4] } : null
 
   return (
     <div
       className={styles.banner}
-      style={{
-        backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
-        backgroundColor: lightColors[currentUser.id % 4],
-      }}
+      style={backgroundStyles}
     >
       <div className={styles.illustration}>
         <h1>
@@ -68,6 +70,14 @@ function OnboardingBanner() {
       </div>
     </div>
   );
+}
+
+OnboardingBanner.propTypes = {
+  useBackgroundImage: PropTypes.bool,
+}
+
+OnboardingBanner.defaultProps = {
+  useBackgroundImage: true,
 }
 
 export default OnboardingBanner;

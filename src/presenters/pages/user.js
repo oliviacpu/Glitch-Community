@@ -125,6 +125,8 @@ const UserPage = ({ user: initialUser }) => {
             placeholder="Tell us about yourself"
           />
         </UserProfileContainer>
+        
+        {isAuthorized && !user.projects && <OnboardingBanner background={} />}
       </section>
 
       {featuredProject && (
