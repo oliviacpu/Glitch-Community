@@ -96,7 +96,10 @@ const useNewProjectAPI = createAPIHook(async (api) => {
 function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
-  const onOpen = useTracker('open new-project pop');
+  const onOpen = useTracker('open new-project pop', {
+    userId: currentUser.id || null,
+    source: 
+  });
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
