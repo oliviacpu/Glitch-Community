@@ -29,7 +29,7 @@ const tests = [
 const runStudy = (request, response) => {
   const store = createStore(request, response);
   const study = new Study({ store });
-  tests.forEach((test) => study.define(test));
+  study.define(tests);
   study.assign();
   return study.assignments();
 };
