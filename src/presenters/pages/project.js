@@ -28,7 +28,7 @@ import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { toggleBookmark, useCollectionReload } from 'State/collection';
-import { useProjectEditor, getProjectByDomain } from 'State/project';
+import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
@@ -36,6 +36,7 @@ import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
 import { useAPI, useAPIHandlers } from 'State/api';
+import { useCachedProject } from 'State/api-cache';
 import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
@@ -149,6 +150,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
   const reloadCollectionProjects = useCollectionReload();
+
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -167,8 +169,16 @@ const ProjectPage = ({ project: initialProject }) => {
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
 
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
+
   return (
     <main id="main">
+      <Helmet title={project.domain} />
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
@@ -238,7 +248,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
@@ -275,26 +285,24 @@ async function addProjectBreadcrumb(projectWithMembers) {
   return projectWithMembers;
 }
 
-const ProjectPageContainer = ({ name: domain }) => (
-  <Layout>
-    <AnalyticsContext properties={{ origin: 'project' }}>
-      <DataLoader
-        get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)}
-        renderError={() => <NotFound name={domain} />}
-      >
-        {(project) =>
-          project ? (
-            <>
-              <Helmet title={project.domain} />
-              <ProjectPage project={project} />
-            </>
-          ) : (
-            <NotFound name={domain} />
-          )
-        }
-      </DataLoader>
-    </AnalyticsContext>
-  </Layout>
-);
+const ProjectPageContainer = ({ name: domain }) => {
+  const { status, value: project } = useCachedProject(domain);
+  useEffect(() => {
+    if (project) addProjectBreadcrumb(project);
+  }, [project]);
+  return (
+    <Layout>
+      <AnalyticsContext properties={{ origin: 'project' }}>
+        {project ? <ProjectPage project={project} /> : (
+          <>
+            {status === 'ready' && <NotFound name={domain} />}
+            {status === 'loading' && <Loader />}
+            {status === 'error' && <NotFound name={domain} />}
+          </>
+        )}
+      </AnalyticsContext>
+    </Layout>
+  );
+};
 
 export default ProjectPageContainer;

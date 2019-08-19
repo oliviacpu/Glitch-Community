@@ -40,7 +40,7 @@ window.bootstrap = (container) => {
         ZINE_POSTS={window.ZINE_POSTS}
         SSR_SIGNED_IN={window.SSR_SIGNED_IN}
       >
-        <App />
+        <App apiCache={window.API_CACHE} />
       </GlobalsProvider>
     </BrowserRouter>
   );

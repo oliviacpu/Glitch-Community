@@ -5,6 +5,8 @@ import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
 
 import { isDarkColor } from 'Utils/color';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -28,6 +30,8 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   useEffect(() => {
     setPreviewProjects(sampleSize(collection.projects, 3));
   }, [collection]);
+  const [displayHint, setDisplayHint] = useState(false);
+
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -81,13 +85,36 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {!preview && (
             <div className={styles.projectCount}>
-              <Text>
+              <Text weight="600">
                 <Pluralize count={collection.projects.length} singular="Project" />
               </Text>
             </div>
           )}
 
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
+
+          {enableSorting && (
+            <div className={classnames(styles.hint, isDarkColor(collection.coverColor) && styles.dark)}>
+              <Emoji name="new" />
+              <Text> You can reorder your projects</Text>
+              {!displayHint && (
+                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
+                  Learn More
+                </Button>
+              )}
+              {displayHint && (
+                <div className={styles.hintBody}>
+                  <Text>
+                    <Emoji name="mouse" /> Click and drag to reorder
+                  </Text>
+                  <Text>
+                    <Emoji name="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
+                    save.
+                  </Text>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -100,7 +127,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         {!collectionHasProjects && isAuthorized && (
           <div className={styles.emptyCollectionHint}>
             <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
-            <Text>You can add any project, created by any user</Text>
+            <Text className={isDarkColor(collection.coverColor) && styles.dark}>You can add any project, created by any user</Text>
           </div>
         )}
         {!collectionHasProjects && !isAuthorized && <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>}
@@ -130,11 +157,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
             }}
             projectOptions={{ ...funcs, collection }}
           />
-        )}
-        {enableSorting && (
-          <Text defaultMargin>
-            Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.
-          </Text>
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>

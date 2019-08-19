@@ -13,6 +13,7 @@ import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
 import { toggleBookmark, useCollectionReload } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
+import { useTrackedFunc } from 'State/segment-analytics';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
@@ -80,19 +81,29 @@ const FeaturedProject = ({
     setHasBookmarked(featuredProject.authUserHasBookmarked);
   }, [featuredProject.authUserHasBookmarked]);
 
-  const bookmarkAction = () =>
-    toggleBookmark({
-      api,
-      project: featuredProject,
-      currentUser,
-      createNotification,
-      myStuffEnabled,
-      addProjectToCollection: addProjectToCollectionAPI,
-      removeProjectFromCollection,
-      setHasBookmarked,
-      hasBookmarked,
-      reloadCollectionProjects,
-    });
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project: featuredProject,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection: addProjectToCollectionAPI,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({
+      ...inherited,
+      projectName: featuredProject.domain,
+      baseProjectId: featuredProject.baseId || featuredProject.baseProject,
+      userId: currentUser.id,
+      origin: `${inherited.origin}-featured-project`,
+    }),
+  );
 
   return (
     <div data-cy="featured-project">
