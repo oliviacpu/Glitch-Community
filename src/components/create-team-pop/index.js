@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { kebabCase, debounce } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import { Icon } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import TextInput from 'Components/inputs/text-input';
 import Loader from 'Components/loader';
 import { MultiPopoverTitle, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import { getPredicates, getTeamPair } from 'Models/words';
 import { getTeamLink } from 'Models/team';
 import { useAPI } from 'State/api';
@@ -136,8 +135,9 @@ const CreateTeamPop = withRouter(({ history }) => {
           {state.isLoading ? (
             <Loader />
           ) : (
-            <Button submit size="small" emoji="thumbsUp" disabled={!!state.error}>
+            <Button submit size="small" disabled={!!state.error}>
               Create Team
+              <Icon icon="thumbsUp" />
             </Button>
           )}
         </form>
