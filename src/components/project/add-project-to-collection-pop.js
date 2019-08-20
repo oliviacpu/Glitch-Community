@@ -3,6 +3,8 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
+import { Button } from '@fogcreek/shared-components';
+
 import Badge from 'Components/badges/badge';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Link from 'Components/link';
@@ -16,7 +18,6 @@ import {
   PopoverActions,
   PopoverSearch,
 } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import { ProjectAvatar } from 'Components/images/avatar';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
@@ -175,7 +176,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       />
 
       <PopoverActions>
-        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
+        <Button size="small" variant="secondary" onClick={createCollectionPopover}>
           Add to a new collection
         </Button>
       </PopoverActions>

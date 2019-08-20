@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';

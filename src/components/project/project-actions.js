@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
 
-import Button, { SIZES } from 'Components/buttons/button';
 import { getShowUrl, getEditorUrl, getRemixUrl } from '../../models/project';
 
 export const ShowButton = ({ name, size }) => (
@@ -22,12 +22,12 @@ export const EditButton = ({ name, isMember, size }) => (
 EditButton.propTypes = {
   name: PropTypes.string.isRequired,
   isMember: PropTypes.bool,
-  size: PropTypes.oneOf(SIZES),
+  size: PropTypes.string,
 };
 
 EditButton.defaultProps = {
   isMember: false,
-  size: null,
+  size: 'normal',
 };
 
 export const RemixButton = ({ name, isMember }) => (
