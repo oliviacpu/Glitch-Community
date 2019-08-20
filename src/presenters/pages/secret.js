@@ -38,7 +38,7 @@ const ABTest = () => {
   if (text) {
     return <>{text}! {button}</>;
   }
-  return <>no luck, {button}</>;
+  return <>no luck {button}</>;
 };
 
 const Secret = () => {

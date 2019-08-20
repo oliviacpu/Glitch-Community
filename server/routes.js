@@ -280,6 +280,12 @@ module.exports = function(external) {
     const canonicalUrl = `${APP_URL}/create`;
     await render(req, res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' }, true);
   });
+
+  app.get('/secret', async (req, res) => {
+    const title = 'Glitch';
+    const description = "It's a secret to everybody";
+    await render(req, res, { title, description }, true);
+  });
   
 
   app.get('*', async (req, res) => {
