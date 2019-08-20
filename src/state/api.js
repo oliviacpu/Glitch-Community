@@ -40,10 +40,7 @@ export const getAPIForToken = memoize((persistentToken) => {
         response,
       };
       return response;
-    },
-    bustCache: (url) => {
-      cache[url].timestamp = 0;
-    },
+    }
   };
 });
 
