@@ -2,8 +2,9 @@ const dayjs = require('dayjs');
 
 const tests = {
   'Just-A-Test': {
-    winner: { weight: 1 },
-    loser: { weight: 1000000 },
+    winnera: { weight: 1, text: 'nice one' },
+    winnerb: { weight: 1, text: 'good job' },
+    loser: { weight: 1000000, te },
   },
 };
 
@@ -11,8 +12,7 @@ const COOKIE_NAME = 'ab-tests';
 
 const readAssignments = (request) => {
   try {
-    const serialized = request.cookies[COOKIE_NAME] || '{}';
-    return JSON.parse(serialized) || {};
+    return JSON.parse(request.cookies[COOKIE_NAME]) || {};
   } catch {
     return {};
   }
@@ -43,16 +43,18 @@ const assignGroup = (groups) => {
 };
 
 const getAssignments = (request, response) => {
-  const assignments = readAssignments(request);
+  const result = {}; // { test: [ assignment, group ] }
+  const assignments = readAssignments(request); // { test: assignment }
   for (const [test, groups] of Object.entries(tests)) {
     let assignment = assignments[test];
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
     }
     assignments[test] = assignment;
+    result[test] = [assignment, groups[assignment]];
   }
   writeAssignments(response, assignments);
-  return Object.fromEntries(Object.keys(tests).map((test) => ));
+  return result;
 };
 
 module.exports = getAssignments;
