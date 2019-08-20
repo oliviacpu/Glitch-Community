@@ -122,7 +122,6 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-    api.bustCache(`v1/users/by/id/collections?id=${currentUser.id}&limit=100`);
   };
 
   return (

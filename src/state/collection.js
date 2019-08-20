@@ -67,7 +67,6 @@ async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
 const loadingResponse = { status: 'loading' };
 
 function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
-  console.log("calling loadCollectionProjects")
   setResponses((prev) => {
     const next = { ...prev };
     for (const { id } of collections) {
@@ -79,21 +78,13 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
   });
   collections.forEach(async (collection) => {
     const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
-    console.log("here's the projects we get back", projects, "for this collection", collection)
-    setResponses((prev) => {
-      let newResponses = {
-        ...prev,
-        [collection.id]: {
-          ...prev[collection.id],
-          projects: { status: 'ready', value: projects },
-        },   
-      };
-      if (collection.isMyStuff) {
-        delete newResponses.nullMyStuff
-      }
-      return newResponses
-    });
-
+    setResponses((prev) => ({
+      ...prev,
+      [collection.id]: {
+        ...prev[collection.id],
+        projects: { status: 'ready', value: projects },
+      },
+    }));
   });
 }
 
@@ -109,7 +100,6 @@ export const CollectionContextProvider = ({ children }) => {
 
   const getCollectionProjects = useCallback(
     (collection) => {
-      console.log("responses", responses)
       if (responses[collection.id] && responses[collection.id].projects) {
         return responses[collection.id].projects;
       }
