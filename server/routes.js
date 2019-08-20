@@ -15,7 +15,7 @@ const { getProject, getTeam, getUser, getCollection, getZine } = require('./api'
 const initWebpack = require('./webpack');
 const constants = require('./constants');
 const renderPage = require('./render');
-const getStudyAssignments = require('./study');
+const getAssignments = require('./ab-tests');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 const { getHomeData, saveHomeDataToFile } = require('./home');
 
@@ -86,9 +86,7 @@ module.exports = function(external) {
       built = false;
     }
 
-    const [, { text }] = getStudyAssignments(req, res)['Just-A-Test'];
-    if (text) console.log(`wow you did it, ${text}!`);
-
+    const assignments = getAssignments(req, res);
     const signedIn = !!req.cookies.hasLogin;
 
     let rendered = null;
@@ -125,6 +123,7 @@ module.exports = function(external) {
       ZINE_POSTS: JSON.stringify(zine || []),
       HOME_CONTENT: JSON.stringify(homeContent),
       SSR_SIGNED_IN: JSON.stringify(signedIn),
+      AB_TESTS: JSON.stringify(assignments),
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,

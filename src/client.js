@@ -50,4 +50,7 @@ window.bootstrap = (container) => {
   } else {
     render(element, container);
   }
+
+  const [, { text }] = window.AB_TESTS['Just-A-Test'];
+  if (text) console.log(`wow you did it, ${text}!`);
 };
