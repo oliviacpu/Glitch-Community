@@ -86,8 +86,14 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setIsHoveringOnProjectItem(false);
   };
 
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
+  providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
