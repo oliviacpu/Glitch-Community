@@ -96,7 +96,7 @@ const useNewProjectAPI = createAPIHook(async (api) => {
 function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
-  const onOpen = useTracker('test new-project pop',  (inherited) => ({ ...inherited, name: '🌈 TARA' }));
+  const onOpen = useTracker('test new-project pop');
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
