@@ -36,7 +36,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
 
   // fetch projects for myStuff
   const { value: myStuffProjects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
-
+  
   if (status === 'loading') {
     return children([]);
   }
@@ -49,6 +49,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
+  console.log("collectionsWithMyStuff inside mystuffcontroller", collectionsWithMyStuff)
 
   return children(collectionsWithMyStuff);
 }
@@ -85,7 +86,6 @@ function CollectionsList({
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
-
   return (
     <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized} maybeTeam={maybeTeam}>
       {(collectionsWithMyStuff) => (
