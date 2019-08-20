@@ -96,6 +96,7 @@ export function useTeamEditor(initialTeam) {
       await joinTeam({ team });
       setTeam((prev) => ({
         ...prev,
+        teamPermissions: [...prev.teamPermissions, { accessLevel: MEMBER_ACCESS_LEVEL, userId: currentUser.id }],
         users: [...prev.users, currentUser],
       }));
       if (currentUser) {
@@ -113,6 +114,7 @@ export function useTeamEditor(initialTeam) {
       removeUserAdmin(user);
       setTeam((prev) => ({
         ...prev,
+        teamPermissions: prev.teamPermissions.filter((p) => p.userId !== user.id),
         users: prev.users.filter((u) => u.id !== user.id),
       }));
       if (currentUser && currentUser.id === user.id) {
