@@ -2,9 +2,9 @@ const dayjs = require('dayjs');
 
 const tests = {
   'Just-A-Test': {
-    winnera: { weight: 1, text: 'nice one' },
-    winnerb: { weight: 1, text: 'good job' },
-    loser: { weight: 1000000, te },
+    niceone: { weight: 0.5, text: 'nice one' },
+    goodjob: { weight: 0.5, text: 'good job' },
+    toobad: { weight: 10 },
   },
 };
 
