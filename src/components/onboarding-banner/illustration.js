@@ -93,7 +93,7 @@ const Illustration = () => (
             </g>
           </g>
         </g>
-        <g id="Group-119" transform="translate(54 .35)" fillRule="nonzero">
+        <g transform="translate(54 .35)" fillRule="nonzero">
           <path fill="#CECECD" d="M123.053 131.77l3.43 4.2h-7.531l-3.36-3.98h7.19z" />
           <path fill="#CECECD" d="M119.263 127.11l3.79 4.66-.27.22h-7.19l-4.11-4.88z" />
           <path fill="#CECECD" d="M115.442 122.42l3.82 4.69h-7.78l-3.96-4.69z" />
@@ -324,10 +324,10 @@ const Illustration = () => (
       <path stroke="#000" strokeWidth="1.875" fill="#1CFEFE" d="M183.438 76.078l10.183-6.538-.992 12.06-9.589 5.55z" />
       <g transform="translate(222.074 70.5)">
         <g transform="translate(.867 .816)">
-          <mask id="mask-2" fill="#fff" />
+          <mask fill="#fff" />
         </g>
       </g>
-      <circle id="Oval" stroke="#000" strokeWidth="1.5" fill="#83FFCD" fillRule="nonzero" cx="222.667" cy="68" r="2.5" />
+      <circle stroke="#000" strokeWidth="1.5" fill="#83FFCD" fillRule="nonzero" cx="222.667" cy="68" r="2.5" />
     </g>
   </svg>
 );
