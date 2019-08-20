@@ -40,9 +40,9 @@ function OnboardingBanner({ isHomepage }) {
     ? { backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)', backgroundColor: lightColors[currentUser.id % 4] }
     : null;
   const sourceLabel = `${isHomepage ? 'homepage' : 'profile page'} onboarding banner`;
-/*    <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile page'} onboarding banner` }}> */
 
   return (
+    <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile page'} onboarding banner` }}>
       <div className={styles.banner} style={backgroundStyles}>
         <div className={styles.illustration}>
           <Illustration />
@@ -78,6 +78,7 @@ function OnboardingBanner({ isHomepage }) {
           </div>
         </div>
       </div>
+    </AnalyticsContext>
   );
 }
 
