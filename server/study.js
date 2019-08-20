@@ -2,8 +2,8 @@ const dayjs = require('dayjs');
 
 const tests = {
   'Just-A-Test': {
-    winner: { weight: 1000 },
-    loser: { weight: 1 },
+    winner: { weight: 1 },
+    loser: { weight: 1000000 },
   },
 };
 
@@ -22,12 +22,13 @@ const assignGroup = (groups) => {
   const entries = Object.entries(groups);
   const sum = Object.values(groups).reduce((sum, { weight }) => sum + weight, 0);
 
+  // pick a number in [0, sum) and see which [0, weight) range it falls in
   let rand = Math.random() * sum;
   for (const [assignment, { weight }] of entries) {
-    rand -= weight;
-    if (rand < 0) {
+    if (rand < weight) {
       return assignment;
     }
+    rand -= weight;
   }
 
   // this must be a rounding error, so return the last group
@@ -41,7 +42,7 @@ const getAssignments = (request, response) => {
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
     }
-    
+
     writeAssignment(response, test, assignment);
     assignments[test] = [assignment, groups[assignment]];
   }

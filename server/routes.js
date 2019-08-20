@@ -87,7 +87,7 @@ module.exports = function(external) {
     }
 
     const [assignment] = getStudyAssignments(req, res)['Just-A-Test'];
-    if (assignment === 'loser') console.log('sorry!');
+    if (assignment === 'winner') console.log('wow you did it!');
 
     const signedIn = !!req.cookies.hasLogin;
 
