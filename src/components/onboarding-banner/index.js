@@ -34,9 +34,7 @@ function OnboardingBanner({ isHomepage }) {
   return (
     <div className={styles.banner} style={backgroundStyles}>
       <div className={styles.illustration}>
-        <h1>
-          <Illustration />
-        </h1>
+        <Illustration />
       </div>
 
       <div className={styles.actions} style={{ background: isHomepage ? 'rgba(255, 255, 255, .875)' : 'none' }}>

@@ -3,6 +3,8 @@ import styles from './illustration.styl';
 
 const Illustration = () => (
   <svg viewBox="0 0 332 263" role="img">
+    <title>Welcome</title>
+    <desc>A computer with a hand giving a welcoming wave</desc>
     <defs>
       <path
         d="M4.233.876c-2.53.959-3.958 3.376-3.192 5.402C1.81 8.3 4.482 9.164 7.013 8.204c2.527-.959 3.956-3.377 3.19-5.4C9.646 1.34 8.095.483 6.324.483a5.91 5.91 0 0 0-2.092.392z"

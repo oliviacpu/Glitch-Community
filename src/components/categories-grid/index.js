@@ -68,18 +68,11 @@ function CategoriesGrid({ categories, wrapItems, className }) {
     categories,
   ]);
 
-  const width = el.current ? el.current.offsetWidth : 0;
-  // const sharedClassNames = cx({
-  //   alwaysWrap,
-  //   small: width <= 450,
-  //   medium: width > 450 && width <= 650,
-  //   wide: width > 650
-  // });
   const itemClassNames = cx({
     categoriesGridItem: true,
     wrapItems,
   });
-  
+
   return (
     <ul ref={el} className={classNames(styles.categoriesGrid, className)}>
       {el.current && el.current.width}
