@@ -282,8 +282,8 @@ module.exports = function(external) {
   });
 
   app.get('/secret', async (req, res) => {
-    const title = 'Glitch';
     const description = "It's a secret to everybody";
+    const title = `Glitch - ${description}`;
     await render(req, res, { title, description }, true);
   });
   
