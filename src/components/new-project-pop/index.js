@@ -100,14 +100,15 @@ function NewProjectPopButton({ buttonText, buttonType, align, source }) {
   const { currentUser } = useCurrentUser();
   const projects = value || [];
   const onOpen = useTracker('open new-project pop', {
-    userId: currentUser.id || null,
-    source,
+    ...inherited,
   });
 
   return (
-    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
-      {() => <NewProjectPop projects={projects} align={align} analyticsProps={{ userId: currentUser.id || null, source }} />}
-    </PopoverWithButton>
+    <AnalyticsContext properties={{ origin: source, userId: currentUser.id }}>
+      <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
+        {() => <NewProjectPop projects={projects} align={align} analyticsProps={{ userId: currentUser.id || null, source }} />}
+      </PopoverWithButton>
+    </AnalyticsContext>
   );
 }
 
