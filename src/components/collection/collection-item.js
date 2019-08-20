@@ -132,7 +132,6 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
 });
 
 export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
-  console.log("mystuffitem collection", collection)
   const CollectionLinkComponent = collection.fullUrl ? CollectionLink : CreateMyStuffOnClickComponent;
 
   return (

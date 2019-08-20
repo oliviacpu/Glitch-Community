@@ -84,7 +84,7 @@ const UserPage = ({ user: initialUser }) => {
   } = funcs;
   const projectOptions = { ...funcs, user };
   const { _deletedProjects, featuredProjectId } = user;
-  console.log("i think i found the bug", "the user passed in has collections", initialUser, "but the current state of this user does not", user)
+
   useFocusFirst();
 
   const { currentUser: maybeCurrentUser } = useCurrentUser();

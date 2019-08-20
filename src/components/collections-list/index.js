@@ -36,7 +36,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
 
   // fetch projects for myStuff
   const { value: myStuffProjects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
-  
+
   if (status === 'loading') {
     return children([]);
   }
@@ -49,7 +49,6 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
-  console.log("collectionsWithMyStuff inside mystuffcontroller", collectionsWithMyStuff)
 
   return children(collectionsWithMyStuff);
 }
@@ -65,7 +64,6 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
-  console.log("rawCollections inside collections-list", rawCollections)
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
