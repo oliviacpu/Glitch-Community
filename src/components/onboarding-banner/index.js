@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
@@ -37,7 +38,7 @@ function OnboardingBanner({ isHomepage }) {
         <Illustration />
       </div>
 
-      <div className={styles.actions} style={{ background: isHomepage ? 'rgba(255, 255, 255, .875)' : 'none' }}>
+      <div className={classNames(styles.actions, isHomepage)}>
         <div className={styles.create}>
           <h2 className={styles.createHeading}>Create your first project</h2>
           <Text size="15px" defaultMargin>
