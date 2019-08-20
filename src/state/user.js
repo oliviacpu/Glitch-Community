@@ -34,7 +34,7 @@ export function useUserEditor(initialUser) {
     undeleteProject,
   } = useAPIHandlers();
   const { getDeletedProject, getProject } = useUserPageGetters();
-
+  // NEW THOUGHT: we never call setUser when currentUser updates
   const isCurrentUser = !!currentUser && user.id === currentUser.id;
 
   async function updateFields(changes) {
