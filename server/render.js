@@ -33,7 +33,7 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
-const render = async ({ url, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
+const render = async ({ url, cache, signedIn, AB_TESTS, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
   const { Page, resetState } = require('../src/server');
   resetState();
 
@@ -43,6 +43,7 @@ const render = async ({ url, cache, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZIN
     route: url.pathname + url.search + url.hash,
     cache,
     signedIn,
+    AB_TESTS,
     ZINE_POSTS,
     HOME_CONTENT,
     EXTERNAL_ROUTES,

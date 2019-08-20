@@ -96,6 +96,7 @@ module.exports = function(external) {
           url: new URL(req.url, `${req.protocol}://${req.hostname}`),
           cache,
           signedIn,
+          AB_TESTS: assignments,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
           ZINE_POSTS: zine || [],
