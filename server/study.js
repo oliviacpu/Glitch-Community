@@ -7,15 +7,22 @@ const tests = {
   },
 };
 
-const COOKIE_PREFIX = 'test-';
+const COOKIE_NAME = 'ab-tests';
 
-const readAssignment = (request, test) => {
-  return request.cookies[`${COOKIE_PREFIX}${test}`] || null;
+const readAssignments = (request) => {
+  try {
+    const serialized = request.cookies[COOKIE_NAME] || '{}';
+    return JSON.parse(serialized) || {};
+  } catch {
+    return {};
+  }
 };
 
-const writeAssignment = (response, test, assignment) => {
+const writeAssignments = (response, assignments) => {
   const maxAge = dayjs.convert(1, 'month', 'ms');
-  response.cookie(`${COOKIE_PREFIX}${test}`, assignment, { maxAge });
+  const whitelist = Object.keys(tests).sort();
+  const serialized = JSON.stringify(assignments, whitelist);
+  response.cookie(COOKIE_NAME, serialized, { maxAge });
 };
 
 const assignGroup = (groups) => {
@@ -36,17 +43,16 @@ const assignGroup = (groups) => {
 };
 
 const getAssignments = (request, response) => {
-  const assignments = {};
+  const assignments = readAssignments(request);
   for (const [test, groups] of Object.entries(tests)) {
-    let assignment = readAssignment(request, test);
+    let assignment = assignments[test];
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
     }
-
-    writeAssignment(response, test, assignment);
-    assignments[test] = [assignment, groups[assignment]];
+    assignments[test] = assignment;
   }
-  return assignments;
+  writeAssignments(response, assignments);
+  return Object.fromEntries(Object.keys(tests).map((test) => ));
 };
 
 module.exports = getAssignments;
