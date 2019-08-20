@@ -64,9 +64,10 @@ const allCategories = [
 function CategoriesGrid({ categories, wrapItems, className }) {
   const el = useRef(null);
 
-  const categoriesToRender = useMemo(() => allCategories.filter((category) => categories === 'all' || categories.includes(category.path)), [
-    categories,
-  ]);
+  const categoriesToRender = useMemo(
+    () => (categories !== allCategories ? allCategories.filter((category) => categories.includes(category.path)) : allCategories),
+    [categories],
+  );
 
   const itemClassNames = cx({
     categoriesGridItem: true,
