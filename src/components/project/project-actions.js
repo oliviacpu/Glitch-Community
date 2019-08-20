@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import { getShowUrl, getEditorUrl, getRemixUrl } from '../../models/project';
 
 export const ShowButton = ({ name, size }) => (
-  <Button href={getShowUrl(name)} size={size} emoji="sunglasses" emojiPosition="left">
-    Show
+  <Button as="a" href={getShowUrl(name)} size={size}>
+    <Icon icon="sunglasses" /> Show
   </Button>
 );
 
@@ -31,8 +31,8 @@ EditButton.defaultProps = {
 };
 
 export const RemixButton = ({ name, isMember }) => (
-  <Button href={getRemixUrl(name)} size="small" emoji="microphone">
-    {isMember ? 'Remix This' : 'Remix your own'}
+  <Button as="a" href={getRemixUrl(name)} size="small">
+    {isMember ? 'Remix This' : 'Remix your own'} <Icon icon="microphone" />
   </Button>
 );
 RemixButton.propTypes = {
