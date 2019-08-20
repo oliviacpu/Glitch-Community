@@ -39,6 +39,7 @@ AnalyticsContext.defaultProps = {
 };
 
 export const useTracker = (name, properties, context) => {
+  console.log('useTracker', name, properties)
   const inherited = React.useContext(Context);
   return () => {
     try {
