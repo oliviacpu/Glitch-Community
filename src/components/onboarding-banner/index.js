@@ -14,6 +14,8 @@ import useWindowSize from 'Hooks/use-window-size';
 import Illustration from './illustration';
 import styles from './styles.styl';
 
+const cx = classNames.bind(styles);
+
 function OnboardingBanner({ isHomepage }) {
   const { currentUser } = useCurrentUser();
   const exploreEl = useRef();
@@ -28,6 +30,11 @@ function OnboardingBanner({ isHomepage }) {
     [windowWidth],
   );
 
+  const actionsClassnames = cx({
+    actions: true,
+    isHomepage,
+  });
+  
   const backgroundStyles = isHomepage
     ? { backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)', backgroundColor: lightColors[currentUser.id % 4] } : null;
   const sourceLabel = `${isHomepage ? 'homepage' : 'profile page'} onboarding banner`;
@@ -38,7 +45,7 @@ function OnboardingBanner({ isHomepage }) {
         <Illustration />
       </div>
 
-      <div className={classNames(styles.actions, isHomepage)}>
+      <div className={actionsClassnames}>
         <div className={styles.create}>
           <h2 className={styles.createHeading}>Create your first project</h2>
           <Text size="15px" defaultMargin>
