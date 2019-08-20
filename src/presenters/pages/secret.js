@@ -5,6 +5,7 @@ import Button from 'Components/buttons/button';
 import Heading from 'Components/text/heading';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { useDevToggles } from 'State/dev-toggles';
+import useABTest from 'State/ab-tests';
 
 import styles from './secret.styl';
 
@@ -29,6 +30,8 @@ function useZeldaMusicalCue() {
 
 const Secret = () => {
   const { enabledToggles, toggleData, setEnabledToggles } = useDevToggles();
+  const [, { text }] = useABTest('Just-A-Test');
+  
   useZeldaMusicalCue();
 
   const isEnabled = (toggleName) => enabledToggles && enabledToggles.includes(toggleName);
