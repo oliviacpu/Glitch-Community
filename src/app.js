@@ -23,7 +23,7 @@ const App = ({ apiCache }) => (
     <LiveAnnouncer>
       <NotificationsProvider>
         <LocalStorageProvider>
-          <AnalyticsContext context={{ groupId: '0' }} properties={{ userId: currentUser.id || null }}>
+          <AnalyticsContext context={{ groupId: '0' }}>
             <CurrentUserProvider>
               <APIContextProvider>
                 <APICacheProvider initial={apiCache}>

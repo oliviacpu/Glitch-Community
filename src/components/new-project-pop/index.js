@@ -38,7 +38,7 @@ const NewProjectResultItem = ({ project }) => (
   </div>
 );
 
-const NewProjectPop = ({ projects, align, analyticsProps }) => (
+const NewProjectPop = ({ projects, align }) => (
   <PopoverDialog align={align}>
     <PopoverSection>
       {projects.length ? (
@@ -51,7 +51,6 @@ const NewProjectPop = ({ projects, align, analyticsProps }) => (
               properties={{
                 baseDomain: project.domain,
                 origin: 'community new project pop',
-                ...analyticsProps,
               }}
             >
               <NewProjectResultItem project={project} />
@@ -99,16 +98,12 @@ function NewProjectPopButton({ buttonText, buttonType, align, source }) {
   const { value } = useNewProjectAPI();
   const { currentUser } = useCurrentUser();
   const projects = value || [];
-  const onOpen = useTracker('open new-project pop', {
-    ...inherited,
-  });
-
+  const onOpen = useTracker('open new-project pop');
+  
   return (
-    <AnalyticsContext properties={{ origin: source, userId: currentUser.id }}>
-      <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
-        {() => <NewProjectPop projects={projects} align={align} analyticsProps={{ userId: currentUser.id || null, source }} />}
-      </PopoverWithButton>
-    </AnalyticsContext>
+    <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
+      {() => <NewProjectPop projects={projects} align={align} />}
+    </PopoverWithButton>
   );
 }
 

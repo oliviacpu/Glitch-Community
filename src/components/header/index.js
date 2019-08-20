@@ -9,6 +9,7 @@ import UserOptionsPop from 'Components/user-options-pop';
 import NewProjectPop from 'Components/new-project-pop';
 import Link, { TrackedExternalLink } from 'Components/link';
 import { useCurrentUser } from 'State/current-user';
+import { AnalyticsContext } from 'State/segment-analytics';
 import { useGlobals } from 'State/globals';
 import Logo from './logo';
 import styles from './header.styl';
@@ -30,48 +31,50 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   const signedOut = !!currentUser.id && !signedIn;
   const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
-    <header role="banner" className={styles.header}>
-      <Button href="#main" className={styles.visibleOnFocus}>
-        Skip to Main Content
-      </Button>
-      <Link to="/" className={styles.logoWrap}>
-        <Logo />
-      </Link>
+    <AnalyticsContext properties={{ origin: 'navbar' }}>
+      <header role="banner" className={styles.header}>
+        <Button href="#main" className={styles.visibleOnFocus}>
+          Skip to Main Content
+        </Button>
+        <Link to="/" className={styles.logoWrap}>
+          <Logo />
+        </Link>
 
-      <nav className={styles.headerActions}>
-        <div className={styles.searchWrap}>
-          <SearchForm defaultValue={searchQuery} />
-        </div>
-        <ul className={styles.buttons}>
-          {(signedIn || signedOut) && (
-            <li className={styles.buttonWrap}>
-              <NewProjectPop source="navbar" />
-            </li>
-          )}
-          {hasProjects && (
-            <li className={styles.buttonWrap}>
-              <ResumeCoding />
-            </li>
-          )}
-          {signedOut && (
-            <li className={styles.buttonWrap}>
-              <SignInPop align="right" />
-            </li>
-          )}
-          {signedIn && (
-            <li className={styles.buttonWrap}>
-              <UserOptionsPop
-                user={currentUser}
-                signOut={clear}
-                showAccountSettingsOverlay={showAccountSettingsOverlay}
-                showNewStuffOverlay={showNewStuffOverlay}
-                superUserHelpers={superUserHelpers}
-              />
-            </li>
-          )}
-        </ul>
-      </nav>
-    </header>
+        <nav className={styles.headerActions}>
+          <div className={styles.searchWrap}>
+            <SearchForm defaultValue={searchQuery} />
+          </div>
+          <ul className={styles.buttons}>
+            {(signedIn || signedOut) && (
+              <li className={styles.buttonWrap}>
+                <NewProjectPop source="navbar" />
+              </li>
+            )}
+            {hasProjects && (
+              <li className={styles.buttonWrap}>
+                <ResumeCoding />
+              </li>
+            )}
+            {signedOut && (
+              <li className={styles.buttonWrap}>
+                <SignInPop align="right" />
+              </li>
+            )}
+            {signedIn && (
+              <li className={styles.buttonWrap}>
+                <UserOptionsPop
+                  user={currentUser}
+                  signOut={clear}
+                  showAccountSettingsOverlay={showAccountSettingsOverlay}
+                  showNewStuffOverlay={showNewStuffOverlay}
+                  superUserHelpers={superUserHelpers}
+                />
+              </li>
+            )}
+          </ul>
+        </nav>
+      </header>
+    </AnalyticsContext>
   );
 };
 
