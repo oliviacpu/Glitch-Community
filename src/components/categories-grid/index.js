@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import Link from 'Components/link';
@@ -75,7 +75,6 @@ function CategoriesGrid({ categories, wrapItems, className }) {
 
   return (
     <ul ref={el} className={classNames(styles.categoriesGrid, className)}>
-      {el.current && el.current.width}
       {categoriesToRender.map((category) => (
         <li key={category.path} className={itemClassNames} style={{ '--bg-color': category.color }}>
           <Link to={`/${category.path}`}>
@@ -88,8 +87,14 @@ function CategoriesGrid({ categories, wrapItems, className }) {
   );
 }
 
-propTypes.defaultProps = {
-  wrapWidth: 0,
+CategoriesGrid.propTypes = {
+  categories: PropTypes.array,
+  wrapItems: PropTypes.bool,
+};
+
+CategoriesGrid.defaultProps = {
+  categories: allCategories,
+  wrapItems: false,
 };
 
 export default CategoriesGrid;
