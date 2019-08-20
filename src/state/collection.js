@@ -80,13 +80,20 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
   collections.forEach(async (collection) => {
     const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
     console.log("here's the projects we get back", projects, "for this collection", collection)
-    setResponses((prev) => ({
-      ...prev,
-      [collection.id]: {
-        ...prev[collection.id],
-        projects: { status: 'ready', value: projects },
-      },
-    }));
+    setResponses((prev) => {
+      let newResponses = {
+        ...prev,
+        [collection.id]: {
+          ...prev[collection.id],
+          projects: { status: 'ready', value: projects },
+        },   
+      };
+      if (collection.isMyStuff) {
+        delete newResponses.nullMyStuff
+      }
+      return newResponses
+    });
+
   });
 }
 
