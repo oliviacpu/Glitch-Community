@@ -5,7 +5,7 @@ import Button from 'Components/buttons/button';
 import Heading from 'Components/text/heading';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { useDevToggles } from 'State/dev-toggles';
-import useABTest from 'State/ab-tests';
+import useTest, { resetTests } from 'State/ab-tests';
 
 import styles from './secret.styl';
 
@@ -28,10 +28,22 @@ function useZeldaMusicalCue() {
   }, []);
 }
 
+const ABTest = () => {
+  const [, { text }] = useTest('Just-A-Test');
+  const onClick = () => {
+    resetTests();
+    window.location.reload();
+  };
+  const button = <Button onClick={onClick}>try again</Button>;
+  if (text) {
+    return <>wow you did it, {text}! {button}</>;
+  }
+  return <>no luck;
+};
+
 const Secret = () => {
   const { enabledToggles, toggleData, setEnabledToggles } = useDevToggles();
-  const [, { text }] = useABTest('Just-A-Test');
-  
+
   useZeldaMusicalCue();
 
   const isEnabled = (toggleName) => enabledToggles && enabledToggles.includes(toggleName);
@@ -49,7 +61,7 @@ const Secret = () => {
   return (
     <main className={styles.secretPage}>
       <Helmet title="Glitch - It's a secret to everybody." />
-      <VisuallyHidden as={Heading} tagName="h1">Glitch - It's a secret to everybody</VisuallyHidden>
+      <VisuallyHidden as={Heading} tagName="h1">It's a secret to everybody</VisuallyHidden>
       <ul>
         {toggleData.map(({ name, description }) => (
           <li key={name} className={isEnabled(name) ? styles.lit : ''}>
@@ -59,6 +71,7 @@ const Secret = () => {
           </li>
         ))}
       </ul>
+      <p className={styles.abTestResult}><ABTest /></p>
     </main>
   );
 };
