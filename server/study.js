@@ -2,18 +2,20 @@ const dayjs = require('dayjs');
 
 const tests = {
   'Just-A-Test': {
-    winner: { weight: 0.75 },
-    loser: { weight: 0.25 },
+    winner: { weight: 1000 },
+    loser: { weight: 1 },
   },
 };
 
+const COOKIE_PREFIX = 'test-';
+
 const readAssignment = (request, test) => {
-  return request.cookies[`test-${test}`] || null;
+  return request.cookies[`${COOKIE_PREFIX}${test}`] || null;
 };
 
 const writeAssignment = (response, test, assignment) => {
   const maxAge = dayjs.convert(1, 'month', 'ms');
-  response.cookie(`test-${test}`, assignment, { maxAge });
+  response.cookie(`${COOKIE_PREFIX}${test}`, assignment, { maxAge });
 };
 
 const assignGroup = (groups) => {
@@ -39,6 +41,7 @@ const getAssignments = (request, response) => {
     if (!Object.keys(groups).includes(assignment)) {
       assignment = assignGroup(groups);
     }
+    
     writeAssignment(response, test, assignment);
     assignments[test] = [assignment, groups[assignment]];
   }
