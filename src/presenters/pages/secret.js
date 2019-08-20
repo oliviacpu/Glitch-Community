@@ -34,11 +34,11 @@ const ABTest = () => {
     resetTests();
     window.location.reload();
   };
-  const button = <Button onClick={onClick}>try again</Button>;
+  const button = <Button onClick={onClick} size="small">try again</Button>;
   if (text) {
-    return <>wow you did it, {text}! {button}</>;
+    return <>{text}! {button}</>;
   }
-  return <>no luck;
+  return <>no luck, {button}</>;
 };
 
 const Secret = () => {

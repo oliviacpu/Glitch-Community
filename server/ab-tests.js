@@ -4,7 +4,7 @@ const tests = {
   'Just-A-Test': {
     niceone: { weight: 0.5, text: 'nice one' },
     goodjob: { weight: 0.5, text: 'good job' },
-    toobad: { weight: 10 },
+    toobad: { weight: 4 },
   },
 };
 
