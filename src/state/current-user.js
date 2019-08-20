@@ -112,8 +112,8 @@ async function getCachedUser(sharedUser) {
   if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
   const api = getAPIForToken(sharedUser.persistentToken);
   try {
-    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
-    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
+    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100&cache=${Date.now()}`;
+    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}&cache=${Date.now()}`;
     const {
       baseUser, emails, projects, teams, collections,
     } = await allByKeys({
@@ -121,7 +121,7 @@ async function getCachedUser(sharedUser) {
       emails: getAllPages(api, makeUrl('emails')),
       projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
       teams: getAllPages(api, makeOrderedUrl('teams', 'url', 'ASC')),
-      collections: getAllPages(api, `${makeUrl('collections')}&cache=${Date.now()}`),
+      collections: getAllPages(api, makeUrl('collections')),
     });
     const user = { ...baseUser, emails, projects: sortProjectsByLastAccess(projects), teams, collections };
     if (!usersMatch(sharedUser, user)) return 'error';
