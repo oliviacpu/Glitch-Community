@@ -31,7 +31,9 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
     <header role="banner" className={styles.header}>
-      <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
+      <Button href="#main" className={styles.visibleOnFocus}>
+        Skip to Main Content
+      </Button>
       <Link to="/" className={styles.logoWrap}>
         <Logo />
       </Link>
@@ -43,7 +45,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
         <ul className={styles.buttons}>
           {(signedIn || signedOut) && (
             <li className={styles.buttonWrap}>
-              <NewProjectPop source="navbar"/>
+              <NewProjectPop source="navbar" />
             </li>
           )}
           {hasProjects && (
