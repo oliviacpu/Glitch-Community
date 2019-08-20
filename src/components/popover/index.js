@@ -1,7 +1,7 @@
 import React, { useState, useContext, useMemo, createContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import { Button } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import TransparentButton from 'Components/buttons/transparent-button';
 
@@ -140,8 +140,8 @@ PopoverMenu.defaultProps = {
 // Use with PopoverMenu so that popover can correctly adjust to fit the content
 export const PopoverMenuButton = ({ label, emoji, onClick }) => (
   <div className={styles.menuButtonWrap}>
-    <Button size="small" variant="secondary" emoji={emoji} onClick={onClick}>
-      <div className={styles.popoverButtonContent}>{label}</div>
+    <Button size="small" variant="secondary" onClick={onClick}>
+      <div className={styles.popoverButtonContent}>{label} <Icon icon={emoji} /></div>
     </Button>
   </div>
 );

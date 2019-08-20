@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mapValues } from 'lodash';
-import Button from 'Components/buttons/button';
+import { Button } from '@fogcreek/shared-components';
+
 import Image from 'Components/images/image';
 import { PopoverMenu, MultiPopover, PopoverDialog, PopoverActions, PopoverMenuButton, PopoverTitle, ActionDescription } from 'Components/popover';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
@@ -17,7 +18,7 @@ const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
       group.some((item) => item.onClick) && (
-        <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
+        <PopoverActions key={i} variant={group.some((item) => item.dangerZone) ? 'warning' : undefined}>
           {group.map((item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
         </PopoverActions>
       ),
@@ -42,7 +43,7 @@ const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => { trackLeaveProject(project); togglePopover(); }}>
+        <Button variant="warning" onClick={() => { trackLeaveProject(project); togglePopover(); }}>
           Leave Project
         </Button>
       </PopoverActions>
