@@ -19,7 +19,7 @@ const writeAssignment = (response, test, assignment) => {
 const assignGroup = (groups) => {
   const entries = Object.entries(groups);
   const sum = Object.values(groups).reduce((sum, { weight }) => sum + weight, 0);
-  
+
   let rand = Math.random() * sum;
   for (const [assignment, { weight }] of entries) {
     rand -= weight;
