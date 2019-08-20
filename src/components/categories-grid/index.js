@@ -51,13 +51,13 @@ const allCategories = [
     name: 'Building Blocks',
     color: '#65cad2',
     path: 'building-blocks',
-    icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg?v=1561575219123`,
+    icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Fbuilding-blocks.svg`,
   },
   {
     name: 'Learn to Code',
     color: '#f8d3c8',
     path: 'learn-to-code',
-    icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg?v=1561575404279`,
+    icon: `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0%2Flearn.svg`,
   },
 ];
 
