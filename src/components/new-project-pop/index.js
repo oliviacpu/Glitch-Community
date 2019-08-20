@@ -9,7 +9,6 @@ import { TrackedExternalLink } from 'Components/link';
 import { ProjectAvatar } from 'Components/images/avatar';
 import { getRemixUrl } from 'Models/project';
 import { useTracker } from 'State/segment-analytics';
-import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 
 import styles from './styles.styl';
@@ -94,9 +93,8 @@ const useNewProjectAPI = createAPIHook(async (api) => {
   return projectIds.map((id) => data[id]);
 });
 
-function NewProjectPopButton({ buttonText, buttonType, align, source }) {
+function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
-  const { currentUser } = useCurrentUser();
   const projects = value || [];
   const onOpen = useTracker('open new-project pop');
   
