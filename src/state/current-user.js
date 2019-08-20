@@ -252,7 +252,7 @@ export const CurrentUserProvider = ({ children }) => {
     sharedUser && sharedUser.id,
     sharedUser && sharedUser.persistentToken,
   ]);
-
+  console.log("inside current user provider", { ...defaultUser, ...sharedUser, ...cachedUser })
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
     persistentToken: sharedUser ? sharedUser.persistentToken : null,

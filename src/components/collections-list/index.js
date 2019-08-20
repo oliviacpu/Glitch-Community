@@ -65,6 +65,7 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
+  console.log("rawCollections inside collections-list", rawCollections)
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
