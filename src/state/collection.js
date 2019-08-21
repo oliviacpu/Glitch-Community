@@ -45,7 +45,7 @@ export const toggleBookmark = async ({
 };
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
-  const fullUrl = `${encodeURIComponent(owner)}/${name}`;
+  const fullUrl = encodeURIComponent(`${owner}/${name}`);
   try {
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
@@ -61,6 +61,7 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
+  api.bustCache(`/v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(collection.fullUrl)}&orderKey=projectOrder&limit=100`)
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
