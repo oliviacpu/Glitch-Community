@@ -56,5 +56,10 @@ const getAssignments = (request, response) => {
 
 // test assignment bias
 const groups = tests['Just-A-Test'];
+const results = mapValues(groups, () => 0);
+for (let i = 0; i < 1000; ++i) {
+  const assignment = assignGroup(groups);
+  results[assignment] += 1;
+}
 
 module.exports = getAssignments;
