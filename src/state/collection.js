@@ -225,7 +225,7 @@ export function useCollectionEditor(initialCollection) {
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
       }));
-      reloadCollectionProjects([selectedCollection])
+      reloadCollectionProjects([collection])
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),

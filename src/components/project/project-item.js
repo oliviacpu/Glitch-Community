@@ -52,7 +52,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
-  const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
+  // const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
   const { createNotification } = useNotifications();
   
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
@@ -61,19 +61,17 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   
-  const addProjectToCollection = async ({ project: projectToAdd, collection: collectionToAddTo }) => {
+  providedProjectOptions.addProjectToCollection = async ({ project: projectToAdd, collection: collectionToAddTo } ) => {
     if (collectionToAddTo.isMyStuff) {
       setHasBookmarked(true);
     }
-    await addProjectToCollectionAPIHandler({ project: projectToAdd, collection: collectionToAddTo });
-    reloadCollectionProjects([collectionToAddTo]);
+    await providedProjectOptions.addProjectToCollection({ project: projectToAdd, collection: collectionToAddTo });
   }
-  const removeProjectFromCollection = async ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
+  providedProjectOptions.removeProjectFromCollection = async ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
     if (collectionToRemoveFrom.isMyStuff) {
       setHasBookmarked(false);
     }
-    await removeProjectFromCollectionAPIHandler({project:projectToRemove, collection: collectionToRemoveFrom});
-    reloadCollectionProjects([collectionToRemoveFrom]);
+    await providedProjectOptions.removeProjectFromCollection({ project:projectToRemove, collection: collectionToRemoveFrom });
   }
   
   const bookmarkAction = useTrackedFunc(
@@ -84,8 +82,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         currentUser,
         createNotification,
         myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
+        addProjectToCollection: providedProjectOptions.addProjectToCollection,
+        removeProjectFromCollection: providedProjectOptions.removeProjectFromCollection,
         // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,
@@ -101,9 +99,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
   };
-
-  providedProjectOptions.addProjectToCollection = addProjectToCollection;
-  providedProjectOptions.removeProjectFromCollection = removeProjectFromCollection;
+  
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   
