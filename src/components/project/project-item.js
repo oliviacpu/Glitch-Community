@@ -52,14 +52,15 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
-  // const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
   const { createNotification } = useNotifications();
   
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
-  console.log("project.authUserHasBookmarked", project.authUserHasBookmarked)
+  const addProjectToCollection = () => {
+    
+  }
 
   const bookmarkAction = useTrackedFunc(
     () =>
