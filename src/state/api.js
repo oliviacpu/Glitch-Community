@@ -28,6 +28,7 @@ export const getAPIForToken = memoize((persistentToken) => {
     ...api,
     persistentToken,
     get: (url, config) => {
+      console.log("here's the cache", cache)
       // TODO: support params
       if (config) return api.get(url, config);
       const now = Date.now();
@@ -40,6 +41,9 @@ export const getAPIForToken = memoize((persistentToken) => {
         response,
       };
       return response;
+    },
+    bustCache: (url) => {
+      cache[url].timestamp = 0;
     },
   };
 });
