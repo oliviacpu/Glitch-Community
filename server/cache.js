@@ -17,6 +17,7 @@ module.exports = (timeout, verb, fallback = null) => {
   return async (key, func, ...args) => {
     let promise = cache.get(key);
     if (!promise) {
+      console.log(`${verb} ${key}`);
       promise = getOrFallback(`${verb} ${key}`, fallback, func, ...args);
       cache.put(key, promise, timeout);
     }
