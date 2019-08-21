@@ -60,18 +60,20 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  
+  const providedAddProjectToCollection = providedProjectOptions.addProjectToCollection;
+  const providedRemoveProjectFromCollection = providedProjectOptions.removeProjectFromCollection;
   providedProjectOptions.addProjectToCollection = async ({ project: projectToAdd, collection: collectionToAddTo } ) => {
     if (collectionToAddTo.isMyStuff) {
       setHasBookmarked(true);
     }
-    await providedProjectOptions.addProjectToCollection({ project: projectToAdd, collection: collectionToAddTo });
+    await providedAddProjectToCollection({ project: projectToAdd, collection: collectionToAddTo });
   }
   providedProjectOptions.removeProjectFromCollection = async ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
+    console.log(projectToRemove, collectionToRemoveFrom)
     if (collectionToRemoveFrom.isMyStuff) {
       setHasBookmarked(false);
     }
-    await providedProjectOptions.removeProjectFromCollection({ project:projectToRemove, collection: collectionToRemoveFrom });
+    await providedRemoveProjectFromCollection({ project:projectToRemove, collection: collectionToRemoveFrom });
   }
   
   const bookmarkAction = useTrackedFunc(

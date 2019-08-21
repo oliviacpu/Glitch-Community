@@ -220,6 +220,7 @@ export function useCollectionEditor(initialCollection) {
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project) => {
+      console.log("project and collection", project, collection)
       await removeProjectFromCollection({ project, collection });
       setCollection((prev) => ({
         ...prev,
