@@ -1,11 +1,10 @@
 /// A locally cached minimal api wrapper
 
 const axios = require('axios');
-const { Cache } = require('memory-cache');
 const dayjs = require('dayjs');
-const { captureException } = require('@sentry/node');
 
 const { API_URL } = require('./constants').current;
+const createCache = require('./cache');
 const { allByKeys } = require('Shared/api');
 
 const api = axios.create({
@@ -45,12 +44,13 @@ function getBatchedEntity(type, field, value) {
 }
 
 async function getProjectFromApi(domain) {
-  const { project, teams, users } = await allByKeys({
-    project: getBatchedEntity('projects', 'domain', domain),
+  const project = await getBatchedEntity('projects', 'domain', domain);
+  if (!project) return project;
+  const members = await allByKeys({
     // teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
     // users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
   });
-  return project && { ...project, teams, users };
+  return { ...project, ...members };
 }
 
 function getTeamFromApi(url) {
@@ -74,32 +74,13 @@ async function getCultureZinePosts() {
   return response.data.posts;
 }
 
-const CACHE_TIMEOUT = dayjs.convert(1, 'hour', 'ms');
-const cache = new Cache();
-
-async function getFromCacheOrApi(key, api, ...args) {
-  let promise = cache.get(key);
-  let trackError = false;
-  if (!promise) {
-    trackError = true;
-    promise = api(...args);
-    cache.put(key, promise, CACHE_TIMEOUT);
-  }
-  try {
-    return await promise;
-  } catch (error) {
-    if (trackError) {
-      console.warn(`Failed to load ${key}: ${error.toString()}`);
-      captureException(error); // it'll probably get filtered out by beforeSend
-    }
-    return null;
-  }
-}
+const getFromCache = createCache(dayjs.convert(1, 'hour', 'ms'), 'load');
+const getFromZineCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'load');
 
 module.exports = {
-  getProject: (domain) => getFromCacheOrApi(`project ${domain}`, getProjectFromApi, domain),
-  getTeam: (url) => getFromCacheOrApi(`team ${url}`, getTeamFromApi, url),
-  getUser: (login) => getFromCacheOrApi(`user ${login}`, getUserFromApi, login),
-  getCollection: (login, collection) => getFromCacheOrApi(`collection ${login}/${collection}`, getCollectionFromApi, login, collection),
-  getZine: () => getFromCacheOrApi('culture zine', getCultureZinePosts),
+  getProject: (domain) => getFromCache(`project ${domain}`, getProjectFromApi, domain),
+  getTeam: (url) => getFromCache(`team ${url}`, getTeamFromApi, url),
+  getUser: (login) => getFromCache(`user ${login}`, getUserFromApi, login),
+  getCollection: (login, collection) => getFromCache(`collection ${login}/${collection}`, getCollectionFromApi, login, collection),
+  getZine: () => getFromZineCache('culture zine', getCultureZinePosts),
 };
