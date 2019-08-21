@@ -171,7 +171,10 @@ export const useAPIHandlers = () => {
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
-      removeProjectFromCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/remove/${project.id}`),
+      removeProjectFromCollection: ({ project, collection }) => {
+        console.log("inside the api", project, collection, `/collections/${collection.id}/remove/${project.id}`, project.id)  
+        return api.patch(`/collections/${collection.id}/remove/${project.id}`)
+      },
 
       // projects
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
