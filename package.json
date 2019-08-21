@@ -17,9 +17,11 @@
     "./src/polyfills.js"
   ],
   "scripts": {
+    "lint": "eslint --config server/.eslintrc.server.js server shared webpack.config.js",
     "prestart": "nodemon --watch server --watch shared --exec 'eslint --config server/.eslintrc.server.js server shared webpack.config.js' &",
     "start": "forever --minUptime 5000 --spinSleepTime 1000 -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
-    "storybook": "build-storybook -c storybook-config -o build/storybook"
+    "storybook": "build-storybook -c storybook-config -o build/storybook",
+    "ci:start": "node ./server/server.js"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -120,6 +122,9 @@
     "webpack-cli": "^3.3.5",
     "webpack-dev-middleware": "^3.7.0",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "cypress": "^3.4.0"
   },
   "engines": {
     "node": "10.x"

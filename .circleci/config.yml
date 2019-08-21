@@ -1,15 +1,20 @@
-version: 2
+    
+# Glitch-Community CircleCI Config
+#
+# Note: Version 2.1 is required in order to use orbs.
+#
+# Dependencies: Cypress.IO Orb
+
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.5.1
 jobs:
-  build_and_test:
+  lint:
     docker:
       - image: circleci/node:10-browsers
-    working_directory: ~/FogCreek/Glitch-Community
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    working_directory: ~/Glitch-Community
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
       - run:
           name: update-pnpm
           command: 'sudo npm install -g pnpm@latest'
@@ -19,21 +24,18 @@ jobs:
       - run:
           name: eslint
           command: pnpm run lint
-      - run:
-          name: integration tests
-          command: ./sh/cypress.sh ${CIRCLE_BRANCH}
-          environment:
-            CYPRESS_SCREENSHOTS_FOLDER: /tmp/circleci-artifacts/screenshots
-            CYPRESS_VIDEOS_FOLDER: /tmp/circleci-artifacts/videos
-      - persist_to_workspace:
-          root: ~/FogCreek
-          paths: Glitch-Community
-      - store_test_results:
-          path: /tmp/circleci-test-results
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
 workflows:
-  version: 2
+  version: 2.1
   regular-workflow:
     jobs:
-      - build_and_test
+      - lint
+      - cypress/install:
+          requires:
+            - lint
+      - cypress/run:
+          requires:
+            - cypress/install
+          start: npm run ci:start
+          wait-on: 'http://localhost:8000'
+          store_artifacts: true
+          record: true
