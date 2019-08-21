@@ -19,7 +19,9 @@ import useFocusFirst from 'Hooks/use-focus-first';
 
 const CollectionPageContents = ({ collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
+  console.log("inside collectionpagecontents", initialCollection)
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
+  console.log("inside collection page contents state", collection)
   useFocusFirst();
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });

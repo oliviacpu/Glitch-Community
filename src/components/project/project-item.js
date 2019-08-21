@@ -59,7 +59,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
-  providedProjectOptions.addProjectToCollection = ()
+  console.log("project.authUserHasBookmarked", project.authUserHasBookmarked)
 
   const bookmarkAction = useTrackedFunc(
     () =>

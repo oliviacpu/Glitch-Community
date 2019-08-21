@@ -82,6 +82,7 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
   });
   collections.forEach(async (collection) => {
     const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
+    console.log("projects inside loadCollectionProjects", projects)
     setResponses((prev) => ({
       ...prev,
       [collection.id]: {
@@ -216,7 +217,7 @@ export function useCollectionEditor(initialCollection) {
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
-      reloadCollectionProjects([selectedCollection])
+      reloadCollectionProjects([selectedCollection, collection])
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
@@ -228,7 +229,7 @@ export function useCollectionEditor(initialCollection) {
           projects: prev.projects.filter((p) => p.id !== project.id),
         }));
       }
-      reloadCollectionProjects([selectedCollection])
+      reloadCollectionProjects([selectedCollection, collection])
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
