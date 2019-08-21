@@ -11,20 +11,14 @@ jobs:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
       - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-v2-{{ checksum "package.json" }}
+          name: update-pnpm
+          command: 'sudo npm install -g pnpm@latest'
       - run:
-          name: npm-install
-          command: npm ci
-      - save_cache:
-          key: dependency-cache-v2-{{ checksum "package.json" }}
-          paths:
-            - ~/.npm
+          name: pnpm-install
+          command: pnpm install
       - run:
           name: eslint
-          command: npm run lint
+          command: pnpm run lint
       - run:
           name: integration tests
           command: ./sh/cypress.sh ${CIRCLE_BRANCH}
