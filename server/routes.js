@@ -151,7 +151,7 @@ module.exports = function(external) {
     const project = await getProject(punycode.toASCII(domain));
     
     if (!project) {
-      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, true);
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, false);
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
@@ -172,8 +172,8 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    const cache = { [`project:${domain}`]: project };
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
+    // const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, false);
   });
 
   app.get('/@:name', async (req, res) => {
