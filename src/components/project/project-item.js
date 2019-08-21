@@ -54,8 +54,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const api = useAPI();
   // const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
   const { createNotification } = useNotifications();
-  const projectOptions = useProjectOptions(project, providedProjectOptions);
-  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
@@ -70,8 +68,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         currentUser,
         createNotification,
         myStuffEnabled,
-        addProjectToCollection: projectOptions.addProjectToCollection,
-        removeProjectFromCollection: projectOptions.removeProjectFromCollection,
+        addProjectToCollection: providedProjectOptions.addProjectToCollection,
+        removeProjectFromCollection: providedProjectOptions.removeProjectFromCollection,
         // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,
@@ -88,6 +86,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setIsHoveringOnProjectItem(false);
   };
   
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
+  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
   
   return (

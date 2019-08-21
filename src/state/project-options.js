@@ -72,6 +72,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
     leaveProject: isProjectMember && !isOnlyProjectAdmin && bind(projectOptions.leaveProject, project),
     removeProjectFromTeam: isTeamMember && bind(projectOptions.removeProjectFromTeam, project),
     deleteProject: isProjectAdmin && bind(projectOptions.deleteProject, project),
-    removeProjectFromCollection: isCollectionOwner && projectOptions.removeProjectFromCollection,
+    removeProjectFromCollection: isCollectionOwner && bind(projectOptions.removeProjectFromCollection, project),
   });
 };
