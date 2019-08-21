@@ -61,5 +61,7 @@ for (let i = 0; i < 1000; ++i) {
   const assignment = assignGroup(groups);
   results[assignment] += 1;
 }
+const total = Object.values(results).reduce((sum, value) => sum + value, 0);
+
 
 module.exports = getAssignments;
