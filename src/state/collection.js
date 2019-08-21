@@ -45,12 +45,13 @@ export const toggleBookmark = async ({
 };
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
-  const fullUrl = `${encodeURIComponent(owner)}/${name}`;
+  const fullUrl = encodeURIComponent(`${owner}/${name}`);
   try {
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
       getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&orderKey=projectOrder&limit=100`),
     ]);
+    console.log("without cache", `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&orderKey=projectOrder&limit=100`)
     return { ...collection, projects };
   } catch (error) {
     if (error && error.response && error.response.status === 404) return null;
@@ -61,7 +62,8 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  return getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${collection.fullUrl}&orderKey=projectOrder&limit=100${cacheBust}`);
+  console.log("with cache", `/v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(collection.fullUrl)}&orderKey=projectOrder&limit=100${cacheBust}`)
+  return getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(collection.fullUrl)}&orderKey=projectOrder&limit=100${cacheBust}`);
 }
 
 const loadingResponse = { status: 'loading' };
