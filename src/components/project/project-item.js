@@ -69,7 +69,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     reloadCollectionProjects([collectionToAddTo]);
   }
   const removeProjectFromCollection = async ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
-    console.log({projectToRemove, collectionToRemoveFrom})
     if (collectionToRemoveFrom.isMyStuff) {
       setHasBookmarked(false);
     }
