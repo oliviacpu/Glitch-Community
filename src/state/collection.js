@@ -23,14 +23,14 @@ export const toggleBookmark = async ({
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
     if (hasBookmarked) {
       // setHasBookmarked(false);
-      await removeProjectFromCollection({ project, collection: myStuffCollection });
+      await removeProjectFromCollection(project, myStuffCollection);
       createNotification(`Removed ${project.domain} from collection My Stuff`);
     } else {
       // setHasBookmarked(true);
       if (!myStuffCollection) {
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
-      await addProjectToCollection({ project, collection: myStuffCollection });
+      await addProjectToCollection(project, myStuffCollection);
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
@@ -219,14 +219,16 @@ export function useCollectionEditor(initialCollection) {
       reloadCollectionProjects([selectedCollection])
     }, handleCustomError),
 
-    removeProjectFromCollection: withErrorHandler(async (project) => {
-      console.log("project and collection", project, collection)
-      await removeProjectFromCollection({ project, collection });
-      setCollection((prev) => ({
-        ...prev,
-        projects: prev.projects.filter((p) => p.id !== project.id),
-      }));
-      reloadCollectionProjects([collection])
+    removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
+      console.log("project and collection inside state/collection", project, selectedCollection)
+      await removeProjectFromCollection({ project, collection: selectedCollection });
+      if (selectedCollection.id === collection.id) {
+        setCollection((prev) => ({
+          ...prev,
+          projects: prev.projects.filter((p) => p.id !== project.id),
+        }));
+      }
+      reloadCollectionProjects([selectedCollection])
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
