@@ -180,7 +180,8 @@ export function useCollectionEditor(initialCollection) {
     updateProjectInCollection,
   } = useAPIHandlers();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
-
+  const reloadCollectionProjects = useCollectionReload();
+  
   async function updateFields(changes) {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
@@ -215,6 +216,7 @@ export function useCollectionEditor(initialCollection) {
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
+      reloadCollectionProjects([selectedCollection])
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project) => {
@@ -223,6 +225,7 @@ export function useCollectionEditor(initialCollection) {
         ...prev,
         projects: prev.projects.filter((p) => p.id !== project.id),
       }));
+      reloadCollectionProjects([selectedCollection])
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
