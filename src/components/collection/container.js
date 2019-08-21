@@ -34,7 +34,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
-  console.log("inside collection continer", collection.projects)
   let { projects } = collection;
   if (preview) {
     projects = previewProjects;
