@@ -57,11 +57,11 @@ const getAssignments = (request, response) => {
 // test assignment bias
 const groups = tests['Just-A-Test'];
 const results = mapValues(groups, () => 0);
-for (let i = 0; i < 1000; ++i) {
+for (let i = 0; i < 100000000; ++i) {
   const assignment = assignGroup(groups);
   results[assignment] += 1;
 }
-const total = Object.values(results).reduce((sum, value) => sum + value, 0);
-
+const total = Object.values(results).reduce((sum, count) => sum + count, 0);
+Object.entries(results).forEach(([group, count]) => console.log(`${group}: ${count * 100 / total}%`));
 
 module.exports = getAssignments;
