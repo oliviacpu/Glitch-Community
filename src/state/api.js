@@ -28,7 +28,6 @@ export const getAPIForToken = memoize((persistentToken) => {
     ...api,
     persistentToken,
     get: (url, config) => {
-      console.log("here's the cache", cache)
       // TODO: support params
       if (config) return api.get(url, config);
       const now = Date.now();
@@ -43,7 +42,9 @@ export const getAPIForToken = memoize((persistentToken) => {
       return response;
     },
     bustCache: (url) => {
-      cache[url].timestamp = 0;
+      if (cache && cache[url]) {
+        cache[url].timestamp = 0;
+      }
     },
   };
 });
@@ -157,6 +158,11 @@ export const entityPath = ({ user, team, project, collection }) => {
   if (collection) return `collections/${collection.id}`;
   throw new Error('Missing entity');
 };
+
+const bustCache = (collection) => {
+  
+};
+
 
 export const useAPIHandlers = () => {
   const api = useAPI();

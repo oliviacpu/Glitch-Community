@@ -44,12 +44,14 @@ export const toggleBookmark = async ({
   }
 };
 
+const createAPICallForCollectionProjects = (encodedFullUrl) => `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
+
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
   try {
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
-      getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&orderKey=projectOrder&limit=100`),
+      getAllPages(api, createAPICallForCollectionProjects(fullUrl)),
     ]);
     return { ...collection, projects };
   } catch (error) {
@@ -61,7 +63,7 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  api.bustCache(`/v1/collections/by/fullUrl/projects?fullUrl=${encodeURIComponent(collection.fullUrl)}&orderKey=projectOrder&limit=100`)
+  api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collection.fullUrl)));
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
