@@ -15,22 +15,22 @@ export const toggleBookmark = async ({
   myStuffEnabled,
   addProjectToCollection,
   removeProjectFromCollection,
-  setHasBookmarked,
+  // setHasBookmarked,
   hasBookmarked,
   // reloadCollectionProjects,
 }) => {
   try {
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
     if (hasBookmarked) {
-      setHasBookmarked(false);
-      await removeProjectFromCollection({ project, collection: myStuffCollection });
+      // setHasBookmarked(false);
+      await removeProjectFromCollection(project, myStuffCollection);
       createNotification(`Removed ${project.domain} from collection My Stuff`);
     } else {
-      setHasBookmarked(true);
+      // setHasBookmarked(true);
       if (!myStuffCollection) {
         myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
       }
-      await addProjectToCollection({ project, collection: myStuffCollection });
+      await addProjectToCollection(project, myStuffCollection);
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
       createNotification(
         <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
@@ -39,6 +39,7 @@ export const toggleBookmark = async ({
     }
     // reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
+    console.log("error", error)
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }

@@ -54,21 +54,28 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const api = useAPI();
   const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
   const { createNotification } = useNotifications();
-
-  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
-    addProjectToCollectionAPIHandler(projectToAdd, collectionToAddTo);
-    reloadCollectionProjects(collectionToAddTo);
-  }
-  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
-    removeProjectFromCollectionAPIHandler(projectToRemove, collectionToRemoveFrom);
-    reloadCollectionProjects(collectionToRemoveFrom);
-  }
   
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
+  
+  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
+    if (collectionToAddTo.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    addProjectToCollectionAPIHandler({ project: projectToAdd, collection: collectionToAddTo });
+    reloadCollectionProjects([collectionToAddTo]);
+  }
+  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
+    if (collectionToRemoveFrom.isMyStuff) {
+      setHasBookmarked(false);
+    }
+    removeProjectFromCollectionAPIHandler({project:projectToRemove, collection: collectionToRemoveFrom});
+    reloadCollectionProjects([collectionToRemoveFrom]);
+  }
+  
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -79,7 +86,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         myStuffEnabled,
         addProjectToCollection,
         removeProjectFromCollection,
-        setHasBookmarked,
+        // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,
       }),
@@ -95,16 +102,13 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setIsHoveringOnProjectItem(false);
   };
 
-  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
-    if (collection.isMyStuff) {
-      setHasBookmarked(true);
-    }
-    return addProjectToCollection(projectToAdd, collection);
-  };
-  providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
+  providedProjectOptions.addProjectToCollection = addProjectToCollection;
+  providedProjectOptions.removeProjectFromCollection = removeProjectFromCollection;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  const onMyStuffPage = window.location.pathname.includes('my-stuff');
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
+  
+  const onMyStuffPage = window.location.pathname.includes('my-stuff');
+  
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
