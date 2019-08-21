@@ -61,14 +61,15 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   
-  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
+  const addProjectToCollection = ({ project: projectToAdd, collection: collectionToAddTo }) => {
     if (collectionToAddTo.isMyStuff) {
       setHasBookmarked(true);
     }
     addProjectToCollectionAPIHandler({ project: projectToAdd, collection: collectionToAddTo });
     reloadCollectionProjects([collectionToAddTo]);
   }
-  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
+  const removeProjectFromCollection = ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
+    console.log({projectToRemove, collectionToRemoveFrom})
     if (collectionToRemoveFrom.isMyStuff) {
       setHasBookmarked(false);
     }
