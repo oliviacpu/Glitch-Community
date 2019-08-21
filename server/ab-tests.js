@@ -54,4 +54,7 @@ const getAssignments = (request, response) => {
   return mapValues(assignments, (assignment, test) => tests[test][assignment].value);
 };
 
+// test assignment bias
+const groups = tests['Just-A-Test'];
+
 module.exports = getAssignments;
