@@ -47,7 +47,6 @@ workflows:
            filters:
              branches:
                only:
-                 - tundra-beat
                  - circleci
     jobs:
       - build_and_test
