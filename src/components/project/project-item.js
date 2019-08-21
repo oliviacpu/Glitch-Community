@@ -60,6 +60,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   const addProjectToCollection = (...args) => {
+    console.log("hi", ...args)
     providedProjectOptions.addProjectToCollection(...args)
   }
   const removeProjectFromCollection = (...args) => {
@@ -93,6 +94,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   };
   
   const projectOptions = useProjectOptions(project, providedProjectOptions);
+  projectOptions.addProjectToCollection = addProjectToCollection;
+  projectOptions.removeProjectFromCollection = removeProjectFromCollection;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
   
