@@ -58,10 +58,14 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
-  const addProjectToCollection = (...args) => {
-    console.log()
-  }
 
+  const addProjectToCollection = (...args) => {
+    providedProjectOptions.addProjectToCollection(...args)
+  }
+  const removeProjectFromCollection = (...args) => {
+    providedProjectOptions.removeProjectFromCollection(...args)
+  }
+  
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -70,8 +74,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         currentUser,
         createNotification,
         myStuffEnabled,
-        addProjectToCollection: providedProjectOptions.addProjectToCollection,
-        removeProjectFromCollection: providedProjectOptions.removeProjectFromCollection,
+        addProjectToCollection,
+        removeProjectFromCollection,
         // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,
