@@ -17,7 +17,7 @@ export const toggleBookmark = async ({
   removeProjectFromCollection,
   setHasBookmarked,
   hasBookmarked,
-  reloadCollectionProjects,
+  // reloadCollectionProjects,
 }) => {
   try {
     let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
@@ -37,7 +37,7 @@ export const toggleBookmark = async ({
         { type: 'success' },
       );
     }
-    reloadCollectionProjects([myStuffCollection]);
+    // reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });

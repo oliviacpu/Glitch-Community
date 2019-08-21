@@ -52,9 +52,18 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { addProjectToCollection: addProjectToCollectionAPIHandler, removeProjectFromCollection: removeProjectFromCollectionAPIHandler } = useAPIHandlers();
   const { createNotification } = useNotifications();
 
+  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
+    addProjectToCollectionAPIHandler(projectToAdd, collectionToAddTo);
+    reloadCollectionProjects(collectionToAddTo);
+  }
+  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
+    removeProjectFromCollectionAPIHandler(projectToRemove, collectionToRemoveFrom);
+    reloadCollectionProjects(collectionToRemoveFrom);
+  }
+  
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
@@ -72,7 +81,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         removeProjectFromCollection,
         setHasBookmarked,
         hasBookmarked,
-        reloadCollectionProjects,
+        // reloadCollectionProjects,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
@@ -90,7 +99,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     if (collection.isMyStuff) {
       setHasBookmarked(true);
     }
-    return addProjectToCollection({ project: projectToAdd, collection });
+    return addProjectToCollection(projectToAdd, collection);
   };
   providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
