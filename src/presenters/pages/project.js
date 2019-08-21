@@ -150,6 +150,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
   const reloadCollectionProjects = useCollectionReload();
+
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -167,6 +168,13 @@ const ProjectPage = ({ project: initialProject }) => {
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
+
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
 
   return (
     <main id="main">
@@ -240,7 +248,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
