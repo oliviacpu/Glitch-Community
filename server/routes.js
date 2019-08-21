@@ -55,8 +55,6 @@ module.exports = function(external) {
   async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
 
-    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
-
     let scripts = [];
     let styles = [];
 
@@ -86,21 +84,25 @@ module.exports = function(external) {
     }
 
     const signedIn = !!req.cookies.hasLogin;
+    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
-    let rendered = null;
+    let ssr = { rendered: null };
     if (shouldRender) {
       try {
-        const { html } = await renderPage({
-          url: new URL(req.url, `${req.protocol}://${req.hostname}`),
-          cache,
-          signedIn,
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const { html, context } = await renderPage(url, {
+          API_CACHE: cache,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
+          SSR_SIGNED_IN: signedIn,
           ZINE_POSTS: zine || [],
         });
-        rendered = html;
+        ssr = {
+          rendered: html,
+          ...context,
+        };
       } catch (error) {
-        console.error(error);
+        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
         captureException(error);
       }
     }
@@ -113,17 +115,17 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
-      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
-      API_CACHE: JSON.stringify(cache),
-      EXTERNAL_ROUTES: JSON.stringify(external),
-      ZINE_POSTS: JSON.stringify(zine || []),
-      HOME_CONTENT: JSON.stringify(homeContent),
-      SSR_SIGNED_IN: JSON.stringify(signedIn),
+      API_CACHE: cache,
+      EXTERNAL_ROUTES: external,
+      ZINE_POSTS: zine || [],
+      HOME_CONTENT: homeContent,
+      SSR_SIGNED_IN: signedIn,
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,
+      ...ssr,
     });
   }
 
@@ -149,7 +151,7 @@ module.exports = function(external) {
     const project = await getProject(punycode.toASCII(domain));
     
     if (!project) {
-      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, true);
       return;
     }
     const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
@@ -170,8 +172,8 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    const cache = null; // { [`project:${domain}`]: project };
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache });
+    const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
   });
 
   app.get('/@:name', async (req, res) => {
