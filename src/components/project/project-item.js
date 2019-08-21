@@ -68,12 +68,12 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     }
     await providedAddProjectToCollection({ project: projectToAdd, collection: collectionToAddTo });
   }
-  providedProjectOptions.removeProjectFromCollection = async ({ project: projectToRemove, collection: collectionToRemoveFrom}) => {
-    console.log(projectToRemove, collectionToRemoveFrom)
+  providedProjectOptions.removeProjectFromCollection = async ({ project:projectToRemove, collection: collectionToRemoveFrom }) => {
+    console.log("inside project-item", { project:projectToRemove, collection: collectionToRemoveFrom })
     if (collectionToRemoveFrom.isMyStuff) {
       setHasBookmarked(false);
     }
-    await providedRemoveProjectFromCollection({ project:projectToRemove, collection: collectionToRemoveFrom });
+    await providedRemoveProjectFromCollection({ project: projectToRemove, collection: collectionToRemoveFrom });
   }
   
   const bookmarkAction = useTrackedFunc(
