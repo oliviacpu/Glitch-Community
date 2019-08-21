@@ -159,11 +159,6 @@ export const entityPath = ({ user, team, project, collection }) => {
   throw new Error('Missing entity');
 };
 
-const bustCache = (collection) => {
-  
-};
-
-
 export const useAPIHandlers = () => {
   const api = useAPI();
   return useMemo(
