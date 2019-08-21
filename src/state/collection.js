@@ -113,10 +113,13 @@ export const CollectionContextProvider = ({ children }) => {
 
   const reloadCollectionProjects = useCallback(
     (collections) => {
+      console.log("reloading these collections", collections)
       loadCollectionProjects(api, collections, setResponses, true);
     },
     [api],
   );
+  
+  console.log("Responses have updated", responses)
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
