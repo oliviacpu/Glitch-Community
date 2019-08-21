@@ -29,16 +29,12 @@ function useZeldaMusicalCue() {
 }
 
 const ABTest = () => {
-  const [, { text }] = useTest('Just-A-Test');
+  const text = useTest('Just-A-Test');
   const onClick = () => {
     resetTests();
     window.location.reload();
   };
-  const button = <Button onClick={onClick} size="small">try again</Button>;
-  if (text) {
-    return <>{text}! {button}</>;
-  }
-  return <>no luck {button}</>;
+  return <>{text} <Button onClick={onClick} size="small">try again</Button></>;
 };
 
 const Secret = () => {

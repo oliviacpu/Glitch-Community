@@ -1,10 +1,11 @@
 const dayjs = require('dayjs');
+const { mapValues } = require('lodash');
 
 const tests = {
   'Just-A-Test': {
-    niceone: { weight: 0.5, text: 'nice one' },
-    goodjob: { weight: 0.5, text: 'good job' },
-    toobad: { weight: 4 },
+    niceone: { weight: 0.5, value: 'nice one!' },
+    goodjob: { weight: 0.5, value: 'good job!' },
+    toobad: { weight: 4, value: 'too bad' },
   },
 };
 
@@ -43,18 +44,14 @@ const assignGroup = (groups) => {
 };
 
 const getAssignments = (request, response) => {
-  const result = {}; // { test: [ assignment, group ] }
-  const assignments = readAssignments(request); // { test: assignment }
+  const assignments = readAssignments(request);
   for (const [test, groups] of Object.entries(tests)) {
-    let assignment = assignments[test];
-    if (!Object.keys(groups).includes(assignment)) {
-      assignment = assignGroup(groups);
+    if (!Object.keys(groups).includes(assignments[test])) {
+      assignments[test] = assignGroup(groups);
     }
-    assignments[test] = assignment;
-    result[test] = [assignment, groups[assignment]];
   }
   writeAssignments(response, assignments);
-  return result;
+  return mapValues(assignments, (assignment, test) => tests[test][assignment].value);
 };
 
 module.exports = getAssignments;
