@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { mapKeys } from 'lodash';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
@@ -57,7 +58,7 @@ function identifyUser(user) {
           login: user.login,
           email,
           created_at: user.createdAt,
-          ...Object.keys(AB_TESTS
+          ...mapKeys(window.AB_TESTS, (assignment, test) => `abtest-${test}`),
         },
         { groupId: '0' },
       );
