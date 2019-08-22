@@ -1,6 +1,4 @@
 const dayjs = require('dayjs');
-const { mapValues } = require('lodash');
-
 const { COOKIE_NAME, tests } = require('Shared/ab-tests');
 
 const readAssignments = (request) => {

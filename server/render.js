@@ -60,8 +60,8 @@ const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT,
 const getFromCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 module.exports = (url, context) => {
   const key = [
-    context.SSR_SIGNED_IN ? 'signed in' : 'signed out',
-    JSON.stringify(context.AB_TESTS),
+    context.SSR_SIGNED_IN ? 'signed-in' : 'signed-out',
+    ...Object.entries(context.AB_TESTS).map(([test, assignment]) => `${test}=${assignment}`),
     url,
   ];
   return getFromCache(key.join(' '), render, url, context)
