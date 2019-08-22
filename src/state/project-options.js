@@ -21,7 +21,7 @@ const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler
 
 const useDefaultProjectOptions = () => {
   const { addProjectToCollection, joinTeamProject, removeUserFromProject, removeProjectFromCollection } = useAPIHandlers();
-  const { currentUser, update } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { handleError, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
   const reloadCollectionProjects = useCollectionReload();
@@ -41,11 +41,11 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
-    toggleBookmark: withErrorHandler(async(project, setHasBookmarked) => {
+    toggleBookmark: withErrorHandler(async (project, setHasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (project.authUserHasBookmarked) {
         if (setHasBookmarked) setHasBookmarked(false);
-        await removeProjectFromCollection({ project, collection: myStuffCollection});
+        await removeProjectFromCollection({ project, collection: myStuffCollection });
         createNotification(`Removed ${project.domain} from collection My Stuff`);
       } else {
         if (setHasBookmarked) setHasBookmarked(true);
@@ -60,7 +60,7 @@ const useDefaultProjectOptions = () => {
           { type: 'success' },
         );
       }
-    }, handleError)
+    }, handleError),
   };
 };
 
@@ -98,6 +98,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
     removeProjectFromTeam: isTeamMember && bind(projectOptions.removeProjectFromTeam, project),
     deleteProject: isProjectAdmin && bind(projectOptions.deleteProject, project),
     removeProjectFromCollection: isCollectionOwner && bind(projectOptions.removeProjectFromCollection, project),
-    toggleBookmark: isLoggedIn && bind(projectOptions.toggleBookmark, project),
+    toggleBookmark: isLoggedIn && projectOptions.toggleBookmark,
   });
 };

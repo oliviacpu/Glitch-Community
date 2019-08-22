@@ -30,19 +30,18 @@ export const toggleBookmark = async ({
       }
       await addProjectToCollection(project, myStuffCollection);
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-        { type: 'success' },
-      );
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+        type: 'success',
+      });
     }
   } catch (error) {
-    console.log("error", error)
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }
 };
 
-const createAPICallForCollectionProjects = (encodedFullUrl) => `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
+const createAPICallForCollectionProjects = (encodedFullUrl) =>
+  `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
@@ -119,9 +118,7 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -211,16 +208,16 @@ export function useCollectionEditor(initialCollection) {
           return [project, ...oldProjects.projects];
         }
         if (selectedCollection.isMyStuff) {
-          return oldProjects.map(p => {
+          return oldProjects.map((p) => {
             if (p.id === project.id) {
-              p.authUserHasBookmarked = true
+              p.authUserHasBookmarked = true;
             }
             return p;
-          })
+          });
         }
         return oldProjects;
-      }
-     
+      };
+
       setCollection((prev) => ({
         ...prev,
         projects: getNewProjectsState(prev.projects),
@@ -230,33 +227,33 @@ export function useCollectionEditor(initialCollection) {
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
-      reloadCollectionProjects([selectedCollection, collection])
+      reloadCollectionProjects([selectedCollection, collection]);
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
       if (!selectedCollection.id) {
-        selectedCollection = collection
+        selectedCollection = collection;
       }
       await removeProjectFromCollection({ project, collection: selectedCollection });
       const getNewProjectsState = (oldProjects) => {
         if (selectedCollection.id === collection.id) {
-          return oldProjects.filter((p) => p.id !== project.id)
+          return oldProjects.filter((p) => p.id !== project.id);
         }
         if (selectedCollection.isMyStuff) {
-          return oldProjects.map(p => {
+          return oldProjects.map((p) => {
             if (p.id === project.id) {
-              p.authUserHasBookmarked = false
+              p.authUserHasBookmarked = false;
             }
             return p;
-          })
+          });
         }
         return oldProjects;
-      }
+      };
       setCollection((prev) => ({
         ...prev,
         projects: getNewProjectsState(prev.projects),
       }));
-      reloadCollectionProjects([selectedCollection, collection])
+      reloadCollectionProjects([selectedCollection, collection]);
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
@@ -305,8 +302,8 @@ export function useCollectionEditor(initialCollection) {
     }, handleError),
 
     unfeatureProject: () => updateFields({ featuredProjectId: null }).catch(handleError),
-    
-    toggleBookmark: withErrorHandler(async(project) => {
+
+    toggleBookmark: withErrorHandler(async (project) => {
       try {
         let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
         if (project.authUserHasBookmarked) {
@@ -318,17 +315,16 @@ export function useCollectionEditor(initialCollection) {
           }
           await funcs.addProjectToCollection(project, myStuffCollection);
           const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-          createNotification(
-            <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-            { type: 'success' },
-          );
+          createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+            type: 'success',
+          });
         }
       } catch (error) {
-        console.log("error", error)
+        console.log('error', error);
         captureException(error);
         createNotification('Something went wrong, try refreshing?', { type: 'error' });
       }
-    }, handleError)
+    }, handleError),
   };
   return [collection, funcs];
 }

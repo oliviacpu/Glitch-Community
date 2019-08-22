@@ -12,8 +12,6 @@ import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
-import { useAPI } from 'State/api';
-import { toggleBookmark } from 'State/collection';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -49,7 +47,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
-  const api = useAPI();
 
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
@@ -66,9 +63,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   };
 
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  
+
   const bookmarkAction = useTrackedFunc(
-    projectOptions.toggleBookmark,
+    () => projectOptions.toggleBookmark(project, setHasBookmarked),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
