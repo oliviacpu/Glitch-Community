@@ -12,8 +12,8 @@ import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
-import { useAPI, useAPIHandlers } from 'State/api';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useAPI } from 'State/api';
+import { toggleBookmark } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
@@ -49,7 +49,6 @@ const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...called
 const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
   const { createNotification } = useNotifications();
@@ -59,7 +58,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
   const onMouseEnter = () => {
@@ -68,9 +66,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
   };
-  
+
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  console.log("projectOptions", projectOptions)
+  
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
@@ -81,18 +79,15 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         myStuffEnabled,
         addProjectToCollection: projectOptions.addProjectToCollection,
         removeProjectFromCollection: projectOptions.removeProjectFromCollection,
-        // setHasBookmarked,
         hasBookmarked,
-        // reloadCollectionProjects,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
-  // projectOptions.addProjectToCollection = addProjectToCollection;
-  // projectOptions.removeProjectFromCollection = removeProjectFromCollection;
+
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
-  
+
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (

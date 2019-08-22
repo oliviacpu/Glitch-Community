@@ -69,9 +69,7 @@ export function APIContextProvider({ children }) {
     if (api.persistentToken && pendingRequests.length) {
       // go back and finally make all of those requests
       pendingRequests.forEach((request) => request(api));
-      setPendingRequests((latestPendingRequests) => (
-        latestPendingRequests.filter((request) => !pendingRequests.includes(request))
-      ));
+      setPendingRequests((latestPendingRequests) => latestPendingRequests.filter((request) => !pendingRequests.includes(request)));
     }
   }, [api, pendingRequests]);
 
@@ -171,9 +169,7 @@ export const useAPIHandlers = () => {
       addProjectToCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/add/${project.id}`),
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
-      removeProjectFromCollection: ({ project, collection }) => {
-        return api.patch(`/collections/${collection.id}/remove/${project.id}`)
-      },
+      removeProjectFromCollection: ({ project, collection }) => api.patch(`/collections/${collection.id}/remove/${project.id}`),
 
       // projects
       removeUserFromProject: ({ project, user }) => api.delete(`/projects/${project.id}/authorization`, { data: { targetUserId: user.id } }),
