@@ -24,18 +24,37 @@ jobs:
       - run:
           name: eslint
           command: pnpm run lint
+  build:
+    docker:
+      - image: circleci/node:10-browsers
+    working_directory: ~/Glitch-Community
+    steps:
+      - checkout
+      - run:
+          name: update-pnpm
+          command: 'sudo npm install -g pnpm@latest'
+      - run:
+          name: pnpm-install
+          command: pnpm install
+      - run:
+          name: eslint
+          command: pnpm run build          
 workflows:
   version: 2.1
   regular-workflow:
     jobs:
       - lint
+      - build:
+          requires:
+            - lint
       - cypress/install:
           requires:
             - lint
+            - build
       - cypress/run:
           requires:
             - cypress/install
-          start: npm run ci:start
+          start: npm run start
           wait-on: 'http://localhost:8000'
           store_artifacts: true
           record: true
