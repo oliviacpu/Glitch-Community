@@ -69,7 +69,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         createNotification,
         myStuffEnabled,
         addProjectToCollection:providedProjectOptions.addProjectToCollection,
-        removeProjectFromCollection: providedProjectOptions.removeFromCollection,
+        removeProjectFromCollection: providedProjectOptions.removeProjectFromCollection,
         // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,

@@ -206,13 +206,26 @@ export function useCollectionEditor(initialCollection) {
 
   const funcs = {
     addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
-      if (selectedCollection.id === collection.id) {
-        // add project to collection page
-        setCollection((prev) => ({
-          ...prev,
-          projects: [project, ...prev.projects],
-        }));
+      const getNewProjectsState = (oldProjects) => {
+        if (selectedCollection.id === collection.id) {
+          return [project, ...oldProjects.projects];
+        }
+        if (selectedCollection.isMyStuff) {
+          return oldProjects.map(p => {
+            if (p.id === project.id) {
+              p.authUserHasBookmarked = true
+            }
+            return p;
+          })
+        }
+        return oldProjects;
       }
+     
+      setCollection((prev) => ({
+        ...prev,
+        projects: getNewProjectsState(prev.projects),
+      }));
+
       await addProjectToCollection({ project, collection: selectedCollection });
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
@@ -220,15 +233,30 @@ export function useCollectionEditor(initialCollection) {
       reloadCollectionProjects([selectedCollection, collection])
     }, handleCustomError),
 
-    removeProjectFromCollection: withErrorHandler(async (project, selectedCollection=collection) => {
-      console.log("project and collection inside state/collection", project, selectedCollection)
-      await removeProjectFromCollection({ project, collection: selectedCollection });
-      if (selectedCollection.id === collection.id) {
-        setCollection((prev) => ({
-          ...prev,
-          projects: prev.projects.filter((p) => p.id !== project.id),
-        }));
+    removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
+      console.log("inside state/collection, removeProjectFromCollection", project, selectedCollection)
+      if (!selectedCollection.id) {
+        selectedCollection = collection
       }
+      await removeProjectFromCollection({ project, collection: selectedCollection });
+      const getNewProjectsState = (oldProjects) => {
+        if (selectedCollection.id === collection.id) {
+          return oldProjects.filter((p) => p.id !== project.id)
+        }
+        if (selectedCollection.isMyStuff) {
+          return oldProjects.map(p => {
+            if (p.id === project.id) {
+              p.authUserHasBookmarked = false
+            }
+            return p;
+          })
+        }
+        return oldProjects;
+      }
+      setCollection((prev) => ({
+        ...prev,
+        projects: getNewProjectsState(prev.projects),
+      }));
       reloadCollectionProjects([selectedCollection, collection])
     }, handleError),
 
