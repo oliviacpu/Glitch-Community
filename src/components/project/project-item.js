@@ -60,23 +60,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection:providedProjectOptions.addProjectToCollection,
-        removeProjectFromCollection: providedProjectOptions.removeProjectFromCollection,
-        // setHasBookmarked,
-        hasBookmarked,
-        // reloadCollectionProjects,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
-  );
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
 
   const onMouseEnter = () => {
@@ -87,6 +70,24 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   };
   
   const projectOptions = useProjectOptions(project, providedProjectOptions);
+  console.log("projectOptions", projectOptions)
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection: projectOptions.addProjectToCollection,
+        removeProjectFromCollection: projectOptions.removeProjectFromCollection,
+        // setHasBookmarked,
+        hasBookmarked,
+        // reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
+  );
   // projectOptions.addProjectToCollection = addProjectToCollection;
   // projectOptions.removeProjectFromCollection = removeProjectFromCollection;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
