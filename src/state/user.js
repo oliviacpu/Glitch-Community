@@ -32,6 +32,7 @@ export function useUserEditor(initialUser) {
     addPinnedProject,
     removePinnedProject,
     undeleteProject,
+    removeProjectFromCollection,
   } = useAPIHandlers();
   const { getDeletedProject, getProject } = useUserPageGetters();
 

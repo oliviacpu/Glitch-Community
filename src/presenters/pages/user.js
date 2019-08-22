@@ -82,6 +82,7 @@ const UserPage = ({ user: initialUser }) => {
     setDeletedProjects,
     addProjectToCollection,
   } = funcs;
+  console.log("addprojecttocollectionnnn", addProjectToCollection)
   const projectOptions = { ...funcs, user };
   const { _deletedProjects, featuredProjectId } = user;
 
