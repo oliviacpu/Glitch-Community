@@ -14,7 +14,6 @@ import VisibilityContainer from 'Components/visibility-container';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { toggleBookmark } from 'State/collection';
-import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -51,7 +50,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
-  const { createNotification } = useNotifications();
 
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
@@ -71,11 +69,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   
   const bookmarkAction = useTrackedFunc(
     () =>
-      toggleBookmark({
-        api,
-        project,
+      toggleBookmark({project,
         currentUser,
-        createNotification,
         myStuffEnabled,
         addProjectToCollection: projectOptions.addProjectToCollection,
         removeProjectFromCollection: projectOptions.removeProjectFromCollection,
