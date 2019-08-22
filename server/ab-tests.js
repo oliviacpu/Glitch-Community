@@ -10,9 +10,9 @@ const readAssignments = (request) => {
 };
 
 const writeAssignments = (response, assignments) => {
-  const maxAge = dayjs.convert(1, 'month', 'ms');
   const whitelist = Object.keys(tests).sort();
   const serialized = JSON.stringify(assignments, whitelist);
+  const maxAge = dayjs.convert(1, 'month', 'ms');
   response.cookie(COOKIE_NAME, serialized, { maxAge });
 };
 

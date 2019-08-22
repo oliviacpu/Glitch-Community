@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
@@ -29,17 +30,14 @@ const defaultUser = {
 };
 
 function identifyUser(user) {
-  const analytics = { window };
-  document.cookie = `hasLogin=; expires=${new Date().toUTCString()}`;
+  document.cookie = `hasLogin=; expires=${new Date()}`;
   if (user) {
     addBreadcrumb({
       level: 'info',
       message: `Current user is ${JSON.stringify(user)}`,
     });
     if (user.login) {
-      const expires = new Date();
-      expires.setFullYear(expires.getFullYear() + 1);
-      document.cookie = `hasLogin=true; expires=${expires}`;
+      document.cookie = `hasLogin=true; expires=${dayjs().add(1, 'year')}`;
     }
   } else {
     addBreadcrumb({
@@ -48,10 +46,10 @@ function identifyUser(user) {
     });
   }
   try {
-    if (analytics && analytics.identify && user && user.login) {
+    if (window.analytics && user && user.login) {
       const emailObj = Array.isArray(user.emails) && user.emails.find((email) => email.primary);
       const email = emailObj && emailObj.email;
-      analytics.identify(
+      window.analytics.identify(
         user.id,
         {
           name: user.name,
