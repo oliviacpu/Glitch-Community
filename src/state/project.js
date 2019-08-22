@@ -125,6 +125,28 @@ export function useProjectEditor(initialProject) {
           }));
         }, handleError),
       ),
+      toggleBookmark: withErrorHandler(async (project) => {
+        try {
+          let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+          if (project.authUserHasBookmarked) {
+            await funcs.removeProjectFromCollection(project, myStuffCollection);
+            createNotification(`Removed ${project.domain} from collection My Stuff`);
+          } else {
+            if (!myStuffCollection) {
+              myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+            }
+            await funcs.addProjectToCollection(project, myStuffCollection);
+            const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+            createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+              type: 'success',
+            });
+          }
+        } catch (error) {
+          console.log('error', error);
+          captureException(error);
+          createNotification('Something went wrong, try refreshing?', { type: 'error' });
+        }
+      }, handleError),
   };
   return [project, funcs];
 }

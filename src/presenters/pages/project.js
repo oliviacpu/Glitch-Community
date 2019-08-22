@@ -138,7 +138,7 @@ DeleteProjectPopover.propTypes = {
 
 const ProjectPage = ({ project: initialProject }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
