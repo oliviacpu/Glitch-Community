@@ -9,7 +9,7 @@ version: 2.1
 orbs:
   cypress: cypress-io/cypress@1.5.1
 jobs:
-  lint:
+  lint_and_build:
     docker:
       - image: circleci/node:10-browsers
     steps:
@@ -23,25 +23,21 @@ jobs:
       - run:
           name: eslint
           command: pnpm run lint
-  build:
-    docker:
-      - image: circleci/node:10-browsers
-    steps:
       - run:
           name: build
           command: pnpm run build
+      - save_cache:
+          key: build
+          paths:
+            - build
 workflows:
   version: 2.1
   regular-workflow:
     jobs:
-      - lint
-      - build:
-          requires:
-            - lint
+      - lint_and_build
       - cypress/install:
           requires:
-            - lint
-            - build
+            - lint_and_build
       - cypress/run:
           requires:
             - cypress/install
