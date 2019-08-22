@@ -2,12 +2,8 @@
 # Glitch-Community CircleCI Config
 #
 # Note: Version 2.1 is required in order to use orbs.
-#
-# Dependencies: Cypress.IO Orb
 
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@1.5.1
 jobs:
   lint_and_build:
     docker:
@@ -26,22 +22,11 @@ jobs:
       - run:
           name: build
           command: pnpm run build
-      - save_cache:
-          key: cache-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - build
+      - run:
+          name: build
+          command: pnpx cypress run
 workflows:
   version: 2.1
   regular-workflow:
     jobs:
       - lint_and_build
-      - cypress/install:
-          requires:
-            - lint_and_build
-      - cypress/run:
-          requires:
-            - cypress/install
-          start: npm run start
-          wait-on: 'http://localhost:8000'
-          store_artifacts: true
-          record: true
