@@ -1,15 +1,7 @@
 const dayjs = require('dayjs');
 const { mapValues } = require('lodash');
 
-const tests = {
-  'Just-A-Test': {
-    niceone: { weight: 0.5, value: 'nice one!' },
-    goodjob: { weight: 0.5, value: 'good job!' },
-    toobad: { weight: 4, value: 'too bad' },
-  },
-};
-
-const COOKIE_NAME = 'ab-tests';
+const { COOKIE_NAME, tests } = require('Shared/ab-tests');
 
 const readAssignments = (request) => {
   try {
@@ -51,7 +43,7 @@ const getAssignments = (request, response) => {
     }
   }
   writeAssignments(response, assignments);
-  return mapValues(assignments, (assignment, test) => tests[test][assignment].value);
+  return assignments;
 };
 
 module.exports = getAssignments;
