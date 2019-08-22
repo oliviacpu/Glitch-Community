@@ -220,7 +220,7 @@ export function useCollectionEditor(initialCollection) {
       reloadCollectionProjects([selectedCollection, collection])
     }, handleCustomError),
 
-    removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
+    removeProjectFromCollection: withErrorHandler(async (project, selectedCollection=collection) => {
       console.log("project and collection inside state/collection", project, selectedCollection)
       await removeProjectFromCollection({ project, collection: selectedCollection });
       if (selectedCollection.id === collection.id) {

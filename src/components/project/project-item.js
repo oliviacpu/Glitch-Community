@@ -59,19 +59,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
-    if (collectionToAddTo.isMyStuff) {
-      setHasBookmarked(true);
-    }
-    providedProjectOptions.addProjectToCollection(projectToAdd, collectionToAddTo)
-  }
-  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
-    console.log(projectToRemove, collectionToRemoveFrom)
-    if (collectionToRemoveFrom.isMyStuff) {
-      setHasBookmarked(false);
-    }
-    providedProjectOptions.removeProjectFromCollection(projectToRemove, collectionToRemoveFrom);
-  }
   
   const bookmarkAction = useTrackedFunc(
     () =>
@@ -81,8 +68,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
         currentUser,
         createNotification,
         myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
+        addProjectToCollection:providedProjectOptions.addProjectToCollection,
+        removeProjectFromCollection: providedProjectOptions.removeFromCollection,
         // setHasBookmarked,
         hasBookmarked,
         // reloadCollectionProjects,
@@ -100,8 +87,8 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   };
   
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-  projectOptions.addProjectToCollection = addProjectToCollection;
-  projectOptions.removeProjectFromCollection = removeProjectFromCollection;
+  // projectOptions.addProjectToCollection = addProjectToCollection;
+  // projectOptions.removeProjectFromCollection = removeProjectFromCollection;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
   
