@@ -27,10 +27,11 @@ const useDefaultProjectOptions = () => {
       await addProjectToCollection({ project, collection });
       reloadCollectionProjects([collection]);
     }, handleCustomError),
-    // removeProjectFromCollection: withErrorHandler(async (project, collection) => {
-    //   await removeProjectFromCollection({ project, collection });
-    //   reloadCollectionProjects([collection]);
-    // }, handleCustomError),
+    removeProjectFromCollection: withErrorHandler(async (project, collection) => {
+      console.log("removePRojectFromCollection from within default project options")
+      await removeProjectFromCollection({ project, collection });
+      reloadCollectionProjects([collection]);
+    }, handleCustomError),
     joinTeamProject: withErrorHandler(async (project, team) => {
       await joinTeamProject({ team, project });
       reloadProjectMembers([project.id]);
@@ -47,7 +48,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const { currentUser } = useCurrentUser();
   const defaultProjectOptions = useDefaultProjectOptions();
   const projectOptions = { ...defaultProjectOptions, ...options };
-
   const isPinned = useMemo(() => {
     if (user) return user.pins.some(({ id }) => id === project.id);
     if (team) return team.teamPins.some(({ projectId }) => projectId === project.id);
@@ -65,7 +65,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const projectTeam = currentUser.teams.find((t) => project.teamIds.includes(t.id));
   const isProfileOwner = isUser || isCollectionOwner || isTeamMember;
   const canAddNote = collection ? isCollectionOwner : isProjectAdmin;
-
+  console.lo
   return pickBy({
     addProjectToCollection: isLoggedIn && projectOptions.addProjectToCollection,
     featureProject: !project.private && isProfileOwner && bind(projectOptions.featureProject, project),
