@@ -23,8 +23,7 @@
     "lint:src": "eslint --config src/.eslintrc.js src",
     "lint": "npm run lint:server && npm run lint:src",
     "build": "webpack",
-    "storybook": "build-storybook -c storybook-config -o build/storybook",
-    "ci:start": "node ./server/server.js"
+    "storybook": "build-storybook -c storybook-config -o build/storybook"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
