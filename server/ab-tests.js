@@ -12,8 +12,8 @@ const readAssignments = (request) => {
 const writeAssignments = (response, assignments) => {
   const whitelist = Object.keys(tests).sort();
   const serialized = JSON.stringify(assignments, whitelist);
-  const maxAge = dayjs.convert(1, 'month', 'ms');
-  response.cookie(COOKIE_NAME, serialized, { maxAge });
+  const expires = dayjs().add(1, 'month').toDate();
+  response.cookie(COOKIE_NAME, serialized, { expires });
 };
 
 const assignGroup = (groups) => {
