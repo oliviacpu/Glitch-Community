@@ -154,7 +154,9 @@ module.exports = function(external) {
       await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, false);
       return;
     }
-    const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
+  
+    // don't show the real avatar if the project has been suspended
+    const avatar = project.suspendedReason ? imageDefault : `${CDN_URL}/project-avatar/${project.id}.png`
 
     const helloTemplateDescriptions = new Set([
       'Your very own basic web page, ready for you to customize.',
@@ -165,7 +167,7 @@ module.exports = function(external) {
     const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
 
     let description;
-    if (usesDefaultDescription || !project.description) {
+    if (usesDefaultDescription || !project.description || project.suspendedReason) {
       description = DEFAULT_PROJECT_DESCRIPTION(domain);
     } else {
       const textDescription = cheerio.load(md.render(project.description)).text();
