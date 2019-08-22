@@ -34,9 +34,8 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
-import { useAPI, useAPIHandlers } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
-import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -144,9 +143,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  const { createNotification } = useNotifications();
+  const { addProjectToCollection } = useAPIHandlers();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
   const bookmarkAction = useTrackedFunc(
@@ -155,6 +152,7 @@ const ProjectPage = ({ project: initialProject }) => {
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
 
+  // TODO think about removing this
   const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
     if (collection.isMyStuff) {
       setHasBookmarked(true);
