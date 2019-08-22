@@ -5,6 +5,10 @@ import { useAPI, useAPIHandlers } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useNotifications } from 'State/notifications';
+import { useCurrentUser } from 'State/current-user';
+import { createCollection } from 'Models/collection';
 
 export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({
@@ -92,7 +96,11 @@ export function useProjectEditor(initialProject) {
   const { uploadAsset } = useUploader();
   const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
-  const { updateItem, deleteItem, updateProjectDomain } = useAPIHandlers();
+  const { updateItem, deleteItem, updateProjectDomain, removeProjectFromCollection, addProjectToCollection } = useAPIHandlers();
+  const api = useAPI();
+  const reloadCollectionProjects = useCollectionReload();
+  const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
   useEffect(() => setProject(initialProject), [initialProject]);
 
   async function updateFields(changes) {
@@ -125,26 +133,24 @@ export function useProjectEditor(initialProject) {
           }));
         }, handleError),
       ),
-      toggleBookmark: withErrorHandler(async (project) => {
-        try {
-          let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-          if (project.authUserHasBookmarked) {
-            await funcs.removeProjectFromCollection(project, myStuffCollection);
-            createNotification(`Removed ${project.domain} from collection My Stuff`);
-          } else {
-            if (!myStuffCollection) {
-              myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
-            }
-            await funcs.addProjectToCollection(project, myStuffCollection);
-            const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-            createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
-              type: 'success',
-            });
+      toggleBookmark: withErrorHandler(async (project, setHasBookmarked) => {
+        let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+        if (project.authUserHasBookmarked) {
+          if (setHasBookmarked) setHasBookmarked(false);
+          await removeProjectFromCollection({ project, collection: myStuffCollection });
+          createNotification(`Removed ${project.domain} from collection My Stuff`);
+        } else {
+          if (setHasBookmarked) setHasBookmarked(true);
+          if (!myStuffCollection) {
+            myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
           }
-        } catch (error) {
-          console.log('error', error);
-          captureException(error);
-          createNotification('Something went wrong, try refreshing?', { type: 'error' });
+          await addProjectToCollection({ project, collection: myStuffCollection });
+          reloadCollectionProjects([myStuffCollection]);
+          const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+          createNotification(
+            <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
+            { type: 'success' },
+          );
         }
       }, handleError),
   };
