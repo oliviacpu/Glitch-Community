@@ -5,10 +5,11 @@ import { useAPI, useAPIHandlers } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import * as assets from 'Utils/assets';
 import { allByKeys, getSingleItem, getAllPages } from 'Shared/api';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useCollectionReload } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
 import { createCollection } from 'Models/collection';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 
 export async function getProjectByDomain(api, domain) {
   const { project, teams, users } = await allByKeys({
@@ -61,23 +62,27 @@ export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
   const api = useAPI();
 
-  const getProjectMembers = useCallback((projectId) => {
-    if (projectResponses[projectId] && projectResponses[projectId].members) {
-      return projectResponses[projectId].members;
-    }
-    loadProjectMembers(api, [projectId], setProjectResponses);
-    return loadingResponse;
-  }, [projectResponses, api]);
+  const getProjectMembers = useCallback(
+    (projectId) => {
+      if (projectResponses[projectId] && projectResponses[projectId].members) {
+        return projectResponses[projectId].members;
+      }
+      loadProjectMembers(api, [projectId], setProjectResponses);
+      return loadingResponse;
+    },
+    [projectResponses, api],
+  );
 
-  const reloadProjectMembers = useCallback((projectIds) => {
-    loadProjectMembers(api, projectIds, setProjectResponses, true);
-  }, [api]);
+  const reloadProjectMembers = useCallback(
+    (projectIds) => {
+      loadProjectMembers(api, projectIds, setProjectResponses, true);
+    },
+    [api],
+  );
 
   return (
     <ProjectMemberContext.Provider value={getProjectMembers}>
-      <ProjectReloadContext.Provider value={reloadProjectMembers}>
-        {children}
-      </ProjectReloadContext.Provider>
+      <ProjectReloadContext.Provider value={reloadProjectMembers}>{children}</ProjectReloadContext.Provider>
     </ProjectMemberContext.Provider>
   );
 };
@@ -133,26 +138,25 @@ export function useProjectEditor(initialProject) {
           }));
         }, handleError),
       ),
-      toggleBookmark: withErrorHandler(async (project, setHasBookmarked) => {
-        let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-        if (project.authUserHasBookmarked) {
-          if (setHasBookmarked) setHasBookmarked(false);
-          await removeProjectFromCollection({ project, collection: myStuffCollection });
-          createNotification(`Removed ${project.domain} from collection My Stuff`);
-        } else {
-          if (setHasBookmarked) setHasBookmarked(true);
-          if (!myStuffCollection) {
-            myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
-          }
-          await addProjectToCollection({ project, collection: myStuffCollection });
-          reloadCollectionProjects([myStuffCollection]);
-          const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-          createNotification(
-            <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-            { type: 'success' },
-          );
+    toggleBookmark: withErrorHandler(async () => {
+      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+      if (project.authUserHasBookmarked) {
+        setProject({ ...project, authUserHasBookmarked: false });
+        await removeProjectFromCollection({ project, collection: myStuffCollection });
+        createNotification(`Removed ${project.domain} from collection My Stuff`);
+      } else {
+        setProject({ ...project, authUserHasBookmarked: true });
+        if (!myStuffCollection) {
+          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
         }
-      }, handleError),
+        await addProjectToCollection({ project, collection: myStuffCollection });
+        reloadCollectionProjects([myStuffCollection]);
+        const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+          type: 'success',
+        });
+      }
+    }, handleError),
   };
   return [project, funcs];
 }

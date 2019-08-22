@@ -150,7 +150,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
   const bookmarkAction = useTrackedFunc(
-    () => toggleBookmark(project, setHasBookmarked),
+    toggleBookmark,
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
