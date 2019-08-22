@@ -27,7 +27,7 @@ jobs:
           name: build
           command: pnpm run build
       - save_cache:
-          key: build
+          key: cache-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - build
 workflows:
