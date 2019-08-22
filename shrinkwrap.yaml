@@ -74,6 +74,7 @@ dependencies:
   randomcolor: 0.5.4
   react: 16.8.6
   react-aria-live: 2.0.5
+  react-axe: 2.1.9
   react-dom: 16.8.6
   react-helmet: 5.2.1
   react-is: 16.8.6
@@ -4367,6 +4368,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ReZxvNHIOv88FlT7rxcXIIC0fPt4KZqZbOlivyWtXLt8ESx84zd3kMC6iK5jVeS2qt+g7ftS7ye4fi06X5rtRQ==
+  /axe-core/2.6.1:
+    dev: false
+    engines:
+      node: '>=4'
+    requiresBuild: true
+    resolution:
+      integrity: sha512-QFfI3d+x/v92HJWGBaNfgrxdfon9/xXzd04YYfm5w5NJQOLex8qkJCctOt7+ky6e1l9zcQ5E7jsvbnTgQzyfTw==
   /axios/0.18.0:
     dependencies:
       follow-redirects: 1.7.0
@@ -12089,6 +12097,12 @@ packages:
       react: ^16.3.x
     resolution:
       integrity: sha512-rXiH1HNKJrr/UfVeGwA2aKY43r5WbjLs+AYB6/kJF1qny2hwxzQc1qewQmUpdQ5h8HAOTD8O/XlGcEHjqlCl0g==
+  /react-axe/2.1.9:
+    dependencies:
+      axe-core: 2.6.1
+    dev: false
+    resolution:
+      integrity: sha512-4u44w5qo6q14nS+TU2vcJA0ayen/BVQW2eC2tqMDuX0bcfPA5pDOL4neBgKGLENSQV327rUx1IcKYev8mWNUqw==
   /react-clientside-effect/1.2.1/react@16.8.6:
     dependencies:
       '@babel/runtime': 7.5.4
@@ -14898,6 +14912,7 @@ specifiers:
   randomcolor: ^0.5.4
   react: ^16.8.6
   react-aria-live: ^2.0.5
+  react-axe: ^2.1.9
   react-dom: ^16.8.6
   react-helmet: ^5.2.1
   react-is: ^16.8.6

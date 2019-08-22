@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
-import { hydrate, render } from 'react-dom';
+import ReactDOM, { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import convertPlugin from 'Shared/dayjs-convert';
@@ -19,6 +19,7 @@ dayjs.extend(convertPlugin);
 
 // This function is used in index.ejs to set up the app
 window.bootstrap = (container) => {
+  console.log('called bootstrap');
   if (location.hash.startsWith('#!/')) {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
@@ -45,7 +46,19 @@ window.bootstrap = (container) => {
     </BrowserRouter>
   );
 
-  if (container.hasChildNodes()) {
+  if (window.ENVIRONMENT !== 'production') {
+    import('react-axe').then(({ default: axe }) => {
+      if (!window.axeInitialized) {
+        axe(React, ReactDOM, 1000);
+        window.axeInitialized = true;
+      }
+      if (container.hasChildNodes()) {
+        hydrate(element, container);
+      } else {
+        render(element, container);
+      }
+    });
+  } else if (container.hasChildNodes()) {
     hydrate(element, container);
   } else {
     render(element, container);
