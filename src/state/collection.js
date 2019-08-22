@@ -7,6 +7,7 @@ import { captureException } from 'Utils/sentry';
 import { createCollection } from 'Models/collection';
 import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useNotifications } from 'State/notifications';
+import { useCurrentUser } from 'State/current-user';
 
 export const toggleBookmark = async ({
   api,
@@ -176,10 +177,11 @@ export function useCollectionEditor(initialCollection) {
     updateProjectInCollection,
   } = useAPIHandlers();
   const api = useAPI();
-  const { createNotification } = useNotifications();
 
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const reloadCollectionProjects = useCollectionReload();
+  const { createNotification } = useNotifications();
+  const { currentUser } = useCurrentUser();
 
   async function updateFields(changes) {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
@@ -304,15 +306,7 @@ export function useCollectionEditor(initialCollection) {
 
     unfeatureProject: () => updateFields({ featuredProjectId: null }).catch(handleError),
     
-    toggleBookmark: withErrorHandler(async({
-      // api,
-      // project,
-      currentUser,
-      createNotification,
-      // addProjectToCollection,
-      // removeProjectFromCollection,
-      project,
-    }) => {
+    toggleBookmark: withErrorHandler(async(project) => {
       try {
         let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
         if (project.authUserHasBookmarked) {

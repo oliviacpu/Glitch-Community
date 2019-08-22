@@ -2,12 +2,14 @@ import { useMemo } from 'react';
 import { pickBy } from 'lodash';
 
 import { useCurrentUser } from 'State/current-user';
-import { useAPIHandlers } from 'State/api';
+import { useAPIHandlers, useAPI } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
+import { useNotifications } from 'State/notifications';
+import { createCollection } from 'Models/collection';
 
 const bind = (fn, ...args) => {
   if (!fn) return null;
@@ -17,11 +19,14 @@ const bind = (fn, ...args) => {
 const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler);
 
 const useDefaultProjectOptions = () => {
-  const { addProjectToCollection, joinTeamProject, removeUserFromProject } = useAPIHandlers();
+  const { addProjectToCollection, joinTeamProject, removeUserFromProject, removeProjectFromCollection } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const { handleError, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
   const reloadCollectionProjects = useCollectionReload();
+  const { createNotification } = useNotifications();
+  const api = useAPI();
+
   return {
     addProjectToCollection: withErrorHandler(async (project, collection) => {
       await addProjectToCollection({ project, collection });
@@ -35,6 +40,24 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
+    toggleBookmark: withErrorHandler(async(project) => {
+      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+      if (project.authUserHasBookmarked) {
+        await removeProjectFromCollection({ project, collection: myStuffCollection});
+        createNotification(`Removed ${project.domain} from collection My Stuff`);
+      } else {
+        if (!myStuffCollection) {
+          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
+        }
+        await addProjectToCollection({ project, collection: myStuffCollection });
+        reloadCollectionProjects([myStuffCollection]);
+        const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+        createNotification(
+          <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
+          { type: 'success' },
+        );
+      }
+    }, handleError)
   };
 };
 
