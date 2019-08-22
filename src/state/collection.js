@@ -28,19 +28,19 @@ export const toggleBookmark = async ({
       }
       await addProjectToCollection(project, myStuffCollection);
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-        { type: 'success' },
-      );
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+        type: 'success',
+      });
     }
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
   }
 };
 
-const createAPICallForCollectionProjects = (encodedFullUrl) => `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
+const createAPICallForCollectionProjects = (encodedFullUrl) =>
+  `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
@@ -77,7 +77,6 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
   });
   collections.forEach(async (collection) => {
     const projects = await getCollectionProjectsFromAPI(api, collection, withCacheBust);
-    console.log("projects inside loadCollectionProjects", projects)
     setResponses((prev) => ({
       ...prev,
       [collection.id]: {
@@ -118,9 +117,7 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -177,7 +174,7 @@ export function useCollectionEditor(initialCollection) {
   } = useAPIHandlers();
   const { handleError, handleErrorForInput, handleCustomError } = useErrorHandlers();
   const reloadCollectionProjects = useCollectionReload();
-  
+
   async function updateFields(changes) {
     // A note here: we don't want to setState with the data from the server from this call, as it doesn't return back the projects in depth with users and notes and things
     // maybe a sign we want to think of something a little more powerful for state management, as we're getting a little hairy here.
@@ -206,16 +203,16 @@ export function useCollectionEditor(initialCollection) {
           return [project, ...oldProjects.projects];
         }
         if (selectedCollection.isMyStuff) {
-          return oldProjects.map(p => {
+          return oldProjects.map((p) => {
             if (p.id === project.id) {
-              p.authUserHasBookmarked = true
+              p.authUserHasBookmarked = true;
             }
             return p;
-          })
+          });
         }
         return oldProjects;
-      }
-     
+      };
+
       setCollection((prev) => ({
         ...prev,
         projects: getNewProjectsState(prev.projects),
@@ -225,34 +222,33 @@ export function useCollectionEditor(initialCollection) {
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
-      reloadCollectionProjects([selectedCollection, collection])
+      reloadCollectionProjects([selectedCollection, collection]);
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
-      console.log("inside state/collection, removeProjectFromCollection", project, selectedCollection)
       if (!selectedCollection.id) {
-        selectedCollection = collection
+        selectedCollection = collection;
       }
       await removeProjectFromCollection({ project, collection: selectedCollection });
       const getNewProjectsState = (oldProjects) => {
         if (selectedCollection.id === collection.id) {
-          return oldProjects.filter((p) => p.id !== project.id)
+          return oldProjects.filter((p) => p.id !== project.id);
         }
         if (selectedCollection.isMyStuff) {
-          return oldProjects.map(p => {
+          return oldProjects.map((p) => {
             if (p.id === project.id) {
-              p.authUserHasBookmarked = false
+              p.authUserHasBookmarked = false;
             }
             return p;
-          })
+          });
         }
         return oldProjects;
-      }
+      };
       setCollection((prev) => ({
         ...prev,
         projects: getNewProjectsState(prev.projects),
       }));
-      reloadCollectionProjects([selectedCollection, collection])
+      reloadCollectionProjects([selectedCollection, collection]);
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),

@@ -172,7 +172,6 @@ export const useAPIHandlers = () => {
       orderProjectInCollection: ({ project, collection }, index) => api.post(`/collections/${collection.id}/project/${project.id}/index/${index}`),
       updateProjectInCollection: ({ project, collection }, data) => api.patch(`/collections/${collection.id}/project/${project.id}`, data),
       removeProjectFromCollection: ({ project, collection }) => {
-        console.log("inside the api", project, collection, `/collections/${collection.id}/remove/${project.id}`, project.id)  
         return api.patch(`/collections/${collection.id}/remove/${project.id}`)
       },
 
