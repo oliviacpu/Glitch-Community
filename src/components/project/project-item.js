@@ -59,12 +59,18 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  const addProjectToCollection = (...args) => {
-    console.log("hi", ...args)
-    providedProjectOptions.addProjectToCollection(...args)
+  const addProjectToCollection = (projectToAdd, collectionToAddTo) => {
+    if (collectionToAddTo.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    providedProjectOptions.addProjectToCollection(projectToAdd, collectionToAddTo)
   }
-  const removeProjectFromCollection = (...args) => {
-    providedProjectOptions.removeProjectFromCollection(...args)
+  const removeProjectFromCollection = (projectToRemove, collectionToRemoveFrom) => {
+    console.log(projectToRemove, collectionToRemoveFrom)
+    if (collectionToRemoveFrom.isMyStuff) {
+      setHasBookmarked(false);
+    }
+    providedProjectOptions.removeProjectFromCollection(projectToRemove, collectionToRemoveFrom);
   }
   
   const bookmarkAction = useTrackedFunc(
