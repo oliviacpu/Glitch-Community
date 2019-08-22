@@ -12,7 +12,6 @@ jobs:
   lint:
     docker:
       - image: circleci/node:10-browsers
-    working_directory: ~/Glitch-Community
     steps:
       - checkout
       - run:
@@ -27,18 +26,10 @@ jobs:
   build:
     docker:
       - image: circleci/node:10-browsers
-    working_directory: ~/Glitch-Community
     steps:
-      - checkout
-      - run:
-          name: update-pnpm
-          command: 'sudo npm install -g pnpm@latest'
-      - run:
-          name: pnpm-install
-          command: pnpm install
       - run:
           name: build
-          command: pnpm run build          
+          command: pnpm run build
 workflows:
   version: 2.1
   regular-workflow:
