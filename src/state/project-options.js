@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { pickBy } from 'lodash';
 
 import { useCurrentUser } from 'State/current-user';
@@ -10,6 +10,7 @@ import { userIsOnTeam } from 'Models/team';
 import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
 import { useNotifications } from 'State/notifications';
 import { createCollection } from 'Models/collection';
+import { AddProjectToCollectionMsg } from 'Components/notification';
 
 const bind = (fn, ...args) => {
   if (!fn) return null;
@@ -20,7 +21,7 @@ const withErrorHandler = (fn, handler) => (...args) => fn(...args).catch(handler
 
 const useDefaultProjectOptions = () => {
   const { addProjectToCollection, joinTeamProject, removeUserFromProject, removeProjectFromCollection } = useAPIHandlers();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, update } = useCurrentUser();
   const { handleError, handleCustomError } = useErrorHandlers();
   const reloadProjectMembers = useProjectReload();
   const reloadCollectionProjects = useCollectionReload();
@@ -40,12 +41,14 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
-    toggleBookmark: withErrorHandler(async(project) => {
+    toggleBookmark: withErrorHandler(async(project, setHasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (project.authUserHasBookmarked) {
+        if (setHasBookmarked) setHasBookmarked(false);
         await removeProjectFromCollection({ project, collection: myStuffCollection});
         createNotification(`Removed ${project.domain} from collection My Stuff`);
       } else {
+        if (setHasBookmarked) setHasBookmarked(true);
         if (!myStuffCollection) {
           myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
         }
@@ -95,5 +98,6 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
     removeProjectFromTeam: isTeamMember && bind(projectOptions.removeProjectFromTeam, project),
     deleteProject: isProjectAdmin && bind(projectOptions.deleteProject, project),
     removeProjectFromCollection: isCollectionOwner && bind(projectOptions.removeProjectFromCollection, project),
+    toggleBookmark: isLoggedIn && bind(projectOptions.toggleBookmark, project),
   });
 };
