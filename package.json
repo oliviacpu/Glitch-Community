@@ -17,9 +17,12 @@
     "./src/polyfills.js"
   ],
   "scripts": {
-    "lint": "eslint --config server/.eslintrc.server.js server shared webpack.config.js",
-    "prestart": "nodemon --watch server --watch shared --exec 'eslint --config server/.eslintrc.server.js server shared webpack.config.js' &",
+    "prestart": "nodemon --watch server --watch shared --exec 'npm run lint' &",
     "start": "forever --minUptime 5000 --spinSleepTime 1000 -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
+    "lint:server": "eslint --env es6,node --config server/.eslintrc.server.js server shared webpack.config.js",
+    "lint:src": "eslint --env es6,browser --config src/.eslintrc.js src",
+    "lint": "npm run lint:server && npm run lint:src",
+    "build": "webpack",
     "storybook": "build-storybook -c storybook-config -o build/storybook",
     "ci:start": "node ./server/server.js"
   },
