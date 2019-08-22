@@ -53,7 +53,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const isAnonymousUser = !currentUser.login;
   const api = useAPI();
   const { createNotification } = useNotifications();
-  
+
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
