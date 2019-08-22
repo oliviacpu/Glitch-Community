@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
@@ -37,7 +36,9 @@ function identifyUser(user) {
       message: `Current user is ${JSON.stringify(user)}`,
     });
     if (user.login) {
-      document.cookie = `hasLogin=true; expires=${dayjs().add(1, 'year')}`;
+      const expires = new Date();
+      expires.setFullYear(expires.getFullYear() + 1);
+      document.cookie = `hasLogin=true; expires=${expires}`;
     }
   } else {
     addBreadcrumb({
