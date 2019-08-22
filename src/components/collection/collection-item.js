@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Pluralize from 'react-pluralize';
 import classNames from 'classnames';
 
 import Markdown from 'Components/text/markdown';
@@ -76,7 +75,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
       </div>
     );
   }
-
+  const footerLabel = `View ${projects.length >= 3 ? 'all' : ''} ${projects.length} ${projects.length > 1 ? 'projects' : 'project'}`;
   return (
     <>
       <div className={styles.projectsContainer}>
@@ -84,9 +83,8 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
           {(project) => <ProjectItemSmall project={project} />}
         </Row>
       </div>
-      <CollectionLink collection={collection} className={styles.footerLink}>
-        {`View ${projects.length >= 3 ? 'all' : ''} `}
-        <Pluralize count={projects.length} singular="project" /> <Arrow />
+      <CollectionLink collection={collection} className={styles.footerLink} label={footerLabel}>
+        {footerLabel} <Arrow />
       </CollectionLink>
     </>
   );
