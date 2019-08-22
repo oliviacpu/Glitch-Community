@@ -57,6 +57,7 @@ function identifyUser(user) {
           login: user.login,
           email,
           created_at: user.createdAt,
+          ...Object.keys(AB_TESTS
         },
         { groupId: '0' },
       );
