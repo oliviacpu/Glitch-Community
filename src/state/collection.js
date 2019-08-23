@@ -66,13 +66,13 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   let cacheBust = '';
-  
+
   // first bust cache for the endpoint used when we load the collection page
   if (withCacheBust) {
     api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collection.fullUrl)));
-    const cacheBust =`&cacheBust=${Date.now()}`;
+    cacheBust = `&cacheBust=${Date.now()}`;
   }
-  
+
   // then get the latest collection projects
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
@@ -218,39 +218,35 @@ export function useCollectionEditor(initialCollection) {
   const funcs = {
     addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
       // update collection state
-      setCollection((oldCollection) => {
-        const getNewProjectsFromOldProjects = (oldProjects) => {
-          // if it's the same collection as the page you're on, add the project to it
-          if (selectedCollection.id === collection.id) {
-            return [project, ...oldProjects.projects];
-          }
-          // if you're adding to the my stuff collection, make sure the project shows as bookmarked
-          if (selectedCollection.isMyStuff) {
-            return oldProjects.map((p) => {
-              if (p.id === project.id) {
-                p.authUserHasBookmarked = true;
-              }
-              return p;
-            });
-          }
-          return oldProjects;
-        };
-        
-        return {
-          ...oldCollection,
-          projects: getNewProjectsFromOldProjects(oldCollection.projects)
+      const getNewProjectsState = (oldProjects) => {
+        if (selectedCollection.id === collection.id) {
+          return [project, ...oldProjects.projects];
         }
-      });
+        if (selectedCollection.isMyStuff) {
+          return oldProjects.map((p) => {
+            if (p.id === project.id) {
+              p.authUserHasBookmarked = true;
+            }
+            return p;
+          });
+        }
+        return oldProjects;
+      };
+
+      setCollection((prev) => ({
+        ...prev,
+        projects: getNewProjectsState(prev.projects),
+      }));
 
       // make backend call
       await addProjectToCollection({ project, collection: selectedCollection });
-      
+
       // reorder collection if necessary
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
-      
-      // reload
+
+      // reload collection projects, this will ensure next time we navigate to this page, the state is up to date and caches are busted if necessary
       reloadCollectionProjects([selectedCollection, collection]);
     }, handleCustomError),
 
