@@ -34,9 +34,10 @@ export const toggleBookmark = async ({
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
-        type: 'success',
-      });
+      createNotification(
+        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
+        { type: 'success' },
+      );
     }
     reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
@@ -109,6 +110,7 @@ const initialResponses = { nullMyStuff: { projects: { status: 'ready', value: []
 export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState(initialResponses);
   const api = useAPI();
+
   const getCollectionProjects = useCallback(
     (collection) => {
       if (responses[collection.id] && responses[collection.id].projects) {
@@ -129,7 +131,9 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
+        {children}
+      </CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -254,9 +258,11 @@ export function useCollectionEditor(initialCollection) {
     }, handleCustomError),
 
     removeProjectFromCollection: withErrorHandler(async (project, selectedCollection) => {
+      // if no collection is passed in, assume the current page is the collection we're removing from
       if (!selectedCollection.id) {
         selectedCollection = collection;
       }
+      
       await removeProjectFromCollection({ project, collection: selectedCollection });
       const getNewProjectsState = (oldProjects) => {
         if (selectedCollection.id === collection.id) {
