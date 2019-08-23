@@ -41,7 +41,7 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
-    toggleBookmark: withErrorHandler(async (project, setHasBookmarked, hasBookmarked) => {
+    toggleBookmark: withErrorHandler(async (project, hasBookmarked, setHasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (hasBookmarked) {
         if (setHasBookmarked) setHasBookmarked(false);
