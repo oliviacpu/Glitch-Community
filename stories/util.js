@@ -1,3 +1,4 @@
+import { Context as GlobalsContext } from 'State/globals';
 import { Context as CurrentUserContext } from 'State/current-user';
 import { Context as APIContext } from 'State/api';
 
@@ -17,9 +18,11 @@ export const provideContext = (
   { currentUser = {}, currentUserFetched = true, api = {} } = {},
   Component,
 ) => () => (
-  <CurrentUserContext.Provider value={{ currentUser, fetched: currentUserFetched }}>
-    <APIContext.Provider value={api}>
-      <Component />
-    </APIContext.Provider>
-  </CurrentUserContext.Provider>
+  <GlobalsContext.Provider value={{ location: new URL(window.location.origin) }}>
+    <CurrentUserContext.Provider value={{ currentUser, fetched: currentUserFetched }}>
+      <APIContext.Provider value={api}>
+        <Component />
+      </APIContext.Provider>
+    </CurrentUserContext.Provider>
+  </GlobalsContext.Provider>
 );

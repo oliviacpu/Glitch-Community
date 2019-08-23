@@ -56,7 +56,7 @@ function Questions({ max }) {
   });
   useRepeatingEffect(() => {
     load(api, max).then(setState);
-  }, 10000, []);
+  }, 10000, [api.persistentToken, max]);
 
   return (
     <section className={styles.container}>
