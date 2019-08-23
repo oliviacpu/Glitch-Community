@@ -130,7 +130,9 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
+        {children}
+      </CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
