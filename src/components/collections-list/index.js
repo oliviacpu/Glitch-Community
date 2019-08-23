@@ -85,6 +85,7 @@ function CollectionsList({
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
 
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
+
   return (
     <MyStuffController collections={orderedCollections} isAuthorized={isAuthorized} maybeTeam={maybeTeam}>
       {(collectionsWithMyStuff) => (

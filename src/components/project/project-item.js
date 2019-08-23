@@ -54,7 +54,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   }, [project.authUserHasBookmarked]);
 
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
-
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
   };
@@ -63,15 +62,14 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   };
 
   const projectOptions = useProjectOptions(project, providedProjectOptions);
+  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
+  const onMyStuffPage = window.location.pathname.includes('my-stuff');
 
   const bookmarkAction = useTrackedFunc(
     () => projectOptions.toggleBookmark(project, setHasBookmarked),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
-
-  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
-  const onMyStuffPage = window.location.pathname.includes('my-stuff');
 
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
