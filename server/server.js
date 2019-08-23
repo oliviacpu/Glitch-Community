@@ -66,7 +66,7 @@ const bodyParserJSON = bodyParser.json();
 app.use((req, res, next) => {
   bodyParserJSON(req, res, (error) => {
     if (error && error.expose && !res.headersSent) {
-      res.status(error.status).send(`<html><head><title>Error</title></head><body>${error.message}</body></html>`);
+      res.sendStatus(error.status);
     } else {
       next(error);
     }
