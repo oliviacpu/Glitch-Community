@@ -65,12 +65,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const bodyParserJSON = bodyParser.json();
 app.use((req, res, next) => {
   bodyParserJSON(req, res, (error) => {
-    if (error) {
-      console.error(error);
-      res.status(400);
-      console.log(error.statusCode, error.status, error.expose, error.message);
+    if (!res.headersSent && error && error.expose) {
+      res.status(error.status);
+      res.send(error.message);
     } else {
-      next();
+      next(error);
     }
   });
 });
