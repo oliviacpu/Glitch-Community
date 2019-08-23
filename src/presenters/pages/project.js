@@ -223,7 +223,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollection} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
