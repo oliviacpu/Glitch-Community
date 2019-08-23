@@ -34,10 +34,9 @@ export const toggleBookmark = async ({
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-        { type: 'success' },
-      );
+      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+        type: 'success',
+      });
     }
     reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
@@ -130,9 +129,7 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -218,25 +215,31 @@ export function useCollectionEditor(initialCollection) {
   const funcs = {
     addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
       // update collection state
-      const getNewProjectsState = (oldProjects) => {
-        if (selectedCollection.id === collection.id) {
-          return [project, ...oldProjects.projects];
-        }
-        if (selectedCollection.isMyStuff) {
-          return oldProjects.map((p) => {
-            if (p.id === project.id) {
-              p.authUserHasBookmarked = true;
-            }
-            return p;
-          });
-        }
-        return oldProjects;
-      };
+      setCollection((oldCollection) => {
+        const getNewProjectsFromOldProjects = (oldProjects) => {
+          // if it's the same collection as the page you're on, add the project to it
+          if (selectedCollection.id === collection.id) {
+            return [project, ...oldProjects];
+          }
 
-      setCollection((prev) => ({
-        ...prev,
-        projects: getNewProjectsState(prev.projects),
-      }));
+          // if you're adding to the my stuff collection, make sure the project shows as bookmarked
+          if (selectedCollection.isMyStuff) {
+            return oldProjects.map((p) => {
+              if (p.id === project.id) {
+                p.authUserHasBookmarked = true;
+              }
+              return p;
+            });
+          }
+
+          return oldProjects;
+        };
+
+        return {
+          ...oldCollection,
+          projects: getNewProjectsFromOldProjects(oldCollection.projects),
+        };
+      });
 
       // make backend call
       await addProjectToCollection({ project, collection: selectedCollection });
