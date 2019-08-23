@@ -138,7 +138,7 @@ export function useProjectEditor(initialProject) {
           }));
         }, handleError),
       ),
-    toggleBookmark: withErrorHandler(async () => {
+    toggleBookmark: withErrorHandler(async (projectToAdd, hasBookmarked, setHasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (project.authUserHasBookmarked) {
         setProject({ ...project, authUserHasBookmarked: false });
