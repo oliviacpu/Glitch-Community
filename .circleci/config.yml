@@ -13,6 +13,9 @@ jobs:
       - run:
           name: update-pnpm
           command: 'sudo npm install -g pnpm@latest'
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "package-lock.json" }}
       - run:
           name: pnpm-install
           command: pnpm install
@@ -29,7 +32,7 @@ jobs:
       - save_cache:
           paths:
             - build
-          key: build-{{ checksum "build/stats.json" }}
+          key: build-{{ .Revision }}
   integration_tests:
     docker:
       - image: circleci/node:10-browsers
@@ -37,8 +40,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - build-{{ checksum "build/stats.json" }}
             - deps-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          keys:
+            - build-{{ .Revision }}
       - run:
           name: update-pnpm
           command: 'sudo npm install -g pnpm@latest'
