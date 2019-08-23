@@ -66,7 +66,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
 
   const bookmarkAction = useTrackedFunc(
-    () => projectOptions.toggleBookmark(project, setHasBookmarked),
+    () => projectOptions.toggleBookmark(project, setHasBookmarked, hasBookmarked),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
