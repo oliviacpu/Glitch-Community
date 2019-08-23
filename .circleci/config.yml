@@ -23,8 +23,8 @@ jobs:
           name: build
           command: pnpm run build
       - run:
-          name: build
-          command: pnpx cypress run
+          name: cypress
+          command: pnpm run cy:ci
 workflows:
   version: 2.1
   regular-workflow:
