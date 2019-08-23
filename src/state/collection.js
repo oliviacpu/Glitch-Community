@@ -217,30 +217,40 @@ export function useCollectionEditor(initialCollection) {
 
   const funcs = {
     addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
-      const getNewProjectsState = (oldProjects) => {
-        if (selectedCollection.id === collection.id) {
-          return [project, ...oldProjects.projects];
+      // update collection state
+      setCollection((oldCollection) => {
+        const getNewProjectsFromOldProjects = (oldProjects) => {
+          // if it's the same collection as the page you're on, add the project to it
+          if (selectedCollection.id === collection.id) {
+            return [project, ...oldProjects.projects];
+          }
+          // if you're adding to the my stuff collection, make sure the project shows as bookmarked
+          if (selectedCollection.isMyStuff) {
+            return oldProjects.map((p) => {
+              if (p.id === project.id) {
+                p.authUserHasBookmarked = true;
+              }
+              return p;
+            });
+          }
+          return oldProjects;
+        };
+        
+        return {
+          ...oldCollection,
+          projects: getNewProjectsFromOldProjects(oldCollection.projects)
         }
-        if (selectedCollection.isMyStuff) {
-          return oldProjects.map((p) => {
-            if (p.id === project.id) {
-              p.authUserHasBookmarked = true;
-            }
-            return p;
-          });
-        }
-        return oldProjects;
-      };
+      });
 
-      setCollection((prev) => ({
-        ...prev,
-        projects: getNewProjectsState(prev.projects),
-      }));
-
+      // make backend call
       await addProjectToCollection({ project, collection: selectedCollection });
+      
+      // reorder collection if necessary
       if (selectedCollection.id === collection.id) {
         await orderProjectInCollection({ project, collection }, 0);
       }
+      
+      // reload
       reloadCollectionProjects([selectedCollection, collection]);
     }, handleCustomError),
 
