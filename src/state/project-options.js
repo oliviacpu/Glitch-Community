@@ -43,7 +43,7 @@ const useDefaultProjectOptions = () => {
     }, handleError),
     toggleBookmark: withErrorHandler(async (project, setHasBookmarked, hasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-      if (hasBookmarked || project.authUserHasBookmarked) {
+      if (hasBookmarked) {
         if (setHasBookmarked) setHasBookmarked(false);
         await removeProjectFromCollection({ project, collection: myStuffCollection });
         createNotification(`Removed ${project.domain} from collection My Stuff`);
