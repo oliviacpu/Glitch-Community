@@ -33,7 +33,7 @@ export function pickRandomColors(count) {
   if (newColors.every((color) => isGoodColorContrast(color))) {
     return newColors;
   }
-  return pickRandomColors();
+  return pickRandomColors(count);
 }
 
 export function pickRandomColor() {
