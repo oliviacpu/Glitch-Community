@@ -16,12 +16,35 @@ jobs:
       - run:
           name: pnpm-install
           command: pnpm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: deps-{{ checksum "package-lock.json" }}
       - run:
           name: eslint
           command: pnpm run lint
       - run:
           name: build
           command: pnpm run build
+      - save_cache:
+          paths:
+            - build
+          key: build-{{ checksum "build/stats.json" }}
+  integration_tests:
+    docker:
+      - image: circleci/node:10-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - build-{{ checksum "build/stats.json" }}
+            - deps-{{ checksum "package-lock.json" }}
+      - run:
+          name: update-pnpm
+          command: 'sudo npm install -g pnpm@latest'
+      - run:
+          name: pnpm-install
+          command: pnpm install
       - run:
           name: cypress
           command: pnpm run cy:ci
@@ -30,3 +53,4 @@ workflows:
   regular-workflow:
     jobs:
       - lint_and_build
+      - integration_tests
