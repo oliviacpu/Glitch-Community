@@ -157,6 +157,9 @@ export function useProjectEditor(initialProject) {
         });
       }
     }, handleError),
+    addProjectToCollection: wihErrorHandler(async () => {
+
+    })
   };
   return [project, funcs];
 }

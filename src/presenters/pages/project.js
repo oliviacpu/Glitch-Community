@@ -136,14 +136,13 @@ DeleteProjectPopover.propTypes = {
 
 const ProjectPage = ({ project: initialProject }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark }] = useProjectEditor(initialProject);
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark, addProjectToCollection }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  const { addProjectToCollection } = useAPIHandlers();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
   const bookmarkAction = useTrackedFunc(
@@ -151,14 +150,6 @@ const ProjectPage = ({ project: initialProject }) => {
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
-
-  // TODO think about removing this
-  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
-    if (collection.isMyStuff) {
-      setHasBookmarked(true);
-    }
-    return addProjectToCollection({ project: projectToAdd, collection });
-  };
 
   return (
     <main id="main">

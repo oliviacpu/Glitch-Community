@@ -33,8 +33,10 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
 
   // put mystuff at beginning of list (and fake one if it's not there yet)
   const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
+
   // fetch projects for myStuff
   const { value: myStuffProjects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
+
   if (status === 'loading') {
     return children([]);
   }
@@ -47,6 +49,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
+
   return children(collectionsWithMyStuff);
 }
 
@@ -80,6 +83,7 @@ function CollectionsList({
     return null;
   }
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
+
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
 
   return (
