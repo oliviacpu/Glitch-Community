@@ -49,13 +49,9 @@ export const toggleBookmark = async ({
 const createAPICallForCollectionProjects = (encodedFullUrl) =>
   `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
 
-export const bustCacheForUserCollections = (api, userId) => {
-  return api.bustCache(`v1/users/by/id/collections?id=${userId}&limit=100`);
-}
+const bustCacheForCollectionProjects = (api, collectionUrl) => api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collectionUrl)));
 
-const bustCacheForCollectionProjects = (api, co) => {
-  return api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collection.fullUrl)));
-}
+export const bustCacheForUserCollections = (api, userId) => api.bustCache(`v1/users/by/id/collections?id=${userId}&limit=100`);
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
@@ -74,7 +70,7 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-
+  bustCacheForCollectionProjects(collection.fullUrl);
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
