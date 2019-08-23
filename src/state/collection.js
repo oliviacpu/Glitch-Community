@@ -262,30 +262,43 @@ export function useCollectionEditor(initialCollection) {
       if (!selectedCollection.id) {
         selectedCollection = collection;
       }
-      
+
+      // update collection state
+      setCollection((oldCollection) => {
+        const getNewProjectsFromOldProjects = (oldProjects) => {
+          // if collection we're removing from is same as current collection page, remove it from the page
+          if (selectedCollection.id === collection.id) {
+            return oldProjects.filter((p) => p.id !== project.id);
+          }
+
+          // if we're unbookmarking a project in a collection, make sure it shows as unbookmarked
+          if (selectedCollection.isMyStuff) {
+            return oldProjects.map((p) => {
+              if (p.id === project.id) {
+                p.authUserHasBookmarked = false;
+              }
+              return p;
+            });
+          }
+
+          return oldProjects;
+        };
+
+        return {
+          ...oldCollection,
+          projects: getNewProjectsFromOldProjects(oldCollection.projects),
+        };
+      });
+
+      // make api call to remove from collection
       await removeProjectFromCollection({ project, collection: selectedCollection });
-      const getNewProjectsState = (oldProjects) => {
-        if (selectedCollection.id === collection.id) {
-          return oldProjects.filter((p) => p.id !== project.id);
-        }
-        if (selectedCollection.isMyStuff) {
-          return oldProjects.map((p) => {
-            if (p.id === project.id) {
-              p.authUserHasBookmarked = false;
-            }
-            return p;
-          });
-        }
-        return oldProjects;
-      };
-      setCollection((prev) => ({
-        ...prev,
-        projects: getNewProjectsState(prev.projects),
-      }));
+
+      // reload collection projects, this will ensure next time we navigate to this page, the state is up to date and caches are busted if necessary
       reloadCollectionProjects([selectedCollection, collection]);
     }, handleError),
 
     deleteCollection: () => deleteItem({ collection }).catch(handleError),
+
     deleteProject: withErrorHandler(async (project) => {
       await deleteItem({ project });
       setCollection((prev) => ({
