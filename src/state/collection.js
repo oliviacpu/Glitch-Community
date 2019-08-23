@@ -17,8 +17,8 @@ export const toggleBookmark = async ({
   myStuffEnabled,
   addProjectToCollection,
   removeProjectFromCollection,
-  hasBookmarked,
   setHasBookmarked,
+  hasBookmarked,
   reloadCollectionProjects,
 }) => {
   try {
@@ -27,7 +27,6 @@ export const toggleBookmark = async ({
       setHasBookmarked(false);
       await removeProjectFromCollection({ project, collection: myStuffCollection });
       createNotification(`Removed ${project.domain} from collection My Stuff`);
-      reloadCollectionProjects([myStuffCollection]);
     } else {
       setHasBookmarked(true);
       if (!myStuffCollection) {
@@ -35,11 +34,12 @@ export const toggleBookmark = async ({
       }
       await addProjectToCollection({ project, collection: myStuffCollection });
       const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
-        type: 'success',
-      });
-      reloadCollectionProjects([myStuffCollection]);
+      createNotification(
+        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
+        { type: 'success' },
+      );
     }
+    reloadCollectionProjects([myStuffCollection]);
   } catch (error) {
     captureException(error);
     createNotification('Something went wrong, try refreshing?', { type: 'error' });
@@ -48,8 +48,6 @@ export const toggleBookmark = async ({
 
 const createAPICallForCollectionProjects = (encodedFullUrl) =>
   `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
-
-const bustCacheForCollectionProjects = (api, collectionUrl) => api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collectionUrl)));
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
@@ -67,8 +65,15 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 };
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
-  const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  bustCacheForCollectionProjects(api, collection.fullUrl);
+  let cacheBust = '';
+  
+  // first bust cache for the endpoint used when we load the collection page
+  if (withCacheBust) {
+    api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collection.fullUrl)));
+    const cacheBust =`&cacheBust=${Date.now()}`;
+  }
+  
+  // then get the latest collection projects
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
