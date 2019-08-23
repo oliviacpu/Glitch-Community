@@ -53,4 +53,6 @@ workflows:
   regular-workflow:
     jobs:
       - lint_and_build
-      - integration_tests
+      - integration_tests:
+          requires:
+          - lint_and_build
