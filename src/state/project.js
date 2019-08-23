@@ -157,11 +157,12 @@ export function useProjectEditor(initialProject) {
         });
       }
     }, handleError),
-    addProjectToCollection: withErrorHandler(async (project, collection) => {
+    addProjectToCollection: withErrorHandler(async (projectToAdd, collection) => {
       if (collection.isMyStuff) {
         setProject({ ...project, authUserHasBookmarked: true });
       }
-
+      await addProjectToCollection({ project: projectToAdd, collection });
+      reloadCollectionProjects([collection]);
     }, handleError),
   };
   return [project, funcs];

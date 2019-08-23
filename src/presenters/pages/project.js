@@ -34,7 +34,6 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
-import { useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
 
 import styles from './project.styl';
@@ -136,18 +135,20 @@ DeleteProjectPopover.propTypes = {
 
 const ProjectPage = ({ project: initialProject }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark, addProjectToCollection }] = useProjectEditor(initialProject);
+  const [
+    project,
+    { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark, addProjectToCollection },
+  ] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
   const bookmarkAction = useTrackedFunc(
     toggleBookmark,
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    `Project ${initialProject.authUserHasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
 
@@ -176,7 +177,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 </Heading>
                 {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={initialProject.authUserHasBookmarked} projectName={project.domain} />
                   </div>
                 )}
               </div>
@@ -190,7 +191,7 @@ const ProjectPage = ({ project: initialProject }) => {
                 <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
                 {myStuffEnabled && !isAnonymousUser && (
                   <div className={styles.bookmarkButton}>
-                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={initialProject.authUserHasBookmarked} projectName={project.domain} />
                   </div>
                 )}
               </div>
@@ -268,7 +269,9 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {project ? <ProjectPage project={project} /> : (
+        {project ? (
+          <ProjectPage project={project} />
+        ) : (
           <>
             {status === 'ready' && <NotFound name={domain} />}
             {status === 'loading' && <Loader />}
