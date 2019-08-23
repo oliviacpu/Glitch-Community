@@ -70,13 +70,14 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
   const cacheBust = withCacheBust ? `&cacheBust=${Date.now()}` : '';
-  bustCacheForCollectionProjects(collection.fullUrl);
+  bustCacheForCollectionProjects(api, collection.fullUrl);
   return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
 }
 
 const loadingResponse = { status: 'loading' };
 
 function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
+  console.log("inside loadCollectionProjects")
   setResponses((prev) => {
     const next = { ...prev };
     for (const { id } of collections) {
@@ -107,7 +108,7 @@ const initialResponses = { nullMyStuff: { projects: { status: 'ready', value: []
 export const CollectionContextProvider = ({ children }) => {
   const [responses, setResponses] = useState(initialResponses);
   const api = useAPI();
-
+  console.log("responses", responses)
   const getCollectionProjects = useCallback(
     (collection) => {
       if (responses[collection.id] && responses[collection.id].projects) {
@@ -136,7 +137,9 @@ export const CollectionContextProvider = ({ children }) => {
 export const useCollectionContext = () => useContext(CollectionProjectContext);
 
 export function useCollectionProjects(collection) {
+  console.log("inside useCollectionProjects with collection", collection)
   const getCollectionProjects = useContext(CollectionProjectContext);
+  console.log("returning ", getCollectionProjects(collection))
   return getCollectionProjects(collection);
 }
 
