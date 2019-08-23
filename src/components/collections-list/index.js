@@ -49,7 +49,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
-
+  console.log({ collectionsWithMyStuff })
   return children(collectionsWithMyStuff);
 }
 
@@ -64,6 +64,7 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
+  console.log("inside collections-list")
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);

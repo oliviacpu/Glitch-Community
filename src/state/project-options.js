@@ -42,6 +42,7 @@ const useDefaultProjectOptions = () => {
       reloadProjectMembers([project.id]);
     }, handleError),
     toggleBookmark: withErrorHandler(async (project, setHasBookmarked) => {
+      console.log("inside project-options", project, setHasBookmarked, currentUser.collections)
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (project.authUserHasBookmarked) {
         if (setHasBookmarked) setHasBookmarked(false);
