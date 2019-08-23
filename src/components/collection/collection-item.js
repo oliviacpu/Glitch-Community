@@ -23,7 +23,7 @@ import { isDarkColor } from 'Utils/color';
 import { CDN_URL } from 'Utils/constants';
 
 import { useAPI } from 'State/api';
-import { useCollectionProjects, useCollectionCurator, bustCacheForUserCollections } from 'State/collection';
+import { useCollectionProjects, useCollectionCurator } from 'State/collection';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
 
@@ -122,7 +122,6 @@ const CreateMyStuffOnClickComponent = withRouter(({ history, children, className
     if (myStuff) {
       history.push(`@${currentUser.login}/${myStuff.url}`);
     }
-    bustCacheForUserCollections(api, currentUser.id);
   };
 
   return (

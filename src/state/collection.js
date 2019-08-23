@@ -51,8 +51,6 @@ const createAPICallForCollectionProjects = (encodedFullUrl) =>
 
 const bustCacheForCollectionProjects = (api, collectionUrl) => api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collectionUrl)));
 
-export const bustCacheForUserCollections = (api, userId) => api.bustCache(`v1/users/by/id/collections?id=${userId}&limit=100`);
-
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = encodeURIComponent(`${owner}/${name}`);
   try {
