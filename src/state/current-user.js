@@ -112,8 +112,8 @@ async function getCachedUser(sharedUser) {
   if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
   const api = getAPIForToken(sharedUser.persistentToken);
   try {
-    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100&cache=${Date.now()}`;
-    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}&cache=${Date.now()}`;
+    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100}`;
+    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}}`;
     const {
       baseUser, emails, projects, teams, collections,
     } = await allByKeys({
