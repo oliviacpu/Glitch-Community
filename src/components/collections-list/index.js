@@ -29,15 +29,12 @@ const CreateFirstCollection = () => (
   - ensures we remove mystuff if the collection has no projects and the user is not authorized we need to remove it from the list
 */
 function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
-  console.log("inside my stuff controller")
   const myStuffEnabled = useDevToggle('My Stuff');
 
   // put mystuff at beginning of list (and fake one if it's not there yet)
   const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
-  console.log("collectionsWithMyStuff", collectionsWithMyStuff)
   // fetch projects for myStuff
   const { value: myStuffProjects, status } = useCollectionProjects(collectionsWithMyStuff[0]);
-  console.log("myStuffProjects", myStuffProjects)
   if (status === 'loading') {
     return children([]);
   }
@@ -50,7 +47,6 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
-  console.log({ collectionsWithMyStuff })
   return children(collectionsWithMyStuff);
 }
 
@@ -65,7 +61,6 @@ function CollectionsList({
   collectionsPerPage,
   placeholder,
 }) {
-  console.log("inside collections-list")
   const { deleteItem } = useAPIHandlers();
   const { currentUser } = useCurrentUser();
   const [deletedCollectionIds, setDeletedCollectionIds] = useState([]);
@@ -78,15 +73,13 @@ function CollectionsList({
   }
 
   const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
-  console.log("collections on 80", collections)
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
-  
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
   const orderedCollections = orderBy(collections, (collection) => collection.updatedAt, 'desc');
-  console.log({ orderedCollections })
   const matchFn = (collection, filter) => collection.name.toLowerCase().includes(filter) || collection.description.toLowerCase().includes(filter);
 
   return (
