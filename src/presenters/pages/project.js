@@ -27,6 +27,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
@@ -34,7 +35,9 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
+import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -135,22 +138,43 @@ DeleteProjectPopover.propTypes = {
 
 const ProjectPage = ({ project: initialProject }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
-  const [
-    project,
-    { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar, toggleBookmark, addProjectToCollection },
-  ] = useProjectEditor(initialProject);
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  const reloadCollectionProjects = useCollectionReload();
+
   const bookmarkAction = useTrackedFunc(
-    () => toggleBookmark(project, hasBookmarked, setHasBookmarked),
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
   );
+
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
 
   return (
     <main id="main">
@@ -224,7 +248,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollection} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
@@ -269,9 +293,7 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {project ? (
-          <ProjectPage project={project} />
-        ) : (
+        {project ? <ProjectPage project={project} /> : (
           <>
             {status === 'ready' && <NotFound name={domain} />}
             {status === 'loading' && <Loader />}
