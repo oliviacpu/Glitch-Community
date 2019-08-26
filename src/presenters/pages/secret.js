@@ -34,7 +34,7 @@ const ABTest = () => {
     resetTests();
     window.location.reload();
   };
-  return <>{text} <Button onClick={onClick} size="small">try again</Button></>;
+  return <>Your A/B testing group assignment: {text} <Button onClick={onClick} size="small">try again</Button></>;
 };
 
 const Secret = () => {
