@@ -75,6 +75,7 @@ const MonitoredComponent = onClickOutside(({ children }) => children, {
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef }) => {
+  console.log("is triggerButtonRef defined", triggerButtonRef)
   console.log("onOpen", onOpen)
   const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
   const inner = children(toggleState);
