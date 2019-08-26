@@ -20,8 +20,8 @@ const assignGroup = (groups) => {
   const entries = Object.entries(groups);
   const sum = Object.values(groups).reduce((sum, { weight }) => sum + weight, 0);
 
-  // pick a number in [0, sum) and see which weight's range it falls in
-  // so for weights 1,2 pick in [0, 3) and the result must be in [0, 1) or [1, 3)
+  // pick a number in [0, sum) (0 to sum, not including sum) and see which weight's range it falls in
+  // so for weights 1 and 2, pick in [0, 3) and the result must be in either [0, 1) or [1, 3)
   let rand = Math.random() * sum;
   for (const [assignment, { weight }] of entries) {
     if (rand < weight) {
