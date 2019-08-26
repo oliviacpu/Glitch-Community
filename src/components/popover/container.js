@@ -51,6 +51,7 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [status]);
 
+  console.log("status", status)
   return useMemo(
     () => ({
       status,

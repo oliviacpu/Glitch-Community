@@ -88,6 +88,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     action(...args);
   });
   const toggleBeforeActions = (togglePopover) => mapValues(projectOptions, (action) => toggleBeforeAction(togglePopover, action));
+  console.log("gunna render a popover menu")
 
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
