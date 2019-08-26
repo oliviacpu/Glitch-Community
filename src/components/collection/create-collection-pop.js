@@ -143,7 +143,7 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
           {loading ? (
             <Loader />
           ) : (
-            <Button size="tiny" onClick={handleSubmit} disabled={submitDisabled}>
+            <Button size="small" onClick={handleSubmit} disabled={submitDisabled}>
               Create
             </Button>
           )}

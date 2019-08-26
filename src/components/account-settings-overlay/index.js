@@ -11,7 +11,7 @@ import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
 const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
-  <Button size="tiny" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
+  <Button size="small" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
     {children}
   </Button>
 );

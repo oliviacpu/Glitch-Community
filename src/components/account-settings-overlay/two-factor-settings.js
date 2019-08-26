@@ -124,7 +124,7 @@ function TwoFactorSettings() {
                   ))}
                 </ul>
               )}
-              <Button type="tertiary" size="tiny" onClick={resetBackupCodes}>
+              <Button type="tertiary" size="small" onClick={resetBackupCodes}>
                 Generate New Codes
               </Button>
             </>
@@ -139,7 +139,7 @@ function TwoFactorSettings() {
               Successfully disabled two-factor authentication
             </Notification>
           )}
-          <Button variant="secondary" size="tiny" disabled={!!secret || working} onClick={generateSecret}>
+          <Button variant="secondary" size="small" disabled={!!secret || working} onClick={generateSecret}>
             Enable Authenticator App
           </Button>
           {secret && (

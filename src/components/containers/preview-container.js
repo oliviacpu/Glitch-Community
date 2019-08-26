@@ -18,11 +18,11 @@ const PreviewContainer = ({ children, get, onPublish, previewMessage }) => {
               {previewMessage}
             </div>
             {currentUser.login ? (
-              <Button size="small" variant="cta" onClick={() => onPublish(data)}>
+              <Button variant="cta" onClick={() => onPublish(data)}>
                 Publish
               </Button>
             ) : (
-              <Button size="small" as="span" variant="cta" disabled>
+              <Button as="span" variant="cta" disabled>
                 Log in to publish
               </Button>
             )}

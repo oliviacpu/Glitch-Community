@@ -141,7 +141,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
         </div>
         <div className={styles.nameDescriptionContainer}>
           <div className={styles.itemButtonWrap}>
-            <Button size="small" as="span">{collection.name}</Button>
+            <Button as="span">{collection.name}</Button>
           </div>
           <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
             <Markdown length={100}>{collection.description || ' '}</Markdown>
@@ -173,7 +173,7 @@ const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurato
           </div>
           <div className={styles.nameDescriptionContainer}>
             <div className={styles.itemButtonWrap}>
-              <Button size="small" as="span">{collection.name}</Button>
+              <Button as="span">{collection.name}</Button>
             </div>
             <div className={classNames(styles.description, { [styles.dark]: isDarkColor(collection.coverColor) })}>
               <Markdown length={100}>{collection.description || ' '}</Markdown>
