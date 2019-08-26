@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
-import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 import Loader from 'Components/loader';
@@ -60,8 +60,8 @@ const GetMagicCode = () => {
             testingId="sign-in-email"
           />
           <div className={styles.submitWrap}>
-            <Button emoji="loveLetter" disabled={!isEnabled || validationError} onClick={onSubmit}>
-              Send a Code
+            <Button disabled={!isEnabled || validationError} onClick={onSubmit}>
+              Send a Code <Icon className={styles.emoji} icon="loveLetter" />
             </Button>
           </div>
         </form>

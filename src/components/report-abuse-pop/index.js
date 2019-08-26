@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { parseOneAddress } from 'email-addresses';
 import { debounce, trimStart } from 'lodash';
 import axios from 'axios';
-import { Icon } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import TextArea from 'Components/inputs/text-area';
 import Loader from 'Components/loader';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
-import Button from 'Components/buttons/button';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions, PopoverTitle, InfoDescription } from 'Components/popover';
 import { useCurrentUser } from 'State/current-user';
 import { captureException } from 'Utils/sentry';

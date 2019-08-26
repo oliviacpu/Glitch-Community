@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Button } from '@fogcreek/shared-components';
 
 import { createAPIHook } from 'State/api';
 
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
-import Button from 'Components/buttons/button';
 import Badge from 'Components/badges/badge';
 import Heading from 'Components/text/heading';
 import UserItem from 'Components/user/user-item';
