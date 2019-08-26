@@ -89,7 +89,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
-  console.log("how are there project optiosn tho?", noProjectOptions, projectOptions)
+  console.log("this is probably the problem?", noProjectOptions, projectOptions)
   if (noProjectOptions) return null;
 
   const toggleBeforeAction = (togglePopover, action) => action && ((...args) => {
@@ -97,7 +97,6 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     action(...args);
   });
   const toggleBeforeActions = (togglePopover) => mapValues(projectOptions, (action) => toggleBeforeAction(togglePopover, action));
-  console.log("gunna render a popover menu")
 
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
