@@ -7,6 +7,7 @@ import { isFragment } from 'react-is';
 const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   const openPopover = (event) => {
+    console.log("hellow my name is openPopover")
     if (event && event.detail === 0) {
       setStatus('openedFromKeyboard');
     } else {
@@ -73,9 +74,10 @@ const MonitoredComponent = onClickOutside(({ children }) => children, {
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef }) => {
+  console.log("onOpen", onOpen)
   const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
-
   const inner = children(toggleState);
+  console.log("le toggle state inside popovercontainer", toggleState, "inner", inner)
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }

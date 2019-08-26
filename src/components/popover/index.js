@@ -72,6 +72,7 @@ MultiPopoverTitle.propTypes = {
 
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => {
   const buttonRef = useRef();
+  console.log("popoverwithbutton on open", onOpen)
   return (
     <div className={styles.popoverWithButtonWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
@@ -104,6 +105,7 @@ PopoverWithButton.defaultProps = {
 
 export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
   const buttonRef = useRef();
+  console.log("popoverMenu", onOpen)
   return (
     <div className={styles.popoverMenuWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
