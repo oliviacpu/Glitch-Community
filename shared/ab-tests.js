@@ -5,7 +5,7 @@ const COOKIE_NAME = 'ab-tests';
 // the exact probability for a group is its weight / the sum of all weights
 
 // the value is sent into the react code in response to useTestValue(name)
-// the type doesn't matter, so it can a set of flags, alternate text, etc
+// it can be whatever is relevant for the test, the type doesn't matter
 
 // changing a group's weight won't affect people who've already been assigned
 // if you want to do a rolling release it'll take some extra finagling
