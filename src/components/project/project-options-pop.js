@@ -101,7 +101,9 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
 
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
-      {({ togglePopover }) => (
+      {({ togglePopover }) => {
+        console.log("I am a child of popoverMeno and I'm about to render multipopover")
+        return (
         <MultiPopover
           views={{
             addToCollection: ({ createCollection }) => (
@@ -127,7 +129,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
             />
           )}
         </MultiPopover>
-      )}
+      )}}
     </PopoverMenu>
   );
 }

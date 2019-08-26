@@ -34,6 +34,7 @@ export {
 const MultiPopoverContext = createContext();
 
 export const MultiPopover = ({ views, initialView, children }) => {
+  console.log("inside the multipopover", views, initialView, children)
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
   const activeViewFunc = activeView ? views[activeView] : children;
@@ -105,7 +106,7 @@ PopoverWithButton.defaultProps = {
 
 export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
   const buttonRef = useRef();
-  console.log("popoverMenu", onOpen)
+  console.log("popoverMenu", label, renderChildren, onOpen)
   return (
     <div className={styles.popoverMenuWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
@@ -114,7 +115,7 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
           return(
           <div>
             <div className={styles.buttonWrap}>
-              <TransparentButton onClick={popoverProps.togglePopover} ref={buttonRef}>
+              <TransparentButton onClick={() => {popoverProps.togglePopover} ref={buttonRef}>
                 <span className={styles.arrowPadding}>
                   <span className={styles.downArrow} />
                 </span>
