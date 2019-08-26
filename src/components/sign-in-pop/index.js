@@ -66,7 +66,7 @@ const ForgotPasswordHandler = ({ align }) => {
               testingId="reset-password-email"
             />
             <div className={styles.submitWrap}>
-              <Button size="small" disabled={!isEnabled} submit>
+              <Button size="small" disabled={!isEnabled} onClick={onSubmit}>
                 Send Reset Password Link
               </Button>
             </div>
@@ -311,7 +311,7 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
           testingId="sign-in-password"
         />
         <div className={styles.submitWrap}>
-          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} submit>
+          <Button size="small" disabled={!emailAddress || !password || emailValidationError || working} onClick={handleSubmit}>
             Sign in
           </Button>
         </div>
