@@ -111,6 +111,7 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
     <div className={styles.popoverMenuWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
         {(popoverProps) => {
+          debugger;
           console.log("popoverProps", popoverProps, renderChildren)
           return(
           <div>
