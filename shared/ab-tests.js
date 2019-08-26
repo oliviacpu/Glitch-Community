@@ -7,7 +7,7 @@ const COOKIE_NAME = 'ab-tests';
 // the value is sent into the react code in response to useTestValue(name)
 // the type doesn't matter, so it can a set of flags, alternate text, etc
 
-// changing a group's weight won't affect people already assigned to the group
+// changing a group's weight won't affect people who've already been assigned
 // if you want to do a rolling release it'll take some extra finagling
 
 const tests = {
