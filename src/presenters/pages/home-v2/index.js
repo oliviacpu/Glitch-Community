@@ -133,7 +133,7 @@ const CuratedCollections = ({ content }) => (
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <div className={styles.curatedCollectionButtonWrap}>
-            <Button size="small" as="span">
+            <Button as="span">
               View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
           </div>
@@ -164,7 +164,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         <div className={styles.unifiedStoriesContentWrap}>
           <h3 className={styles.h3}>{dek}</h3>
           <Markdown>{summary}</Markdown>
-          <Button size="small" as="a" href={href}>
+          <Button as="a" href={href}>
             {cta} <Arrow />
           </Button>
         </div>
@@ -239,7 +239,7 @@ const BuildingOnGlitch = ({ content }) => (
           </div>
           <h3>{title}</h3>
           <p>{description}</p>
-          <Button size="small" as="span">
+          <Button as="span">
             {cta} <Arrow />
           </Button>
         </Link>
@@ -251,7 +251,7 @@ const BuildingOnGlitch = ({ content }) => (
 const MadeInGlitch = () => (
   <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
-    <Button as="a" size="small" href={getEditorUrl('community')}>
+    <Button as="a" href={getEditorUrl('community')}>
       View Source
       <Icon icon="carpStreamer" className={styles.carp} />
     </Button>
@@ -299,7 +299,7 @@ export const HomePreview = () => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
+            This is a live preview of edits done with <Link to="/index/edit">Community Home Editor.</Link>
           </>
         }
       >
