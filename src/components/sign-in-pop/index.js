@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { Icon } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
-import Button from 'Components/buttons/button';
 import SignInButton from 'Components/buttons/sign-in-button';
 import TextInput from 'Components/inputs/text-input';
 import Link from 'Components/link';
@@ -23,7 +22,7 @@ import styles from './styles.styl';
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
-    <Button size="small" type="tertiary" matchBackground onClick={onClick}>
+    <Button size="small" variant="secondary" matchBackground onClick={onClick}>
       Use a sign in code
     </Button>
   </PopoverActions>
@@ -318,7 +317,7 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
         </div>
       </form>
       <div className={styles.submitWrap}>
-        <Button size="small" type="tertiary" onClick={showForgotPassword}>
+        <Button size="small" variant="secondary" onClick={showForgotPassword}>
           Forgot Password
         </Button>
       </div>
@@ -381,8 +380,8 @@ export const SignInPopBase = withRouter(({ location, align }) => {
             <SignInButton companyName="github" onClick={onClick} />
             <SignInButton companyName="google" onClick={onClick} />
             {slackAuthEnabled && <SignInButton companyName="slack" onClick={onClick} />}
-            <Button size="small" emoji="email" onClick={setDestinationAnd(showView.email)}>
-              Sign in with Email
+            <Button size="small" onClick={setDestinationAnd(showView.email)}>
+              Sign in with Email <Icon className={styles.emoji} icon="email" />
             </Button>
           </PopoverActions>
           <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />

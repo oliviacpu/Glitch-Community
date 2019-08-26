@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { parseOneAddress } from 'email-addresses';
+import { Button } from '@fogcreek/shared-components';
 
-import Button from 'Components/buttons/button';
 import TextInput from 'Components/inputs/text-input';
 import Notification from 'Components/notification';
 
@@ -76,7 +76,7 @@ const PasswordLoginSection = ({ showTwoFactor, showForgotPassword }) => {
         </div>
       </form>
       <div className={styles.submitWrap}>
-        <Button size="small" type="tertiary" onClick={showForgotPassword}>
+        <Button size="small" variant="secondary" onClick={showForgotPassword}>
           Forgot Password
         </Button>
       </div>
