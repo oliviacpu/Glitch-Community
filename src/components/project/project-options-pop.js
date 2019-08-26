@@ -55,6 +55,7 @@ const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
 };
 
 const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover, leaveProjectPopover, leaveProjectDirect }) => {
+  console.log("project options content never renders my friends")
   const { currentUser } = useCurrentUser();
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
   const trackedLeaveProjectDirect = useTrackedLeaveProject(leaveProjectDirect);

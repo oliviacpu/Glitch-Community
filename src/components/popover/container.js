@@ -22,6 +22,7 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   };
 
   const togglePopover = (event) => {
+    console.log("I am togglepopover")
     if (status === 'closed') {
       openPopover(event);
     } else {
@@ -81,6 +82,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
+  console.log("outer", outer)
   const before = outer ? outer(toggleState) : null;
   return (
     <PopoverToggleContext.Provider value={toggleState}>
