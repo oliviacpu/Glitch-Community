@@ -80,7 +80,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
-
+  console.log("how are there project optiosn tho?", noProjectOptions, projectOptions)
   if (noProjectOptions) return null;
 
   const toggleBeforeAction = (togglePopover, action) => action && ((...args) => {
