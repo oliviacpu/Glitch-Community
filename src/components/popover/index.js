@@ -110,7 +110,7 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
     <div className={styles.popoverMenuWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
         {(popoverProps) => {
-          console.log("popoverProps", popoverProps)
+          console.log("popoverProps", popoverProps, renderChildren)
           return(
           <div>
             <div className={styles.buttonWrap}>
