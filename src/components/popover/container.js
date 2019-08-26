@@ -78,7 +78,7 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef
   console.log("onOpen", onOpen)
   const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
   const inner = children(toggleState);
-  console.log("le toggle state inside popovercontainer", toggleState, "inner", inner)
+  console.log("inner", inner)
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
