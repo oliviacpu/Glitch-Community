@@ -61,7 +61,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const projectTeam = currentUser.teams.find((t) => project.teamIds.includes(t.id));
   const isProfileOwner = isUser || isCollectionOwner || isTeamMember;
   const canAddNote = collection ? isCollectionOwner : isProjectAdmin;
-
+  console.log("projectOptions.addPin", projectOptions.addPin)
   return pickBy({
     addProjectToCollection: isLoggedIn && projectOptions.addProjectToCollection,
     featureProject: !project.private && isProfileOwner && bind(projectOptions.featureProject, project),

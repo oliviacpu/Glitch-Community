@@ -51,7 +51,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
   const trackedLeaveProjectDirect = useTrackedLeaveProject(leaveProjectDirect);
   const onClickLeaveProject = isTeamProject({ currentUser, project }) ? trackedLeaveProjectDirect : leaveProjectPopover;
-
+  console.log("le project options from projectoptionscontent", projectOptions)
   return (
     <PopoverDialog align="right">
       <PopoverMenuItems>
