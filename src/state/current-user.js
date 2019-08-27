@@ -215,9 +215,6 @@ export const { reducer, actions } = createSlice({
     updated: (state, { payload }) => ({ ...state, ...payload }),
   },
 });
-// TODO: triggered by localStorage event
-// TODO: might be better to dispatch 'loggedIn' / 'loggedOut' instead, if possible
-actions.changedInAnotherWindow = createAction('currentUser/changedInAnotherWindow');
 
 // eslint-disable-next-line func-names
 const load = runLatest(function* (action, store) {
@@ -276,7 +273,20 @@ export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(pageMounted());
-    // TODO: set up event listener here that dispatches `changedInAnotherWindow`
+    
+    const onStorage = (event) => {
+      const sharedUser = getFromStorage(sharedUserKey);
+      if (sharedUser) {
+        dispatch(actions.loggedIn(sharedUser));
+      } else {
+        dispatch(actions.loggedOut());
+      }
+    };
+
+    window.addEventListener('storage', onStorage, { passive: true });
+    return () => {
+      window.removeEventListener('storage', onStorage, { passive: true });
+    };
   }, []);
   return children;
 };
