@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { createSlice } from 'redux-starter-kit';
+import { createSlice, createAction } from 'redux-starter-kit';
 import { useDispatch } from 'react-redux';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -10,9 +10,12 @@ import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
 // takes a generator that yields promises, 
-// returns an async function that restarts from the beginning every time it is called.
+// returns an async function that restarts from the beginning every time it is called with changed args.
 function runLatest (fn) {
-  const state = {};
+  const state = {
+    currentGenerator: null,
+    args: [],
+  };
   return async (args) => {
     const isAlreadyRunning = state.currentGenerator;
     state.currentGenerator = fn(args);
@@ -29,10 +32,6 @@ function runLatest (fn) {
     }
   }
 }
-
-
-
-export const Context = React.createContext();
 
 // Default values for all of the user fields we need you to have
 // We always generate a 'real' anon user, but use this until we do
@@ -51,7 +50,32 @@ const defaultUser = {
   projects: [],
   teams: [],
   collections: [],
-};
+}
+
+const pageMounted = createAction('mounted')
+
+export const { reducer, actions } = createSlice({
+  slice: 'currentUser',
+  initialState: {
+    ...defaultUser,
+    status: 'loading',
+  },
+  reducers: {
+    loaded: (state, { payload }) => ({
+      ...payload,
+      status: 'ready',
+    }),
+    // 'loading' because we're now fetching a new anonymous user
+    loggedOut: (state) => ({
+      ...defaultUser,
+      status: 'loading',
+    }),
+    requestedReload: (state) => ({
+      ...state,
+      status: 'loading',
+    }),
+  }
+})
 
 function identifyUser(user) {
   document.cookie = `hasLogin=; expires=${new Date()}`;
@@ -212,10 +236,6 @@ const useDebouncedAsync = (fn) => {
   return debouncedFn;
 };
 
-
-const updatedCurrentUser = createAction('currentUser/updated');
-export const actions = { updatedCurrentUser };
-
 export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [fetched, setFetched] = useState(false); // Set true on first complete load
@@ -290,9 +310,6 @@ export const CurrentUserProvider = ({ children }) => {
     }),
     [sharedUser, cachedUser],
   );
-  useEffect(() => {
-    dispatch(updatedCurrentUser(currentUser));
-  }, [currentUser]);
   
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
 
