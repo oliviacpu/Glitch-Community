@@ -75,7 +75,7 @@ const ResetPasswordForm = ({ resetPasswordToken }) => {
         <form onSubmit={onSubmit}>
           <NewPasswordInput disabled={state.working} onChange={setPassword} />
           <div className={styles.submitWrap}>
-            <Button size="small" disabled={!password || state.working} submit>Set Password</Button>
+            <Button size="small" disabled={!password || state.working} onClick={onSubmit}>Set Password</Button>
           </div>
         </form>
       )}
