@@ -269,15 +269,13 @@ export const handlers = {
     await load(action, store);
   },
   [actions.updatedInAnotherTab]: async (action, store) => {
-    const sharedUser = getStorage(sharedUserKey)
+    const sharedUser = getFromStorage(sharedUserKey);
     if (!sharedUser) {
-      // dispatch(actions.loggedOut());
-      console.log('no shared user')
+      store.dispatch(actions.loggedOut());
     } else if (!usersMatch(sharedUser, store.getState().currentUser)) {
-      // dispatch(actions.loggedIn(sharedUser));
-      console.log('users dont match')
+      store.dispatch(actions.loggedIn(sharedUser));
     }
-  }
+  },
 };
 
 export const useCurrentUser = () => {
@@ -296,10 +294,9 @@ export const useCurrentUser = () => {
 
 export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.currentUser);
   useEffect(() => {
     dispatch(pageMounted());
-    
+
     const onStorage = (event) => {
       if (!event.key || event.key === sharedUserKey) {
         dispatch(actions.updatedInAnotherTab());
