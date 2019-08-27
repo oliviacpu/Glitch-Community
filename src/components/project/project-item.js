@@ -130,7 +130,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                 )}
                 <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                   <header className={styles.header}>
-                    <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
+                    <div className={styles.userListContainer}>
                       <ProfileListLoader project={project} />
                     </div>
                     {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (

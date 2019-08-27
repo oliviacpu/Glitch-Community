@@ -59,6 +59,7 @@ const useResizeObserver = () => {
       window.removeEventListener('resize', debouncedSetWidth);
     };
   }, [ref, setWidth]);
+  console.log("width in resize observer", width)
   return { ref, width };
 };
 
@@ -77,7 +78,7 @@ const parametersForSize = {
 
 const RowContainer = ({ size, users, teams }) => {
   const { ref, width } = useResizeObserver();
-  console.log("width", width)
+  console.log({ size, users, teams, width, ref })
   const { avatarWidth, userOffset, teamOffset } = parametersForSize[size];
   const maxTeams = Math.floor(width / (avatarWidth + teamOffset));
   const remainingWidth = width - (avatarWidth + teamOffset) * teams.length - teamOffset;
