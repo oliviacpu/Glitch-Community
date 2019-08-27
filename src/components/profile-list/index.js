@@ -59,7 +59,6 @@ const useResizeObserver = () => {
       window.removeEventListener('resize', debouncedSetWidth);
     };
   }, [ref, setWidth]);
-
   return { ref, width };
 };
 

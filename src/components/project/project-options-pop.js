@@ -51,6 +51,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
   const trackedLeaveProjectDirect = useTrackedLeaveProject(leaveProjectDirect);
   const onClickLeaveProject = isTeamProject({ currentUser, project }) ? trackedLeaveProjectDirect : leaveProjectPopover;
+
   return (
     <PopoverDialog align="right">
       <PopoverMenuItems>
@@ -79,6 +80,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
+
   if (noProjectOptions) return null;
 
   const toggleBeforeAction = (togglePopover, action) => action && ((...args) => {
@@ -86,6 +88,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
     action(...args);
   });
   const toggleBeforeActions = (togglePopover) => mapValues(projectOptions, (action) => toggleBeforeAction(togglePopover, action));
+
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
       {({ togglePopover }) => (
