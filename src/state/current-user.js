@@ -261,9 +261,10 @@ export const CurrentUserProvider = ({ children }) => {
     [sharedUser, cachedUser],
   );
   
+  
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
 
-  const userProps = useMemo(() => ({
+  const userProps = {
     currentUser,
     fetched,
     persistentToken,
@@ -279,7 +280,7 @@ export const CurrentUserProvider = ({ children }) => {
       setSharedUser(undefined);
       setCachedUser(undefined);
     },
-  }, [currentUser, fetched, persistentToken]);
+  }
 
   return <Context.Provider value={userProps}>{children}</Context.Provider>;
 };
