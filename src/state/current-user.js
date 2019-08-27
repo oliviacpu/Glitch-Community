@@ -256,6 +256,7 @@ export const CurrentUserProvider = ({ children }) => {
 
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
+    fetched,
     persistentToken: sharedUser ? sharedUser.persistentToken : null,
     reload: load,
     login: (data) => {

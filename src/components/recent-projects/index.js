@@ -42,7 +42,7 @@ const ClearSession = ({ clearUser }) => {
 };
 
 const RecentProjects = () => {
-  const { currentUser, clear } = useCurrentUser();
+  const { currentUser, fetched, clear } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
 
   return (
@@ -59,7 +59,7 @@ const RecentProjects = () => {
             </WrappingLink>
           </div>
           <div className={styles.projectsWrap}>
-            {currentUser && currentUser.projects ? (
+            {fetched ? (
               <ProjectsList layout="row" projects={currentUser.projects.slice(0, 3)} />
             ) : (
               <Loader />
