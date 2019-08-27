@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { createSlice, createAction } from 'redux-starter-kit';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
@@ -89,27 +89,22 @@ const load = runLatest(function * (action, store) {
     sharedOrAnonUser = yield getAnonUser();
   }
 
-  const newCachedUser = yield getCachedUser(sharedOrAnonUser);
+  let newCachedUser = yield getCachedUser(sharedOrAnonUser);
 
-  if (newCachedUser === 'error') {
+  while (newCachedUser === 'error') {
     // Looks like our sharedUser is bad
     // Anon users get their token and id deleted when they're merged into a user on sign in
-    // If it did change then quit out and let useEffect sort it out
-    if (usersMatch(sharedOrAnonUser, sharedUserRef.current)) {
-      // The user wasn't changed, so we need to fix it
-      setFetched(false);
-      sharedOrAnonUser = yield getSharedUser(sharedOrAnonUser.persistentToken);
-      setSharedUser(newSharedUser);
-      logSharedUserError(sharedUser, newSharedUser);
-    }
-  } else {
-    // The shared user is good, store it
-    setCachedUser(newCachedUser);
-    setFetched(true);
-  }
-  
-  
-  
+    const prevSharedUser = sharedOrAnonUser
+    sharedOrAnonUser = yield getSharedUser(sharedOrAnonUser.persistentToken);
+    setStorage('cachedUser', sharedOrAnonUser)
+    logSharedUserError(prevSharedUser, sharedOrAnonUser);
+    
+    newCachedUser = yield getCachedUser(sharedOrAnonUser);
+  } 
+    
+  // The shared user is good, store it
+  setStorage('cachedUser-community', newCachedUser)
+  store.dispatch(actions.loaded(newCachedUser))
 })
 
 
@@ -391,7 +386,19 @@ CurrentUserProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const useCurrentUser = () => React.useContext(Context);
+export const useCurrentUser = () => {
+  const currentUser = useSelector((state) => state.currentUser)
+  const dispatch = useDispatch()
+  return {
+    currentUser,
+    fetched: currentUser.status === 'ready',
+    persistentToken: currentUser.persistentToken,
+    reload: () => dispatch(actions.requestedReload()),
+    login: (data) => dispatch(actions.loggedIn(data)),
+    update: (data) => dispatch(actions.updated(data)),
+    clear: () => dispatch(actions.loggedOut()),
+  }
+}
 
 export const useSuperUserHelpers = () => {
   const { currentUser } = useCurrentUser();
