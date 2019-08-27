@@ -257,7 +257,6 @@ export const CurrentUserProvider = ({ children }) => {
   const userProps = {
     currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
     persistentToken: sharedUser ? sharedUser.persistentToken : null,
-    fetched: !!cachedUser && fetched,
     reload: load,
     login: (data) => {
       setSharedUser(data);
@@ -280,3 +279,8 @@ CurrentUserProvider.propTypes = {
 };
 
 export const useCurrentUser = () => React.useContext(Context);
+
+export const useSuperUserHelpers = () => {
+  const { currentUser } = useCurrentUser()
+  return getSuperUserHelpers(currentUser);
+}
