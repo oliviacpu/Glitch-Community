@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { memoize } from 'lodash';
 import { createSlice, createAction } from 'redux-starter-kit';
@@ -19,9 +19,9 @@ const getStorageMemo = memoize(getStorage);
 const getFromStorage = (key) => readFromStorage(getStorageMemo(), key);
 const setStorage = (key, value) => writeToStorage(getStorageMemo(), key, value);
 
-// takes a generator that yields promises, 
+// takes a generator that yields promises,
 // returns an async function that restarts from the beginning every time it is called.
-function runLatest (fn) {
+function runLatest(fn) {
   const state = {
     currentGenerator: null,
   };
@@ -29,17 +29,18 @@ function runLatest (fn) {
     const isAlreadyRunning = state.currentGenerator;
     state.currentGenerator = fn(...args);
     if (isAlreadyRunning) return;
-    
+
     let promiseResult = null;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const { value, done } = state.currentGenerator.next(promiseResult);
       if (done) {
         state.currentGenerator = null;
         return;
       }
-      promiseResult = await value;
+      promiseResult = await value; // eslint-disable-line no-await-in-loop
     }
-  }
+  };
 }
 
 // Default values for all of the user fields we need you to have
@@ -59,37 +60,9 @@ const defaultUser = {
   projects: [],
   teams: [],
   collections: [],
-}
+};
 
 const pageMounted = createAction('app/pageMounted');
-
-const load = runLatest(function * (action, store) {
-  let sharedUser = getFromStorage(sharedUserKey);
-  
-  // If we're signed out create a new anon user
-  if (!sharedUser) {
-    sharedUser = yield getAnonUser();
-    setStorage(sharedUserKey, sharedUser);
-  }
-
-  let newCachedUser = yield getCachedUser(sharedUser);
-
-  while (newCachedUser === 'error') {
-    // Looks like our sharedUser is bad
-    // Anon users get their token and id deleted when they're merged into a user on sign in
-    const prevSharedUser = sharedUser;
-    sharedUser = yield getSharedUser(sharedUser.persistentToken);
-    setStorage(sharedUserKey, sharedUser)
-    logSharedUserError(prevSharedUser, sharedUser);
-    
-    newCachedUser = yield getCachedUser(sharedUser);
-  } 
-    
-  // The shared user is good, store it
-  setStorage(cachedUserKey, newCachedUser);
-  store.dispatch(actions.loadedFresh(newCachedUser));
-});
-
 
 function identifyUser(user) {
   document.cookie = `hasLogin=; expires=${new Date()}`;
@@ -240,15 +213,45 @@ export const { reducer, actions } = createSlice({
     }),
     // TODO: more granular actions for managing user's teams, collections etc
     updated: (state, { payload }) => ({ ...state, ...payload }),
-  }
+  },
 });
 // TODO: triggered by localStorage event
 // TODO: might be better to dispatch 'loggedIn' / 'loggedOut' instead, if possible
 actions.changedInAnotherWindow = createAction('currentUser/changedInAnotherWindow');
 
+// eslint-disable-next-line func-names
+const load = runLatest(function* (action, store) {
+  let sharedUser = getFromStorage(sharedUserKey);
+
+  // If we're signed out create a new anon user
+  if (!sharedUser) {
+    sharedUser = yield getAnonUser();
+    setStorage(sharedUserKey, sharedUser);
+  }
+
+  let newCachedUser = yield getCachedUser(sharedUser);
+
+  while (newCachedUser === 'error') {
+    // Looks like our sharedUser is bad
+    // Anon users get their token and id deleted when they're merged into a user on sign in
+    const prevSharedUser = sharedUser;
+    sharedUser = yield getSharedUser(sharedUser.persistentToken);
+    setStorage(sharedUserKey, sharedUser);
+    logSharedUserError(prevSharedUser, sharedUser);
+
+    newCachedUser = yield getCachedUser(sharedUser);
+  }
+
+  // The shared user is good, store it
+  setStorage(cachedUserKey, newCachedUser);
+  identifyUser(newCachedUser);
+  store.dispatch(actions.loadedFresh(newCachedUser));
+});
+
 export const handlers = {
   [pageMounted]: async (action, store) => {
     const cachedUser = getFromStorage(cachedUserKey);
+    identifyUser(cachedUser);
     store.dispatch(actions.loadedFromCache(cachedUser));
     await load(action, store);
   },
@@ -266,9 +269,9 @@ export const handlers = {
     setStorage(sharedUserKey, undefined);
     setStorage(cachedUserKey, undefined);
     const anonUser = await getAnonUser();
-    store.dispatch(actions.loaded(anonUser));
+    store.dispatch(actions.loadedFresh(anonUser));
   },
-}
+};
 
 export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -283,8 +286,8 @@ CurrentUserProvider.propTypes = {
 };
 
 export const useCurrentUser = () => {
-  const currentUser = useSelector((state) => state.currentUser)
-  const dispatch = useDispatch()
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
   return {
     currentUser,
     fetched: currentUser.status === 'ready',
@@ -293,8 +296,8 @@ export const useCurrentUser = () => {
     login: (data) => dispatch(actions.loggedIn(data)),
     update: (data) => dispatch(actions.updated(data)),
     clear: () => dispatch(actions.loggedOut()),
-  }
-}
+  };
+};
 
 export const useSuperUserHelpers = () => {
   const { currentUser: cachedUser } = useCurrentUser();
