@@ -34,7 +34,6 @@ export {
 const MultiPopoverContext = createContext();
 
 export const MultiPopover = ({ views, initialView, children }) => {
-  console.log("inside the multipopover", views, initialView, children)
   const [activeView, setActiveView] = useState(initialView);
   const multiPopoverState = useMemo(() => ({ activeView, setActiveView }), [activeView]);
   const activeViewFunc = activeView ? views[activeView] : children;
@@ -73,7 +72,6 @@ MultiPopoverTitle.propTypes = {
 
 export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChildren, onOpen }) => {
   const buttonRef = useRef();
-  console.log("popoverwithbutton on open", onOpen)
   return (
     <div className={styles.popoverWithButtonWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>

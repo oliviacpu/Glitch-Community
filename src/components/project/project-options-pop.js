@@ -14,11 +14,8 @@ const isTeamProject = ({ currentUser, project }) => currentUser.teams.some((team
 const useTrackedLeaveProject = (leaveProject) => useTrackedFunc(leaveProject, 'Leave Project clicked');
 
 /* eslint-disable react/no-array-index-key */
-const PopoverMenuItems = ({ children }) =>{
-  console.log("hellow from inside popovermenuitems")
-  console.log("children.length", children.length)
-  console.log()
-  const thing =  children.map(
+const PopoverMenuItems = ({ children }) =>
+  children.map(
     (group, i) =>
       group.some((item) => item.onClick) && (
         <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
@@ -26,10 +23,6 @@ const PopoverMenuItems = ({ children }) =>{
         </PopoverActions>
       ),
   );
-  
-  console.log("Thing", thing.length)
-  return thing
-}
   
 
 const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
