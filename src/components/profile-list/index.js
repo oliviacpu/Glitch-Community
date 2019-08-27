@@ -59,7 +59,7 @@ const useResizeObserver = () => {
       window.removeEventListener('resize', debouncedSetWidth);
     };
   }, [ref, setWidth]);
-  console.log("width in resize observer", width)
+
   return { ref, width };
 };
 
@@ -78,7 +78,6 @@ const parametersForSize = {
 
 const RowContainer = ({ size, users, teams }) => {
   const { ref, width } = useResizeObserver();
-  console.log({ size, users, teams, width, ref })
   const { avatarWidth, userOffset, teamOffset } = parametersForSize[size];
   const maxTeams = Math.floor(width / (avatarWidth + teamOffset));
   const remainingWidth = width - (avatarWidth + teamOffset) * teams.length - teamOffset;
@@ -157,16 +156,13 @@ const ProfileList = React.memo(({ size, users, teams, layout, glitchTeam }) => {
   }
 
   if (!users.length && !teams.length) {
-    console.log("placeholder list")
     return <PlaceholderList size={size} />;
   }
 
   if (layout === 'row') {
-    console.log("row", size, users)
     return <RowContainer size={size} users={users} teams={teams} />;
   }
 
-  console.log("Block")
   return <BlockContainer size={size} users={users} teams={teams} />;
 });
 

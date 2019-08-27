@@ -113,7 +113,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
               },
               (_, key) => projectOptions[key],
             );
-            
+
             return (
               <>
                 {collection && (
