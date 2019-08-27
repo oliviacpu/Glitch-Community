@@ -9,7 +9,7 @@ import Text from 'Components/text/text';
 const NotifyUploading = ({ progress }) => (
   <>
     <Text>Uploading asset</Text>
-    <Progress value={progress} max={100} />
+    <Progress value={progress} max={100}>{progress}%</Progress>
   </>
 );
 const NotifyError = ({ error }) => {
