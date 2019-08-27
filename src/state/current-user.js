@@ -10,15 +10,14 @@ import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
 // takes a generator that yields promises, 
-// returns an async function that restarts from the beginning every time it is called with changed args.
+// returns an async function that restarts from the beginning every time it is called.
 function runLatest (fn) {
   const state = {
     currentGenerator: null,
-    args: [],
   };
-  return async (args) => {
+  return async (...args) => {
     const isAlreadyRunning = state.currentGenerator;
-    state.currentGenerator = fn(args);
+    state.currentGenerator = fn(...args);
     if (isAlreadyRunning) return;
     
     let promiseResult = null;
@@ -52,7 +51,10 @@ const defaultUser = {
   collections: [],
 }
 
-const pageMounted = createAction('mounted')
+const pageMounted = createAction('app/pageMounted')
+// TODO: from local storage
+const currentUserChangedInAnotherWindow = createAction('currentUser/changedInAnotherWindow')
+
 
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
@@ -74,8 +76,25 @@ export const { reducer, actions } = createSlice({
       ...state,
       status: 'loading',
     }),
+    // TODO: more granular actions for managing user's teams, collections etc
+    updated: (state, { payload }) => ({ ...state, ...payload }),
   }
 })
+
+const load = runLatest(function * (action, store) {
+  
+})
+
+
+const handlers = {
+  [pageMounted]: load,
+  [currentUserChangedInAnotherWindow]: load,
+  [actions.requestedReload]: load,
+  [actions.updated]: () => {
+    // TODO: save to localStorage
+  }
+}
+
 
 function identifyUser(user) {
   document.cookie = `hasLogin=; expires=${new Date()}`;
