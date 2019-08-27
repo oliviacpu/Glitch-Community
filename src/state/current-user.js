@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { createSlice } from 'redux-starter-kit';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from 'Utils/sentry';
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
+
+export const { reducer, actions } = createSlice('currentUser', {
+  updated: (state, { payload }) => payload,
+})
+
+
+
 
 export const Context = React.createContext();
 
@@ -260,7 +269,6 @@ export const CurrentUserProvider = ({ children }) => {
     }),
     [sharedUser, cachedUser],
   );
-  
   
   const persistentToken = sharedUser ? sharedUser.persistentToken : null;
 
