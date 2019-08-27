@@ -96,7 +96,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   };
   providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
