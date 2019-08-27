@@ -39,7 +39,7 @@ const collectionColorStyles = (collection) => ({
 
 const ProjectsLoading = () => (
   <div className={classNames(styles.projectsContainer, styles.empty)}>
-    <Loader  style={{ width: '25px' }} />
+    <Loader style={{ width: '25px' }} />
   </div>
 );
 
