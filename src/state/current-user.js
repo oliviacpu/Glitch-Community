@@ -67,10 +67,7 @@ const defaultUser = {
   collections: [],
 }
 
-const pageMounted = createAction('app/pageMounted')
-// TODO: from local storage
-const currentUserChangedInAnotherWindow = createAction('currentUser/changedInAnotherWindow')
-
+const pageMounted = createAction('app/pageMounted');
 
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
@@ -81,28 +78,38 @@ export const { reducer, actions } = createSlice({
   reducers: {
     loadedFromCache: (_, { payload }) => ({
       ...payload,
-      status: 'loading',
+      status: 'loading', // because this data is probably stale
     }),
     loadedFresh: (_, { payload }) => ({
       ...payload,
       status: 'ready',
     }),
-    // 'loading' because we're now fetching a new anonymous user
-    loggedOut: (_) => ({
+    loggedIn: (state) => ({
+      ...state,
+      status: 'loading', // because this has the shared
+    }),
+    loggedOut: () => ({
       ...defaultUser,
-      status: 'loading',
+      status: 'loading', // because we're now fetching a new anonymous user
     }),
     requestedReload: (state) => ({
+      ...state,
+      status: 'loading',
+    }),
+    changedInAnotherWindow: (state) => ({
       ...state,
       status: 'loading',
     }),
     // TODO: more granular actions for managing user's teams, collections etc
     updated: (state, { payload }) => ({ ...state, ...payload }),
   }
-})
+});
+// triggered by localStorage
+actions.changedInAnotherWindow = createAction('currentUser/changedInAnotherWindow');
+
 
 const load = runLatest(function * (action, store) {
-  let sharedUser = yield getFromStorage(sharedUserKey);
+  let sharedUser = getFromStorage(sharedUserKey);
   
   // If we're signed out create a new anon user
   if (!sharedUser) {
@@ -131,11 +138,11 @@ const load = runLatest(function * (action, store) {
 
 export const handlers = {
   [pageMounted]: async (action, store) => {
-    const cachedUser = await getFromStorage(cachedUserKey);
+    const cachedUser = getFromStorage(cachedUserKey);
     store.dispatch(actions.loadedFromCache(cachedUser));
     await load(action, store);
   },
-  [currentUserChangedInAnotherWindow]: load,
+  [actions.changedInAnotherWindow]: load,
   [actions.requestedReload]: load,
   [actions.updated]: (_, store) => {
     setStorage(cachedUserKey, store.getState().currentUser);
@@ -273,7 +280,10 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
 
 export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
-  
+  useEffect(() => {
+    dispatch(pageMounted());
+    // TODO: set up event listener here that dispatches `changedInAnotherWindow`
+  }, []);
   return children;
 };
 CurrentUserProvider.propTypes = {
