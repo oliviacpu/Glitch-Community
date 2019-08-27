@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { memoize } from 'lodash';
 import { createSlice, createAction } from 'redux-starter-kit';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,16 +15,9 @@ const sharedUserKey = 'cachedUser';
 // cachedUser mirrors GET /users/{id} and is what we actually display
 const cachedUserKey = 'community-cachedUser';
 
-let storage = undefined;
-const getFromStorage = (key) => {
-  if (storage === undefined) storage = getStorage();
-  return readFromStorage(storage, key);
-}
-const setStorage = (key, value) => {
-  if (storage === undefined) storage = getStorage();
-  return readFromStorage(storage, key, value);
-}
-
+const getStorageMemo = memoize(getStorage);
+const getFromStorage = (key) => readFromStorage(getStorageMemo(), key);
+const setStorage = (key, value) => writeToStorage(getStorageMemo(), key, value);
 
 // takes a generator that yields promises, 
 // returns an async function that restarts from the beginning every time it is called.
@@ -69,45 +63,6 @@ const defaultUser = {
 
 const pageMounted = createAction('app/pageMounted');
 
-export const { reducer, actions } = createSlice({
-  slice: 'currentUser',
-  initialState: {
-    ...defaultUser,
-    status: 'loading',
-  },
-  reducers: {
-    loadedFromCache: (_, { payload }) => ({
-      ...payload,
-      status: 'loading', // because this data is probably stale
-    }),
-    loadedFresh: (_, { payload }) => ({
-      ...payload,
-      status: 'ready',
-    }),
-    loggedIn: (state) => ({
-      ...state,
-      status: 'loading', // because this has the shared
-    }),
-    loggedOut: () => ({
-      ...defaultUser,
-      status: 'loading', // because we're now fetching a new anonymous user
-    }),
-    requestedReload: (state) => ({
-      ...state,
-      status: 'loading',
-    }),
-    changedInAnotherWindow: (state) => ({
-      ...state,
-      status: 'loading',
-    }),
-    // TODO: more granular actions for managing user's teams, collections etc
-    updated: (state, { payload }) => ({ ...state, ...payload }),
-  }
-});
-// triggered by localStorage
-actions.changedInAnotherWindow = createAction('currentUser/changedInAnotherWindow');
-
-
 const load = runLatest(function * (action, store) {
   let sharedUser = getFromStorage(sharedUserKey);
   
@@ -134,31 +89,6 @@ const load = runLatest(function * (action, store) {
   setStorage(cachedUserKey, newCachedUser);
   store.dispatch(actions.loadedFresh(newCachedUser));
 });
-
-
-export const handlers = {
-  [pageMounted]: async (action, store) => {
-    const cachedUser = getFromStorage(cachedUserKey);
-    store.dispatch(actions.loadedFromCache(cachedUser));
-    await load(action, store);
-  },
-  [actions.changedInAnotherWindow]: load,
-  [actions.requestedReload]: load,
-  [actions.updated]: (_, store) => {
-    setStorage(cachedUserKey, store.getState().currentUser);
-  },
-  [actions.loggedIn]: async (action, store) => {
-    setStorage(sharedUserKey, action.payload);
-    setStorage(cachedUserKey, undefined);
-    await load(action, store);
-  },
-  [actions.loggedOut]: async (_, store) => {
-    setStorage(sharedUserKey, undefined);
-    setStorage(cachedUserKey, undefined);
-    const anonUser = await getAnonUser();
-    store.dispatch(actions.loaded(anonUser));
-  },
-}
 
 
 function identifyUser(user) {
@@ -277,6 +207,68 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
   captureMessage('Invalid cachedUser');
 };
 
+export const { reducer, actions } = createSlice({
+  slice: 'currentUser',
+  initialState: {
+    ...defaultUser,
+    status: 'loading',
+  },
+  reducers: {
+    loadedFromCache: (_, { payload }) => ({
+      ...payload,
+      status: 'loading', // because this data is probably stale
+    }),
+    loadedFresh: (_, { payload }) => ({
+      ...payload,
+      status: 'ready',
+    }),
+    loggedIn: () => ({
+      ...defaultUser,
+      status: 'loading', // because the auth token has been set, but there's no user data yet
+    }),
+    loggedOut: () => ({
+      ...defaultUser,
+      status: 'loading', // because we're now fetching a new anonymous user
+    }),
+    requestedReload: (state) => ({
+      ...state,
+      status: 'loading',
+    }),
+    changedInAnotherWindow: (state) => ({
+      ...state,
+      status: 'loading',
+    }),
+    // TODO: more granular actions for managing user's teams, collections etc
+    updated: (state, { payload }) => ({ ...state, ...payload }),
+  }
+});
+// TODO: triggered by localStorage event
+// TODO: might be better to dispatch 'loggedIn' / 'loggedOut' instead, if possible
+actions.changedInAnotherWindow = createAction('currentUser/changedInAnotherWindow');
+
+export const handlers = {
+  [pageMounted]: async (action, store) => {
+    const cachedUser = getFromStorage(cachedUserKey);
+    store.dispatch(actions.loadedFromCache(cachedUser));
+    await load(action, store);
+  },
+  [actions.changedInAnotherWindow]: load,
+  [actions.requestedReload]: load,
+  [actions.updated]: (_, store) => {
+    setStorage(cachedUserKey, store.getState().currentUser);
+  },
+  [actions.loggedIn]: async (action, store) => {
+    setStorage(sharedUserKey, action.payload);
+    setStorage(cachedUserKey, undefined);
+    await load(action, store);
+  },
+  [actions.loggedOut]: async (_, store) => {
+    setStorage(sharedUserKey, undefined);
+    setStorage(cachedUserKey, undefined);
+    const anonUser = await getAnonUser();
+    store.dispatch(actions.loaded(anonUser));
+  },
+}
 
 export const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
