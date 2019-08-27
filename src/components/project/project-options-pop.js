@@ -88,6 +88,7 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
 };
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
+  // projectOptions = {}
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
   console.log("this is probably the problem?", noProjectOptions, projectOptions)
   if (noProjectOptions) return null;
