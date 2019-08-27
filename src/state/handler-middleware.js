@@ -1,7 +1,3 @@
-import { configureStore } from 'redux-starter-kit'
-import { Provider } from 'react-redux'
-
-
 const createHandlerMiddleware = (...handlerGroups) => {
   const combinedHandlers = {}
   for (const handlerGroup of handlerGroups) {
@@ -25,10 +21,4 @@ const createHandlerMiddleware = (...handlerGroups) => {
   }
 } 
 
-const store = configureStore({
-  reducer: (state = {}, action) => state,
-})
-
-export default ({ children }) => (
-  <Provider store={store}>{children}</Provider>
-)
+export default createHandlerMiddleware;
