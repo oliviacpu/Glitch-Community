@@ -10,11 +10,6 @@ import { configureScope, captureException, captureMessage, addBreadcrumb } from 
 import { getStorage, readFromStorage, writeToStorage } from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
-// sharedUser syncs with the editor and is authoritative on id and persistentToken
-const sharedUserKey = 'cachedUser';
-// cachedUser mirrors GET /users/{id} and is what we actually display
-const cachedUserKey = 'community-cachedUser';
-
 const getStorageMemo = memoize(getStorage);
 const getFromStorage = (key) => readFromStorage(getStorageMemo(), key);
 const setStorage = (key, value) => writeToStorage(getStorageMemo(), key, value);
@@ -42,27 +37,6 @@ function runLatest(fn) {
     }
   };
 }
-
-// Default values for all of the user fields we need you to have
-// We always generate a 'real' anon user, but use this until we do
-const defaultUser = {
-  id: 0,
-  login: null,
-  name: null,
-  description: '',
-  color: '#aaa',
-  avatarUrl: null,
-  avatarThumbnailUrl: null,
-  hasCoverImage: false,
-  coverColor: null,
-  emails: [],
-  features: [],
-  projects: [],
-  teams: [],
-  collections: [],
-};
-
-const pageMounted = createAction('app/pageMounted');
 
 function identifyUser(user) {
   document.cookie = `hasLogin=; expires=${new Date()}`;
@@ -180,6 +154,32 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
   captureMessage('Invalid cachedUser');
 };
 
+// sharedUser syncs with the editor and is authoritative on id and persistentToken
+const sharedUserKey = 'cachedUser';
+// cachedUser mirrors GET /users/{id} and is what we actually display
+const cachedUserKey = 'community-cachedUser';
+
+// Default values for all of the user fields we need you to have
+// We always generate a 'real' anon user, but use this until we do
+const defaultUser = {
+  id: 0,
+  login: null,
+  name: null,
+  description: '',
+  color: '#aaa',
+  avatarUrl: null,
+  avatarThumbnailUrl: null,
+  hasCoverImage: false,
+  coverColor: null,
+  emails: [],
+  features: [],
+  projects: [],
+  teams: [],
+  collections: [],
+};
+
+const pageMounted = createAction('app/pageMounted');
+
 export const { reducer, actions } = createSlice({
   slice: 'currentUser',
   initialState: {
@@ -265,11 +265,10 @@ export const handlers = {
     setStorage(cachedUserKey, undefined);
     await load(action, store);
   },
-  [actions.loggedOut]: async (_, store) => {
+  [actions.loggedOut]: async (action, store) => {
     setStorage(sharedUserKey, undefined);
     setStorage(cachedUserKey, undefined);
-    const anonUser = await getAnonUser();
-    store.dispatch(actions.loadedFresh(anonUser));
+    await load(action, store);
   },
 };
 
