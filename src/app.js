@@ -1,5 +1,6 @@
 import React from 'react';
 import { LiveAnnouncer } from 'react-aria-live';
+import { RootStyle, lightTheme } from '@fogcreek/shared-components';
 
 import Store from 'State/store';
 import { AnalyticsContext } from 'State/segment-analytics';
@@ -29,6 +30,7 @@ const App = ({ apiCache }) => (
                     <ProjectContextProvider>
                       <CollectionContextProvider>
                         <>
+                          <RootStyle theme={lightTheme} />
                           <SuperUserBanner />
                           <OfflineNotice />
                           <Router />
