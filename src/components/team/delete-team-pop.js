@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { Button, Icon } from '@fogcreek/shared-components';
+
 import Loader from 'Components/loader';
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import { useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
@@ -39,8 +40,9 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteTeam}>
+        <Button size="small" variant="warning" onClick={deleteTeam}>
           Delete {team.name}
+          <Icon style={{ height: `${1.3}em`, width: `${1.3}em`, verticalAlign: 'sub' }} icon="bomb" />
           {teamIsDeleting && <Loader />}
         </Button>
       </PopoverActions>
