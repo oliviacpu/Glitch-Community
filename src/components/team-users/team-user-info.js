@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
 
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
@@ -8,7 +9,6 @@ import { UserAvatar, ProjectAvatar } from 'Components/images/avatar';
 import { UserLink } from 'Components/link';
 import Thanks from 'Components/thanks';
 import { PopoverContainer, PopoverDialog, PopoverActions, PopoverInfo, MultiPopover, MultiPopoverTitle, ActionDescription } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import Loader from 'Components/loader';
 
@@ -98,7 +98,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
       )}
 
       <PopoverActions type="dangerZone">
-        <Button type="dangerZone" onClick={() => onRemoveUser(projectsToRemove)}>
+        <Button variant="warning" onClick={() => onRemoveUser(projectsToRemove)}>
           Remove{' '}
           <span className={styles.tinyAvatar}>
             <UserAvatar user={user} withinButton />
