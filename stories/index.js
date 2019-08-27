@@ -2,7 +2,6 @@ import React from 'react';
 import { mapValues, sumBy, memoize } from 'lodash';
 import { storiesOf } from '@storybook/react';
 import 'Components/global.styl';
-import Button from 'Components/buttons/button';
 import Emoji from 'Components/images/emoji';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Text from 'Components/text/text';
@@ -52,7 +51,7 @@ storiesOf('Emoji', module)
 storiesOf('TooltipContainer', module)
   .add('action', () => (
     <div style={{ margin: '70px' }}>
-      <TooltipContainer type="action" target={<Button>Hover or focus me</Button>} tooltip="I'm an action tooltip" />
+      <TooltipContainer type="action" target={<button>Hover or focus me</button>} tooltip="I'm an action tooltip" />
     </div>
   ))
   .add('info', () => (
@@ -76,7 +75,7 @@ storiesOf('TooltipContainer', module)
   ))
   .add('left and top aligned', () => (
     <div style={{ margin: '70px' }}>
-      <TooltipContainer type="action" target={<Button>Hover or focus me</Button>} tooltip="I'm a tooltip" align={['top', 'left']} />
+      <TooltipContainer type="action" target={<button>Hover or focus me</button>} tooltip="I'm a tooltip" align={['top', 'left']} />
     </div>
   ));
 

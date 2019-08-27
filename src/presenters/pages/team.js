@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Helmet from 'react-helmet';
 import { partition } from 'lodash';
@@ -17,7 +17,6 @@ import ReportButton from 'Components/report-abuse-pop';
 import DeleteTeam from 'Components/team/delete-team-pop';
 import AddTeamProject from 'Components/team/add-team-project-pop';
 import TeamUsers from 'Components/team-users';
-import Button from 'Components/buttons/button';
 import TeamAnalytics from 'Components/team-analytics';
 import AuthDescription from 'Components/fields/auth-description';
 import ErrorBoundary from 'Components/error-boundary';
@@ -62,8 +61,8 @@ const TeamMarketing = () => (
       />
       Want your own team page, complete with detailed app analytics?
     </Text>
-    <Button href="/teams" emoji="fishingPole">
-      About Teams
+    <Button as="a" href="/teams">
+      About Teams <Icon className={styles.emoji} icon="fishingPole" />
     </Button>
   </section>
 );
@@ -73,7 +72,7 @@ const NameConflictWarning = ({ id }) => (
     <Text>
       This team has your name. You should update your info to remain unique <Icon className={styles.emoji} icon="sparkles" />
     </Text>
-    <Button size="small" type="tertiary" href={`/user/${id}`}>
+    <Button as="a" size="small" variant="secondary" href={`/user/${id}`}>
       Your Profile
     </Button>
   </>
