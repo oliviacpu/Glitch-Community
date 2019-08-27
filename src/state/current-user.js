@@ -215,6 +215,7 @@ export const { reducer, actions } = createSlice({
     updated: (state, { payload }) => ({ ...state, ...payload }),
   },
 });
+actions.updatedInAnotherTab = createAction('currentUser/updatedInAnotherTab');
 
 // eslint-disable-next-line func-names
 const load = runLatest(function* (action, store) {
@@ -267,31 +268,16 @@ export const handlers = {
     setStorage(cachedUserKey, undefined);
     await load(action, store);
   },
-};
-
-export const CurrentUserProvider = ({ children }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(pageMounted());
-    
-    const onStorage = (event) => {
-      const sharedUser = getFromStorage(sharedUserKey);
-      if (sharedUser) {
-        dispatch(actions.loggedIn(sharedUser));
-      } else {
-        dispatch(actions.loggedOut());
-      }
-    };
-
-    window.addEventListener('storage', onStorage, { passive: true });
-    return () => {
-      window.removeEventListener('storage', onStorage, { passive: true });
-    };
-  }, []);
-  return children;
-};
-CurrentUserProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  [actions.updatedInAnotherTab]: async (action, store) => {
+    const sharedUser = getStorage(sharedUserKey)
+    if (!sharedUser) {
+      // dispatch(actions.loggedOut());
+      console.log('no shared user')
+    } else if (!usersMatch(sharedUser, store.getState().currentUser)) {
+      // dispatch(actions.loggedIn(sharedUser));
+      console.log('users dont match')
+    }
+  }
 };
 
 export const useCurrentUser = () => {
@@ -307,6 +293,30 @@ export const useCurrentUser = () => {
     clear: () => dispatch(actions.loggedOut()),
   };
 };
+
+export const CurrentUserProvider = ({ children }) => {
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.currentUser);
+  useEffect(() => {
+    dispatch(pageMounted());
+    
+    const onStorage = (event) => {
+      if (!event.key || event.key === sharedUserKey) {
+        dispatch(actions.updatedInAnotherTab());
+      }
+    };
+
+    window.addEventListener('storage', onStorage, { passive: true });
+    return () => {
+      window.removeEventListener('storage', onStorage, { passive: true });
+    };
+  }, []);
+  return children;
+};
+CurrentUserProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 
 export const useSuperUserHelpers = () => {
   const { currentUser: cachedUser } = useCurrentUser();
