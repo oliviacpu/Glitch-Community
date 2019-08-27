@@ -129,7 +129,7 @@ function TwoFactorSettings() {
               </Button>
             </>
           ) : (
-            <Loader />
+            <Loader style={{ width: '25px' }} />
           )}
         </>
       ) : (

@@ -135,7 +135,7 @@ const CreateTeamPop = withRouter(({ history }) => {
           <div className={styles.teamUrlPreview}>/@{kebabCase(state.teamName || placeholder)}</div>
 
           {state.isLoading ? (
-            <Loader />
+            <Loader style={{ width: '25px' }} />
           ) : (
             <Button submit size="small" emoji="thumbsUp" disabled={!!state.error}>
               Create Team

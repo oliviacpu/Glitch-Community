@@ -62,7 +62,7 @@ function useActiveIndex(items, onSelect) {
 
 const PopoverLoader = () => (
   <PopoverActions>
-    <Loader />
+    <Loader style={{ width: '25px' }} />
   </PopoverActions>
 );
 

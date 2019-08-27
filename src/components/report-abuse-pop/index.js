@@ -157,7 +157,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
       )}
       <PopoverActions>
         {status === 'loading' ? (
-          <Loader />
+          <Loader style={{ width: '25px' }} />
         ) : (
           <Button size="small" onClick={submitReport}>
             Submit Report

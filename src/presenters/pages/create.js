@@ -221,8 +221,7 @@ function Starters() {
           </Heading>
           <Text size="16px">Your favorite companies use Glitch to share apps that get you up and running with their APIs.</Text>
         </div>
-        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader style={{ width: '100px' }} />}
-        <Loader style={{ width: '40px' }} />
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader style={{ width: '25px' }} />}
       </div>
     </section>
   );

@@ -114,7 +114,7 @@ function DeletedProjects({ deletedProjects, setDeletedProjects, undelete, user }
     );
   }
   if (state === 'loading') {
-    return <Loader />;
+    return <Loader style={{ width: '25px' }} />;
   }
   if (!deletedProjects.length) {
     return 'nothing found';

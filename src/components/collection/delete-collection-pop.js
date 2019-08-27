@@ -42,7 +42,7 @@ const DeleteCollectionPop = withRouter(({ location, history, collection, animate
       </PopoverActions>
       <PopoverActions type="dangerZone">
         <PopoverMenuButton size="small" label={`Delete ${collection.name}`} type="dangerZone" emoji="bomb" onClick={deleteThisCollection}>
-          {collectionIsDeleting && <Loader />}
+          {collectionIsDeleting && <Loader style={{ width: '25px' }} />}
         </PopoverMenuButton>
       </PopoverActions>
     </PopoverDialog>

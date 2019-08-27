@@ -77,7 +77,7 @@ function TeamUserRemovePop({ user, onRemoveUser, userTeamProjects }) {
 
       {!userTeamProjects && (
         <PopoverActions>
-          <Loader />
+          <Loade />
         </PopoverActions>
       )}
       {userTeamProjects && userTeamProjects.length > 0 && (

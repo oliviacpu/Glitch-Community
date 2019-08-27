@@ -62,7 +62,7 @@ const RecentProjects = () => {
             {fetched ? (
               <ProjectsList layout="row" projects={currentUser.projects.slice(0, 3)} />
             ) : (
-              <Loader />
+              <Loader style={{ width: '25px' }} />
             )}
           </div>
         </div>

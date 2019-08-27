@@ -152,7 +152,7 @@ const EmailHandler = ({ align, showView }) => {
             </div>
           </form>
         )}
-        {status === 'loading' && <Loader />}
+        {status === 'loading' && <Loader style={{ width: '25px' }} />}
         {status === 'done' && (
           <>
             <Notification persistent type="success">

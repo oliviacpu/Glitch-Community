@@ -54,7 +54,7 @@ function useCollectionsWithProjects(collections) {
 const MoreCollections = ({ currentCollection, collections }) => {
   const curator = useCollectionCurator(currentCollection);
   const collectionsWithProjects = useCollectionsWithProjects(collections);
-  if (!collectionsWithProjects) return <Loader />;
+  if (!collectionsWithProjects) return <Loader style={{ width: '25px' }} />;
   if (!collectionsWithProjects.length) return null;
 
   const isUserCollection = currentCollection.teamId === -1;

@@ -57,7 +57,7 @@ const NewProjectPop = ({ projects }) => (
           )}
         </ResultsList>
       ) : (
-        <Loader />
+        <Loader style={{ width: '25px' }} />
       )}
     </PopoverSection>
     <PopoverActions type="secondary">

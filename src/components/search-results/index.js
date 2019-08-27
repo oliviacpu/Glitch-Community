@@ -120,7 +120,7 @@ function SearchResults({ query, searchResults, activeFilter, setActiveFilter }) 
         <FilterContainer filters={filters} setFilter={setActiveFilter} activeFilter={activeFilter} />
       )}
       {activeFilter === 'all' && <h1>All results for {query}</h1>}
-      {!ready && <Loader />}
+      {!ready && <Loader style={{ width: '25px' }} />}
       {showTopResults && (
         <article className={classnames(styles.groupContainer, styles.topResults)}>
           <Heading tagName="h2">Top Results</Heading>

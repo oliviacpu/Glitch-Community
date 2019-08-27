@@ -46,7 +46,7 @@ DataLoader.propTypes = {
 };
 DataLoader.defaultProps = {
   renderError: () => 'Something went wrong, try refreshing?',
-  renderLoader: () => <Loader />,
+  renderLoader: () => <Loader style={{ width: '25px' }} />,
   captureException: undefined,
   args: undefined,
 };

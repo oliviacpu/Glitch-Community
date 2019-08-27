@@ -87,7 +87,7 @@ function TeamAnalytics({ id, projects }) {
   if (!analytics) {
     return (
       <section className={styles.container}>
-        <Loader />
+        <Loader style={{ width: '25px' }} />
       </section>
     );
   }

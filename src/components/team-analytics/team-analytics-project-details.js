@@ -95,7 +95,7 @@ const useProjectDetails = createAPIHook(async (api, id, currentProjectDomain) =>
 
 function TeamAnalyticsProjectDetails({ activeFilter, id, currentProjectDomain }) {
   const { value: projectDetails } = useProjectDetails(id, currentProjectDomain);
-  if (!projectDetails) return <Loader />;
+  if (!projectDetails) return <Loader style={{ width: '25px' }} />;
 
   const projectRemixes = projectDetails.remixes.slice(0, RECENT_REMIXES_COUNT);
   return (
