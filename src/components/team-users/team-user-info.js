@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import { getDisplayName } from 'Models/user';
 import { userIsTeamAdmin, userIsOnlyTeamAdmin } from 'Models/team';
@@ -144,20 +144,20 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
         <PopoverActions>
           <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
           {selectedUserIsTeamAdmin ? (
-            <Button size="small" type="tertiary" emoji="fastDown" onClick={onRemoveAdmin}>
-              Remove Admin Status
+            <Button size="small" variant="secondary" onClick={onRemoveAdmin}>
+              Remove Admin Status <Icon className={styles.emoji} icon="fastDown" />
             </Button>
           ) : (
-            <Button size="small" type="tertiary" emoji="fastUp" onClick={onMakeAdmin}>
-              Make an Admin
+            <Button size="small" variant="secondary" onClick={onMakeAdmin}>
+              Make an Admin <Icon className={styles.emoji} icon="fastUp" />
             </Button>
           )}
         </PopoverActions>
       )}
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
-          <Button type="dangerZone" emoji="wave" onClick={onRemoveUser}>
-            {isCurrentUser ? 'Leave Team' : 'Remove from Team'}
+          <Button variant="warning" onClick={onRemoveUser}>
+            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Icon className={styles.emoji} icon="wave" />
           </Button>
         </PopoverActions>
       )}
