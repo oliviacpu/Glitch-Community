@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
+import { Button, Icon } from '@fogcreek/shared-components';
 
-import Button from 'Components/buttons/button';
 import Heading from 'Components/text/heading';
 import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
@@ -109,9 +109,8 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
                 <Loader />
               ) : (
                 <Button
-                  type="tertiary"
+                  variant="secondary"
                   size="small"
-                  emoji="bomb"
                   onClick={() => {
                     setLoading(true);
                     deleteProject().then(() => {
@@ -120,7 +119,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
                     });
                   }}
                 >
-                  Delete {projectDomain}
+                  Delete {projectDomain} <Icon className={styles.emoji} icon="bomb" />
                 </Button>
               )}
             </PopoverActions>

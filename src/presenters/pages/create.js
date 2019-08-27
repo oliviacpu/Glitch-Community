@@ -35,7 +35,7 @@ function RemixButton({ app, type, size, emoji, children }) {
 
   return (
     <Button as="a" href={getRemixUrl(app.domain)} onClick={() => trackRemix()} variant={type} size={size}>
-      {children} {!!icon ? <Icon className={styles.emoji} icon={emoji} /> : ''}
+      {children} {emoji ? <Icon className={styles.emoji} icon={emoji} /> : ''}
     </Button>
   );
 }
@@ -401,10 +401,9 @@ function VSCode() {
         <Button
           as="a"
           href="https://marketplace.visualstudio.com/items?itemName=glitch.glitch"
-          image={<Image src={vscodeIcon} alt="" width="17" height="17" />}
-          imagePosition="left"
         >
-          Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
+          <Image src={vscodeIcon} alt="" width="17" height="17" />
+          &nbsp;Download from Visual Studio Marketplace <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
 
