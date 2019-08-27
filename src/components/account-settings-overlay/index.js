@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon, Button } from '@fogcreek/shared-components';
+import { Icon, SegmentedButton } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
@@ -11,9 +11,9 @@ import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
 const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
-  <Button size="small" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
+  <SegmentedButton size="small" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
     {children}
-  </Button>
+  </SegmentedButton>
 );
 
 const AccountSettingsOverlay = () => {
