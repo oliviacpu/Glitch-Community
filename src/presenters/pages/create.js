@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
 import { values, sampleSize, shuffle } from 'lodash';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
 import Text from 'Components/text/text';
 import Markdown from 'Components/text/markdown';
 import Heading from 'Components/text/heading';
-import Button from 'Components/buttons/button';
 import Link from 'Components/link';
 import Embed from 'Components/project/embed';
 import Video from 'Components/video';
@@ -34,8 +34,8 @@ function RemixButton({ app, type, size, emoji, children }) {
   });
 
   return (
-    <Button href={getRemixUrl(app.domain)} onClick={() => trackRemix()} type={type} size={size} emoji={emoji}>
-      {children}
+    <Button as="a" href={getRemixUrl(app.domain)} onClick={() => trackRemix()} variant={type} size={size}>
+      {children} {!!icon ? <Icon className={styles.emoji} icon={emoji} /> : ''}
     </Button>
   );
 }
@@ -170,7 +170,7 @@ function PlatformStarterItem(team) {
       </div>
       <div>
         <div className={styles.platformLink}>
-          <Button href={getTeamLink(team)}>{team.name}</Button>
+          <Button as="a" href={getTeamLink(team)}>{team.name}</Button>
         </div>
         <Text size="14px">
           <Markdown renderAsPlaintext>{team.description}</Markdown>
@@ -339,7 +339,7 @@ function Help() {
           <Heading tagName="h3">Help Center</Heading>
           <Text>The best place to find answers about Glitch</Text>
           <Text>
-            <Button href="https://glitch.com/help">
+            <Button as="a" href="https://glitch.com/help">
               Read FAQs <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
@@ -360,7 +360,7 @@ function Help() {
           <Heading tagName="h3">Support Forum</Heading>
           <Text>Personalized support for your app-specific questions.</Text>
           <Text>
-            <Button href="https://support.glitch.com">
+            <Button as="a" href="https://support.glitch.com">
               Get Support <span aria-hidden="true">&rarr;</span>
             </Button>
           </Text>
@@ -399,6 +399,7 @@ function VSCode() {
 
       <Text className={styles.sectionDescription}>
         <Button
+          as="a"
           href="https://marketplace.visualstudio.com/items?itemName=glitch.glitch"
           image={<Image src={vscodeIcon} alt="" width="17" height="17" />}
           imagePosition="left"
@@ -446,7 +447,7 @@ function GitHub() {
       </Text>
 
       <Text className={styles.sectionDescription}>
-        <Button href="https://glitch.com/help/import-git/">
+        <Button as="a" href="https://glitch.com/help/import-git/">
           Find Out How <span aria-hidden="true">&rarr;</span>
         </Button>
       </Text>
