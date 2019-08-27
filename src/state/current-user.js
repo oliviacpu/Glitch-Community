@@ -9,6 +9,16 @@ import { configureScope, captureException, captureMessage, addBreadcrumb } from 
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
+
+
+
+function runLatest (fn) {
+  let status = 'ready'
+  return fn
+}
+
+
+
 export const Context = React.createContext();
 
 // Default values for all of the user fields we need you to have
