@@ -211,11 +211,14 @@ export const { reducer, actions } = createSlice({
       ...state,
       status: 'loading',
     }),
+    updatedInAnotherTab: (state, { payload }) => ({
+      ...state,
+      ...payload,
+    }),
     // TODO: more granular actions for managing user's teams, collections etc
     updated: (state, { payload }) => ({ ...state, ...payload }),
   },
 });
-actions.updatedInAnotherTab = createAction('currentUser/updatedInAnotherTab');
 
 // eslint-disable-next-line func-names
 const load = runLatest(function* (action, store) {
@@ -298,8 +301,8 @@ export const CurrentUserProvider = ({ children }) => {
     dispatch(pageMounted());
 
     const onStorage = (event) => {
-      if (!event.key || event.key === sharedUserKey) {
-        dispatch(actions.updatedInAnotherTab());
+      if (!event.key || event.key === sharedUserKey || event.key === cachedUserKey) {
+        dispatch(actions.updatedInAnotherTab(getFromStorage(cachedUserKey)));
       }
     };
 
