@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -113,9 +113,7 @@ async function getCachedUser(sharedUser) {
   try {
     const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
     const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
-    const {
-      baseUser, emails, projects, teams, collections,
-    } = await allByKeys({
+    const { baseUser, emails, projects, teams, collections } = await allByKeys({
       baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}&cache=${Date.now()}`, sharedUser.id),
       emails: getAllPages(api, makeUrl('emails')),
       projects: getAllPages(api, makeOrderedUrl('projects', 'domain', 'ASC')),
@@ -254,10 +252,21 @@ export const CurrentUserProvider = ({ children }) => {
     sharedUser && sharedUser.persistentToken,
   ]);
 
-  const userProps = {
-    currentUser: { ...defaultUser, ...sharedUser, ...cachedUser },
+  const currentUser = useMemo(
+    () => ({
+      ...defaultUser,
+      ...sharedUser,
+      ...cachedUser,
+    }),
+    [sharedUser, cachedUser],
+  );
+  
+  const persistentToken = sharedUser ? sharedUser.persistentToken : null;
+
+  const userProps = useMemo(() => ({
+    currentUser,
     fetched,
-    persistentToken: sharedUser ? sharedUser.persistentToken : null,
+    persistentToken,
     reload: load,
     login: (data) => {
       setSharedUser(data);
@@ -270,8 +279,7 @@ export const CurrentUserProvider = ({ children }) => {
       setSharedUser(undefined);
       setCachedUser(undefined);
     },
-    superUserHelpers: getSuperUserHelpers(cachedUser),
-  };
+  }, [currentUser, fetched, persistentToken]);
 
   return <Context.Provider value={userProps}>{children}</Context.Provider>;
 };
@@ -282,6 +290,6 @@ CurrentUserProvider.propTypes = {
 export const useCurrentUser = () => React.useContext(Context);
 
 export const useSuperUserHelpers = () => {
-  const { currentUser } = useCurrentUser()
+  const { currentUser } = useCurrentUser();
   return getSuperUserHelpers(currentUser);
-}
+};

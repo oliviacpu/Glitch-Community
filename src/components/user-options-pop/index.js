@@ -164,8 +164,6 @@ Are you sure you want to sign out?`)
 UserOptionsPop.propTypes = {
   togglePopover: PropTypes.func.isRequired,
   showCreateTeam: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  signOut: PropTypes.func.isRequired,
   showAccountSettingsOverlay: PropTypes.func.isRequired,
   showNewStuffOverlay: PropTypes.func.isRequired,
 };
@@ -207,11 +205,11 @@ export default function UserOptionsAndCreateTeamPopContainer({ showAccountSettin
                     }}
                   >
                     {({ createTeam }) => (
-                      <UserOptionsPop 
+                      <UserOptionsPop
                         showAccountSettingsOverlay={showAccountSettingsOverlay}
                         showNewStuffOverlay={showNewStuffOverlay}
                         togglePopover={togglePopover}
-                        showCreateTeam={createTeam} 
+                        showCreateTeam={createTeam}
                       />
                     )}
                   </MultiPopover>
