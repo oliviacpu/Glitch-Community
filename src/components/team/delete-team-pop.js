@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Loader from 'Components/loader';
+import { Loader } from '@fogcreek/shared-components';
+
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
 import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';

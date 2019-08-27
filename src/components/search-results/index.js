@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Loader } from '@fogcreek/shared-components';
 
 import { createAPIHook } from 'State/api';
 
@@ -15,7 +16,6 @@ import CollectionItemSmall from 'Components/collection/collection-item-small';
 import StarterKitItem from 'Components/search/starter-kit-result';
 import Grid from 'Components/containers/grid';
 import NotFound from 'Components/errors/not-found';
-import Loader from 'Components/loader';
 import styles from './search-results.styl';
 
 const FilterContainer = ({ filters, activeFilter, setFilter }) => {
