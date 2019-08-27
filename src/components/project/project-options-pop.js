@@ -55,12 +55,10 @@ const LeaveProjectPopover = ({ project, leaveProject, togglePopover }) => {
 };
 
 const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover, leaveProjectPopover, leaveProjectDirect }) => {
-  console.log("project options content never renders my friends")
   const { currentUser } = useCurrentUser();
   const onClickDeleteProject = useTrackedFunc(projectOptions.deleteProject, 'Delete Project clicked');
   const trackedLeaveProjectDirect = useTrackedLeaveProject(leaveProjectDirect);
   const onClickLeaveProject = isTeamProject({ currentUser, project }) ? trackedLeaveProjectDirect : leaveProjectPopover;
-  console.log("le project options from projectoptionscontent", projectOptions)
   return (
     <PopoverDialog align="right">
       <PopoverMenuItems>
@@ -88,7 +86,6 @@ const ProjectOptionsContent = ({ project, projectOptions, addToCollectionPopover
 };
 
 export default function ProjectOptionsPop({ project, projectOptions }) {
-  // projectOptions = {}
   const noProjectOptions = Object.values(projectOptions).every((option) => !option);
   console.log("this is probably the problem?", noProjectOptions, projectOptions)
   if (noProjectOptions) return null;
@@ -101,9 +98,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
 
   return (
     <PopoverMenu label={`Project Options for ${project.domain}`}>
-      {({ togglePopover }) => {
-        console.log("I am a child of popoverMeno and I'm about to render multipopover")
-        return (
+      {({ togglePopover }) => (
         <MultiPopover
           views={{
             addToCollection: ({ createCollection }) => (
@@ -129,7 +124,7 @@ export default function ProjectOptionsPop({ project, projectOptions }) {
             />
           )}
         </MultiPopover>
-      )}}
+      )}
     </PopoverMenu>
   );
 }

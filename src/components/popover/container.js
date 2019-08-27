@@ -7,7 +7,6 @@ import { isFragment } from 'react-is';
 const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   const [status, setStatus] = useState(startOpen ? 'openedFromKeyboard' : 'closed');
   const openPopover = (event) => {
-    console.log("hellow my name is openPopover")
     if (event && event.detail === 0) {
       setStatus('openedFromKeyboard');
     } else {
@@ -22,7 +21,6 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   };
 
   const togglePopover = (event) => {
-    console.log("I am togglepopover")
     if (status === 'closed') {
       openPopover(event);
     } else {
@@ -53,7 +51,6 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [status]);
 
-  console.log("status", status)
   return useMemo(
     () => ({
       status,
@@ -81,15 +78,14 @@ const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
   const before = outer ? outer(toggleState) : null;
-  return inner
-  // return (
-  //   <PopoverToggleContext.Provider value={toggleState}>
-  //     {before}
-  //     <MonitoredComponent excludeScrollbar onClickOutside={toggleState.closePopover}>
-  //       {inner}
-  //     </MonitoredComponent>
-  //   </PopoverToggleContext.Provider>
-  // );
+  return (
+    <PopoverToggleContext.Provider value={toggleState}>
+      {before}
+      <MonitoredComponent excludeScrollbar onClickOutside={toggleState.closePopover}>
+        {inner}
+      </MonitoredComponent>
+    </PopoverToggleContext.Provider>
+  );
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
