@@ -112,21 +112,22 @@ export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
         {(popoverProps) => {
           console.log("children inside popovercontainer")
-          return(
-          <div>
-            <div className={styles.buttonWrap}>
-              <TransparentButton onClick={() => {
-                  console.log("about to call popoverProps.togglePopover")
-                  popoverProps.togglePopover()
-                }} ref={buttonRef}>
-                <span className={styles.arrowPadding}>
-                  <span className={styles.downArrow} />
-                </span>
-                <span className={globalStyles.visuallyHidden}>{label}</span>
-              </TransparentButton>
-            </div>
-            {popoverProps.visible && renderChildren(popoverProps)}
-          </div>
+          return (<button onClick={(() => console.log("we said hi"))}>hi</button>
+          // return(
+          // <div>
+          //   <div className={styles.buttonWrap}>
+          //     <TransparentButton onClick={() => {
+          //         console.log("about to call popoverProps.togglePopover")
+          //         popoverProps.togglePopover()
+          //       }} ref={buttonRef}>
+          //       <span className={styles.arrowPadding}>
+          //         <span className={styles.downArrow} />
+          //       </span>
+          //       <span className={globalStyles.visuallyHidden}>{label}</span>
+          //     </TransparentButton>
+          //   </div>
+          //   {popoverProps.visible && renderChildren(popoverProps)}
+          // </div>
         )}}
       </PopoverContainer>
     </div>

@@ -75,24 +75,21 @@ const MonitoredComponent = onClickOutside(({ children }) => children, {
 export const PopoverToggleContext = createContext(null);
 
 const PopoverContainer = ({ children, onOpen, outer, startOpen, triggerButtonRef }) => {
-  console.log("is triggerButtonRef defined", triggerButtonRef)
-  console.log("onOpen", onOpen)
   const toggleState = usePopoverToggle({ startOpen, onOpen, triggerButtonRef });
   const inner = children(toggleState);
-  console.log("inner", inner)
   if (isFragment(inner)) {
     console.error('PopoverContainer does not support Fragment as the top level item. Please use a different element.');
   }
-  console.log("outer", outer)
   const before = outer ? outer(toggleState) : null;
-  return (
-    <PopoverToggleContext.Provider value={toggleState}>
-      {before}
-      <MonitoredComponent excludeScrollbar onClickOutside={toggleState.closePopover}>
-        {inner}
-      </MonitoredComponent>
-    </PopoverToggleContext.Provider>
-  );
+  return inner
+  // return (
+  //   <PopoverToggleContext.Provider value={toggleState}>
+  //     {before}
+  //     <MonitoredComponent excludeScrollbar onClickOutside={toggleState.closePopover}>
+  //       {inner}
+  //     </MonitoredComponent>
+  //   </PopoverToggleContext.Provider>
+  // );
 };
 PopoverContainer.propTypes = {
   children: PropTypes.func.isRequired,
