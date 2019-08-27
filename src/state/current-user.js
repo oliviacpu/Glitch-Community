@@ -6,13 +6,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
 import { sortProjectsByLastAccess } from 'Models/project';
 import { configureScope, captureException, captureMessage, addBreadcrumb } from 'Utils/sentry';
-import useLocalStorage from './local-storage';
+import { getStorage, readFromStorage, writeToStorage } from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
 // sharedUser syncs with the editor and is authoritative on id and persistentToken
 const sharedUserKey = 'cachedUser';
 // cachedUser mirrors GET /users/{id} and is what we actually display
 const cachedUserKey = 'community-cachedUser';
+
+let storage = undefined;
+const getFromStorage = (key) => {
+  if (storage === undefined) storage = getStorage();
+  return readFromStorage(storage, key);
+}
+const setStorage = (key, value) => {
+  if (storage === undefined) storage = getStorage();
+  return readFromStorage(storage, key, value);
+}
+
 
 // takes a generator that yields promises, 
 // returns an async function that restarts from the beginning every time it is called.
@@ -91,52 +102,52 @@ export const { reducer, actions } = createSlice({
 })
 
 const load = runLatest(function * (action, store) {
-  let sharedOrAnonUser = yield getFromStorage(sharedUserKey);
+  let sharedUser = yield getFromStorage(sharedUserKey);
   
   // If we're signed out create a new anon user
-  if (!sharedOrAnonUser) {
-    sharedOrAnonUser = yield getAnonUser();
+  if (!sharedUser) {
+    sharedUser = yield getAnonUser();
+    setStorage(sharedUserKey, sharedUser);
   }
 
-  let newCachedUser = yield getCachedUser(sharedOrAnonUser);
+  let newCachedUser = yield getCachedUser(sharedUser);
 
   while (newCachedUser === 'error') {
     // Looks like our sharedUser is bad
     // Anon users get their token and id deleted when they're merged into a user on sign in
-    const prevSharedUser = sharedOrAnonUser
-    sharedOrAnonUser = yield getSharedUser(sharedOrAnonUser.persistentToken);
-    setSharedUser(sharedOrAnonUser)
-    logSharedUserError(prevSharedUser, sharedOrAnonUser);
+    const prevSharedUser = sharedUser;
+    sharedUser = yield getSharedUser(sharedUser.persistentToken);
+    setStorage(sharedUserKey, sharedUser)
+    logSharedUserError(prevSharedUser, sharedUser);
     
-    newCachedUser = yield getCachedUser(sharedOrAnonUser);
+    newCachedUser = yield getCachedUser(sharedUser);
   } 
     
   // The shared user is good, store it
-  setCachedUser(newCachedUser);
+  setStorage(cachedUserKey, newCachedUser);
   store.dispatch(actions.loadedFresh(newCachedUser));
-})
+});
 
 
 export const handlers = {
   [pageMounted]: async (action, store) => {
-    const cachedUser = await getCachedUserFromStorage();
+    const cachedUser = await getFromStorage(cachedUserKey);
     store.dispatch(actions.loadedFromCache(cachedUser));
     await load(action, store);
   },
   [currentUserChangedInAnotherWindow]: load,
   [actions.requestedReload]: load,
   [actions.updated]: (_, store) => {
-    setCachedUser(store.getState().currentUser);
+    setStorage(cachedUserKey, store.getState().currentUser);
   },
   [actions.loggedIn]: async (action, store) => {
-    setSharedUser(action.payload);
-    setCachedUser(undefined);
+    setStorage(sharedUserKey, action.payload);
+    setStorage(cachedUserKey, undefined);
     await load(action, store);
   },
   [actions.loggedOut]: async (_, store) => {
-    // TODO: clear localStorage
-    setSharedUser(undefined);
-    setCachedUser(undefined);
+    setStorage(sharedUserKey, undefined);
+    setStorage(cachedUserKey, undefined);
     const anonUser = await getAnonUser();
     store.dispatch(actions.loaded(anonUser));
   },
