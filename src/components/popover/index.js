@@ -106,12 +106,12 @@ PopoverWithButton.defaultProps = {
 
 export const PopoverMenu = ({ label, children: renderChildren, onOpen }) => {
   const buttonRef = useRef();
-  console.log("popoverMenu")
+  console.log("popoverMenu rendering")
   return (
     <div className={styles.popoverMenuWrap}>
       <PopoverContainer onOpen={onOpen} triggerButtonRef={buttonRef}>
         {(popoverProps) => {
-          console.log("popoverProps", popoverProps, renderChildren)
+          console.log("children inside popovercontainer")
           return(
           <div>
             <div className={styles.buttonWrap}>
