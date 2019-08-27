@@ -31,7 +31,7 @@ function runLatest(fn) {
       const { value, done } = state.currentGenerator.next(promiseResult);
       if (done) {
         state.currentGenerator = null;
-        return value;
+        return;
       }
       promiseResult = await value; // eslint-disable-line no-await-in-loop
     }
