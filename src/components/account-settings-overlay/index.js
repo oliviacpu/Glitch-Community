@@ -10,18 +10,12 @@ import PasswordSettings from './password-settings';
 import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
 
-const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
-  <SegmentedButton size="small" className={styles.settingsTab} onClick={() => setPage(name)} active={name === currentPage}>
-    {children}
-  </SegmentedButton>
-);
-
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
 
   const [page, setPage] = useState('password');
-  
-  const options = [{ id: 'password', label: 'Password' }, { id: '2fa', label: 'Two-Factor Authentication' }, { id: 'baz', label: 'BagLager' }];
+
+  const options = [{ id: 'password', label: 'Password' }, { id: '2fa', label: 'Two-Factor Authentication' }];
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
 
@@ -36,12 +30,7 @@ const AccountSettingsOverlay = () => {
       <OverlaySection type="actions">
         <div className={styles.accountSettings}>
           <div className={styles.accountSettingsActions}>
-            <AccountSettingsTab name="password" currentPage={page} setPage={setPage}>
-              Password
-            </AccountSettingsTab>
-            <AccountSettingsTab name="2fa" currentPage={page} setPage={setPage}>
-              Two-Factor Authentication
-            </AccountSettingsTab>
+            <SegmentedButton size="small" value={page} onChange={(id) => setPage(id)} options={options} />
           </div>
           <div className={styles.accountSettingsContent}>
             {page === 'password' ? <PasswordSettings /> : null}
