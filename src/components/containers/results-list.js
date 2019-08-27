@@ -52,7 +52,7 @@ export const ResultItem = ({ className, onClick, href, children, active, selecte
       </TransparentButton>
       {href && (
         <div className={styles.linkButtonWrap}>
-          <Button size="small" href={href} newTab>
+          <Button size="small" href={href} target="blank">
             View <Arrow />
           </Button>
         </div>
