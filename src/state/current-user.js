@@ -82,17 +82,52 @@ export const { reducer, actions } = createSlice({
 })
 
 const load = runLatest(function * (action, store) {
+  let sharedOrAnonUser = yield getFromStorageWhenReady('cachedUser')
+  
+  // If we're signed out create a new anon user
+  if (!sharedOrAnonUser) {
+    sharedOrAnonUser = yield getAnonUser();
+  }
+
+  const newCachedUser = yield getCachedUser(sharedOrAnonUser);
+
+  if (newCachedUser === 'error') {
+    // Looks like our sharedUser is bad
+    // Anon users get their token and id deleted when they're merged into a user on sign in
+    // If it did change then quit out and let useEffect sort it out
+    if (usersMatch(sharedOrAnonUser, sharedUserRef.current)) {
+      // The user wasn't changed, so we need to fix it
+      setFetched(false);
+      sharedOrAnonUser = yield getSharedUser(sharedOrAnonUser.persistentToken);
+      setSharedUser(newSharedUser);
+      logSharedUserError(sharedUser, newSharedUser);
+    }
+  } else {
+    // The shared user is good, store it
+    setCachedUser(newCachedUser);
+    setFetched(true);
+  }
+  
+  
   
 })
 
 
-const handlers = {
+export const handlers = {
   [pageMounted]: load,
   [currentUserChangedInAnotherWindow]: load,
   [actions.requestedReload]: load,
+  [actions.loaded]: () => {
+    // save to localStorage
+  },
   [actions.updated]: () => {
     // TODO: save to localStorage
-  }
+  },
+  [actions.loggedOut]: async (_, store) => {
+    // TODO: clear localStorage
+    const anonUser = await getAnonUser();
+    store.dispatch(actions.loaded(anonUser));
+  },
 }
 
 
