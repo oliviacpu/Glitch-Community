@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { createAction } from 'redux-starter-kit';
+import { createSlice } from 'redux-starter-kit';
 import { useDispatch } from 'react-redux';
 
 import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
@@ -9,12 +9,25 @@ import { configureScope, captureException, captureMessage, addBreadcrumb } from 
 import useLocalStorage from './local-storage';
 import { getAPIForToken } from './api'; // eslint-disable-line import/no-cycle
 
-
-
-
+// takes a generator that yields promises, 
+// returns an async function that restarts from the beginning every time it is called.
 function runLatest (fn) {
-  let status = 'ready'
-  return fn
+  const state = {};
+  return async (args) => {
+    const isAlreadyRunning = state.currentGenerator;
+    state.currentGenerator = fn(args);
+    if (isAlreadyRunning) return;
+    
+    let promiseResult = null;
+    while (true) {
+      const { value, done } = state.currentGenerator.next(promiseResult);
+      if (done) {
+        state.currentGenerator = null;
+        return;
+      }
+      promiseResult = await value;
+    }
+  }
 }
 
 
