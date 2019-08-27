@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
-import { Button, Icon } from '@fogcreek/shared-components';
+import { Button, Icon, UnstyledButton } from '@fogcreek/shared-components';
 
 import { getTeamLink } from 'Models/team';
 import { getUserAvatarThumbnailUrl } from 'Models/user';
@@ -136,24 +136,24 @@ Are you sure you want to sign out?`)
           </div>
         )}
         <div className={styles.buttonWrap}>
-          <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
-            New Stuff
+          <Button variant="secondary" size="small" onClick={clickNewStuff}>
+            New Stuff <Icon className={styles.emoji} icon="dogFace" />
           </Button>
         </div>
         <div className={styles.buttonWrap}>
-          <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
-            Support
+          <Button as="a" variant="secondary" size="small" href="https://support.glitch.com">
+            Support <Icon className={styles.emoji} icon="ambulance" />
           </Button>
         </div>
         {userPasswordEnabled && (
           <div className={styles.buttonWrap}>
-            <Button size="small" type="tertiary" emoji="key" onClick={clickAccountSettings}>
-              Account Settings
+            <Button size="small" variant="secondary" onClick={clickAccountSettings}>
+              Account Settings <Icon className={styles.emoji} icon="key" />
             </Button>
           </div>
         )}
-        <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
-          Sign Out
+        <Button variant="secondary" size="small" onClick={clickSignout}>
+          Sign Out <Icon className={styles.emoji} icon="balloon" />
         </Button>
       </PopoverInfo>
     </PopoverDialog>
@@ -186,14 +186,14 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
         <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <Button type="dropDown" onClick={togglePopover} decorative={!props.user.id} ref={buttonRef}>
+              <UnstyledButton type="dropDown" onClick={togglePopover} decorative={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
                     <UserAvatar user={props.user} hideTooltip withinButton style={avatarStyle} />
                   </span>
                   <span className="down-arrow icon" />
                 </span>
-              </Button>
+              </UnstyledButton>
             );
 
             return (
