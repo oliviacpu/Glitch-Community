@@ -96,7 +96,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   };
   providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
-
+  const hasProjectOptions = projectOptions.length > 0;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
@@ -130,7 +130,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                 )}
                 <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                   <header className={styles.header}>
-                    <div className={styles.userListContainer}>
+                    <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasProjectOptions })}>
                       <ProfileListLoader project={project} />
                     </div>
                     {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
