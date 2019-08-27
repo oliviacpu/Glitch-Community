@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { Loader } from '@fogcreek/shared-components';
 
 import { getCollectionOwnerLink, getCollectionLink } from 'Models/collection';
 import Image from 'Components/images/image';
-import Loader from 'Components/loader';
 import { PopoverDialog, PopoverActions, PopoverTitle, ActionDescription, PopoverMenuButton } from 'Components/popover';
 import { useCollectionEditor } from 'State/collection';
 import { useNotifications } from 'State/notifications';

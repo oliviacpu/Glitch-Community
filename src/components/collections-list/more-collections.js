@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sampleSize } from 'lodash';
+import { Loader } from '@fogcreek/shared-components';
 
 import CoverContainer from 'Components/containers/cover-container';
 import DataLoader from 'Components/data-loader';
-import Loader from 'Components/loader';
 import SmallCollectionItem from 'Components/collection/collection-item-small';
 import Heading from 'Components/text/heading';
 import Row from 'Components/containers/row';

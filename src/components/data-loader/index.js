@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Loader from 'Components/loader';
+import { Loader } from '@fogcreek/shared-components';
+
 import { useAPI } from 'State/api';
 import { captureException } from 'Utils/sentry';
 
