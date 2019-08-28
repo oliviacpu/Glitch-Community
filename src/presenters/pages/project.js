@@ -30,7 +30,7 @@ import { useCurrentUser } from 'State/current-user';
 import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
-import { userIsProjectMember } from 'Models/project';
+import { userIsProjectMember, userIsProjectAdmin } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
@@ -143,6 +143,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const { currentUser } = useCurrentUser();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
+  const isAdmin = userIsProjectAdmin({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
   const api = useAPI();
@@ -254,7 +255,7 @@ const ProjectPage = ({ project: initialProject }) => {
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAdmin && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
