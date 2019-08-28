@@ -9,7 +9,6 @@ const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'
 // apply transformations to the client code so it can run in node
 const stylus = require('stylus');
 require('@babel/register')({
-  babelrc: false,
   only: [(location) => location.startsWith(src)],
   presets: [
     ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
@@ -25,6 +24,21 @@ require('@babel/register')({
     }],
   ],
 });
+console.log(require('@babel/core').transform(require('fs').readFileSync(src+'server.js'), {
+  presets: [
+    ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
+    '@babel/preset-react',
+  ],
+  plugins: [
+    ['module-resolver', {
+      alias: { '@sentry/browser': '@sentry/node' },
+    }],
+    ['css-modules-transform', {
+      preprocessCss: (data, filename) => stylus.render(data, { filename }),
+      extensions: ['.styl'],
+    }],
+  ],
+}).code);
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
@@ -50,7 +64,7 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   const startTime = performance.now();
   const { Page, resetState } = require('../src/server');
   const endTime = performance.now();
-  if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000} s`);
+  if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000}s`);
   isRequireCached = true;
 
   resetState();
