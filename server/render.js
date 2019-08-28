@@ -9,6 +9,7 @@ const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'
 // apply transformations to the client code so it can run in node
 const stylus = require('stylus');
 require('@babel/register')({
+  babelrc: false,
   only: [(location) => location.startsWith(src)],
   presets: [
     ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage' }],
@@ -45,13 +46,11 @@ const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
 const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
+  if (!isRequireCached) console.log('Transpiling for SSR...');
   const startTime = performance.now();
   const { Page, resetState } = require('../src/server');
   const endTime = performance.now();
-
-  if (!isRequireCached) {
-    console.log(`SSR transpilation took ${endTime - startTime} ms`);
-  }
+  if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000} s`);
   isRequireCached = true;
 
   resetState();
