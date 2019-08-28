@@ -8,7 +8,7 @@ dependencies:
   '@babel/register': 7.5.5
   '@babel/runtime': 7.5.5
   '@babel/runtime-corejs3': 7.5.5
-  '@fogcreek/shared-components': 0.2.0
+  '@fogcreek/shared-components': 0.5.0
   '@percy/cypress': 1.0.9
   '@sentry/browser': 4.6.6
   '@sentry/node': 4.6.6
@@ -2821,7 +2821,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-zVgvPwGK7c1aVdUVc9Qv7SqepOGRDrqCw7KZPSZziWGxSlbII3gmvGLPzLX4d0n0BMbamBacUrN22zOMyFFEkQ==
-  /@fogcreek/shared-components/0.2.0:
+  /@fogcreek/shared-components/0.5.0:
     dependencies:
       prop-types: 15.7.2
       react-textarea-autosize: 7.1.0
@@ -2832,7 +2832,7 @@ packages:
     peerDependencies:
       react: ^16.8.0
     resolution:
-      integrity: sha512-y3qTPOWCjm7Qa5PToy5cXCCjAY5w+okVGVpDqnyzSXmm4Amdx2NTztDBn5zBcupQtxy9Z76ywSQej/m3ku+5ag==
+      integrity: sha512-YSL2QqlnLhnlpxRSWV9YY3lBK1WAfpyXy4qg/4mwlYyTv1Q9icycRvjlniR6SUxmY9awY+Tlv/uscAhwLnTEXQ==
   /@mrmlnc/readdir-enhanced/2.2.1:
     dependencies:
       call-me-maybe: 1.0.1
@@ -6108,14 +6108,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-xYL0AMZJ4gFzJQsHUKa5jiWWi2vH77WVNg7JYRyewwj6oPh4yb/y6Y9ZCw9dsj/9UauMhtuxR+ogQd//EdEVNA==
-  /css-to-react-native/2.3.1:
+  /css-to-react-native/2.3.2:
     dependencies:
       camelize: 1.0.0
       css-color-keywords: 1.0.0
       postcss-value-parser: 3.3.1
     dev: false
     resolution:
-      integrity: sha512-yO+oEx1Lf+hDKasqQRVrAvzMCz825Huh1VMlEEDlRWyAhFb/FWb6I0KpEF1PkyKQ7NEdcx9d5M2ZEWgJAsgPvQ==
+      integrity: sha512-VOFaeZA053BqvvvqIA8c9n0+9vFppVBAHCp6JgFTtTMU3Mzi+XnelJ9XC9ul3BqFzZyQ5N+H0SnwsWT2Ebchxw==
   /css-tree/1.0.0-alpha.29:
     dependencies:
       mdn-data: 1.1.4
@@ -10319,6 +10319,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ey6EpYv0tEaIbM/nTDOpHciXUvd+ackQrJgEzBwemhZZIWZjcyodqEcrmqDy2BKRTM3a65kKBV4WtLXJDt26SQ==
+  /memoize-one/5.1.1:
+    dev: false
+    resolution:
+      integrity: sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
   /memoizerific/1.11.3:
     dependencies:
       map-or-similar: 1.5.0
@@ -10336,12 +10340,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-OpoguEYlI+RHz7x+i7gO1me/xVI=
-  /merge-anything/2.4.0:
+  /merge-anything/2.4.1:
     dependencies:
       is-what: 3.3.1
     dev: false
     resolution:
-      integrity: sha512-MhJcPOEcDUIbwU0LnEfx5S9s9dfQ/KPu4g2UA5T5G1LRKS0XmpDvJ9+UUfTkfhge+nA1gStE4tJAvx6lXLs+rg==
+      integrity: sha512-dYOIAl9GFCJNctSIHWOj9OJtarCjsD16P8ObCl6oxrujAG+kOvlwJuOD9/O9iYZ9aTi1RGpGTG9q9etIvuUikQ==
   /merge-deep/3.0.2:
     dependencies:
       arr-union: 3.1.0
@@ -13756,9 +13760,9 @@ packages:
       '@emotion/is-prop-valid': 0.8.2
       '@emotion/unitless': 0.7.4
       babel-plugin-styled-components: /babel-plugin-styled-components/1.10.6/styled-components@4.3.2
-      css-to-react-native: 2.3.1
-      memoize-one: 5.0.5
-      merge-anything: 2.4.0
+      css-to-react-native: 2.3.2
+      memoize-one: 5.1.1
+      merge-anything: 2.4.1
       prop-types: 15.7.2
       react-is: 16.9.0
       stylis: 3.5.4
@@ -14928,7 +14932,7 @@ specifiers:
   '@babel/register': 7.5.5
   '@babel/runtime': ^7.5.4
   '@babel/runtime-corejs3': ^7.5.5
-  '@fogcreek/shared-components': ^0.2.0
+  '@fogcreek/shared-components': ^0.5.0
   '@percy/cypress': ^1.0.9
   '@sentry/browser': ^4.6.6
   '@sentry/node': ^4.6.6
