@@ -12,7 +12,7 @@ require('@babel/register')({
   babelrc: false,
   only: [(location) => location.startsWith(src)],
   presets: [
-    ['@babel/preset-env', { targets: { node: true } }],
+    ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }],
     '@babel/preset-react',
   ],
   plugins: [
@@ -25,22 +25,6 @@ require('@babel/register')({
     }],
   ],
 });
-console.log(require('@babel/core').transform(require('fs').readFileSync(src+'server.js'), {
-  babelrc: false,
-  presets: [
-    ['@babel/preset-env', { targets: { node: true } }],
-    '@babel/preset-react',
-  ],
-  plugins: [
-    ['module-resolver', {
-      alias: { '@sentry/browser': '@sentry/node' },
-    }],
-    ['css-modules-transform', {
-      preprocessCss: (data, filename) => stylus.render(data, { filename }),
-      extensions: ['.styl'],
-    }],
-  ],
-}).code);
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
