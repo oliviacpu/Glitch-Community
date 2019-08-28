@@ -9,11 +9,10 @@ const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'
 // apply transformations to the client code so it can run in node
 const stylus = require('stylus');
 require('@babel/register')({
-  babelrc: false,
   only: [(location) => location.startsWith(src)],
   presets: [
-    ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }],
     '@babel/preset-react',
+    ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }],
   ],
   plugins: [
     ['module-resolver', {

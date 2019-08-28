@@ -6,7 +6,6 @@ const getOrFallback = async (label, fallback, func, ...args) => {
     return await func(...args);
   } catch (error) {
     console.warn(`Failed to ${label}: ${error.toString()}`);
-    console.log(error);
     captureException(error);
     return fallback;
   }
