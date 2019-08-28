@@ -80,7 +80,10 @@ module.exports = function(app) {
   proxyGlitch('sitemaps', 'sitemaps.glitch.me');
 
   // proxy home CMS (without rewriting paths)
-  app.use('/index/edit', proxy('community-home-editor.glitch.me', { timeout: 15000 }));
+  app.use('/index/edit', proxy('community-home-editor.glitch.me', { timeout: 5000 }));
+
+  // proxy home CMS (without rewriting paths)
+  app.use('/pupdates/edit', proxy('pupdates-editor.glitch.me', { timeout: 5000 }));
 
   return routes;
 };
