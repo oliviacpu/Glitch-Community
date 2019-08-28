@@ -4,6 +4,8 @@ const dayjs = require('dayjs');
 const createCache = require('./cache');
 const src = path.join(__dirname, '../src/');
 
+const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
+
 // apply transformations to the client code so it can run in node
 const stylus = require('stylus');
 require('@babel/register')({
@@ -28,9 +30,13 @@ require('@babel/register')({
 let isRequireCached = false;
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
+  // remove everything that babel transpiled
   Object.keys(require.cache).forEach((location) => {
     if (location.startsWith(src)) delete require.cache[location];
   });
+  // remove all rendered pages from the cache
+  clearCache();
+  // flag for performance profiling
   isRequireCached = false;
 });
 
@@ -46,6 +52,7 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   if (!isRequireCached) {
     console.log(`SSR transpilation took ${endTime - startTime} ms`);
   }
+  isRequireCached = true;
 
   resetState();
 
@@ -66,5 +73,4 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   return { html, helmet, context };
 };
 
-const getFromCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 module.exports = (url, context) => getFromCache(`signed ${context.SSR_SIGNED_IN ? 'in' : 'out'} ${url}`, render, url, context);
