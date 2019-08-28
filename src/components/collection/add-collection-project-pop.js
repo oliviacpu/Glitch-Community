@@ -40,6 +40,7 @@ const useTeamProjects = createAPIHook(async (api, teamId) => {
 function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollection }) {
   const [query, setQuery] = useState('');
   const parsedQuery = parseQuery(query);
+  console.log("parsedQuery", parsedQuery)
   const debouncedQuery = useDebouncedValue(query, 200);
   const { topResults, project: retrievedProjects, status } = useAlgoliaSearch(
     debouncedQuery,
