@@ -1,4 +1,5 @@
 const path = require('path');
+const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
 const src = path.join(__dirname, '../src/');
@@ -23,12 +24,14 @@ require('@babel/register')({
 });
 
 // clear client code from the require cache whenever it gets changed
-
+// it'll get loaded off the disk again when the render calls require
+let isRequireCached = false;
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
   Object.keys(require.cache).forEach((location) => {
     if (location.startsWith(src)) delete require.cache[location];
   });
+  isRequireCached = false;
 });
 
 const React = require('react');
@@ -36,7 +39,12 @@ const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
 const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
+  const startTime = performance.now();
   const { Page, resetState } = require('../src/server');
+  const endTime = performance.now();
+
+  console.log(`Transpiled for SSR in ${endTime - startTime} ms`, isRequireCached);
+
   resetState();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
