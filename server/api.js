@@ -9,7 +9,7 @@ const { allByKeys, getSingleItem } = require('Shared/api');
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 5000,
+  timeout: 1000,
 });
 
 async function getProjectFromApi(domain) {
@@ -40,8 +40,8 @@ async function getCultureZinePosts() {
   console.log('Fetching culture zine posts');
   const client = 'client_id=ghost-frontend&client_secret=c9a97f14ced8';
   const params = 'filter=featured:true&limit=4&fields=id,title,url,feature_image,primary_tag&include=tags';
-
-  const response = await api.get(`https://culture-zine.glitch.me/culture/ghost/api/v0.1/posts/?${client}&${params}`);
+  const url = `https://culture-zine.glitch.me/culture/ghost/api/v0.1/posts/?${client}&${params}`;
+  const response = await axios.get(url, { timeout: 10000 });
   return response.data.posts;
 }
 
