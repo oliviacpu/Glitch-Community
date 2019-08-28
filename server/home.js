@@ -1,4 +1,5 @@
 const fs = require('fs');
+const util = require('util');
 const path = require('path');
 const axios = require('axios');
 
@@ -12,22 +13,24 @@ const api = axios.create({
   timeout: 5000,
 });
 
-let pageCache = {};
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
-async function getData(page) {
-  if (!pageCache[page]) {
-    const json = await fs.readFile(path.join(__dirname, `../src/curated/${page}.json`));
-    pageCache[page] = JSON.parse(json);
+let homeCache = null;
+
+async function getHomeData() {
+  if (!homeCache) {
+    homeCache = readFile(path.join(__dirname, '../src/curated/home.json')).then(JSON.parse);
   }
-  return pageCache[page];
+  return homeCache;
 }
 
-async function saveDataToFile({ page, data, persistentToken }) {
+async function saveHomeDataToFile({ data, persistentToken }) {
   const teams = await getAllPages(api, `/v1/users/by/persistentToken/teams?persistentToken=${persistentToken}&limit=100`);
-  if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden'); 
+  if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
 
-  pageCache[page] = data;
-  await fs.writeFile(path.join(__dirname, `../src/curated/${page}.json`), JSON.stringify(data), { encoding: 'utf8' });
+  homeCache = Promise.resolve(data);
+  await writeFile(path.join(__dirname, '../src/curated/home.json'), JSON.stringify(data), { encoding: 'utf8' });
 }
 
-module.exports = { getData, saveDataToFile };
+module.exports = { getHomeData, saveHomeDataToFile };
