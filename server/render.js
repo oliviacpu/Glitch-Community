@@ -23,7 +23,7 @@ require('@babel/register')({
 });
 
 // clear client code from the require cache whenever it gets changed
-// it'll get loaded off the disk again when the render calls require
+
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
   Object.keys(require.cache).forEach((location) => {
