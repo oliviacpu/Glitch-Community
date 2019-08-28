@@ -30,16 +30,20 @@
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
     
-    <!-- <noscript><style>#fallback, #fallback-noscript { display: inline-block !important; } #fallback-img {display: block !important}</style></noscript> -->
+    <% if (!rendered) { %>
+    <noscript><style>#fallback, #fallback-noscript { display: inline-block !important } #fallback-img { display: block !important }</style></noscript>
+    <% } %>
   </head>
   <body>
     <script>
       var RUNNING_ON = '<%= RUNNING_ON %>';
       var ENVIRONMENT = '<%= ENVIRONMENT %>';
-      var EXTERNAL_ROUTES = <%- EXTERNAL_ROUTES %>;
+      var EXTERNAL_ROUTES = <%- JSON.stringify(EXTERNAL_ROUTES) %>;
       var PROJECT_DOMAIN = '<%= PROJECT_DOMAIN %>';
-      var ZINE_POSTS = <%- ZINE_POSTS %>;
-      var HOME_CONTENT = <%- HOME_CONTENT %>;
+      var ZINE_POSTS = <%- JSON.stringify(ZINE_POSTS) %>;
+      var HOME_CONTENT = <%- JSON.stringify(HOME_CONTENT) %>;
+      var API_CACHE = <%- JSON.stringify(API_CACHE) %>;
+      var SSR_SIGNED_IN = <%- SSR_SIGNED_IN %>;
       var BUILD_COMPLETE = <%- BUILD_COMPLETE %>;
       var BUILD_TIMESTAMP = '<%= BUILD_TIMESTAMP %>';
     </script>
@@ -74,35 +78,40 @@
       </div>
     </div>
 
+    <div id="react-root"><%- rendered %></div>
+
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>
     <% } %>
     <script>
-      var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
-      const isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
-      if (isIe) {
-        var fallback = document.getElementById('fallback');
-        var fallbackIe = document.getElementById('fallback-ie');
-        var fallbackImg = document.getElementById('fallback-img');
-        fallback.style.display = 'block';
-        fallbackIe.style.display = 'block';
-        fallbackImg.style.display = 'block';
-      } else if (isCodeRunningInsideGoogleTranslateIframe) {
-        var fallback = document.getElementById('fallback');
-        var fallbackImg = document.getElementById('fallback-img');
-        var fallbackTranslate = document.getElementById('fallback-translate');
-        fallback.style.display = 'block';
-        fallbackImg.style.display = 'block';
-        fallbackTranslate.style.display = 'block';
-        setTimeout(function(){
-          window.location.href = "https://glitch.com";      
-        }, 3000);
-      } else if (window.bootstrap) {
-        window.bootstrap()
-      } else if (!BUILD_COMPLETE) {
+      var container = document.getElementById('react-root');
+      function showFallback(name) {
         document.getElementById('fallback').removeAttribute('style');
         document.getElementById('fallback-img').removeAttribute('style');
-        document.getElementById('fallback-notbuilt').removeAttribute('style');
+        document.getElementById('fallback-' + name).removeAttribute('style');
+        container.style.display = 'none';
+      }
+      var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
+      var isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      if (isIe) {
+        // ie doesn't support our css
+        showFallback('ie');
+      } else if (isCodeRunningInsideGoogleTranslateIframe) {
+        // only translate server rendered pages
+        if (!container.hasChildNodes()) {
+          showFallback('translate');
+          setTimeout(function() {
+            window.location.href = "https://glitch.com";      
+          }, 3000);
+        }
+      } else if (window.bootstrap) {
+        window.bootstrap(container);
+      } else if (!BUILD_COMPLETE) {
+        // we can't show the server rendered page if the css is still building
+        showFallback('notbuilt');
+      } else {
+        // js failed to parse, odds are the css would be broken too
+        showFallback('noscript');
       }
       analytics.load("ZE6VsqXhz5izMM2cqRrVEDIrJWUKntoX");
     </script>

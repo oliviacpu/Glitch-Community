@@ -15,15 +15,16 @@ import CollectionsList from 'Components/collections-list';
 import DeletedProjects from 'Components/deleted-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import AuthDescription from 'Components/fields/auth-description';
-import { getLink } from 'Models/user';
+import { getUserLink } from 'Models/user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useUserEditor } from 'State/user';
+import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';
 
 function syncPageToLogin(login) {
-  history.replaceState(null, null, getLink({ login }));
+  history.replaceState(null, null, getUserLink({ login }));
 }
 
 const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) => {
@@ -84,6 +85,8 @@ const UserPage = ({ user: initialUser }) => {
   const projectOptions = { ...funcs, user };
   const { _deletedProjects, featuredProjectId } = user;
 
+  useFocusFirst();
+
   const { currentUser: maybeCurrentUser } = useCurrentUser();
   const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
   const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;
@@ -95,7 +98,7 @@ const UserPage = ({ user: initialUser }) => {
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className={styles.container}>
+    <main id="main" className={styles.container}>
       <section>
         <UserProfileContainer
           item={user}
@@ -139,11 +142,8 @@ const UserPage = ({ user: initialUser }) => {
         <ProjectsList
           dataCy="pinned-projects"
           layout="grid"
-          title={
-            <>
-              Pinned Projects <Emoji inTitle name="pushpin" />
-            </>
-          }
+          title="Pinned Projects"
+          titleEmoji="pushpin"
           projects={pinnedProjects}
           projectOptions={projectOptions}
         />
@@ -157,6 +157,8 @@ const UserPage = ({ user: initialUser }) => {
             user,
           }))}
           isAuthorized={isAuthorized}
+          enablePagination
+          enableFiltering={user.collections.length > 6}
           maybeCurrentUser={maybeCurrentUser}
         />
       )}

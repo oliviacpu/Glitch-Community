@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
 
-import { getProfileStyle as getTeamProfileStyle } from 'Models/team';
-import { getProfileStyle as getUserProfileStyle } from 'Models/user';
+import { getTeamProfileStyle } from 'Models/team';
+import { getUserProfileStyle } from 'Models/user';
 import styles from './cover-container.styl';
 
 const cx = classNames.bind(styles);
@@ -19,9 +19,8 @@ const CoverContainer = ({ coverActions, children, type, item }) => {
     coverContainer: true,
     hasCoverImage: item.hasCoverImage,
   });
-  const cache = item.updatedAt;
   return (
-    <div className={className} style={getProfileStyles[type]({ ...item, cache })}>
+    <div className={className} style={getProfileStyles[type](item)}>
       {children}
       <div className={styles.buttonWrap}>{coverActions && <TrackedButtonGroup actions={coverActions} />}</div>
     </div>

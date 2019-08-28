@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import CoverContainer from 'Components/containers/cover-container';
 import ProfileList from 'Components/profile-list';
 import TrackedButtonGroup from 'Components/buttons/tracked-button-group';
-import { getAvatarStyle as getUserAvatarStyle } from 'Models/user';
+import { getUserAvatarStyle } from 'Models/user';
 import styles from './styles.styl';
 
 const UserProfileContainer = ({ item, children, avatarActions, coverActions, teams }) => {

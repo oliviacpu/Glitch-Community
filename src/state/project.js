@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, createContext } from 'react';
+import React, { useState, useCallback, useContext, createContext, useEffect } from 'react';
 
 import useUploader from 'State/uploader';
 import { useAPI, useAPIHandlers } from 'State/api';
@@ -52,6 +52,7 @@ function loadProjectMembers(api, projectIds, setProjectResponses, withCacheBust)
 
 const ProjectMemberContext = createContext();
 const ProjectReloadContext = createContext();
+
 export const ProjectContextProvider = ({ children }) => {
   const [projectResponses, setProjectResponses] = useState({});
   const api = useAPI();
@@ -92,6 +93,7 @@ export function useProjectEditor(initialProject) {
   const { handleError, handleErrorForInput } = useErrorHandlers();
   const { getAvatarImagePolicy } = assets.useAssetPolicy();
   const { updateItem, deleteItem, updateProjectDomain } = useAPIHandlers();
+  useEffect(() => setProject(initialProject), [initialProject]);
 
   async function updateFields(changes) {
     await updateItem({ project }, changes);

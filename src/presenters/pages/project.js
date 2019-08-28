@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 
 import Helmet from 'react-helmet';
@@ -22,13 +24,20 @@ import { ShowButton, EditButton } from 'Components/project/project-actions';
 import AuthDescription from 'Components/fields/auth-description';
 import Layout from 'Components/layout';
 import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
-import { AnalyticsContext } from 'State/segment-analytics';
+import BookmarkButton from 'Components/buttons/bookmark-button';
+import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useProjectEditor, getProjectByDomain } from 'State/project';
-import { getLink as getUserLink } from 'Models/user';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useProjectEditor } from 'State/project';
+import { getUserLink } from 'Models/user';
 import { userIsProjectMember } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
+import useFocusFirst from 'Hooks/use-focus-first';
+import useDevToggle from 'State/dev-toggles';
+import { useAPI, useAPIHandlers } from 'State/api';
+import { useCachedProject } from 'State/api-cache';
+import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -36,12 +45,12 @@ function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const filteredCollections = (collections) => collections.filter((c) => c.user || c.team);
+const filteredCollections = (collections) => collections.filter((c) => (c.user || c.team) && !c.isMyStuff);
 
 const IncludedInCollections = ({ projectId }) => (
   <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
     {(collections) =>
-      collections.length > 0 && (
+      filteredCollections(collections).length > 0 && (
         <>
           <Heading tagName="h2">Included in Collections</Heading>
           <Row items={filteredCollections(collections)}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
@@ -59,15 +68,19 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = ({ domain }) => (
+const ReadmeLoader = withRouter(({ domain, location }) => (
   <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
-    {({ data }) => (
-      <Expander height={250}>
-        <Markdown>{data.toString()}</Markdown>
-      </Expander>
-    )}
+    {({ data }) =>
+      location.hash ? (
+        <Markdown linkifyHeadings>{data.toString()}</Markdown>
+      ) : (
+        <Expander height={location.hash ? Infinity : 250}>
+          <Markdown linkifyHeadings>{data.toString()}</Markdown>
+        </Expander>
+      )
+    }
   </DataLoader>
-);
+));
 
 ReadmeLoader.propTypes = {
   domain: PropTypes.string.isRequired,
@@ -124,16 +137,48 @@ DeleteProjectPopover.propTypes = {
 };
 
 const ProjectPage = ({ project: initialProject }) => {
-  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(
-    initialProject,
-  );
-
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
+  useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
+  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  const reloadCollectionProjects = useCollectionReload();
+
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
+  );
+
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
+
   return (
-    <main>
+    <main id="main">
+      <Helmet title={project.domain} />
       <section id="info">
         <ProjectProfileContainer
           currentUser={currentUser}
@@ -144,22 +189,42 @@ const ProjectPage = ({ project: initialProject }) => {
           }}
         >
           {isAuthorized ? (
-            <div className={styles.headingWrap}>
-              <Heading tagName="h1">
-                <OptimisticTextInput
-                  labelText="Project Domain"
-                  value={project.domain}
-                  onChange={updateDomainAndSync}
-                  placeholder="Name your project"
-                />
-              </Heading>
-              <PrivateToggle isPrivate={project.private} setPrivate={updatePrivate} />
-            </div>
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">
+                  <OptimisticTextInput
+                    labelText="Project Domain"
+                    value={project.domain}
+                    onChange={updateDomainAndSync}
+                    placeholder="Name your project"
+                  />
+                </Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                  </div>
+                )}
+              </div>
+              <div className={styles.privacyToggle}>
+                <PrivateToggle isPrivate={!!project.private} setPrivate={updatePrivate} />
+              </div>
+            </>
           ) : (
-            <div className={styles.headingWrap}>
-              <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
-              {project.private && <PrivateBadge />}
-            </div>
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                  </div>
+                )}
+              </div>
+              {project.private && (
+                <div className={styles.privacyToggle}>
+                  <PrivateBadge />
+                </div>
+              )}
+            </>
           )}
           {users.length + teams.length > 0 && (
             <div>
@@ -183,7 +248,7 @@ const ProjectPage = ({ project: initialProject }) => {
         </ProjectProfileContainer>
       </section>
       <div className={styles.projectEmbedWrap}>
-        <ProjectEmbed project={project} />
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
       </div>
       <section id="readme">
         <ReadmeLoader domain={domain} />
@@ -220,23 +285,24 @@ async function addProjectBreadcrumb(projectWithMembers) {
   return projectWithMembers;
 }
 
-const ProjectPageContainer = ({ name: domain }) => (
-  <Layout>
-    <AnalyticsContext properties={{ origin: 'project' }}>
-      <DataLoader get={(api) => getProjectByDomain(api, domain).then(addProjectBreadcrumb)} renderError={() => <NotFound name={domain} />}>
-        {(project) =>
-          project ? (
-            <>
-              <Helmet title={project.domain} />
-              <ProjectPage project={project} />
-            </>
-          ) : (
-            <NotFound name={domain} />
-          )
-        }
-      </DataLoader>
-    </AnalyticsContext>
-  </Layout>
-);
+const ProjectPageContainer = ({ name: domain }) => {
+  const { status, value: project } = useCachedProject(domain);
+  useEffect(() => {
+    if (project) addProjectBreadcrumb(project);
+  }, [project]);
+  return (
+    <Layout>
+      <AnalyticsContext properties={{ origin: 'project' }}>
+        {project ? <ProjectPage project={project} /> : (
+          <>
+            {status === 'ready' && <NotFound name={domain} />}
+            {status === 'loading' && <Loader />}
+            {status === 'error' && <NotFound name={domain} />}
+          </>
+        )}
+      </AnalyticsContext>
+    </Layout>
+  );
+};
 
 export default ProjectPageContainer;

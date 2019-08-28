@@ -14,7 +14,7 @@ import styles from './project-embed.styl';
 
 const cx = classNames.bind(styles);
 
-const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
+const ProjectEmbed = ({ project, top, addProjectToCollection, loading }) => {
   const projectOptions = useProjectOptions(project, addProjectToCollection ? { addProjectToCollection } : {});
   const { currentUser } = useCurrentUser();
   const isMember = currentUser.projects.some(({ id }) => id === project.id);
@@ -27,11 +27,15 @@ const ProjectEmbed = ({ project, top, addProjectToCollection }) => {
     <section className={styles.projectEmbed}>
       {top}
       <div className={styles.embedWrap}>
-        <Embed domain={project.domain} />
+        <Embed domain={project.domain} loading={loading} />
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.left}>
-          {isMember ? (<EditButton name={project.id} isMember={isMember} size="small" />) : (<ReportButton reportedType="project" reportedModel={project} />)}
+          {isMember ? (
+            <EditButton name={project.id} isMember={isMember} size="small" />
+          ) : (
+            <ReportButton reportedType="project" reportedModel={project} />
+          )}
         </div>
         <div className={cx({ right: true, buttonWrap: true })}>
           {projectOptions.addProjectToCollection && (
@@ -50,11 +54,13 @@ ProjectEmbed.propTypes = {
   project: PropTypes.object.isRequired,
   addProjectToCollection: PropTypes.func,
   top: PropTypes.any,
+  loading: PropTypes.oneOf(['lazy', 'eager', 'auto']),
 };
 
 ProjectEmbed.defaultProps = {
   addProjectToCollection: null,
   top: null,
+  loading: 'auto',
 };
 
 export default ProjectEmbed;

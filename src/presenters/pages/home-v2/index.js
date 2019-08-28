@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
-import { withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import Button from 'Components/buttons/button';
@@ -19,8 +18,10 @@ import Link from 'Components/link';
 import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
+import VisibilityContainer from 'Components/visibility-container';
+import LazyLoader from 'Components/lazy-loader';
 import { useCurrentUser } from 'State/current-user';
-import { getEditorUrl, getAvatarUrl } from 'Models/project';
+import { getEditorUrl, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useGlobals } from 'State/globals';
 
@@ -86,7 +87,7 @@ const AppsWeLove = ({ content }) => {
       <div className={styles.appsWeLoveSmallLayout}>
         {content.map(({ id, title, description, domain }) => (
           <Link key={id} to={`/~${domain}`} className={classnames(styles.plainLink, styles.appItemMini)}>
-            <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+            <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
             <div className={styles.appContent}>
               <h4 className={styles.h4}>{title}</h4>
               <p>{description}</p>
@@ -94,6 +95,7 @@ const AppsWeLove = ({ content }) => {
           </Link>
         ))}
       </div>
+
       <Tabs forceRenderTabPanel selectedIndex={currentTab} onSelect={(index) => setCurrentTab(index)} className={styles.appsWeLoveBigLayout}>
         <TabList className={styles.appsWeLoveList}>
           {content.map(({ id, domain, title, description, users }, i) => (
@@ -108,7 +110,7 @@ const AppsWeLove = ({ content }) => {
                   <h4 className={styles.h4}>{title}</h4>
                   <p>{description}</p>
                 </div>
-                <img src={getAvatarUrl(id)} alt="" className={styles.appAvatar} />
+                <img src={getProjectAvatarUrl({ id })} alt="" className={styles.appAvatar} />
               </div>
             </Tab>
           ))}
@@ -190,36 +192,45 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
 );
 
 const CultureZine = ({ content }) => (
-  <HomeSection id="culture-zine" className={styles.cultureZine}>
-    <div className={styles.cultureZineContainer}>
-      <h2 className={styles.h2}>
-        <Mark color="#CBC3FF">Where tech meets culture</Mark>
-      </h2>
-      <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
-      <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
-        {({ content: cultureZineItems }) => (
-          <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
-            {({ title, primary_tag: source, feature_image: img, url }) => (
-              <Link to={`/culture${url}`} className={styles.plainLink}>
-                <div className={styles.cultureZineImageWrap}>
-                  <MaskImage src={img} />
-                </div>
-                <div className={styles.cultureZineText}>
-                  <h4 className={styles.h4}>{title}</h4>
-                  {source && <p>{source.name}</p>}
-                </div>
-              </Link>
-            )}
-          </Row>
-        )}
-      </Row>
-      <div className={styles.readMoreLink}>
-        <Button href="https://glitch.com/culture/">
-          Read More on Culture <Arrow />
-        </Button>
-      </div>
-    </div>
-  </HomeSection>
+  <VisibilityContainer>
+    {({ wasEverVisible }) => (
+      <HomeSection id="culture-zine" className={styles.cultureZine}>
+        <div className={styles.cultureZineContainer}>
+          <h2 className={styles.h2}>
+            <Mark color="#CBC3FF">Where tech meets culture</Mark>
+          </h2>
+          <p className={styles.subtitle}>Code is shaping the world around us. We’ll help you understand where it’s going.</p>
+
+          <LazyLoader delay={wasEverVisible ? 0 : 3000}>
+            <>
+              <Row count={2} items={[{ id: 0, content: content.slice(0, 2) }, { id: 1, content: content.slice(2, 4) }]}>
+                {({ content: cultureZineItems }) => (
+                  <Row items={cultureZineItems} count={2} className={styles.cultureZineRow}>
+                    {({ title, primary_tag: source, feature_image: img, url }) => (
+                      <Link to={`/culture${url}`} className={styles.plainLink}>
+                        <div className={styles.cultureZineImageWrap}>
+                          <MaskImage src={img} />
+                        </div>
+                        <div className={styles.cultureZineText}>
+                          <h4 className={styles.h4}>{title}</h4>
+                          {source && <p>{source.name}</p>}
+                        </div>
+                      </Link>
+                    )}
+                  </Row>
+                )}
+              </Row>
+              <div className={styles.readMoreLink}>
+                <Button href="https://glitch.com/culture/">
+                  Read More on Culture <Arrow />
+                </Button>
+              </div>
+            </>
+          </LazyLoader>
+        </div>
+      </HomeSection>
+    )}
+  </VisibilityContainer>
 );
 
 const buildingGraphics = [
@@ -261,7 +272,7 @@ const MadeInGlitch = () => (
 // loggedIn and hasProjects are passed as props instead of pulled from context
 // because we want the preview to show what an anonymous user would see
 export const Home = ({ data, loggedIn, hasProjects }) => (
-  <main className={styles.homeContainer}>
+  <main id="main" className={styles.homeContainer}>
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
@@ -278,13 +289,14 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
   </main>
 );
 
-export const HomePreview = withRouter(({ history }) => {
+export const HomePreview = () => {
   const api = useAPI();
   const { origin, ZINE_POSTS } = useGlobals();
   const onPublish = async (data) => {
     try {
       await api.post(`${origin}/api/home`, data);
-      history.push('/');
+      // need to do a hard reload for this to take effect
+      window.location = '/';
     } catch (e) {
       console.error(e);
     }
@@ -297,7 +309,7 @@ export const HomePreview = withRouter(({ history }) => {
         onPublish={onPublish}
         previewMessage={
           <>
-            This is a live preview of edits done with <Link to="https://community-home-editor.glitch.me">Community Home Editor.</Link>
+            This is a live preview of edits done with <Link to="/index/edit">Community Home Editor.</Link>
           </>
         }
       >
@@ -305,16 +317,16 @@ export const HomePreview = withRouter(({ history }) => {
       </PreviewContainer>
     </Layout>
   );
-});
+};
 
 const HomeWithProductionData = () => {
   const { currentUser } = useCurrentUser();
-  const { HOME_CONTENT, ZINE_POSTS } = useGlobals();
+  const { HOME_CONTENT, ZINE_POSTS, SSR_SIGNED_IN } = useGlobals();
   return (
     <Layout>
       <Home
         data={{ ...HOME_CONTENT, cultureZine: ZINE_POSTS.slice(0, 4) }}
-        loggedIn={!!currentUser.login}
+        loggedIn={!!currentUser.login || (!currentUser.id && SSR_SIGNED_IN)}
         hasProjects={currentUser.projects.length > 0}
       />
     </Layout>

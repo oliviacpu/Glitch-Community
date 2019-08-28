@@ -12,7 +12,7 @@ import TransparentButton from 'Components/buttons/transparent-button';
 import AnimationContainer from 'Components/animation-container';
 import Grid from 'Components/containers/grid';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
-import { getAvatarUrl } from 'Models/project';
+import { getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
 import { useTrackedFunc } from 'State/segment-analytics';
 
@@ -23,11 +23,10 @@ const DeletedProject = ({ project, onClick }) => {
   if (!onClick) {
     return (
       <div className={styles.deletedProject}>
-        <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
+        <img className={styles.avatar} src={getProjectAvatarUrl(project)} alt="" />
         <div className={styles.projectName}>{project.domain}</div>
         <TooltipContainer
           type="action"
-          id="undelete-project"
           target={
             <div className={styles.buttonWrap}>
               <Button size="small" disabled decorative>
@@ -44,7 +43,7 @@ const DeletedProject = ({ project, onClick }) => {
     <AnimationContainer type="slideUp" onAnimationEnd={onClick}>
       {(animateAndDeleteProject) => (
         <TransparentButton onClick={animateAndDeleteProject} className={styles.deletedProject}>
-          <img className={styles.avatar} src={getAvatarUrl(project.id)} alt="" />
+          <img className={styles.avatar} src={getProjectAvatarUrl(project)} alt="" />
           <span className={styles.projectName}>{project.domain}</span>
           <div className={styles.buttonWrap}>
             <Button size="small" decorative>

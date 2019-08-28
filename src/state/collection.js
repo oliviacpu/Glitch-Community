@@ -4,13 +4,52 @@ import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
+import { createCollection } from 'Models/collection';
+import { AddProjectToCollectionMsg } from 'Components/notification';
+
+export const toggleBookmark = async ({
+  api,
+  project,
+  currentUser,
+  createNotification,
+  myStuffEnabled,
+  addProjectToCollection,
+  removeProjectFromCollection,
+  setHasBookmarked,
+  hasBookmarked,
+  reloadCollectionProjects,
+}) => {
+  try {
+    let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+    if (hasBookmarked) {
+      setHasBookmarked(false);
+      await removeProjectFromCollection({ project, collection: myStuffCollection });
+      createNotification(`Removed ${project.domain} from collection My Stuff`);
+    } else {
+      setHasBookmarked(true);
+      if (!myStuffCollection) {
+        myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+      }
+      await addProjectToCollection({ project, collection: myStuffCollection });
+      const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+      createNotification(
+        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
+        { type: 'success' },
+      );
+    }
+    reloadCollectionProjects([myStuffCollection]);
+  } catch (error) {
+    captureException(error);
+    createNotification('Something went wrong, try refreshing?', { type: 'error' });
+  }
+};
 
 export const getCollectionWithProjects = async (api, { owner, name }) => {
   const fullUrl = `${encodeURIComponent(owner)}/${name}`;
   try {
     const [collection, projects] = await Promise.all([
       getSingleItem(api, `/v1/collections/by/fullUrl?fullUrl=${fullUrl}`, `${owner}/${name}`),
-      getAllPages(api, `/v1/collections/by/fullUrl/projects?limit=100&fullUrl=${fullUrl}`),
+      getAllPages(api, `/v1/collections/by/fullUrl/projects?fullUrl=${fullUrl}&orderKey=projectOrder&limit=100`),
     ]);
     return { ...collection, projects };
   } catch (error) {
@@ -52,8 +91,11 @@ function loadCollectionProjects(api, collections, setResponses, withCacheBust) {
 const CollectionProjectContext = createContext();
 const CollectionReloadContext = createContext();
 
+// we mock out the projects for the placeholder my stuff collections
+const initialResponses = { nullMyStuff: { projects: { status: 'ready', value: [] } } };
+
 export const CollectionContextProvider = ({ children }) => {
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState(initialResponses);
   const api = useAPI();
 
   const getCollectionProjects = useCallback(
@@ -76,7 +118,9 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
+        {children}
+      </CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };

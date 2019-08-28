@@ -1,5 +1,6 @@
 /* eslint-disable no-bitwise */
 import { hex as getHexContrastRatio } from 'wcag-contrast';
+import randomColor from 'randomcolor';
 
 export const getContrastWithLightText = (hex) => getHexContrastRatio(hex, '#fff');
 
@@ -24,3 +25,18 @@ export const hexToRgbA = (hex) => {
   }
   return false;
 };
+
+export const isGoodColorContrast = (hex) => getContrastWithDarkText(hex) >= 4.5 || getContrastWithLightText(hex) >= 4.5;
+
+export function pickRandomColors(count) {
+  const newColors = randomColor({ luminosity: 'light', count });
+  if (newColors.every((color) => isGoodColorContrast(color))) {
+    return newColors;
+  }
+  return pickRandomColors(count);
+}
+
+export function pickRandomColor() {
+  const [newColor] = pickRandomColors(1);
+  return newColor;
+}

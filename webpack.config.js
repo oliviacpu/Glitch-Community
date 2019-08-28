@@ -1,12 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AutoprefixerStylus = require('autoprefixer-stylus');
 const StatsPlugin = require('stats-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { EnvironmentPlugin } = require('webpack');
 const aliases = require('./shared/aliases');
 
 const BUILD = path.resolve(__dirname, 'build');
@@ -44,20 +46,42 @@ module.exports = smp.wrap({
     path: BUILD,
     publicPath: '/',
   },
-  devtool: mode === 'production' ? 'source-map' : 'cheap-module-source-map',
+  devtool: mode === 'production' ? 'source-map' : 'eval-source-map',
   optimization: {
     splitChunks: {
       chunks: 'initial',
-      maxInitialRequests: 5,
+      maxInitialRequests: 6,
       cacheGroups: {
         curated: {
           name: 'curated',
           test: /[\\/]src[\\/]curated[\\/]/,
           minSize: 0,
+          priority: 1,
         },
         react: {
           name: 'react',
           test: /[\\/]node_modules[\\/]react[-\\/]/,
+          priority: 3,
+        },
+        markdown: {
+          name: 'markdown',
+          test: /[\\/]node_modules[\\/]markdown-it[-\\/]/,
+          priority: 2,
+        },
+        algolia: {
+          name: 'algolia',
+          test: /[\\/]node_modules[\\/]algoliasearch[-\\/]/,
+          priority: 2,
+        },
+        lodash: {
+          name: 'lodash',
+          test: /[\\/]node_modules[\\/]lodash[-\\/]/,
+          priority: 2,
+        },
+        sentry: {
+          name: 'sentry',
+          test: /[\\/]node_modules[\\/]@sentry[-\\/]/,
+          priority: 2,
         },
         modules: {
           name: 'dependencies',
@@ -69,8 +93,8 @@ module.exports = smp.wrap({
     minimizer: [new TerserPlugin({ terserOptions: { safari10: true }, sourceMap: true })],
     noEmitOnErrors: true,
     runtimeChunk: {
-      name: "manifest"
-    }
+      name: 'manifest',
+    },
   },
   context: path.resolve(__dirname),
   resolve: {
@@ -112,8 +136,9 @@ module.exports = smp.wrap({
                 loader: 'css-loader?modules',
                 options: {
                   sourceMap: mode !== 'production', // no css source maps in production
-                  modules: true,
-                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                  modules: {
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                  },
                 },
               },
               {
@@ -160,7 +185,10 @@ module.exports = smp.wrap({
       hash: true,
       publicPath: true,
     }),
-    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets]}),
+    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets] }),
+    new EnvironmentPlugin({
+      FWD_SUBDOMAIN_PREFIX: process.env.PROJECT_NAME || os.userInfo().username,
+    }),    
   ],
   watchOptions: {
     ignored: /node_modules/,

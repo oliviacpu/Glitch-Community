@@ -1,3 +1,4 @@
+const { captureException } = require('@sentry/node');
 const express = require('express');
 const helmet = require('helmet');
 const enforce = require('express-sslify');
@@ -13,6 +14,7 @@ const cheerio = require('cheerio');
 const { getProject, getTeam, getUser, getCollection, getZine } = require('./api');
 const initWebpack = require('./webpack');
 const constants = require('./constants');
+const renderPage = require('./render');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
 const { getData, saveDataToFile } = require('./home');
 
@@ -23,7 +25,10 @@ const DEFAULT_PROJECT_DESCRIPTION = (domain) => `Check out ~${domain} on Glitch,
 module.exports = function(external) {
   const app = express.Router();
 
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  // don't enforce HTTPS if building the site locally, not on glitch.com
+  if (!process.env.RUNNING_LOCALLY) {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  }
 
   // CORS - Allow pages from any domain to make requests to our API
   app.use(function(request, response, next) {
@@ -47,13 +52,15 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL }) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
-
-    const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
-
     let scripts = [];
     let styles = [];
+
+    if (wistiaVideoId) {
+      scripts.push('//fast.wistia.com/assets/external/E-v1.js');
+      scripts.push(`//fast.wistia.com/embed/medias/${wistiaVideoId}.jsonp`);
+    }
 
     try {
       const stats = JSON.parse(await readFilePromise('build/stats.json'));
@@ -75,6 +82,30 @@ module.exports = function(external) {
       built = false;
     }
 
+    const signedIn = !!req.cookies.hasLogin;
+    const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
+
+    let ssr = { rendered: null };
+    if (shouldRender) {
+      try {
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const { html, context } = await renderPage(url, {
+          API_CACHE: cache,
+          EXTERNAL_ROUTES: external,
+          HOME_CONTENT: homeContent,
+          SSR_SIGNED_IN: signedIn,
+          ZINE_POSTS: zine || [],
+        });
+        ssr = {
+          rendered: html,
+          ...context,
+        };
+      } catch (error) {
+        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
+        captureException(error);
+      }
+    }
+
     res.render('index.ejs', {
       title,
       socialTitle,
@@ -85,12 +116,15 @@ module.exports = function(external) {
       canonicalUrl,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
-      EXTERNAL_ROUTES: JSON.stringify(external),
-      ZINE_POSTS: JSON.stringify(zine || []),
-      HOME_CONTENT: JSON.stringify(homeContent),
+      API_CACHE: cache,
+      EXTERNAL_ROUTES: external,
+      ZINE_POSTS: zine || [],
+      HOME_CONTENT: homeContent,
+      SSR_SIGNED_IN: signedIn,
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,
+      ...ssr,
     });
   }
 
@@ -114,11 +148,14 @@ module.exports = function(external) {
     const { domain } = req.params;
     const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
+    
     if (!project) {
-      await render(res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, false);
       return;
     }
-    const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
+  
+    // don't show the real avatar if the project has been suspended
+    const avatar = project.suspendedReason ? imageDefault : `${CDN_URL}/project-avatar/${project.id}.png`
 
     const helloTemplateDescriptions = new Set([
       'Your very own basic web page, ready for you to customize.',
@@ -129,14 +166,15 @@ module.exports = function(external) {
     const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
 
     let description;
-    if (usesDefaultDescription || !project.description) {
+    if (usesDefaultDescription || !project.description || project.suspendedReason) {
       description = DEFAULT_PROJECT_DESCRIPTION(domain);
     } else {
       const textDescription = cheerio.load(md.render(project.description)).text();
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(res, { title: domain, canonicalUrl, description, image: avatar });
+    // const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, false);
   });
 
   app.get('/@:name', async (req, res) => {
@@ -162,14 +200,14 @@ module.exports = function(external) {
         args.image = `${CDN_URL}/76c73a5d-d54e-4c11-9161-ddec02bd7c67%2Fteam-avatar.png?1558031923766`;
       }
 
-      await render(res, args);
+      await render(req, res, args);
       return;
     }
     const user = await getUser(name);
     if (user) {
       const description = DEFAULT_USER_DESCRIPTION(user.login, user.name) + cheerio.load(md.render(user.description)).text();
 
-      await render(res, {
+      await render(req, res, {
         title: user.name || `@${user.login}`,
         canonicalUrl,
         description,
@@ -177,7 +215,7 @@ module.exports = function(external) {
       });
       return;
     }
-    await render(res, { title: `@${name}`, description: `We couldn't find @${name}`, canonicalUrl });
+    await render(req, res, { title: `@${name}`, description: `We couldn't find @${name}`, canonicalUrl });
   });
 
   app.get('/@:name/:collection', async (req, res) => {
@@ -193,10 +231,10 @@ module.exports = function(external) {
       description += ` 🎏 A collection of apps by @${author}`;
       description = description.trimStart(); // if there was no description, trim space before the fish
 
-      await render(res, { title: name, description, canonicalUrl });
+      await render(req, res, { title: name, description, canonicalUrl });
       return;
     }
-    await render(res, { title: collection, description: `We couldn't find @${name}/${collection}`, canonicalUrl });
+    await render(req, res, { title: collection, description: `We couldn't find @${name}/${collection}`, canonicalUrl });
   });
 
   app.get('/auth/:domain', async (req, res) => {
@@ -208,7 +246,7 @@ module.exports = function(external) {
       RUNNING_ON: process.env.RUNNING_ON,
     });
   });
-  
+
   app.get('/api/home', async (req, res) => {
     const data = await getData('home');
     res.send(data);
@@ -245,21 +283,29 @@ module.exports = function(external) {
     }
   });
 
+  app.get(['/', '/index.html'], async (req, res) => {
+    const socialTitle = 'Glitch: The friendly community where everyone builds the web';
+    const description = 'Simple, powerful, free tools to create and use millions of apps.';
+    const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
+    await render(req, res, { title: 'Glitch', socialTitle, description, image, wistiaVideoId: 'z2ksbcs34d' }, true);
+  });
+
   app.get('/create', async (req, res) => {
     const title = 'Glitch - Create';
     const socialTitle = 'Get Started Creating on Glitch';
     const description = 'Glitch is a collaborative programming environment that lives in your browser and deploys code as you type.';
     const image = `${CDN_URL}/50f784d9-9995-4fa4-a185-b4b1ea6e77c0/create-illustration.png?v=1562612212463`;
     const canonicalUrl = `${APP_URL}/create`;
-    await render(res, { title, description, image, socialTitle, canonicalUrl });
+    await render(req, res, { title, socialTitle, description, image, canonicalUrl, wistiaVideoId: '2vcr60pnx9' }, true);
   });
+  
 
   app.get('*', async (req, res) => {
     const title = 'Glitch';
     const socialTitle = 'Glitch: The friendly community where everyone builds the web';
     const description = 'Simple, powerful, free tools to create and use millions of apps.';
     const image = `${CDN_URL}/0aa2fffe-82eb-4b72-a5e9-444d4b7ce805%2Fsocial-banner.png?v=1562683795781`;
-    await render(res, { title, description, image, socialTitle });
+    await render(req, res, { title, description, image, socialTitle });
   });
 
   return app;

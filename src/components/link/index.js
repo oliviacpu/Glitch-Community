@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import { getLink as getCollectionLink } from 'Models/collection';
-import { getLink as getProjectLink } from 'Models/project';
-import { getLink as getTeamLink } from 'Models/team';
-import { getLink as getUserLink } from 'Models/user';
+import { getCollectionLink } from 'Models/collection';
+import { getProjectLink } from 'Models/project';
+import { getTeamLink } from 'Models/team';
+import { getUserLink } from 'Models/user';
 import { useGlobals } from 'State/globals';
 import WrappingLink from './wrapping-link';
 import TrackedExternalLink from './tracked-external-link';
@@ -14,10 +14,13 @@ import TrackedExternalLink from './tracked-external-link';
 export { WrappingLink, TrackedExternalLink };
 
 const Link = React.forwardRef(({ to, children, ...props }, ref) => {
-  const { origin, EXTERNAL_ROUTES } = useGlobals();
+  const { location, EXTERNAL_ROUTES } = useGlobals();
   if (typeof to === 'string') {
-    const targetUrl = new URL(to, origin);
-    if (targetUrl.origin !== origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route))) {
+    // https://github.com/ReactTraining/react-router/issues/394 inner page links using hashes are not supported in react router links
+    const [, hash] = location.href.split('#');
+
+    const targetUrl = new URL(to, location);
+    if (targetUrl.origin !== location.origin || EXTERNAL_ROUTES.some((route) => targetUrl.pathname.startsWith(route)) || hash) {
       return (
         <a href={to} {...props} ref={ref}>
           {children}
@@ -42,8 +45,8 @@ Link.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const CollectionLink = ({ collection, children, ...props }) => (
-  <Link to={getCollectionLink(collection)} {...props} aria-label={collection.name}>
+export const CollectionLink = ({ collection, children, label, ...props }) => (
+  <Link to={getCollectionLink(collection)} {...props} aria-label={label || collection.name}>
     {children}
   </Link>
 );
@@ -66,6 +69,11 @@ CollectionLink.propTypes = {
       url: PropTypes.string.isRequired,
     }),
   ]).isRequired,
+  label: PropTypes.string,
+};
+
+CollectionLink.defaultProps = {
+  label: null,
 };
 
 export const ProjectLink = ({ project, children, ...props }) => {

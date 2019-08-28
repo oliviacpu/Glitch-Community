@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { withRouter } from 'react-router-dom';
 import { kebabCase } from 'lodash';
 
-import { getLink } from 'Models/collection';
+import { getCollectionLink } from 'Models/collection';
 import { PopoverWithButton } from 'Components/popover';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
@@ -16,10 +15,12 @@ import ReportButton from 'Components/report-abuse-pop';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import { useCollectionEditor, userOrTeamIsAuthor, getCollectionWithProjects } from 'State/collection';
+import useFocusFirst from 'Hooks/use-focus-first';
 
-const CollectionPageContents = withRouter(({ history, collection: initialCollection }) => {
+const CollectionPageContents = ({ collection: initialCollection }) => {
   const { currentUser } = useCurrentUser();
   const [collection, baseFuncs] = useCollectionEditor(initialCollection);
+  useFocusFirst();
 
   const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
@@ -28,26 +29,26 @@ const CollectionPageContents = withRouter(({ history, collection: initialCollect
     onNameChange: async (name) => {
       const url = kebabCase(name);
       const result = await funcs.updateNameAndUrl({ name, url });
-      history.replace(getLink({ ...collection, url }));
+      window.history.replaceState(null, null, getCollectionLink({ ...collection, url }));
       return result;
     },
   };
   return (
     <>
       <Helmet title={collection.name} />
-      <main>
+      <main id="main">
         <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
-        {currentUserIsAuthor &&
+        {currentUserIsAuthor && !collection.isMyStuff && (
           <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
             {() => <DeleteCollection collection={collection} />}
           </PopoverWithButton>
-        }
+        )}
       </main>
       <MoreCollectionsContainer collection={collection} />
     </>
   );
-});
+};
 
 CollectionPageContents.propTypes = {
   collection: PropTypes.shape({
@@ -65,7 +66,7 @@ const CollectionPage = ({ owner, name }) => (
       {(collection) =>
         collection ? (
           <AnalyticsContext
-            properties={{ origin: 'collection' }}
+            properties={{ origin: 'collection', collectionId: collection.id }}
             context={{
               groupId: collection.team ? collection.team.id.toString() : '0',
             }}
