@@ -10,14 +10,13 @@ import { useTracker } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
 import useUserPref from 'State/user-prefs';
 
-import pupdates from '../../curated/pupdates.json';
+import newStuffLog from '../../curated/new-stuff-log';
 import NewStuffArticle from './new-stuff-article';
 import NewStuffPrompt from './new-stuff-prompt';
 import NewStuffPup from './new-stuff-pup';
 import styles from './styles.styl';
 
-const pupdatesArray = pupdates.pupdates;
-const latestId = Math.max(...pupdatesArray.map(({ id }) => id));
+const latestId = Math.max(...newStuffLog.map(({ id }) => id));
 
 function usePreventTabOut() {
   const first = useRef();
@@ -46,7 +45,7 @@ function usePreventTabOut() {
   return { first, last };
 }
 
-export const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover }) => {
+const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover }) => {
   const { first, last } = usePreventTabOut();
 
   return (
@@ -91,16 +90,16 @@ const NewStuff = ({ children }) => {
   const isSignedIn = !!currentUser && !!currentUser.login;
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
-  const [log, setLog] = useState(pupdatesArray);
-  const track = useTracker('pupdates');
+  const [log, setLog] = useState(newStuffLog);
+  const track = useTracker('Pupdate');
 
   const renderOuter = ({ visible, openPopover }) => {
     const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
     const show = () => {
       track();
       openPopover();
-      const unreadStuff = pupdatesArray.filter(({ id }) => id > newStuffReadId);
-      setLog(unreadStuff.length ? unreadStuff : pupdatesArray);
+      const unreadStuff = newStuffLog.filter(({ id }) => id > newStuffReadId);
+      setLog(unreadStuff.length ? unreadStuff : newStuffLog);
       setNewStuffReadId(latestId);
     };
 
