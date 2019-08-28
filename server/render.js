@@ -1,4 +1,6 @@
 const path = require('path');
+const dayjs = require('dayjs');
+const createCache = require('./cache');
 const src = path.join(__dirname, '../src/');
 
 // apply transformations to the client code so it can run in node
@@ -33,7 +35,7 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
 
-const render = async ({ url, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS }) => {
+const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = require('../src/server');
   resetState();
 
@@ -41,15 +43,18 @@ const render = async ({ url, signedIn, EXTERNAL_ROUTES, HOME_CONTENT, ZINE_POSTS
   const page = React.createElement(Page, {
     origin: url.origin,
     route: url.pathname + url.search + url.hash,
-    signedIn,
+    API_CACHE,
     ZINE_POSTS,
     HOME_CONTENT,
+    SSR_SIGNED_IN,
     EXTERNAL_ROUTES,
   });
 
   const html = ReactDOMServer.renderToString(page);
   const helmet = Helmet.renderStatic();
-  return { html, helmet };
+  const context = { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
+  return { html, helmet, context };
 };
 
-module.exports = render;
+const getFromCache = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
+module.exports = (url, context) => getFromCache(`signed ${context.SSR_SIGNED_IN ? 'in' : 'out'} ${url}`, render, url, context);

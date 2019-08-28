@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { Button } from '@fogcreek/shared-components';
+=======
+import classNames from 'classnames';
+>>>>>>> c52f1d17f7c3fdb4d63f7904fcd82da2f952e10c
 
 import Image from 'Components/images/image';
 import { getEditorUrl } from 'Models/project';
 import Link from 'Components/link';
+import { isDarkColor } from 'Utils/color';
 import styles from './questions.styl';
 
 const iconHelp = 'https://cdn.glitch.com/f7224274-1330-4022-a8f2-8ae09dbd68a8%2Fask-for-help.svg?1494954687906';
@@ -38,7 +43,7 @@ const QuestionItem = ({ colorOuter, colorInner, domain, question, tags, userAvat
           <Button as="span">Help {userLogin}</Button>
         </div>
 
-        <div className={styles.questionText} title={question}>
+        <div className={classNames(styles.questionText, { [styles.dark]: isDarkColor(colorInner) })} title={question}>
           {truncateQuestion(question)}
         </div>
         <div className={styles.questionTags}>

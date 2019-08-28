@@ -16,7 +16,7 @@ const initWebpack = require('./webpack');
 const constants = require('./constants');
 const renderPage = require('./render');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { getHomeData, saveHomeDataToFile } = require('./home');
+const { getData, saveDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -52,11 +52,8 @@ module.exports = function(external) {
   const readFilePromise = util.promisify(fs.readFile);
   const imageDefault = 'https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fsocial-card%402x.png';
 
-  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId }, shouldRender = false) {
+  async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
-
-    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
-
     let scripts = [];
     let styles = [];
 
@@ -86,20 +83,25 @@ module.exports = function(external) {
     }
 
     const signedIn = !!req.cookies.hasLogin;
+    const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
 
-    let rendered = null;
+    let ssr = { rendered: null };
     if (shouldRender) {
       try {
-        const { html } = await renderPage({
-          url: new URL(req.url, `${req.protocol}://${req.hostname}`),
-          signedIn,
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const { html, context } = await renderPage(url, {
+          API_CACHE: cache,
           EXTERNAL_ROUTES: external,
           HOME_CONTENT: homeContent,
+          SSR_SIGNED_IN: signedIn,
           ZINE_POSTS: zine || [],
         });
-        rendered = html;
+        ssr = {
+          rendered: html,
+          ...context,
+        };
       } catch (error) {
-        console.error(error);
+        console.error(`Failed to server render ${req.url}: ${error.toString()}`);
         captureException(error);
       }
     }
@@ -112,16 +114,17 @@ module.exports = function(external) {
       scripts,
       styles,
       canonicalUrl,
-      rendered,
       BUILD_COMPLETE: built,
       BUILD_TIMESTAMP: buildTime.toISOString(),
-      EXTERNAL_ROUTES: JSON.stringify(external),
-      ZINE_POSTS: JSON.stringify(zine || []),
-      HOME_CONTENT: JSON.stringify(homeContent),
-      SSR_SIGNED_IN: JSON.stringify(signedIn),
+      API_CACHE: cache,
+      EXTERNAL_ROUTES: external,
+      ZINE_POSTS: zine || [],
+      HOME_CONTENT: homeContent,
+      SSR_SIGNED_IN: signedIn,
       PROJECT_DOMAIN: process.env.PROJECT_DOMAIN,
       ENVIRONMENT: process.env.NODE_ENV || 'dev',
       RUNNING_ON: process.env.RUNNING_ON,
+      ...ssr,
     });
   }
 
@@ -145,11 +148,14 @@ module.exports = function(external) {
     const { domain } = req.params;
     const canonicalUrl = `${APP_URL}/~${domain}`;
     const project = await getProject(punycode.toASCII(domain));
+    
     if (!project) {
-      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` });
+      await render(req, res, { title: domain, canonicalUrl, description: `We couldn't find ~${domain}` }, false);
       return;
     }
-    const avatar = `${CDN_URL}/project-avatar/${project.id}.png`;
+  
+    // don't show the real avatar if the project has been suspended
+    const avatar = project.suspendedReason ? imageDefault : `${CDN_URL}/project-avatar/${project.id}.png`
 
     const helloTemplateDescriptions = new Set([
       'Your very own basic web page, ready for you to customize.',
@@ -160,14 +166,15 @@ module.exports = function(external) {
     const usesDefaultDescription = helloTemplateDescriptions.has(project.description) || project.description.match(defaultProjectDescriptionPattern);
 
     let description;
-    if (usesDefaultDescription || !project.description) {
+    if (usesDefaultDescription || !project.description || project.suspendedReason) {
       description = DEFAULT_PROJECT_DESCRIPTION(domain);
     } else {
       const textDescription = cheerio.load(md.render(project.description)).text();
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar });
+    // const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, false);
   });
 
   app.get('/@:name', async (req, res) => {
@@ -241,15 +248,34 @@ module.exports = function(external) {
   });
 
   app.get('/api/home', async (req, res) => {
-    const data = await getHomeData();
+    const data = await getData('home');
     res.send(data);
   });
 
   app.post('/api/home', async (req, res) => {
     const persistentToken = req.headers.authorization;
     const data = req.body;
+    const page = 'home';
     try {
-      await saveHomeDataToFile({ persistentToken, data });
+      await saveDataToFile({ page, persistentToken, data });
+      res.sendStatus(200);
+    } catch (e) {
+      console.warn(e);
+      res.sendStatus(403);
+    }
+  });
+  
+  app.get('/api/pupdate', async (req, res) => {
+    const data = await getData('pupdates');
+    res.send(data);
+  });
+
+  app.post('/api/pupdate', async (req, res) => {
+    const persistentToken = req.headers.authorization;
+    const data = req.body;
+    const page = 'pupdates';
+    try {
+      await saveDataToFile({ page, persistentToken, data });
       res.sendStatus(200);
     } catch (e) {
       console.warn(e);
