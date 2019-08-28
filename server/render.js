@@ -43,7 +43,9 @@ const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNE
   const { Page, resetState } = require('../src/server');
   const endTime = performance.now();
 
-  console.log(`Transpiled for SSR in ${endTime - startTime} ms`, isRequireCached);
+  if (!isRequireCached) {
+    console.log(`SSR transpilation took ${endTime - startTime} ms`);
+  }
 
   resetState();
 
