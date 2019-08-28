@@ -65,7 +65,7 @@ const usePopoverToggle = ({ startOpen, onOpen, triggerButtonRef }) => {
   );
 };
 
-const MonitoredComponent = onClickOutside(({ children }) => children, {
+const MonitoredComponent = onClickOutside(function MonitoredComponent({ children }) { return children; }, {
   handleClickOutside: (component) => component.props.onClickOutside,
 });
 
