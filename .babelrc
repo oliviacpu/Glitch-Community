@@ -7,14 +7,22 @@
         "modules": false,
         "targets": {
           "chrome": "41",
-          "ie": "11",
           "edge": "16"
         },
-        "useBuiltIns": "usage",
-        "corejs": 2
+        "corejs": "runtime"
       }
     ]
   ],
-  "plugins": ["lodash", "@babel/syntax-dynamic-import", "@babel/plugin-proposal-class-properties"],
+  "plugins": [
+    "lodash",
+    "@babel/syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3
+      }
+    ]
+  ],
   "sourceType": "unambiguous"
 }

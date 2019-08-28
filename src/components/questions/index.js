@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import randomColor from 'randomcolor';
 import { sample } from 'lodash';
 
 import Heading from 'Components/text/heading';
@@ -8,10 +7,12 @@ import Link from 'Components/link';
 import Grid from 'Components/containers/grid';
 import ErrorBoundary from 'Components/error-boundary';
 import Arrow from 'Components/arrow';
-import QuestionItem from './item';
 
-import { captureException } from '../../utils/sentry';
-import { useAPI } from '../../state/api';
+import { pickRandomColors } from 'Utils/color';
+import { captureException } from 'Utils/sentry';
+import { useAPI } from 'State/api';
+
+import QuestionItem from './item';
 import styles from './questions.styl';
 
 const kaomojis = ['八(＾□＾*)', '(ノ^_^)ノ', 'ヽ(*ﾟｰﾟ*)ﾉ', '♪(┌・。・)┌', 'ヽ(๏∀๏ )ﾉ', 'ヽ(^。^)丿'];
@@ -25,10 +26,7 @@ async function load(api, max) {
       .filter((q) => !!q)
       .slice(0, max)
       .map((question) => {
-        const [colorInner, colorOuter] = randomColor({
-          luminosity: 'light',
-          count: 2,
-        });
+        const [colorInner, colorOuter] = pickRandomColors(2);
         return { colorInner, colorOuter, id: question.questionId, ...question };
       });
     return { kaomoji, questions };
@@ -55,7 +53,7 @@ function Questions({ max }) {
   });
   useRepeatingEffect(() => {
     load(api, max).then(setState);
-  }, 10000, []);
+  }, 10000, [api.persistentToken, max]);
 
   return (
     <section className={styles.container}>

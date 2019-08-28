@@ -1,9 +1,8 @@
 // create-collection-pop.jsx -> add a project to a new user or team collection
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { kebabCase, orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
-import Select from 'react-select';
 
 import Loader from 'Components/loader';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
@@ -20,17 +19,31 @@ import { getAllPages } from 'Shared/api';
 
 import styles from './create-collection-pop.styl';
 
-const Dropdown = ({ selection, options, onUpdate }) => (
-  <Select
-    autoWidth
-    value={selection}
-    options={options}
-    className={styles.userOrTeamToggle}
-    classNamePrefix="dropdown"
-    onChange={onUpdate}
-    isSearchable={false}
-  />
-);
+function Dropdown({ selection, options, onUpdate }) {
+  const [reactSelect, setReactSelect] = useState(null);
+  useEffect(() => {
+    if (reactSelect) return;
+    const loadReactSelect = async () => {
+      setReactSelect(await import(/* webpackChunkName: "react-select" */ 'react-select'));
+    };
+    loadReactSelect();
+  }, []);
+
+  if (!reactSelect) return <Loader />;
+
+  const Select = reactSelect.default;
+  return (
+    <Select
+      autoWidth
+      value={selection}
+      options={options}
+      className={styles.userOrTeamToggle}
+      classNamePrefix="dropdown"
+      onChange={onUpdate}
+      isSearchable={false}
+    />
+  );
+}
 
 // Format in { value: teamId, label: html elements } format for react-select
 const getUserOption = (currentUser) => ({
@@ -74,18 +87,31 @@ function CreateCollectionPopBase({ align, title, onSubmit, options }) {
   const [collectionName, setCollectionName] = useState('');
 
   const [selection, setSelection] = useState(options[0]);
-  // determine if entered name already exists for selected user / team
-  const { value: collections } = useCollections(selection.value, currentUser);
-  const hasQueryError = (collections || []).some((c) => c.url === kebabCase(collectionName));
-  const error = hasQueryError ? 'You already have a collection with this name' : '';
 
-  const submitDisabled = loading || collectionName.length === 0;
+  // determine if name is valid
+  const { value: collections } = useCollections(selection.value, currentUser);
+  const nameAlreadyExists = (collections || []).some((c) => c.url === kebabCase(collectionName));
+  const isMyStuffError = kebabCase(collectionName) === 'my-stuff';
+  let error = '';
+  if (isMyStuffError) {
+    error = 'My Stuff is a reserved name';
+  }
+  if (nameAlreadyExists) {
+    error = 'You already have a collection with this name';
+  }
+
+  const submitDisabled = loading || collectionName.length === 0 || !!error;
 
   async function handleSubmit(event) {
     if (submitDisabled) return;
     event.preventDefault();
     setLoading(true);
-    const collection = await createCollection(api, collectionName, selection.value, createNotification);
+    const collection = await createCollection({
+      api,
+      name: collectionName,
+      teamId: selection.value,
+      createNotification,
+    });
     const team = currentUser.teams.find((t) => t.id === selection.value);
     collection.fullUrl = `${team ? team.url : currentUser.login}/${collection.url}`;
     onSubmit(collection);

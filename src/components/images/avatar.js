@@ -1,33 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import Image from 'Components/images/image';
 import CollectionAvatarBase from 'Components/collection/defaultAvatar';
-import { hexToRgbA } from 'Utils/color';
 
-import { DEFAULT_TEAM_AVATAR, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
-import { ANON_AVATAR_URL, getAvatarThumbnailUrl, getDisplayName } from 'Models/user';
-import { FALLBACK_AVATAR_URL, getAvatarUrl as getProjectAvatarUrl } from 'Models/project';
+import { hexToRgbA } from 'Utils/color';
+import { CDN_URL } from 'Utils/constants';
+
+import { DEFAULT_TEAM_AVATAR, getTeamAvatarUrl } from 'Models/team';
+import { ANON_AVATAR_URL, getUserAvatarThumbnailUrl, getDisplayName } from 'Models/user';
+import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
+
 import styles from './avatar.styl';
 
 // UserAvatar
-
-export const Avatar = ({ name, src, color, srcFallback, type, hideTooltip, withinButton }) => {
-  const contents = (
-    <Image
-      width="32px"
-      height="32px"
-      src={src}
-      defaultSrc={srcFallback}
-      alt={name}
-      backgroundColor={color}
-      className={styles[type]}
-    />
-  );
+export const Avatar = ({ name, src, color, srcFallback, type, tiny, hideTooltip, withinButton }) => {
+  const className = classNames(styles.avatar, styles[type], { [styles.tiny]: tiny });
+  const contents = <Image src={src} defaultSrc={srcFallback} alt={name} backgroundColor={color} className={className} />;
 
   if (!hideTooltip) {
-    return <TooltipContainer tooltip={name} target={contents} type="action" id={`avatar-tooltip-${name}`} align={['left']} fallback={withinButton} />;
+    return <TooltipContainer tooltip={name} target={contents} type="action" align={['left']} fallback={withinButton} />;
   }
   return contents;
 };
@@ -40,22 +34,18 @@ Avatar.propTypes = {
   color: PropTypes.string,
   hideTooltip: PropTypes.bool,
   withinButton: PropTypes.bool,
+  tiny: PropTypes.bool,
 };
 
 Avatar.defaultProps = {
   color: null,
   srcFallback: '',
   hideTooltip: false,
+  tiny: false,
 };
 
-export const TeamAvatar = ({ team, size, hideTooltip }) => (
-  <Avatar
-    name={team.name}
-    src={getTeamAvatarUrl({ ...team, size })}
-    srcFallback={DEFAULT_TEAM_AVATAR}
-    type="team"
-    hideTooltip={hideTooltip}
-  />
+export const TeamAvatar = ({ team, size, hideTooltip, tiny }) => (
+  <Avatar name={team.name} src={getTeamAvatarUrl({ ...team, size })} srcFallback={DEFAULT_TEAM_AVATAR} type="team" hideTooltip={hideTooltip} tiny={tiny} />
 );
 TeamAvatar.propTypes = {
   team: PropTypes.shape({
@@ -71,15 +61,16 @@ TeamAvatar.defaultProps = {
   size: 'small',
 };
 
-export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton }) => (
+export const UserAvatar = ({ user, suffix = '', hideTooltip, withinButton, tiny }) => (
   <Avatar
     name={getDisplayName(user) + suffix}
-    src={getAvatarThumbnailUrl(user)}
+    src={getUserAvatarThumbnailUrl(user)}
     color={user.color}
     srcFallback={ANON_AVATAR_URL}
     type="user"
     hideTooltip={hideTooltip}
     withinButton={withinButton}
+    tiny={tiny}
   />
 );
 UserAvatar.propTypes = {
@@ -101,14 +92,8 @@ UserAvatar.defaultProps = {
   withinButton: false,
 };
 
-export const ProjectAvatar = ({ project, hasAlt }) => (
-  <Avatar
-    name={hasAlt ? project.domain : ''}
-    src={getProjectAvatarUrl(project.id)}
-    srcFallback={FALLBACK_AVATAR_URL}
-    type="team"
-    hideTooltip
-  />
+export const ProjectAvatar = ({ project, hasAlt, tiny }) => (
+  <Avatar name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="project" hideTooltip tiny={tiny} />
 );
 
 ProjectAvatar.propTypes = {
@@ -123,10 +108,13 @@ ProjectAvatar.defaultProps = {
   hasAlt: false,
 };
 
-export const CollectionAvatar = ({ collection }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} />;
+export const CollectionAvatar = ({ collection, tiny }) => <CollectionAvatarBase backgroundFillColor={hexToRgbA(collection.coverColor)} tiny={tiny} />;
 
 CollectionAvatar.propTypes = {
   collection: PropTypes.shape({
     coverColor: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+
+export const BookmarkAvatar = ({ width }) => <Image src={`${CDN_URL}/ee609ed3-ee18-495d-825a-06fc588a4d4c%2Fmy-stuff-collection-avatar%20(1).svg?v=1564432130141`} alt="" width={width} />;

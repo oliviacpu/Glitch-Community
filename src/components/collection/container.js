@@ -5,6 +5,8 @@ import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
 
 import { isDarkColor } from 'Utils/color';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -14,10 +16,11 @@ import CollectionNameInput from 'Components/fields/collection-name-input';
 import AddCollectionProject from 'Components/collection/add-collection-project-pop';
 import EditCollectionColor from 'Components/collection/edit-collection-color-pop';
 import AuthDescription from 'Components/fields/auth-description';
-import { CollectionAvatar } from 'Components/images/avatar';
+import { CollectionAvatar, BookmarkAvatar } from 'Components/images/avatar';
 import { CollectionLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import { useCollectionCurator } from 'State/collection';
+import useDevToggle from 'State/dev-toggles';
 
 import styles from './container.styl';
 
@@ -27,6 +30,8 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
   useEffect(() => {
     setPreviewProjects(sampleSize(collection.projects, 3));
   }, [collection]);
+  const [displayHint, setDisplayHint] = useState(false);
+
   const collectionHasProjects = collection.projects.length > 0;
   let featuredProject = null;
   let { projects } = collection;
@@ -37,8 +42,11 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
     [[featuredProject], projects] = partition(collection.projects, (p) => p.id === collection.featuredProjectId);
   }
 
+  const myStuffIsEnabled = useDevToggle('My Stuff');
+  const canEditNameAndDescription = myStuffIsEnabled ? isAuthorized && !collection.isMyStuff : isAuthorized;
+
   let collectionName = collection.name;
-  if (isAuthorized) {
+  if (canEditNameAndDescription) {
     collectionName = <CollectionNameInput name={collection.name} onChange={funcs.onNameChange} />;
   } else if (preview) {
     collectionName = <CollectionLink collection={collection}>{collection.name}</CollectionLink>;
@@ -46,14 +54,20 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
   const enableSorting = isAuthorized && projects.length > 1;
 
+  let avatar;
+  if (myStuffIsEnabled && collection.isMyStuff) {
+    avatar = <BookmarkAvatar width="50%" />;
+  } else if (collection.avatarUrl) {
+    avatar = <Image src={collection.avatarUrl} alt="" />;
+  } else {
+    avatar = <CollectionAvatar collection={collection} />;
+  }
+
   return (
     <article className={classnames(styles.container, isDarkColor(collection.coverColor) && styles.dark, preview && styles.preview)}>
       <header className={styles.collectionHeader} style={{ backgroundColor: collection.coverColor }}>
-        <div className={styles.imageContainer}>
-          {collection.avatarUrl ? <Image src={collection.avatarUrl} alt="" /> : <CollectionAvatar collection={collection} />}
-        </div>
-
-        <div className={styles.collectionInfo}>
+        <div className={styles.imageContainer}>{avatar}</div>
+        <div>
           <h1 className={styles.name}>{collectionName}</h1>
 
           <div className={styles.owner}>
@@ -62,7 +76,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           <div className={styles.description}>
             <AuthDescription
-              authorized={isAuthorized}
+              authorized={canEditNameAndDescription}
               description={collection.description}
               update={funcs.updateDescription}
               placeholder="Tell us about your collection"
@@ -71,13 +85,36 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {!preview && (
             <div className={styles.projectCount}>
-              <Text>
+              <Text weight="600">
                 <Pluralize count={collection.projects.length} singular="Project" />
               </Text>
             </div>
           )}
 
           {isAuthorized && funcs.updateColor && <EditCollectionColor update={funcs.updateColor} initialColor={collection.coverColor} />}
+
+          {enableSorting && (
+            <div className={classnames(styles.hint, isDarkColor(collection.coverColor) && styles.dark)}>
+              <Emoji name="new" />
+              <Text> You can reorder your projects</Text>
+              {!displayHint && (
+                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
+                  Learn More
+                </Button>
+              )}
+              {displayHint && (
+                <div className={styles.hintBody}>
+                  <Text>
+                    <Emoji name="mouse" /> Click and drag to reorder
+                  </Text>
+                  <Text>
+                    <Emoji name="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
+                    save.
+                  </Text>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -90,7 +127,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         {!collectionHasProjects && isAuthorized && (
           <div className={styles.emptyCollectionHint}>
             <Image src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="psst" width="" height="" />
-            <Text>You can add any project, created by any user</Text>
+            <Text className={isDarkColor(collection.coverColor) && styles.dark}>You can add any project, created by any user</Text>
           </div>
         )}
         {!collectionHasProjects && !isAuthorized && <div className={styles.emptyCollectionHint}>No projects to see in this collection just yet.</div>}
@@ -120,9 +157,6 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
             }}
             projectOptions={{ ...funcs, collection }}
           />
-        )}
-        {enableSorting && (
-          <Text>Drag to reorder, or move focus to a project and press space. Move it with the arrow keys and press space again to save.</Text>
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>

@@ -2,16 +2,17 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
-import { getLink as getTeamLink, getAvatarUrl as getTeamAvatarUrl } from 'Models/team';
-import { getAvatarThumbnailUrl as getUserAvatarUrl } from 'Models/user';
+import { getTeamLink } from 'Models/team';
+import { getUserAvatarThumbnailUrl } from 'Models/user';
 import Image from 'Components/images/image';
-import { UserAvatar } from 'Components/images/avatar';
+import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
+import { useGlobals } from 'State/globals';
 import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
@@ -45,7 +46,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             type="tertiary"
-            image={<Image className={styles.teamAvatar} src={getTeamAvatarUrl({ ...team, size: 'small' })} alt="" width={16} height={16} />}
+            image={<TeamAvatar team={team} size="small" tiny hideTooltip />}
           >
             {team.name}
           </Button>
@@ -110,7 +111,7 @@ Are you sure you want to sign out?`)
       <PopoverTitle>
         <UserLink user={user}>
           <div className={styles.userAvatarContainer} style={{ backgroundColor: user.color }}>
-            <Image src={getUserAvatarUrl(user)} alt="Your avatar" />
+            <Image src={getUserAvatarThumbnailUrl(user)} alt="Your avatar" />
           </div>
           <div className={styles.userInfo}>
             <InfoDescription>{user.name || 'Anonymous'}</InfoDescription>
@@ -127,8 +128,8 @@ Are you sure you want to sign out?`)
 
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
-          <div>
-            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary" matchBackground>
+          <div className={styles.buttonWrap}>
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary">
               Super User
             </CheckboxButton>
           </div>
@@ -168,7 +169,8 @@ UserOptionsPop.propTypes = {
 };
 
 function CheckForCreateTeamHash(props) {
-  return props.children(window.location.hash === '#create-team');
+  const { location } = useGlobals();
+  return props.children(location.hash === '#create-team');
 }
 
 // Header button and init pop
@@ -183,10 +185,10 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
         <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <Button type="dropDown" onClick={togglePopover} disabled={!props.user.id} ref={buttonRef}>
+              <Button type="dropDown" onClick={togglePopover} decorative={!props.user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
-                    <UserAvatar user={props.user} withinButton style={avatarStyle} />
+                    <UserAvatar user={props.user} hideTooltip withinButton style={avatarStyle} />
                   </span>
                   <span className="down-arrow icon" />
                 </span>
@@ -194,7 +196,7 @@ export default function UserOptionsAndCreateTeamPopContainer(props) {
             );
 
             return (
-              <TooltipContainer target={userOptionsButton} tooltip="User options" id="user-options-tooltip" type="action" align={['right']}>
+              <TooltipContainer target={userOptionsButton} tooltip="User options" type="action" align={['right']}>
                 {visible && (
                   <MultiPopover
                     views={{

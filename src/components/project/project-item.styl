@@ -53,7 +53,7 @@
   position: relative
   z-index: 1
   &.spaceForOptions
-    max-width: calc(100% - 30px)
+    max-width: calc(100% - 87px)
 
 .projectOptionsContainer
   position: absolute
@@ -103,3 +103,24 @@ a.linkBody:hover
   height: 42px
   border-radius: 5px
     
+.bookmarkButtonContainer
+  display: block
+  margin: -3px 22px 0
+  flex: none 
+  position: absolute
+  top: 0
+  right: 15px
+
+@media (min-width: mediumSmallViewport)
+  .container
+    &:hover
+      .bookmarkButtonContainer
+        button
+          opacity: 1
+          transform: translateY(0px)
+          
+.projectsContainerNote
+  margin-bottom: -1rem
+  width: 90%
+  &:empty
+    margin-bottom: 0

@@ -1,4 +1,5 @@
-const fs = require('fs').promises;
+const fs = require('fs');
+const util = require('util');
 const path = require('path');
 const axios = require('axios');
 

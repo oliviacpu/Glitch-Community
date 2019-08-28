@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
 
 import Button from 'Components/buttons/button';
@@ -48,16 +48,32 @@ const OverlayVideo = () => {
 const InlineVideo = () => {
   const [showVideo, setShowVideo] = useState(false);
   const track = useTracker();
+  const wistiaRef = React.createRef();
 
   const onClick = () => {
     track('Watch Video clicked');
     setShowVideo(true);
   };
 
+  useEffect(() => {
+    if (showVideo && wistiaRef.current) {
+      setTimeout(() => {
+        if (!wistiaRef.current) {
+          return;
+        }
+
+        const pauseButton = wistiaRef.current.querySelector('[aria-label="Pause"]');
+        if (pauseButton) {
+          pauseButton.focus();
+        }
+      }, 500);
+    }
+  }, [showVideo, wistiaRef.current]);
+
   return (
-    <div className={classnames(styles.bannerVideo, styles[status])}>
+    <div className={classnames(styles.bannerVideo)}>
       {showVideo ? (
-        <WistiaVideo videoId="z2ksbcs34d" />
+        <WistiaVideo ref={wistiaRef} videoId="z2ksbcs34d" />
       ) : (
         <>
           <div className={styles.bannerVideoPoster} onClick={onClick} aria-hidden="true" />
@@ -105,7 +121,7 @@ const Banner = () => (
         <br />
         <Unmarked>where everyone</Unmarked>
         <br />
-        <Mark color="#16A76D">builds the web</Mark>
+        <Mark color="#2EA073">builds the web</Mark>
       </h1>
       <div className={styles.bannerCopyAndButtons}>
         <p>Simple, powerful, free tools to create and use millions of apps.</p>

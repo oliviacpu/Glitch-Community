@@ -9,8 +9,10 @@ const LOGO_NIGHT = 'https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%
 const LogoImage = ({ src }) => <img className={styles.logo} src={src} alt="Glitch" />;
 
 function Logo() {
-  const [hour, setHour] = useState(new Date().getHours());
+  const [hour, setHour] = useState(12);
   useEffect(() => {
+    setHour(new Date().getHours());
+
     const handle = window.setInterval(() => {
       setHour(new Date().getHours());
     }, dayjs.convert(5, 'minutes', 'ms'));

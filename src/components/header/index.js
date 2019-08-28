@@ -8,6 +8,7 @@ import SignInPop from 'Components/sign-in-pop';
 import UserOptionsPop from 'Components/user-options-pop';
 import Link, { TrackedExternalLink } from 'Components/link';
 import { useCurrentUser } from 'State/current-user';
+import { useGlobals } from 'State/globals';
 import NewProjectPop from './new-project-pop';
 import Logo from './logo';
 import styles from './header.styl';
@@ -22,8 +23,15 @@ const ResumeCoding = () => (
 
 const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }) => {
   const { currentUser, clear, superUserHelpers } = useCurrentUser();
+  const { SSR_SIGNED_IN } = useGlobals();
+  // signedIn and signedOut are both false on the server so the sign in button doesn't render
+  const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
+  const signedIn = !!currentUser.login || fakeSignedIn;
+  const signedOut = !!currentUser.id && !signedIn;
+  const hasProjects = currentUser.projects.length > 0 || fakeSignedIn;
   return (
     <header role="banner" className={styles.header}>
+      <Button href="#main" className={styles.visibleOnFocus}>Skip to Main Content</Button>
       <Link to="/" className={styles.logoWrap}>
         <Logo />
       </Link>
@@ -33,20 +41,22 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <SearchForm defaultValue={searchQuery} />
         </div>
         <ul className={styles.buttons}>
-          <li className={styles.buttonWrap}>
-            <NewProjectPop />
-          </li>
-          {!!currentUser && !!currentUser.projects.length && (
+          {(signedIn || signedOut) && (
+            <li className={styles.buttonWrap}>
+              <NewProjectPop />
+            </li>
+          )}
+          {hasProjects && (
             <li className={styles.buttonWrap}>
               <ResumeCoding />
             </li>
           )}
-          {!(currentUser && currentUser.login) && (
+          {signedOut && (
             <li className={styles.buttonWrap}>
               <SignInPop align="right" />
             </li>
           )}
-          {!!currentUser && currentUser.login && (
+          {signedIn && (
             <li className={styles.buttonWrap}>
               <UserOptionsPop
                 user={currentUser}

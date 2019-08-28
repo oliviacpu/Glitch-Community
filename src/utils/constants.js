@@ -1,14 +1,28 @@
 const { envs } = require('Shared/constants');
-/* global RUNNING_ON */
 
-let envFromOrigin = 'production';
-if (origin.includes('staging.glitch.com')) {
-  envFromOrigin = 'staging';
-} else if (origin.includes('glitch.development')) {
-  envFromOrigin = 'development';
-}
+// The current environment is based on the RUNNING_ON environment variable,
+// unless we're running under a staging/dev hostname, in which case we use the
+// corresponding environment config.
+const getBrowserEnv = () => {
+  if (window.location.origin.includes('staging.glitch.com')) {
+    return 'staging';
+  }
+  if (window.location.origin.includes('glitch.development')) {
+    return 'development';
+  }
+  if (envs[window.RUNNING_ON]) {
+    return window.RUNNING_ON;
+  }
+  return 'production';
+};
 
-const currentEnv = envs[RUNNING_ON] ? RUNNING_ON : envFromOrigin;
+const getNodeEnv = () => {
+  const runningOn = process.env.RUNNING_ON;
+  return envs[runningOn] ? runningOn : 'production';
+};
+
+const isBrowser = typeof window !== 'undefined';
+const currentEnv = isBrowser ? getBrowserEnv() : getNodeEnv();
 
 const {
   APP_URL,
@@ -22,6 +36,7 @@ const {
 
 export {
   currentEnv,
+  isBrowser,
   APP_URL,
   API_URL,
   EDITOR_URL,

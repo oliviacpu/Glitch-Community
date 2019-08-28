@@ -8,7 +8,7 @@ import { UserLink, WrappingLink } from 'Components/link';
 import Button from 'Components/buttons/button';
 import Arrow from 'Components/arrow';
 import SignInPop from 'Components/sign-in-pop';
-import { getAvatarStyle, getLink } from 'Models/user';
+import { getUserAvatarStyle, getUserLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
@@ -54,8 +54,8 @@ const RecentProjects = () => {
       <CoverContainer type="user" item={currentUser}>
         <div className={styles.coverWrap}>
           <div className={styles.avatarWrap}>
-            <WrappingLink user={currentUser} href={getLink(currentUser)}>
-              <div className={styles.userAvatar} style={getAvatarStyle(currentUser)} />
+            <WrappingLink user={currentUser} href={getUserLink(currentUser)}>
+              <div className={styles.userAvatar} style={getUserAvatarStyle(currentUser)} />
             </WrappingLink>
           </div>
           <div className={styles.projectsWrap}>

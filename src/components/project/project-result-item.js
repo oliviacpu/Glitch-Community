@@ -7,7 +7,7 @@ import ProfileList from 'Components/profile-list';
 import VisibilityContainer from 'Components/visibility-container';
 import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Components/containers/results-list';
 import { ProjectAvatar } from 'Components/images/avatar';
-import { getLink } from 'Models/project';
+import { getProjectLink } from 'Models/project';
 import { useProjectMembers } from 'State/project';
 
 import styles from './project-result-item.styl';
@@ -30,7 +30,7 @@ const ProfileListWrap = ({ project }) => (
 const ProjectResultItem = ({ project, selected, active, onClick }) => (
   <ResultItem
     className={classnames(project.private && styles.private)}
-    href={getLink(project)}
+    href={getProjectLink(project)}
     onClick={onClick}
     active={active}
     selected={selected}
