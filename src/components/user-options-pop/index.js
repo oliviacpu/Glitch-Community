@@ -47,10 +47,9 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             variant="secondary"
-            image=""
           >
             {team.name}
-            <TeamAvatar team={team} style={{ marginLeft: `${5}px` }} tiny hideTooltip />
+            <TeamAvatar team={team} size="small" style={{ marginLeft: `${5}px` }} tiny hideTooltip />
           </Button>
         </div>
       ))}

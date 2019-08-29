@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from '@fogcreek/shared-components';
+import { Button, CheckboxButton, Icon } from '@fogcreek/shared-components';
 
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
-import CheckboxButton from 'Components/buttons/checkbox-button';
 import { PopoverContainer } from 'Components/popover';
 
 import { useTracker } from 'State/segment-analytics';
