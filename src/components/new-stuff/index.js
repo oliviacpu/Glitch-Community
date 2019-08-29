@@ -55,7 +55,7 @@ const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, closePopover
         </div>
         <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
         <div className={styles.newStuffToggle}>
-          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
+          <CheckboxButton size="small" value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these
           </CheckboxButton>
         </div>
