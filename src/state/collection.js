@@ -9,6 +9,7 @@ import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
 
+// used by featured-project and pages/project
 export const toggleBookmark = async ({
   api,
   project,
@@ -337,6 +338,7 @@ export function useCollectionEditor(initialCollection) {
 
     unfeatureProject: () => updateFields({ featuredProjectId: null }).catch(handleError),
 
+    // used on the collection page
     toggleBookmark: withErrorHandler(async (project) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (project.authUserHasBookmarked) {
