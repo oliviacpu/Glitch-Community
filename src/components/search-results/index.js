@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Button. SegmentedButton } from '@fogcreek/shared-components';
+import { Button, SegmentedButton } from '@fogcreek/shared-components';
 
 import { createAPIHook } from 'State/api';
 
-import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Badge from 'Components/badges/badge';
 import Heading from 'Components/text/heading';
 import UserItem from 'Components/user/user-item';
@@ -20,8 +19,8 @@ import styles from './search-results.styl';
 
 const FilterContainer = ({ filters, activeFilter, setFilter }) => {
   const buttons = filters.map((filter) => ({
-    name: filter.id,
-    contents: (
+    id: filter.id,
+    label: (
       <>
         {filter.label}
         {filter.hits && <Badge>{filter.hits > filter.maxHits ? `${filter.maxHits}+` : filter.hits}</Badge>}
@@ -29,7 +28,7 @@ const FilterContainer = ({ filters, activeFilter, setFilter }) => {
     ),
   }));
 
-  return <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setFilter} />;
+  return <SegmentedButton value={activeFilter} options={buttons} onChange={setFilter} />;
 };
 
 const groups = [
