@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
-import { Button, Icon, UnstyledButton } from '@fogcreek/shared-components';
+import { Button, CheckboxButton, Icon, UnstyledButton } from '@fogcreek/shared-components';
 
 import { getTeamLink } from 'Models/team';
 import { getUserAvatarThumbnailUrl } from 'Models/user';
@@ -9,7 +9,6 @@ import Image from 'Components/images/image';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
-import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useGlobals } from 'State/globals';
@@ -47,9 +46,9 @@ const TeamList = ({ teams, showCreateTeam }) => {
             href={getTeamLink(team)}
             size="small"
             variant="secondary"
-            image={<TeamAvatar team={team} size="small" tiny hideTooltip />}
           >
             {team.name}
+            <TeamAvatar team={team} size="small" style={{ marginLeft: `${5}px` }} tiny hideTooltip />
           </Button>
         </div>
       ))}
@@ -130,7 +129,7 @@ Are you sure you want to sign out?`)
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
           <div className={styles.buttonWrap}>
-            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary">
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
               Super User
             </CheckboxButton>
           </div>
