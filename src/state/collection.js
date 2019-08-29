@@ -65,16 +65,14 @@ export const getCollectionWithProjects = async (api, { owner, name }) => {
 };
 
 async function getCollectionProjectsFromAPI(api, collection, withCacheBust) {
-  let cacheBust = '';
-
-  // first bust cache for the endpoint used when we load the collection page
   if (withCacheBust) {
+    // busts cache for collection projects by both url and by id
     api.bustCache(createAPICallForCollectionProjects(encodeURIComponent(collection.fullUrl)));
-    cacheBust = `&cacheBust=${Date.now()}`;
+    api.bustCache(`/v1/collections/by/id/projects?id=${collection.id}&limit=100`);
   }
 
   // then get the latest collection projects
-  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100${cacheBust}`);
+  return getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&limit=100`);
 }
 
 const loadingResponse = { status: 'loading' };
@@ -218,32 +216,26 @@ export function useCollectionEditor(initialCollection) {
 
   const funcs = {
     addProjectToCollection: withErrorHandler(async (project, selectedCollection) => {
-      // update collection state
-      setCollection((oldCollection) => {
-        const getNewProjectsFromOldProjects = (oldProjects) => {
-          // if it's the same collection as the page you're on, add the project to it
-          if (selectedCollection.id === collection.id) {
-            return [project, ...oldProjects];
-          }
-
-          // if you're adding to the my stuff collection, make sure the project shows as bookmarked
-          if (selectedCollection.isMyStuff) {
-            return oldProjects.map((p) => {
-              if (p.id === project.id) {
-                p.authUserHasBookmarked = true;
-              }
-              return p;
-            });
-          }
-
-          return oldProjects;
-        };
-
-        return {
+      // if it's the same collection as the page you're on, add the project to it
+      if (selectedCollection.id === collection.id) {
+        setCollection((oldCollection) => ({
           ...oldCollection,
-          projects: getNewProjectsFromOldProjects(oldCollection.projects),
-        };
-      });
+          projects: [project, ...oldCollection.projects],
+        }));
+      }
+
+      // if you're adding to a project to the my stuff collection, make sure the project shows as bookmarked
+      if (selectedCollection.isMyStuff) {
+        setCollection((oldCollection) => ({
+          ...oldCollection,
+          projects: oldCollection.projects.map((p) => {
+            if (p.id === project.id) {
+              p.authUserHasBookmarked = true;
+            }
+            return p;
+          }),
+        }));
+      }
 
       // make backend call
       await addProjectToCollection({ project, collection: selectedCollection });
