@@ -207,10 +207,6 @@ export const { reducer, actions } = createSlice({
       ...state,
       status: 'loading',
     }),
-    changedInAnotherWindow: (state) => ({
-      ...state,
-      status: 'loading',
-    }),
     updatedInAnotherTab: (state, { payload }) => ({
       ...state,
       ...payload,
@@ -256,7 +252,6 @@ export const handlers = {
     store.dispatch(actions.loadedFromCache(cachedUser));
     await load(action, store);
   },
-  [actions.changedInAnotherWindow]: load,
   [actions.requestedReload]: load,
   [actions.updated]: (_, store) => {
     setStorage(cachedUserKey, store.getState().currentUser);
