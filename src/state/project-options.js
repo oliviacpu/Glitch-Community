@@ -41,6 +41,7 @@ const useDefaultProjectOptions = () => {
       await removeUserFromProject({ project, user: currentUser });
       reloadProjectMembers([project.id]);
     }, handleError),
+    // toggleBookmark is defined in a few different places: state/collection and 
     toggleBookmark: withErrorHandler(async (project, hasBookmarked, setHasBookmarked) => {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (hasBookmarked) {

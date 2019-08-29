@@ -4,7 +4,7 @@ import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
 import { getSingleItem, getAllPages } from 'Shared/api';
 import { captureException } from 'Utils/sentry';
-import { createCollection } from 'Models/collection';
+import { createCollection, getCollectionLink } from 'Models/collection';
 import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
@@ -338,24 +338,18 @@ export function useCollectionEditor(initialCollection) {
     unfeatureProject: () => updateFields({ featuredProjectId: null }).catch(handleError),
 
     toggleBookmark: withErrorHandler(async (project) => {
-      try {
-        let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-        if (project.authUserHasBookmarked) {
-          await funcs.removeProjectFromCollection(project, myStuffCollection);
-          createNotification(`Removed ${project.domain} from collection My Stuff`);
-        } else {
-          if (!myStuffCollection) {
-            myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
-          }
-          await funcs.addProjectToCollection(project, myStuffCollection);
-          const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-          createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
-            type: 'success',
-          });
+      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+      if (project.authUserHasBookmarked) {
+        await funcs.removeProjectFromCollection(project, myStuffCollection);
+        createNotification(`Removed ${project.domain} from collection My Stuff`);
+      } else {
+        if (!myStuffCollection) {
+          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
         }
-      } catch (error) {
-        captureException(error);
-        createNotification('Something went wrong, try refreshing?', { type: 'error' });
+        await funcs.addProjectToCollection(project, myStuffCollection);
+        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={getCollectionLink(myStuffCollection)} />, {
+          type: 'success',
+        });
       }
     }, handleError),
   };
