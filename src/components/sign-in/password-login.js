@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react';
-import { parseOneAddress } from 'email-addresses';
+import React, { useState } from 'react';
 import { Button } from '@fogcreek/shared-components';
 
 import TextInput from 'Components/inputs/text-input';
