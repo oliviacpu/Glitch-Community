@@ -24,18 +24,6 @@ const App = ({ apiCache }) => (
           <AnalyticsContext context={{ groupId: '0' }}>
             <CurrentUserProvider>
               <APIContextProvider>
-<<<<<<< HEAD
-                <ProjectContextProvider>
-                  <CollectionContextProvider>
-                    <>
-                      <RootStyle theme={lightTheme} />
-                      <SuperUserBanner />
-                      <OfflineNotice />
-                      <Router />
-                    </>
-                  </CollectionContextProvider>
-                </ProjectContextProvider>
-=======
                 <APICacheProvider initial={apiCache}>
                   <ProjectContextProvider>
                     <CollectionContextProvider>
@@ -48,7 +36,6 @@ const App = ({ apiCache }) => (
                     </CollectionContextProvider>
                   </ProjectContextProvider>
                 </APICacheProvider>
->>>>>>> c52f1d17f7c3fdb4d63f7904fcd82da2f952e10c
               </APIContextProvider>
             </CurrentUserProvider>
           </AnalyticsContext>
