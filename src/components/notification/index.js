@@ -65,7 +65,7 @@ export const AddProjectToCollectionMsg = ({ projectDomain, collectionName, url }
       {collectionName && `to collection ${collectionName}`}
     </Text>
     {url && (
-      <Button as="a" href={url} rel="noopener noreferrer" size="small" variant="tertiary">
+      <Button as="a" href={url} rel="noopener noreferrer" size="small" variant="secondary">
         Take me there
       </Button>
     )}
