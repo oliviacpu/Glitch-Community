@@ -40,5 +40,4 @@ const PupdatesPreview = withRouter(({ history }) => {
     </main>
   );
 });
-
 export default PupdatesPreview;

@@ -54,6 +54,7 @@ module.exports = function(external) {
 
   async function render(req, res, { title, description, image = imageDefault, socialTitle, canonicalUrl = APP_URL, wistiaVideoId, cache = {} }, shouldRender = false) {
     let built = true;
+
     let scripts = [];
     let styles = [];
 
@@ -264,7 +265,7 @@ module.exports = function(external) {
       res.sendStatus(403);
     }
   });
-  
+
   app.get('/api/pupdate', async (req, res) => {
     const data = await getData('pupdates');
     res.send(data);

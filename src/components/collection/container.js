@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
-import
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import { isDarkColor } from 'Utils/color';
-import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -99,7 +97,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
               <Emoji name="new" />
               <Text> You can reorder your projects</Text>
               {!displayHint && (
-                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
+                <Button variant="secondary" size="small" onClick={() => setDisplayHint(true)}>
                   Learn More
                 </Button>
               )}
