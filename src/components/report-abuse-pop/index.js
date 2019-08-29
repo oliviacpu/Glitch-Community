@@ -168,7 +168,7 @@ function ReportAbusePop({ reportedType, reportedModel }) {
 }
 
 const ReportAbusePopButton = ({ reportedType, reportedModel }) => (
-  <PopoverWithButton buttonProps={{ size: 'small', type: 'tertiary' }} buttonText="Report Abuse">
+  <PopoverWithButton buttonProps={{ size: 'small', variant: 'secondary' }} buttonText="Report Abuse">
     {() => (
       <PopoverDialog align="topLeft" wide>
         <ReportAbusePop reportedType={reportedType} reportedModel={reportedModel} />
