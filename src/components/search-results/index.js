@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Button } from '@fogcreek/shared-components';
+import { Button. SegmentedButton } from '@fogcreek/shared-components';
 
 import { createAPIHook } from 'State/api';
 

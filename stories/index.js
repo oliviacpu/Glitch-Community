@@ -7,7 +7,6 @@ import Text from 'Components/text/text';
 import Heading from 'Components/text/heading';
 import Markdown from 'Components/text/markdown';
 import Badge from 'Components/badges/badge';
-import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import ProjectItem from 'Components/project/project-item';
 import ProjectItemSmall from 'Components/project/project-item-small';
 import CollectionItem from 'Components/collection/collection-item';
@@ -141,45 +140,6 @@ storiesOf('Badge', module)
   .add('warning', () => <Badge type="warning">Warning</Badge>)
   .add('error', () => <Badge type="error">Error</Badge>)
   .add('private', () => <Badge type="private" />);
-
-storiesOf('Segmented-Buttons', module)
-  .add(
-    'regular',
-    withState('a', ({ state, setState }) => (
-      <SegmentedButtons
-        value={state}
-        onChange={setState}
-        buttons={[{ name: 'a', contents: 1 }, { name: 'b', contents: 2 }, { name: 'c', contents: 3 }]}
-      />
-    )),
-  )
-  .add(
-    'jsx contents',
-    withState('a', ({ state, setState }) => (
-      <SegmentedButtons
-        value={state}
-        onChange={setState}
-        buttons={[
-          {
-            name: 'a',
-            contents: (
-              <>
-                <Badge>Normal</Badge> Badge
-              </>
-            ),
-          },
-          {
-            name: 'b',
-            contents: (
-              <>
-                <Badge type="error">Error</Badge> Badge
-              </>
-            ),
-          },
-        ]}
-      />
-    )),
-  );
 
 storiesOf('ProjectItem', module)
   .add(
