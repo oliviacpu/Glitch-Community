@@ -21,7 +21,7 @@ const TeamAnalyticsTimePop = ({ currentTimeFrame, updateTimeFrame }) => (
 
 const TeamAnalyticsTimePopButton = ({ updateTimeFrame, currentTimeFrame }) => (
   <PopoverWithButton
-    buttonProps={{ size: 'small', type: 'tertiary' }}
+    buttonProps={{ size: 'small', variant: 'secondary' }}
     buttonText={
       <>
         {currentTimeFrame} <div className="down-arrow" aria-label="options" />
