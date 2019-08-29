@@ -50,7 +50,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             image=""
           >
             {team.name}
-            <TeamAvatar team={team} size="small" className={styles.teamAvatar} tiny hideTooltip />
+            <TeamAvatar team={team} size="small" style={{ marginLeft: `${5}px` }} tiny hideTooltip />
           </Button>
         </div>
       ))}
