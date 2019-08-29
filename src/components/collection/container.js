@@ -94,7 +94,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {enableSorting && (
             <div className={classnames(styles.hint, isDarkColor(collection.coverColor) && styles.dark)}>
-              <Emoji name="new" />
+              <Icon icon="new" />
               <Text> You can reorder your projects</Text>
               {!displayHint && (
                 <Button variant="secondary" size="small" onClick={() => setDisplayHint(true)}>
@@ -104,10 +104,10 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
               {displayHint && (
                 <div className={styles.hintBody}>
                   <Text>
-                    <Emoji name="mouse" /> Click and drag to reorder
+                    <Icon icon="mouse" /> Click and drag to reorder
                   </Text>
                   <Text>
-                    <Emoji name="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
+                    <Icon icon="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
                     save.
                   </Text>
                 </div>
