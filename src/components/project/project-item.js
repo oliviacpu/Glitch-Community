@@ -147,17 +147,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                     <div className={styles.projectOptionsContainer}>
                       <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                     </div>
-<<<<<<< HEAD
-                    <div className={styles.nameWrap}>
-                      <div className={styles.itemButtonWrap}>
-                        <Button
-                          as="span"
-                          disabled={!!project.suspendedReason}
-                        >
-                          {project.private ? <PrivateIcon inButton isPrivate /> : null}
-                          <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
-                        </Button>
-=======
                   </header>
                   <ProjectLink className={getLinkBodyStyles(project)} project={project}>
                     <div className={styles.projectHeader}>
@@ -175,7 +164,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                             <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
                           </Button>
                         </div>
->>>>>>> c52f1d17f7c3fdb4d63f7904fcd82da2f952e10c
                       </div>
                     </div>
                     <div className={styles.description}>

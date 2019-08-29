@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
 import { Button } from '@fogcreek/shared-components';
-=======
 import classNames from 'classnames';
->>>>>>> c52f1d17f7c3fdb4d63f7904fcd82da2f952e10c
 
 import Image from 'Components/images/image';
 import { getEditorUrl } from 'Models/project';
