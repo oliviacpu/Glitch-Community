@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
 import Layout from 'Components/layout';
-import { ADMIN_ACCESS_LEVEL } from 'State/team';
+import { ADMIN_ACCESS_LEVEL } from 'Models/team';
 import { getTeam, getUser } from 'Shared/api-loaders';
 
 import TeamPage from './team';
@@ -15,7 +15,7 @@ const getTeamWithAdminIds = async (...args) => {
   if (!team) return team;
   const adminUsers = team.teamPermissions.filter((user) => user.accessLevel === ADMIN_ACCESS_LEVEL);
   return { ...team, adminIds: adminUsers.map((user) => user.userId) };
-}
+};
 
 const TeamPageLoader = ({ name, ...props }) => (
   <DataLoader get={(api) => getTeamWithAdminIds(api, name, 'url')} renderError={() => <NotFound name={name} />}>

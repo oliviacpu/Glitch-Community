@@ -10,7 +10,7 @@ async function getCollection(api, id, idType = 'id') {
 }
 
 async function getProject(api, id, idType = 'id') {
-  const project = await getSingleItem(`v1/projects/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
+  const project = await getSingleItem(api, `v1/projects/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!project) return project;
   const data = await allByKeys({
     teams: getAllPages(api, `v1/projects/by/id/teams?id=${project.id}&limit=100`),
