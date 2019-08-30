@@ -30,7 +30,7 @@ async function getTeam(api, id, idType = 'id') {
   });
   return {
     ...team, ...data,
-    users: orderBy(users, [(user) => user.teamPermission.updatedAt], ['desc']),
+    users: orderBy(users, [(user) => user.teamPermission.updatedAt], ['asc']),
     projects: orderBy(projects, [(project) => project.updatedAt], ['desc']),
   };
 }
