@@ -9166,10 +9166,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ey6EpYv0tEaIbM/nTDOpHciXUvd+ackQrJgEzBwemhZZIWZjcyodqEcrmqDy2BKRTM3a65kKBV4WtLXJDt26SQ==
-  /memoize-one/5.1.1:
-    dev: false
-    resolution:
-      integrity: sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
   /memoizerific/1.11.3:
     dependencies:
       map-or-similar: 1.5.0
