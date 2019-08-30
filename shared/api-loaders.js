@@ -1,5 +1,12 @@
 const { getSingleItem, getAllPages, allByKeys } = require('./api');
 
+async function getCollection(api, id, idType = 'id') {
+  const collection = await getSingleItem(`v1/collections/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
+  if (!collection) return collection;
+  const projects = await getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&orderKey=projectOrder&limit=100`);
+  return { ...collection, projects };
+}
+
 async function getProject(api, id, idType = 'id') {
   const project = await getSingleItem(`v1/projects/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!project) return project;
@@ -23,6 +30,7 @@ async function getUser(api, id, idType = 'id') {
 }
 
 module.exports = {
+  getCollection,
   getProject,
   getUser,
 };
