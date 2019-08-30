@@ -48,8 +48,7 @@ const TeamList = ({ teams, showCreateTeam }) => {
             size="small"
             variant="secondary"
           >
-            {team.name}
-            <TeamAvatar team={team} size="small" style={{ marginLeft: `${5}px` }} tiny hideTooltip />
+            {team.name} <TeamAvatar team={team} size="small" className={emoji} tiny hideTooltip />
           </Button>
         </div>
       ))}
