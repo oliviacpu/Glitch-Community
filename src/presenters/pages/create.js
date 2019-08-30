@@ -25,6 +25,7 @@ import { emojiPattern } from 'Shared/regex';
 import { CDN_URL } from 'Utils/constants';
 
 import styles from './create.styl';
+import { emoji as emojiStyle } from '../../components/global.styl';
 
 function RemixButton({ app, type, size, emoji, children }) {
   const trackRemix = useTracker('Click Remix', {
@@ -35,7 +36,7 @@ function RemixButton({ app, type, size, emoji, children }) {
 
   return (
     <Button as="a" href={getRemixUrl(app.domain)} onClick={() => trackRemix()} variant={type} size={size}>
-      {children} {emoji ? <Icon className={styles.emoji} icon={emoji} /> : ''}
+      {children} {emoji ? <Icon className={emojiStyle} icon={emoji} /> : ''}
     </Button>
   );
 }

@@ -22,6 +22,7 @@ import { useUserEditor } from 'State/user';
 import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './user.styl';
+import { emoji } from '../../components/global.styl';
 
 function syncPageToLogin(login) {
   history.replaceState(null, null, getUserLink({ login }));
@@ -180,7 +181,7 @@ const UserPage = ({ user: initialUser }) => {
         <article data-cy="deleted-projects">
           <Heading tagName="h2">
             Deleted Projects
-            <Icon className={styles.emoji} icon="bomb" />
+            <Icon className={emoji} icon="bomb" />
           </Heading>
           <DeletedProjects
             setDeletedProjects={setDeletedProjects}

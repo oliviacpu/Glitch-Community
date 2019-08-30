@@ -29,6 +29,7 @@ import { useTeamEditor } from 'State/team';
 import useFocusFirst from 'Hooks/use-focus-first';
 
 import styles from './team.styl';
+import { emoji } from '../../components/global.styl';
 
 function syncPageToUrl(team) {
   history.replaceState(null, null, getTeamLink(team));
@@ -62,7 +63,7 @@ const TeamMarketing = () => (
       Want your own team page, complete with detailed app analytics?
     </Text>
     <Button as="a" href="/teams">
-      About Teams <Icon className={styles.emoji} icon="fishingPole" />
+      About Teams <Icon className={emoji} icon="fishingPole" />
     </Button>
   </section>
 );
@@ -70,7 +71,7 @@ const TeamMarketing = () => (
 const NameConflictWarning = ({ id }) => (
   <>
     <Text>
-      This team has your name. You should update your info to remain unique <Icon className={styles.emoji} icon="sparkles" />
+      This team has your name. You should update your info to remain unique <Icon className={emoji} icon="sparkles" />
     </Text>
     <Button as="a" size="small" variant="secondary" href={`/user/${id}`}>
       Your Profile

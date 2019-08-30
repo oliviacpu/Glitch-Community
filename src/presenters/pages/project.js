@@ -40,6 +40,7 @@ import { useCachedProject } from 'State/api-cache';
 import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
+import { emoji } from '../../components/global.styl';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
@@ -120,7 +121,7 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
                     });
                   }}
                 >
-                  Delete {projectDomain} <Icon className={styles.emoji} icon="bomb" />
+                  Delete {projectDomain} <Icon className={emoji} icon="bomb" />
                 </Button>
               )}
             </PopoverActions>
