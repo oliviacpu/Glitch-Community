@@ -72,7 +72,7 @@ function InvitedUser({ user, team, onRevokeInvite }) {
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
-                <Button onClick={onRevokeInvite} variant="warning">
+                <Button onClick={onRevokeInvite} variant="warning" size="small">
                   Remove <Icon className={styles.emoji} icon="wave" />
                 </Button>
               </PopoverActions>
