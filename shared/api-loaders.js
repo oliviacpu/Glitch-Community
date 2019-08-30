@@ -3,7 +3,7 @@ const { orderBy } = require('lodash');
 const { getSingleItem, getAllPages, allByKeys } = require('./api');
 
 async function getCollection(api, id, idType = 'id') {
-  const collection = await getSingleItem(`v1/collections/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
+  const collection = await getSingleItem(api, `v1/collections/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!collection) return collection;
   const projects = await getAllPages(api, `/v1/collections/by/id/projects?id=${collection.id}&orderKey=projectOrder&limit=100`);
   return { ...collection, projects };
