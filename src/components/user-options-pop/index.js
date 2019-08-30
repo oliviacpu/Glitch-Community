@@ -16,6 +16,7 @@ import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 // Create Team button
 
@@ -23,7 +24,7 @@ const CreateTeamButton = ({ showCreateTeam }) => {
   const onClickCreateTeam = useTrackedFunc(showCreateTeam, 'Create Team clicked');
   return (
     <Button size="small" onClick={onClickCreateTeam}>
-      Create Team <Icon className={styles.emoji} icon="herb" />
+      Create Team <Icon className={emoji} icon="herb" />
     </Button>
   );
 };
@@ -136,23 +137,23 @@ Are you sure you want to sign out?`)
         )}
         <div className={styles.buttonWrap}>
           <Button variant="secondary" size="small" onClick={clickNewStuff}>
-            New Stuff <Icon className={styles.emoji} icon="dogFace" />
+            New Stuff <Icon className={emoji} icon="dogFace" />
           </Button>
         </div>
         <div className={styles.buttonWrap}>
           <Button as="a" variant="secondary" size="small" href="https://support.glitch.com">
-            Support <Icon className={styles.emoji} icon="ambulance" />
+            Support <Icon className={emoji} icon="ambulance" />
           </Button>
         </div>
         {userPasswordEnabled && (
           <div className={styles.buttonWrap}>
             <Button size="small" variant="secondary" onClick={clickAccountSettings}>
-              Account Settings <Icon className={styles.emoji} icon="key" />
+              Account Settings <Icon className={emoji} icon="key" />
             </Button>
           </div>
         )}
         <Button variant="secondary" size="small" onClick={clickSignout}>
-          Sign Out <Icon className={styles.emoji} icon="balloon" />
+          Sign Out <Icon className={emoji} icon="balloon" />
         </Button>
       </PopoverInfo>
     </PopoverDialog>

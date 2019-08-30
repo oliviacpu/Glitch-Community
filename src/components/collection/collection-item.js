@@ -29,6 +29,7 @@ import { createCollection } from 'Models/collection';
 import CollectionOptions from './collection-options-pop';
 
 import styles from './collection-item.styl';
+import { emoji } from '../global.styl';
 
 const collectionColorStyles = (collection) => ({
   backgroundColor: collection.coverColor,
@@ -61,7 +62,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
     return (
       <div className={classNames(styles.projectsContainer, styles.empty)}>
         <Text className={styles.emptyCollectionText}>
-          This collection is empty – add some projects <Icon className={styles.emoji} icon="index" />
+          This collection is empty – add some projects <Icon className={emoji} icon="index" />
         </Text>
       </div>
     );

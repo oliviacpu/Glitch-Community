@@ -19,6 +19,7 @@ import { useNotifications } from 'State/notifications';
 import { getAllPages } from 'Shared/api';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 const MEMBER_ACCESS_LEVEL = 20;
 const ADMIN_ACCESS_LEVEL = 30;
@@ -145,11 +146,11 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
           <ActionDescription>Admins can update team info, billing, and remove users</ActionDescription>
           {selectedUserIsTeamAdmin ? (
             <Button size="small" variant="secondary" onClick={onRemoveAdmin}>
-              Remove Admin Status <Icon className={styles.emoji} icon="fastDown" />
+              Remove Admin Status <Icon className={emoji} icon="fastDown" />
             </Button>
           ) : (
             <Button size="small" variant="secondary" onClick={onMakeAdmin}>
-              Make an Admin <Icon className={styles.emoji} icon="fastUp" />
+              Make an Admin <Icon className={emoji} icon="fastUp" />
             </Button>
           )}
         </PopoverActions>
@@ -157,7 +158,7 @@ const TeamUserInfo = ({ user, team, onMakeAdmin, onRemoveAdmin, onRemoveUser }) 
       {canCurrentUserRemoveUser && (
         <PopoverActions type="dangerZone">
           <Button variant="warning" onClick={onRemoveUser}>
-            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Icon className={styles.emoji} icon="wave" />
+            {isCurrentUser ? 'Leave Team' : 'Remove from Team'} <Icon className={emoji} icon="wave" />
           </Button>
         </PopoverActions>
       )}

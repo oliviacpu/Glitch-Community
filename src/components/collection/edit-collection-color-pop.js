@@ -8,6 +8,7 @@ import TextInput from 'Components/inputs/text-input';
 import ColorInput from 'Components/inputs/color';
 import { PopoverWithButton, PopoverDialog, PopoverInfo, PopoverActions } from 'Components/popover';
 import styles from './edit-collection-color-pop.styl';
+import { emoji } from '../global.styl';
 
 const formatAndValidateHex = (hex) => {
   if (!hex) return null;
@@ -95,7 +96,7 @@ function EditCollectionColorPop({ initialColor, updateColor, togglePopover }) {
       <PopoverActions type="secondary">
         <Button size="small" variant="secondary" onClick={setRandomColor}>
           Random
-          <Icon className={styles.emoji} icon="bouquet" />
+          <Icon className={emoji} icon="bouquet" />
         </Button>
       </PopoverActions>
     </PopoverDialog>

@@ -12,6 +12,7 @@ import { getUserAvatarStyle, getUserLink } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 const SignInNotice = () => (
   <div className={styles.anonUserSignUp}>
@@ -35,7 +36,7 @@ const ClearSession = ({ clearUser }) => {
   return (
     <div className={styles.clearSession}>
       <Button onClick={clickClearSession} size="small">
-        Clear Session <Icon className={styles.emoji} icon="balloon" />
+        Clear Session <Icon className={emoji} icon="balloon" />
       </Button>
     </div>
   );

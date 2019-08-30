@@ -12,6 +12,7 @@ import classNames from 'classnames/bind';
 import SkipSectionButtons from 'Components/containers/skip-section-buttons';
 
 import styles from './projects-list.styl';
+import { emoji } from '../global.styl';
 
 const containers = {
   row: (props) => <Row className={styles.projectsRow} {...props} />,
@@ -54,7 +55,7 @@ function ProjectsList({
     }
     return (
       <>
-        {title} <Icon className={styles.emoji} icon={titleEmoji} />
+        {title} <Icon className={emoji} icon={titleEmoji} />
       </>
     );
   };

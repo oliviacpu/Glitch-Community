@@ -10,6 +10,7 @@ import { useAPI } from 'State/api';
 import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 const GetMagicCode = () => {
   const api = useAPI();
@@ -61,7 +62,7 @@ const GetMagicCode = () => {
           />
           <div className={styles.submitWrap}>
             <Button disabled={!isEnabled || validationError} onClick={onSubmit}>
-              Send a Code <Icon className={styles.emoji} icon="loveLetter" />
+              Send a Code <Icon className={emoji} icon="loveLetter" />
             </Button>
           </div>
         </form>

@@ -19,6 +19,7 @@ import useDevToggle from 'State/dev-toggles';
 import { captureException } from 'Utils/sentry';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 const SignInCodeSection = ({ onClick }) => (
   <PopoverActions type="secondary">
@@ -127,7 +128,7 @@ const EmailHandler = ({ align, showView }) => {
   return (
     <PopoverDialog align={align}>
       <MultiPopoverTitle>
-        Email Sign In&nbsp;<Icon className={styles.emoji} icon="email" />
+        Email Sign In&nbsp;<Icon className={emoji} icon="email" />
       </MultiPopoverTitle>
       <PopoverActions>
         {status === 'ready' && (
@@ -245,7 +246,7 @@ const SignInWithCode = ({ align, showTwoFactor }) => {
 const TwoFactorSignIn = ({ align, token }) => (
   <PopoverDialog align={align}>
     <MultiPopoverTitle>
-      Two factor auth <Icon className={styles.emoji} icon="key" />
+      Two factor auth <Icon className={emoji} icon="key" />
     </MultiPopoverTitle>
     <PopoverActions>
       <TwoFactorForm initialToken={token} />
@@ -364,7 +365,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
       {(showView) => (
         <PopoverDialog focusOnDialog align={align}>
           <PopoverInfo>
-            <Icon className={styles.emoji} icon="carpStreamer" /> New to Glitch? Create an account by signing in.
+            <Icon className={emoji} icon="carpStreamer" /> New to Glitch? Create an account by signing in.
           </PopoverInfo>
           <PopoverInfo>
             <div className={styles.termsAndConditions}>
@@ -381,7 +382,7 @@ export const SignInPopBase = withRouter(({ location, align }) => {
             <SignInButton companyName="google" onClick={onClick} />
             {slackAuthEnabled && <SignInButton companyName="slack" onClick={onClick} />}
             <Button size="small" onClick={setDestinationAnd(showView.email)}>
-              Sign in with Email <Icon className={styles.emoji} icon="email" />
+              Sign in with Email <Icon className={emoji} icon="email" />
             </Button>
           </PopoverActions>
           <SignInCodeSection onClick={setDestinationAnd(showView.signInCode)} />

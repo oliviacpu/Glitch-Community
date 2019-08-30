@@ -15,6 +15,7 @@ import { captureException } from 'Utils/sentry';
 import { getAbuseReportTitle, getAbuseReportBody } from 'Utils/abuse-reporting';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 function getDefaultReason(reportedType) {
   if (reportedType === 'user') {
@@ -51,7 +52,7 @@ const Success = () => (
     <PopoverActions>
       <Notification persistent type="success">Report Sent</Notification>
       <InfoDescription>
-        Thanks for helping to keep Glitch a safe, friendly community <Icon className={styles.emoji} icon="park" />
+        Thanks for helping to keep Glitch a safe, friendly community <Icon className={emoji} icon="park" />
       </InfoDescription>
     </PopoverActions>
   </>
@@ -60,7 +61,7 @@ const Success = () => (
 const Failure = ({ value }) => (
   <>
     <PopoverTitle>
-      Failed to Send <Icon className={styles.emoji} icon="sick" />
+      Failed to Send <Icon className={emoji} icon="sick" />
     </PopoverTitle>
     <PopoverInfo>
       <InfoDescription>

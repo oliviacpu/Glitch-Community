@@ -4,13 +4,14 @@ import classNames from 'classnames';
 import { Icon } from '@fogcreek/shared-components';
 
 import styles from './password-strength.styl';
+import { emoji } from '../global.styl';
 
 const PasswordStrength = ({ strength }) => {
   const labels = {
-    0: <><Icon className={styles.emoji} icon="faceExpressionless" /> weak</>,
-    1: <><Icon className={styles.emoji} icon="faceSlightlySmiling" /> okay</>,
-    2: <><Icon className={styles.emoji} icon="faceSlightlySmiling" /> okay</>,
-    3: <><Icon className={styles.emoji} icon="bicep" /> strong</>,
+    0: <><Icon className={emoji} icon="faceExpressionless" /> weak</>,
+    1: <><Icon className={emoji} icon="faceSlightlySmiling" /> okay</>,
+    2: <><Icon className={emoji} icon="faceSlightlySmiling" /> okay</>,
+    3: <><Icon className={emoji} icon="bicep" /> strong</>,
   };
   return (
     <div className={styles.container}>

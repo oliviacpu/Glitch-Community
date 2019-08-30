@@ -19,6 +19,7 @@ import { captureException } from 'Utils/sentry';
 
 import TeamUserPop from './team-user-info';
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 // Invited user icon and pop
 
@@ -67,13 +68,13 @@ function InvitedUser({ user, team, onRevokeInvite }) {
 
               <PopoverActions>
                 <Button onClick={resendInvite} variant="secondary" size="small">
-                  Resend invite <Icon className={styles.emoji} icon="herb" />
+                  Resend invite <Icon className={emoji} icon="herb" />
                 </Button>
               </PopoverActions>
 
               <PopoverActions type="dangerZone">
                 <Button onClick={onRevokeInvite} variant="warning" size="small">
-                  Remove <Icon className={styles.emoji} icon="wave" />
+                  Remove <Icon className={emoji} icon="wave" />
                 </Button>
               </PopoverActions>
             </PopoverDialog>
@@ -115,7 +116,7 @@ const WhitelistedDomain = ({ domain, setDomain }) => (
             {!!setDomain && (
               <PopoverActions type="dangerZone">
                 <Button variant="warning" size="small" onClick={() => setDomain(null)}>
-                  Remove {domain} <Icon className={styles.emoji} icon="bomb" />
+                  Remove {domain} <Icon className={emoji} icon="bomb" />
                 </Button>
               </PopoverActions>
             )}

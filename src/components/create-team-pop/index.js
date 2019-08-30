@@ -12,6 +12,7 @@ import { useAPI } from 'State/api';
 import { useTracker } from 'State/segment-analytics';
 
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 // Create Team 🌿
 
@@ -120,7 +121,7 @@ const CreateTeamPop = withRouter(({ history }) => {
   return (
     <PopoverDialog align="right" className={styles.createTeamPop}>
       <MultiPopoverTitle>
-        Create Team <Icon className={styles.emoji} icon="herb" />
+        Create Team <Icon className={emoji} icon="herb" />
       </MultiPopoverTitle>
 
       <PopoverInfo>
@@ -137,7 +138,7 @@ const CreateTeamPop = withRouter(({ history }) => {
           ) : (
             <Button submit size="small" disabled={!!state.error}>
               Create Team
-              <Icon icon="thumbsUp" className={styles.emoji} />
+              <Icon icon="thumbsUp" className={emoji} />
             </Button>
           )}
         </form>

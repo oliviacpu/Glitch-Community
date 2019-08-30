@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@fogcreek/shared-components';
 
 import styles from './thanks.styl';
+import { emoji } from '../global.styl';
 
 const thanksText = (count) => {
   if (count === 1) {
@@ -18,13 +19,13 @@ const ThanksLong = ({ count }) => (
   <p className={styles.container}>
     {thanksText(count)}
     &nbsp;
-    <Icon className={styles.emoji} icon="sparklingHeart" />
+    <Icon className={emoji} icon="sparklingHeart" />
   </p>
 );
 
 const ThanksShort = ({ count }) => (
   <p className={styles.container}>
-    <Icon className={styles.emoji} icon="sparklingHeart" />
+    <Icon className={emoji} icon="sparklingHeart" />
     &nbsp;
     {count}
   </p>

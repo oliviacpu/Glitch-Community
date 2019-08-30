@@ -10,6 +10,7 @@ import WistiaVideo from 'Components/wistia-video';
 import { useTracker } from 'State/segment-analytics';
 
 import styles from './banner.styl';
+import { emoji } from '../../../components/global.styl';
 
 const OverlayVideoBody = () => (
   <Overlay>
@@ -31,7 +32,7 @@ const OverlayVideo = () => {
     return (
       <>
         <Button onClick={onClick}>
-          Watch Video <Icon className={styles.emoji} icon="playButton" />
+          Watch Video <Icon className={emoji} icon="playButton" />
         </Button>
         {visible && <OverlayBackground />}
       </>
@@ -79,7 +80,7 @@ const InlineVideo = () => {
           <div className={styles.bannerVideoPoster} onClick={onClick} aria-hidden="true" />
           <span className={styles.bannerVideoButton}>
             <Button onClick={onClick}>
-              Watch Video <Icon className={styles.emoji} icon="playButton" />
+              Watch Video <Icon className={emoji} icon="playButton" />
             </Button>
           </span>
         </>

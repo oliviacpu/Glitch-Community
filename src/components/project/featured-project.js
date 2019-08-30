@@ -16,6 +16,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
+import { emoji } from '../global.styl';
 
 const Top = ({
   featuredProject,
@@ -34,7 +35,7 @@ const Top = ({
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
-        <Icon className={styles.emoji} icon="clapper" />
+        <Icon className={emoji} icon="clapper" />
       </Heading>
       {collection && (
         <div className={styles.note}>

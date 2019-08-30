@@ -81,7 +81,7 @@ export const PopoverWithButton = ({ buttonProps, buttonText, children: renderChi
             <div className={styles.buttonWrap}>
               <Button {...buttonProps} ref={buttonRef} onClick={popoverProps.togglePopover}>
                 {buttonText}
-                {buttonProps.emoji && <Icon icon={buttonProps.emoji} className={styles.emoji} />}
+                {buttonProps.emoji && <Icon icon={buttonProps.emoji} className={globalStyles.emoji} />}
               </Button>
             </div>
             {popoverProps.visible && renderChildren(popoverProps)}
