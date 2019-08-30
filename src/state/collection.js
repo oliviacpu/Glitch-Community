@@ -260,10 +260,9 @@ export function useCollectionEditor(initialCollection) {
       if (selectedCollection.id === collection.id) {
         setCollection((oldCollection) => ({
           ...oldCollection,
-          projects: oldCollection.projects.filter((p) => p.id !== project.id)
+          projects: oldCollection.projects.filter((p) => p.id !== project.id),
         }));
-      }        
-        
+      }
 
       // if we're unbookmarking a project in a collection, make sure it shows as unbookmarked
       if (selectedCollection.isMyStuff) {
@@ -274,8 +273,8 @@ export function useCollectionEditor(initialCollection) {
               p.authUserHasBookmarked = false;
             }
             return p;
-          })
-        })); 
+          }),
+        }));
       }
 
       // make api call to remove from collection
