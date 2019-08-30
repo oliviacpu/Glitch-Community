@@ -7,7 +7,7 @@ and potentially dispatches additional actions.
 A "handler map" is an object with the shape `{[action type]: handler}`
 that defines a mapping of action types with the handlers that should respond to them.
 
-createHandlerMiddleware takes one or more handler maps 
+createHandlerMiddleware takes one or more handler maps
 and returns a Redux middleware that routes each action to the appropriate handlers.
 */
 

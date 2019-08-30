@@ -1,8 +1,9 @@
-/* 
+/*
 `runLatest` takes a generator that yields promises,
 and returns an async function that restarts from the beginning every time it is called.
-This is for when you have 
-
+Effectively, this means that the first call is "cancelled" when the second call is made.
+This is useful for long-running processes that need to be restarted if their initial values change
+(e.g. loading a user if the persistent token changes).
 */
 
 export default function runLatest(fn) {
@@ -10,21 +11,23 @@ export default function runLatest(fn) {
     currentGenerator: null,
   };
   return async (...args) => {
-    // if there is already a running generator instance, 
+    // if there is already a running generator instance,
     // create a new instance and replace the old one.
-    //     
+    // the loop initiated to run the previous instance
+    // will now run the new instance instead.
     if (state.currentGenerator) {
       state.currentGenerator = fn(...args);
-      return
+      return;
     }
-    
+
     state.currentGenerator = fn(...args);
-  
 
     let promiseResult = null;
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const { value, done } = state.currentGenerator.next(promiseResult);
+
+      // when the generator is done, remove the running instance from state and end the loop.
       if (done) {
         state.currentGenerator = null;
         return;
