@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@fogcreek/shared-components';
+import { Badge, Button } from '@fogcreek/shared-components';
 
-import Badge from 'Components/badges/badge';
 import Image from 'Components/images/image';
 import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
