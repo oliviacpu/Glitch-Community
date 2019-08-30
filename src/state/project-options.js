@@ -45,7 +45,7 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   const projectOptions = { ...defaultProjectOptions, ...options };
 
   const isPinned = useMemo(() => {
-    if (user) return user.pins.some(({ id }) => id === project.id);
+    if (user) return user.pinnedProjects.some(({ id }) => id === project.id);
     if (team) return team.pinnedProjects.some(({ id }) => id === project.id);
     return false;
   }, [user, team, project]);

@@ -10,7 +10,7 @@ import { getTeam, getUser } from 'Shared/api-loaders';
 import TeamPage from './team';
 import UserPage from './user';
 
-const getTeamWithAdminIds = (...args) => {
+const getTeamWithAdminIds = async (...args) => {
   const team = await getTeam(...args);
   if (!team) return team;
   const adminUsers = team.teamPermissions.filter((user) => user.accessLevel === ADMIN_ACCESS_LEVEL);

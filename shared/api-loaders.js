@@ -22,18 +22,16 @@ async function getProject(api, id, idType = 'id') {
 async function getTeam(api, id, idType = 'id') {
   const team = await getSingleItem(api, `v1/teams/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!team) return team;
-  const [users, pinnedProjects, projects, collections] = await Promise.all([
-    getAllPages(api, `v1/teams/by/id/users?id=${team.id}&orderKey=createdAt&orderDirection=ASC&limit=100`),
-    getAllPages(api, `v1/teams/by/id/pinnedProjects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
-    getAllPages(api, `v1/teams/by/id/projects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
-    getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
-  ]);
+  const { users, projects, ...data } = await allByKeys({
+    users: getAllPages(api, `v1/teams/by/id/users?id=${team.id}&orderKey=createdAt&orderDirection=ASC&limit=100`),
+    pinnedProjects: getAllPages(api, `v1/teams/by/id/pinnedProjects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
+    projects: getAllPages(api, `v1/teams/by/id/projects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
+    collections: getAllPages(api, `v1/teams/by/id/collections?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
+  });
   return {
-    ...team,
+    ...team, ...data,
     users: orderBy(users, [(user) => user.teamPermission.updatedAt], ['desc']),
     projects: orderBy(projects, [(project) => project.updatedAt], ['desc']),
-    pinnedProjects,
-    collections,
   };
 }
 
@@ -41,7 +39,7 @@ async function getUser(api, id, idType = 'id') {
   const user = await getSingleItem(api, `v1/users/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!user) return user;
   const data = await allByKeys({
-    pins: getAllPages(api, `v1/users/by/id/pinnedProjects?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
+    pinnedProjects: getAllPages(api, `v1/users/by/id/pinnedProjects?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
     projects: getAllPages(api, `v1/users/by/id/projects?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
     teams: getAllPages(api, `v1/users/by/id/teams?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
     collections: getAllPages(api, `v1/users/by/id/collections?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),

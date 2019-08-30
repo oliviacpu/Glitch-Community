@@ -9,8 +9,7 @@ import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
 import { useProjectReload } from 'State/project';
 
-const MEMBER_ACCESS_LEVEL = 20;
-const ADMIN_ACCESS_LEVEL = 30;
+import { MEMBER_ACCESS_LEVEL, ADMIN_ACCESS_LEVEL } from 'Models/team';
 
 // eslint-disable-next-line import/prefer-default-export
 export function useTeamEditor(initialTeam) {
