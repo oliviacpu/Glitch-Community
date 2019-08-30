@@ -5,19 +5,7 @@ import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import useUploader from 'State/uploader';
 import useErrorHandlers from 'State/error-handlers';
-import { getSingleItem, getAllPages, allByKeys } from 'Shared/api';
-
-export async function getUser(api, id, idType = 'id') {
-  const user = await getSingleItem(api, `v1/users/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
-  if (!user) return user;
-  const data = await allByKeys({
-    pins: getAllPages(api, `v1/users/by/id/pinnedProjects?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    projects: getAllPages(api, `v1/users/by/id/projects?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    teams: getAllPages(api, `v1/users/by/id/teams?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-    collections: getAllPages(api, `v1/users/by/id/collections?id=${user.id}&limit=100&orderKey=createdAt&orderDirection=DESC`),
-  });
-  return { ...user, ...data };
-};
+import { getSingleItem } from 'Shared/api';
 
 function useUserPageGetters() {
   const api = useAPI();
