@@ -156,7 +156,7 @@ const logSharedUserError = (sharedUser, newSharedUser) => {
 
 // sharedUser syncs with the editor and is authoritative on id and persistentToken
 const sharedUserKey = 'cachedUser';
-// cachedUser mirrors GET /users/{id} and is what we actually display
+// cachedUser mirrors the v1 API data and is what we actually display
 const cachedUserKey = 'community-cachedUser';
 
 // Default values for all of the user fields we need you to have
@@ -248,8 +248,10 @@ const load = runLatest(function* (action, store) {
 export const handlers = {
   [pageMounted]: async (action, store) => {
     const cachedUser = getFromStorage(cachedUserKey);
-    identifyUser(cachedUser);
-    store.dispatch(actions.loadedFromCache(cachedUser));
+    if (cachedUser) {
+      identifyUser(cachedUser);
+      store.dispatch(actions.loadedFromCache(cachedUser));
+    }
     await load(action, store);
   },
   [actions.requestedReload]: load,
@@ -326,7 +328,7 @@ export const useSuperUserHelpers = () => {
       window.location.reload();
     },
     canBecomeSuperUser:
-      cachedUser && cachedUser.projects && cachedUser.projects.filter((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff').length > 0,
+      cachedUser && cachedUser.projects && cachedUser.projects.some((p) => p.id === 'b9f7fbdd-ac07-45f9-84ea-d484533635ff'),
     superUserFeature,
   };
 };

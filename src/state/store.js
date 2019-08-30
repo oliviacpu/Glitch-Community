@@ -9,7 +9,7 @@ const store = configureStore({
     currentUser: currentUser.reducer,
   },
   middleware: [...getDefaultMiddleware(), createHandlerMiddleware(currentUser.handlers)],
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: window.ENVIRONMENT === 'dev',
 });
 
 export default ({ children }) => <Provider store={store}>{children}</Provider>;
