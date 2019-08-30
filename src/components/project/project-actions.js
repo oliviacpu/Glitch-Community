@@ -4,6 +4,8 @@ import { Button, Icon } from '@fogcreek/shared-components';
 
 import { getShowUrl, getEditorUrl, getRemixUrl } from '../../models/project';
 
+import { emoji } from '../global.styl';
+
 export const ShowButton = ({ name, size }) => (
   <Button as="a" href={getShowUrl(name)} size={size}>
     <Icon icon="sunglasses" /> Show
@@ -15,7 +17,7 @@ ShowButton.propTypes = {
 };
 
 export const EditButton = ({ name, isMember, size }) => (
-  <Button href={getEditorUrl(name)} size={size}>
+  <Button as="a" href={getEditorUrl(name)} size={size}>
     {isMember ? 'Edit Project' : 'View Source'}
   </Button>
 );
@@ -32,7 +34,7 @@ EditButton.defaultProps = {
 
 export const RemixButton = ({ name, isMember }) => (
   <Button as="a" href={getRemixUrl(name)} size="small">
-    {isMember ? 'Remix This' : 'Remix your own'} <Icon icon="microphone" />
+    {isMember ? 'Remix This' : 'Remix your own'} <Icon className={emoji} icon="microphone" />
   </Button>
 );
 RemixButton.propTypes = {
