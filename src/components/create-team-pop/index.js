@@ -137,7 +137,7 @@ const CreateTeamPop = withRouter(({ history }) => {
           ) : (
             <Button submit size="small" disabled={!!state.error}>
               Create Team
-              <Icon icon="thumbsUp" />
+              <Icon icon="thumbsUp" className={styles.emoji} />
             </Button>
           )}
         </form>
