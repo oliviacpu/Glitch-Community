@@ -82,11 +82,14 @@ function PopoverSearch({
   onSubmit,
   renderItem,
   renderNoResults,
+  renderMessage,
   renderLoader,
   renderError,
   labelText,
   placeholder,
 }) {
+  const message = renderMessage();
+
   const { inputRef, activeIndex } = useActiveIndex(results, onSubmit);
   return (
     <>
@@ -107,6 +110,7 @@ function PopoverSearch({
           <ResultsList scroll items={results}>
             {(item, i) => renderItem({ item, onSubmit, active: i === activeIndex })}
           </ResultsList>
+          {message}
         </PopoverSection>
       )}
       {status === 'loading' && value.length > 0 && results.length === 0 && renderLoader()}
@@ -124,6 +128,7 @@ PopoverSearch.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   renderItem: PropTypes.func.isRequired,
   renderNoResults: PropTypes.func,
+  renderMessage: PropTypes.func,
   renderLoader: PropTypes.func,
   renderError: PropTypes.func,
   labelText: PropTypes.string.isRequired,
@@ -133,6 +138,7 @@ PopoverSearch.propTypes = {
 PopoverSearch.defaultProps = {
   renderLoader: () => <PopoverLoader />,
   renderNoResults: () => <NothingFound />,
+  renderMessage: () => null,
   renderError: () => null,
   placeholder: null,
 };
