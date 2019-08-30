@@ -7,6 +7,8 @@ import TextInput from 'Components/inputs/text-input';
 import ResultsList from 'Components/containers/results-list';
 import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './base';
 
+import { emoji } from '../global.styl';
+
 function useActiveIndex(items, onSelect) {
   const inputRef = useRef();
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -69,7 +71,7 @@ const PopoverLoader = () => (
 const NothingFound = () => (
   <PopoverActions>
     <InfoDescription>
-      Nothing found <Icon style={{ height: `${1.3}em`, width: `${1.3}em`, verticalAlign: 'sub' }} icon="sparkles" />
+      Nothing found <Icon className={emoji} icon="sparkles" />
     </InfoDescription>
   </PopoverActions>
 );

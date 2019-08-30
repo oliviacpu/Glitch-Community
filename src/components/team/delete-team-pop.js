@@ -10,6 +10,8 @@ import { useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
 // import { teamAdmins } from 'Models/team';
 
+import { emoji } from '../global.styl';
+
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
 const DeleteTeamPop = withRouter(({ history, team }) => {
@@ -41,7 +43,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
       </PopoverActions>
       <PopoverActions type="dangerZone">
         <Button size="small" variant="warning" onClick={deleteTeam}>
-          Delete {team.name} <Icon style={{ height: `${1.3}em`, width: `${1.3}em`, verticalAlign: 'sub' }} icon="bomb" />
+          Delete {team.name} <Icon className={emoji} icon="bomb" />
           {teamIsDeleting && <Loader />}
         </Button>
       </PopoverActions>
