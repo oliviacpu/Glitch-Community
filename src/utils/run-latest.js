@@ -1,10 +1,7 @@
 /* 
 `runLatest` takes a generator that yields promises,
 and returns an async function that restarts from the beginning every time it is called.
-Example:
-
-const 
-
+This is for when you have 
 
 */
 
@@ -13,9 +10,16 @@ export default function runLatest(fn) {
     currentGenerator: null,
   };
   return async (...args) => {
-    const isAlreadyRunning = state.currentGenerator;
+    // if there is already a running generator instance, 
+    // create a new instance and replace the old one.
+    //     
+    if (state.currentGenerator) {
+      state.currentGenerator = fn(...args);
+      return
+    }
+    
     state.currentGenerator = fn(...args);
-    if (isAlreadyRunning) return;
+  
 
     let promiseResult = null;
     // eslint-disable-next-line no-constant-condition
