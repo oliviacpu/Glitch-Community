@@ -129,7 +129,7 @@ Are you sure you want to sign out?`)
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
           <div className={styles.buttonWrap}>
-            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
+            <CheckboxButton size="small" value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
               Super User
             </CheckboxButton>
           </div>

@@ -19,7 +19,7 @@ const PopoverMenuItems = ({ children }) =>
   children.map(
     (group, i) =>
       group.some((item) => item.onClick) && (
-        <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'warning' : undefined}>
+        <PopoverActions key={i} type={group.some((item) => item.dangerZone) ? 'dangerZone' : undefined}>
           {group.map((item, j) => item.onClick && <PopoverMenuButton key={j} onClick={item.onClick} label={item.label} emoji={item.emoji} />)}
         </PopoverActions>
       ),
