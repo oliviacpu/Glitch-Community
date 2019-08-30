@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
 import Layout from 'Components/layout';
-import { getSingleItem, getAllPages } from 'Shared/api';
 import { getTeam, getUser } from 'Shared/api-loaders';
 
 import TeamPage from './team';
 import UserPage from './user';
+
+const getTeamWithAdminIds = (api, )
 
 const TeamPageLoader = ({ name, ...props }) => (
   <DataLoader get={(api) => getTeam(api, name, 'url')} renderError={() => <NotFound name={name} />}>
