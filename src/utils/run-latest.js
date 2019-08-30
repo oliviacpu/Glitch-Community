@@ -1,8 +1,14 @@
-// takes a generator that yields promises,
-// returns an async function that restarts from the beginning every time it is called.
-// 
+/* 
+`runLatest` takes a generator that yields promises,
+and returns an async function that restarts from the beginning every time it is called.
+Example:
 
-function runLatest(fn) {
+const 
+
+
+*/
+
+export default function runLatest(fn) {
   const state = {
     currentGenerator: null,
   };
