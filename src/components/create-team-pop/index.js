@@ -136,7 +136,7 @@ const CreateTeamPop = withRouter(({ history }) => {
           {state.isLoading ? (
             <Loader />
           ) : (
-            <Button submit size="small" disabled={!!state.error}>
+            <Button onClick={handleSubmit} size="small" disabled={!!state.error}>
               Create Team
               <Icon icon="thumbsUp" className={emoji} />
             </Button>
