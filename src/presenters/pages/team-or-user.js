@@ -4,15 +4,21 @@ import PropTypes from 'prop-types';
 import NotFound from 'Components/errors/not-found';
 import DataLoader from 'Components/data-loader';
 import Layout from 'Components/layout';
+import { ADMIN_ACCESS_LEVEL } from 'State/team';
 import { getTeam, getUser } from 'Shared/api-loaders';
 
 import TeamPage from './team';
 import UserPage from './user';
 
-const getTeamWithAdminIds = (api, )
+const getTeamWithAdminIds = (...args) => {
+  const team = await getTeam(...args);
+  if (!team) return team;
+  const adminUsers = team.teamPermissions.filter((user) => user.accessLevel === ADMIN_ACCESS_LEVEL);
+  return { ...team, adminIds: adminUsers.map((user) => user.userId) };
+}
 
 const TeamPageLoader = ({ name, ...props }) => (
-  <DataLoader get={(api) => getTeam(api, name, 'url')} renderError={() => <NotFound name={name} />}>
+  <DataLoader get={(api) => getTeamWithAdminIds(api, name, 'url')} renderError={() => <NotFound name={name} />}>
     {(team) => <TeamPage team={team} {...props} />}
   </DataLoader>
 );
@@ -33,7 +39,7 @@ UserPageLoader.propTypes = {
 };
 
 const TeamOrUserPageLoader = ({ name, ...props }) => (
-  <DataLoader get={(api) => getTeam(api, name, 'url')}>
+  <DataLoader get={(api) => getTeamWithAdminIds(api, name, 'url')}>
     {(team) =>
       team ? (
         <TeamPage team={team} {...props} />

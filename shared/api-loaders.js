@@ -1,4 +1,5 @@
 const { orderBy } = require('lodash');
+
 const { getSingleItem, getAllPages, allByKeys } = require('./api');
 
 async function getCollection(api, id, idType = 'id') {
@@ -22,7 +23,6 @@ async function getTeam(api, id, idType = 'id') {
   const team = await getSingleItem(api, `v1/teams/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);
   if (!team) return team;
   const [users, pinnedProjects, projects, collections] = await Promise.all([
-    // load all users, need to handle pagination
     getAllPages(api, `v1/teams/by/id/users?id=${team.id}&orderKey=createdAt&orderDirection=ASC&limit=100`),
     getAllPages(api, `v1/teams/by/id/pinnedProjects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
     getAllPages(api, `v1/teams/by/id/projects?id=${team.id}&orderKey=createdAt&orderDirection=DESC&limit=100`),
@@ -31,11 +31,11 @@ async function getTeam(api, id, idType = 'id') {
   return {
     ...team,
     users: orderBy(users, [(user) => user.teamPermission.updatedAt], ['desc']),
-    projects: orderBy(projects, ['updatedAt'], ['desc']),
-    teamPins: pinnedProjects.map((project) => ({ projectId: project.id })),
+    projects: orderBy(projects, [(project) => project.updatedAt], ['desc']),
+    pinnedProjects,
     collections,
   };
-};
+}
 
 async function getUser(api, id, idType = 'id') {
   const user = await getSingleItem(api, `v1/users/by/${idType}?${idType}=${encodeURIComponent(id)}`, id);

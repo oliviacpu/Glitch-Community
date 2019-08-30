@@ -183,14 +183,14 @@ export function useTeamEditor(initialTeam) {
       await addPinnedProject({ project, team });
       setTeam((prev) => ({
         ...prev,
-        teamPins: [...prev.teamPins, { projectId: project.id }],
+        pinnedProjects: [...prev.pinnedProjects, project],
       }));
     }, handleError),
     removePin: withErrorHandler(async (project) => {
       await removePinnedProject({ project, team });
       setTeam((prev) => ({
         ...prev,
-        teamPins: prev.teamPins.filter((p) => p.projectId !== project.id),
+        pinnedProjects: prev.pinnedProjects.filter((p) => p.id !== project.id),
       }));
     }, handleError),
     updateWhitelistedDomain: (whitelistedDomain) => updateFields({ whitelistedDomain }).catch(handleError),
