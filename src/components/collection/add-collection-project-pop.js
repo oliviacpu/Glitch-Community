@@ -14,6 +14,8 @@ import { useAlgoliaSearch } from 'State/search';
 import { useNotifications } from 'State/notifications';
 import useDebouncedValue from 'Hooks/use-debounced-value';
 
+import { emoji } from '../global.styl';
+
 function parseQuery(query) {
   query = query.trim();
   try {
@@ -99,7 +101,7 @@ function AddCollectionProjectPop({ collection, togglePopover, addProjectToCollec
       {status === 'ready' && excludingExactMatch && (
         <PopoverInfo>
           <InfoDescription>
-            {parsedQuery} is already in this collection <Icon style={{ height: '1.3em', width: '1.3em' }} icon="sparkles" />
+            {parsedQuery} is already in this collection <Icon className={emoji} icon="sparkles" />
           </InfoDescription>
         </PopoverInfo>
       )}

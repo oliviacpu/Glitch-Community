@@ -35,7 +35,7 @@ const ClearSession = ({ clearUser }) => {
 
   return (
     <div className={styles.clearSession}>
-      <Button onClick={clickClearSession} size="small">
+      <Button onClick={clickClearSession} size="small" variant="warning">
         Clear Session <Icon className={emoji} icon="balloon" />
       </Button>
     </div>
