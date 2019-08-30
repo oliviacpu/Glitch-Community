@@ -4,11 +4,11 @@ that is called after an action is dispatched to the Redux store,
 executes side effects (e.g. logging, network calls, writing to local storage),
 and potentially dispatches additional actions.
 
-A "handler map" is an object map with the shape `{[action type]: handler}`
+A "handler map" is an object with the shape `{[action type]: handler}`
+that defines a mapping of action types with the handlers that should respond to them.
 
-
-createHandlerMiddleware takes
-
+createHandlerMiddleware takes one or more handler maps 
+and returns a Redux middleware that routes each action to the appropriate handlers.
 */
 
 const createHandlerMiddleware = (...handlerMaps) => {
