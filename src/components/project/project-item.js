@@ -20,6 +20,7 @@ import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
+import { useGlobals } from 'State/globals';
 import { useTrackedFunc } from 'State/segment-analytics';
 
 import ProjectOptionsPop from './project-options-pop';
@@ -55,6 +56,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   const api = useAPI();
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
   const { createNotification } = useNotifications();
+  const { location } = useGlobals();
 
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
@@ -86,7 +88,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
   };
-  const onMyStuffPage = window.location.pathname.includes('my-stuff');
+  const onMyStuffPage = location.pathname.includes('my-stuff');
 
   const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collectionToAddTo) => {
     if (collectionToAddTo.isMyStuff) {
