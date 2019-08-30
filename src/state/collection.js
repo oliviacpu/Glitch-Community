@@ -256,32 +256,27 @@ export function useCollectionEditor(initialCollection) {
         selectedCollection = collection;
       }
 
-      // update collection state
-      setCollection((oldCollection) => {
-        const getNewProjectsFromOldProjects = (oldProjects) => {
-          // if collection we're removing from is same as current collection page, remove it from the page
-          if (selectedCollection.id === collection.id) {
-            return oldProjects.filter((p) => p.id !== project.id);
-          }
-
-          // if we're unbookmarking a project in a collection, make sure it shows as unbookmarked
-          if (selectedCollection.isMyStuff) {
-            return oldProjects.map((p) => {
-              if (p.id === project.id) {
-                p.authUserHasBookmarked = false;
-              }
-              return p;
-            });
-          }
-
-          return oldProjects;
-        };
-
-        return {
+      // if collection we're removing from is same as current collection page, remove it from the page
+      if (selectedCollection.id === collection.id) {
+        setCollection((oldCollection) => ({
           ...oldCollection,
-          projects: getNewProjectsFromOldProjects(oldCollection.projects),
-        };
-      });
+          projects: oldCollection.projects.filter((p) => p.id !== project.id)
+        }));
+      }        
+        
+
+      // if we're unbookmarking a project in a collection, make sure it shows as unbookmarked
+      if (selectedCollection.isMyStuff) {
+        setCollection((oldCollection) => ({
+          ...oldCollection,
+          projects: oldCollection.projects.map((p) => {
+            if (p.id === project.id) {
+              p.authUserHasBookmarked = false;
+            }
+            return p;
+          })
+        })); 
+      }
 
       // make api call to remove from collection
       await removeProjectFromCollection({ project, collection: selectedCollection });
