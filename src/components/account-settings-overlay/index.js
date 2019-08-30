@@ -9,6 +9,7 @@ import { useCurrentUser } from 'State/current-user';
 import PasswordSettings from './password-settings';
 import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
+import { emoji } from '../global.styl';
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
@@ -23,7 +24,7 @@ const AccountSettingsOverlay = () => {
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
-          Account Settings <Icon icon="key" className={styles.emoji} />
+          Account Settings <Icon icon="key" className={emoji} />
         </OverlayTitle>
       </OverlaySection>
 
