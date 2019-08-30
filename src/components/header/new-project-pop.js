@@ -61,7 +61,7 @@ const NewProjectPop = ({ projects }) => (
       )}
     </PopoverSection>
     <PopoverActions type="secondary">
-      <Button size="small" type="secondary" onClick={importGitRepo} matchBackground>
+      <Button size="small" variant="secondary" onClick={importGitRepo} matchBackground>
         Clone from Git Repo
       </Button>
     </PopoverActions>

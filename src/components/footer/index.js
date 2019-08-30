@@ -22,35 +22,33 @@ const PlatformsIcon = () => (
   />
 );
 
-function Footer() {
-  return (
-    <footer className={styles.container} role="contentinfo">
-      <FooterLink href="/about" track="about">
-        About Glitch
-        <Icon className={styles.emoji} icon="crystalBall" />
-      </FooterLink>
-      <FooterLink href="/culture" track="blog">
-        Blog
-        <Icon className={styles.emoji} icon="newspaper" />
-      </FooterLink>
-      <FooterLink href="/help/" track="faq">
-        Help Center
-        <Icon className={styles.emoji} icon="umbrella" />
-      </FooterLink>
-      <FooterLink href="http://status.glitch.com/" track="system status">
-        System Status
-        <Icon className={styles.emoji} icon="horizontalTrafficLight" />
-      </FooterLink>
-      <FooterLink href="/legal" track="legal stuff">
-        Legal Stuff
-        <Icon className={styles.emoji} icon="scales" />
-      </FooterLink>
-      <FooterLink className={styles.teams} href="/teams" track="platforms">
-        <PlatformsIcon />
-        Glitch Teams
-      </FooterLink>
-    </footer>
-  );
-}
+const Footer = () => (
+  <footer className={styles.container} role="contentinfo">
+    <FooterLink href="/about" track="about">
+      About Glitch
+      <Icon className={styles.emoji} icon="crystalBall" />
+    </FooterLink>
+    <FooterLink href="/culture" track="blog">
+      Blog
+      <Icon className={styles.emoji} icon="newspaper" />
+    </FooterLink>
+    <FooterLink href="/help/" track="faq">
+      Help Center
+      <Icon className={styles.emoji} icon="umbrella" />
+    </FooterLink>
+    <FooterLink href="http://status.glitch.com/" track="system status">
+      System Status
+      <Icon className={styles.emoji} icon="horizontalTrafficLight" />
+    </FooterLink>
+    <FooterLink href="/legal" track="legal stuff">
+      Legal Stuff
+      <Icon className={styles.emoji} icon="scales" />
+    </FooterLink>
+    <FooterLink className={styles.teams} href="/teams" track="platforms">
+      <PlatformsIcon />
+      Glitch Teams
+    </FooterLink>
+  </footer>
+);
 
 export default Footer;

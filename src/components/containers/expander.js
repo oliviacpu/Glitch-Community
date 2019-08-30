@@ -53,7 +53,7 @@ const Expander = ({ children, height, minSlide }) => {
       {expandState !== 'complete' && aboveLimit && (
         <div className={styles.expanderMask}>
           {expandState !== 'expanding' && (
-            <Button size="small" variety="secondary" onClick={expand}>
+            <Button size="small" variant="secondary" onClick={expand}>
               Show More
             </Button>
           )}
