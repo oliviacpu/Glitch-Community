@@ -5,18 +5,16 @@ import { isBrowser } from 'Utils/constants';
 import createHandlerMiddleware from './handler-middleware';
 import * as currentUser from './current-user';
 
-const store = configureStore({
-  reducer: {
-    currentUser: currentUser.reducer,
-  },
-  middleware: [...getDefaultMiddleware(), createHandlerMiddleware(currentUser.handlers)],
-  devTools: isBrowser && window.ENVIRONMENT === 'dev',
-});
-
+const createStore = () =>
+  configureStore({
+    reducer: {
+      currentUser: currentUser.reducer,
+    },
+    middleware: [...getDefaultMiddleware(), createHandlerMiddleware(currentUser.handlers)],
+    devTools: isBrowser && window.ENVIRONMENT === 'dev',
+  });
 
 export default ({ children }) => {
-  const 
-  
-}
-
-export default ({ children }) => <Provider store={store}>{children}</Provider>;
+  const [store] = React.useState(createStore);
+  return <Provider store={store}>{children}</Provider>;
+};
