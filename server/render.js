@@ -40,18 +40,23 @@ chokidar.watch(src).on('change', () => {
   isRequireCached = false;
 });
 
-const React = require('react');
-const ReactDOMServer = require('react-dom/server');
-const { Helmet } = require('react-helmet');
-
-const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
+const requireClient = () => {
   if (!isRequireCached) console.log('Transpiling for SSR...');
   const startTime = performance.now();
-  const { Page, resetState } = require('../src/server');
+  const required = require('../src/server');
   const endTime = performance.now();
   if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000}s`);
   isRequireCached = true;
+  return required;
+};
 
+const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+const { Helmet } = require('react-helmet');
+setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
+
+const render = async (url, { API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
+  const { Page, resetState } = requireClient();
   resetState();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
