@@ -43,6 +43,7 @@ const paginationReducer = (oldState, action) => {
 };
 
 function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimistically, children }) {
+  console.log("inside the paginationcontroller")
   const numItems = items.length;
   const numPages = Math.ceil(items.length / itemsPerPage);
   const allItems = items;
