@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
 import { values, sampleSize, shuffle } from 'lodash';
-<<<<<<< HEAD
-import { Mark } from '@fogcreek/shared-components';
-=======
-import { Loader } from '@fogcreek/shared-components';
->>>>>>> a0ae6262b2c8dc45893eae34e15fa0d0f2b5183a
+import { Loader, Mark } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';

@@ -20,30 +20,6 @@ import Router from './presenters/pages/router';
 const App = ({ apiCache }) => (
   <ErrorBoundary fallback="Something went very wrong, try refreshing?">
     <LiveAnnouncer>
-<<<<<<< HEAD
-      <NotificationsProvider>
-        <LocalStorageProvider>
-          <AnalyticsContext context={{ groupId: '0' }}>
-            <CurrentUserProvider>
-              <APIContextProvider>
-                <APICacheProvider initial={apiCache}>
-                  <ProjectContextProvider>
-                    <CollectionContextProvider>
-                      <>
-                        <RootStyle theme={lightTheme} />
-                        <SuperUserBanner />
-                        <OfflineNotice />
-                        <Router />
-                      </>
-                    </CollectionContextProvider>
-                  </ProjectContextProvider>
-                </APICacheProvider>
-              </APIContextProvider>
-            </CurrentUserProvider>
-          </AnalyticsContext>
-        </LocalStorageProvider>
-      </NotificationsProvider>
-=======
       <Store>
         <NotificationsProvider>
           <LocalStorageProvider>
@@ -68,7 +44,6 @@ const App = ({ apiCache }) => (
           </LocalStorageProvider>
         </NotificationsProvider>
       </Store>
->>>>>>> a0ae6262b2c8dc45893eae34e15fa0d0f2b5183a
     </LiveAnnouncer>
   </ErrorBoundary>
 );
