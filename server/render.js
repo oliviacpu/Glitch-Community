@@ -40,12 +40,14 @@ chokidar.watch(src).on('change', () => {
   isRequireCached = false;
 });
 
+let isInitialRequire = false;
 const requireClient = () => {
-  if (!isRequireCached) console.log('Transpiling for SSR...');
+  if (!isRequireCached) console.log(`${isInitialRequire ? 'T' : 'Ret'}ranspiling for SSR...`);
   const startTime = performance.now();
   const required = require('../src/server');
   const endTime = performance.now();
-  if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  if (!isRequireCached) console.log(`SSR ${isInitialRequire ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  isInitialRequire = false;
   isRequireCached = true;
   return required;
 };
