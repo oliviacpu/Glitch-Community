@@ -30,7 +30,6 @@ const CreateFirstCollection = () => (
 */
 function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   const myStuffEnabled = useDevToggle('My Stuff');
-
   // put mystuff at beginning of list (and fake one if it's not there yet)
   const collectionsWithMyStuff = getCollectionsWithMyStuff({ collections });
 
