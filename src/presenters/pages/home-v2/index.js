@@ -220,7 +220,7 @@ const CultureZine = ({ content }) => (
                 )}
               </Row>
               <div className={styles.readMoreLink}>
-                <Button href="https://glitch.com/culture/">
+                <Button as="a" href="https://glitch.com/culture/">
                   Read More on Culture <Arrow />
                 </Button>
               </div>
