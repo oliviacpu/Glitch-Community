@@ -78,7 +78,7 @@ function CollectionsList({
   const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
-
+  console.log("hasCollections", hasCollections)
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
@@ -114,7 +114,9 @@ function CollectionsList({
 
                 {hasCollections && (
                   <SkipSectionButtons sectionName="Collections">
-                    {renderItems((filteredCollections) => (
+                    {renderItems((filteredCollections) => {
+                      console.log("filteredCollections", filteredCollections)
+                      return (
                       <PaginationController
                         enabled={enablePagination}
                         items={filteredCollections}
@@ -142,7 +144,7 @@ function CollectionsList({
                           </Grid>
                         )}
                       </PaginationController>
-                    ))}
+                    )})}
                   </SkipSectionButtons>
                 )}
               </article>
