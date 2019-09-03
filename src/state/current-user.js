@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { memoize } from 'lodash';
+import { mapKeys, memoize } from 'lodash';
 import { createSlice, createAction } from 'redux-starter-kit';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -44,6 +44,7 @@ function identifyUser(user) {
           login: user.login,
           email,
           created_at: user.createdAt,
+          ...mapKeys(window.AB_TESTS, (assignment, test) => `abtest-${test}`),
         },
         { groupId: '0' },
       );
@@ -98,8 +99,8 @@ async function getCachedUser(sharedUser) {
   if (!sharedUser.id || !sharedUser.persistentToken) return 'error';
   const api = getAPIForToken(sharedUser.persistentToken);
   try {
-    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100`;
-    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}`;
+    const makeUrl = (type) => `v1/users/by/id/${type}?id=${sharedUser.id}&limit=100&cache=${Date.now()}`;
+    const makeOrderedUrl = (type, order, direction) => `${makeUrl(type)}&orderKey=${order}&orderDirection=${direction}&cache=${Date.now()}`;
     const { baseUser, emails, projects, teams, collections } = await allByKeys({
       baseUser: getSingleItem(api, `v1/users/by/id?id=${sharedUser.id}&cache=${Date.now()}`, sharedUser.id),
       emails: getAllPages(api, makeUrl('emails')),
