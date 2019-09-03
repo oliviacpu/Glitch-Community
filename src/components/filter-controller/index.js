@@ -31,7 +31,7 @@ function FilterController({ matchFn, enabled, placeholder, items, children, sear
 
   const filtering = validFilter && isDoneFiltering;
   const displayedItems = filtering ? filteredItems : items;
-
+  console.log("filteredItems", filteredItems, "items", items)
   return children({
     filterInput: enabled && (
       <TextInput
