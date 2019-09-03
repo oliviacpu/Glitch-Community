@@ -23,7 +23,7 @@ require('@babel/register')({
       extensions: ['.styl'],
     }],
   ],
-  cache: true,
+  cache: '/tmp/babel-register',
 });
 
 // clear client code from the require cache whenever it gets changed
