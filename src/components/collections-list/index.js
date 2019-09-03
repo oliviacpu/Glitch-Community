@@ -48,6 +48,7 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
+  console.log(collectionsWithMyStuff)
 
   return children(collectionsWithMyStuff);
 }
@@ -122,8 +123,9 @@ function CollectionsList({
                       >
                         {(paginatedCollections, isExpanded) => (
                           <Grid items={paginatedCollections}>
-                            {(collection) =>
-                              myStuffEnabled && collection.isMyStuff ? (
+                            {(collection) =>{
+                              console.log("collection", collection)
+                              return myStuffEnabled && collection.isMyStuff ? (
                                 <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
                               ) : (
                                 <CollectionItem
@@ -134,6 +136,8 @@ function CollectionsList({
                                   showLoader={isExpanded}
                                 />
                               )
+                            }
+                              
                             }
                           </Grid>
                         )}
