@@ -27,7 +27,7 @@ require('@babel/register')({
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
-let isRequireCached = false;
+let isTranspileNeeded = false;
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
   // remove everything that babel transpiled
@@ -37,18 +37,18 @@ chokidar.watch(src).on('change', () => {
   // remove all rendered pages from the cache
   clearCache();
   // flag for performance profiling
-  isRequireCached = false;
+  isTranspileNeeded = false;
 });
 
-let isInitialRequire = false;
+let isFirstTranspile = true;
 const requireClient = () => {
-  if (!isRequireCached) console.log(`${isInitialRequire ? 'T' : 'Ret'}ranspiling for SSR...`);
+  if (!isTranspileNeeded) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
   const startTime = performance.now();
   const required = require('../src/server');
   const endTime = performance.now();
-  if (!isRequireCached) console.log(`SSR ${isInitialRequire ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
-  isInitialRequire = false;
-  isRequireCached = true;
+  if (!isTranspileNeeded) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  isFirstTranspile = false;
+  isTranspileNeeded = true;
   return required;
 };
 
