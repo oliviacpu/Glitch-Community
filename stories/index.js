@@ -19,7 +19,6 @@ import TeamUsers from 'Components/team-users';
 import UserItem from 'Components/user/user-item';
 import SearchResultCoverBar from 'Components/search-result-cover-bar';
 import Thanks from 'Components/thanks';
-import Loader from 'Components/loader';
 import NotFound from 'Components/errors/not-found';
 import SearchResults from 'Components/search-results';
 import StarterKitResult from 'Components/search/starter-kit-result';
@@ -284,8 +283,6 @@ storiesOf('Thanks', module).add('variations', () => (
     <Thanks count={3} short />
   </div>
 ));
-
-storiesOf('Loader', module).add('loader', () => <Loader />);
 
 storiesOf('NotFound', module).add('not found', () => <NotFound name="any results" />);
 
