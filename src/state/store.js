@@ -10,7 +10,7 @@ const store = configureStore({
     currentUser: currentUser.reducer,
   },
   middleware: [...getDefaultMiddleware(), createHandlerMiddleware(currentUser.handlers)],
-  devTools: isBrowser() && (window.ENVIRONMENT === 'dev'),
+  devTools: isBrowser && (window.ENVIRONMENT === 'dev'),
 });
 
 export default ({ children }) => <Provider store={store}>{children}</Provider>;
