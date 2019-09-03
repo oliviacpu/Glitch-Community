@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
 import { values, sampleSize, shuffle } from 'lodash';
+<<<<<<< HEAD
 import { Mark } from '@fogcreek/shared-components';
+=======
+import { Loader } from '@fogcreek/shared-components';
+>>>>>>> a0ae6262b2c8dc45893eae34e15fa0d0f2b5183a
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -15,7 +19,6 @@ import Embed from 'Components/project/embed';
 import Video from 'Components/video';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
-import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
 import LazyLoader from 'Components/lazy-loader';
 import { useAPI } from 'State/api';
@@ -216,7 +219,7 @@ function Starters() {
           </Heading>
           <Text size="16px">Your favorite companies use Glitch to share apps that get you up and running with their APIs.</Text>
         </div>
-        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader style={{ width: '25px' }} />}
       </div>
     </section>
   );
