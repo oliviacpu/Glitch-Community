@@ -48,7 +48,6 @@ function MyStuffController({ children, collections, isAuthorized, maybeTeam }) {
   if (!isAuthorized && collectionsWithMyStuff[0].isMyStuff && myStuffProjects.length === 0) {
     collectionsWithMyStuff.shift();
   }
-  console.log(collectionsWithMyStuff)
 
   return children(collectionsWithMyStuff);
 }
@@ -78,7 +77,7 @@ function CollectionsList({
   const collections = rawCollections.filter(({ id }) => !deletedCollectionIds.includes(id));
   const hasCollections = !!collections.length;
   const canMakeCollections = isAuthorized && !!currentUser;
-  console.log("hasCollections", hasCollections)
+
   if (!hasCollections && !canMakeCollections) {
     return null;
   }
@@ -112,11 +111,9 @@ function CollectionsList({
                   </>
                 )}
 
-                {hasCollections && (
+                {!!collectionsWithMyStuff.length && (
                   <SkipSectionButtons sectionName="Collections">
-                    {renderItems((filteredCollections) => {
-                      console.log("filteredCollections", filteredCollections)
-                      return (
+                    {renderItems((filteredCollections) => (
                       <PaginationController
                         enabled={enablePagination}
                         items={filteredCollections}
@@ -125,9 +122,8 @@ function CollectionsList({
                       >
                         {(paginatedCollections, isExpanded) => (
                           <Grid items={paginatedCollections}>
-                            {(collection) =>{
-                              console.log("collection", collection)
-                              return myStuffEnabled && collection.isMyStuff ? (
+                            {(collection) =>
+                              myStuffEnabled && collection.isMyStuff ? (
                                 <MyStuffItem collection={collection} isAuthorized={isAuthorized} showLoader={isExpanded} />
                               ) : (
                                 <CollectionItem
@@ -139,12 +135,10 @@ function CollectionsList({
                                 />
                               )
                             }
-                              
-                            }
                           </Grid>
                         )}
                       </PaginationController>
-                    )})}
+                    ))}
                   </SkipSectionButtons>
                 )}
               </article>
