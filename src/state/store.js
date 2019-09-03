@@ -13,4 +13,10 @@ const store = configureStore({
   devTools: isBrowser && window.ENVIRONMENT === 'dev',
 });
 
+
+export default ({ children }) => {
+  const 
+  
+}
+
 export default ({ children }) => <Provider store={store}>{children}</Provider>;
