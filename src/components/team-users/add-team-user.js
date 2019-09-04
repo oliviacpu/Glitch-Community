@@ -59,17 +59,11 @@ function useCheckedDomains(query) {
   const [checkedDomains, setCheckedDomains] = useState({ 'gmail.com': false, 'yahoo.com': false });
   useEffect(() => {
     const domain = getDomain(query);
-    if (!domain || domain in checkedDomains) return undefined;
+    if (!domain || domain in checkedDomains) return;
 
-    let isCurrentRequest = true;
     axios.get(`https://freemail.glitch.me/${domain}`).then(({ data }) => {
-      if (!isCurrentRequest) return;
       setCheckedDomains((domains) => ({ ...domains, [domain]: !data.free }));
     }, captureException);
-
-    return () => {
-      isCurrentRequest = false;
-    };
   }, [query, checkedDomains]);
   return checkedDomains;
 }
@@ -125,7 +119,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     );
 
     return out;
-  }, [debouncedValue, retrievedUsers, members, whitelistedDomain]);
+  }, [debouncedValue, retrievedUsers, members, whitelistedDomain, checkedDomains]);
 
   return (
     <PopoverDialog align="left">
