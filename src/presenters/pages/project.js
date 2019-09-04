@@ -33,9 +33,8 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
-import { useAPI, useAPIHandlers } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
-import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -89,14 +88,11 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(
-    () => {
-      if (done) {
-        window.location = getUserLink(currentUser);
-      }
-    },
-    [done, currentUser],
-  );
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
 
   return (
     <section>
@@ -148,7 +144,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const isAdmin = userIsProjectAdmin({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  
+
   const { addProjectToCollection } = useAPIHandlers();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
@@ -281,12 +277,9 @@ async function addProjectBreadcrumb(projectWithMembers) {
 
 const ProjectPageContainer = ({ name: domain }) => {
   const { status, value: project } = useCachedProject(domain);
-  useEffect(
-    () => {
-      if (project) addProjectBreadcrumb(project);
-    },
-    [project],
-  );
+  useEffect(() => {
+    if (project) addProjectBreadcrumb(project);
+  }, [project]);
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
