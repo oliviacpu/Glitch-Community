@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Link from 'Components/link';
 import Logo from 'Components/header/logo';
-import Button from 'Components/buttons/button';
 import TransparentButton from 'Components/buttons/transparent-button';
 import SignInButton, { companyNames } from 'Components/buttons/sign-in-button';
 import Image from 'Components/images/image';
@@ -63,8 +63,8 @@ const SignInLayout = () => {
                       ))}
                   </div>
                   <div className={styles.signInButtons}>
-                    <Button emoji="loveLetter" onClick={showMagicPage}>
-                      Magic Code via Email
+                    <Button onClick={showMagicPage}>
+                      Magic Code via Email <Icon icon="loveLetter" />
                     </Button>
                   </div>
                 </div>
