@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
 
 import { EDITOR_URL } from 'Utils/constants';
 import SearchForm from 'Components/search-form';
