@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from 'Components/buttons/button';
+import { Button from 'Components/buttons/button';
 
 import { FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL } from 'Utils/constants';
 
