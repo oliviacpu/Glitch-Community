@@ -120,6 +120,8 @@ export const useToggleBookmark = () => {
   const { createNotification } = useNotifications();
 
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  
+  const [hasBookmarked, setHasBookmarked]
 
   return async ({ project, hasBookmarked, setHasBookmarked }) => {
     try {
