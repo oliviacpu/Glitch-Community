@@ -466,10 +466,13 @@ function Remix() {
 
   const [currentTab, setCurrentTab] = useState(0);
   const [apps, setApps] = useState([]);
+  // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
+  const apps = [leaflet].concat()
+  
 
   useEffect(() => {
-    // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
-    setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
+    
+    setApps([leaflet].concat(sampleSize(appsToRandomize, 4)));
   }, []);
 
   return (

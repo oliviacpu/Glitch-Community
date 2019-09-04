@@ -8,6 +8,7 @@ import DataLoader from 'Components/data-loader';
 import { TeamLink, UserLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import { getDisplayName } from 'Models/user';
+import useSample from 'Hooks/use-sample';
 import styles from './styles.styl';
 
 const PROJECT_COUNT = 3;
@@ -38,14 +39,6 @@ async function getProjects(api, { type, id, ignoreProjectId }) {
   recents = recents.filter((project) => project.id !== ignoreProjectId && !sampledPinIDs.includes(project.id));
   const sampledRecents = sampleSize(recents, PROJECT_COUNT - sampledPins.length);
   return [...sampledPins, ...sampledRecents];
-}
-
-function useSample(items, count) {
-  const [sample, setSample] = useState([]);
-  useEffect(() => {
-    setSample(sampleSize(items, count));
-  }, [count, ...items.map((item) => item.id)]);
-  return sample;
 }
 
 function RelatedProjects({ project }) {
