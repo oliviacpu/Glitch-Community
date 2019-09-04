@@ -38,7 +38,7 @@ const InviteByEmail = ({ result: email, active, onClick }) => {
   const { current: color } = useRef(randomColor({ luminosity: 'light' }));
   return (
     <ResultItem onClick={onClick} active={active}>
-      <UserAvatar user={{ color }} hideTooltip />
+      <UserAvatar user={{ id: 0, color }} hideTooltip />
       <ResultInfo>
         <ResultName>Invite {email}</ResultName>
       </ResultInfo>
