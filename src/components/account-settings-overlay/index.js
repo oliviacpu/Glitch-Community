@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Icon, SegmentedButton } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
+import Emoji from 'Components/images/emoji';
+import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
 import PopoverContainer from 'Components/popover/container';
 import { useCurrentUser } from 'State/current-user';
@@ -9,14 +10,17 @@ import { useCurrentUser } from 'State/current-user';
 import PasswordSettings from './password-settings';
 import TwoFactorSettings from './two-factor-settings';
 import styles from './styles.styl';
-import { emoji } from '../global.styl';
+
+const AccountSettingsTab = ({ name, children, currentPage, setPage }) => (
+  <Button size="small" onClick={() => setPage(name)} active={name === currentPage}>
+    {children}
+  </Button>
+);
 
 const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
 
   const [page, setPage] = useState('password');
-
-  const options = [{ id: 'password', label: 'Password' }, { id: '2fa', label: 'Two-Factor Authentication' }];
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);
 
@@ -24,14 +28,19 @@ const AccountSettingsOverlay = () => {
     <Overlay className="account-settings-overlay">
       <OverlaySection type="info">
         <OverlayTitle>
-          Account Settings <Icon icon="key" className={emoji} />
+          Account Settings <Emoji name="key" />
         </OverlayTitle>
       </OverlaySection>
 
       <OverlaySection type="actions">
         <div className={styles.accountSettings}>
           <div className={styles.accountSettingsActions}>
-            <SegmentedButton size="small" value={page} onChange={(id) => setPage(id)} options={options} />
+            <AccountSettingsTab name="password" currentPage={page} setPage={setPage}>
+              Password
+            </AccountSettingsTab>
+            <AccountSettingsTab name="2fa" currentPage={page} setPage={setPage}>
+              Two-Factor Authentication
+            </AccountSettingsTab>
           </div>
           <div className={styles.accountSettingsContent}>
             {page === 'password' ? <PasswordSettings /> : null}

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { cloneDeep, sumBy } from 'lodash';
 import sampleAnalytics, { sampleAnalyticsTime } from 'Curated/sample-analytics';
-import { Loader, SegmentedButton } from '@fogcreek/shared-components';
+import { Loader } from '@fogcreek/shared-components';
 
 import Text from 'Components/text/text';
 import SegmentedButtons from 'Components/buttons/segmented-buttons';
-
 import { createAPIHook } from 'State/api';
 import { captureException } from 'Utils/sentry';
 
@@ -83,7 +82,7 @@ function TeamAnalytics({ id, projects }) {
   );
 
   // segmented button filters
-  const buttons = [{ id: 'views', label: 'App Views' }, { id: 'remixes', label: 'Remixes' }];
+  const buttons = [{ name: 'views', contents: 'App Views' }, { name: 'remixes', contents: 'Remixes' }];
 
   if (!analytics) {
     return (
@@ -103,7 +102,7 @@ function TeamAnalytics({ id, projects }) {
       {projects.length > 0 && (
         <section className={styles.section}>
           <div className={styles.segmentedButtonsWrap}>
-            <SegmentedButton value={activeFilter} options={buttons} onChange={setActiveFilter} />
+            <SegmentedButtons value={activeFilter} buttons={buttons} onChange={setActiveFilter} />
           </div>
           <div className={styles.options}>
             <TeamAnalyticsProjectPop updateProjectDomain={setCurrentProjectDomain} currentProjectDomain={currentProjectDomain} projects={projects} />

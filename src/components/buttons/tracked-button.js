@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from '@fogcreek/shared-components';
-
+import Button from 'Components/buttons/button';
 import { useTrackedFunc } from 'State/segment-analytics';
 
 const TrackedButton = ({ children, label, onClick, ...props }) => {

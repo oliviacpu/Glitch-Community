@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Button, CheckboxButton, Icon } from '@fogcreek/shared-components';
 
 import { Overlay, OverlaySection, OverlayTitle, OverlayBackground } from 'Components/overlays';
+import CheckboxButton from 'Components/buttons/checkbox-button';
+import Button from 'Components/buttons/button';
 import { PopoverContainer } from 'Components/popover';
 
 import { useTracker } from 'State/segment-analytics';
@@ -56,7 +57,7 @@ export const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, close
         </div>
         <OverlayTitle id="newStuff">New Stuff</OverlayTitle>
         <div className={styles.newStuffToggle}>
-          <CheckboxButton size="small" value={showNewStuff} onChange={setShowNewStuff} ref={first}>
+          <CheckboxButton value={showNewStuff} onChange={setShowNewStuff} ref={first}>
             Keep showing me these
           </CheckboxButton>
         </div>
@@ -65,8 +66,8 @@ export const NewStuffOverlay = ({ setShowNewStuff, showNewStuff, newStuff, close
         {newStuff.map(({ id, ...props }) => (
           <NewStuffArticle key={id} {...props} />
         ))}
-        <Button onClick={closePopover} ref={last}>
-          Back to Glitch <Icon icon="carpStreamer" />
+        <Button emoji="carpStreamer" onClick={closePopover} ref={last}>
+          Back to Glitch
         </Button>
       </OverlaySection>
     </Overlay>

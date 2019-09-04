@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { AnimationContainer, slideDown, Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
 import ProjectEmbed from 'Components/project/project-embed';
+import Emoji from 'Components/images/emoji';
 import Note from 'Components/collection/note';
+import AnimationContainer from 'Components/animation-container';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 
 import { useAPI, useAPIHandlers } from 'State/api';
@@ -16,7 +17,6 @@ import { useTrackedFunc } from 'State/segment-analytics';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
-import { emoji } from '../global.styl';
 
 const Top = ({
   featuredProject,
@@ -35,7 +35,7 @@ const Top = ({
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
-        <Icon className={emoji} icon="clapper" />
+        <Emoji name="clapper" inTitle />
       </Heading>
       {collection && (
         <div className={styles.note}>
@@ -107,7 +107,7 @@ const FeaturedProject = ({
 
   return (
     <div data-cy="featured-project">
-      <AnimationContainer animation={slideDown} onAnimationEnd={unfeatureProject}>
+      <AnimationContainer type="slideDown" onAnimationEnd={unfeatureProject}>
         {(animateAndUnfeatureProject) => (
           <ProjectEmbed
             top={

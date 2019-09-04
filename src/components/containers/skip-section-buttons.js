@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@fogcreek/shared-components';
-
+import Button from 'Components/buttons/button';
 import useUniqueId from 'Hooks/use-unique-id';
 import styles from './skip-section-buttons.styl';
 

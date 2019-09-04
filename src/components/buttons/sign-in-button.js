@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from '@fogcreek/shared-components';
+
+import Button from 'Components/buttons/button';
 
 import { FACEBOOK_CLIENT_ID, GITHUB_CLIENT_ID, APP_URL, API_URL } from 'Utils/constants';
-import { emoji as emojiStyle } from '../global.styl';
 
 function facebookAuthLink() {
   const params = new URLSearchParams();
@@ -65,8 +65,8 @@ const SignInButton = ({ companyName, onClick, short }) => {
 
   return (
     <div style={{ marginBottom: '10px' }}>
-      <Button href={href} onClick={onClick} size="small">
-        {short ? name : `Sign in with ${name}`} <Icon className={emojiStyle} icon={emoji} />
+      <Button href={href} onClick={onClick} size="small" emoji={emoji}>
+        {short ? name : `Sign in with ${name}`}
       </Button>
     </div>
   );

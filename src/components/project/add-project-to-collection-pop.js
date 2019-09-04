@@ -3,9 +3,8 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition } from 'lodash';
-import { Button, SegmentedButton } from '@fogcreek/shared-components';
-
 import Badge from 'Components/badges/badge';
+import SegmentedButtons from 'Components/buttons/segmented-buttons';
 import Link from 'Components/link';
 import {
   PopoverWithButton,
@@ -17,6 +16,7 @@ import {
   PopoverActions,
   PopoverSearch,
 } from 'Components/popover';
+import Button from 'Components/buttons/button';
 import { ProjectAvatar } from 'Components/images/avatar';
 import CollectionResultItem from 'Components/collection/collection-result-item';
 import { CreateCollectionWithProject } from 'Components/collection/create-collection-pop';
@@ -33,12 +33,12 @@ import styles from './popover.styl';
 
 const collectionTypeOptions = [
   {
-    id: 'user',
-    label: 'Your collections',
+    name: 'user',
+    contents: 'Your collections',
   },
   {
-    id: 'team',
-    label: 'Team collections',
+    name: 'team',
+    contents: 'Team collections',
   },
 ];
 
@@ -152,7 +152,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
 
       {currentUser.teams.length > 0 && (
         <PopoverActions>
-          <SegmentedButton value={collectionType} options={collectionTypeOptions} onChange={setCollectionType} />
+          <SegmentedButtons value={collectionType} buttons={collectionTypeOptions} onChange={setCollectionType} />
         </PopoverActions>
       )}
 
@@ -181,7 +181,7 @@ export const AddProjectToCollectionBase = ({ project, fromProject, addProjectToC
       />
 
       <PopoverActions>
-        <Button size="small" variant="secondary" onClick={createCollectionPopover}>
+        <Button size="small" type="tertiary" onClick={createCollectionPopover}>
           Add to a new collection
         </Button>
       </PopoverActions>

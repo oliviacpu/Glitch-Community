@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Loader } from '@fogcreek/shared-components';
+import { Loader } from '@fogcreek/shared-components';
 
+import Emoji from 'Components/images/emoji';
 import TextInput from 'Components/inputs/text-input';
 import ResultsList from 'Components/containers/results-list';
 import { PopoverActions, PopoverInfo, PopoverSection, InfoDescription } from './base';
-
-import { emoji } from '../global.styl';
 
 function useActiveIndex(items, onSelect) {
   const inputRef = useRef();
@@ -70,7 +69,7 @@ const PopoverLoader = () => (
 const NothingFound = () => (
   <PopoverActions>
     <InfoDescription>
-      Nothing found <Icon className={emoji} icon="sparkles" />
+      Nothing found <Emoji name="sparkles" />
     </InfoDescription>
   </PopoverActions>
 );
