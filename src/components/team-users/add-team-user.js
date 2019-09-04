@@ -12,7 +12,6 @@ import { ResultItem, ResultInfo, ResultName, ResultDescription } from 'Component
 import { getDisplayName } from 'Models/user';
 import { captureException } from 'Utils/sentry';
 import { useTracker } from 'State/segment-analytics';
-import useDevToggle from 'State/dev-toggles';
 import { useAlgoliaSearch } from 'State/search';
 
 import useDebouncedValue from '../../hooks/use-debounced-value';
@@ -79,7 +78,6 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
   const [value, onChange] = useState('');
   const debouncedValue = useDebouncedValue(value, 200);
   const checkedDomains = useCheckedDomains(debouncedValue);
-  const allowEmailInvites = useDevToggle('Email Invites');
 
   const { user: retrievedUsers, status } = useAlgoliaSearch(
     debouncedValue,
@@ -95,7 +93,7 @@ function AddTeamUserPop({ members, inviteEmail, inviteUser, setWhitelistedDomain
     const out = [];
 
     const email = parseOneAddress(debouncedValue);
-    if (email && allowEmailInvites) {
+    if (email) {
       out.push({
         id: 'invite-by-email',
         result: email.address,
