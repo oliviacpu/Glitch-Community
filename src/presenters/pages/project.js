@@ -25,7 +25,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useToggleBookmark } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember, userIsProjectAdmin } from 'Models/project';
@@ -142,30 +142,22 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const toggleBookmark = useToggleBookmark();
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const isAdmin = userIsProjectAdmin({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  const { createNotification } = useNotifications();
+  
+  const { addProjectToCollection } = useAPIHandlers();
   const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const reloadCollectionProjects = useCollectionReload();
 
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
-        api,
         project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
         setHasBookmarked,
         hasBookmarked,
-        reloadCollectionProjects,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),

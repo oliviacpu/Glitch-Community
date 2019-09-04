@@ -11,7 +11,7 @@ import BookmarkButton from 'Components/buttons/bookmark-button';
 import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
 import { useNotifications } from 'State/notifications';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useCollectionReload, useToggleBookmark } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 import { useTrackedFunc } from 'State/segment-analytics';
 
@@ -70,30 +70,20 @@ const FeaturedProject = ({
 }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const reloadCollectionProjects = useCollectionReload();
+  const toggleBookmark = useToggleBookmark();
   const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
-  const { createNotification } = useNotifications();
   const isAnonymousUser = !currentUser.login;
-  const api = useAPI();
-  const { addProjectToCollection: addProjectToCollectionAPI, removeProjectFromCollection } = useAPIHandlers();
 
   useEffect(() => {
     setHasBookmarked(featuredProject.authUserHasBookmarked);
   }, [featuredProject.authUserHasBookmarked]);
-
+  
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
-        api,
         project: featuredProject,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection: addProjectToCollectionAPI,
-        removeProjectFromCollection,
         setHasBookmarked,
         hasBookmarked,
-        reloadCollectionProjects,
       }),
     `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
     (inherited) => ({

@@ -8,43 +8,43 @@ import { createCollection, getCollectionLink } from 'Models/collection';
 import { AddProjectToCollectionMsg } from 'Components/notification';
 import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
+import useDevToggle from 'State/dev-toggles';
 
 // used by featured-project and pages/project
-export const toggleBookmark = async ({
-  api,
-  project,
-  currentUser,
-  createNotification,
-  myStuffEnabled,
-  addProjectToCollection,
-  removeProjectFromCollection,
-  setHasBookmarked,
-  hasBookmarked,
-  reloadCollectionProjects,
-}) => {
-  try {
-    let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-    if (hasBookmarked) {
-      setHasBookmarked(false);
-      await removeProjectFromCollection({ project, collection: myStuffCollection });
-      createNotification(`Removed ${project.domain} from collection My Stuff`);
-    } else {
-      setHasBookmarked(true);
-      if (!myStuffCollection) {
-        myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+const useToggleBookmark = () => {
+  const api = useAPI();
+  const { currentUser } = useCurrentUser();
+  const reloadCollectionProjects = useCollectionReload();
+
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const { createNotification } = useNotifications();
+
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+
+  return async ({ project, hasBookmarked, setHasBookmarked }) => {
+    try {
+      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+      if (hasBookmarked) {
+        setHasBookmarked(false);
+        await removeProjectFromCollection({ project, collection: myStuffCollection });
+        createNotification(`Removed ${project.domain} from collection My Stuff`);
+      } else {
+        setHasBookmarked(true);
+        if (!myStuffCollection) {
+          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+        }
+        await addProjectToCollection({ project, collection: myStuffCollection });
+        const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+          type: 'success',
+        });
       }
-      await addProjectToCollection({ project, collection: myStuffCollection });
-      const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-      createNotification(
-        <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />,
-        { type: 'success' },
-      );
+      reloadCollectionProjects([myStuffCollection]);
+    } catch (error) {
+      captureException(error);
+      createNotification('Something went wrong, try refreshing?', { type: 'error' });
     }
-    reloadCollectionProjects([myStuffCollection]);
-  } catch (error) {
-    captureException(error);
-    createNotification('Something went wrong, try refreshing?', { type: 'error' });
-  }
+  };
 };
 
 const createAPICallForCollectionProjects = (encodedFullUrl) =>
@@ -130,9 +130,7 @@ export const CollectionContextProvider = ({ children }) => {
 
   return (
     <CollectionProjectContext.Provider value={getCollectionProjects}>
-      <CollectionReloadContext.Provider value={reloadCollectionProjects}>
-        {children}
-      </CollectionReloadContext.Provider>
+      <CollectionReloadContext.Provider value={reloadCollectionProjects}>{children}</CollectionReloadContext.Provider>
     </CollectionProjectContext.Provider>
   );
 };
@@ -343,9 +341,12 @@ export function useCollectionEditor(initialCollection) {
           myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled: true });
         }
         await funcs.addProjectToCollection(project, myStuffCollection);
-        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={getCollectionLink(myStuffCollection)} />, {
-          type: 'success',
-        });
+        createNotification(
+          <AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={getCollectionLink(myStuffCollection)} />,
+          {
+            type: 'success',
+          },
+        );
       }
     }, handleError),
   };
