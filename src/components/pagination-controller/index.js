@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Button } from '@fogcreek/shared-components';
 
+import Badge from 'Components/badges/badge';
+import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import { LiveMessage } from 'react-aria-live';
 import classNames from 'classnames/bind';
@@ -98,18 +99,18 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
       {canPaginate && (
         <div className={styles.controls}>
           <div className={styles.paginationControls}>
-            <Button ref={prevButtonRef} variant="secondary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
+            <Button ref={prevButtonRef} type="tertiary" disabled={state.page === 1} onClick={onPreviousButtonClick}>
               <Image alt="Previous" className={styles.paginationArrow} src={arrow} />
             </Button>
             {state.announce && <LiveMessage message={state.announce} aria-live="assertive" />}
             <div data-cy="page-numbers" className={styles.pageNumbers}>
               {state.page} / {numPages}
             </div>
-            <Button ref={nextButtonRef} variant="secondary" disabled={state.page === numPages} onClick={onNextButtonClick}>
+            <Button ref={nextButtonRef} type="tertiary" disabled={state.page === numPages} onClick={onNextButtonClick}>
               <Image alt="Next" className={classNames(styles.paginationArrow, styles.next)} src={arrow} />
             </Button>
           </div>
-          <Button data-cy="show-all" variant="secondary" onClick={() => dispatchState({ type: 'expand' })}>
+          <Button data-cy="show-all" type="tertiary" onClick={() => dispatchState({ type: 'expand' })}>
             Show all <Badge>{numItems}</Badge>
           </Button>
         </div>

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
-import { Button } from '@fogcreek/shared-components';
-
 import Markdown from 'Components/text/markdown';
 import BookmarkButton from 'Components/buttons/bookmark-button';
+import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';

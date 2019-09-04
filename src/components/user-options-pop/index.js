@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
-import { Button, CheckboxButton, Icon, UnstyledButton } from '@fogcreek/shared-components';
 
 import { getTeamLink } from 'Models/team';
 import { getUserAvatarThumbnailUrl } from 'Models/user';
@@ -9,6 +8,8 @@ import Image from 'Components/images/image';
 import { UserAvatar, TeamAvatar } from 'Components/images/avatar';
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import { UserLink } from 'Components/link';
+import Button from 'Components/buttons/button';
+import CheckboxButton from 'Components/buttons/checkbox-button';
 import { MultiPopover, PopoverContainer, PopoverActions, PopoverInfo, PopoverDialog, PopoverTitle, InfoDescription } from 'Components/popover';
 import CreateTeamPop from 'Components/create-team-pop';
 import { useGlobals } from 'State/globals';
@@ -17,15 +18,14 @@ import { useTrackedFunc, useTracker } from 'State/segment-analytics';
 import useDevToggle from 'State/dev-toggles';
 
 import styles from './styles.styl';
-import { emoji } from '../global.styl';
 
 // Create Team button
 
 const CreateTeamButton = ({ showCreateTeam }) => {
   const onClickCreateTeam = useTrackedFunc(showCreateTeam, 'Create Team clicked');
   return (
-    <Button size="small" onClick={onClickCreateTeam}>
-      Create Team <Icon className={emoji} icon="herb" />
+    <Button size="small" onClick={onClickCreateTeam} emoji="herb">
+      Create Team
     </Button>
   );
 };
@@ -44,12 +44,12 @@ const TeamList = ({ teams, showCreateTeam }) => {
       {orderedTeams.map((team) => (
         <div className={styles.buttonWrap} key={team.id}>
           <Button
-            as="a"
             href={getTeamLink(team)}
             size="small"
-            variant="secondary"
+            type="tertiary"
+            image={<TeamAvatar team={team} size="small" tiny hideTooltip />}
           >
-            {team.name} <TeamAvatar team={team} size="small" className={emoji} tiny hideTooltip />
+            {team.name}
           </Button>
         </div>
       ))}
@@ -131,30 +131,30 @@ Are you sure you want to sign out?`)
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
           <div className={styles.buttonWrap}>
-            <CheckboxButton size="small" value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
+            <CheckboxButton value={!!superUserFeature} onChange={toggleSuperUser} type="tertiary">
               Super User
             </CheckboxButton>
           </div>
         )}
         <div className={styles.buttonWrap}>
-          <Button variant="secondary" size="small" onClick={clickNewStuff}>
-            New Stuff <Icon className={emoji} icon="dogFace" />
+          <Button type="tertiary" size="small" emoji="dogFace" onClick={clickNewStuff}>
+            New Stuff
           </Button>
         </div>
         <div className={styles.buttonWrap}>
-          <Button as="a" variant="secondary" size="small" href="https://support.glitch.com">
-            Support <Icon className={emoji} icon="ambulance" />
+          <Button type="tertiary" size="small" emoji="ambulance" href="https://support.glitch.com">
+            Support
           </Button>
         </div>
         {userPasswordEnabled && (
           <div className={styles.buttonWrap}>
-            <Button size="small" variant="secondary" onClick={clickAccountSettings}>
-              Account Settings <Icon className={emoji} icon="key" />
+            <Button size="small" type="tertiary" emoji="key" onClick={clickAccountSettings}>
+              Account Settings
             </Button>
           </div>
         )}
-        <Button variant="secondary" size="small" onClick={clickSignout}>
-          Sign Out <Icon className={emoji} icon="balloon" />
+        <Button type="tertiary" size="small" emoji="balloon" onClick={clickSignout}>
+          Sign Out
         </Button>
       </PopoverInfo>
     </PopoverDialog>
@@ -186,14 +186,14 @@ export default function UserOptionsAndCreateTeamPopContainer({ showAccountSettin
         <PopoverContainer startOpen={createTeamOpen} triggerButtonRef={buttonRef}>
           {({ togglePopover, visible }) => {
             const userOptionsButton = (
-              <UnstyledButton type="dropDown" onClick={togglePopover} decorative={!props.user.id} ref={buttonRef}>
+              <Button type="dropDown" onClick={togglePopover} decorative={!user.id} ref={buttonRef}>
                 <span className={styles.userOptionsWrap}>
                   <span className={styles.userOptionsButtonAvatar}>
                     <UserAvatar user={user} hideTooltip withinButton style={avatarStyle} />
                   </span>
                   <span className="down-arrow icon" />
                 </span>
-              </UnstyledButton>
+              </Button>
             );
 
             return (

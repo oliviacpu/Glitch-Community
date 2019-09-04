@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import { partition, sampleSize } from 'lodash';
 import classnames from 'classnames';
-import { Button, Icon } from '@fogcreek/shared-components';
 
 import { isDarkColor } from 'Utils/color';
+import Button from 'Components/buttons/button';
+import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -94,20 +95,20 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {enableSorting && (
             <div className={classnames(styles.hint, isDarkColor(collection.coverColor) && styles.dark)}>
-              <Icon icon="new" />
+              <Emoji name="new" />
               <Text> You can reorder your projects</Text>
               {!displayHint && (
-                <Button variant="secondary" size="small" onClick={() => setDisplayHint(true)}>
+                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
                   Learn More
                 </Button>
               )}
               {displayHint && (
                 <div className={styles.hintBody}>
                   <Text>
-                    <Icon icon="mouse" /> Click and drag to reorder
+                    <Emoji name="mouse" /> Click and drag to reorder
                   </Text>
                   <Text>
-                    <Icon icon="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
+                    <Emoji name="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
                     save.
                   </Text>
                 </div>
