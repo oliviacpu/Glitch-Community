@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle } from 'lodash';
+import { values } from 'lodash';
 import { Loader } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
@@ -23,6 +23,7 @@ import { getRemixUrl } from 'Models/project';
 import { getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
 import { CDN_URL } from 'Utils/constants';
+import useSample from 'Hooks/use-sample';
 
 import styles from './create.styl';
 
@@ -465,15 +466,8 @@ function Remix() {
   ];
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [apps, setApps] = useState([]);
   // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
-  const apps = [leaflet].concat()
-  
-
-  useEffect(() => {
-    
-    setApps([leaflet].concat(sampleSize(appsToRandomize, 4)));
-  }, []);
+  const apps = [leaflet].concat(useSample(appsToRandomize, 4));
 
   return (
     <VisibilityContainer>
