@@ -10,43 +10,6 @@ import { useNotifications } from 'State/notifications';
 import { useCurrentUser } from 'State/current-user';
 import useDevToggle from 'State/dev-toggles';
 
-// used by featured-project and pages/project
-const useToggleBookmark = () => {
-  const api = useAPI();
-  const { currentUser } = useCurrentUser();
-  const reloadCollectionProjects = useCollectionReload();
-
-  const myStuffEnabled = useDevToggle('My Stuff');
-  const { createNotification } = useNotifications();
-
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-
-  return async ({ project, hasBookmarked, setHasBookmarked }) => {
-    try {
-      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
-      if (hasBookmarked) {
-        setHasBookmarked(false);
-        await removeProjectFromCollection({ project, collection: myStuffCollection });
-        createNotification(`Removed ${project.domain} from collection My Stuff`);
-      } else {
-        setHasBookmarked(true);
-        if (!myStuffCollection) {
-          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
-        }
-        await addProjectToCollection({ project, collection: myStuffCollection });
-        const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
-        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
-          type: 'success',
-        });
-      }
-      reloadCollectionProjects([myStuffCollection]);
-    } catch (error) {
-      captureException(error);
-      createNotification('Something went wrong, try refreshing?', { type: 'error' });
-    }
-  };
-};
-
 const createAPICallForCollectionProjects = (encodedFullUrl) =>
   `/v1/collections/by/fullUrl/projects?fullUrl=${encodedFullUrl}&orderKey=projectOrder&limit=100`;
 
@@ -146,6 +109,43 @@ export function useCollectionReload() {
   const reloadCollectionProjects = useContext(CollectionReloadContext);
   return reloadCollectionProjects;
 }
+
+// used by featured-project and pages/project
+export const useToggleBookmark = () => {
+  const api = useAPI();
+  const { currentUser } = useCurrentUser();
+  const reloadCollectionProjects = useCollectionReload();
+
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const { createNotification } = useNotifications();
+
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+
+  return async ({ project, hasBookmarked, setHasBookmarked }) => {
+    try {
+      let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
+      if (hasBookmarked) {
+        setHasBookmarked(false);
+        await removeProjectFromCollection({ project, collection: myStuffCollection });
+        createNotification(`Removed ${project.domain} from collection My Stuff`);
+      } else {
+        setHasBookmarked(true);
+        if (!myStuffCollection) {
+          myStuffCollection = await createCollection({ api, name: 'My Stuff', createNotification, myStuffEnabled });
+        }
+        await addProjectToCollection({ project, collection: myStuffCollection });
+        const url = myStuffCollection.fullUrl || `${currentUser.login}/${myStuffCollection.url}`;
+        createNotification(<AddProjectToCollectionMsg projectDomain={project.domain} collectionName="My Stuff" url={`/@${url}`} />, {
+          type: 'success',
+        });
+      }
+      reloadCollectionProjects([myStuffCollection]);
+    } catch (error) {
+      captureException(error);
+      createNotification('Something went wrong, try refreshing?', { type: 'error' });
+    }
+  };
+};
 
 export const useCollectionCurator = createAPIHook(async (api, collection) => {
   if (collection.teamId > 0) {
