@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values } from 'lodash';
 import { Loader } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
@@ -188,7 +187,7 @@ function Starters() {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
 
-      let teams = values(data);
+      let teams = Object.values(data);
       teams = teams.map((team) => Object.assign(team, { description: team.description.replace(emojiPattern, '') }));
       setPlatformStarters(teams);
     };
