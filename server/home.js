@@ -26,6 +26,10 @@ async function getData(page) {
   return pageCache[page];
 }
 
+async function saveHomeDataToFile({ data, persistentToken }) {
+  const teams = await getAllPages(api, `/v1/users/by/persistentToken/teams?persistentToken=${persistentToken}&limit=100`);
+  if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden');
+
 async function saveDataToFile({ page, data, persistentToken }) {
   const teams = await getAllPages(api, `/v1/users/by/persistentToken/teams?persistentToken=${persistentToken}&limit=100`);
   if (!teams.some((team) => team.id === GLITCH_TEAM_ID)) throw new Error('Forbidden'); 

@@ -16,7 +16,7 @@ const initWebpack = require('./webpack');
 const constants = require('./constants');
 const renderPage = require('./render');
 const { defaultProjectDescriptionPattern } = require('../shared/regex');
-const { getData, saveDataToFile } = require('./home');
+const { getHomeData, saveHomeDataToFile } = require('./home');
 
 const DEFAULT_USER_DESCRIPTION = (login, name) => `See what ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
 const DEFAULT_TEAM_DESCRIPTION = (login, name) => `See what Team ${name} (@${login}) is up to on Glitch, the ${constants.tagline} `;
@@ -84,7 +84,7 @@ module.exports = function(external) {
     }
 
     const signedIn = !!req.cookies.hasLogin;
-    const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
+    const [zine, homeContent] = await Promise.all([getZine(), getHomeData()]);
 
     let ssr = { rendered: null };
     if (shouldRender) {
@@ -249,7 +249,7 @@ module.exports = function(external) {
   });
 
   app.get('/api/home', async (req, res) => {
-    const data = await getData('home');
+    const data = await getHomeData();
     res.send(data);
   });
 

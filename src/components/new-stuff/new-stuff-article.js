@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 
 import Link from 'Components/link';
 import Arrow from 'Components/arrow';
-import Image from 'Components/images/image';
 import Markdown from 'Components/text/markdown';
 import Text from 'Components/text/text';
 
 import styles from './new-stuff-article.styl';
 
-const NewStuffArticle = ({ title, body, image, imageAlt, link }) => (
+const NewStuffArticle = ({ title, body, link }) => (
   <article className={styles.article}>
     <h2 className={styles.title}>{title}</h2>
     <div className={styles.body}>
