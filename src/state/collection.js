@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, createContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, createContext } from 'react';
 
 import { useAPI, useAPIHandlers, createAPIHook } from 'State/api';
 import useErrorHandlers from 'State/error-handlers';
@@ -111,7 +111,7 @@ export function useCollectionReload() {
 }
 
 // used by featured-project and pages/project
-export const useToggleBookmark = () => {
+export const useToggleBookmark = (project) => {
   const api = useAPI();
   const { currentUser } = useCurrentUser();
   const reloadCollectionProjects = useCollectionReload();
@@ -120,10 +120,13 @@ export const useToggleBookmark = () => {
   const { createNotification } = useNotifications();
 
   const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  
-  const [hasBookmarked, setHasBookmarked]
 
-  return async ({ project, hasBookmarked, setHasBookmarked }) => {
+  const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
+  useEffect(() => {
+    setHasBookmarked(project.authUserHasBookmarked);
+  }, [project.authUserHasBookmarked]);
+
+  const toggleBookmarked = async () => {
     try {
       let myStuffCollection = currentUser.collections.find((c) => c.isMyStuff);
       if (hasBookmarked) {
@@ -147,6 +150,7 @@ export const useToggleBookmark = () => {
       createNotification('Something went wrong, try refreshing?', { type: 'error' });
     }
   };
+  return [hasBookmarked, toggleBookmarked, setHasBookmarked];
 };
 
 export const useCollectionCurator = createAPIHook(async (api, collection) => {

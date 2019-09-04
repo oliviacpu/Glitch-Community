@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -68,30 +68,17 @@ const FeaturedProject = ({
 }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const toggleBookmark = useToggleBookmark();
-  const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
+  const [hasBookmarked, toggleBookmark] = useToggleBookmark();
+
   const isAnonymousUser = !currentUser.login;
 
-  useEffect(() => {
-    setHasBookmarked(featuredProject.authUserHasBookmarked);
-  }, [featuredProject.authUserHasBookmarked]);
-
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        project: featuredProject,
-        setHasBookmarked,
-        hasBookmarked,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({
-      ...inherited,
-      projectName: featuredProject.domain,
-      baseProjectId: featuredProject.baseId || featuredProject.baseProject,
-      userId: currentUser.id,
-      origin: `${inherited.origin}-featured-project`,
-    }),
-  );
+  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
+    ...inherited,
+    projectName: featuredProject.domain,
+    baseProjectId: featuredProject.baseId || featuredProject.baseProject,
+    userId: currentUser.id,
+    origin: `${inherited.origin}-featured-project`,
+  }));
 
   return (
     <div data-cy="featured-project">

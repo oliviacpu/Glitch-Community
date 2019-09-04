@@ -138,7 +138,7 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
-  const toggleBookmark = useToggleBookmark();
+  const [hasBookmarked, toggleBookmark, setHasBookmarked] = useToggleBookmark(project);
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const isAdmin = userIsProjectAdmin({ project, user: currentUser });
@@ -146,18 +146,13 @@ const ProjectPage = ({ project: initialProject }) => {
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
 
   const { addProjectToCollection } = useAPIHandlers();
-  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
 
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        project,
-        setHasBookmarked,
-        hasBookmarked,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
-  );
+  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
+    ...inherited,
+    projectName: project.domain,
+    baseProjectId: project.baseId,
+    userId: currentUser.id,
+  }));
 
   const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
     if (collection.isMyStuff) {
