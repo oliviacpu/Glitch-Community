@@ -8,10 +8,8 @@ import Note from 'Components/collection/note';
 import AnimationContainer from 'Components/animation-container';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 
-import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { useNotifications } from 'State/notifications';
-import { useCollectionReload, useToggleBookmark } from 'State/collection';
+import { useToggleBookmark } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 import { useTrackedFunc } from 'State/segment-analytics';
 
@@ -77,7 +75,7 @@ const FeaturedProject = ({
   useEffect(() => {
     setHasBookmarked(featuredProject.authUserHasBookmarked);
   }, [featuredProject.authUserHasBookmarked]);
-  
+
   const bookmarkAction = useTrackedFunc(
     () =>
       toggleBookmark({
