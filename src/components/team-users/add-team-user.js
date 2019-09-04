@@ -61,6 +61,7 @@ function useCheckedDomains(query) {
     const domain = getDomain(query);
     if (!domain || domain in checkedDomains) return;
 
+    setCheckedDomains((domains) => ({ ...domains, [domain]: null }));
     axios.get(`https://freemail.glitch.me/${domain}`).then(({ data }) => {
       setCheckedDomains((domains) => ({ ...domains, [domain]: !data.free }));
     }, captureException);
