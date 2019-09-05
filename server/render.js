@@ -10,7 +10,7 @@ const build = path.join(__dirname, '../build/node/');
 setImmediate(() => {
   console.log('Compiling for SSR with babel');
   const args = ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
-  spawn('pnpx', args, { env: process.env, stdio: 'inherit' });
+  spawn('npx', args, { env: process.env, stdio: 'inherit' });
 });
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
@@ -19,7 +19,8 @@ const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'
 // it'll get loaded off the disk again when the render calls require
 let isTranspileNeeded = false;
 const chokidar = require('chokidar');
-chokidar.watch(build).on('change', () => {
+chokidar.watch(build).on('change', (changed) => {
+  console.log('change', changed);
   // remove everything that babel transpiled
   Object.keys(require.cache).forEach((location) => {
     if (location.startsWith(build)) delete require.cache[location];
