@@ -7,11 +7,14 @@
   },
   "restart": {
     "exclude": [
-      "^src/"
+      "^src/",
+      "^styles/"
     ],
     "include": [
-      "\\.json",
-      "^webpack\\.config\\.js$",
+      "^server/",
+      "^shared/",
+      "^views/",
+      "\\.json$",
       "\\.eslintrc\\.js$",
       "\\.babelrc"
     ]

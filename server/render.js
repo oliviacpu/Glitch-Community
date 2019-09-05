@@ -34,11 +34,10 @@ chokidar.watch(build).on('change', () => {
 
 let isFirstTranspile = true;
 const requireClient = () => {
-  if (!isTranspiled) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
   const startTime = performance.now();
   const required = require(path.resolve(build, './server'));
   const endTime = performance.now();
-  if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}load took ${Math.round(endTime - startTime)}ms`);
   isFirstTranspile = false;
   isTranspiled = true;
   return required;
