@@ -7,16 +7,12 @@
   },
   "restart": {
     "exclude": [
-      "^src/",
-      "^styles/"
+      "build/"
     ],
     "include": [
-      "^server/",
-      "^shared/",
-      "^views/",
-      "\\.js$",
-      "\\.json$",
-      "\\.babelrc"
+      "\\.babelrc",
+      "\\.eslintrc",
+      "webpack\\.config"
     ]
   },
   "throttle": 100
