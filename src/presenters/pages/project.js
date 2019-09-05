@@ -25,7 +25,7 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { useToggleBookmark } from 'State/collection';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
 import { userIsProjectMember, userIsProjectAdmin } from 'Models/project';
@@ -33,8 +33,9 @@ import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
-import { useAPIHandlers } from 'State/api';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
+import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -88,11 +89,14 @@ function DeleteProjectPopover({ projectDomain, deleteProject }) {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (done) {
-      window.location = getUserLink(currentUser);
-    }
-  }, [done, currentUser]);
+  useEffect(
+    () => {
+      if (done) {
+        window.location = getUserLink(currentUser);
+      }
+    },
+    [done, currentUser],
+  );
 
   return (
     <section>
@@ -138,21 +142,34 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
-  const [hasBookmarked, toggleBookmark, setHasBookmarked] = useToggleBookmark(project);
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
   const isAdmin = userIsProjectAdmin({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+  const api = useAPI();
+  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
+  const { createNotification } = useNotifications();
+  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
+  const reloadCollectionProjects = useCollectionReload();
 
-  const { addProjectToCollection } = useAPIHandlers();
-
-  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
-    ...inherited,
-    projectName: project.domain,
-    baseProjectId: project.baseId,
-    userId: currentUser.id,
-  }));
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
+  );
 
   const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
     if (collection.isMyStuff) {
@@ -272,9 +289,12 @@ async function addProjectBreadcrumb(projectWithMembers) {
 
 const ProjectPageContainer = ({ name: domain }) => {
   const { status, value: project } = useCachedProject(domain);
-  useEffect(() => {
-    if (project) addProjectBreadcrumb(project);
-  }, [project]);
+  useEffect(
+    () => {
+      if (project) addProjectBreadcrumb(project);
+    },
+    [project],
+  );
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
