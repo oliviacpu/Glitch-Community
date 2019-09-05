@@ -7,6 +7,9 @@
   },
   "restart": {
     "exclude": [
+      "server/",
+      "shared/",
+      "src/",
       "build/"
     ],
     "include": [
