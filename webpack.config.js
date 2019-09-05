@@ -99,7 +99,7 @@ module.exports = smp.wrap({
   context: path.resolve(__dirname),
   resolve: {
     extensions: ['.js'],
-    alias: aliases,
+    alias: aliases(SRC),
   },
   module: {
     rules: [
