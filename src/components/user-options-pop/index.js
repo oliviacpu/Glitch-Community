@@ -130,20 +130,28 @@ Are you sure you want to sign out?`)
 
       <PopoverInfo>
         {(canBecomeSuperUser || !!superUserFeature) && (
-          <CheckboxButton className={styles.buttonWrap} size="small" value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
-            Super User
-          </CheckboxButton>
+          <div className={styles.buttonWrap}>
+            <CheckboxButton className={styles.buttonWrap} size="small" value={!!superUserFeature} onChange={toggleSuperUser} variant="secondary">
+              Super User
+            </CheckboxButton>
+          </div>
         )}
-        <Button className={styles.buttonWrap} variant="secondary" size="small" onClick={clickNewStuff}>
-          New Stuff <Icon className={emoji} icon="dogFace" />
-        </Button>
-        <Button className={styles.buttonWrap} as="a" variant="secondary" size="small" href="https://support.glitch.com">
-          Support <Icon className={emoji} icon="ambulance" />
-        </Button>
-        {userPasswordEnabled && (
-          <Button className={styles.buttonWrap} size="small" variant="secondary" onClick={clickAccountSettings}>
-            Account Settings <Icon className={emoji} icon="key" />
+        <div className={styles.buttonWrap}>
+          <Button variant="secondary" size="small" onClick={clickNewStuff}>
+            New Stuff <Icon className={emoji} icon="dogFace" />
           </Button>
+        </div>
+        <div className={styles.buttonWrap}>
+          <Button as="a" variant="secondary" size="small" href="https://support.glitch.com">
+            Support <Icon className={emoji} icon="ambulance" />
+          </Button>
+        </div>
+        {userPasswordEnabled && (
+          <div className={styles.buttonWrap}>
+            <Button size="small" variant="secondary" onClick={clickAccountSettings}>
+              Account Settings <Icon className={emoji} icon="key" />
+            </Button>
+          </div>
         )}
         <Button variant="secondary" size="small" onClick={clickSignout}>
           Sign Out <Icon className={emoji} icon="balloon" />
