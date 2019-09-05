@@ -3,10 +3,12 @@ const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
 
+console.log('Compiling for SSR with babel');
 const { spawn } = require('child_process');
 const src = path.join(__dirname, '../src/');
 const build = path.join(__dirname, '../build/node/');
-//spawn('pnpx', ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '-d', build], { env: process.env, stdio: 'inherit' });
+const args = ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
+spawn('pnpx', args, { env: process.env, stdio: 'inherit' });
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
