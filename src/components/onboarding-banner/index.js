@@ -45,8 +45,9 @@ function OnboardingBanner() {
     }
     : null;
 
+  // return (
+  //   <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile'} onboarding banner` }}>
   return (
-    <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile'} onboarding banner` }}>
       <div className={styles.banner} style={backgroundStyles}>
         <div className={styles.illustration}>
           <Illustration />
@@ -81,9 +82,9 @@ function OnboardingBanner() {
             )}
           </div>
         </div>
-      </div>
-    </AnalyticsContext>
-  );
+      </div>)
+  //   </AnalyticsContext>
+  // );
 }
 
 export default OnboardingBanner;
