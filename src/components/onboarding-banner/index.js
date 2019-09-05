@@ -11,7 +11,7 @@ import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useGlobals } from 'State/globals';
-import useTest, { resetTests } from 'State/ab-tests';
+import useTest from 'State/ab-tests';
 import useWindowSize from 'Hooks/use-window-size';
 
 import Illustration from './illustration';
@@ -55,7 +55,6 @@ function OnboardingBanner() {
           <div className={styles.illustration}>
             <Illustration />
           </div>
-          <Button onClick={resetTests}>Reset test</Button>
 
           <div className={actionsClassnames}>
             <div className={styles.create}>
@@ -90,7 +89,7 @@ function OnboardingBanner() {
       </AnalyticsContext>
     );
   }
-  return <Button onClick={resetTests}>Reset test</Button>;
+  return null;
 }
 
 export default OnboardingBanner;
