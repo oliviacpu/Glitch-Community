@@ -1,4 +1,5 @@
 dependencies:
+  '@babel/cli': 7.5.5
   '@babel/core': 7.5.5
   '@babel/plugin-proposal-class-properties': 7.5.5
   '@babel/plugin-syntax-dynamic-import': 7.2.0
@@ -103,6 +104,25 @@ dependencies:
   webpack-dev-middleware: 3.7.0
   winston: 3.2.1
 packages:
+  /@babel/cli/7.5.5:
+    dependencies:
+      commander: 2.20.0
+      convert-source-map: 1.6.0
+      fs-readdir-recursive: 1.1.0
+      glob: 7.1.4
+      lodash: 4.17.15
+      mkdirp: 0.5.1
+      output-file-sync: 2.0.1
+      slash: 2.0.0
+      source-map: 0.5.7
+    dev: false
+    hasBin: true
+    optionalDependencies:
+      chokidar: 2.1.8
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    resolution:
+      integrity: sha512-UHI+7pHv/tk9g6WXQKYz+kmXTI77YtuY3vqC59KIqcoWEjsJJSG6rAxKaLsgj3LDyadsPrCB929gVOKM6Hui0w==
   /@babel/code-frame/7.5.5:
     dependencies:
       '@babel/highlight': 7.5.0
@@ -4744,6 +4764,10 @@ packages:
       node: '>=6 <7 || >=8'
     resolution:
       integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
+  /fs-readdir-recursive/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-GNanXlVr2pf02+sPN40XN8HG+ePaNcvM0q5mZBd668Obwb0yD5GiUbZOFgwn8kGMY6I3mdyDJzieUy3PTYyTRA==
   /fs-write-stream-atomic/1.0.10:
     dependencies:
       graceful-fs: 4.2.2
@@ -7208,6 +7232,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
+  /output-file-sync/2.0.1:
+    dependencies:
+      graceful-fs: 4.2.2
+      is-plain-obj: 1.1.0
+      mkdirp: 0.5.1
+    dev: false
+    resolution:
+      integrity: sha512-mDho4qm7WgIXIGf4eYU1RHN2UU5tPfVYVSRwDJw0uTmj35DQUt/eNp19N7v6T3SrR0ESTEf2up2CGO73qI35zQ==
   /p-defer/1.0.0:
     dev: false
     engines:
@@ -8882,6 +8914,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
+  /slash/2.0.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
   /slash/3.0.0:
     dev: false
     engines:
@@ -10179,6 +10217,7 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  '@babel/cli': ^7.5.5
   '@babel/core': ^7.5.5
   '@babel/plugin-proposal-class-properties': ^7.5.0
   '@babel/plugin-syntax-dynamic-import': ^7.2.0

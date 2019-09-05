@@ -29,6 +29,7 @@
     "build": "webpack"
   },
   "dependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
