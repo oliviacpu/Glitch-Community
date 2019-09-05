@@ -15,7 +15,7 @@ const AccountSettingsOverlay = () => {
   const { currentUser } = useCurrentUser();
 
   const [page, setPage] = useState('password');
-  
+
   const options = [{ id: 'password', label: 'Password' }, { id: '2fa', label: 'Two-Factor Authentication' }];
 
   const primaryEmail = currentUser.emails.find((email) => email.primary);

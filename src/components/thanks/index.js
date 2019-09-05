@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '@fogcreek/shared-components';
+import { Icon } from '@fogcreek/shared-components';
 
 import styles from './thanks.styl';
 import { emoji } from '../global.styl';
