@@ -11,10 +11,8 @@ import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
+import Note from 'Components/collection/note';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
-import { useAPI, useAPIHandlers } from 'State/api';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
-import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -46,56 +44,35 @@ const ProfileListLoader = ({ project }) => (
 
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
-const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
+const ProjectItem = ({ project, projectOptions: providedProjectOptions, collection, noteOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
-  const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  const { createNotification } = useNotifications();
 
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
-        setHasBookmarked,
-        hasBookmarked,
-        reloadCollectionProjects,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
-  );
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
-
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
   };
   const onMouseLeave = () => {
     setIsHoveringOnProjectItem(false);
   };
-
-  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
-    if (collection.isMyStuff) {
-      setHasBookmarked(true);
-    }
-    return addProjectToCollection({ project: projectToAdd, collection });
-  };
-  providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
-  const projectOptions = useProjectOptions(project, providedProjectOptions);
   const onMyStuffPage = window.location.pathname.includes('my-stuff');
+
+  const projectOptions = useProjectOptions(project, providedProjectOptions);
+  const hasProjectOptions = Object.keys(projectOptions).length > 0;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
+
+  const bookmarkAction = useTrackedFunc(
+    () => projectOptions.toggleBookmark(project, hasBookmarked, setHasBookmarked),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
+  );
+
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
@@ -114,48 +91,61 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions }) => {
             );
 
             return (
-              <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-                <header className={styles.header}>
-                  <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: !!currentUser.login })}>
-                    <ProfileListLoader project={project} />
+              <>
+                {collection && (
+                  <div className={styles.projectsContainerNote} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                    <Note
+                      project={project}
+                      collection={collection}
+                      isAuthorized={noteOptions.isAuthorized}
+                      hideNote={noteOptions.hideNote}
+                      updateNote={noteOptions.updateNote}
+                    />
                   </div>
-                  {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
-                    <div className={styles.bookmarkButtonContainer}>
-                      <BookmarkButton
-                        action={bookmarkAction}
-                        initialIsBookmarked={hasBookmarked}
-                        containerDetails={{ isHoveringOnProjectItem }}
-                        projectName={project.domain}
-                      />
+                )}
+                <div className={styles.container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                  <header className={styles.header}>
+                    <div className={classnames(styles.userListContainer, { [styles.spaceForOptions]: hasProjectOptions })}>
+                      <ProfileListLoader project={project} />
                     </div>
-                  )}
-                  <div className={styles.projectOptionsContainer}>
-                    <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
-                  </div>
-                </header>
-                <ProjectLink className={getLinkBodyStyles(project)} project={project}>
-                  <div className={styles.projectHeader}>
-                    <div className={styles.avatarWrap}>
-                      <ProfileAvatar project={project} />
+                    {myStuffEnabled && !isAnonymousUser && !onMyStuffPage && (
+                      <div className={styles.bookmarkButtonContainer}>
+                        <BookmarkButton
+                          action={bookmarkAction}
+                          initialIsBookmarked={hasBookmarked}
+                          containerDetails={{ isHoveringOnProjectItem }}
+                          projectName={project.domain}
+                        />
+                      </div>
+                    )}
+                    <div className={styles.projectOptionsContainer}>
+                      <ProjectOptionsPop project={project} projectOptions={animatedProjectOptions} />
                     </div>
-                    <div className={styles.nameWrap}>
-                      <div className={styles.itemButtonWrap}>
-                        <Button
-                          decorative
-                          disabled={!!project.suspendedReason}
-                          image={project.private ? <PrivateIcon inButton isPrivate /> : null}
-                          imagePosition="left"
-                        >
-                          <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
-                        </Button>
+                  </header>
+                  <ProjectLink className={getLinkBodyStyles(project)} project={project}>
+                    <div className={styles.projectHeader}>
+                      <div className={styles.avatarWrap}>
+                        <ProfileAvatar project={project} />
+                      </div>
+                      <div className={styles.nameWrap}>
+                        <div className={styles.itemButtonWrap}>
+                          <Button
+                            decorative
+                            disabled={!!project.suspendedReason}
+                            image={project.private ? <PrivateIcon inButton isPrivate /> : null}
+                            imagePosition="left"
+                          >
+                            <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className={styles.description}>
-                    <Markdown length={80}>{project.suspendedReason ? 'suspended project' : project.description || ' '}</Markdown>
-                  </div>
-                </ProjectLink>
-              </div>
+                    <div className={styles.description}>
+                      <Markdown length={80}>{project.suspendedReason ? 'suspended project' : project.description || ' '}</Markdown>
+                    </div>
+                  </ProjectLink>
+                </div>
+              </>
             );
           }}
         </AnimationContainer>
@@ -174,10 +164,12 @@ ProjectItem.propTypes = {
     teams: PropTypes.array,
   }).isRequired,
   projectOptions: PropTypes.object,
+  collection: PropTypes.object,
 };
 
 ProjectItem.defaultProps = {
   projectOptions: {},
+  collection: null,
 };
 
 export default ProjectItem;

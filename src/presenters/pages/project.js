@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-
 import PropTypes from 'prop-types';
-
 import Helmet from 'react-helmet';
+import { Loader } from '@fogcreek/shared-components';
 
 import Button from 'Components/buttons/button';
 import Heading from 'Components/text/heading';
-import Loader from 'Components/loader';
 import Markdown from 'Components/text/markdown';
 import NotFound from 'Components/errors/not-found';
 import CollectionItem from 'Components/collection/collection-item';
@@ -27,17 +25,16 @@ import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
 import { useCurrentUser } from 'State/current-user';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
+import { useToggleBookmark } from 'State/collection';
 import { useProjectEditor } from 'State/project';
 import { getUserLink } from 'Models/user';
-import { userIsProjectMember } from 'Models/project';
+import { userIsProjectMember, userIsProjectAdmin } from 'Models/project';
 import { addBreadcrumb } from 'Utils/sentry';
 import { getAllPages } from 'Shared/api';
 import useFocusFirst from 'Hooks/use-focus-first';
 import useDevToggle from 'State/dev-toggles';
-import { useAPI, useAPIHandlers } from 'State/api';
+import { useAPIHandlers } from 'State/api';
 import { useCachedProject } from 'State/api-cache';
-import { useNotifications } from 'State/notifications';
 
 import styles from './project.styl';
 
@@ -141,33 +138,21 @@ const ProjectPage = ({ project: initialProject }) => {
   const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
   useFocusFirst();
   const { currentUser } = useCurrentUser();
+  const [hasBookmarked, toggleBookmark, setHasBookmarked] = useToggleBookmark(project);
   const isAnonymousUser = !currentUser.login;
   const isAuthorized = userIsProjectMember({ project, user: currentUser });
+  const isAdmin = userIsProjectAdmin({ project, user: currentUser });
   const { domain, users, teams, suspendedReason } = project;
   const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
-  const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  const { createNotification } = useNotifications();
-  const [hasBookmarked, setHasBookmarked] = useState(initialProject.authUserHasBookmarked);
-  const reloadCollectionProjects = useCollectionReload();
 
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
-        setHasBookmarked,
-        hasBookmarked,
-        reloadCollectionProjects,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId, userId: currentUser.id }),
-  );
+  const { addProjectToCollection } = useAPIHandlers();
+
+  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
+    ...inherited,
+    projectName: project.domain,
+    baseProjectId: project.baseId,
+    userId: currentUser.id,
+  }));
 
   const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
     if (collection.isMyStuff) {
@@ -254,7 +239,7 @@ const ProjectPage = ({ project: initialProject }) => {
         <ReadmeLoader domain={domain} />
       </section>
 
-      {isAuthorized && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+      {isAdmin && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
 
       <section id="included-in-collections">
         <IncludedInCollections projectId={project.id} />
@@ -293,10 +278,12 @@ const ProjectPageContainer = ({ name: domain }) => {
   return (
     <Layout>
       <AnalyticsContext properties={{ origin: 'project' }}>
-        {project ? <ProjectPage project={project} /> : (
+        {project ? (
+          <ProjectPage project={project} />
+        ) : (
           <>
             {status === 'ready' && <NotFound name={domain} />}
-            {status === 'loading' && <Loader />}
+            {status === 'loading' && <Loader style={{ width: '25px' }} />}
             {status === 'error' && <NotFound name={domain} />}
           </>
         )}

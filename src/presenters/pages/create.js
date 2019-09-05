@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle } from 'lodash';
+import { Loader } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -14,7 +14,6 @@ import Embed from 'Components/project/embed';
 import Video from 'Components/video';
 import WistiaVideo from 'Components/wistia-video';
 import Layout from 'Components/layout';
-import Loader from 'Components/loader';
 import VisibilityContainer from 'Components/visibility-container';
 import LazyLoader from 'Components/lazy-loader';
 import CategoriesGrid from 'Components/categories-grid';
@@ -24,6 +23,7 @@ import { getRemixUrl } from 'Models/project';
 import { getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
 import { CDN_URL } from 'Utils/constants';
+import useSample from 'Hooks/use-sample';
 
 import styles from './create.styl';
 
@@ -188,7 +188,7 @@ function Starters() {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
 
-      let teams = values(data);
+      let teams = Object.values(data);
       teams = teams.map((team) => Object.assign(team, { description: team.description.replace(emojiPattern, '') }));
       setPlatformStarters(teams);
     };
@@ -222,7 +222,7 @@ function Starters() {
           </Heading>
           <Text size="16px">Your favorite companies use Glitch to share apps that get you up and running with their APIs.</Text>
         </div>
-        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader />}
+        {platformStarters ? platformStarters.map(PlatformStarterItem) : <Loader style={{ width: '25px' }} />}
       </div>
     </section>
   );
@@ -466,12 +466,8 @@ function Remix() {
   ];
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [apps, setApps] = useState([]);
-
-  useEffect(() => {
-    // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
-    setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
-  }, []);
+  // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
+  const apps = [leaflet].concat(useSample(appsToRandomize, 4));
 
   return (
     <VisibilityContainer>
