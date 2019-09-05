@@ -34,7 +34,7 @@ let isFirstTranspile = true;
 const requireClient = () => {
   if (!isTranspileNeeded) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
   const startTime = performance.now();
-  const required = require(path.join(build, './server'));
+  const required = require(path.resolve(build, './server'));
   const endTime = performance.now();
   if (!isTranspileNeeded) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
   isFirstTranspile = false;
