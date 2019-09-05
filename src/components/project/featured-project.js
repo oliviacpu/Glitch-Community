@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Heading from 'Components/text/heading';
@@ -8,8 +8,10 @@ import Note from 'Components/collection/note';
 import AnimationContainer from 'Components/animation-container';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useCurrentUser } from 'State/current-user';
-import { useToggleBookmark } from 'State/collection';
+import { useNotifications } from 'State/notifications';
+import { toggleBookmark, useCollectionReload } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
 import { useTrackedFunc } from 'State/segment-analytics';
 
@@ -68,17 +70,40 @@ const FeaturedProject = ({
 }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const [hasBookmarked, toggleBookmark] = useToggleBookmark();
-
+  const reloadCollectionProjects = useCollectionReload();
+  const [hasBookmarked, setHasBookmarked] = useState(featuredProject.authUserHasBookmarked);
+  const { createNotification } = useNotifications();
   const isAnonymousUser = !currentUser.login;
+  const api = useAPI();
+  const { addProjectToCollection: addProjectToCollectionAPI, removeProjectFromCollection } = useAPIHandlers();
 
-  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
-    ...inherited,
-    projectName: featuredProject.domain,
-    baseProjectId: featuredProject.baseId || featuredProject.baseProject,
-    userId: currentUser.id,
-    origin: `${inherited.origin}-featured-project`,
-  }));
+  useEffect(() => {
+    setHasBookmarked(featuredProject.authUserHasBookmarked);
+  }, [featuredProject.authUserHasBookmarked]);
+
+  const bookmarkAction = useTrackedFunc(
+    () =>
+      toggleBookmark({
+        api,
+        project: featuredProject,
+        currentUser,
+        createNotification,
+        myStuffEnabled,
+        addProjectToCollection: addProjectToCollectionAPI,
+        removeProjectFromCollection,
+        setHasBookmarked,
+        hasBookmarked,
+        reloadCollectionProjects,
+      }),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({
+      ...inherited,
+      projectName: featuredProject.domain,
+      baseProjectId: featuredProject.baseId || featuredProject.baseProject,
+      userId: currentUser.id,
+      origin: `${inherited.origin}-featured-project`,
+    }),
+  );
 
   return (
     <div data-cy="featured-project">
