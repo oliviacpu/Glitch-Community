@@ -4,7 +4,6 @@ import classNames from 'classnames/bind';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
-import Button from 'Components/buttons/button';
 import NewProjectPop from 'Components/new-project-pop';
 import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
@@ -43,9 +42,9 @@ function OnboardingBanner() {
 
   const backgroundStyles = isHomepage
     ? {
-        backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
-        backgroundColor: lightColors[currentUser.id % 4],
-      }
+      backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
+      backgroundColor: lightColors[currentUser.id % 4],
+    }
     : null;
 
   if (userIsInOnboardingTestGroup) {
