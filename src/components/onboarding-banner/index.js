@@ -4,13 +4,14 @@ import classNames from 'classnames/bind';
 import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Link from 'Components/link';
+import Button from 'Components/buttons/button';
 import NewProjectPop from 'Components/new-project-pop';
 import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { AnalyticsContext } from 'State/segment-analytics';
 import { useGlobals } from 'State/globals';
-import useTest from 'State/ab-tests';
+import useTest, { resetTests } from 'State/ab-tests';
 import useWindowSize from 'Hooks/use-window-size';
 
 import Illustration from './illustration';
@@ -20,7 +21,7 @@ const cx = classNames.bind(styles);
 
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
-  const onboardCurrentUser = useTest('Onboarding');
+  const userIsInOnboardingTestGroup = useTest('Onboarding');
   const { location } = useGlobals();
   const exploreEl = useRef();
 
@@ -37,55 +38,59 @@ function OnboardingBanner() {
   const isHomepage = location.pathname === '/';
   const actionsClassnames = cx({
     actions: true,
-    isHomepage: true,
+    isHomepage,
   });
 
   const backgroundStyles = isHomepage
     ? {
-      backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
-      backgroundColor: lightColors[currentUser.id % 4],
-    }
+        backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
+        backgroundColor: lightColors[currentUser.id % 4],
+      }
     : null;
 
-  return (
-    <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile'} onboarding banner` }}>
-      <div className={styles.banner} style={backgroundStyles}>
-        <div className={styles.illustration}>
-          <Illustration />
-        </div>
-
-        <div className={actionsClassnames}>
-          <div className={styles.create}>
-            <h2 className={styles.createHeading}>Create your first project</h2>
-            <Text size="15px" defaultMargin>
-              Jump into the editor by creating your very own app.
-            </Text>
-            <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" />
-            <Text className={styles.createCta} size="15px" defaultMargin>
-              <Link to="/create">Learn about creating on Glitch</Link>
-            </Text>
+  if (userIsInOnboardingTestGroup) {
+    return (
+      <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile'} onboarding banner` }}>
+        <div className={styles.banner} style={backgroundStyles}>
+          <div className={styles.illustration}>
+            <Illustration />
           </div>
+          <Button onClick={resetTests}>Reset test</Button>
 
-          <div className={styles.explore} ref={exploreEl}>
-            <Text defaultMargin size="15px">
-              <strong>...or explore starter apps</strong> to find a project to remix.
-            </Text>
-            <CategoriesGrid
-              wrapItems={windowWidth >= 1200 && categoriesWidth > 580}
-              className={styles.categoriesGrid}
-              categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
-            />
-
-            {isHomepage && (
-              <Text size="15px">
-                Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
+          <div className={actionsClassnames}>
+            <div className={styles.create}>
+              <h2 className={styles.createHeading}>Create your first project</h2>
+              <Text size="15px" defaultMargin>
+                Jump into the editor by creating your very own app.
               </Text>
-            )}
+              <NewProjectPop align="left" buttonText="Create New Project" buttonType="cta" />
+              <Text className={styles.createCta} size="15px" defaultMargin>
+                <Link to="/create">Learn about creating on Glitch</Link>
+              </Text>
+            </div>
+
+            <div className={styles.explore} ref={exploreEl}>
+              <Text defaultMargin size="15px">
+                <strong>...or explore starter apps</strong> to find a project to remix.
+              </Text>
+              <CategoriesGrid
+                wrapItems={windowWidth >= 1200 && categoriesWidth > 580}
+                className={styles.categoriesGrid}
+                categories={['games', 'music', 'art', 'handy-bots', 'learn-to-code', 'tools-for-work']}
+              />
+
+              {isHomepage && (
+                <Text size="15px">
+                  Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
+                </Text>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </AnalyticsContext>
-  );
+      </AnalyticsContext>
+    );
+  }
+  return <Button onClick={resetTests}>Reset test</Button>;
 }
 
 export default OnboardingBanner;
