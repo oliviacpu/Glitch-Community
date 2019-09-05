@@ -9,37 +9,38 @@ const build = path.join(__dirname, '../build/node/');
 
 setImmediate(() => {
   console.log('Compiling for SSR with babel');
-  const args = ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
-  spawn('npx', args, { env: process.env, stdio: 'inherit' });
+  const args = [src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
+  spawn('babel', args, { env: process.env, stdio: 'inherit' });
 });
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
-let isTranspileNeeded = false;
+let isTranspiled = false;
 const chokidar = require('chokidar');
-chokidar.watch(build).on('change', (changed) => {
-  console.log('change', changed);
-  // remove everything that babel transpiled
-  Object.keys(require.cache).forEach((location) => {
-    if (location.startsWith(build)) delete require.cache[location];
-  });
-  // remove all rendered pages from the cache
-  clearCache();
-  // flag for performance profiling
-  isTranspileNeeded = false;
+chokidar.watch(build).on('change', () => {
+  if (isTranspiled) {
+    // remove everything that babel transpiled
+    Object.keys(require.cache).forEach((location) => {
+      if (location.startsWith(build)) delete require.cache[location];
+    });
+    // remove all rendered pages from the cache
+    clearCache();
+    // flag for performance profiling
+    isTranspiled = false;
+  }
 });
 
 let isFirstTranspile = true;
 const requireClient = () => {
-  if (!isTranspileNeeded) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
+  if (!isTranspiled) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
   const startTime = performance.now();
   const required = require(path.resolve(build, './server'));
   const endTime = performance.now();
-  if (!isTranspileNeeded) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
   isFirstTranspile = false;
-  isTranspileNeeded = true;
+  isTranspiled = true;
   return required;
 };
 

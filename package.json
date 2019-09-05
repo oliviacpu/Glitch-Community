@@ -17,8 +17,8 @@
     "./src/polyfills.js"
   ],
   "scripts": {
-    "prestart": "nodemon --watch server --watch shared --exec 'npm run --silent lint:server' &",
-    "start": "forever --minUptime 5000 --spinSleepTime 1000 -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
+    "prestart": "npm run --silent lint:server &",
+    "start": "forever --minUptime 5000 --spinSleepTime 1000 ./server/server.js",
     "lint:server": "eslint --config server/.eslintrc.server.js server shared webpack.config.js",
     "lint:src": "eslint --config src/.eslintrc.js src",
     "lint": "npm run lint:server && npm run lint:src",
