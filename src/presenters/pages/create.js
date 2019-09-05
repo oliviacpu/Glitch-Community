@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle } from 'lodash';
 import { Loader, Mark } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
