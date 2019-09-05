@@ -10,7 +10,7 @@ const build = path.join(__dirname, '../build/node/');
 setImmediate(() => {
   console.log('Compiling for SSR with babel');
   const args = [src, '--config-file', path.resolve(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
-  spawn('babel', args, { env: process.env, stdio: 'inherit' });
+  //spawn('babel', args, { env: process.env, stdio: 'inherit' });
 });
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
