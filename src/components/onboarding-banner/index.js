@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import Emoji from 'Components/images/emoji';
@@ -10,6 +9,7 @@ import CategoriesGrid from 'Components/categories-grid';
 import { lightColors } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
 import { AnalyticsContext } from 'State/segment-analytics';
+import { useGlobals } from 'State/globals';
 import useWindowSize from 'Hooks/use-window-size';
 
 import Illustration from './illustration';
@@ -17,8 +17,9 @@ import styles from './styles.styl';
 
 const cx = classNames.bind(styles);
 
-function OnboardingBanner({ isHomepage }) {
+function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
+  const { location } = useGlobals();
   const exploreEl = useRef();
 
   const [categoriesWidth, setCategoriesWidth] = useState(0);
@@ -31,13 +32,17 @@ function OnboardingBanner({ isHomepage }) {
     [windowWidth],
   );
 
+  const isHomepage = location.pathname === '/';
   const actionsClassnames = cx({
     actions: true,
-    isHomepage,
+    isHomepage: true,
   });
 
   const backgroundStyles = isHomepage
-    ? { backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)', backgroundColor: lightColors[currentUser.id % 4] }
+    ? {
+      backgroundImage: 'url(https://cdn.glitch.com/b065beeb-4c71-4a9c-a8aa-4548e266471f%2Fuser-pattern.svg)',
+      backgroundColor: lightColors[currentUser.id % 4],
+    }
     : null;
 
   return (
@@ -80,13 +85,5 @@ function OnboardingBanner({ isHomepage }) {
     </AnalyticsContext>
   );
 }
-
-OnboardingBanner.propTypes = {
-  isHomepage: PropTypes.bool,
-};
-
-OnboardingBanner.defaultProps = {
-  isHomepage: false,
-};
 
 export default OnboardingBanner;

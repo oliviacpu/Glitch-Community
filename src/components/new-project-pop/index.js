@@ -98,9 +98,10 @@ function NewProjectPopButton({ buttonText, buttonType, align }) {
   const projects = value || [];
   const onOpen = useTracker('open new-project pop', (inherited) => {
     console.log(inherited);
-    return ({
-    ...inherited,
-  })});
+    return {
+      ...inherited,
+    };
+  });
   // const track = useTracker('Create Collection clicked', (inherited) => ({
   //   ...inherited,
   //   origin: `${inherited.origin} project`,
