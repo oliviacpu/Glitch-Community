@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
 import ProjectEmbed from 'Components/project/project-embed';
-import Emoji from 'Components/images/emoji';
 import Note from 'Components/collection/note';
 import AnimationContainer from 'Components/animation-container';
 import BookmarkButton from 'Components/buttons/bookmark-button';
@@ -17,6 +17,7 @@ import { useTrackedFunc } from 'State/segment-analytics';
 
 import FeaturedProjectOptionsPop from './featured-project-options-pop';
 import styles from './featured-project.styl';
+import { emoji } from '../global.styl';
 
 const Top = ({
   featuredProject,
@@ -35,7 +36,7 @@ const Top = ({
     <div className={styles.left}>
       <Heading tagName="h2">
         Featured Project
-        <Emoji name="clapper" inTitle />
+        <Icon className={emoji} icon="clapper" inTitle />
       </Heading>
       {collection && (
         <div className={styles.note}>

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Loader } from '@fogcreek/shared-components';
+import { Button, Icon, Loader } from '@fogcreek/shared-components';
 
 import Heading from 'Components/text/heading';
 import ProjectsList from 'Components/containers/projects-list';
 import CoverContainer from 'Components/containers/cover-container';
 import { UserLink, WrappingLink } from 'Components/link';
-import Button from 'Components/buttons/button';
 import Arrow from 'Components/arrow';
 import SignInPop from 'Components/sign-in-pop';
 import { getUserAvatarStyle, getUserLink } from 'Models/user';
