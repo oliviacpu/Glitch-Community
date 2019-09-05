@@ -40,7 +40,6 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <Logo />
         </Link>
 
-<<<<<<< HEAD
         <nav className={styles.headerActions}>
           <div className={styles.searchWrap}>
             <SearchForm defaultValue={searchQuery} />
@@ -48,7 +47,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
           <ul className={styles.buttons}>
             {(signedIn || signedOut) && (
               <li className={styles.buttonWrap}>
-                <NewProjectPop source="navbar" />
+                <NewProjectPop />
               </li>
             )}
             {hasProjects && (
@@ -63,13 +62,7 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
             )}
             {signedIn && (
               <li className={styles.buttonWrap}>
-                <UserOptionsPop
-                  user={currentUser}
-                  signOut={clear}
-                  showAccountSettingsOverlay={showAccountSettingsOverlay}
-                  showNewStuffOverlay={showNewStuffOverlay}
-                  superUserHelpers={superUserHelpers}
-                />
+                <UserOptionsPop showAccountSettingsOverlay={showAccountSettingsOverlay} showNewStuffOverlay={showNewStuffOverlay} />
               </li>
             )}
           </ul>
