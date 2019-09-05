@@ -27,7 +27,7 @@ require('@babel/register')({
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
-let isRequireCached = false;
+let isTranspileNeeded = false;
 const chokidar = require('chokidar');
 chokidar.watch(src).on('change', () => {
   // remove everything that babel transpiled
@@ -37,21 +37,28 @@ chokidar.watch(src).on('change', () => {
   // remove all rendered pages from the cache
   clearCache();
   // flag for performance profiling
-  isRequireCached = false;
+  isTranspileNeeded = false;
 });
+
+let isFirstTranspile = true;
+const requireClient = () => {
+  if (!isTranspileNeeded) console.log(`${isFirstTranspile ? 'T' : 'Ret'}ranspiling for SSR...`);
+  const startTime = performance.now();
+  const required = require('../src/server');
+  const endTime = performance.now();
+  if (!isTranspileNeeded) console.log(`SSR ${isFirstTranspile ? '' : 're'}transpile took ${Math.round(endTime - startTime) / 1000}s`);
+  isFirstTranspile = false;
+  isTranspileNeeded = true;
+  return required;
+};
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
+setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
-  if (!isRequireCached) console.log('Transpiling for SSR...');
-  const startTime = performance.now();
-  const { Page, resetState } = require('../src/server');
-  const endTime = performance.now();
-  if (!isRequireCached) console.log(`SSR transpile took ${Math.round(endTime - startTime) / 1000}s`);
-  isRequireCached = true;
-
+  const { Page, resetState } = requireClient();
   resetState();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
