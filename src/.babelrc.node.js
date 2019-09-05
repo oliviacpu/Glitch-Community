@@ -15,4 +15,5 @@ module.exports = {
       extensions: ['.styl'],
     }],
   ],
+  babelrc: false,
 };
