@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-console.log(path.resolve(__dirname, './src'));
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -100,7 +99,7 @@ module.exports = smp.wrap({
   context: path.resolve(__dirname),
   resolve: {
     extensions: ['.js'],
-    alias: aliases(SRC),
+    alias: aliases('../src'),
   },
   module: {
     rules: [
