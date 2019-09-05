@@ -40,7 +40,6 @@ AnalyticsContext.defaultProps = {
 
 export const useTracker = (name, properties, context) => {
   const inherited = React.useContext(Context);
-  console.log({ context, properties, inherited });
   return () => {
     try {
       analytics.track(name, resolveProperties(properties, inherited.properties), resolveProperties(context, inherited.context));

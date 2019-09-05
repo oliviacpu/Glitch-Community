@@ -98,7 +98,7 @@ function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
   const { currentUser } = useCurrentUser();
   const projects = value || [];
-  const onOpen = useTracker('open new-project pop', { userId: currentUser ? currentUser.id : null });
+  const onOpen = useTracker('test open new-project pop');
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
