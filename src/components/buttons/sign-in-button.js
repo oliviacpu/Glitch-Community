@@ -66,7 +66,7 @@ const SignInButton = ({ companyName, onClick, short }) => {
 
   return (
     <div style={{ marginBottom: '10px' }}>
-      <Button href={href} onClick={onClick} size="small">
+      <Button as="a" href={href} onClick={onClick} size="small">
         {short ? name : `Sign in with ${name}`} <Icon className={emojiStyle} icon={emoji} />
       </Button>
     </div>
