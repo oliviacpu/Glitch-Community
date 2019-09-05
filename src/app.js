@@ -1,7 +1,6 @@
 import React from 'react';
 import { LiveAnnouncer } from 'react-aria-live';
 import { RootStyle, lightTheme } from '@fogcreek/shared-components';
-import { HelmetProvider } from 'react-helmet-async';
 
 import Store from 'State/store';
 import { AnalyticsContext } from 'State/segment-analytics';
@@ -30,14 +29,12 @@ const App = ({ apiCache }) => (
                   <APICacheProvider initial={apiCache}>
                     <ProjectContextProvider>
                       <CollectionContextProvider>
-                        <HelmetProvider>
-                          <>
-                            <RootStyle theme={lightTheme} />
-                            <SuperUserBanner />
-                            <OfflineNotice />
-                            <Router />
-                          </>
-                        </HelmetProvider>
+                        <>
+                          <RootStyle theme={lightTheme} />
+                          <SuperUserBanner />
+                          <OfflineNotice />
+                          <Router />
+                        </>
                       </CollectionContextProvider>
                     </ProjectContextProvider>
                   </APICacheProvider>

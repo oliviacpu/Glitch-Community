@@ -3,9 +3,10 @@ import { StaticRouter } from 'react-router-dom';
 import { resetIdCounter } from 'react-tabs';
 import { resetUniqueId } from 'Hooks/use-unique-id';
 import { GlobalsProvider } from 'State/globals';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './app';
 
-const Page = ({ origin, route, AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => (
+const Page = ({ origin, helmetContext, route, AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => (
   <StaticRouter location={route}>
     <GlobalsProvider
       origin={origin}
@@ -15,7 +16,9 @@ const Page = ({ origin, route, AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTEN
       SSR_SIGNED_IN={SSR_SIGNED_IN}
       ZINE_POSTS={ZINE_POSTS}
     >
-      <App apiCache={API_CACHE} />
+      <HelmetProvider>
+        <App apiCache={API_CACHE} />
+      </HelmetProvider>
     </GlobalsProvider>
   </StaticRouter>
 );
