@@ -23,6 +23,7 @@ import { getRemixUrl } from 'Models/project';
 import { getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
 import { CDN_URL } from 'Utils/constants';
+import useSample from 'Hooks/use-sample';
 
 import styles from './create.styl';
 
@@ -181,7 +182,7 @@ function Starters() {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
 
-      let teams = values(data);
+      let teams = Object.values(data);
       teams = teams.map((team) => Object.assign(team, { description: team.description.replace(emojiPattern, '') }));
       setPlatformStarters(teams);
     };
@@ -459,12 +460,8 @@ function Remix() {
   ];
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [apps, setApps] = useState([]);
-
-  useEffect(() => {
-    // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
-    setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
-  }, []);
+  // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
+  const apps = [leaflet].concat(useSample(appsToRandomize, 4));
 
   return (
     <VisibilityContainer>
