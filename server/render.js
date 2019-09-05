@@ -35,18 +35,9 @@ chokidar.watch(build).on('change', () => {
 });
 
 let isFirstTranspile = true;
-const requireClient = async () => {
+const requireClient = () => {
   const startTime = performance.now();
-  let required;
-  while (true) {
-    try {
-      required = require(path.resolve(build, './server'));
-      break;
-    } catch (error) {
-      console.warn(error.toString());
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
-  }
+  const required = require(path.resolve(build, './server'));
   const endTime = performance.now();
   if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}load took ${Math.round(endTime - startTime)}ms`);
   isFirstTranspile = false;
@@ -60,7 +51,7 @@ const { Helmet } = require('react-helmet');
 setImmediate(() => requireClient()); // load in the client right away so we don't have to wait later
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
-  const { Page, resetState } = await requireClient();
+  const { Page, resetState } = requireClient();
   resetState();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
