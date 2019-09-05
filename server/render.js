@@ -54,7 +54,7 @@ const requireClient = () => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const { Helmet } = require('react-helmet');
+const { Helmet } = require('react-helmet-async');
 setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {

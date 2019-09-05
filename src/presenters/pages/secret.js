@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 import Button from 'Components/buttons/button';
 import Heading from 'Components/text/heading';
