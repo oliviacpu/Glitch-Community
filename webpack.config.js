@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+console.log(path.resolve(__dirname, './src'));
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -27,10 +28,10 @@ const smp = new SpeedMeasurePlugin({ outputFormat: 'humanVerbose' });
 
 console.log(`Starting Webpack in ${mode} mode.`);
 
-let prevBuildAssets = ['!node/**'];
+let prevBuildAssets = [];
 try {
   const prevBuildStats = JSON.parse(fs.readFileSync(path.resolve(BUILD, 'stats.json')));
-  prevBuildAssets = [...prevBuildAssets, '!stats.json', ...prevBuildStats.assets.map((asset) => `!${asset.name}`)];
+  prevBuildAssets = ['!stats.json', ...prevBuildStats.assets.map((asset) => `!${asset.name}`)];
 } catch (error) {
   // Don't worry about it, there's probably just no stats.json
 }
@@ -185,7 +186,7 @@ module.exports = smp.wrap({
       hash: true,
       publicPath: true,
     }),
-    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets] }),
+    new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!node/**', ...prevBuildAssets] }),
     new EnvironmentPlugin({
       FWD_SUBDOMAIN_PREFIX: process.env.PROJECT_NAME || os.userInfo().username,
     }),    

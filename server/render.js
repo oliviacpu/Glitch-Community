@@ -1,17 +1,8 @@
 const path = require('path');
-const { spawn } = require('child_process');
 const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
-
-const src = path.join(__dirname, '../src/');
 const build = path.join(__dirname, '../build/node/');
-
-setImmediate(() => {
-  console.log('Compiling for SSR with babel');
-  const args = [src, '--config-file', path.resolve(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
-  //spawn('babel', args, { env: process.env, stdio: 'inherit' });
-});
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
