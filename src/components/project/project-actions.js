@@ -24,12 +24,10 @@ export const EditButton = ({ name, isMember, size }) => (
 EditButton.propTypes = {
   name: PropTypes.string.isRequired,
   isMember: PropTypes.bool,
-  size: PropTypes.string,
 };
 
 EditButton.defaultProps = {
   isMember: false,
-  size: 'normal',
 };
 
 export const RemixButton = ({ name, isMember }) => (
