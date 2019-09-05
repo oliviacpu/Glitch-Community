@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
+import { Mark } from '@fogcreek/shared-components';
 
 import Button from 'Components/buttons/button';
 import { Overlay, OverlaySection, OverlayBackground } from 'Components/overlays';
 import { PopoverContainer } from 'Components/popover';
-import Mark from 'Components/mark';
 import Arrow from 'Components/arrow';
 import WistiaVideo from 'Components/wistia-video';
 import { useTracker } from 'State/segment-analytics';

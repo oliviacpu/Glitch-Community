@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { Loader } from '@fogcreek/shared-components';
+import { Loader, Mark } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -39,12 +39,6 @@ function RemixButton({ app, type, size, emoji, children }) {
     </Button>
   );
 }
-
-const Mark = ({ color, children }) => (
-  <span className={styles.mark} style={{ '--mark-color': color }}>
-    <span className={styles.markText}>{children}</span>
-  </span>
-);
 
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
