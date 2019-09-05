@@ -9,6 +9,7 @@ import { TrackedExternalLink } from 'Components/link';
 import { ProjectAvatar } from 'Components/images/avatar';
 import { getRemixUrl } from 'Models/project';
 import { useTracker } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
 import { createAPIHook } from 'State/api';
 
 import styles from './styles.styl';
@@ -95,17 +96,9 @@ const useNewProjectAPI = createAPIHook(async (api) => {
 
 function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
+  const { currentUser } = useCurrentUser();
   const projects = value || [];
-  const onOpen = useTracker('open new-project pop', (inherited) => {
-    console.log(inherited);
-    return {
-      ...inherited,
-    };
-  });
-  // const track = useTracker('Create Collection clicked', (inherited) => ({
-  //   ...inherited,
-  //   origin: `${inherited.origin} project`,
-  // }));
+  const onOpen = useTracker('open new-project pop', { userId: currentUser ? currentUser.id : null });
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
