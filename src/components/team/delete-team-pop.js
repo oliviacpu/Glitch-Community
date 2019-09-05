@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Loader } from '@fogcreek/shared-components';
+import { Button, Icon, Loader } from '@fogcreek/shared-components';
 
 import { PopoverWithButton, PopoverDialog, PopoverActions, PopoverTitle, ActionDescription } from 'Components/popover';
-import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import { useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
 // import { teamAdmins } from 'Models/team';
+
+import { emoji } from '../global.styl';
 
 const illustration = 'https://cdn.glitch.com/c53fd895-ee00-4295-b111-7e024967a033%2Fdelete-team.svg?1531267699621';
 
@@ -40,8 +41,8 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
         </ActionDescription>
       </PopoverActions>
       <PopoverActions type="dangerZone">
-        <Button size="small" type="dangerZone" emoji="bomb" onClick={deleteTeam}>
-          Delete {team.name}
+        <Button size="small" variant="warning" onClick={deleteTeam}>
+          Delete {team.name} <Icon className={emoji} icon="bomb" />
           {teamIsDeleting && <Loader style={{ width: '25px' }} />}
         </Button>
       </PopoverActions>
@@ -60,7 +61,7 @@ DeleteTeamPop.propTypes = {
 };
 
 const DeleteTeam = ({ team }) => (
-  <PopoverWithButton buttonProps={{ size: 'small', type: 'dangerZone', emoji: 'bomb' }} buttonText={`Delete ${team.name}`}>
+  <PopoverWithButton buttonProps={{ size: 'small', variant: 'warning', emoji: 'bomb' }} buttonText={`Delete ${team.name}`}>
     {() => <DeleteTeamPop team={team} />}
   </PopoverWithButton>
 );
