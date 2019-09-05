@@ -1,14 +1,17 @@
 const path = require('path');
+const { spawn } = require('child_process');
 const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
 
-console.log('Compiling for SSR with babel');
-const { spawn } = require('child_process');
 const src = path.join(__dirname, '../src/');
 const build = path.join(__dirname, '../build/node/');
-const args = ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
-spawn('pnpx', args, { env: process.env, stdio: 'inherit' });
+
+setImmediate(() => {
+  console.log('Compiling for SSR with babel');
+  const args = ['babel', src, '--no-babelrc', '--config-file', path.join(src, './.babelrc.node.js'), '--copy-files', '-d', build, '--watch'];
+  spawn('pnpx', args, { env: process.env, stdio: 'inherit' });
+});
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
@@ -42,7 +45,7 @@ const requireClient = () => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
-setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
+setImmediate(() => requireClient()); // load in the client right away so we don't have to wait later
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
