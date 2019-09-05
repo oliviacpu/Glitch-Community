@@ -14,8 +14,8 @@
       "^server/",
       "^shared/",
       "^views/",
+      "\\.js$",
       "\\.json$",
-      "\\.eslintrc\\.js$",
       "\\.babelrc"
     ]
   },

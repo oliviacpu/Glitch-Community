@@ -15,27 +15,38 @@ setImmediate(() => {
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
+let isTranspiled = false;
+const clearTranspile = () => {
+  // remove everything that babel transpiled
+  Object.keys(require.cache).forEach((location) => {
+    if (location.startsWith(build)) delete require.cache[location];
+  });
+  // remove all rendered pages from the cache
+  clearCache();
+  // flag for performance profiling
+  isTranspiled = false;
+};
+
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
-let isTranspiled = false;
 const chokidar = require('chokidar');
 chokidar.watch(build).on('change', () => {
-  if (isTranspiled) {
-    // remove everything that babel transpiled
-    Object.keys(require.cache).forEach((location) => {
-      if (location.startsWith(build)) delete require.cache[location];
-    });
-    // remove all rendered pages from the cache
-    clearCache();
-    // flag for performance profiling
-    isTranspiled = false;
-  }
+  if (isTranspiled) clearTranspile();
 });
 
 let isFirstTranspile = true;
-const requireClient = () => {
+const requireClient = async () => {
   const startTime = performance.now();
-  const required = require(path.resolve(build, './server'));
+  let required;
+  while (true) {
+    try {
+      required = require(path.resolve(build, './server'));
+      break;
+    } catch (error) {
+      console.warn(error.toString());
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
   const endTime = performance.now();
   if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}load took ${Math.round(endTime - startTime)}ms`);
   isFirstTranspile = false;
@@ -49,7 +60,7 @@ const { Helmet } = require('react-helmet');
 setImmediate(() => requireClient()); // load in the client right away so we don't have to wait later
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
-  const { Page, resetState } = requireClient();
+  const { Page, resetState } = await requireClient();
   resetState();
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory

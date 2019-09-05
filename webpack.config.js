@@ -27,10 +27,10 @@ const smp = new SpeedMeasurePlugin({ outputFormat: 'humanVerbose' });
 
 console.log(`Starting Webpack in ${mode} mode.`);
 
-let prevBuildAssets = [];
+let prevBuildAssets = ['!node'];
 try {
   const prevBuildStats = JSON.parse(fs.readFileSync(path.resolve(BUILD, 'stats.json')));
-  prevBuildAssets = ['!stats.json'].concat(...prevBuildStats.assets.map((asset) => `!${asset.name}`));
+  prevBuildAssets = [...prevBuildAssets, '!stats.json', ...prevBuildStats.assets.map((asset) => `!${asset.name}`)];
 } catch (error) {
   // Don't worry about it, there's probably just no stats.json
 }
