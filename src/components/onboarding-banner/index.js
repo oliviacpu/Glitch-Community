@@ -42,7 +42,7 @@ function OnboardingBanner({ isHomepage }) {
   const sourceLabel = `${isHomepage ? 'homepage' : 'profile page'} onboarding banner`;
 
   return (
-    <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile page'} onboarding banner` }}>
+    <AnalyticsContext context={{ origin: `${isHomepage ? 'homepage' : 'profile page'} onboarding banner` }}>
       <div className={styles.banner} style={backgroundStyles}>
         <div className={styles.illustration}>
           <Illustration />
