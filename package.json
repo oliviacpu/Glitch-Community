@@ -23,7 +23,7 @@
     "lint:src": "eslint --config src/.eslintrc.js src",
     "lint": "npm run lint:server && npm run lint:src",
     "watch:webpack": "npx webpack --watch --info-verbosity verbose",
-    "watch:babel": "npx babel src --config-file src/.babelrc.server.js --copy-files -d build/node --watch",
+    "watch:babel": "npx babel ./src --config-file ./src/.babelrc.node.js --copy-files -d ./build/node --watch",
     "watch:lint:server": "nodemon --watch server --watch shared --exec 'npm run --silent lint:server'",
     "cy:run": "npx cypress run",
     "cy:open": "npx cypress open",
