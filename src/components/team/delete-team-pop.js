@@ -43,7 +43,7 @@ const DeleteTeamPop = withRouter(({ history, team }) => {
       <PopoverActions type="dangerZone">
         <Button size="small" variant="warning" onClick={deleteTeam}>
           Delete {team.name} <Icon className={emoji} icon="bomb" />
-          {teamIsDeleting && <Loader style={{ width: '25px' }} />}
+          {teamIsDeleting && <Loader style={{ width: '14px' }} />}
         </Button>
       </PopoverActions>
       {/* temp hidden until the email part of this is ready
