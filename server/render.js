@@ -3,67 +3,53 @@ const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
 
-const externalBuild = {
-  directory: build,
-  setup: () => {}, // no init required
-};
-
-const internalBuild = {
-  directory: src,
-  setup: () => {
-    require('@babel/register')({
-      only: [(location) => location.startsWith(src)],
-      configFile: path.join(src, './.babelrc.node.js'),
-    })
-  },
-};
-
 const setup = () => {
   const src = path.join(__dirname, '../src');
   const build = path.join(__dirname, '../build/node/');
-  switch (ProcessingInstruction.env.DEPLOY_ENV) {
+  switch (process.env.DEPLOY_ENV) {
     case 'production':
       // This is ~community, use the external watcher
-      return build;
+      return { directory: build, verb: 'load' };
     case 'ci':
-      return build;
+      // use the static build
+      return { directory: build, verb: 'load' };
     default:
+      // babel register is blocking so we always use the latest
       require('@babel/register')({
         only: [(location) => location.startsWith(src)],
         configFile: path.join(src, './.babelrc.node.js'),
       });
-      return src;
+      return { directory: src, verb: 'transpile' };
   }
 };
-const directory = setup();
+const { directory, verb } = setup();
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
 let isTranspiled = false;
-const clearTranspile = () => {
-  // remove everything in the src directory
-  Object.keys(require.cache).forEach((location) => {
-    if (location.startsWith(build)) delete require.cache[location];
-  });
-  // remove all rendered pages from the cache
-  clearCache();
-  // flag for performance profiling
-  isTranspiled = false;
-};
+let isFirstTranspile = true;
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
 const chokidar = require('chokidar');
-chokidar.watch(build).on('change', () => {
-  if (isTranspiled) clearTranspile();
+chokidar.watch(directory).on('change', () => {
+  if (isTranspiled) {
+    // remove everything in the src directory
+    Object.keys(require.cache).forEach((location) => {
+      if (location.startsWith(directory)) delete require.cache[location];
+    });
+    // remove all rendered pages from the cache
+    clearCache();
+    // flag for performance profiling
+    isTranspiled = false;
+  }
 });
 
-let isFirstTranspile = true;
 const requireClient = () => {
   const startTime = performance.now();
-  const required = require(path.resolve(build, './server'));
+  const required = require(path.join(directory, './server'));
   const endTime = performance.now();
-  if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}load took ${Math.round(endTime - startTime)}ms`);
+  if (!isTranspiled) console.log(`SSR ${isFirstTranspile ? '' : 're'}${verb} took ${Math.round(endTime - startTime)}ms`);
   isFirstTranspile = false;
   isTranspiled = true;
   return required;
@@ -72,6 +58,7 @@ const requireClient = () => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
+setImmediate(() => requireClient()); // Load it right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
