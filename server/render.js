@@ -1,6 +1,7 @@
 const path = require('path');
 const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
+const { captureException } = require('@sentry/node');
 const createCache = require('./cache');
 
 const setup = () => {
@@ -61,6 +62,8 @@ setImmediate(() => {
   } catch (error) {
     // try importing right away so we don't have to wait
     // but if this fails not it might just be because the first time build isn't ready
+    console.warn('Failed to load client code for ssr. This either means the initial build is not finished or there is a bug in the code');
+    captureException(error);
   }
 });
 
