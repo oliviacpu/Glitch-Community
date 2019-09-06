@@ -17,7 +17,6 @@ const SHARED = path.resolve(__dirname, 'shared');
 const STYLES = path.resolve(__dirname, 'styles');
 const NODE_MODULES = path.resolve(__dirname, 'node_modules');
 const STYLE_BUNDLE_NAME = 'styles';
-console.log(aliases(SRC));
 
 let mode = 'development';
 if (process.env.NODE_ENV === 'production') {
@@ -193,5 +192,8 @@ module.exports = smp.wrap({
   ],
   watchOptions: {
     ignored: /node_modules/,
+  },
+  stats: {
+    assets: false,
   },
 });
