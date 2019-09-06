@@ -162,6 +162,7 @@ const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
+  const [emailInvited, setEmailInvited] = useState([]);
   const [newlyInvited, setNewlyInvited] = useState([]);
   const [removedInvitees, setRemovedInvitee] = useState([]);
   const { revokeTeamInvite } = useAPIHandlers();
@@ -188,15 +189,12 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   const onInviteEmail = async (email) => {
-    setNewlyInvited((invited) => [
-      ...invited,
-      {}
-    ]);
+    setEmailInvited((invited) => [...invited, { email, name: email }]);
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
     } catch (error) {
-      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      setEmailInvited((invited) => invited.filter((u) => u.email !== email));
       captureException(error);
       createNotification(`Couldn't invite ${email}, Try again later`, { type: 'error' });
     }
@@ -230,6 +228,11 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
               }
             }}
           />
+        </li>
+      ))}
+      {emailInvited.map((user) => (
+        <li key={user.email} className={styles.invitedMember}>
+          <UserAvatar user={user} />
         </li>
       ))}
       {currentUserIsOnTeam && (
