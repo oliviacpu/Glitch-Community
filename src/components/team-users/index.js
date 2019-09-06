@@ -188,6 +188,10 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   const onInviteEmail = async (email) => {
+    setNewlyInvited((invited) => [
+      ...invited,
+      {}
+    ]);
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
