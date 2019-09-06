@@ -4,7 +4,7 @@ const constants = require('./constants');
 const moduleAlias = require('module-alias');
 const dotenv = require('dotenv');
 
-moduleAlias.addAliases(require('../shared/aliases')('../build/node/'));
+moduleAlias.addAliases(require('../shared/aliases').server);
 
 const sentryHelpers = require('Shared/sentryHelpers');
 

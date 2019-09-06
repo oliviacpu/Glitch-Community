@@ -1,12 +1,24 @@
 const path = require('path');
 
-module.exports = (SRC) => ({
-  Components: path.resolve(__dirname, SRC, './components'),
-  Utils: path.resolve(__dirname, SRC, './utils'),
-  Curated: path.resolve(__dirname, SRC, './curated'),
-  Models: path.resolve(__dirname, SRC, './models'),
-  State: path.resolve(__dirname, SRC, './state'),
-  Hooks: path.resolve(__dirname, SRC, './hooks'),
+const makeAliases = (SRC) => ({
+  Components: path.resolve(SRC, './components'),
+  Utils: path.resolve(SRC, './utils'),
+  Curated: path.resolve(SRC, './curated'),
+  Models: path.resolve(SRC, './models'),
+  State: path.resolve(SRC, './state'),
+  Hooks: path.resolve(SRC, './hooks'),
   Shared: path.resolve(__dirname),
-  a:console.log(__dirname, SRC)||'sdfg',
 });
+
+const clientPath = path.resolve(__dirname, '../src');
+const builtPath = path.resolve(__dirname, '../build/node');
+
+let serverPath = clientPath;
+if (process.env.DEPLOY_ENV === 'production' || process.env.DEPLOY_ENV === 'ci') {
+  serverPath = builtPath;
+}
+
+module.exports = {
+  server: makeAliases(serverPath),
+  client: makeAliases(clientPath),
+};
