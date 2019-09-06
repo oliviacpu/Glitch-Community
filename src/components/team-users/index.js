@@ -189,7 +189,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   const onInviteEmail = async (email) => {
-    setEmailInvited((invited) => [...invited, { email, name: email }]);
+    setEmailInvited((invited) => [...invited, { email, id: 0, name: email }]);
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
@@ -232,7 +232,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       ))}
       {emailInvited.map((user) => (
         <li key={user.email} className={styles.invitedMember}>
-          <UserAvatar user={user} />
+          <div style={{ position: 'relative' }}>
+            <UserAvatar user={user} />
+          </div>
         </li>
       ))}
       {currentUserIsOnTeam && (
