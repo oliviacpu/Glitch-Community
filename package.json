@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "prestart": "npm run watch:lint:server & [ \"$DEPLOY_ENV\" == \"production\" ] && (npm run watch:babel & npm run watch:webpack &)",
-    "start": "forever --minUptime 5000 --spinSleepTime 1000 -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
+    "start": "forever --minUptime 5000 --spinSleepTime 1000 --killSignal SIGTERM -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
     "lint:server": "eslint --config server/.eslintrc.server.js server shared webpack.config.js",
     "lint:src": "eslint --config src/.eslintrc.js src",
     "lint": "npm run lint:server && npm run lint:src",
