@@ -34,7 +34,7 @@ dependencies:
   core-js: 3.2.1
   css-loader: 3.2.0
   d3-array: 2.3.1
-  dayjs: 1.8.16
+  dayjs: 1.8.15
   details-element-polyfill: 2.4.0
   dotenv: 8.1.0
   ejs: 2.6.2
@@ -98,7 +98,7 @@ dependencies:
   url-join: 4.0.1
   url-search-params-polyfill: 7.0.0
   wcag-contrast: 2.1.1
-  webpack: 4.39.3
+  webpack: 4.39.2
   webpack-cli: 3.3.7
   webpack-dev-middleware: 3.7.0
   winston: 3.2.1
@@ -3349,10 +3349,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
-  /dayjs/1.8.16:
+  /dayjs/1.8.15:
     dev: false
     resolution:
-      integrity: sha512-XPmqzWz/EJiaRHjBqSJ2s6hE/BUoCIHKgdS2QPtTQtKcS9E4/Qn0WomoH1lXanWCzri+g7zPcuNV4aTZ8PMORQ==
+      integrity: sha512-HYHCI1nohG52B45vCQg8Re3hNDZbMroWPkhz50yaX7Lu0ATyjGsTdoYZBpjED9ar6chqTx2dmSmM8A51mojnAg==
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
@@ -9920,7 +9920,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==
-  /webpack/4.39.3:
+  /webpack/4.39.2:
     dependencies:
       '@webassemblyjs/ast': 1.8.5
       '@webassemblyjs/helper-module-context': 1.8.5
@@ -9950,7 +9950,7 @@ packages:
       node: '>=6.11.5'
     hasBin: true
     resolution:
-      integrity: sha512-BXSI9M211JyCVc3JxHWDpze85CvjC842EvpRsVTc/d15YJGlox7GIDd38kJgWrb3ZluyvIjgenbLDMBQPDcxYQ==
+      integrity: sha512-AKgTfz3xPSsEibH00JfZ9sHXGUwIQ6eZ9tLN8+VLzachk1Cw2LVmy+4R7ZiwTa9cZZ15tzySjeMui/UnSCAZhA==
   /when/3.6.4:
     dev: false
     resolution:

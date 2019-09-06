@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames/bind';
-import { values, sampleSize, shuffle } from 'lodash';
-import { Button, Icon, Loader } from '@fogcreek/shared-components';
+import { Button, Icon, Loader, Mark } from '@fogcreek/shared-components';
 
 import Image from 'Components/images/image';
 import { TeamAvatar, ProjectAvatar } from 'Components/images/avatar';
@@ -22,6 +21,7 @@ import { getRemixUrl } from 'Models/project';
 import { getTeamLink } from 'Models/team';
 import { emojiPattern } from 'Shared/regex';
 import { CDN_URL } from 'Utils/constants';
+import useSample from 'Hooks/use-sample';
 
 import styles from './create.styl';
 import { emoji as emojiStyle } from '../../components/global.styl';
@@ -39,12 +39,6 @@ function RemixButton({ app, type, size, emoji, children }) {
     </Button>
   );
 }
-
-const Mark = ({ color, children }) => (
-  <span className={styles.mark} style={{ '--mark-color': color }}>
-    <span className={styles.markText}>{children}</span>
-  </span>
-);
 
 const Unmarked = ({ children }) => <span className={styles.unmarked}>{children}</span>;
 
@@ -187,7 +181,7 @@ function Starters() {
       const url = `/v1/teams/by/url?url=${PLATFORM_STARTERS.join('&url=')}`;
       const { data } = await api.get(url);
 
-      let teams = values(data);
+      let teams = Object.values(data);
       teams = teams.map((team) => Object.assign(team, { description: team.description.replace(emojiPattern, '') }));
       setPlatformStarters(teams);
     };
@@ -465,12 +459,8 @@ function Remix() {
   ];
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [apps, setApps] = useState([]);
-
-  useEffect(() => {
-    // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
-    setApps([leaflet].concat(shuffle(sampleSize(appsToRandomize, 4))));
-  }, []);
+  // we show 5 apps total: starter-leaflet first because it's pretty, 4 random projects after
+  const apps = [leaflet].concat(useSample(appsToRandomize, 4));
 
   return (
     <VisibilityContainer>

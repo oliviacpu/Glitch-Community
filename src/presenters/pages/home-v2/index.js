@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Button, Icon } from '@fogcreek/shared-components';
+import { Button, Icon, Mark } from '@fogcreek/shared-components';
 
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
@@ -15,7 +15,6 @@ import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Link from 'Components/link';
-import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
 import VisibilityContainer from 'Components/visibility-container';
