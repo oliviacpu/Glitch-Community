@@ -17,19 +17,21 @@
     "./src/polyfills.js"
   ],
   "scripts": {
-    "prestart": "npm run --silent watch:lint:server & [ \"$DEPLOY_ENV\" == \"production\" ] && npm run --silent watch:webpack & npm run --silent watch:babel &",
+    "prestart": "npm run watch:lint:server & [ \"$DEPLOY_ENV\" == \"production\" ] && (npm run watch:babel & npm run watch:webpack &)",
     "start": "forever --minUptime 5000 --spinSleepTime 1000 -c 'nodemon --watch server --watch shared --watch views --exitcrash' ./server/server.js",
     "lint:server": "eslint --config server/.eslintrc.server.js server shared webpack.config.js",
     "lint:src": "eslint --config src/.eslintrc.js src",
     "lint": "npm run lint:server && npm run lint:src",
-    "watch:webpack": "npx webpack --watch --info-verbosity verbose",
-    "watch:babel": "npx babel ./src --config-file ./src/.babelrc.node.js --copy-files -d ./build/node --watch",
+    "watch:webpack": "npm run build:webpack -- --watch --info-verbosity verbose",
+    "watch:babel": "npm run build:babel -- --watch",
     "watch:lint:server": "nodemon --watch server --watch shared --exec 'npm run --silent lint:server'",
     "cy:run": "npx cypress run",
     "cy:open": "npx cypress open",
     "cy:remix": "npx cypress open --config baseUrl=https://$1.glitch.me",
     "cy:ci": "start-server-and-test start http://localhost:8000 'npx cypress run --record'",
-    "build": "webpack"
+    "build:webpack": "npx webpack",
+    "build:babel": "npx babel ./src --config-file ./src/.babelrc.node.js --copy-files -d ./build/node",
+    "build": "npm run build:webpack && npm run build:babel"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
