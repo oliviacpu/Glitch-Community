@@ -10,7 +10,7 @@ const makeAliases = (SRC) => ({
   Shared: path.resolve(__dirname),
 });
 
-const clientPath = '../src/';
+const clientPath = '/src/';
 const builtPath = '../build/node/';
 
 let serverPath = clientPath;
