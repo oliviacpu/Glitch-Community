@@ -55,7 +55,14 @@ const requireClient = () => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
-setImmediate(() => requireClient()); // don't wait for a request
+setImmediate(() => {
+  try {
+    requireClient();
+  } catch (error) {
+    // try importing right away so we don't have to wait
+    // but if this fails not it might just be because the first time build isn't ready
+  }
+});
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
