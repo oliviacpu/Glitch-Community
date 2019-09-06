@@ -232,7 +232,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       ))}
       {emailInvited.map((user) => (
         <li key={user.email} className={styles.invitedMember}>
-          <div style={{ position: 'relative' }}>
+          <div className={styles.fakeEmailUser}>
             <UserAvatar user={user} />
           </div>
         </li>
