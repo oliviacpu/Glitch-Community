@@ -9,7 +9,7 @@ const StatsPlugin = require('stats-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { EnvironmentPlugin } = require('webpack');
-const aliases = require('./shared/aliases');
+const aliases = require('./aliases');
 
 const BUILD = path.resolve(__dirname, 'build/client');
 const SRC = path.resolve(__dirname, 'src');

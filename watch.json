@@ -15,7 +15,8 @@
     "include": [
       "\\.babelrc",
       "\\.eslintrc",
-      "webpack\\.config"
+      "webpack\\.config",
+      "aliases.js"
     ]
   },
   "throttle": 100
