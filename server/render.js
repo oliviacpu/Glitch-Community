@@ -2,13 +2,46 @@ const path = require('path');
 const { performance } = require('perf_hooks');
 const dayjs = require('dayjs');
 const createCache = require('./cache');
-const build = path.join(__dirname, '../build/node/');
+
+const externalBuild = {
+  directory: build,
+  setup: () => {}, // no init required
+};
+
+const internalBuild = {
+  directory: src,
+  setup: () => {
+    require('@babel/register')({
+      only: [(location) => location.startsWith(src)],
+      configFile: path.join(src, './.babelrc.node.js'),
+    })
+  },
+};
+
+const setup = () => {
+  const src = path.join(__dirname, '../src');
+  const build = path.join(__dirname, '../build/node/');
+  switch (ProcessingInstruction.env.DEPLOY_ENV) {
+    case 'production':
+      // This is ~community, use the external watcher
+      return build;
+    case 'ci':
+      return build;
+    default:
+      require('@babel/register')({
+        only: [(location) => location.startsWith(src)],
+        configFile: path.join(src, './.babelrc.node.js'),
+      });
+      return src;
+  }
+};
+const directory = setup();
 
 const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'), 'render', {});
 
 let isTranspiled = false;
 const clearTranspile = () => {
-  // remove everything that babel transpiled
+  // remove everything in the src directory
   Object.keys(require.cache).forEach((location) => {
     if (location.startsWith(build)) delete require.cache[location];
   });
