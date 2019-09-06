@@ -30,7 +30,7 @@ module.exports = function(app) {
       // Do not webpack, we have already built
       break;
     default:
-      // Use webpack middlware for dev/staging/etc.
+      // Use webpack middleware for dev/staging/etc.
       app.use(webpackExpressMiddleware());
       break;
   }
