@@ -194,6 +194,6 @@ module.exports = smp.wrap({
     ignored: /node_modules/,
   },
   stats: {
-    assets: false,
+    children: false,
   },
 });
