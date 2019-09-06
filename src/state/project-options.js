@@ -7,7 +7,7 @@ import useErrorHandlers from 'State/error-handlers';
 import { userOrTeamIsAuthor, useCollectionReload } from 'State/collection';
 import { useProjectReload, useProjectMembers } from 'State/project';
 import { userIsOnTeam } from 'Models/team';
-import { userIsProjectMember, userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
+import { userIsProjectAdmin, userIsOnlyProjectAdmin } from 'Models/project';
 import { useNotifications } from 'State/notifications';
 import { createCollection } from 'Models/collection';
 import { AddProjectToCollectionMsg } from 'Components/notification';
@@ -78,10 +78,8 @@ export const useProjectOptions = (project, { user, team, collection, ...options 
   }, [user, team, project]);
 
   const isLoggedIn = !!currentUser.login;
-  // const isProjectMember = userIsProjectMember({ project, user: currentUser });
   const { value: members } = useProjectMembers(project.id);
-  const isProjectMember = members.users.some(({ userId }) => user.id === currentUser.id);
-  console.log({ isProjectMember })
+  const isProjectMember = !!(members && members.users && members.users.some(({ id }) => id === currentUser.id));
   const isProjectAdmin = userIsProjectAdmin({ project, user: currentUser });
   const isOnlyProjectAdmin = userIsOnlyProjectAdmin({ project, user: currentUser });
 
