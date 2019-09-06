@@ -10,8 +10,8 @@ const makeAliases = (SRC) => ({
   Shared: path.resolve(__dirname),
 });
 
-const clientPath = path.resolve(__dirname, '../src');
-const builtPath = path.resolve(__dirname, '../build/node');
+const clientPath = path.resolve(__dirname, '../src/');
+const builtPath = path.resolve(__dirname, '../build/node/');
 
 let serverPath = clientPath;
 if (process.env.DEPLOY_ENV === 'production' || process.env.DEPLOY_ENV === 'ci') {
