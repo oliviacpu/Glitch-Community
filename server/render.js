@@ -8,13 +8,11 @@ const setup = () => {
   const build = path.join(__dirname, '../build/node/');
   switch (process.env.DEPLOY_ENV) {
     case 'production':
-      // This is ~community, use the external watcher
-      return { directory: build, verb: 'load' };
     case 'ci':
-      // use the static build
+      // use the build created either statically or by a watcher
       return { directory: build, verb: 'load' };
     default:
-      // babel register is blocking so we're always using the latest
+      // transpile on render to ensure we always use the latest code
       require('@babel/register')({
         only: [(location) => location.startsWith(src)],
         configFile: path.join(src, './.babelrc.node.js'),
@@ -57,7 +55,7 @@ const requireClient = () => {
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const { Helmet } = require('react-helmet');
-setImmediate(() => requireClient()); // Load it right away rather than waiting for a request
+setImmediate(() => requireClient()); // don't wait for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
