@@ -196,6 +196,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
     } catch (error) {
+      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
       captureException(error);
       createNotification(`Couldn't invite ${email}, Try again later`, { type: 'error' });
     }
