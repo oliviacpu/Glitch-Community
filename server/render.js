@@ -14,7 +14,7 @@ const setup = () => {
       // use the static build
       return { directory: build, verb: 'load' };
     default:
-      // babel register is blocking so we always use the latest
+      // babel register is blocking so we're always using the latest
       require('@babel/register')({
         only: [(location) => location.startsWith(src)],
         configFile: path.join(src, './.babelrc.node.js'),
@@ -31,8 +31,7 @@ let isFirstTranspile = true;
 
 // clear client code from the require cache whenever it gets changed
 // it'll get loaded off the disk again when the render calls require
-const chokidar = require('chokidar');
-chokidar.watch(directory).on('change', () => {
+require('chokidar').watch(directory).on('change', () => {
   if (isTranspiled) {
     // remove everything in the src directory
     Object.keys(require.cache).forEach((location) => {
