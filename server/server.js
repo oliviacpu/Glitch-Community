@@ -74,6 +74,13 @@ app.use((req, res, next) => {
 });
 app.use(compression());
 
+// express thinks a//b is the same as a/b but react-router disagrees
+// so just redirect to the non double slash version
+app.get(/\/+/, function(req, res) {
+  console.log(req.url);
+  res.redirect(301, req.url.replace(/\/+/g, '/'));
+});
+
 app.get('/edit', function(req, res) {
   res.status(500);
   res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
