@@ -96,7 +96,7 @@ UserAvatar.defaultProps = {
 };
 
 export const ProjectAvatar = ({ project, hasAlt, tiny }) => (
-  <AvatarBase name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} type="project" hideTooltip tiny={tiny} />
+  <AvatarBase name={hasAlt ? project.domain : ''} src={getProjectAvatarUrl(project)} srcFallback={FALLBACK_AVATAR_URL} variant="roundrect" type="project" hideTooltip tiny={tiny} />
 );
 
 ProjectAvatar.propTypes = {

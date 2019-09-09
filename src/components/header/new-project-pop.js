@@ -25,7 +25,7 @@ const importGitRepo = () => {
 const NewProjectResultItem = ({ project }) => (
   <div className={styles.project}>
     <div className={styles.projectAvatar}>
-      <ProjectAvatar project={project} />
+      <ProjectAvatar project={project} variant="roundrect" />
     </div>
     <div className={styles.projectInfo}>
       <div className={styles.projectDomain} title={project.domain}>
