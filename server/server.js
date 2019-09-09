@@ -77,6 +77,7 @@ app.use(compression());
 // express thinks a//b is the same as a/b but react-router disagrees
 // so just redirect to the non double slash version to avoid conflict
 app.get(/\/\/+/, function(req, res) {
+  console.log(req.path, req.originalUrl);
   const fixedPath = req.path.replace(/\/+/g, '/');
   res.redirect(301, req.originalUrl.replace(path, fixedPath));
 });
