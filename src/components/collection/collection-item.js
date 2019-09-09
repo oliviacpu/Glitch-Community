@@ -152,7 +152,7 @@ export const MyStuffItem = ({ collection, isAuthorized, showLoader }) => {
 };
 
 const CollectionItem = ({ collection, deleteCollection, isAuthorized, showCurator, showLoader }) => (
-  <AnimationContainer type="slideDown" onAnimationEnd={deleteCollection}>
+  <AnimationContainer animation={slideDown} onAnimationEnd={deleteCollection}>
     {(animateAndDeleteCollection) => (
       <div className={styles.collectionItem}>
         {(showCurator || isAuthorized) && (
