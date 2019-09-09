@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import punycode from 'punycode';
 
 import categories from 'Curated/categories';
@@ -83,7 +83,6 @@ const Router = () => {
   const { EXTERNAL_ROUTES } = useGlobals();
   return (
     <>
-      <Redirect from="//*" to="/*" />
       <PageChangeHandler />
       <Switch>
         <Route path="/" exact render={({ location }) => <NewHomePage key={location.key} />} />
