@@ -858,19 +858,14 @@ packages:
       regenerator-runtime: 0.13.3
     dev: false
     resolution:
-<<<<<<< HEAD
-      integrity: sha512-bNxHJ+w7RfLzZJtIZdEjFgL1twwZ6ozuOmsEjtyuTqfi1hb1fqsDYYyi3Fi3i+RgAO4S9+wkSG102+GCqdpr7w==
+      integrity: sha512-AS2D/5APsqzq3LJVmHnwLwH0CbQpbcD+bjxuuxbrwt0E3PtTv3TL5TBTUnL6SkKzIW/+ZBf3oegHNG7W0pXcUA==
   /@babel/runtime/7.3.4:
     dependencies:
       regenerator-runtime: 0.12.1
     dev: false
     resolution:
       integrity: sha512-IvfvnMdSaLBateu0jfsYIpZTxAc2cKEXEMiezGGN75QcBcecDUKd3PgLAncT0oOgxKy8dd8hrJKj9MfzgfZd6g==
-  /@babel/runtime/7.5.5:
-=======
-      integrity: sha512-AS2D/5APsqzq3LJVmHnwLwH0CbQpbcD+bjxuuxbrwt0E3PtTv3TL5TBTUnL6SkKzIW/+ZBf3oegHNG7W0pXcUA==
   /@babel/runtime/7.6.0:
->>>>>>> 1c2807547422f19d40abe15df76d9491788d720d
     dependencies:
       regenerator-runtime: 0.13.3
     dev: false
@@ -8219,11 +8214,7 @@ packages:
       invariant: 2.2.4
       prop-types: 15.7.2
       react-fast-compare: 2.0.4
-<<<<<<< HEAD
       shallowequal: 1.1.0
-=======
-      react-side-effect: 1.2.0
->>>>>>> 1c2807547422f19d40abe15df76d9491788d720d
     dev: false
     peerDependencies:
       react: ^16.6.0
@@ -8329,17 +8320,6 @@ packages:
       react-dom: ^16.8.0
     resolution:
       integrity: sha512-fbVISKa/lSUlLsltuatfUiKcWCNvdLXxFFyrzVQCBUsjxJZH/m7UMPdw/ywmRixAmwXAP++MdbNNZypOsiDEfA==
-<<<<<<< HEAD
-=======
-  /react-side-effect/1.2.0:
-    dependencies:
-      shallowequal: 1.1.0
-    dev: false
-    peerDependencies:
-      react: ^0.13.0 || ^0.14.0 || ^15.0.0 || ^16.0.0
-    resolution:
-      integrity: sha512-v1ht1aHg5k/thv56DRcjw+WtojuuDHFUgGfc+bFHOWsF4ZK6C2V57DO0Or0GPsg6+LSTE0M6Ry/gfzhzSwbc5w==
->>>>>>> 1c2807547422f19d40abe15df76d9491788d720d
   /react-sortable-hoc/1.10.1:
     dependencies:
       '@babel/runtime': 7.6.0
