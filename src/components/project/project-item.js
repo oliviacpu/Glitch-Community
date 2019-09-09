@@ -74,9 +74,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   );
 
   return (
-    <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
+    <AnimationContainer animation={slideDown} onAnimationEnd={dispatch}>
       {(slideDown) => (
-        <AnimationContainer type="slideUp" onAnimationEnd={dispatch}>
+        <AnimationContainer animation={slideUp} onAnimationEnd={dispatch}>
           {(slideUp) => {
             const animatedProjectOptions = pickBy(
               {
