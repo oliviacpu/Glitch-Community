@@ -66,19 +66,21 @@ const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT,
   const helmetContext = {};
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
-  const page = React.createElement(Hel)
-        
-        React.createElement(Page, {
-    origin: url.origin,
-    route: url.pathname + url.search + url.hash,
-    AB_TESTS,
-    API_CACHE,
-    ZINE_POSTS,
-    HOME_CONTENT,
-    SSR_SIGNED_IN,
-    EXTERNAL_ROUTES,
-  });
-  const
+  const page = React.createElement(
+    HelmetProvider,
+    { context: helmetContext },
+
+    React.createElement(Page, {
+      origin: url.origin,
+      route: url.pathname + url.search + url.hash,
+      AB_TESTS,
+      API_CACHE,
+      ZINE_POSTS,
+      HOME_CONTENT,
+      SSR_SIGNED_IN,
+      EXTERNAL_ROUTES,
+    }),
+  );
 
   const html = ReactDOMServer.renderToString(page);
   const context = { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };

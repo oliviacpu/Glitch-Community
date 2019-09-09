@@ -76,7 +76,6 @@ dependencies:
   react-aria-live: 2.0.5
   react-axe: 2.1.9
   react-dom: 16.9.0
-  react-helmet: 5.2.1
   react-helmet-async: 1.0.2
   react-is: 16.9.0
   react-konami: 0.6.2
@@ -4175,10 +4174,6 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-adbxcyWV46qiHyvSp50TKt05tB4tK3HcmF7/nxfAdhnox83seTDbwnaqKO4sXRy7roHAIFqJP/Rw/AuEbX61LA==
-  /exenv/1.2.2:
-    dev: false
-    resolution:
-      integrity: sha1-KueOhdmJQVhnCwPUe+wfA72Ru50=
   /expand-brackets/0.1.5:
     dependencies:
       is-posix-bracket: 0.1.1
@@ -8083,17 +8078,6 @@ packages:
       react-dom: ^16.6.0
     resolution:
       integrity: sha512-qzzchrM/ibHuPS/60ief8jaibPunuRdeta4iBDQV+ri2SFKwOV+X2NlEpvevZOauhmHrH/I6dI4E90EPVfJBBg==
-  /react-helmet/5.2.1:
-    dependencies:
-      object-assign: 4.1.1
-      prop-types: 15.7.2
-      react-fast-compare: 2.0.4
-      react-side-effect: 1.1.5
-    dev: false
-    peerDependencies:
-      react: '>=15.0.0'
-    resolution:
-      integrity: sha512-CnwD822LU8NDBnjCpZ4ySh8L6HYyngViTZLfBBb3NjtrpN8m49clH8hidHouq20I51Y6TpCTISCBbqiY5GamwA==
   /react-input-autosize/2.2.1:
     dependencies:
       prop-types: 15.7.2
@@ -8193,15 +8177,6 @@ packages:
       react-dom: ^16.8.0
     resolution:
       integrity: sha512-fbVISKa/lSUlLsltuatfUiKcWCNvdLXxFFyrzVQCBUsjxJZH/m7UMPdw/ywmRixAmwXAP++MdbNNZypOsiDEfA==
-  /react-side-effect/1.1.5:
-    dependencies:
-      exenv: 1.2.2
-      shallowequal: 1.1.0
-    dev: false
-    peerDependencies:
-      react: ^0.13.0 || ^0.14.0 || ^15.0.0 || ^16.0.0
-    resolution:
-      integrity: sha512-Z2ZJE4p/jIfvUpiUMRydEVpQRf2f8GMHczT6qLcARmX7QRb28JDBTpnM2g/i5y/p7ZDEXYGHWg0RbhikE+hJRw==
   /react-sortable-hoc/1.10.1:
     dependencies:
       '@babel/runtime': 7.5.5
@@ -10279,7 +10254,6 @@ specifiers:
   react-aria-live: ^2.0.5
   react-axe: ^2.1.9
   react-dom: ^16.8.6
-  react-helmet: ^5.2.1
   react-helmet-async: ^1.0.2
   react-is: ^16.8.6
   react-konami: ^0.6.2
