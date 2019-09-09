@@ -57,7 +57,7 @@ const requireClient = () => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const { Helmet } = require('react-helmet-async');
+const { HelmetProvider } = require('react-helmet-async');
 setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
@@ -66,7 +66,9 @@ const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT,
   const helmetContext = {};
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
-  const page = React.createElement(Page, {
+  const page = React.createElement(Hel)
+        
+        React.createElement(Page, {
     origin: url.origin,
     route: url.pathname + url.search + url.hash,
     AB_TESTS,
@@ -75,8 +77,8 @@ const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT,
     HOME_CONTENT,
     SSR_SIGNED_IN,
     EXTERNAL_ROUTES,
-    helmetContext,
   });
+  const
 
   const html = ReactDOMServer.renderToString(page);
   const context = { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
