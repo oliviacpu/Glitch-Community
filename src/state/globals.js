@@ -6,7 +6,7 @@ export const Context = createContext({});
 
 export const GlobalsProvider = withRouter(({ children, history, location, origin, ...globals }) => {
   const value = useMemo(() => {
-    const pathname = location.pathname.replace(/^\/+/, '/');
+    const pathname = location.pathname.replace(/^\/+/, '/'); // new URL('//', 'https://glitch.com')
     const url = new URL(pathname + location.search + location.hash, origin);
     return { history, location: url, origin, ...globals };
   }, [history, location.key, origin, ...Object.values(globals)]);
