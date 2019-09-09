@@ -24,8 +24,8 @@ window.bootstrap = async (container) => {
     return;
   }
 
-  // express sees a//b as the same as a/b but react-router does not
-  // redirect to the single slash url so the conflict doesn't cause a post ssr 404
+  // express sees a//b as the same as a/b, but react-router does not
+  // redirect to the single slash url so the site doesn't flicker from ssr to 404
   if (location.pathname.includes('//')) {
     history.replaceState(history.state, '', location.pathname.replace(/\/+/g, '/') + location.search + location.hash);
   }
