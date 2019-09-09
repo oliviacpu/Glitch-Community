@@ -30,12 +30,23 @@ const paginationReducer = (oldState, action) => {
         totalPages: oldState.totalPages,
         announce: 'Showing all pages',
       };
-    case 'restart':
-      return {
-        ...oldState,
-        page: 1,
-        announce: `Showing page 1 of ${action.totalPages}`,
-      };
+    case 'numberOfPagesChanged':
+      if (oldState.page > action.totalPages) {
+        let pageToReturnTo = 1;
+        if (oldState.page > 1) {
+          pageToReturnTo = oldState.page - 1;
+        }
+        if (pageToReturnTo > action.totalPages) {
+          pageToReturnTo = action.totalPages - 1;
+        }
+        return {
+          ...oldState,
+          page: pageToReturnTo,
+          totalPages: action.totalPages,
+          announce: `Showing page ${pageToReturnTo} of ${action.totalPages}`,
+        };
+      }
+      return oldState;
     default:
       return {};
   }
@@ -87,8 +98,8 @@ function PaginationController({ enabled, items, itemsPerPage, fetchDataOptimisti
   }, [state.page, canPaginate, itemsPerPage]);
 
   useEffect(() => {
-    dispatchState({ type: 'restart', totalPages: numPages });
-  }, [numItems]);
+    dispatchState({ type: 'numberOfPagesChanged', totalPages: numPages });
+  }, [numPages]);
 
   const arrow = 'https://cdn.glitch.com/11efcb07-3386-43b6-bab0-b8dc7372cba8%2Fleft-arrow.svg?1553883919269';
 
