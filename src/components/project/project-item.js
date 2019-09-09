@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
-import { Button } from '@fogcreek/shared-components';
+import { AnimationContainer, slideDown, slideUp, Button } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
 import BookmarkButton from 'Components/buttons/bookmark-button';
@@ -10,7 +10,6 @@ import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
 import { PrivateIcon } from 'Components/private-badge';
-import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import Note from 'Components/collection/note';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
@@ -75,9 +74,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   );
 
   return (
-    <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
+    <AnimationContainer animation={slideDown} onAnimationEnd={dispatch}>
       {(slideDown) => (
-        <AnimationContainer type="slideUp" onAnimationEnd={dispatch}>
+        <AnimationContainer anmiation={slideUp} onAnimationEnd={dispatch}>
           {(slideUp) => {
             const animatedProjectOptions = pickBy(
               {
