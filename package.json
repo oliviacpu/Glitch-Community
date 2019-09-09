@@ -26,6 +26,7 @@
     "cy:open": "npx cypress open",
     "cy:remix": "npx cypress open --config baseUrl=https://$1.glitch.me",
     "cy:ci": "start-server-and-test start http://localhost:8000 'npx cypress run --record'",
+    "test": "mocha",
     "build": "webpack"
   },
   "dependencies": {
@@ -135,5 +136,9 @@
   },
   "engines": {
     "node": "10.x"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0"
   }
 }
