@@ -23,6 +23,13 @@ window.bootstrap = async (container) => {
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
   }
+
+  // express sees a//b as the same as a/b but react-router does not
+  // redirect to the single slash url so the conflict doesn't cause a post ssr 404
+  if (location.pathname.includes('//')) {
+    history.replaceState(history.state, '', location.pathname.replace(/\/+/g, '/') + location.search + location.hash);
+  }
+
   // Mark that bootstrapping has occurred,
   // ..and more importantly, use this as an excuse
   // to call into Sentry so that its initialization
