@@ -26,9 +26,7 @@ const ProjectItemSmall = ({ project }) => (
           <span className={styles.projectName}>{project.domain}</span>{' '}
         </Text>
         {project.private && (
-          <Icon icon="private" className={styles.privateIcon} aria-label="private">
-            {' '}
-          </Icon>
+          <span className={styles.privateIcon}><Icon icon="private" alt="private" /></span>
         )}
       </div>
     </ProjectLink>
