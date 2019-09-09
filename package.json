@@ -106,6 +106,7 @@
     "react-aria-live": "^2.0.5",
     "react-axe": "^2.1.9",
     "react-dom": "^16.8.6",
+    "react-helmet-async": "^1.0.2",
     "react-is": "^16.8.6",
     "react-konami": "^0.6.2",
     "react-onclickoutside": "^6.8.0",
@@ -130,8 +131,7 @@
     "webpack": "^4.35.0",
     "webpack-cli": "^3.3.5",
     "webpack-dev-middleware": "^3.7.0",
-    "winston": "^3.2.1",
-    "react-helmet-async": "^1.0.2"
+    "winston": "^3.2.1"
   },
   "engines": {
     "node": "10.x"
