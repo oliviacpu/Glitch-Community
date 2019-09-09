@@ -30,6 +30,10 @@
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
     
+    <!-- styled-components SSR tags -->
+    <%- styleTags %>
+    <!-- end styled-components SSR tags -->
+    
     <% if (!rendered) { %>
     <noscript><style>#fallback, #fallback-noscript { display: inline-block !important } #fallback-img { display: block !important }</style></noscript>
     <% } %>
