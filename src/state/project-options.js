@@ -38,8 +38,13 @@ const useDefaultProjectOptions = () => {
       reloadProjectMembers([project.id]);
     }, handleError),
     leaveProject: withErrorHandler(async (project) => {
-      await removeUserFromProject({ project, user: currentUser });
-      reloadProjectMembers([project.id]);
+      console.log("default leaveProject")
+      try {
+        await removeUserFromProject({ project, user: currentUser });
+        reloadProjectMembers([project.id]);
+      } catch (error) {
+        console.log("error", error)
+      }
     }, handleError),
     // toggleBookmark is defined here and on state/collection and are very similar. Their only differences are how they modify state.
     // we'll probably want to revisit condensing these when we have a centralized state object to work off of.
