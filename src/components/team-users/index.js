@@ -173,7 +173,7 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   const addInvitee = (user) => {
     setUsers((oldUsers) => ({ ...oldUsers, [user.id]: user }));
-    setTokens((oldTokens) => [...oldTokens, { userId: user.id }]);
+    setTokens((oldTokens) => [{ userId: user.id }, ...oldTokens]);
   };
 
   const removeInvitee = (id) => {
