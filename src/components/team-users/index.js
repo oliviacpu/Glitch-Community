@@ -147,7 +147,7 @@ const JoinTeam = ({ onClick }) => (
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
   const [tokens, setTokens] = useState([]);
-  const [users, setUsers] = useState(new Map());
+  const [users, setUsers] = useState({});
 
   // watch for changes to the team and update tokens
   useEffect(() => {
@@ -156,21 +156,22 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   // watch for changes to tokens and load new users
   useEffect(() => {
+    console.log(users);
     const invitedIds = tokens.map(({ userId }) => userId);
-    const neededUsers = invitedIds.filter((id) => !users.has(id));
+    const neededUsers = invitedIds.filter((id) => !users.hasOwnProperty(id));
     if (neededUsers.length) {
+      setUsers((oldUsers) => neededUsers.reduce((accumUsers, id) => ({ [id]: null, ...accumUsers }), oldUsers));
       const idString = neededUsers.map((id) => `id=${id}`).join('&');
-      setUsers((oldUsers) => new Map([...oldUsers, ...neededUsers.map((id) => [id, null])]));
       api.get(`v1/users/by/id?${idString}`).then(({ data }) => {
-        setUsers((oldUsers) => new Map([...oldUsers, ...Object.entries(data)]));
+        setUsers((oldUsers) => ({ ...oldUsers, ...data }));
       }, captureException);
     }
   }, [tokens]);
 
-  const invitees = tokens.filter((id) => users.has(id)).map((id) => users.get(id));
+  const invitees = tokens.map(({ userId }) => users[userId]).filter((user) => !!user);
 
   const addInvitee = (user) => {
-    setUsers((oldUsers) => new Map([...oldUsers, [user.id, user]]));
+    setUsers((oldUsers) => ({ ...oldUsers, [user.id]: user }));
     setTokens((oldTokens) => [...oldTokens, { userId: user.id }]);
   };
 
