@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Pluralize from 'react-pluralize';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Button, Icon, Mark } from '@fogcreek/shared-components';
 
-import Button from 'Components/buttons/button';
 import Row from 'Components/containers/row';
 import ProfileList from 'Components/profile-list';
 import Embed from 'Components/project/embed';
@@ -15,7 +15,6 @@ import RecentProjects from 'Components/recent-projects';
 import ReportButton from 'Components/report-abuse-pop';
 import Layout from 'Components/layout';
 import Link from 'Components/link';
-import Mark from 'Components/mark';
 import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
 import VisibilityContainer from 'Components/visibility-container';
@@ -30,6 +29,7 @@ import Banner from './banner';
 import CuratedCollectionContainer from './collection-container';
 import { Discover, Dreams, Teams } from './feature-callouts';
 import styles from './styles.styl';
+import { emoji } from '../../../components/global.styl';
 
 const calloutGraphics = {
   apps: {
@@ -137,7 +137,7 @@ const CuratedCollections = ({ content }) => (
           <h4 className={styles.h4}>{title}</h4>
           <p>{description}</p>
           <div className={styles.curatedCollectionButtonWrap}>
-            <Button decorative>
+            <Button as="span">
               View <Pluralize count={count} singular="Project" /> <Arrow />
             </Button>
           </div>
@@ -168,7 +168,7 @@ const UnifiedStories = ({ content: { hed, dek, featuredImage, featuredImageDescr
         <div className={styles.unifiedStoriesContentWrap}>
           <h3 className={styles.h3}>{dek}</h3>
           <Markdown>{summary}</Markdown>
-          <Button href={href}>
+          <Button as="a" href={href}>
             {cta} <Arrow />
           </Button>
         </div>
@@ -222,7 +222,7 @@ const CultureZine = ({ content }) => (
                 )}
               </Row>
               <div className={styles.readMoreLink}>
-                <Button href="https://glitch.com/culture/">
+                <Button as="a" href="https://glitch.com/culture/">
                   Read More on Culture <Arrow />
                 </Button>
               </div>
@@ -252,7 +252,7 @@ const BuildingOnGlitch = ({ content }) => (
           </div>
           <h3>{title}</h3>
           <p>{description}</p>
-          <Button decorative>
+          <Button as="span">
             {cta} <Arrow />
           </Button>
         </Link>
@@ -264,8 +264,9 @@ const BuildingOnGlitch = ({ content }) => (
 const MadeInGlitch = () => (
   <HomeSection className={styles.madeInGlitch}>
     <Text defaultMargin>Of course, this site was made on Glitch too.</Text>
-    <Button href={getEditorUrl('community')} emoji="carpStreamer">
+    <Button as="a" href={getEditorUrl('community')}>
       View Source
+      <Icon className={emoji} icon="carpStreamer" />
     </Button>
   </HomeSection>
 );

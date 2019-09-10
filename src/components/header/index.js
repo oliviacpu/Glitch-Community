@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@fogcreek/shared-components';
 
 import { EDITOR_URL } from 'Utils/constants';
 import SearchForm from 'Components/search-form';
-import Button from 'Components/buttons/button';
 import SignInPop from 'Components/sign-in-pop';
 import UserOptionsPop from 'Components/user-options-pop';
 import NewProjectPop from 'Components/new-project-pop';
@@ -16,7 +16,7 @@ import styles from './header.styl';
 
 const ResumeCoding = () => (
   <TrackedExternalLink name="Resume Coding clicked" to={EDITOR_URL}>
-    <Button type="cta" size="small" decorative>
+    <Button variant="cta" size="small" as="span">
       Resume Coding
     </Button>
   </TrackedExternalLink>
@@ -33,13 +33,12 @@ const Header = ({ searchQuery, showAccountSettingsOverlay, showNewStuffOverlay }
   return (
     <AnalyticsContext properties={{ origin: 'navbar' }}>
       <header role="banner" className={styles.header}>
-        <Button href="#main" className={styles.visibleOnFocus}>
+        <Button as="a" href="#main" className={styles.visibleOnFocus}>
           Skip to Main Content
         </Button>
         <Link to="/" className={styles.logoWrap}>
           <Logo />
         </Link>
-
         <nav className={styles.headerActions}>
           <div className={styles.searchWrap}>
             <SearchForm defaultValue={searchQuery} />

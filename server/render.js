@@ -10,18 +10,21 @@ const [getFromCache, clearCache] = createCache(dayjs.convert(15, 'minutes', 'ms'
 const stylus = require('stylus');
 require('@babel/register')({
   only: [(location) => location.startsWith(src)],
-  presets: [
-    '@babel/preset-react',
-    ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }],
-  ],
+  presets: ['@babel/preset-react', ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }]],
   plugins: [
-    ['module-resolver', {
-      alias: { '@sentry/browser': '@sentry/node' },
-    }],
-    ['css-modules-transform', {
-      preprocessCss: (data, filename) => stylus.render(data, { filename }),
-      extensions: ['.styl'],
-    }],
+    [
+      'module-resolver',
+      {
+        alias: { '@sentry/browser': '@sentry/node' },
+      },
+    ],
+    [
+      'css-modules-transform',
+      {
+        preprocessCss: (data, filename) => stylus.render(data, { filename }),
+        extensions: ['.styl'],
+      },
+    ],
   ],
 });
 
@@ -54,29 +57,35 @@ const requireClient = () => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const { Helmet } = require('react-helmet');
+const { ServerStyleSheet } = require('styled-components');
 setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
   resetState();
+  const sheet = new ServerStyleSheet();
+  const helmetContext = {};
 
-  // don't use <ReactSyntax /> so babel can stay scoped to the src directory
-  const page = React.createElement(Page, {
-    origin: url.origin,
-    route: url.pathname + url.search + url.hash,
-    AB_TESTS, 
-    API_CACHE,
-    ZINE_POSTS,
-    HOME_CONTENT,
-    SSR_SIGNED_IN,
-    EXTERNAL_ROUTES,
-  });
-
-  const html = ReactDOMServer.renderToString(page);
-  const helmet = Helmet.renderStatic();
-  const context = { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
-  return { html, helmet, context };
+  try {
+    // don't use <ReactSyntax /> so babel can stay scoped to the src directory
+    const page = React.createElement(Page, {
+      origin: url.origin,
+      route: url.pathname + url.search + url.hash,
+      helmetContext,
+      AB_TESTS,
+      API_CACHE,
+      ZINE_POSTS,
+      HOME_CONTENT,
+      SSR_SIGNED_IN,
+      EXTERNAL_ROUTES,
+    });
+    const html = ReactDOMServer.renderToString(sheet.collectStyles(page));
+    const styleTags = sheet.getStyleTags();
+    const context = { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
+    return { html, styleTags, helmet: helmetContext.helmet, context };
+  } finally {
+    sheet.seal();
+  }
 };
 
 module.exports = (url, context) => {
@@ -85,5 +94,5 @@ module.exports = (url, context) => {
     ...Object.entries(context.AB_TESTS).map(([test, assignment]) => `${test}=${assignment}`),
     url,
   ];
-  return getFromCache(key.join(' '), render, url, context)
+  return getFromCache(key.join(' '), render, url, context);
 };

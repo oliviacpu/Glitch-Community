@@ -1,3 +1,4 @@
 import React from 'react';
+import { Icon } from '@fogcreek/shared-components';
 
-export default () => <span aria-hidden="true">→</span>;
+export default () => <Icon icon="arrowRight" />;
