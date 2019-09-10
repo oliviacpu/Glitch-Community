@@ -25,12 +25,13 @@
     <meta name="twitter:image" content="<%= image %>">
     <meta name="twitter:url" content="<%= canonicalUrl %>">
     
+    <!-- norton safeweb verification, can be removed once verification is complete -->
+    <meta name="norton-safeweb-site-verification" content="p2ou8wp-rqphby6friirgu674v4mdl63bldktot1arf8x-02sknirce1ybskl3oca6c6845btybnr4r8pmf841sqg5yeyl759tq0br2n3f3dcxrv7f48bn0pnqopptmw" />
+    
     <link rel="stylesheet" href="https://cloud.webtype.com/css/3a8e55c6-b1f3-4659-99eb-125ae72bd084.css">
     <% for (let i = 0; i < styles.length; ++i) { %>
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
-    
-    <%- styleTags %>
     
     <% if (!rendered) { %>
     <noscript><style>#fallback, #fallback-noscript { display: inline-block !important } #fallback-img { display: block !important }</style></noscript>

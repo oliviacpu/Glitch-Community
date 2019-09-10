@@ -89,7 +89,7 @@ const InlineVideo = () => {
 };
 
 const Chrome = () => (
-  <svg viewBox="0 0 578 55" aria-label="" className={styles.chrome}>
+  <svg viewBox="0 0 578 55" aria-label="">
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g transform="translate(-622, -148)" fillRule="nonzero">
         <g transform="translate(622, 148)">
@@ -127,7 +127,7 @@ const Banner = () => (
         <p>Simple, powerful, free tools to create and use millions of apps.</p>
         <div className={styles.bannerButtonWrap}>
           <Button as="a" variant="cta" href="/create">
-            Start Creating&nbsp;<Arrow />
+            Start Creating <Arrow />
           </Button>
           <div className={styles.watchVideoBtnWrap}>
             <OverlayVideo />
