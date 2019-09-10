@@ -146,8 +146,18 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
-  const [tokens, setTokens] = useState(t);
+  const [tokens, setTokens] = useState(team.tokens);
   const [users, setUsers] = useState({});
+
+  const loadUsers = async (userIds) => {
+    const neededUsers = userIds.map(({ userId }) => userId).filter((id) => users[id] === undefined);
+    if (neededUsers.length) {
+      setUsers((oldUsers) => neededUsers.reduce((accumUsers, id) => ({ [id]: null, ...accumUsers }), oldUsers));
+      const idString = neededUsers.map((id) => `id=${id}`).join('&');
+      const { data } = await api.get(`v1/users/by/id?${idString}`);
+      setUsers((oldUsers) => ({ ...oldUsers, ...data }));
+    }
+  };
 
   // watch for changes to the team and update tokens
   useEffect(() => {
@@ -156,18 +166,10 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   // watch for changes to tokens and load new users
   useEffect(() => {
-    const invitedIds = tokens.map(({ userId }) => userId);
-    const neededUsers = invitedIds.filter((id) => users[id] === undefined);
-    if (neededUsers.length) {
-      setUsers((oldUsers) => neededUsers.reduce((accumUsers, id) => ({ [id]: null, ...accumUsers }), oldUsers));
-      const idString = neededUsers.map((id) => `id=${id}`).join('&');
-      api.get(`v1/users/by/id?${idString}`).then(({ data }) => {
-        setUsers((oldUsers) => ({ ...oldUsers, ...data }));
-      }, captureException);
-    }
+    loadUsers(tokens);
   }, [tokens]);
 
-  const invitees = tokens.map(({ userId }) => users[userId]).filter((user) => !!user);
+  const invitees = tokens.map(({ userId }) => users[userId]).filter((user) => !!user).reverse();
 
   const addInvitee = (user) => {
     setUsers((oldUsers) => ({ ...oldUsers, [user.id]: user }));
@@ -180,7 +182,10 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   const reloadInvitees = async () => {
     const { data } = await api.get(`v1/teams/by/id?id=${team.id}`);
-    setTokens(data.tokens);
+    if (data[team.id]) {
+      await loadUsers(data[team.id].tokens);
+      setTokens(data[team.id].tokens);
+    }
   };
 
   return [currentUserIsOnTeam ? invitees : [], addInvitee, removeInvitee, reloadInvitees];
@@ -210,7 +215,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   };
 
   const onInviteEmail = async (email) => {
-    addInvitee({ id: email, name: email });
+    addInvitee({ id: 0, name: email });
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
