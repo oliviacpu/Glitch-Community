@@ -233,9 +233,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       ))}
       {emailInvited.map((user) => (
         <li key={user.email} className={styles.invitedMember}>
-          <div className={styles.fakeEmailUser}>
-            <UserAvatar user={user} />
-          </div>
+          <UserAvatar user={user} />
         </li>
       ))}
       {currentUserIsOnTeam && (
