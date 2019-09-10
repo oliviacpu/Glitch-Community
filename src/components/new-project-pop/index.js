@@ -96,7 +96,7 @@ const useNewProjectAPI = createAPIHook(async (api) => {
 function NewProjectPopButton({ buttonText, buttonType, align }) {
   const { value } = useNewProjectAPI();
   const projects = value || [];
-  const onOpen = useTracker('tara testing open new-project pop');
+  const onOpen = useTracker('open new-project pop');
 
   return (
     <PopoverWithButton onOpen={onOpen} buttonProps={{ size: 'small', type: buttonType }} buttonText={buttonText}>
