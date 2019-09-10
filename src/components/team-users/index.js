@@ -146,18 +146,25 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
-  const [tokens, setTokens] = useState(team.tokens);
-  const [invitees, setInvitees] = useState([]);
+  const [tokens, setTokens] = useState([]);
+  const [users, setUsers] = useState({});
   
   useEffect(() => {
     setTokens(currentUserIsOnTeam ? team.tokens : []);
   }, [currentUserIsOnTeam, team.tokens]);
 
   useEffect(() => {
-    if (tokens.length) {
-      const 
+    const invitedIds = tokens.map(({ userId }) => userId);
+    setInvitees((oldInvitees) => {
+      const newInvitees = invitedIds.map((id) => oldInvitees.find((invitee) => invitee.id === id));
+      return newInvitees.filter((invitee) => !!invitee); // remove the not yet loaded invitees
+    });
+    const neededUsers = invitedIds.filter((id) => !invitees.some((user) => user.id === id));
+    if (neededUsers.length) {
+      const idString = neededUsers.map((id) => `id=${id}`).join('&');
+      api.get(`v1/users/by/id?${idString}`);
     } else {
-      setInvitees([]);
+      setInvitees;
     }
   }, [tokens]);
 
