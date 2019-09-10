@@ -146,7 +146,7 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
-  const [tokens, setTokens] = useState(team.tokens);
+  const [tokens, setTokens] = useState(team.tokens || []);
   const [users, setUsers] = useState({});
 
   const loadUsers = async (userIds) => {
@@ -161,7 +161,7 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   // watch for changes to the team and update tokens
   useEffect(() => {
-    setTokens(team.tokens);
+    setTokens(team.tokens || []);
   }, [team.tokens]);
 
   // watch for changes to tokens and load new users
@@ -183,8 +183,9 @@ const useInvitees = (team, currentUserIsOnTeam) => {
   const reloadInvitees = async () => {
     const { data } = await api.get(`v1/teams/by/id?id=${team.id}`);
     if (data[team.id]) {
-      await loadUsers(data[team.id].tokens);
-      setTokens(data[team.id].tokens);
+      const newTokens = data[team.id].tokens || [];
+      await loadUsers(newTokens);
+      setTokens(newTokens);
     }
   };
 
