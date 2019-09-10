@@ -11,7 +11,7 @@ const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
 export const PrivateIcon = ({ className, label, inButton, isPrivate }) => (
-  <span>
+  <span className={styles.privateBadge}>
     {isPrivate ? <Icon className={styles.private} icon="private" /> : <Icon className={styles.public} icon="public" /> }
   </span>
 );
