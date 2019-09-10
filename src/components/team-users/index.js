@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { uniq } from 'lodash';
 import { Button, Icon } from '@fogcreek/shared-components';
@@ -148,7 +148,7 @@ const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
   const [tokens, setTokens] = useState([]);
   const [users, setUsers] = useState(new Map());
-  
+
   // watch for changes to the team and update tokens
   useEffect(() => {
     setTokens(currentUserIsOnTeam ? team.tokens : []);
@@ -171,11 +171,11 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   const addInvitee = (user) => {
     setUsers((oldUsers) => new Map([...oldUsers, [user.id, user]]));
-    setTokens((oldTokens) => [...oldTokens, user.id]);
+    setTokens((oldTokens) => [...oldTokens, { userId: user.id }]);
   };
 
   const removeInvitee = (id) => {
-    setTokens((oldTokens) => oldTokens.filter((tokenId) => tokenId !== id));
+    setTokens((oldTokens) => oldTokens.filter(({ userId }) => userId !== id));
   };
 
   return [invitees, addInvitee, removeInvitee];
@@ -183,39 +183,34 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
-  const [emailInvited, setEmailInvited] = useState([]);
-  const [newlyInvited, setNewlyInvited] = useState([]);
-  const [removedInvitees, setRemovedInvitee] = useState([]);
   const { revokeTeamInvite } = useAPIHandlers();
   const { createNotification } = useNotifications();
 
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
-  const { value } = useInvitees(team, currentUserIsOnTeam);
-  const invitees = (value || []).concat(newlyInvited).filter((el) => (!removedInvitees.includes(el)));
-
+  const [invitees, addInvitee, removeInvitee] = useInvitees(team, currentUserIsOnTeam);
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
   const onInviteUser = async (user) => {
-    setNewlyInvited((invited) => [...invited, user]);
+    addInvitee(user);
     try {
       await inviteUser(user);
       createNotification(`Invited ${getDisplayName(user)}!`, { type: 'success' });
     } catch (error) {
-      setNewlyInvited((invited) => invited.filter((u) => u.id !== user.id));
+      removeInvitee(user.id);
       captureException(error);
       createNotification(`Couldn't invite ${getDisplayName(user)}, Try again later`, { type: 'error' });
     }
   };
 
   const onInviteEmail = async (email) => {
-    setEmailInvited((invited) => [...invited, { email, id: 0, name: email }]);
+    addInvitee({ id: email, name: email });
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
     } catch (error) {
-      setEmailInvited((invited) => invited.filter((u) => u.email !== email));
+      removeInvitee(email);
       captureException(error);
       createNotification(`Couldn't invite ${email}, Try again later`, { type: 'error' });
     }
@@ -239,7 +234,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             user={user}
             team={team}
             onRevokeInvite={async () => {
-              setRemovedInvitee((removed) => [...removed, user]);
+              removeInvitee(user);
               try {
                 await revokeTeamInvite({ team, user });
                 createNotification(`Removed ${user.name} from team`);
@@ -249,11 +244,6 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
               }
             }}
           />
-        </li>
-      ))}
-      {emailInvited.map((user) => (
-        <li key={user.email} className={styles.invitedMember}>
-          <UserAvatar user={user} />
         </li>
       ))}
       {currentUserIsOnTeam && (
