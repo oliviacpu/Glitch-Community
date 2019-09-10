@@ -10,7 +10,7 @@ import styles from './styles.styl';
 const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
-const PrivateIcon = ({ className, label, isPrivate }) => (
+const PrivateIcon = ({ className, isPrivate }) => (
   <span className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public)}>
     {isPrivate ? <Icon icon="private" /> : <Icon icon="public" /> }
   </span>
@@ -21,17 +21,21 @@ PrivateIcon.defaultProps = {
 };
 
 export const PrivateBadge = () => (
-  <TooltipContainer type="info" tooltip={privateText} target={<PrivateIcon isPrivate label={privateText} />} />
+  <span className={classnames(styles.projectBadge, styles.private)}>
+    <TooltipContainer type="info" tooltip={privateText} target={<Icon icon="private" />} />
+  </span>
 );
 
 export const PrivateToggle = ({ isPrivate, setPrivate }) => (
-  <TooltipContainer
-    type="action"
-    tooltip={isPrivate ? privateText : publicText}
-    target={
-      <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
-        <PrivateIcon isPrivate={isPrivate} className={styles.button} label={privateText} />
-      </HiddenCheckbox>
-    }
-  />
+  <span className={classnames(styles.button, styles.projectBadge, isPrivate ? styles.private : styles.public)}>
+    <TooltipContainer
+      type="action"
+      tooltip={isPrivate ? privateText : publicText}
+      target={
+        <HiddenCheckbox value={isPrivate} onChange={setPrivate}>
+          {isPrivate ? <Icon icon="private" /> : <Icon icon="public" /> }
+        </HiddenCheckbox>
+      }
+    />
+  </span>
 );
