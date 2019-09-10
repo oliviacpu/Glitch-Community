@@ -10,16 +10,6 @@ import styles from './styles.styl';
 const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
-const PrivateIcon = ({ className, isPrivate }) => (
-  <span className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public)}>
-    {isPrivate ? <Icon icon="private" /> : <Icon icon="public" /> }
-  </span>
-);
-
-PrivateIcon.defaultProps = {
-  label: privateText,
-};
-
 export const PrivateBadge = () => (
   <span className={classnames(styles.projectBadge, styles.private)}>
     <TooltipContainer type="info" tooltip={privateText} target={<Icon icon="private" />} />
