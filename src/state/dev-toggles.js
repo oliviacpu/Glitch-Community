@@ -12,10 +12,6 @@ import useUserPref from './user-prefs';
 // Users can enable them with the /secret page.
 const toggleData = [
   {
-    name: 'Slack Auth',
-    description: 'Sign in with your Slack account!',
-  },
-  {
     name: 'User Passwords',
     description: 'Enable users to set a password for their account',
   },
