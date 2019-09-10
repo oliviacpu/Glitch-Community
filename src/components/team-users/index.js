@@ -189,6 +189,10 @@ const useInvitees = (team, currentUserIsOnTeam) => {
     }
   };
 
+  useEffect(() => {
+    reloadInvitees();
+  }, [currentUserIsOnTeam]);
+
   return [currentUserIsOnTeam ? invitees : [], addInvitee, removeInvitee, reloadInvitees];
 };
 
