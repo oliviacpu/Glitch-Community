@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import { Icon } from '@fogcreek/shared-components';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import HiddenCheckbox from 'Components/fields/hidden-checkbox';
