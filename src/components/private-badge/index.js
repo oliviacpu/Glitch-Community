@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Icon } from '@fogcreek/shared-components';
 
 import TooltipContainer from 'Components/tooltips/tooltip-container';
 import HiddenCheckbox from 'Components/fields/hidden-checkbox';
@@ -14,7 +13,9 @@ export const PrivateIcon = ({ className, label, inButton, isPrivate }) => (
   <span
     className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public, inButton && styles.inButton)}
     aria-label={label}
-  />
+  >
+    {isPrivate ? <Icon className={styles.private} icon="private" : }
+  </span>
 );
 
 PrivateIcon.defaultProps = {
@@ -22,11 +23,7 @@ PrivateIcon.defaultProps = {
 };
 
 export const PrivateBadge = () => (
-  <TooltipContainer 
-    type="info" 
-    tooltip={privateText} 
-    target={<Icon icon="private" className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public)} label={privateText} />} 
-  />
+  <TooltipContainer type="info" tooltip={privateText} target={<PrivateIcon isPrivate label={privateText} />} />
 );
 
 export const PrivateToggle = ({ isPrivate, setPrivate }) => (
