@@ -147,42 +147,39 @@ const JoinTeam = ({ onClick }) => (
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
   const [tokens, setTokens] = useState([]);
-  const [users, setUsers] = useState({});
+  const [users, setUsers] = useState(new Map());
   
+  // watch for changes to the team and update tokens
   useEffect(() => {
     setTokens(currentUserIsOnTeam ? team.tokens : []);
   }, [currentUserIsOnTeam, team.tokens]);
 
+  // watch for changes to tokens and load new users
   useEffect(() => {
     const invitedIds = tokens.map(({ userId }) => userId);
-    setInvitees((oldInvitees) => {
-      const newInvitees = invitedIds.map((id) => oldInvitees.find((invitee) => invitee.id === id));
-      return newInvitees.filter((invitee) => !!invitee); // remove the not yet loaded invitees
-    });
-    const neededUsers = invitedIds.filter((id) => !invitees.some((user) => user.id === id));
+    const neededUsers = invitedIds.filter((id) => !users.has(id));
     if (neededUsers.length) {
       const idString = neededUsers.map((id) => `id=${id}`).join('&');
-      api.get(`v1/users/by/id?${idString}`);
-    } else {
-      setInvitees;
+      setUsers((oldUsers) => new Map([...oldUsers, ...neededUsers.map((id) => [id, null])]));
+      api.get(`v1/users/by/id?${idString}`).then(({ data }) => {
+        setUsers((oldUsers) => new Map([...oldUsers, ...Object.entries(data)]));
+      }, captureException);
     }
   }, [tokens]);
 
-  if (!currentUserIsOnTeam) return [];
-  if (!team.tokens.length) return [];
+  const invitees = tokens.filter((id) => users.has(id)).map((id) => users.get(id));
 
-  try {
-    const idString = team.tokens.map(({ userId }) => `id=${userId}`).join('&');
-    const { data } = await api.get(`v1/users/by/id?${idString}`);
-    const invitees = Object.values(data);
-    return invitees;
-  } catch (error) {
-    if (!error.response || error.response.status !== 404) {
-      captureException(error);
-    }
-    return [];
-  }
-});
+  const addInvitee = (user) => {
+    setUsers((oldUsers) => new Map([...oldUsers, [user.id, user]]));
+    setTokens((oldTokens) => [...oldTokens, user.id]);
+  };
+
+  const removeInvitee = (id) => {
+    setTokens((oldTokens) => oldTokens.filter((tokenId) => tokenId !== id));
+  };
+
+  return [invitees, addInvitee, removeInvitee];
+};
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
   const { currentUser } = useCurrentUser();
