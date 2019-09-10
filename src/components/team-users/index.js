@@ -234,7 +234,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
             user={user}
             team={team}
             onRevokeInvite={async () => {
-              removeInvitee(user);
+              removeInvitee(user.id);
               try {
                 await revokeTeamInvite({ team, user });
                 createNotification(`Removed ${user.name} from team`);
