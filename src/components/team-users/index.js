@@ -8,7 +8,7 @@ import WhitelistedDomainIcon from 'Components/whitelisted-domain';
 import { userIsTeamAdmin, userIsOnTeam, userCanJoinTeam } from 'Models/team';
 import { getDisplayName } from 'Models/user';
 import { useCurrentUser } from 'State/current-user';
-import { useAPIHandlers, createAPIHook } from 'State/api';
+import { useAPI, useAPIHandlers } from 'State/api';
 import { useNotifications } from 'State/notifications';
 import { PopoverContainer, PopoverDialog, PopoverInfo, PopoverActions, InfoDescription } from 'Components/popover';
 import AddTeamUserPop from 'Components/team-users/add-team-user';
@@ -144,7 +144,23 @@ const JoinTeam = ({ onClick }) => (
   </Button>
 );
 
-const useInvitees = createAPIHook(async (api, team, currentUserIsOnTeam) => {
+const useInvitees = (team, currentUserIsOnTeam) => {
+  const api = useAPI();
+  const [tokens, setTokens] = useState(team.tokens);
+  const [invitees, setInvitees] = useState([]);
+  
+  useEffect(() => {
+    setTokens(currentUserIsOnTeam ? team.tokens : []);
+  }, [currentUserIsOnTeam, team.tokens]);
+
+  useEffect(() => {
+    if (tokens.length) {
+      const 
+    } else {
+      setInvitees([]);
+    }
+  }, [tokens]);
+
   if (!currentUserIsOnTeam) return [];
   if (!team.tokens.length) return [];
 
