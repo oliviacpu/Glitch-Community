@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
-import { Button } from '@fogcreek/shared-components';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
 import BookmarkButton from 'Components/buttons/bookmark-button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
-import { PrivateIcon } from 'Components/private-badge';
 import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import Note from 'Components/collection/note';
@@ -133,9 +132,9 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                           <Button
                             as="span"
                             disabled={!!project.suspendedReason}
-                            image={project.private ? <PrivateIcon inButton isPrivate /> : null}
                             imagePosition="left"
                           >
+                            {project.private && (<span className={styles.privateIcon}><Icon icon="private" alt="private" /></span>)}
                             <span className={styles.projectDomain}>{project.suspendedReason ? 'suspended project' : project.domain}</span>
                           </Button>
                         </div>
