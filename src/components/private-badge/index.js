@@ -11,10 +11,8 @@ const publicText = 'Visible to everyone';
 
 export const PrivateIcon = ({ className, label, inButton, isPrivate }) => (
   <span
-    className={classnames(className, styles.projectBadge, isPrivate ? styles.private : styles.public, inButton && styles.inButton)}
-    aria-label={label}
   >
-    {isPrivate ? <Icon className={styles.private} icon="private" : }
+    {isPrivate ? <Icon className={styles.private} icon="private" /> : <Icon className={styles.public} icon="public" /> }
   </span>
 );
 
