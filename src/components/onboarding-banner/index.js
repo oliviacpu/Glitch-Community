@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
-import Emoji from 'Components/images/emoji';
+import { Icon } from '@fogcreek/shared-components';
+
 import Text from 'Components/text/text';
 import Link from 'Components/link';
 import NewProjectPop from 'Components/new-project-pop';
@@ -79,7 +80,10 @@ function OnboardingBanner() {
 
               {isHomepage && (
                 <Text size="15px">
-                  Find even more inspiration below with our <Link to="#top-picks">featured apps</Link> <Emoji name="backhandIndex" />
+                  Find even more inspiration below with our <Link to="#top-picks">featured apps</Link>{' '}
+                  <span className={styles.emoji}>
+                    <Icon icon="backhandIndex" />
+                  </span>
                 </Text>
               )}
             </div>
