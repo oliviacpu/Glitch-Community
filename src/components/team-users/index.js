@@ -156,9 +156,8 @@ const useInvitees = (team, currentUserIsOnTeam) => {
 
   // watch for changes to tokens and load new users
   useEffect(() => {
-    console.log(users);
     const invitedIds = tokens.map(({ userId }) => userId);
-    const neededUsers = invitedIds.filter((id) => !users.hasOwnProperty(id));
+    const neededUsers = invitedIds.filter((id) => users[id] === undefined);
     if (neededUsers.length) {
       setUsers((oldUsers) => neededUsers.reduce((accumUsers, id) => ({ [id]: null, ...accumUsers }), oldUsers));
       const idString = neededUsers.map((id) => `id=${id}`).join('&');
