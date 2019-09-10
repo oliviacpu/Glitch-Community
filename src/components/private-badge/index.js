@@ -11,8 +11,7 @@ const privateText = 'Only members can view code';
 const publicText = 'Visible to everyone';
 
 export const PrivateIcon = ({ className, label, inButton, isPrivate }) => (
-  <span
-  >
+  <span>
     {isPrivate ? <Icon className={styles.private} icon="private" /> : <Icon className={styles.public} icon="public" /> }
   </span>
 );
@@ -22,7 +21,7 @@ PrivateIcon.defaultProps = {
 };
 
 export const PrivateBadge = () => (
-  <TooltipContainer type="info" tooltip={privateText} target={<PrivateIcon isPrivate label={privateText} />} />
+  <TooltipContainer type="info" tooltip={privateText} target={<Icon className={styles.private} icon="private" label={privateText} />} />
 );
 
 export const PrivateToggle = ({ isPrivate, setPrivate }) => (
