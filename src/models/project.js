@@ -44,7 +44,7 @@ export const MEMBER_ACCESS_LEVEL = 20;
 export const ADMIN_ACCESS_LEVEL = 30;
 
 export function userIsProjectMember({ members, user }) {
-  return !!(members && members.users && members.users.some(({ id }) => id === currentUser.id))
+  return !!(members && members.users && members.users.some(({ id }) => id === user.id));
 }
 
 export function userIsProjectAdmin({ project, user }) {
