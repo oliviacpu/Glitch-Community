@@ -146,13 +146,13 @@ const JoinTeam = ({ onClick }) => (
 
 const useInvitees = (team, currentUserIsOnTeam) => {
   const api = useAPI();
-  const [tokens, setTokens] = useState([]);
+  const [tokens, setTokens] = useState(t);
   const [users, setUsers] = useState({});
 
   // watch for changes to the team and update tokens
   useEffect(() => {
-    setTokens(currentUserIsOnTeam ? team.tokens : []);
-  }, [currentUserIsOnTeam, team.tokens]);
+    setTokens(team.tokens);
+  }, [team.tokens]);
 
   // watch for changes to tokens and load new users
   useEffect(() => {
@@ -178,7 +178,12 @@ const useInvitees = (team, currentUserIsOnTeam) => {
     setTokens((oldTokens) => oldTokens.filter(({ userId }) => userId !== id));
   };
 
-  return [invitees, addInvitee, removeInvitee];
+  const reloadInvitees = async () => {
+    const { data } = await api.get(`v1/teams/by/id?id=${team.id}`);
+    setTokens(data.tokens);
+  };
+
+  return [currentUserIsOnTeam ? invitees : [], addInvitee, removeInvitee, reloadInvitees];
 };
 
 const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, updateWhitelistedDomain, inviteEmail, inviteUser, joinTeam }) => {
@@ -189,7 +194,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
   const currentUserIsOnTeam = userIsOnTeam({ team, user: currentUser });
   const currentUserIsTeamAdmin = userIsTeamAdmin({ team, user: currentUser });
   const currentUserCanJoinTeam = userCanJoinTeam({ team, user: currentUser });
-  const [invitees, addInvitee, removeInvitee] = useInvitees(team, currentUserIsOnTeam);
+  const [invitees, addInvitee, removeInvitee, reloadInvitees] = useInvitees(team, currentUserIsOnTeam);
   const members = uniq([...team.users, ...invitees].map((user) => user.id));
 
   const onInviteUser = async (user) => {
@@ -198,7 +203,7 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
       await inviteUser(user);
       createNotification(`Invited ${getDisplayName(user)}!`, { type: 'success' });
     } catch (error) {
-      removeInvitee(user.id);
+      reloadInvitees();
       captureException(error);
       createNotification(`Couldn't invite ${getDisplayName(user)}, Try again later`, { type: 'error' });
     }
@@ -209,8 +214,9 @@ const TeamUserContainer = ({ team, removeUserFromTeam, updateUserPermissions, up
     try {
       await inviteEmail(email);
       createNotification(`Invited ${email}!`, { type: 'success' });
+      reloadInvitees();
     } catch (error) {
-      removeInvitee(email);
+      reloadInvitees();
       captureException(error);
       createNotification(`Couldn't invite ${email}, Try again later`, { type: 'error' });
     }
