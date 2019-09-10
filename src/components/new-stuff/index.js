@@ -92,7 +92,7 @@ const NewStuff = ({ children }) => {
   const [showNewStuff, setShowNewStuff] = useUserPref('showNewStuff', true);
   const [newStuffReadId, setNewStuffReadId] = useUserPref('newStuffReadId', 0);
   const [log, setLog] = useState(pupdatesArray);
-  const track = useTracker('pupdates');
+  const track = useTracker('🐶 pupdates');
 
   const renderOuter = ({ visible, openPopover }) => {
     const pupVisible = isSignedIn && showNewStuff && newStuffReadId < latestId;
@@ -107,7 +107,7 @@ const NewStuff = ({ children }) => {
     return (
       <>
         {children(show)}
-        {pupVisible && <NewStuffPrompt onClick={show} />}
+        {!pupVisible && <NewStuffPrompt onClick={show} />}
         {visible && <OverlayBackground />}
       </>
     );
