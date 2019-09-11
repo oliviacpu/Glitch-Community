@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { pickBy } from 'lodash';
+import { Button } from '@fogcreek/shared-components';
+
 import Markdown from 'Components/text/markdown';
 import BookmarkButton from 'Components/buttons/bookmark-button';
-import Button from 'Components/buttons/button';
 import Image from 'Components/images/image';
 import ProfileList from 'Components/profile-list';
 import { ProjectLink } from 'Components/link';
@@ -13,9 +14,6 @@ import AnimationContainer from 'Components/animation-container';
 import VisibilityContainer from 'Components/visibility-container';
 import Note from 'Components/collection/note';
 import { FALLBACK_AVATAR_URL, getProjectAvatarUrl } from 'Models/project';
-import { useAPI, useAPIHandlers } from 'State/api';
-import { toggleBookmark, useCollectionReload } from 'State/collection';
-import { useNotifications } from 'State/notifications';
 import { useProjectMembers } from 'State/project';
 import { useProjectOptions } from 'State/project-options';
 import { useCurrentUser } from 'State/current-user';
@@ -49,39 +47,17 @@ const ProfileListLoader = ({ project }) => (
 const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
 
 const ProjectItem = ({ project, projectOptions: providedProjectOptions, collection, noteOptions }) => {
+  const { location } = useGlobals();
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
-  const reloadCollectionProjects = useCollectionReload();
   const isAnonymousUser = !currentUser.login;
-  const api = useAPI();
-  const { addProjectToCollection, removeProjectFromCollection } = useAPIHandlers();
-  const { createNotification } = useNotifications();
-  const { location } = useGlobals();
 
   const [hasBookmarked, setHasBookmarked] = useState(project.authUserHasBookmarked);
   useEffect(() => {
     setHasBookmarked(project.authUserHasBookmarked);
   }, [project.authUserHasBookmarked]);
 
-  const bookmarkAction = useTrackedFunc(
-    () =>
-      toggleBookmark({
-        api,
-        project,
-        currentUser,
-        createNotification,
-        myStuffEnabled,
-        addProjectToCollection,
-        removeProjectFromCollection,
-        setHasBookmarked,
-        hasBookmarked,
-        reloadCollectionProjects,
-      }),
-    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
-    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
-  );
   const [isHoveringOnProjectItem, setIsHoveringOnProjectItem] = useState(false);
-
   const onMouseEnter = () => {
     setIsHoveringOnProjectItem(true);
   };
@@ -90,16 +66,16 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
   };
   const onMyStuffPage = location.pathname.includes('my-stuff');
 
-  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collectionToAddTo) => {
-    if (collectionToAddTo.isMyStuff) {
-      setHasBookmarked(true);
-    }
-    return addProjectToCollection({ project: projectToAdd, collection: collectionToAddTo });
-  };
-  providedProjectOptions.addProjectToCollection = addProjectToCollectionAndSetHasBookmarked;
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const hasProjectOptions = Object.keys(projectOptions).length > 0;
   const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
+
+  const bookmarkAction = useTrackedFunc(
+    () => projectOptions.toggleBookmark(project, hasBookmarked, setHasBookmarked),
+    `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`,
+    (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
+  );
+
   return (
     <AnimationContainer type="slideDown" onAnimationEnd={dispatch}>
       {(slideDown) => (
@@ -157,7 +133,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
                       <div className={styles.nameWrap}>
                         <div className={styles.itemButtonWrap}>
                           <Button
-                            decorative
+                            as="span"
                             disabled={!!project.suspendedReason}
                             image={project.private ? <PrivateIcon inButton isPrivate /> : null}
                             imagePosition="left"

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import { partition, sampleSize } from 'lodash';
+import { partition } from 'lodash';
 import classnames from 'classnames';
+import { Button, Icon } from '@fogcreek/shared-components';
 
 import { isDarkColor } from 'Utils/color';
-import Button from 'Components/buttons/button';
-import Emoji from 'Components/images/emoji';
 import Text from 'Components/text/text';
 import Image from 'Components/images/image';
 import FeaturedProject from 'Components/project/featured-project';
@@ -21,15 +20,14 @@ import { CollectionLink } from 'Components/link';
 import Arrow from 'Components/arrow';
 import { useCollectionCurator } from 'State/collection';
 import useDevToggle from 'State/dev-toggles';
+import useSample from 'Hooks/use-sample';
 
 import styles from './container.styl';
+import { emoji } from '../global.styl';
 
 const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, preview, funcs }) => {
   const { value: curator } = useCollectionCurator(collection);
-  const [previewProjects, setPreviewProjects] = useState(sampleSize(collection.projects, 3));
-  useEffect(() => {
-    setPreviewProjects(sampleSize(collection.projects, 3));
-  }, [collection]);
+  const previewProjects = useSample(collection.projects, 3);
   const [displayHint, setDisplayHint] = useState(false);
 
   const collectionHasProjects = collection.projects.length > 0;
@@ -95,20 +93,20 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
 
           {enableSorting && (
             <div className={classnames(styles.hint, isDarkColor(collection.coverColor) && styles.dark)}>
-              <Emoji name="new" />
+              <Icon className={emoji} icon="new" />
               <Text> You can reorder your projects</Text>
               {!displayHint && (
-                <Button type="tertiary" size="small" onClick={() => setDisplayHint(true)}>
+                <Button variant="secondary" size="small" onClick={() => setDisplayHint(true)}>
                   Learn More
                 </Button>
               )}
               {displayHint && (
                 <div className={styles.hintBody}>
                   <Text>
-                    <Emoji name="mouse" /> Click and drag to reorder
+                    <Icon className={emoji} icon="mouse" /> Click and drag to reorder
                   </Text>
                   <Text>
-                    <Emoji name="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
+                    <Icon className={emoji} icon="keyboard" /> Focus on a project and press space to select. Move it with the arrow keys, and press space again to
                     save.
                   </Text>
                 </div>
