@@ -69,7 +69,7 @@ const CollectionResult = ({ value: collection }) => (
 
 const SeeAllResults = ({ query, selected }) => (
   <Link to={`/search?q=${query}`} className={classnames(styles.seeAllResults, selected && styles.selected)}>
-    See all results <Icon icon="arrowRight" />
+    See all results <Icon className={styles.arrow} icon="arrowRight" />
   </Link>
 );
 

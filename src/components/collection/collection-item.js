@@ -82,7 +82,7 @@ const CollectionProjects = ({ collection, isAuthorized }) => {
         </Row>
       </div>
       <CollectionLink collection={collection} className={styles.footerLink} label={footerLabel}>
-        {footerLabel} <Icon icon="arrowRight" />
+        {footerLabel} <Icon className={styles.arrow} icon="arrowRight" />
       </CollectionLink>
     </>
   );

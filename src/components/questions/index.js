@@ -58,7 +58,7 @@ function Questions({ max }) {
   return (
     <section className={styles.container}>
       <Heading tagName="h2">
-        <Link to="/questions">Help Others, Get Thanks <Icon icon="arrowRight" /></Link>
+        <Link to="/questions">Help Others, Get Thanks <Icon className={styles.arrow} icon="arrowRight" /></Link>
       </Heading>
       <div>
         {questions.length ? (

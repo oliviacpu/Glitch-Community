@@ -19,7 +19,7 @@ const NewStuffArticle = ({ title, body, image, imageAlt, link }) => (
     {!!link && (
       <Text>
         <Link to={link}>
-          Read the blog post <Icon icon="arrowRight" />
+          Read the blog post <Icon className={styles.arrow} icon="arrowRight" />
         </Link>
       </Text>
     )}

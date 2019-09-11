@@ -59,7 +59,7 @@ const CollectionItemSmall = ({ collection, showCurator }) => (
         </div>
       </div>
       <div className={styles.smallProjectCount}>
-        <Pluralize count={collection.projects.length} singular="project" /> <Icon icon="arrowRight" />
+        <Pluralize count={collection.projects.length} singular="project" /> <Icon className={styles.arrow} icon="arrowRight" />
       </div>
     </CollectionLink>
   </div>
