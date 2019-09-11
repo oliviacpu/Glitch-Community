@@ -22,7 +22,7 @@ const cx = classNames.bind(styles);
 function OnboardingBanner() {
   const { currentUser } = useCurrentUser();
   const userIsInOnboardingTestGroup = useTest('Onboarding');
-  const { location } = useGlobals();
+  const { location, SSR_SIGNED_IN } = useGlobals();
   const exploreEl = useRef();
 
   const [categoriesWidth, setCategoriesWidth] = useState(0);
@@ -47,8 +47,10 @@ function OnboardingBanner() {
       backgroundColor: lightColors[currentUser.id % 4],
     }
     : null;
+  
+  const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
 
-  if (userIsInOnboardingTestGroup) {
+  if (userIsInOnboardingTestGroup && !fakeSignedIn) {
     return (
       <AnalyticsContext properties={{ origin: `${isHomepage ? 'homepage' : 'profile'} onboarding banner` }}>
         <div className={styles.banner} style={backgroundStyles}>
