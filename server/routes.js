@@ -178,8 +178,8 @@ module.exports = function(external) {
       description = `${textDescription} 🎏 Glitch is the ${constants.tagline}`;
     }
 
-    // const cache = { [`project:${domain}`]: project };
-    await render(req, res, { title: domain, canonicalUrl, description, image: avatar }, false);
+    const cache = { [`project:${domain}`]: project };
+    await render(req, res, { title: domain, canonicalUrl, description, image: avatar, cache }, true);
   });
 
   app.get('/@:name', async (req, res) => {
