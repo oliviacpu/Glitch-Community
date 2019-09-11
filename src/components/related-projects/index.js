@@ -58,7 +58,7 @@ function RelatedProjects({ project }) {
               projects && projects.length > 0 && (
                 <>
                   <h2>
-                    <TeamLink team={team}>More by {team.name} <Icon icon="arrowRight" /></TeamLink>
+                    <TeamLink team={team}>More by {team.name} <Icon className={styles.arrow} icon="arrowRight" /></TeamLink>
                   </h2>
                   <RelatedProjectsBody projects={projects} type="team" item={team} />
                 </>
@@ -74,7 +74,7 @@ function RelatedProjects({ project }) {
               projects && projects.length > 0 && (
                 <>
                   <h2>
-                    <UserLink user={user}>More by {getDisplayName(user)} <Icon icon="arrowRight" /></UserLink>
+                    <UserLink user={user}>More by {getDisplayName(user)} <Icon className={styles.arrow} icon="arrowRight" /></UserLink>
                   </h2>
                   <RelatedProjectsBody projects={projects} type="user" item={user} />
                 </>

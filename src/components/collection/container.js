@@ -157,7 +157,7 @@ const CollectionContainer = ({ collection, showFeaturedProject, isAuthorized, pr
         )}
         {preview && (
           <CollectionLink collection={collection} className={styles.viewAll}>
-            View all <Pluralize count={collection.projects.length} singular="project" /> <Icon icon="arrowRight" />
+            View all <Pluralize count={collection.projects.length} singular="project" /> <Icon className={styles.arrow} icon="arrowRight" />
           </CollectionLink>
         )}
       </div>
