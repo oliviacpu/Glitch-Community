@@ -47,7 +47,7 @@ const RecentProjects = () => {
   return (
     <section data-cy="recent-projects">
       <Heading tagName="h2">
-        <UserLink user={currentUser}>Your Projects <Icon icon="arrowRight" /></UserLink>
+        <UserLink user={currentUser}>Your Projects <Icon className={styles.arrow} icon="arrowRight" /></UserLink>
       </Heading>
       {isAnonymousUser && <SignInNotice />}
       <CoverContainer type="user" item={currentUser}>
