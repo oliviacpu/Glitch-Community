@@ -55,7 +55,7 @@ const Illustration = () => (
           <path fill="#CECECD" d="M46.692 122.42l3.96 4.69h-8.94l-3.95-4.69z" />
           <path fill="#CECECD" d="M42.712 117.7l3.98 4.72h-8.93l-3.99-4.72z" />
           <path d="M43.083 140.19c.75.98 1.16 2.18 1.16 3.41v6.4H.443V7.39c0-3.72 3.29-6.74 7.36-6.74h17.72v116.7l17.56 22.84z" fill="#F6D742" />
-          <ellipse stroke="#222" stroke-width="2.5" fill="#222" cx="12.298" cy="103" rx="5" ry="13.564" />
+          <ellipse stroke="#222" strokeWidth="2.5" fill="#222" cx="12.298" cy="103" rx="5" ry="13.564" />
           <path
             d="M41.712 102.04c1.4 0 2.53 1.13 2.53 2.53 0 1.39-1.13 2.53-2.53 2.53s-2.53-1.14-2.53-2.53c0-1.4 1.13-2.53 2.53-2.53"
             fill="#A5DEF8"
@@ -139,34 +139,34 @@ const Illustration = () => (
             <path
               d="M0 0c4.661 32.182 24.517 50.08 42.967 48.933C44.322 46.477 45 43.174 45 39.023c0-4.15-.678-7.747-2.033-10.791v-.153c-13.086 1.26-24.764-5.048-24.742-26.951"
               fill="#B5EAFF"
-              fill-rule="nonzero"
+              fillRule="nonzero"
             />
             <path
               d="M0 0c4.661 32.182 24.517 50.133 42.967 48.985C44.322 45.408 45 41.837 45 38.273s-.678-6.911-2.033-10.041v-.153c-13.086 1.26-24.764-5.048-24.742-26.951"
               stroke="#231F20"
-              stroke-width="2"
+              strokeWidth="2"
             />
           </g>
           <g transform="scale(-1 1) rotate(23 -22.22 -103.6)">
-            <g transform="translate(34 12)" fill="#B3EAFF" fill-rule="nonzero" stroke="#231F20" stroke-linecap="round" stroke-width="2">
+            <g transform="translate(34 12)" fill="#B3EAFF" fillRule="nonzero" stroke="#231F20" strokeLinecap="round" strokeWidth="2">
               <path d="M6.168 46.063c.99-.42 3.382-2.517 4.49-8.405.781-4.16-.178-5.767-1.223-7.92-.349-.72-.338-1.851-.208-2.782L10.34 7.872c.473-3.647-1.045-6.861-4.232-7.239C2.92.256.635 2.957.162 6.604l.03 6.074" />
             </g>
             <path
               d="M15.524 33.436L34.482 20.69l5.7 29.257c.219 1.437.118 2.456-.3 3.059-.42.602-2.056 2.725-4.911 6.367l-11.5-5.125-7.947-20.812z"
               fill="#B3EAFF"
-              fill-rule="nonzero"
+              fillRule="nonzero"
             />
             <g transform="translate(25 2)">
               <path
                 d="M2.792 22.102L.084 8.357c-.52-3.64 1.496-6.922 4.503-7.332 3.006-.41 5.864 2.207 6.383 5.847l2.396 20.224"
                 fill="#B5EAFF"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               />
               <path
                 d="M2.792 22.102L.084 8.357c-.52-3.64 1.496-6.922 4.503-7.332 3.006-.41 5.864 2.207 6.383 5.847l2.396 20.224"
                 stroke="#231F20"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
               <path d="M4.587 1.025C1.58 1.435-.435 4.717.085 8.357l2.708 13.745 10.573 4.995L10.97 6.871C10.487 3.484 7.978.982 5.209.982c-.206 0-.414.014-.622.043z" />
             </g>
@@ -174,39 +174,39 @@ const Illustration = () => (
               <path
                 d="M4.804 29.985L.29 7.091C-.175 3.618 1.859.537 4.833.208c2.974-.329 5.763 2.22 6.229 5.693l3.18 23.427"
                 fill="#B5EAFF"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               />
               <path
                 d="M4.804 29.985L.29 7.091C-.175 3.618 1.859.537 4.833.208c2.974-.329 5.763 2.22 6.229 5.693l3.18 23.427"
                 stroke="#231F20"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
             </g>
             <g id="index" transform="translate(9.513 8.05)">
               <path
                 d="M5.542 34.106L.174 8.349C-.54 4.549 1.01.869 3.636.13c2.626-.74 5.333 1.742 6.046 5.542l4.34 21.838"
                 fill="#B5EAFF"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               />
               <path
                 d="M5.542 30.183L.174 7.39C-.54 4.025 1.01.769 3.636.115 6.262-.539 8.969 1.657 9.682 5.02l4.34 19.328"
                 stroke="#231F20"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
             </g>
             <g transform="rotate(4 -513.27 43.818)">
               <path
                 d="M29.556 21.51c-7.474.402-12.457-1.583-14.949-5.96a8.905 8.905 0 0 0-4.36-3.83L4.003 9.163C1.433 8.109.394 6.908.714 3.896 1.034.883 5.34-.721 7.91.33l5.34 2.189a9.59 9.59 0 0 0 4.324.69c6.921-.497 11.53.817 13.826 3.94"
                 fill="#B5EAFF"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               />
               <path
                 d="M29.556 21.51c-7.474.402-12.457-1.583-14.949-5.96a8.905 8.905 0 0 0-4.36-3.83L4.003 9.163C1.433 8.109.394 6.908.714 3.896 1.034.883 5.34-.721 7.91.33l5.34 2.189a9.59 9.59 0 0 0 4.324.69c6.921-.497 11.53.817 13.826 3.94"
                 stroke="#231F20"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
             </g>
           </g>
