@@ -47,7 +47,7 @@ function OnboardingBanner() {
       backgroundColor: lightColors[currentUser.id % 4],
     }
     : null;
-  
+
   const fakeSignedIn = !currentUser.id && SSR_SIGNED_IN;
 
   if (userIsInOnboardingTestGroup && !fakeSignedIn) {
