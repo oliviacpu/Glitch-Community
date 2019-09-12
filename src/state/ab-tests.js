@@ -1,9 +1,13 @@
 import { COOKIE_NAME, tests } from 'Shared/ab-tests';
 import { useGlobals } from 'State/globals';
 
-const useTestValue = (name) => {
+const useTestAssignments = () => {
   const { AB_TESTS } = useGlobals();
-  const assignment = AB_TESTS[name];
+  return AB_TESTS;
+};
+
+const useTestValue = (name) => {
+  const assignment = useTestAssignments()[name];
   return tests[name][assignment].value;
 };
 
