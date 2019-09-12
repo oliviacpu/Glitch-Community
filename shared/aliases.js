@@ -8,5 +8,5 @@ module.exports = {
   State: path.resolve(__dirname, '../src/state'),
   Hooks: path.resolve(__dirname, '../src/hooks'),
   Shared: path.resolve(__dirname),
-  '@fogcreek/shared-components': path.resolve(__dirname, '../src/components/shared-components.js'),
+  //'@fogcreek/shared-components': '@fogcreek/shared-components/build/module.js',
 };
