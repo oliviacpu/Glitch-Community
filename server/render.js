@@ -58,11 +58,13 @@ const requireClient = () => {
 
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
+const { ServerStyleSheet } = require('styled-components');
 setImmediate(() => requireClient()); // transpile right away rather than waiting for a request
 
 const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS }) => {
   const { Page, resetState } = requireClient();
   resetState();
+  const sheet = new ServerStyleSheet();
   const helmetContext = {};
 
   // don't use <ReactSyntax /> so babel can stay scoped to the src directory
@@ -78,9 +80,11 @@ const render = async (url, { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT,
     EXTERNAL_ROUTES,
   });
 
-  const html = ReactDOMServer.renderToString(page);
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(page));
+  const styleTags = sheet.getStyleTags();
+  sheet.seal();
   const context = { AB_TESTS, API_CACHE, EXTERNAL_ROUTES, HOME_CONTENT, SSR_SIGNED_IN, ZINE_POSTS };
-  return { html, helmet: helmetContext.helmet, context };
+  return { html, helmet: helmetContext.helmet, context, styleTags };
 };
 
 module.exports = (url, context) => {

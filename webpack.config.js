@@ -188,7 +188,7 @@ module.exports = smp.wrap({
     new CleanWebpackPlugin({ dry: false, verbose: true, cleanOnceBeforeBuildPatterns: ['**/*', '!storybook/**', ...prevBuildAssets] }),
     new EnvironmentPlugin({
       FWD_SUBDOMAIN_PREFIX: process.env.PROJECT_NAME || os.userInfo().username,
-    }),    
+    }),
   ],
   watchOptions: {
     ignored: /node_modules/,

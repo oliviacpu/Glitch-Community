@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
+import * as styled from 'styled-components';
+import styled__default, { createGlobalStyle, css, keyframes } from 'styled-components';
 import TextareaAutosize from 'react-textarea-autosize';
 
-const CodeExample = styled.pre`
+const CodeExample = styled__default.pre`
   font-family: var(--fonts-mono);
   font-size: var(--fontSizes-big);
   background-color: var(--colors-secondaryBackground);
@@ -11,14 +12,14 @@ const CodeExample = styled.pre`
 `;
 
 const _jsxFileName = "/Users/justinfalcone/src/shared-components/lib/icon.js";
-const IconBase = styled.img`
+const IconBase = styled__default.img`
   display: inline-block;
   height: 0.875em;
   width: auto;
   vertical-align: top;
 `;
 
-const SVGBase = styled.svg`
+const SVGBase = styled__default.svg`
   display: inline-block;
   height: 0.875em;
   width: auto;
@@ -239,18 +240,18 @@ Icon.defaultProps = {
   alt: '',
 };
 
-const GiantIcon = styled(Icon)`
+const GiantIcon = styled__default(Icon)`
   height: 300px;
 `;
 
-const Grid = styled.div`
+const Grid = styled__default.div`
   display: grid;
   grid-gap: var(--space-1);
   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   margin: var(--space-1) auto;
 `;
 
-const Inverted = styled.div`
+const Inverted = styled__default.div`
   padding: var(--space-2);
   color: var(--colors-background);
   background-color: var(--colors-primary);
@@ -297,7 +298,7 @@ const RootStyle = createGlobalStyle`
   }
 `;
 
-const LocalStyle = styled.div`
+const LocalStyle = styled__default.div`
   ${setThemeVars};
   font-family: var(--fonts-sans);
   font-size: 100%;
@@ -312,7 +313,7 @@ for (const size of sizeNames) {
   sizes[size] = `font-size: var(--fontSizes-${size});`;
 }
 
-const BaseButton = styled.button`
+const BaseButton = styled__default.button`
   appearance: none;
   color: inherit;
   background-color: transparent;
@@ -336,7 +337,7 @@ BaseButton.defaultProps = {
   type: 'button',
 };
 
-const StyledButton = styled.span`
+const StyledButton = styled__default.span`
   display: inline-block;
   border-radius: var(--rounded);
   font-family: var(--fonts-sans);
@@ -416,8 +417,8 @@ const variants = {
   `,
 };
 
-const UnstyledButton = styled(BaseButton).attrs(() => ({ 'data-module': 'UnstyledButton' }))``;
-const Button = styled(StyledButton).attrs(() => ({ 'data-module': 'Button' }))``;
+const UnstyledButton = styled__default(BaseButton).attrs(() => ({ 'data-module': 'UnstyledButton' }))``;
+const Button = styled__default(StyledButton).attrs(() => ({ 'data-module': 'Button' }))``;
 
 Button.propTypes = {
   variant: PropTypes.oneOf(Object.keys(variants)),
@@ -429,14 +430,14 @@ Button.defaultProps = {
   as: BaseButton,
 };
 
-const Container = styled.div`
+const Container = styled__default.div`
   margin: var(--space-1) auto;
   & > * {
     margin: 0 var(--space-1) var(--space-1) 0;
   }
 `;
 
-const ProjectLink = styled.a`
+const ProjectLink = styled__default.a`
   display: block;
   width: 300px;
   border-radius: var(--rounded);
@@ -447,7 +448,7 @@ const ProjectLink = styled.a`
   text-decoration: none;
 `;
 
-const ShadowButton = styled(Button)`
+const ShadowButton = styled__default(Button)`
   ${hover`
     background-color: var(--colors-secondaryBackground);
     box-shadow: 4px 4px 0 var(--colors-primary);
@@ -475,7 +476,7 @@ const fadeOut = keyframes`
   }
 `;
 
-const AnimationWrap = styled.div`
+const AnimationWrap = styled__default.div`
   animation-name: ${({ animation }) => animation};
   @media (prefers-reduced-motion: reduce) {
     animation-name: ${({ reducedMotionAnimation }) => reducedMotionAnimation};
@@ -517,19 +518,19 @@ AnimationContainer.propTypes = {
   onAnimationEnd: PropTypes.func.isRequired,
 };
 
-const ExampleBlock = styled.div`
+const ExampleBlock = styled__default.div`
   padding: var(--space-1);
   border: 1px solid var(--colors-border);
 `;
 
-const Grid$1 = styled.div`
+const Grid$1 = styled__default.div`
   display: grid;
   grid-gap: var(--space-1);
   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   margin: var(--space-1) auto;
 `;
 
-const ProjectItem = styled.div`
+const ProjectItem = styled__default.div`
   border-radius: var(--rounded);
   padding: var(--space-1);
   color: var(--colors-tertiary-text);
@@ -561,7 +562,7 @@ const variants$1 = {
   `,
 };
 
-const Avatar = styled(Image).attrs(() => ({ 'data-module': 'Avatar' }))`
+const Avatar = styled__default(Image).attrs(() => ({ 'data-module': 'Avatar' }))`
   display: block;
   width: 100%;
   height: auto;
@@ -575,7 +576,7 @@ Avatar.propTypes = {
   variant: PropTypes.oneOf(Object.keys(variants$1)).isRequired,
 };
 
-const Container$1 = styled.div`
+const Container$1 = styled__default.div`
   color: var(--colors-tertiary-text);
   background-color: var(--colors-tertiary-background);
   border-radius: var(--rounded);
@@ -583,7 +584,7 @@ const Container$1 = styled.div`
   margin: var(--space-1) 0;
 `;
 
-const Flex = styled(Container$1)`
+const Flex = styled__default(Container$1)`
   display: flex;
   width: 300px;
   > * {
@@ -623,7 +624,7 @@ const variants$2 = {
   `,
 };
 
-const BadgeBase = styled.span.attrs(() => ({ 'data-module': 'Badge' }))`
+const BadgeBase = styled__default.span.attrs(() => ({ 'data-module': 'Badge' }))`
   display: inline-block;
   vertical-align: top;
   font-size: 0.75em;
@@ -661,14 +662,14 @@ Badge.defaultProps = {
   collapsed: false,
 };
 
-const Container$2 = styled.div`
+const Container$2 = styled__default.div`
   & > * {
     margin: 0 var(--space-1) var(--space-1) 0;
   }
 `;
 
 const _jsxFileName$4 = "/Users/justinfalcone/src/shared-components/lib/icon-button.js";
-const IconButtonWrap = styled.span`
+const IconButtonWrap = styled__default.span`
   padding: var(--opticalPadding);
   border-radius: var(--rounded);
   display: inline-block;
@@ -677,7 +678,7 @@ const IconButtonWrap = styled.span`
     background-color: var(--colors-hover);
   }
 `;
-const ButtonIcon = styled(Icon)`
+const ButtonIcon = styled__default(Icon)`
   color: var(--colors-secondary);
   &:hover {
     color: var(--colors-primary);
@@ -703,14 +704,14 @@ IconButton.defaultProps = {
 const _jsxFileName$5 = "/Users/justinfalcone/src/shared-components/lib/block.js";
 // used in popovers and overlays
 
-const TitleWrap = styled.header`
+const TitleWrap = styled__default.header`
   display: flex;
   align-items: baseline;
   font-size: var(--fontSizes-big);
   padding: var(--space-1);
   background-color: var(--colors-secondaryBackground);
 `;
-const TitleContent = styled.h2`
+const TitleContent = styled__default.h2`
   flex: 1 0 auto;
   margin: 0;
   padding: 0 var(--space-1);
@@ -740,7 +741,7 @@ const variants$3 = {
   `,
 };
 
-const Section = styled.section`
+const Section = styled__default.section`
   padding: var(--space-1);
   ${({ variant }) => variants$3[variant]};
   border-top: 1px solid var(--colors-border);
@@ -755,7 +756,7 @@ const Actions = (props) => React.createElement(Section, { 'data-module': "Action
 
 const DangerZone = (props) => React.createElement(Section, { 'data-module': "DangerZone", variant: "warning", ...props, __self: undefined, __source: {fileName: _jsxFileName$5, lineNumber: 58}} );
 
-const Container$3 = styled.div`
+const Container$3 = styled__default.div`
   margin: var(--space-1) 0;
   font-size: var(--fontSizes-small);
   border-radius: var(--rounded);
@@ -832,13 +833,13 @@ const onArrowKeys = (e, index, options) => {
 };
 
 const _jsxFileName$6 = "/Users/justinfalcone/src/shared-components/lib/button-group.js";
-const ButtonWrap = styled.div`
+const ButtonWrap = styled__default.div`
   display: flex;
   flex-direction: row;
   position: relative;
 `;
 
-const ButtonSegment = styled(Button)`
+const ButtonSegment = styled__default(Button)`
   flex: 0 0 auto;
   border-radius: 0;
   border-right-style: none;
@@ -867,7 +868,7 @@ ButtonGroup.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const SoftIcon = styled(Icon)`
+const SoftIcon = styled__default(Icon)`
   color: var(--colors-placeholder);
   button:active & {
     color: inherit;
@@ -919,12 +920,12 @@ SegmentedButton.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const Wrap = styled.div`
+const Wrap = styled__default.div`
   margin: var(--space-2) 0;
 `;
 
 const _jsxFileName$7 = "/Users/justinfalcone/src/shared-components/lib/checkbox-button.js";
-const Checkbox = styled.input`
+const Checkbox = styled__default.input`
   margin: 0 var(--space-1) 0 0;
   padding: 0;
   vertical-align: top;
@@ -943,7 +944,7 @@ CheckboxButton.propTypes = {
   value: PropTypes.bool.isRequired,
 };
 
-const VisuallyHidden = styled.span.attrs(() => ({ 'data-module': 'VisuallyHidden' }))`
+const VisuallyHidden = styled__default.span.attrs(() => ({ 'data-module': 'VisuallyHidden' }))`
   border: 0;
   height: 1px;
   width: 1px;
@@ -1011,14 +1012,14 @@ const LiveAnnouncer = ({ children }) => {
 };
 
 const _jsxFileName$9 = "/Users/justinfalcone/src/shared-components/lib/loader.js";
-const Container$4 = styled.span`
+const Container$4 = styled__default.span`
   display: inline-block;
   width: 0.75em;
   height: auto;
   object-fit: contain;
 `;
 
-const Mask = styled.span`
+const Mask = styled__default.span`
   overflow: hidden;
   display: inline-block;
   width: 100%;
@@ -1030,7 +1031,7 @@ const Mask = styled.span`
   transform: translate3d(0, 0, 0);
 `;
 
-const Circle = styled.span`
+const Circle = styled__default.span`
   position: absolute;
   mix-blend-mode: exclusion;
   height: var(--diameter);
@@ -1040,7 +1041,7 @@ const Circle = styled.span`
   animation-iteration-count: infinite;
 `;
 
-const Earth = styled(Circle)`
+const Earth = styled__default(Circle)`
   @media (prefers-reduced-motion: reduce) {
     margin-left: 0;
     animation-direction: alternate;
@@ -1069,7 +1070,7 @@ const Earth = styled(Circle)`
   `};
 `;
 
-const Moon = styled(Circle)`
+const Moon = styled__default(Circle)`
   @media (prefers-reduced-motion: reduce) {
     display: none
   }
@@ -1089,7 +1090,7 @@ const Moon = styled(Circle)`
   `};
 `;
 
-const Asteroid = styled(Circle)`
+const Asteroid = styled__default(Circle)`
   @media (prefers-reduced-motion: reduce) {
     display: none;
   }
@@ -1109,7 +1110,7 @@ const Asteroid = styled(Circle)`
   `};
 `;
 
-const AsteroidDust = styled(Circle)`
+const AsteroidDust = styled__default(Circle)`
   @media (prefers-reduced-motion: reduce) {
     display: none;
   }
@@ -1141,7 +1142,7 @@ const Loader = (props) => (
 );
 
 const _jsxFileName$a = "/Users/justinfalcone/src/shared-components/lib/mark.js";
-const MarkWrap = styled.span`
+const MarkWrap = styled__default.span`
   display: inline-block;
   transform: rotate(-1deg);
   position: relative;
@@ -1152,7 +1153,7 @@ const MarkWrap = styled.span`
   padding: var(--rounded) calc(var(--rounded) * 2);
   border-radius: var(--rounded);
 `;
-const MarkText = styled.span`
+const MarkText = styled__default.span`
   position: relative;
   display: inline-block;
   transform: rotate(1deg);
@@ -1173,7 +1174,7 @@ Mark.defaultProps = {
 };
 
 const _jsxFileName$b = "/Users/justinfalcone/src/shared-components/lib/progress.js";
-const ProgressBase = styled.progress`
+const ProgressBase = styled__default.progress`
   appearance: none;
   display: block;
   height: 0.75em;
@@ -1229,7 +1230,7 @@ const variants$4 = {
   `,
 };
 
-const CloseButton = styled(UnstyledButton)`
+const CloseButton = styled__default(UnstyledButton)`
   flex: 0 0 auto;
   font-size: var(--fontSizes-small);
   margin-bottom: -1rem;
@@ -1244,7 +1245,7 @@ const closingAnimation = keyframes`
   }
 `;
 
-const NotificationBase = styled.aside`
+const NotificationBase = styled__default.aside`
   display: flex;
   align-items: flex-start;
   font-size: var(--fontSizes-tiny);
@@ -1286,7 +1287,7 @@ const NotificationBase = styled.aside`
   }
 `;
 
-const NotificationContent = styled.div`
+const NotificationContent = styled__default.div`
   flex: 1 1 auto;
   margin-right: var(--space-1);
 `;
@@ -1345,7 +1346,7 @@ const NotificationContext = React.createContext();
 const NotificationsConsumer = NotificationContext.Consumer;
 const useNotifications = () => React.useContext(NotificationContext);
 
-const NotificationsContainer = styled.div`
+const NotificationsContainer = styled__default.div`
   position: fixed;
   z-index: var(--z-notifications);
   top: 0;
@@ -1388,7 +1389,7 @@ const NotificationsProvider = ({ children, ...props }) => {
 };
 
 const _jsxFileName$d = "/Users/justinfalcone/src/shared-components/lib/overlay.js";
-const OverlayWrap = styled.div`
+const OverlayWrap = styled__default.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -1405,7 +1406,7 @@ const OverlayWrap = styled.div`
   -webkit-overflow-scrolling: touch;
 `;
 
-const OverlayContent = styled.dialog.attrs(() => ({
+const OverlayContent = styled__default.dialog.attrs(() => ({
   'data-module': 'OverlayContent',
   open: true,
   'aria-modal': true,
@@ -1536,7 +1537,7 @@ const usePositionAdjustment = () => {
   return { ref, offset };
 };
 
-const PopoverWrap = styled.div`
+const PopoverWrap = styled__default.div`
   position: absolute;
   width: auto;
   ${({ align }) => alignments[align]}
@@ -1559,7 +1560,7 @@ const alignments = {
   `,
 };
 
-const PopoverInner = styled.div`
+const PopoverInner = styled__default.div`
   position: relative;
   overflow: hidden;
   background-color: var(--colors-background);
@@ -1582,7 +1583,7 @@ const PopoverContent = ({ align, children, ...props }) => {
   );
 };
 
-const PopoverContainer = styled.div`
+const PopoverContainer = styled__default.div`
   position: relative;
   display: inline-block;
 `;
@@ -1666,11 +1667,11 @@ Popover.propTypes = {
   contentProps: PropTypes.object,
 };
 
-const WidePopover = styled.div`
+const WidePopover = styled__default.div`
   width: 22rem;
 `;
 
-const ActionsStack = styled(Actions)`
+const ActionsStack = styled__default(Actions)`
   > * + * {
     margin-top: var(--space-1);
     display: block;
@@ -1729,7 +1730,7 @@ function createRemoteComponent(url, componentName) {
 }
 
 const _jsxFileName$g = "/Users/justinfalcone/src/shared-components/lib/results-list.js";
-const ScrollContainer = styled.div`
+const ScrollContainer = styled__default.div`
   ${({ scroll }) =>
     scroll &&
     css`
@@ -1738,14 +1739,14 @@ const ScrollContainer = styled.div`
     `}
 `;
 
-const ResultsListContainer = styled.ul`
+const ResultsListContainer = styled__default.ul`
   margin: 0;
   padding: var(--space-1);
   list-style-type: none;
   border: 1px solid var(--colors-border);
 `;
 
-const ResultItemWrap = styled.li``;
+const ResultItemWrap = styled__default.li``;
 
 const ResultsList = React.forwardRef(({ scroll, value, options, onChange, onKeyDown, children, ...props }, ref) => {
   const refs = React.useRef([]);
@@ -1806,17 +1807,17 @@ ResultsList.defaultProps = {
   onKeyDown: () => {},
 };
 
-const ResultInfo = styled.span.attrs(() => ({ 'data-module': 'ResultInfo' }))`
+const ResultInfo = styled__default.span.attrs(() => ({ 'data-module': 'ResultInfo' }))`
   display: block;
   padding-left: var(--space-2);
   width: 100%;
 `;
 
-const ResultName = styled.span.attrs(() => ({ 'data-module': 'ResultName' }))`
+const ResultName = styled__default.span.attrs(() => ({ 'data-module': 'ResultName' }))`
   font-size: var(--fontSizes-small);
 `;
 
-const ResultDescription = styled.span.attrs(() => ({ 'data-module': 'ResultDescription' }))`
+const ResultDescription = styled__default.span.attrs(() => ({ 'data-module': 'ResultDescription' }))`
   display: block;
   color: var(--colors-secondary);
   word-break: break-word;
@@ -1830,7 +1831,7 @@ const ResultDescription = styled.span.attrs(() => ({ 'data-module': 'ResultDescr
 // and could also work as an <a>.
 // Its defined as a span here so that it doesn't inherit the PropTypes of UnstyledButton
 // when its being used as an <a>.
-const ResultItem = styled.span.attrs(() => ({ 'data-module': 'ResultItem' }))`
+const ResultItem = styled__default.span.attrs(() => ({ 'data-module': 'ResultItem' }))`
   display: flex;
   width: 100%;
   font-size: var(--fontSizes-normal);
@@ -1855,12 +1856,12 @@ ResultItem.defaultProps = {
   as: UnstyledButton,
 };
 
-const Container$5 = styled.div`
+const Container$5 = styled__default.div`
   width: 20rem;
 `;
 
 const _jsxFileName$h = "/Users/justinfalcone/src/shared-components/lib/text-input.js";
-const InputWrap = styled.span`
+const InputWrap = styled__default.span`
   position: relative;
   display: flex;
   align-items: baseline;
@@ -1876,7 +1877,7 @@ const variants$5 = {
   `,
 };
 
-const InputErrorMessage = styled.span`
+const InputErrorMessage = styled__default.span`
   color: var(--colors-error-text);
   background-color: var(--colors-error-background);
   border-radius: 0 0 var(--rounded) var(--rounded);
@@ -1886,7 +1887,7 @@ const InputErrorMessage = styled.span`
   padding: 0.25em 0.5em;
 `;
 
-const SearchIcon = styled(Icon).attrs(() => ({ icon: 'search' }))`
+const SearchIcon = styled__default(Icon).attrs(() => ({ icon: 'search' }))`
   position: absolute;
   right: 0.4em;
   top: 50%;
@@ -1895,11 +1896,11 @@ const SearchIcon = styled(Icon).attrs(() => ({ icon: 'search' }))`
   color: var(--colors-placeholder);
 `;
 
-const ErrorIcon = styled(Icon).attrs(() => ({ icon: 'fireEngine', alt: 'Warning' }))`
+const ErrorIcon = styled__default(Icon).attrs(() => ({ icon: 'fireEngine', alt: 'Warning' }))`
   font-size: var(--fontSizes-bigger);
 `;
 
-const Label = styled.label`
+const Label = styled__default.label`
   display: block;
 `;
 
@@ -1928,14 +1929,14 @@ const inputStyles = css`
     }[variant])}
 `;
 
-const Input = styled.input`
+const Input = styled__default.input`
   ${inputStyles}
 `;
 
-const Prefix = styled.span`
+const Prefix = styled__default.span`
   margin-right: var(--space-1);
 `;
-const Postfix = styled.span`
+const Postfix = styled__default.span`
   margin-left: var(--space-1);
 `;
 
@@ -1988,13 +1989,13 @@ TextInput.defaultProps = {
   containerProps: null,
 };
 
-const TextAreaErrorIcon = styled(ErrorIcon)`
+const TextAreaErrorIcon = styled__default(ErrorIcon)`
   position: absolute;
   bottom: 0.25em;
   right: 0;
 `;
 
-const TextAreaContent = styled(TextareaAutosize)`
+const TextAreaContent = styled__default(TextareaAutosize)`
   ${inputStyles}
   resize: none;
   transition: none;
@@ -2032,7 +2033,7 @@ TextArea.defaultProps = {
   containerProps: null,
 };
 
-const Container$6 = styled.div`
+const Container$6 = styled__default.div`
   background-color: var(--colors-secondaryBackground);
   padding: var(--space-1);
   border-radius: var(--rounded);
@@ -2042,16 +2043,16 @@ const Container$6 = styled.div`
   }
 `;
 
-const PrivateIcon = styled(Icon).attrs(() => ({ icon: 'private' }))`
+const PrivateIcon = styled__default(Icon).attrs(() => ({ icon: 'private' }))`
   color: #ab933b;
 `;
 
-const BoldTextInput = styled(TextInput)`
+const BoldTextInput = styled__default(TextInput)`
   font-weight: bold;
 `;
 
 const _jsxFileName$i = "/Users/justinfalcone/src/shared-components/lib/search-results.js";
-const FloatingResultsList = styled(ResultsList)`
+const FloatingResultsList = styled__default(ResultsList)`
   position: absolute;
   width: 100%;
   z-index: 1;
@@ -2059,7 +2060,7 @@ const FloatingResultsList = styled(ResultsList)`
   display: none;
 `;
 
-const Container$7 = styled.span`
+const Container$7 = styled__default.span`
   display: block;
   position: relative;
   &:focus-within ${FloatingResultsList} {
