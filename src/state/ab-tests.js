@@ -33,3 +33,4 @@ const useTestValue = (name) => {
 
 export default useTestValue;
 export { TestsProvider, useTestAssignments };
+export { tests } from 'Shared/ab-tests';

@@ -5,7 +5,7 @@ import { Button } from '@fogcreek/shared-components';
 import Heading from 'Components/text/heading';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { useDevToggles } from 'State/dev-toggles';
-import { useTestAssignments } from 'State/ab-tests';
+import useTest, { useTestAssignments, tests } from 'State/ab-tests';
 
 import styles from './secret.styl';
 
@@ -29,23 +29,24 @@ function useZeldaMusicalCue() {
 }
 
 const ABTests = () => {
+  const text = useTest('Just-A-Test');
   const [assignments, reassign] = useTestAssignments();
   return (
-    <p className={styles.abTests}>
-      Your A/B test groups:
+    <section className={styles.abTests}>
+      Your A/B test groups ({text}):
       <ul>
         {Object.keys(assignments).map((test) => (
           <li key={test}>
             <label>
               {test}:
               <select value={assignments[test]} onChange={(event) => reassign(test, event.target.value)}>
-                <option value={assignments[test]}>{assignments[test]}</option>
+                {Object.keys(tests[test]).map((group) => <option value={group} key={group}>{group}</option>)}
               </select>
             </label>
           </li>
         ))}
       </ul>
-    </p>
+    </section>
   );
 };
 
@@ -70,7 +71,7 @@ const Secret = () => {
     <main className={styles.secretPage}>
       <Helmet title="Glitch - It's a secret to everybody." />
       <VisuallyHidden as={Heading} tagName="h1">It's a secret to everybody</VisuallyHidden>
-      <ul>
+      <ul className={st}>
         {toggleData.map(({ name, description }) => (
           <li key={name} className={isEnabled(name) ? styles.lit : ''}>
             <Button size="small" title={description} ariaPressed={isEnabled(name) ? 'true' : 'false'} onClick={() => toggleTheToggle(name)}>
