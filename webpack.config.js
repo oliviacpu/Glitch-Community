@@ -15,7 +15,6 @@ const BUILD = path.resolve(__dirname, 'build');
 const SRC = path.resolve(__dirname, 'src');
 const SHARED = path.resolve(__dirname, 'shared');
 const STYLES = path.resolve(__dirname, 'styles');
-const SHARED_COMPONENTS = path.resolve(__dirname, 'node_modules/@fogcreek/shared-components');
 const NODE_MODULES = path.resolve(__dirname, 'node_modules');
 const STYLE_BUNDLE_NAME = 'styles';
 
@@ -123,7 +122,7 @@ module.exports = smp.wrap({
           {
             test: /\.js$/,
             loader: 'babel-loader',
-            include: mode === 'development' ? [SRC, SHARED, SHARED_COMPONENTS] : [SRC, SHARED, NODE_MODULES],
+            include: mode === 'development' ? [SRC, SHARED] : [SRC, SHARED, NODE_MODULES],
             query: {
               compact: mode === 'development' ? true : false,
             },
