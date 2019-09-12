@@ -132,7 +132,9 @@
     "webpack": "^4.35.0",
     "webpack-cli": "^3.3.5",
     "webpack-dev-middleware": "^3.7.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "babel-plugin-styled-components": "^1.10.6",
+    "styled-components": "^4.3.2"
   },
   "engines": {
     "node": "10.x"
@@ -142,4 +144,3 @@
     "mocha": "^6.2.0"
   }
 }
-
