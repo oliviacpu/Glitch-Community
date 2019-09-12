@@ -1,27 +1,30 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { COOKIE_NAME, tests } from 'Shared/ab-tests';
 
 const Context = createContext();
 
-const AbTestProvider = ({ AB_TESTS, children }) => {
+const TestProvider = ({ AB_TESTS, children }) => {
   const [assignments, setAssignments] = useState(AB_TESTS);
-  return <Context.Provider value={assignments}>{children}</Context.Provider>;
+  const value = useMemo(() => {
+    const reassign = (test, assignment) => {
+      setAssignments((oldAssignments) => {
+        const newAssignments = { ...oldAssignments, [test]: assignment };
+        document.cookie = `${COOKIE_NAME}=${JSON.stringify(newAssignments)}`;
+        return newAssignments;
+      });
+    };
+    return [assignments, reassign];
+  }, [assignments]);
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 };
-AbTestProvider.propTypes = {
+TestProvider.propTypes = {
   AB_TESTS: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
 };
 
-const useTestAssignments = () => {
-  const { AB_TESTS } = useGlobals();
-  const setAssignment = (name, group) => {
-    document.cookie = `${COOKIE_NAME}=${JSON.stringify({ ...AB_TESTS, [name]: group })}`;
-    window.location.reload();
-  };
-  return [AB_TESTS, setAssignment];
-};
+const useTestAssignments = () => useContext(Context);
 
 const useTestValue = (name) => {
   const [assignments] = useTestAssignments();
@@ -29,3 +32,4 @@ const useTestValue = (name) => {
 };
 
 export default useTestValue;
+export { TestProvider, useTestAssignments };
