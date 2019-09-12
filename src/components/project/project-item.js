@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { pickBy } from 'lodash';
 import { AnimationContainer, slideDown, slideUp, Button } from '@fogcreek/shared-components';
 
 import Markdown from 'Components/text/markdown';
@@ -42,8 +41,6 @@ const ProfileListLoader = ({ project }) => (
   </VisibilityContainer>
 );
 
-const bind = (fn, ...boundArgs) => (...calledArgs) => fn(...boundArgs, ...calledArgs);
-
 const ProjectItem = ({ project, projectOptions: providedProjectOptions, collection, noteOptions }) => {
   const myStuffEnabled = useDevToggle('My Stuff');
   const { currentUser } = useCurrentUser();
@@ -65,7 +62,6 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
 
   const projectOptions = useProjectOptions(project, providedProjectOptions);
   const hasProjectOptions = Object.keys(projectOptions).length > 0;
-  const dispatch = (projectOptionName, ...args) => projectOptions[projectOptionName](...args);
 
   const bookmarkAction = useTrackedFunc(
     () => projectOptions.toggleBookmark(project, hasBookmarked, setHasBookmarked),
@@ -73,22 +69,27 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
     (inherited) => ({ ...inherited, projectName: project.domain, baseProjectId: project.baseId || project.baseProject, userId: currentUser.id }),
   );
 
+  const sequence = (doAnimation, projectOption) => {
+    if (!projectOption) return undefined;
+    return (...args) => {
+      doAnimation();
+      projectOption(...args);
+    };
+  };
+
   return (
-    <AnimationContainer animation={slideDown} onAnimationEnd={dispatch}>
-      {(slideDown) => (
-        <AnimationContainer animation={slideUp} onAnimationEnd={dispatch}>
-          {(slideUp) => {
-            const animatedProjectOptions = pickBy(
-              {
-                ...projectOptions,
-                addPin: bind(slideUp, 'addPin'),
-                removePin: bind(slideDown, 'removePin'),
-                deleteProject: bind(slideDown, 'deleteProject'),
-                removeProjectFromTeam: bind(slideDown, 'removeProjectFromTeam'),
-                featureProject: bind(slideUp, 'featureProject'),
-              },
-              (_, key) => projectOptions[key],
-            );
+    <AnimationContainer animation={slideDown} onAnimationEnd={() => {}}>
+      {(doSlideDown) => (
+        <AnimationContainer animation={slideUp} onAnimationEnd={() => {}}>
+          {(doSlideUp) => {
+            const animatedProjectOptions = {
+              ...projectOptions,
+              addPin: sequence(doSlideUp, projectOptions.addPin),
+              removePin: sequence(doSlideDown, projectOptions.removePin),
+              deleteProject: sequence(doSlideDown, projectOptions.deleteProject),
+              removeProjectFromTeam: sequence(doSlideDown, projectOptions.removeProjectFromTeam),
+              featureProject: sequence(doSlideUp, 'featureProject'),
+            };
 
             return (
               <>
