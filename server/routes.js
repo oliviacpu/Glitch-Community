@@ -88,11 +88,11 @@ module.exports = function(external) {
     const signedIn = !!req.cookies.hasLogin;
     const [zine, homeContent] = await Promise.all([getZine(), getData('home')]);
 
-    let ssr = { rendered: null };
+    let ssr = { rendered: null, styleTags: '' };
     if (shouldRender) {
       try {
         const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
-        const { html, context } = await renderPage(url, {
+        const { html, context, styleTags } = await renderPage(url, {
           AB_TESTS: assignments,
           API_CACHE: cache,
           EXTERNAL_ROUTES: external,
@@ -102,6 +102,7 @@ module.exports = function(external) {
         });
         ssr = {
           rendered: html,
+          styleTags,
           ...context,
         };
       } catch (error) {
