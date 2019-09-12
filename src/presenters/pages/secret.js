@@ -32,13 +32,13 @@ const ABTests = () => {
   const text = useTest('Just-A-Test');
   const [assignments, reassign] = useTestAssignments();
   return (
-    <section className={styles.abTests}>
+    <section className={styles.abTestSection}>
       Your A/B test groups ({text}):
-      <ul>
+      <ul className={styles.abTests}>
         {Object.keys(assignments).map((test) => (
-          <li key={test}>
+          <li key={test} className={styles.abTest}>
             <label>
-              {test}:
+              {test}:&nbsp;
               <select value={assignments[test]} onChange={(event) => reassign(test, event.target.value)}>
                 {Object.keys(tests[test]).map((group) => <option value={group} key={group}>{group}</option>)}
               </select>
@@ -71,7 +71,7 @@ const Secret = () => {
     <main className={styles.secretPage}>
       <Helmet title="Glitch - It's a secret to everybody." />
       <VisuallyHidden as={Heading} tagName="h1">It's a secret to everybody</VisuallyHidden>
-      <ul className={st}>
+      <ul className={styles.toggles}>
         {toggleData.map(({ name, description }) => (
           <li key={name} className={isEnabled(name) ? styles.lit : ''}>
             <Button size="small" title={description} ariaPressed={isEnabled(name) ? 'true' : 'false'} onClick={() => toggleTheToggle(name)}>
