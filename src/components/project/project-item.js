@@ -88,7 +88,7 @@ const ProjectItem = ({ project, projectOptions: providedProjectOptions, collecti
               removePin: sequence(doSlideDown, projectOptions.removePin),
               deleteProject: sequence(doSlideDown, projectOptions.deleteProject),
               removeProjectFromTeam: sequence(doSlideDown, projectOptions.removeProjectFromTeam),
-              featureProject: sequence(doSlideUp, 'featureProject'),
+              featureProject: sequence(doSlideUp, projectOptions.featureProject),
             };
 
             return (
