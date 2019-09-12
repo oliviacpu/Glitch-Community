@@ -5,7 +5,7 @@ import { Button } from '@fogcreek/shared-components';
 import Heading from 'Components/text/heading';
 import VisuallyHidden from 'Components/containers/visually-hidden';
 import { useDevToggles } from 'State/dev-toggles';
-import useTest, { resetTests } from 'State/ab-tests';
+import { useTestAssignments } from 'State/ab-tests';
 
 import styles from './secret.styl';
 
@@ -28,13 +28,25 @@ function useZeldaMusicalCue() {
   }, []);
 }
 
-const ABTest = () => {
-  const text = useTest('Just-A-Test');
-  const onClick = () => {
-    resetTests();
-    window.location.reload();
-  };
-  return <>Your A/B test group: {text} <Button onClick={onClick} size="small">reassign me</Button></>;
+const ABTests = () => {
+  const [assignments, reassign] = useTestAssignments();
+  return (
+    <p className={styles.abTests}>
+      Your A/B test groups:
+      <ul>
+        {Object.keys(assignments).map((test) => (
+          <li key={test}>
+            <label>
+              {test}:
+              <select value={assignments[test]} onChange={(event) => reassign(test, event.target.value)}>
+                <option value={assignments[test]}>{assignments[test]}</option>
+              </select>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </p>
+  );
 };
 
 const Secret = () => {
@@ -67,7 +79,7 @@ const Secret = () => {
           </li>
         ))}
       </ul>
-      <p className={styles.abTestResult}><ABTest /></p>
+      <ABTests />
     </main>
   );
 };

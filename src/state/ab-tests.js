@@ -5,21 +5,21 @@ import { COOKIE_NAME, tests } from 'Shared/ab-tests';
 
 const Context = createContext();
 
-const TestProvider = ({ AB_TESTS, children }) => {
+const TestsProvider = ({ AB_TESTS, children }) => {
   const [assignments, setAssignments] = useState(AB_TESTS);
-  const value = useMemo(() => {
-    const reassign = (test, assignment) => {
+  const value = useMemo(() => [
+    assignments,
+    (test, assignment) => {
       setAssignments((oldAssignments) => {
         const newAssignments = { ...oldAssignments, [test]: assignment };
         document.cookie = `${COOKIE_NAME}=${JSON.stringify(newAssignments)}`;
         return newAssignments;
       });
-    };
-    return [assignments, reassign];
-  }, [assignments]);
+    },
+  ], [assignments]);
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
-TestProvider.propTypes = {
+TestsProvider.propTypes = {
   AB_TESTS: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
 };
@@ -32,4 +32,4 @@ const useTestValue = (name) => {
 };
 
 export default useTestValue;
-export { TestProvider, useTestAssignments };
+export { TestsProvider, useTestAssignments };
