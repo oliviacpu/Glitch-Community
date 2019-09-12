@@ -16,7 +16,7 @@ const setup = () => {
       // transpile on render to ensure we always use the latest code
       require('@babel/register')({
         only: [(location) => location.startsWith(src)],
-        configFile: path.join(src, './.babelrc.node.js'),
+        configFile: path.join(__dirname, '../.babelrc.node.js'),
       });
       return { directory: src, verb: 'transpile' };
   }

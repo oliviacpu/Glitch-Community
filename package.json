@@ -30,7 +30,7 @@
     "cy:remix": "npx cypress open --config baseUrl=https://$1.glitch.me",
     "cy:ci": "start-server-and-test start http://localhost:8000 'npx cypress run --record'",
     "build:webpack": "npx webpack",
-    "build:babel": "npx babel ./src --config-file ./src/.babelrc.node.js --copy-files -d ./build/node",
+    "build:babel": "npx babel ./src --config-file ./.babelrc.node.js --copy-files -d ./build/node",
     "build": "npm run build:webpack && npm run build:babel",
     "test": "mocha"
   },
