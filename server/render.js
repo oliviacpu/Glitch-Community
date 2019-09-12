@@ -12,6 +12,7 @@ require('@babel/register')({
   only: [(location) => location.startsWith(src)],
   presets: ['@babel/preset-react', ['@babel/preset-env', { targets: { node: true }, useBuiltIns: false }]],
   plugins: [
+    ['styled-components'],
     [
       'module-resolver',
       {
