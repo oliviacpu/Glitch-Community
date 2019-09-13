@@ -40,6 +40,7 @@ const SignInLayout = () => {
               <div className={styles.magicCode}>
                 <span className={styles.backArrow}>
                   <span className="left-arrow icon" />
+                  <Icon name="chevronLeft" "
                 </span>
                 <h1>Magic Code via Email</h1>
               </div>
