@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@'
+import { Icon } from '@fogcreek/shared-components';
 import ProjectResultItem from 'Components/project/project-result-item';
 import { ResultItem, ResultInfo, ResultName } from 'Components/containers/results-list';
 import { PopoverWithButton, PopoverDialog, PopoverSearch } from 'Components/popover';
