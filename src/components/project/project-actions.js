@@ -17,7 +17,7 @@ ShowButton.propTypes = {
 };
 
 export const EditButton = ({ name, isMember, size }) => (
-  <Button as="a" href={getEditorUrl(name)} size={size}>
+  <Button as="a" href={getEditorUrl(name)} size={size} variant={isMember ? 'cta' : undefined}>
     {isMember ? 'Edit Project' : 'View Source'}
   </Button>
 );
