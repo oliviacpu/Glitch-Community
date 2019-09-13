@@ -55,7 +55,7 @@ const ProjectSearch = ({ projects, updateProjectDomain, currentProjectDomain }) 
   );
 };
 
-const Dropdown = () => <span className={styles.dropDown} aria-label="options"><Icon icon="chevronDown" /></span>;
+const Dropdown = () => <span className={styles.dropDownArrow} aria-label="options"><Icon icon="chevronDown" /></span>;
 
 const TeamAnalyticsProjectPop = ({ projects, updateProjectDomain, currentProjectDomain }) => (
   <PopoverWithButton
