@@ -21,6 +21,7 @@ export const EditButton = ({ name, isMember, size }) => (
     {isMember ? 'Edit Project' : 'View Source'}
   </Button>
 );
+
 EditButton.propTypes = {
   name: PropTypes.string.isRequired,
   isMember: PropTypes.bool,
@@ -35,6 +36,7 @@ export const RemixButton = ({ name, isMember }) => (
     {isMember ? 'Remix This' : 'Remix your own'} <Icon className={emoji} icon="microphone" />
   </Button>
 );
+
 RemixButton.propTypes = {
   name: PropTypes.string.isRequired,
   isMember: PropTypes.bool,
