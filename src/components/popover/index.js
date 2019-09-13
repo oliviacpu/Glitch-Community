@@ -60,6 +60,7 @@ export const MultiPopoverTitle = ({ children }) => {
       <PopoverTitle>
         <span className={styles.backArrow}>
           <span className="left-arrow icon" />
+          <Icon name="chevronLeft" />
         </span>
         &nbsp;
         {children}
