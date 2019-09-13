@@ -32,30 +32,31 @@ body
 // styles for index.ejs
 // There will always be a little special sauce here, since these styles have to work
 // in a no-react environment.
-#fallback
-  #fallback-img
-    padding: calc(20%) 0
-    margin: 0 auto
-  .error-msg 
-    background: secondary-background 
-    border: 3px solid black
-    border-radius: 10px
-    h1, p
-      margin: 20px
-
-@media(min-width: 700px)
-  :global #fallback
-    main
-      width: 700px
-      position: absolute
-      top: 40%
-      left: 50%
-      transform: translate(-50%, -40%)
+:global
+  #fallback
     #fallback-img
-      padding: 0
-      float: left
-      margin-right: 40px
-    .error-msg
-      float: left
-      width: 350px
-      margin-top: 65px
+      padding: calc(20%) 0
+      margin: 0 auto
+    .error-msg 
+      background: secondary-background 
+      border: 3px solid black
+      border-radius: 10px
+      h1, p
+        margin: 20px
+
+  @media(min-width: 700px)
+    #fallback
+      main
+        width: 700px
+        position: absolute
+        top: 40%
+        left: 50%
+        transform: translate(-50%, -40%)
+      #fallback-img
+        padding: 0
+        float: left
+        margin-right: 40px
+      .error-msg
+        float: left
+        width: 350px
+        margin-top: 65px
