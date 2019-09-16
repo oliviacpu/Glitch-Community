@@ -19,6 +19,7 @@ import PreviewContainer from 'Components/containers/preview-container';
 import Arrow from 'Components/arrow';
 import VisibilityContainer from 'Components/visibility-container';
 import LazyLoader from 'Components/lazy-loader';
+import OnboardingBanner from 'Components/onboarding-banner';
 import { useCurrentUser } from 'State/current-user';
 import { getEditorUrl, getProjectAvatarUrl } from 'Models/project';
 import { useAPI } from 'State/api';
@@ -277,6 +278,7 @@ export const Home = ({ data, loggedIn, hasProjects }) => (
     {!loggedIn && <Banner />}
     {!loggedIn && <FeatureCallouts content={data.featureCallouts} />}
     {hasProjects && <RecentProjects />}
+    {loggedIn && !hasProjects && <OnboardingBanner isHomepage />}
     {loggedIn && <Questions />}
     <UnifiedStories content={data.unifiedStories} />
     <TopPicks>
