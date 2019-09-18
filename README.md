@@ -16,9 +16,7 @@ File structure
 
 Olivia changed this to test something
 
-Changed it again
-
-There will be at least one more change after this
+Removed some other changes
 
 - the backend app starts at `server.js`
 - the backend app starts at `server/server.js`
