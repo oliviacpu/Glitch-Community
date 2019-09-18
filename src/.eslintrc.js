@@ -28,11 +28,21 @@ module.exports = {
     'jsx-a11y/label-has-for': OFF, // It's been deprecated. -- https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-for.md
     'arrow-parens': [ERROR, 'always'],
     'operator-linebreak': [ERROR, 'after', { overrides: { '?': 'before', ':': 'before' } }],
+    'jsx-a11y/label-has-associated-control': [ERROR, {
+      assert: "either",
+      depth: 3,
+    }],
     // disabled for prettier compatibility
     'implicit-arrow-linebreak': OFF,
     'object-curly-newline': OFF,
     'no-confusing-arrow': OFF,
     'function-paren-newline': OFF,
+    // allow for focusing on pop-overs
+    'jsx-a11y/no-noninteractive-tabindex': [
+      'error', {
+        tags: ['dialog'],
+      },
+    ],
     // Overrides of react/recommended:
     'react/no-unescaped-entities': ['error', { forbid: [`"`, '>', '}'] }], // permit ' in jsx html,
     'react/prop-types': [OFF], // disabled so we can use composed prop-types
@@ -54,7 +64,7 @@ module.exports = {
     'no-param-reassign': [OFF],
     'react/jsx-no-bind': [OFF],
     'no-restricted-syntax': [OFF],
-    'no-restricted-globals': [OFF],
+    'no-restricted-globals': [ERROR, 'event'],
     'no-alert': [OFF],
     'react/button-has-type': [OFF], // TODO turn back on when button componentization is done
     'max-len': [
@@ -72,7 +82,7 @@ module.exports = {
     // React hooks config
     'react-hooks/rules-of-hooks': 'error',
     'react/jsx-one-expression-per-line': [OFF],
-    'react/jsx-filename-extension': [ERROR, { extensions: ['.js'] }],
+    'react/jsx-filename-extension': [ERROR, { extensions: ['.js'] }]
   },
   settings: {
     'import/ignore': ['sentry'],

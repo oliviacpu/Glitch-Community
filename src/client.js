@@ -1,5 +1,3 @@
-/* globals EDITOR_URL */
-
 import './polyfills';
 
 // Init our dayjs plugins
@@ -7,20 +5,30 @@ import dayjs from 'dayjs';
 import relativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 import React from 'react';
-import { render } from 'react-dom';
-import convertPlugin from '../shared/dayjs-convert';
-import { captureException, configureScope } from './utils/sentry';
+import ReactDOM, { hydrate, render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import convertPlugin from 'Shared/dayjs-convert';
+import { configureScope } from 'Utils/sentry';
+import { EDITOR_URL } from 'Utils/constants';
+import { TestsProvider } from 'State/ab-tests';
+import { GlobalsProvider } from 'State/globals';
 import App from './app';
 
 dayjs.extend(relativeTimePlugin);
 dayjs.extend(convertPlugin);
 
 // This function is used in index.ejs to set up the app
-window.bootstrap = () => {
+window.bootstrap = async (container) => {
   if (location.hash.startsWith('#!/')) {
-    // eslint-disable-line no-restricted-globals
     window.location.replace(EDITOR_URL + window.location.hash);
     return;
+  }
+
+  // express sees a//b as the same as a/b, but react-router does not
+  // redirect to the single slash url so the site doesn't flicker from ssr to 404
+  if (location.pathname.includes('//')) {
+    history.replaceState(history.state, '', location.pathname.replace(/\/+/g, '/') + location.search + location.hash);
   }
 
   // Mark that bootstrapping has occurred,
@@ -31,16 +39,32 @@ window.bootstrap = () => {
     scope.setTag('bootstrap', 'true');
   });
 
-  const dom = document.createElement('div');
-  document.body.appendChild(dom);
-  render(<App />, dom);
-};
+  const element = (
+    <BrowserRouter>
+      <GlobalsProvider
+        origin={window.location.origin}
+        EXTERNAL_ROUTES={window.EXTERNAL_ROUTES}
+        HOME_CONTENT={window.HOME_CONTENT}
+        SSR_SIGNED_IN={window.SSR_SIGNED_IN}
+        ZINE_POSTS={window.ZINE_POSTS}
+      >
+        <TestsProvider AB_TESTS={window.AB_TESTS}>
+          <App apiCache={window.API_CACHE} />
+        </TestsProvider>
+      </GlobalsProvider>
+    </BrowserRouter>
+  );
 
-// Make sure react exists because that's an issue that is happening
-try {
-  if (!React.Component) {
-    throw new Error('React.Component is not defined?');
+  if (window.ENVIRONMENT !== 'production') {
+    const { default: axe } = await import('react-axe');
+    if (!window.axeInitialized) {
+      axe(React, ReactDOM, 1000);
+      window.axeInitialized = true;
+    }
   }
-} catch (error) {
-  captureException(error);
-}
+  if (container.hasChildNodes()) {
+    hydrate(element, container);
+  } else {
+    render(element, container);
+  }
+};

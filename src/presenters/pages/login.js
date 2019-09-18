@@ -1,12 +1,15 @@
-/* globals APP_URL analytics */
+/* globals analytics */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { captureException } from '../../utils/sentry';
+import { captureException } from 'Utils/sentry';
+import { APP_URL } from 'Utils/constants';
 
-import useLocalStorage from '../../state/local-storage';
-import { useCurrentUser } from '../../state/current-user';
+import useLocalStorage from 'State/local-storage';
+import { useAPI } from 'State/api';
+import { useCurrentUser } from 'State/current-user';
+import TwoFactorCodePage from './two-factor-code';
 import { EmailErrorPage, OauthErrorPage } from './error';
 
 // The Editor may embed /login/* endpoints in an iframe in order to share code.
@@ -28,113 +31,122 @@ function notifyParent(message = {}) {
   window.parent.postMessage(message, APP_URL);
 }
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      done: false,
-      redirect: { pathname: '/' },
-      error: false,
-      errorMessage: null,
-    };
+const RedirectToDestination = () => {
+  const [destination, setDestination] = useLocalStorage('destinationAfterAuth', null);
+
+  React.useEffect(() => {
+    setDestination(undefined);
+  }, []);
+
+  if (destination && destination.expires > new Date().toISOString()) {
+    return <Redirect to={destination.to} />;
   }
 
-  async componentDidMount() {
-    const { api, provider, url, destination } = this.props;
-    this.props.setDestination(undefined);
+  return <Redirect to="/" />;
+};
 
+const LoginPage = ({ provider, url }) => {
+  const api = useAPI();
+  const { login } = useCurrentUser();
+
+  const [state, setState] = React.useState({ status: 'active' });
+  const setDone = () => setState({ status: 'done' });
+  const setError = (title, message) => setState({ status: 'error', title, message });
+  const setTwoFactor = (token) => setState({ status: 'tfa', token });
+
+  const perform = async () => {
     try {
       const { data } = await api.post(url);
-      if (data.id <= 0) {
+      if (data.tfaToken) {
+        setTwoFactor(data.tfaToken);
+      } else if (!data.id || data.id <= 0) {
         throw new Error(`Bad user id (${data.id}) after ${provider} login`);
+      } else {
+        console.log('LOGGED IN', data.id);
+        login(data);
+
+        setDone();
+        analytics.track('Signed In', { provider });
+        notifyParent({ success: true, details: { provider } });
       }
-
-      console.log('LOGGED IN', data.id);
-      this.props.setUser(data);
-
-      if (destination && destination.expires > new Date().toISOString()) {
-        this.setState({ redirect: destination.to });
-      }
-
-      this.setState({ done: true });
-      analytics.track('Signed In', { provider });
-      notifyParent({ success: true, details: { provider } });
     } catch (error) {
-      this.setState({ error: true });
-
       const errorData = error && error.response && error.response.data;
-      if (errorData && errorData.message) {
-        this.setState({ errorMessage: errorData.message });
-      }
+      setError(undefined, errorData && errorData.message);
 
-      if (error && error.response && error.response.status !== 401) {
-        console.error('Login error.', errorData);
-        captureException(error);
+      if (error && error.response) {
+        if (error.response.status === 403) {
+          // Our API returns a 403 when the login provider didn't return an email address
+          // We can suggest using email for login and avoid capturing this error in Sentry
+          const title = 'Missing Email Address';
+          const message = `${provider} didn't return an email address for your account.  Try using "Sign in with Email" instead to create an account on Glitch.`;
+          setError(title, message);
+        } else if (error.response.status !== 401) {
+          console.error('Login error.', errorData);
+          captureException(error);
+        }
       }
       const details = { provider, error: errorData };
       notifyParent({ success: false, details });
     }
-  }
+  };
+  React.useEffect(() => {
+    perform();
+  }, [provider, url]);
 
-  render() {
-    if (this.state.done) {
-      return <Redirect to={this.state.redirect} />;
-    }
-    if (this.state.error) {
-      const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
-      if (this.props.provider === 'Email') {
-        return (
-          <EmailErrorPage
-            api={this.props.api}
-            title={`${this.props.provider} Login Problem`}
-            description={this.state.errorMessage || genericDescription}
-          />
-        );
-      }
-      return (
-        <OauthErrorPage
-          api={this.props.api}
-          title={`${this.props.provider} Login Problem`}
-          description={this.state.errorMessage || genericDescription}
-        />
-      );
-    }
-    return <div className="content" />;
+  if (state.status === 'done') {
+    return <RedirectToDestination />;
   }
-}
+  if (state.status === 'error') {
+    const genericTitle = `${provider} Login Problem`;
+    const genericDescription = "Hard to say what happened, but we couldn't log you in. Try again?";
+    const errorTitle = state.title || genericTitle;
+    const errorMessage = state.message || genericDescription;
+    if (provider === 'Email') {
+      return <EmailErrorPage title={errorTitle} description={errorMessage} />;
+    }
+    return <OauthErrorPage title={errorTitle} description={errorMessage} />;
+  }
+  if (state.status === 'tfa') {
+    return <TwoFactorCodePage initialToken={state.token} onSuccess={setDone} />;
+  }
+  return <div className="content" />;
+};
 LoginPage.propTypes = {
-  api: PropTypes.any.isRequired,
-  url: PropTypes.string.isRequired,
   provider: PropTypes.string.isRequired,
-  setUser: PropTypes.func.isRequired,
-  destination: PropTypes.shape({
-    expires: PropTypes.string.isRequired,
-    to: PropTypes.object.isRequired,
-  }),
+  url: PropTypes.string.isRequired,
 };
 
-LoginPage.defaultProps = {
-  destination: null,
+const OAuthLoginPage = ({ error, provider, url }) => {
+  if (error === 'access_denied') {
+    return <RedirectToDestination />;
+  }
+  return <LoginPage provider={provider} url={url} />;
+};
+OAuthLoginPage.propTypes = {
+  error: PropTypes.string,
+};
+OAuthLoginPage.defaultProps = {
+  error: null,
 };
 
-const LoginPageContainer = (props) => {
-  const { login } = useCurrentUser();
-  const [destination, setDestination] = useLocalStorage('destinationAfterAuth', null);
-  return <LoginPage setUser={login} destination={destination} setDestination={setDestination} {...props} />;
-};
-
-export const FacebookLoginPage = ({ code, ...props }) => {
+export const FacebookLoginPage = ({ code, error }) => {
   const callbackUrl = `${APP_URL}/login/facebook`;
   const url = `/auth/facebook/${code}?callbackURL=${encodeURIComponent(callbackUrl)}`;
-  return <LoginPageContainer {...props} provider="Facebook" url={url} />;
+  return <OAuthLoginPage error={error} provider="Facebook" url={url} />;
 };
 
-export const GitHubLoginPage = ({ code, ...props }) => {
+export const GitHubLoginPage = ({ code, error }) => {
   const url = `/auth/github/${code}`;
-  return <LoginPageContainer {...props} provider="GitHub" url={url} />;
+  return <OAuthLoginPage error={error} provider="GitHub" url={url} />;
 };
 
-export const EmailTokenLoginPage = ({ token, ...props }) => {
+export const GoogleLoginPage = ({ code, error }) => {
+  const callbackUrl = `${APP_URL}/login/google`;
+  const url = `/auth/google/callback?code=${code}&callbackURL=${encodeURIComponent(callbackUrl)}`;
+  return <OAuthLoginPage error={error} provider="Google" url={url} />;
+};
+
+export const EmailTokenLoginPage = ({ token }) => {
   const url = `/auth/email/${token}`;
-  return <LoginPageContainer {...props} provider="Email" url={url} />;
+  return <LoginPage provider="Email" url={url} />;
 };

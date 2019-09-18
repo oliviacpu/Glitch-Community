@@ -1,197 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet-async';
+import { kebabCase } from 'lodash';
 
-import { Redirect } from 'react-router-dom';
+import { getCollectionLink } from 'Models/collection';
+import { PopoverWithButton } from 'Components/popover';
+import NotFound from 'Components/errors/not-found';
+import DataLoader from 'Components/data-loader';
+import CollectionContainer from 'Components/collection/container';
+import MoreCollectionsContainer from 'Components/collections-list/more-collections';
+import DeleteCollection from 'Components/collection/delete-collection-pop';
+import Layout from 'Components/layout';
+import ReportButton from 'Components/report-abuse-pop';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { useCollectionEditor, userOrTeamIsAuthor } from 'State/collection';
+import useFocusFirst from 'Hooks/use-focus-first';
+import { getCollection } from 'Shared/api-loaders';
 
-import Helmet from 'react-helmet';
-import _ from 'lodash';
-import Layout from '../layout';
-import { isDarkColor, getLink, getOwnerLink } from '../../models/collection';
+const CollectionPageContents = ({ collection: initialCollection }) => {
+  const { currentUser } = useCurrentUser();
+  const [collection, baseFuncs] = useCollectionEditor(initialCollection);
+  useFocusFirst();
 
-import { AnalyticsContext } from '../analytics';
-import { DataLoader } from '../includes/loader';
-import { ProjectsUL } from '../projects-list';
-import NotFound from '../includes/not-found';
+  const currentUserIsAuthor = userOrTeamIsAuthor({ collection, user: currentUser });
 
-import { AuthDescription } from '../includes/description-field';
-import CollectionEditor from '../collection-editor';
-
-import EditCollectionColor from '../includes/edit-collection-color';
-import EditCollectionNameAndUrl from '../includes/edit-collection-name-and-url';
-import AddCollectionProject from '../includes/add-collection-project';
-import ReportButton from '../pop-overs/report-abuse-pop';
-
-import CollectionAvatar from '../includes/collection-avatar';
-import { TeamTile } from '../teams-list';
-import { UserTile } from '../users-list';
-
-import { CurrentUserConsumer } from '../../state/current-user';
-
-import Text from '../../components/text/text';
-
-function syncPageToUrl(collection, url) {
-  history.replaceState(null, null, getLink({ ...collection, url }));
-}
-
-class DeleteCollectionBtn extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      done: false,
-    };
-  }
-
-  render() {
-    if (this.state.done) {
-      return <Redirect to={getOwnerLink(this.props.collection)} />;
-    }
-    return (
-      <button
-        className="button delete-collection button-tertiary"
-        onClick={() => {
-          if (!window.confirm('Are you sure you want to delete your collection?')) {
-            return;
-          }
-          this.props.deleteCollection();
-          this.setState({ done: true });
-        }}
-      >
-        Delete Collection
-      </button>
-    );
-  }
-}
-
-DeleteCollectionBtn.propTypes = {
-  collection: PropTypes.shape({
-    team: PropTypes.object,
-    user: PropTypes.object,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-  deleteCollection: PropTypes.func.isRequired,
-};
-
-const CollectionPageContents = ({
-  api,
-  collection,
-  currentUser,
-  deleteCollection,
-  currentUserIsAuthor,
-  updateNameAndUrl,
-  updateDescription,
-  addProjectToCollection,
-  removeProjectFromCollection,
-  updateColor,
-  updateOrAddNote,
-  addNoteField,
-  hideNote,
-  ...props
-}) => {
-  const collectionHasProjects = !!collection && !!collection.projects;
-  const userIsLoggedIn = currentUser && currentUser.login;
-
+  const funcs = {
+    ...baseFuncs,
+    onNameChange: async (name) => {
+      const url = kebabCase(name);
+      const result = await funcs.updateNameAndUrl({ name, url });
+      window.history.replaceState(null, null, getCollectionLink({ ...collection, url }));
+      return result;
+    },
+  };
   return (
     <>
-      <Helmet>
-        <title>{collection.name}</title>
-      </Helmet>
-      <main className="collection-page">
-        <article className="collection-full projects" style={{ backgroundColor: collection.coverColor }}>
-          <header className={`collection ${isDarkColor(collection.coverColor) ? 'dark' : ''}`}>
-            <div className="collection-image-container">
-              <CollectionAvatar color={collection.coverColor} />
-            </div>
-
-            <EditCollectionNameAndUrl
-              isAuthorized={currentUserIsAuthor}
-              name={collection.name}
-              url={collection.url}
-              update={(data) => updateNameAndUrl(data).then(() => syncPageToUrl(collection, data.url))}
-            />
-
-            {collection.team && <TeamTile team={collection.team} />}
-            {collection.user && <UserTile user={collection.user} />}
-
-            <div className="collection-description">
-              <AuthDescription
-                authorized={currentUserIsAuthor}
-                description={collection.description}
-                update={updateDescription}
-                placeholder="Tell us about your collection"
-              />
-            </div>
-
-            <div className="collection-project-count">
-              <Text>{collection.projects.length} Projects</Text>
-            </div>
-
-            {currentUserIsAuthor && <EditCollectionColor update={updateColor} initialColor={collection.coverColor} />}
-          </header>
-          {!collectionHasProjects && currentUserIsAuthor && (
-            <div className="empty-collection-hint">
-              <img src="https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fpsst-pink.svg?1541086338934" alt="" />
-              <Text>You can add any project, created by any user</Text>
-            </div>
-          )}
-          {!collectionHasProjects && !currentUserIsAuthor && (
-            <div className="empty-collection-hint">No projects to see in this collection just yet.</div>
-          )}
-          {collectionHasProjects && (
-            <>
-              <div className="collection-contents">
-                <div className="collection-project-container-header">
-                  {currentUserIsAuthor && (
-                    <AddCollectionProject
-                      addProjectToCollection={addProjectToCollection}
-                      collection={collection}
-                      api={api}
-                      currentUser={currentUser}
-                    />
-                  )}
-                </div>
-                {currentUserIsAuthor && (
-                  <ProjectsUL
-                    {...props}
-                    projects={collection.projects}
-                    collection={collection}
-                    api={api}
-                    hideNote={hideNote}
-                    projectOptions={{
-                      removeProjectFromCollection,
-                      addProjectToCollection,
-                      updateOrAddNote,
-                      addNoteField,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && userIsLoggedIn && (
-                  <ProjectsUL
-                    {...props}
-                    projects={collection.projects}
-                    collection={collection}
-                    api={api}
-                    projectOptions={{
-                      addProjectToCollection,
-                    }}
-                  />
-                )}
-                {!currentUserIsAuthor && !userIsLoggedIn && (
-                  <ProjectsUL projects={collection.projects} collection={collection} api={api} projectOptions={{}} />
-                )}
-              </div>
-            </>
-          )}
-        </article>
+      <Helmet title={collection.name} />
+      <main id="main">
+        <CollectionContainer collection={collection} showFeaturedProject isAuthorized={currentUserIsAuthor} funcs={funcs} />
         {!currentUserIsAuthor && <ReportButton reportedType="collection" reportedModel={collection} />}
+        {currentUserIsAuthor && !collection.isMyStuff && (
+          <PopoverWithButton buttonProps={{ size: 'small', variant: 'warning', emoji: 'bomb' }} buttonText={`Delete ${collection.name}`}>
+            {() => <DeleteCollection collection={collection} />}
+          </PopoverWithButton>
+        )}
       </main>
-      {currentUserIsAuthor && <DeleteCollectionBtn collection={collection} deleteCollection={deleteCollection} />}
+      <MoreCollectionsContainer collection={collection} />
     </>
   );
 };
 
 CollectionPageContents.propTypes = {
-  addProjectToCollection: PropTypes.func.isRequired,
-  api: PropTypes.any,
   collection: PropTypes.shape({
     avatarUrl: PropTypes.string,
     coverColor: PropTypes.string,
@@ -199,76 +59,20 @@ CollectionPageContents.propTypes = {
     name: PropTypes.string.isRequired,
     projects: PropTypes.array.isRequired,
   }).isRequired,
-  currentUser: PropTypes.object.isRequired,
-  deleteCollection: PropTypes.func.isRequired,
-  currentUserIsAuthor: PropTypes.bool.isRequired,
-  removeProjectFromCollection: PropTypes.func.isRequired,
-  updateOrAddNote: PropTypes.func,
-  addNoteField: PropTypes.func,
-  hideNote: PropTypes.func,
 };
 
-CollectionPageContents.defaultProps = {
-  api: null,
-  updateOrAddNote: null,
-  addNoteField: null,
-  hideNote: null,
-};
-
-async function loadCollection(api, ownerName, collectionName) {
-  try {
-    const { data: collectionId } = await api.get(`collections/${ownerName}/${collectionName}`);
-    const { data: collection } = await api.get(`collections/${collectionId}`);
-
-    // fetch projects in depth
-    if (collection.projects.length) {
-      const { data: projects } = await api.get(`projects/byIds?ids=${collection.projects.map(({ id }) => id).join(',')}`);
-      collection.projects = projects.map((project) => {
-        const collectionProject = _.find(collection.collectionProjects, (p) => p.projectId === project.id);
-        if (collectionProject && collectionProject.annotation && _.trim(collectionProject.annotation)) {
-          project.note = _.trim(collectionProject.annotation);
-          project.isAddingANewNote = true;
-        }
-        project.collectionCoverColor = collection.coverColor;
-        return project;
-      });
-    }
-    return collection;
-  } catch (error) {
-    if (error && error.response && error.response.status === 404) {
-      return null;
-    }
-    throw error;
-  }
-}
-
-const CollectionPage = ({ api, ownerName, name, ...props }) => (
-  <Layout api={api}>
-    <DataLoader get={() => loadCollection(api, ownerName, name)}>
+const CollectionPage = ({ owner, name }) => (
+  <Layout>
+    <DataLoader get={(api, fullUrl) => getCollection(api, fullUrl, 'fullUrl')} args={`${owner}/${name}`}>
       {(collection) =>
         collection ? (
           <AnalyticsContext
-            properties={{ origin: 'collection' }}
+            properties={{ origin: 'collection', collectionId: collection.id }}
             context={{
               groupId: collection.team ? collection.team.id.toString() : '0',
             }}
           >
-            <CurrentUserConsumer>
-              {(currentUser) => (
-                <CollectionEditor api={api} initialCollection={collection}>
-                  {(collectionFromEditor, funcs, currentUserIsAuthor) => (
-                    <CollectionPageContents
-                      collection={collectionFromEditor}
-                      api={api}
-                      currentUser={currentUser}
-                      currentUserIsAuthor={currentUserIsAuthor}
-                      {...funcs}
-                      {...props}
-                    />
-                  )}
-                </CollectionEditor>
-              )}
-            </CurrentUserConsumer>
+            <CollectionPageContents collection={collection} />
           </AnalyticsContext>
         ) : (
           <NotFound name={name} />

@@ -1,79 +1,61 @@
-/* global analytics */
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet-async';
+import { Button, Icon, Loader } from '@fogcreek/shared-components';
 
-import Helmet from 'react-helmet';
-import { getAvatarUrl } from '../../models/project';
-import { getSingleItem, getAllPages, allByKeys } from '../../../shared/api';
+import Heading from 'Components/text/heading';
+import Markdown from 'Components/text/markdown';
+import NotFound from 'Components/errors/not-found';
+import CollectionItem from 'Components/collection/collection-item';
+import ProjectEmbed from 'Components/project/project-embed';
+import ProfileList from 'Components/profile-list';
+import OptimisticTextInput from 'Components/fields/optimistic-text-input';
+import { ProjectProfileContainer } from 'Components/containers/profile';
+import DataLoader from 'Components/data-loader';
+import Row from 'Components/containers/row';
+import RelatedProjects from 'Components/related-projects';
+import Expander from 'Components/containers/expander';
+import { PopoverWithButton, PopoverDialog, PopoverActions, ActionDescription } from 'Components/popover';
+import { ShowButton, EditButton } from 'Components/project/project-actions';
+import AuthDescription from 'Components/fields/auth-description';
+import Layout from 'Components/layout';
+import { PrivateBadge, PrivateToggle } from 'Components/private-badge';
+import BookmarkButton from 'Components/buttons/bookmark-button';
+import { AnalyticsContext, useTrackedFunc } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { useToggleBookmark } from 'State/collection';
+import { useProjectEditor, useProjectMembers } from 'State/project';
+import { getUserLink } from 'Models/user';
+import { userIsProjectMember, userIsProjectAdmin } from 'Models/project';
+import { addBreadcrumb } from 'Utils/sentry';
+import { getAllPages } from 'Shared/api';
+import useFocusFirst from 'Hooks/use-focus-first';
+import useDevToggle from 'State/dev-toggles';
+import { useAPIHandlers } from 'State/api';
+import { useCachedProject } from 'State/api-cache';
 
-import { AnalyticsContext } from '../analytics';
-import TooltipContainer from '../../components/tooltips/tooltip-container';
-import { DataLoader } from '../includes/loader';
-import NotFound from '../includes/not-found';
-import Heading from '../../components/text/heading';
-import Markdown from '../../components/text/markdown';
-import ProjectEditor from '../project-editor';
-import Expander from '../includes/expander';
-import EditableField from '../includes/editable-field';
-import Embed from '../includes/embed';
-import { AuthDescription } from '../includes/description-field';
-import { InfoContainer, ProjectInfoContainer } from '../includes/profile';
-import { ShowButton, EditButton, RemixButton } from '../includes/project-actions';
-import ReportButton from '../pop-overs/report-abuse-pop';
-import AddProjectToCollection from '../includes/add-project-to-collection';
-import TeamsList from '../teams-list';
-import UsersList from '../users-list';
-import RelatedProjects from '../includes/related-projects';
-import IncludedInCollections from '../includes/included-in-collections';
-import { addBreadcrumb } from '../../utils/sentry';
-
-import { CurrentUserConsumer } from '../../state/current-user';
-
-import Layout from '../layout';
-
-function trackRemix(id, domain) {
-  analytics.track('Click Remix', {
-    origin: 'project page',
-    baseProjectId: id,
-    baseDomain: domain,
-  });
-}
+import styles from './project.styl';
+import { emoji } from '../../components/global.styl';
 
 function syncPageToDomain(domain) {
   history.replaceState(null, null, `/~${domain}`);
 }
 
-const PrivateTooltip = 'Only members can view code';
-const PublicTooltip = 'Visible to everyone';
+const filteredCollections = (collections) => collections.filter((c) => (c.user || c.team) && !c.isMyStuff);
 
-const PrivateBadge = () => (
-  <TooltipContainer
-    type="info"
-    id="private-project-badge-tooltip"
-    tooltip={PrivateTooltip}
-    target={<span className="project-badge private-project-badge" />}
-  />
+const IncludedInCollections = ({ projectId }) => (
+  <DataLoader get={(api) => getAllPages(api, `/v1/projects/by/id/collections?id=${projectId}&limit=100`)} renderLoader={() => null}>
+    {(collections) =>
+      filteredCollections(collections).length > 0 && (
+        <>
+          <Heading tagName="h2">Included in Collections</Heading>
+          <Row items={filteredCollections(collections)}>{(collection) => <CollectionItem collection={collection} showCurator />}</Row>
+        </>
+      )
+    }
+  </DataLoader>
 );
-
-const PrivateToggle = ({ isPrivate, setPrivate }) => {
-  const tooltip = isPrivate ? PrivateTooltip : PublicTooltip;
-  const classBase = 'button-tertiary button-on-secondary-background project-badge';
-  const className = isPrivate ? 'private-project-badge' : 'public-project-badge';
-
-  return (
-    <TooltipContainer
-      type="action"
-      id="toggle-private-button-tooltip"
-      target={<button onClick={() => setPrivate(!isPrivate)} className={`${classBase} ${className}`} type="button" />}
-      tooltip={tooltip}
-    />
-  );
-};
-PrivateToggle.propTypes = {
-  isPrivate: PropTypes.bool.isRequired,
-  setPrivate: PropTypes.func.isRequired,
-};
 
 const ReadmeError = (error) =>
   error && error.response && error.response.status === 404 ? (
@@ -83,96 +65,192 @@ const ReadmeError = (error) =>
   ) : (
     <>We couldn{"'"}t load the readme. Try refreshing?</>
   );
-const ReadmeLoader = ({ api, domain }) => (
-  <DataLoader get={() => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
-    {({ data }) => (
-      <Expander height={250}>
-        <Markdown>{data.toString()}</Markdown>
-      </Expander>
-    )}
+const ReadmeLoader = withRouter(({ domain, location }) => (
+  <DataLoader get={(api) => api.get(`projects/${domain}/readme`)} renderError={ReadmeError}>
+    {({ data }) =>
+      location.hash ? (
+        <Markdown linkifyHeadings>{data.toString()}</Markdown>
+      ) : (
+        <Expander height={location.hash ? Infinity : 250}>
+          <Markdown linkifyHeadings>{data.toString()}</Markdown>
+        </Expander>
+      )
+    }
   </DataLoader>
-);
+));
+
 ReadmeLoader.propTypes = {
-  api: PropTypes.any,
   domain: PropTypes.string.isRequired,
 };
-ReadmeLoader.defaultProps = {
-  api: null,
+
+function DeleteProjectPopover({ projectDomain, deleteProject }) {
+  const { currentUser } = useCurrentUser();
+  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (done) {
+      window.location = getUserLink(currentUser);
+    }
+  }, [done, currentUser]);
+
+  return (
+    <section>
+      <PopoverWithButton buttonProps={{ size: 'small', variant: 'warning', emoji: 'bomb' }} buttonText="Delete Project">
+        {({ togglePopover }) => (
+          <PopoverDialog align="left" wide>
+            <PopoverActions>
+              <ActionDescription>You can always undelete a project from your profile page.</ActionDescription>
+            </PopoverActions>
+            <PopoverActions type="dangerZone">
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => {
+                    setLoading(true);
+                    deleteProject().then(() => {
+                      togglePopover();
+                      setDone(true);
+                    });
+                  }}
+                >
+                  Delete {projectDomain} <Icon className={emoji} icon="bomb" />
+                </Button>
+              )}
+            </PopoverActions>
+          </PopoverDialog>
+        )}
+      </PopoverWithButton>
+    </section>
+  );
+}
+
+DeleteProjectPopover.propTypes = {
+  deleteProject: PropTypes.func.isRequired,
 };
 
-const ProjectPage = ({ project, addProjectToCollection, api, currentUser, isAuthorized, updateDomain, updateDescription, updatePrivate }) => {
-  const { domain, users, teams } = project;
+const ProjectPage = ({ project: initialProject }) => {
+  const myStuffEnabled = useDevToggle('My Stuff');
+  const [project, { updateDomain, updateDescription, updatePrivate, deleteProject, uploadAvatar }] = useProjectEditor(initialProject);
+  useFocusFirst();
+  const { currentUser } = useCurrentUser();
+  const [hasBookmarked, toggleBookmark, setHasBookmarked] = useToggleBookmark(project);
+  const isAnonymousUser = !currentUser.login;
+  const { value: members } = useProjectMembers(project.id);
+  const isAuthorized = userIsProjectMember({ members, user: currentUser });
+  const isAdmin = userIsProjectAdmin({ project, user: currentUser });
+  const { domain, users, teams, suspendedReason } = project;
+  const updateDomainAndSync = (newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain));
+
+  const { addProjectToCollection } = useAPIHandlers();
+
+  const bookmarkAction = useTrackedFunc(toggleBookmark, `Project ${hasBookmarked ? 'removed from my stuff' : 'added to my stuff'}`, (inherited) => ({
+    ...inherited,
+    projectName: project.domain,
+    baseProjectId: project.baseId,
+    userId: currentUser.id,
+  }));
+
+  const addProjectToCollectionAndSetHasBookmarked = (projectToAdd, collection) => {
+    if (collection.isMyStuff) {
+      setHasBookmarked(true);
+    }
+    return addProjectToCollection({ project: projectToAdd, collection });
+  };
+
   return (
-    <main className="project-page">
+    <main id="main">
+      <Helmet title={project.domain} />
       <section id="info">
-        <InfoContainer>
-          <ProjectInfoContainer style={{ backgroundImage: `url('${getAvatarUrl(project.id)}')` }}>
-            <Heading tagName="h1">
-              {isAuthorized ? (
-                <EditableField
-                  value={domain}
-                  placeholder="Name your project"
-                  update={(newDomain) => updateDomain(newDomain).then(() => syncPageToDomain(newDomain))}
-                  suffix={<PrivateToggle isPrivate={project.private} isMember={isAuthorized} setPrivate={updatePrivate} />}
-                />
-              ) : (
-                <>
-                  {domain} {project.private && <PrivateBadge />}
-                </>
+        <ProjectProfileContainer
+          currentUser={currentUser}
+          project={project}
+          isAuthorized={isAuthorized}
+          avatarActions={{
+            'Upload Avatar': isAuthorized ? uploadAvatar : null,
+          }}
+        >
+          {isAuthorized ? (
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">
+                  <OptimisticTextInput
+                    labelText="Project Domain"
+                    value={project.domain}
+                    onChange={updateDomainAndSync}
+                    placeholder="Name your project"
+                  />
+                </Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                  </div>
+                )}
+              </div>
+              <div className={styles.privacyToggle}>
+                <PrivateToggle isPrivate={!!project.private} setPrivate={updatePrivate} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.headingWrap}>
+                <Heading tagName="h1">{!currentUser.isSupport && suspendedReason ? 'suspended project' : domain}</Heading>
+                {myStuffEnabled && !isAnonymousUser && (
+                  <div className={styles.bookmarkButton}>
+                    <BookmarkButton action={bookmarkAction} initialIsBookmarked={hasBookmarked} projectName={project.domain} />
+                  </div>
+                )}
+              </div>
+              {project.private && (
+                <div className={styles.privacyToggle}>
+                  <PrivateBadge />
+                </div>
               )}
-            </Heading>
-            <div className="users-information">
-              <UsersList users={users} />
-              {!!teams.length && <TeamsList teams={teams} />}
+            </>
+          )}
+          {users.length + teams.length > 0 && (
+            <div>
+              <ProfileList hasLinks teams={teams} users={users} layout="block" />
             </div>
-            <AuthDescription
-              authorized={isAuthorized}
-              description={project.description}
-              update={updateDescription}
-              placeholder="Tell us about your app"
-            />
-            <p className="buttons">
-              <ShowButton name={domain} />
-              <EditButton name={domain} isMember={isAuthorized} />
-            </p>
-          </ProjectInfoContainer>
-        </InfoContainer>
-      </section>
-      <section id="embed">
-        <Embed domain={domain} />
-        <div className="buttons space-between">
-          <ReportButton reportedType="project" reportedModel={project} />
+          )}
+          <AuthDescription
+            authorized={isAuthorized}
+            description={!currentUser.isSupport && !isAuthorized && suspendedReason ? 'suspended project' : project.description}
+            update={updateDescription}
+            placeholder="Tell us about your app"
+          />
           <div>
-            {currentUser.login && (
-              <AddProjectToCollection
-                className="button-small margin"
-                api={api}
-                currentUser={currentUser}
-                project={project}
-                fromProject
-                addProjectToCollection={addProjectToCollection}
-              />
-            )}
-            <RemixButton className="button-small margin" name={domain} isMember={isAuthorized} onClick={() => trackRemix(project.id, domain)} />
+            <span className={styles.profileButton}>
+              <ShowButton name={domain} />
+            </span>
+            <span className={styles.profileButton}>
+              <EditButton name={domain} isMember={isAuthorized} />
+            </span>
           </div>
-        </div>
+        </ProjectProfileContainer>
       </section>
+      <div className={styles.projectEmbedWrap}>
+        <ProjectEmbed project={project} addProjectToCollection={addProjectToCollectionAndSetHasBookmarked} />
+      </div>
       <section id="readme">
-        <ReadmeLoader api={api} domain={domain} />
+        <ReadmeLoader domain={domain} />
       </section>
+
+      {isAdmin && <DeleteProjectPopover projectDomain={project.domain} currentUser={currentUser} deleteProject={deleteProject} />}
+
       <section id="included-in-collections">
-        <IncludedInCollections api={api} projectId={project.id} />
+        <IncludedInCollections projectId={project.id} />
       </section>
       <section id="related">
-        <RelatedProjects ignoreProjectId={project.id} {...{ api, teams, users }} />
+        <RelatedProjects project={project} />
       </section>
     </main>
   );
 };
 ProjectPage.propTypes = {
-  api: PropTypes.any,
-  currentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -183,61 +261,35 @@ ProjectPage.propTypes = {
   }).isRequired,
 };
 
-ProjectPage.defaultProps = {
-  api: null,
-};
-
-async function getProject(api, domain) {
-  const data = await allByKeys({
-    project: getSingleItem(api, `v1/projects/by/domain?domain=${domain}`, domain),
-    teams: getAllPages(api, `v1/projects/by/domain/teams?domain=${domain}`),
-    users: getAllPages(api, `v1/projects/by/domain/users?domain=${domain}`),
-  });
-
-  const { project, ...rest } = data;
+async function addProjectBreadcrumb(projectWithMembers) {
+  const { users, teams, ...project } = projectWithMembers;
   addBreadcrumb({
     level: 'info',
     message: `project: ${JSON.stringify(project)}`,
   });
-  return { ...project, ...rest };
+  return projectWithMembers;
 }
 
-const ProjectPageLoader = ({ domain, api, currentUser, ...props }) => (
-  <DataLoader get={() => getProject(api, domain)} renderError={() => <NotFound name={domain} />}>
-    {(project) =>
-      project ? (
-        <ProjectEditor api={api} initialProject={project}>
-          {(currentProject, funcs, userIsMember) => (
-            <>
-              <Helmet>
-                <title>{currentProject.domain}</title>
-              </Helmet>
-              <ProjectPage api={api} project={currentProject} {...funcs} isAuthorized={userIsMember} currentUser={currentUser} {...props} />
-            </>
-          )}
-        </ProjectEditor>
-      ) : (
-        <NotFound name={domain} />
-      )
-    }
-  </DataLoader>
-);
-ProjectPageLoader.propTypes = {
-  api: PropTypes.func,
-  domain: PropTypes.string.isRequired,
-  currentUser: PropTypes.object.isRequired,
+const ProjectPageContainer = ({ name: domain }) => {
+  const { status, value: project } = useCachedProject(domain);
+  useEffect(() => {
+    if (project) addProjectBreadcrumb(project);
+  }, [project]);
+  return (
+    <Layout>
+      <AnalyticsContext properties={{ origin: 'project' }}>
+        {project ? (
+          <ProjectPage project={project} />
+        ) : (
+          <>
+            {status === 'ready' && <NotFound name={domain} />}
+            {status === 'loading' && <Loader style={{ width: '25px' }} />}
+            {status === 'error' && <NotFound name={domain} />}
+          </>
+        )}
+      </AnalyticsContext>
+    </Layout>
+  );
 };
-
-ProjectPageLoader.defaultProps = {
-  api: null,
-};
-
-const ProjectPageContainer = ({ api, name }) => (
-  <Layout api={api}>
-    <AnalyticsContext properties={{ origin: 'project' }}>
-      <CurrentUserConsumer>{(currentUser) => <ProjectPageLoader api={api} domain={name} currentUser={currentUser} />}</CurrentUserConsumer>
-    </AnalyticsContext>
-  </Layout>
-);
 
 export default ProjectPageContainer;

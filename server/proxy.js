@@ -32,22 +32,21 @@ module.exports = function(app) {
       preserveHostHdr: false, // glitch routes based on this, so we have to reset it
       https: true,
       proxyReqPathResolver: (req) => {
-        const path = urlJoin('/', pathOnTarget, req.path);
-        console.log('Proxied:', urlJoin(routeWithLeadingSlash, req.path));
-        return path;
+        return urlJoin('/', pathOnTarget, req.path);
       },
+      timeout: 5000,
     };
 
     const genericProxy = proxy(target, proxyConfig);
 
     const sitemapProxy = proxy(target, {
+      ...proxyConfig,
       userResDecorator: (res, data) => {
         // do gross stuff to rewrite urls
         // this is dangerous to do on a full page, but the sitemap is simple
         const regexp = new RegExp(escapeRegExp(target), 'g');
         return data.toString().replace(regexp, new URL(APP_URL).hostname);
       },
-      ...proxyConfig,
     });
 
     // Do the actual proxy
@@ -76,6 +75,15 @@ module.exports = function(app) {
   ['faq', 'forplatforms', 'email-sales'].forEach((route) => proxyGlitch(route, 'about.glitch.me', route));
 
   proxyGlitch('teams', 'teams.glitch.me');
+
+  // proxy projects, users, teams, collections sitemaps
+  proxyGlitch('sitemaps', 'sitemaps.glitch.me');
+
+  // proxy home CMS (without rewriting paths)
+  app.use('/index/edit', proxy('community-home-editor.glitch.me', { timeout: 5000 }));
+
+  // proxy home CMS (without rewriting paths)
+  app.use('/pupdates/edit', proxy('pupdates-editor.glitch.me', { timeout: 5000 }));
 
   return routes;
 };

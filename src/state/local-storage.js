@@ -1,7 +1,7 @@
 import React from 'react';
-import { captureException } from '../utils/sentry';
+import { captureException } from 'Utils/sentry';
 
-const getStorage = () => {
+export const getStorage = () => {
   try {
     const storage = window.localStorage;
     storage.setItem('test', 'test');
@@ -9,13 +9,21 @@ const getStorage = () => {
     storage.removeItem('test');
     return storage;
   } catch (error) {
-    console.warn('Local storage not available, using memory store');
+    console.warn('Local storage not available');
+  }
+  try {
+    const storage = window.sessionStorage;
+    storage.setItem('test', 'test');
+    storage.getItem('test');
+    storage.removeItem('test');
+    return storage;
+  } catch (error) {
+    console.warn('Session storage not available');
   }
   return null;
 };
-const storage = getStorage();
 
-const readFromStorage = (name) => {
+export const readFromStorage = (storage, name) => {
   if (storage) {
     try {
       const raw = storage.getItem(name);
@@ -29,7 +37,7 @@ const readFromStorage = (name) => {
   return undefined;
 };
 
-const writeToStorage = (name, value) => {
+export const writeToStorage = (storage, name, value) => {
   if (storage) {
     try {
       if (value !== undefined) {
@@ -43,28 +51,68 @@ const writeToStorage = (name, value) => {
   }
 };
 
-const useLocalStorage = (name, defaultValue) => {
-  const [rawValue, setValueInMemory] = React.useState(() => readFromStorage(name));
+const Context = React.createContext([() => undefined, () => {}]);
+
+const LocalStorageProvider = ({ children }) => {
+  const storageRef = React.useRef(null);
+  const [cache, setCache] = React.useState(new Map());
+  const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    const reload = (event) => {
-      if (event.storageArea === storage && event.key === name) {
-        setValueInMemory(readFromStorage(name));
+    storageRef.current = getStorage();
+    setCache(new Map());
+    setReady(true);
+
+    const onStorage = (event) => {
+      if (event.storageArea === storageRef.current) {
+        if (event.key) {
+          setCache((oldCache) => {
+            const newCache = new Map(oldCache);
+            newCache.delete(event.key);
+            return newCache;
+          });
+        } else {
+          setCache(new Map());
+        }
       }
     };
-    window.addEventListener('storage', reload, { passive: true });
-    return () => {
-      window.removeEventListener('storage', reload, { passive: true });
-    };
-  }, [name]);
 
-  const value = rawValue !== undefined ? rawValue : defaultValue;
-  const setValue = (newValue) => {
-    setValueInMemory(newValue);
-    writeToStorage(name, newValue);
+    window.addEventListener('storage', onStorage, { passive: true });
+    return () => {
+      window.removeEventListener('storage', onStorage, { passive: true });
+    };
+  }, []);
+
+  const getValue = (name) => {
+    if (!cache.has(name)) {
+      const value = readFromStorage(storageRef.current, name);
+      setCache((oldCache) => new Map([...oldCache, [name, value]]));
+      return value;
+    }
+    return cache.get(name);
   };
 
-  return [value, setValue];
+  const setValue = (name, value) => {
+    writeToStorage(storageRef.current, name, value);
+    setCache((oldCache) => new Map([...oldCache, [name, value]]));
+  };
+
+  return (
+    <Context.Provider value={[getValue, setValue, ready]}>
+      {children}
+    </Context.Provider>
+  );
+};
+
+const useLocalStorage = (name, defaultValue) => {
+  const [getRawValue, setRawValue, ready] = React.useContext(Context);
+  const rawValue = getRawValue(name);
+
+  const value = rawValue !== undefined ? rawValue : defaultValue;
+  const setValue = (newValue) => setRawValue(name, newValue);
+
+  return [value, setValue, ready];
 };
 
 export default useLocalStorage;
+export { LocalStorageProvider };

@@ -18,9 +18,10 @@ Olivia changed this to test something
 
 Changed it again
 
-There will be at least one more change after this 
+There will be at least one more change after this
 
 - the backend app starts at `server.js`
+- the backend app starts at `server/server.js`
 - `src/client.js` is compiled and served as /client-bundle.js
 - components and their styles are in `src/components/` :-)
 - view templates are powered by the .jsx files in `src/presenters/`
@@ -30,14 +31,25 @@ There will be at least one more change after this
 
 application models -> presenter -> DOM
 
+## Script Overview
+
+The following commands are available for use during development:
+
+| Command           | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
+| `npm start`       | Launch the development server                                            |
+| `npm run lint`    | Lint the codebase using ESLint                                           |
+| `npm run cy:run`  | Run Cypress-based integration tests in the console                       |
+| `npm run cy:open` | Launch the Cypress GUI for running integration tests                     |
+| `npm run cy:ci`   | Auto-start a temporary dev server and run integration tests against it   |
+| `npm run build`   | Perform a production build of the site and store the results in `build/` |
+
 ## Built with
 
 - [ES6](http://es6-features.org/)
 - [React.js](https://reactjs.org/)
 - [Stylus](http://stylus-lang.com/)
 - [Node.js](https://nodejs.org/dist/latest-v8.x/docs/api/)
-
-
 
 ```
   ___     ___      ___

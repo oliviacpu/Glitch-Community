@@ -1,0 +1,52 @@
+.header
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  position: relative
+
+.logoWrap
+  flex: 0 0 70px
+  margin-right: 10px
+
+.logo
+  width: 100%
+
+.headerActions
+  flex: 1 1 auto
+
+.searchWrap
+  position: relative
+  width: 100%
+  max-width: 250px
+  margin-left: auto
+  
+.buttons
+  padding: 0
+  margin: 8px 0 0
+  list-style-type: none
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  justify-content: flex-end
+  
+.buttonWrap
+  margin-left: 10px 
+
+.visibleOnFocus
+  position: absolute
+  left: -1000px
+  top: -1000px
+  width: 1px
+  height: 1px
+  text-align: left 
+  overflow: hidden
+  z-index: 1
+
+.visibleOnFocus:focus, .visibleOnFocus:active
+  position: absolute 
+  left: 0
+  top: 0
+  width: auto
+  height: auto
+  overflow: visible
+  margin: 8px

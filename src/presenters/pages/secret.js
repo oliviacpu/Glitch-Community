@@ -1,15 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Button, VisuallyHidden } from '@fogcreek/shared-components';
 
-import Helmet from 'react-helmet';
-import { useDevToggles } from '../includes/dev-toggles';
+import Heading from 'Components/text/heading';
+import { useDevToggles } from 'State/dev-toggles';
+import useTest, { useTestAssignments, tests } from 'State/ab-tests';
 
-class SecretEffectsOnMount extends React.Component {
-  componentDidMount() {
-    // try to play the secret sound:
+import styles from './secret.styl';
+
+function useZeldaMusicalCue() {
+  useEffect(() => {
     const audio = new Audio('https://cdn.glitch.com/a5a035b7-e3db-4b07-910a-b5c3ca9d8e86%2Fsecret.mp3?1535396729988');
     const maybePromise = audio.play();
-
     // Chrome returns a promise which we must handle:
     if (maybePromise) {
       maybePromise
@@ -22,19 +24,36 @@ class SecretEffectsOnMount extends React.Component {
           // s'fine, let it.
         });
     }
-  }
-
-  render() {
-    return null;
-  }
+  }, []);
 }
 
-const SecretPageContainer = () => {
-  const { enabledToggles, toggleData, setEnabledToggles } = useDevToggles();
-  return <Secret {...{ enabledToggles, toggleData, setEnabledToggles }} />;
+const ABTests = () => {
+  const text = useTest('Just-A-Test');
+  const [assignments, reassign] = useTestAssignments();
+  return (
+    <section className={styles.abTestSection}>
+      Your A/B test groups ({text}):
+      <ul className={styles.abTests}>
+        {Object.keys(assignments).map((test) => (
+          <li key={test} className={styles.abTest}>
+            <label>
+              {test}:&nbsp;
+              <select value={assignments[test]} onChange={(event) => reassign(test, event.target.value)}>
+                {Object.keys(tests[test]).map((group) => <option value={group} key={group}>{group}</option>)}
+              </select>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 };
 
-const Secret = ({ enabledToggles, toggleData, setEnabledToggles }) => {
+const Secret = () => {
+  const { enabledToggles, toggleData, setEnabledToggles } = useDevToggles();
+
+  useZeldaMusicalCue();
+
   const isEnabled = (toggleName) => enabledToggles && enabledToggles.includes(toggleName);
 
   const toggleTheToggle = (name) => {
@@ -48,29 +67,21 @@ const Secret = ({ enabledToggles, toggleData, setEnabledToggles }) => {
   };
 
   return (
-    <section className="secretPage">
-      <div className="filler" />
-      <Helmet>
-        <title>Glitch - It's a secret to everybody.</title>
-      </Helmet>
-      <SecretEffectsOnMount />
-      <ul>
+    <main className={styles.secretPage}>
+      <Helmet title="Glitch - It's a secret to everybody." />
+      <VisuallyHidden as={Heading} tagName="h1">It's a secret to everybody</VisuallyHidden>
+      <ul className={styles.toggles}>
         {toggleData.map(({ name, description }) => (
-          <li key={name}>
-            <button title={description} onClick={() => toggleTheToggle(name)} className={isEnabled(name) ? 'lit' : 'dark'}>
+          <li key={name} className={isEnabled(name) ? styles.lit : ''}>
+            <Button size="small" title={description} ariaPressed={isEnabled(name) ? 'true' : 'false'} onClick={() => toggleTheToggle(name)}>
               {name}
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
-    </section>
+      <ABTests />
+    </main>
   );
 };
 
-Secret.propTypes = {
-  toggleData: PropTypes.array.isRequired,
-  enabledToggles: PropTypes.array.isRequired,
-  setEnabledToggles: PropTypes.func.isRequired,
-};
-
-export default SecretPageContainer;
+export default Secret;

@@ -1,17 +1,11 @@
-function webpackBackgroundProcess() {
-  // Launch webpack in a separate process because it blocks a bit
-  const { spawn } = require('child_process');
-  const env = { ...process.env, NODE_OPTIONS: '--max-old-space-size=384' };
-  spawn('webpack', ['--watch', '--info-verbosity', 'verbose'], { env, stdio: 'inherit' });
-}
-
 function webpackExpressMiddleware() {
   const webpack = require('webpack');
   const webpackConfig = require('../webpack.config.js');
   const compiler = webpack(webpackConfig);
 
   const webpackMiddleware = require('webpack-dev-middleware');
-  const middleware = webpackMiddleware(compiler, { writeToDisk: true });
+  const stats = { children: false };
+  const middleware = webpackMiddleware(compiler, { stats, writeToDisk: true });
 
   let ready = false;
   middleware.waitUntilValid(() => {
@@ -27,9 +21,17 @@ function webpackExpressMiddleware() {
 }
 
 module.exports = function(app) {
-  if (process.env.NODE_ENV === 'production') {
-    webpackBackgroundProcess();
-  } else {
-    app.use(webpackExpressMiddleware());
+  switch (process.env.DEPLOY_ENV) {
+    case 'production':
+      // Production here is glitch.com/~community!
+      // webpack --watch is running via prestart
+      break;
+    case 'ci':
+      // Do not webpack, we have already built
+      break;
+    default:
+      // Use webpack middleware for dev/staging/etc.
+      app.use(webpackExpressMiddleware());
+      break;
   }
 };

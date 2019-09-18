@@ -26,7 +26,7 @@ app.use(
     format: winston.format.combine(winston.format.json()),
     meta: false, // logs meta data about the request if true
     msg: (req, res) => {
-      return `${req.requestTime}: HTTP ${req.method} ${req.url} ${res.statusCode} / Response-Time: ${res.responseTime}ms`;
+      return `${req.requestTime}: ${req.ip} HTTP ${req.method} ${req.url} ${res.statusCode} / Response-Time: ${res.responseTime}ms`;
     },
     colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).,
     ignoreRoute: (req) => {

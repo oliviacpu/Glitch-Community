@@ -5,72 +5,61 @@
     <title><%= title %></title>
     <meta name="description" content="<%= description %>">
     <script>
-      !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="4.0.0";
-      analytics.load("ZE6VsqXhz5izMM2cqRrVEDIrJWUKntoX");
-      }}();
+      var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";}
     </script> 
     <link id="favicon" rel="icon" href="https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Ffavicon.ico" type="image/x-icon">
     <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="https://cdn.gomix.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fapple-touch-icon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- facebook open graph tags -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://glitch.com">
-    <meta property="og:title" content="<%= title %>">
+    <meta property="og:url" content="<%= canonicalUrl %>">
+    <meta property="og:title" content="<%= socialTitle || title %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:image" content="<%= image %>">
     <!-- twitter card tags (stacks with og: tags) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@glitch">
-    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:title" content="<%= socialTitle || title %>">
     <meta name="twitter:description" content="<%= description %>">
     <meta name="twitter:image" content="<%= image %>">
-    <meta name="twitter:url" content="https://glitch.com">
-    <!-- google webmaster ownership tag -->
-    <meta name="google-site-verification" content="zvQWS96z0h_KgPML2DV4_nIFA2ksuPF_L4v01vuiB-U" />
-
+    <meta name="twitter:url" content="<%= canonicalUrl %>">
+    
     <link rel="stylesheet" href="https://cloud.webtype.com/css/3a8e55c6-b1f3-4659-99eb-125ae72bd084.css">
     <% for (let i = 0; i < styles.length; ++i) { %>
     <link rel="stylesheet" type="text/css" href="<%= styles[i] %>">
     <% } %>
-    <noscript><style>#fallback, #fallback-noscript { display: inline-block !important; } #fallback-img {display: block !important}</style></noscript>
+    
+    <!-- styles from styled-components -->
+    <%- styleTags %>
+    
+    <% if (!rendered) { %>
+    <noscript><style>#fallback, #fallback-noscript { display: inline-block !important } #fallback-img { display: block !important }</style></noscript>
+    <% } %>
   </head>
   <body>
     <script>
-      var CONSTANTS = <%- JSON.stringify(CONSTANTS) %>;
-      var _env;
-      if (document.location.hostname.indexOf('glitch.development') >= 0) {
-        _env = "development";
-      } else if (document.location.hostname.indexOf('staging.glitch.com') >= 0) {
-        _env = "staging";
-      } else {
-        _env = "production";
-      }
-      var API_URL = CONSTANTS[_env].API_URL;
-      var APP_URL = CONSTANTS[_env].APP_URL;
-      var CDN_URL = CONSTANTS[_env].CDN_URL;
-      var EDITOR_URL = CONSTANTS[_env].EDITOR_URL;
-      var FACEBOOK_CLIENT_ID = CONSTANTS[_env].FACEBOOK_CLIENT_ID;
-      var GITHUB_CLIENT_ID = CONSTANTS[_env].GITHUB_CLIENT_ID;
-      var PROJECTS_DOMAIN = CONSTANTS[_env].PROJECTS_DOMAIN;
+      var RUNNING_ON = '<%= RUNNING_ON %>';
       var ENVIRONMENT = '<%= ENVIRONMENT %>';
-      var EXTERNAL_ROUTES = <%- EXTERNAL_ROUTES %>;
+      var EXTERNAL_ROUTES = <%- JSON.stringify(EXTERNAL_ROUTES) %>;
       var PROJECT_DOMAIN = '<%= PROJECT_DOMAIN %>';
-      var ZINE_POSTS = <%- ZINE_POSTS %>;
+      var ZINE_POSTS = <%- JSON.stringify(ZINE_POSTS) %>;
+      var HOME_CONTENT = <%- JSON.stringify(HOME_CONTENT) %>;
+      var API_CACHE = <%- JSON.stringify(API_CACHE) %>;
+      var SSR_SIGNED_IN = <%- SSR_SIGNED_IN %>;
+      var AB_TESTS = <%- JSON.stringify(AB_TESTS) %>;
       var BUILD_COMPLETE = <%- BUILD_COMPLETE %>;
       var BUILD_TIMESTAMP = '<%= BUILD_TIMESTAMP %>';
     </script>
-
     <div id="fallback" style="display: none">
       <div class="content">
         <header>
           <a href="/">
-            <img class="logo" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" width="70px" alt="Glitch">
+            <img class="logo" src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg" width="70" alt="Glitch">
           </a>
         </header>
           <main>
-            <img id="fallback-img" style="display: none" src="https://cdn.glitch.com/dbd73211-c667-4832-9229-c27f4cb66f5c%2Fmagikarp-illust.svg?1542746418939"/>
+            <img id="fallback-img" alt="" style="display: none" src="https://cdn.glitch.com/dbd73211-c667-4832-9229-c27f4cb66f5c%2Fmagikarp-illust.svg?1542746418939"/>
             <div class="error-msg" id="fallback-noscript" style="display: none">
               <h1>The web browser that you're using does not support Javascript</h1>
               <p>Since Glitch requires Javascript to run, please try using Glitch in a different web browser.</p>
@@ -79,21 +68,56 @@
               <h1>The site isn&apos;t quite ready yet</h1>
               <p>Try refreshing in a few moments.</p>
             </div>
+            <div class="error-msg" id="fallback-ie" style="display: none">
+              <h1>Glitch doesn't support Internet Explorer yet</h1>
+              <p>Please upgrade to a web browser that can support Glitch features. Please use 
+                <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a>, <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.
+              </p>
+            </div>
+            <div class="error-msg" id="fallback-translate" style="display: none">
+              <h1>Unfortunately, Glitch does not support Google translate at this time</h1>
+              <p>redirecting to glitch.com in English...</p>
+            </div>
           </main>
       </div>
     </div>
+
+    <div id="react-root"><%- rendered %></div>
 
     <% for (let i = 0; i < scripts.length; ++i) { %>
     <script src="<%= scripts[i] %>"></script>
     <% } %>
     <script>
-        if (window.bootstrap) {
-          window.bootstrap()
-        } else if (!BUILD_COMPLETE) {
-          document.getElementById('fallback').removeAttribute('style');
-          document.getElementById('fallback-img').removeAttribute('style');
-          document.getElementById('fallback-notbuilt').removeAttribute('style');
+      var container = document.getElementById('react-root');
+      function showFallback(name) {
+        document.getElementById('fallback').removeAttribute('style');
+        document.getElementById('fallback-img').removeAttribute('style');
+        document.getElementById('fallback-' + name).removeAttribute('style');
+        container.style.display = 'none';
+      }
+      var isIe = /Trident\/[7]{1}/i.test(navigator.userAgent);
+      var isCodeRunningInsideGoogleTranslateIframe = window.location.origin === "https://translate.googleusercontent.com";
+      if (isIe) {
+        // ie doesn't support our css
+        showFallback('ie');
+      } else if (isCodeRunningInsideGoogleTranslateIframe) {
+        // only translate server rendered pages
+        if (!container.hasChildNodes()) {
+          showFallback('translate');
+          setTimeout(function() {
+            window.location.href = "https://glitch.com";      
+          }, 3000);
         }
+      } else if (window.bootstrap) {
+        window.bootstrap(container);
+      } else if (!BUILD_COMPLETE) {
+        // we can't show the server rendered page if the css is still building
+        showFallback('notbuilt');
+      } else {
+        // js failed to parse, odds are the css would be broken too
+        showFallback('noscript');
+      }
+      analytics.load("ZE6VsqXhz5izMM2cqRrVEDIrJWUKntoX");
     </script>
   </body>
 </html>

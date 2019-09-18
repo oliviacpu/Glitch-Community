@@ -1,28 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { orderBy, partition } from 'lodash';
-import { getAvatarStyle, getLink, getProfileStyle } from '../../models/user';
+import { Icon } from '@fogcreek/shared-components';
 
-import { AnalyticsContext } from '../analytics';
-import { CurrentUserConsumer } from '../../state/current-user';
-import { AuthDescription } from '../includes/description-field';
-import EditableField from '../includes/editable-field';
-import UserEditor from '../user-editor';
-import { Thanks } from '../includes/thanks';
+import Heading from 'Components/text/heading';
+import FeaturedProject from 'Components/project/featured-project';
+import Thanks from 'Components/thanks';
+import UserNameInput from 'Components/fields/user-name-input';
+import UserLoginInput from 'Components/fields/user-login-input';
+import ProjectsList from 'Components/containers/projects-list';
+import { UserProfileContainer } from 'Components/containers/profile';
+import OnboardingBanner from 'Components/onboarding-banner';
+import CollectionsList from 'Components/collections-list';
+import DeletedProjects from 'Components/deleted-projects';
+import ReportButton from 'Components/report-abuse-pop';
+import AuthDescription from 'Components/fields/auth-description';
+import { getUserLink } from 'Models/user';
+import { AnalyticsContext } from 'State/segment-analytics';
+import { useCurrentUser } from 'State/current-user';
+import { useUserEditor } from 'State/user';
+import useFocusFirst from 'Hooks/use-focus-first';
 
-import DeletedProjects from '../deleted-projects';
-import EntityPageFeaturedProject from '../entity-page-featured-project';
-import EntityPageProjects from '../entity-page-projects';
-import CollectionsList from '../collections-list';
-import { ProfileContainer, ImageButtons } from '../includes/profile';
-import ProjectsLoader from '../projects-loader';
-import ReportButton from '../pop-overs/report-abuse-pop';
-import Heading from '../../components/text/heading';
+import styles from './user.styl';
+import { emoji } from '../../components/global.styl';
 
 function syncPageToLogin(login) {
-  history.replaceState(null, null, getLink({ login }));
+  history.replaceState(null, null, getUserLink({ login }));
 }
 
 const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) => {
@@ -45,10 +49,10 @@ const NameAndLogin = ({ name, login, isAuthorized, updateName, updateLogin }) =>
   return (
     <>
       <Heading tagName="h1">
-        <EditableField value={editableName} update={updateName} placeholder="What's your name?" />
+        <UserNameInput name={editableName} onChange={updateName} />
       </Heading>
       <Heading tagName="h2">
-        <EditableField value={login} update={updateLogin} prefix="@" placeholder="Nickname?" />
+        <UserLoginInput login={login} onChange={updateLogin} />
       </Heading>
     </>
   );
@@ -66,50 +70,47 @@ NameAndLogin.defaultProps = {
   login: '',
 };
 
-// has science gone too far?
-const UserPage = ({
-  user: {
-    // has science gone too far?
-    _deletedProjects,
-    _cacheCover,
-    featuredProjectId,
-    ...user
-  },
-  api,
-  isAuthorized,
-  maybeCurrentUser,
-  updateDescription,
-  updateName,
-  updateLogin,
-  uploadCover,
-  clearCover,
-  uploadAvatar,
-  addPin,
-  removePin,
-  leaveProject,
-  deleteProject,
-  undeleteProject,
-  featureProject,
-  unfeatureProject,
-  setDeletedProjects,
-  addProjectToCollection,
-}) => {
-  const pinnedSet = new Set(user.pins.map(({ id }) => id));
+const UserPage = ({ user: initialUser }) => {
+  const [user, funcs] = useUserEditor(initialUser);
+  const {
+    updateDescription,
+    updateName,
+    updateLogin,
+    uploadCover,
+    clearCover,
+    uploadAvatar,
+    undeleteProject,
+    unfeatureProject,
+    setDeletedProjects,
+    addProjectToCollection,
+  } = funcs;
+  const projectOptions = { ...funcs, user };
+  const { _deletedProjects, featuredProjectId } = user;
+
+  useFocusFirst();
+
+  const { currentUser: maybeCurrentUser } = useCurrentUser();
+  const isSupport = maybeCurrentUser && maybeCurrentUser.isSupport;
+  const isAuthorized = maybeCurrentUser && maybeCurrentUser.id === user.id;
+
+  const pinnedSet = new Set(user.pinnedProjects.map(({ id }) => id));
   // filter featuredProject out of both pinned & recent projects
-  const [pinnedProjects, recentProjects] = partition(user.projects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
+  const sortedProjects = orderBy(user.projects, (project) => project.updatedAt, ['desc']);
+  const [pinnedProjects, recentProjects] = partition(sortedProjects.filter(({ id }) => id !== featuredProjectId), ({ id }) => pinnedSet.has(id));
   const featuredProject = user.projects.find(({ id }) => id === featuredProjectId);
 
   return (
-    <main className="profile-page user-page">
+    <main id="main" className={styles.container}>
       <section>
-        <ProfileContainer
-          avatarStyle={getAvatarStyle(user)}
-          coverStyle={getProfileStyle({ ...user, cache: _cacheCover })}
-          coverButtons={
-            isAuthorized &&
-            !!user.login && <ImageButtons name="Cover" uploadImage={uploadCover} clearImage={user.hasCoverImage ? clearCover : null} />
-          }
-          avatarButtons={isAuthorized && !!user.login && <ImageButtons name="Avatar" uploadImage={uploadAvatar} />}
+        <UserProfileContainer
+          item={user}
+          coverActions={{
+            'Upload Cover': isAuthorized && user.login ? uploadCover : null,
+            'Clear Cover': isAuthorized && user.hasCoverImage ? clearCover : null,
+          }}
+          avatarActions={{
+            'Upload Avatar': isAuthorized && user.login ? uploadAvatar : null,
+          }}
           teams={user.teams}
         >
           <NameAndLogin
@@ -118,20 +119,21 @@ const UserPage = ({
             {...{ isAuthorized, updateName }}
             updateLogin={(login) => updateLogin(login).then(() => syncPageToLogin(login))}
           />
-          {!!user.thanksCount && <Thanks count={user.thanksCount} />}
+          <Thanks count={user.thanksCount} />
           <AuthDescription
             authorized={isAuthorized && !!user.login}
             description={user.description}
             update={updateDescription}
             placeholder="Tell us about yourself"
           />
-        </ProfileContainer>
+        </UserProfileContainer>
+
+        {isAuthorized && !recentProjects.length && <OnboardingBanner />}
       </section>
 
       {featuredProject && (
-        <EntityPageFeaturedProject
+        <FeaturedProject
           featuredProject={featuredProject}
-          api={api}
           isAuthorized={isAuthorized}
           unfeatureProject={unfeatureProject}
           addProjectToCollection={addProjectToCollection}
@@ -140,19 +142,16 @@ const UserPage = ({
       )}
 
       {/* Pinned Projects */}
-      <EntityPageProjects
-        projects={pinnedProjects}
-        isAuthorized={isAuthorized}
-        api={api}
-        removePin={removePin}
-        projectOptions={{
-          featureProject,
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-      />
+      {pinnedProjects.length > 0 && (
+        <ProjectsList
+          dataCy="pinned-projects"
+          layout="grid"
+          title="Pinned Projects"
+          titleEmoji="pushpin"
+          projects={pinnedProjects}
+          projectOptions={projectOptions}
+        />
+      )}
 
       {!!user.login && (
         <CollectionsList
@@ -161,28 +160,39 @@ const UserPage = ({
             ...collection,
             user,
           }))}
-          api={api}
           isAuthorized={isAuthorized}
+          enablePagination
+          enableFiltering={user.collections.length > 6}
           maybeCurrentUser={maybeCurrentUser}
         />
       )}
 
       {/* Recent Projects */}
-      <EntityPageProjects
-        projects={recentProjects}
-        isAuthorized={isAuthorized}
-        api={api}
-        addPin={addPin}
-        projectOptions={{
-          featureProject,
-          leaveProject,
-          deleteProject,
-          addProjectToCollection,
-        }}
-        currentUser={maybeCurrentUser}
-      />
-      {isAuthorized && (
-        <DeletedProjects api={api} setDeletedProjects={setDeletedProjects} deletedProjects={_deletedProjects} undelete={undeleteProject} />
+      {recentProjects.length > 0 && (
+        <ProjectsList
+          dataCy="recent-projects"
+          layout="grid"
+          title="Recent Projects"
+          projects={recentProjects}
+          enablePagination
+          enableFiltering={recentProjects.length > 6}
+          projectOptions={projectOptions}
+        />
+      )}
+
+      {(isAuthorized || isSupport) && (
+        <article data-cy="deleted-projects">
+          <Heading tagName="h2">
+            Deleted Projects
+            <Icon className={emoji} icon="bomb" />
+          </Heading>
+          <DeletedProjects
+            setDeletedProjects={setDeletedProjects}
+            deletedProjects={_deletedProjects}
+            undelete={isAuthorized ? undeleteProject : null}
+            user={user}
+          />
+        </article>
       )}
       {!isAuthorized && <ReportButton reportedType="user" reportedModel={user} />}
     </main>
@@ -190,12 +200,6 @@ const UserPage = ({
 };
 
 UserPage.propTypes = {
-  clearCover: PropTypes.func.isRequired,
-  maybeCurrentUser: PropTypes.object.isRequired,
-  isAuthorized: PropTypes.bool.isRequired,
-  leaveProject: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
-  uploadCover: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string,
     login: PropTypes.string,
@@ -206,37 +210,17 @@ UserPage.propTypes = {
     color: PropTypes.string.isRequired,
     coverColor: PropTypes.string,
     description: PropTypes.string.isRequired,
-    pins: PropTypes.array.isRequired,
+    pinnedProjects: PropTypes.array.isRequired,
     projects: PropTypes.array.isRequired,
     teams: PropTypes.array.isRequired,
     collections: PropTypes.array.isRequired,
-    _cacheCover: PropTypes.number.isRequired,
-    _deletedProjects: PropTypes.array.isRequired,
   }).isRequired,
-  addProjectToCollection: PropTypes.func.isRequired,
-  featureProject: PropTypes.func.isRequired,
-  unfeatureProject: PropTypes.func.isRequired,
 };
 
-const UserPageContainer = ({ api, user }) => (
+const UserPageContainer = ({ user }) => (
   <AnalyticsContext properties={{ origin: 'user' }}>
-    <UserEditor api={api} initialUser={user}>
-      {(userFromEditor, funcs, isAuthorized) => (
-        <>
-          <Helmet>
-            <title>{userFromEditor.name || (userFromEditor.login ? `@${userFromEditor.login}` : `User ${userFromEditor.id}`)}</title>
-          </Helmet>
-
-          <CurrentUserConsumer>
-            {(maybeCurrentUser) => (
-              <ProjectsLoader api={api} projects={orderBy(userFromEditor.projects, (project) => project.updatedAt, ['desc'])}>
-                {(projects) => <UserPage {...{ api, isAuthorized, maybeCurrentUser }} user={{ ...userFromEditor, projects }} {...funcs} />}
-              </ProjectsLoader>
-            )}
-          </CurrentUserConsumer>
-        </>
-      )}
-    </UserEditor>
+    <Helmet title={user.name || (user.login ? `@${user.login}` : `User ${user.id}`)} />
+    <UserPage user={user} />
   </AnalyticsContext>
 );
 

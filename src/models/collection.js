@@ -1,34 +1,45 @@
-/* global CDN_URL */
-
 import { kebabCase } from 'lodash';
-import randomColor from 'randomcolor';
-import { getLink as getTeamLink } from './team';
-import { getLink as getUserLink } from './user';
+
+import { pickRandomColor } from 'Utils/color';
+
+import { getTeamLink } from './team';
+import { getUserLink } from './user';
 
 import { getCollectionPair } from './words';
 
 export const FALLBACK_AVATAR_URL = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1541449590339';
 export const defaultAvatar = 'https://cdn.glitch.com/1afc1ac4-170b-48af-b596-78fe15838ad3%2Fcollection-avatar.svg?1540389405633';
 
-// from http://dannyruchtie.com/color-contrast-calculator-with-yiq/
-export const isDarkColor = (hex) => {
-  if (hex) {
-    hex = hex.substring(1);
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq < 128;
-  }
-
-  return false;
+const nullMyStuffCollection = {
+  isMyStuff: true,
+  name: 'My Stuff',
+  description: 'My place to save cool finds',
+  coverColor: pickRandomColor(),
+  projects: [],
+  id: 'nullMyStuff',
 };
 
-export function getAvatarUrl(id) {
-  return `${CDN_URL}/collection-avatar/${id}.png`;
+// puts my stuff at the front of the array, if my stuff doesn't exist we add it.
+export function getCollectionsWithMyStuff({ collections }) {
+  let myStuffCollection = null;
+  const updatedCollections = collections.filter((collection) => {
+    if (collection.isMyStuff) {
+      myStuffCollection = collection;
+      return false;
+    }
+    return true;
+  });
+
+  if (!myStuffCollection) {
+    myStuffCollection = nullMyStuffCollection;
+  }
+
+  updatedCollections.unshift(myStuffCollection);
+
+  return updatedCollections;
 }
 
-export function getOwnerLink(collection) {
+export function getCollectionOwnerLink(collection) {
   if (collection.team) {
     return getTeamLink(collection.team);
   }
@@ -38,13 +49,17 @@ export function getOwnerLink(collection) {
   throw new Error(`Collection ${collection.id} has no team or user field!`);
 }
 
-export function getLink(collection) {
-  return `${getOwnerLink(collection)}/${collection.url}`;
+export function getCollectionLink(collection) {
+  if (collection.team || collection.user) {
+    return `${getCollectionOwnerLink(collection)}/${collection.url}`;
+  }
+  return `/@${collection.fullUrl}`;
 }
 
-export async function createCollection(api, name, teamId, createNotification) {
+export async function createCollection({ api, name, teamId, createNotification, myStuffEnabled = false }) {
   let description = '';
   let generatedName = false;
+  let isMyStuff = false;
   if (!name) {
     // generate a new random name & description
     generatedName = true;
@@ -57,9 +72,14 @@ export async function createCollection(api, name, teamId, createNotification) {
     const [predicate, collectionSynonym] = name.split('-');
     description = `A ${collectionSynonym} of projects that does ${predicate} things`;
   }
+
+  if (name === 'My Stuff' && myStuffEnabled) {
+    isMyStuff = true;
+    description = 'My place to save cool finds';
+  }
   const url = kebabCase(name);
   const avatarUrl = defaultAvatar;
-  const coverColor = randomColor({ luminosity: 'light' }); // get a random color
+  const coverColor = pickRandomColor();
 
   try {
     const { data: collection } = await api.post('collections', {
@@ -69,6 +89,7 @@ export async function createCollection(api, name, teamId, createNotification) {
       avatarUrl,
       coverColor,
       teamId,
+      isMyStuff,
     });
 
     return collection;
@@ -77,7 +98,7 @@ export async function createCollection(api, name, teamId, createNotification) {
     if (!generatedName && error.response && error.response.data) {
       errorMessage = error.response.data.message;
     }
-    createNotification(errorMessage, 'notifyError');
+    createNotification(errorMessage, { type: 'error' });
   }
   return null;
 }

@@ -1,7 +1,6 @@
-import { getUrlForModel, getDisplayNameForModel } from './models';
-import { getLink, getDisplayName } from '../models/user';
-
-/* global APP_URL */
+import { getUserLink, getDisplayName } from 'Models/user';
+import { getUrlForModel, getDisplayNameForModel } from 'Utils/models';
+import { APP_URL } from 'Utils/constants';
 
 export const getAbuseReportTitle = (model, modelType) => {
   if (modelType === 'home') {
@@ -40,7 +39,7 @@ export const getAbuseReportBody = (currentUser, submitterEmail, reportedType, re
 
   return `${thingIdentifiers}
 
-- Submitted by: [${getDisplayName(currentUser)}](${APP_URL}${getLink(currentUser)})
+- Submitted by: [${getDisplayName(currentUser)}](${APP_URL}${getUserLink(currentUser)})
 
 - Contact: ${pickEmailForReport(currentUser, submitterEmail)}
 
