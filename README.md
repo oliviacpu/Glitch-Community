@@ -16,6 +16,8 @@ File structure
 
 Olivia changed this to test something
 
+Changed it again
+
 - the backend app starts at `server.js`
 - `src/client.js` is compiled and served as /client-bundle.js
 - components and their styles are in `src/components/` :-)
