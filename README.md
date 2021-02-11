@@ -14,6 +14,11 @@ Glitch employees should check out [DEPLOYING.md](https://glitch.com/edit/#!/comm
 
 File structure
 
+Olivia changed this to test something
+
+Mmhmm
+
+- the backend app starts at `server.js`
 - the backend app starts at `server/server.js`
 - `src/client.js` is compiled and served as /client-bundle.js
 - components and their styles are in `src/components/` :-)
@@ -36,7 +41,6 @@ The following commands are available for use during development:
 | `npm run cy:open` | Launch the Cypress GUI for running integration tests                     |
 | `npm run cy:ci`   | Auto-start a temporary dev server and run integration tests against it   |
 | `npm run build`   | Perform a production build of the site and store the results in `build/` |
-
 
 ## Built with
 
